@@ -56,20 +56,20 @@ export default function InternalServerError({ deviceInfo }: any) {
 
       {(isMobile || isIPadorTablet) ? (
         <>
-          <div className="w-full px-10 py-8 pr-10">
-            <div className="error-container py-4 sm:py-12">
-              <div className="w-full px-10 pr-10 mt-24 mb-8 text-left error-text-section">
-                <h1 className="mb-2 font-22 font-semibold text-black">
-                  {translate('label.500.internalServerErrorText')} </h1>
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-red-100">
+            <div className="py-4 error-container sm:py-12">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold text-red-800 font-h1-xl'>500</h1>
+                <h2 className="mb-2 font-semibold text-red-600 font-32">
+                  {translate('label.500.internalServerErrorText')}
+                </h2>
                 <p className="font-16 text-brown-light">
-                  {translate('common.label.pageErrorDesc')} </p>
+                  {translate('common.label.pageErrorDesc')}
+                </p>
               </div>
-              <div className="w-40 mx-auto mt-5 text-center">
-                <Link
-                  href="/"
-                  className="block p-4 text-sm font-semibold text-center text-white bg-black"
-                >
-                  {translate('common.label.backToHomepageText')} 
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
+                  {translate('common.label.backToHomepageText')}
                 </Link>
               </div>
             </div>
@@ -77,21 +77,21 @@ export default function InternalServerError({ deviceInfo }: any) {
         </>
       ) : (
         <>
-          <div className="w-full px-10 py-8 pr-10">
-            <div className="error-container py-4 sm:py-12">
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-red-100">
+            <div className="py-4 error-container sm:py-12">
               <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
-                <h1 className='text-5xl font-bold font-h1-xl'>{translate('label.500.500')}</h1>
-                <h2 className="mb-2 font-32 font-semibold text-black">
-                  {translate('common.label.internalServerError')} </h2>
+                <h1 className='text-5xl font-bold text-red-800 font-h1-xl'>500</h1>
+                <h2 className="mb-2 font-semibold text-red-600 font-32">
+                  {translate('common.label.internalServerError')}
+                </h2>
                 <p className="font-16 text-brown-light">
-                  {translate('common.label.pageErrorDesc')} </p>
+                  {translate('common.label.pageErrorDesc')}
+                </p>
               </div>
-              <div className="w-40 mx-auto mt-5 text-center">
-                <Link
-                  href="/"
-                  className="block p-4 text-sm font-semibold text-center text-white bg-black"
-                >
-                  {translate('common.label.backToHomepageText')} </Link>
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
+                  {translate('common.label.backToHomepageText')}
+                </Link>
               </div>
             </div>
           </div>

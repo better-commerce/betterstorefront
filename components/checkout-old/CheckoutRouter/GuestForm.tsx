@@ -67,7 +67,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
       {({ errors, touched, handleSubmit, values, handleChange }: any) => {
         return (
           <div className="flex flex-col items-center justify-center w-full px-5 py-5">
-            <Form className="w-full font-semibold sm:w-1/2">
+            <Form className="w-full font-semibold">
               {config.map((formItem: any, idx: number) => {
                 return (
                   <>

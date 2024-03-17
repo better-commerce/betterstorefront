@@ -249,7 +249,7 @@ export default function CollectionPage(props: any) {
       setProductDataToPass(dataToPass)
     }
   }, [productListMemory?.products, data?.products])
-    
+
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
@@ -348,7 +348,7 @@ export default function CollectionPage(props: any) {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', handleScroll)
     }
-        
+
     const trackScroll = (ev: any) => {
       setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
@@ -428,12 +428,8 @@ export default function CollectionPage(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      {props?.hostName && ( <input className="inst" type="hidden" value={props?.hostName} /> )}
-      <div className="container pt-6 pb-24 mx-auto bg-transparent">
-        {props?.breadCrumbs && (
-          <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
-        )}
-
+      {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
+      <div className='flex flex-col'>
         {props?.customInfo3 == 'vertical' && (
           <>
             <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-4 sm:px-4 2xl:sm:px-0 sm:mt-4">
@@ -447,7 +443,7 @@ export default function CollectionPage(props: any) {
                           <div className="relative w-full h-auto px-0 collection-multi-vimage">
                             <Link legacyBehavior href={img?.link || '#'} passHref >
                               <span style={{ paddingTop }} className="block">
-                                <img src={ generateUri(imgUrl, 'h=1600&fm=webp&q=50') || IMG_PLACEHOLDER } alt="Collection Banner" className="object-contain" onLoad={({ target }) => { const { naturalWidth, naturalHeight } = target as HTMLImageElement; setPaddingTop( `calc(100% / (${naturalWidth} / ${naturalHeight})` ) }} />
+                                <img src={generateUri(imgUrl, 'h=1600&fm=webp&q=50') || IMG_PLACEHOLDER} alt="Collection Banner" className="object-contain" onLoad={({ target }) => { const { naturalWidth, naturalHeight } = target as HTMLImageElement; setPaddingTop(`calc(100% / (${naturalWidth} / ${naturalHeight})`) }} />
                               </span>
                             </Link>
                             <div className="absolute z-10 text-left bottom-3 left-4">
@@ -480,7 +476,7 @@ export default function CollectionPage(props: any) {
                     return (
                       <div className="w-full h-auto px-0" key={`banner-image-${idx}`} >
                         <Link legacyBehavior href={img?.link || '#'}>
-                          <a> <img src={imgUrl} width ={1920} height={460} alt="banner" /> </a>
+                          <a> <img src={imgUrl} width={1920} height={460} alt="banner" /> </a>
                         </Link>
                       </div>
                     )
@@ -490,64 +486,64 @@ export default function CollectionPage(props: any) {
             </div>
           </>
         )}
-        {props?.customInfo3 == 'Horizontal' ||
-          (props?.customInfo3 == 'horizontal' && props?.images?.length > 0 && (
-            <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >
-              {props?.images?.map((img: any, idx: number) => (
-                <SwiperSlide key={`horizontal-slider-${idx}`}>
-                  <Link href={img.link || '#'}>
-                    <img style={css} width={1920} height={460} src={ generateUri(img.url, 'h=500&fm=webp') || IMG_PLACEHOLDER } alt={props?.name || 'Collection Banner'} className="object-cover object-center w-full h-48 cursor-pointer sm:h-96 sm:max-h-96" />
-                  </Link>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          ))}
-
-        <div className={`sticky w-full py-4 mx-auto bg-white top-108 px-4 sm:px-4 2xl:px-0 sm:py-4 ${cls}`} >
-          <h1 className="inline-block capitalize text-primary dark:text-black">
+        {props?.customInfo3 == 'Horizontal' || (props?.customInfo3 == 'horizontal' && props?.images?.length > 0 && (
+          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >
+            {props?.images?.map((img: any, idx: number) => (
+              <SwiperSlide key={`horizontal-slider-${idx}`}>
+                <Link href={img.link || '#'}>
+                  <img style={css} width={1920} height={500} src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} alt={props?.name || 'Collection Banner'} className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer" />
+                </Link>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ))}
+      </div>
+      <div className="container pt-6 pb-24 mx-auto bg-transparent">
+        {props?.breadCrumbs && (
+          <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
+        )}
+        <div className="max-w-screen-sm">
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {props?.name}
           </h1>
-          <span className="pl-2 mt-0 text-xs font-semibold text-black text-14 sm:h-6 dark:text-black">
-            {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} results`}
-          </span>
-          <h2>{props?.description}</h2>
+          {props?.description &&
+            <div className='flex justify-between w-full align-bottom'>
+              <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
+                {props?.description}
+              </span>
+            </div>
+          }
         </div>
-
+        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} results`}</span>
+          <div className="flex justify-end align-bottom">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+          </div>
+        </div>
+        <hr className='border-slate-200 dark:border-slate-700' />
         {productDataToPass?.results?.length > 0 && (
           <div className="grid grid-cols-1 gap-1 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3">
             {props?.allowFacets ? (
               <>
                 {isMobile ? (
                   <>
-                    <div className="flex justify-end w-full">
-                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                    </div>
-                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
                   </>
-                ) : ( 
-                    <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                ) : (
+                  <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
-                <div className="sm:col-span-10 p-[1px]">
-                  {isMobile ? null : (   
-                  <>
-                    <div className="flex justify-end w-full">
-                      <OutOfStockFilter
-                        excludeOOSProduct={excludeOOSProduct}
-                        onEnableOutOfStockItems={onEnableOutOfStockItems}
-                        />
-                    </div>
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy}  removeFilter={removeFilter}/>
-                  </>    
+                <div className="sm:col-span-9 p-[1px]">
+                  {isMobile ? null : (
+                    <>
+                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                    </>
                   )}
                   <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                 </div>
               </>
             ) : (
               <div className="col-span-12">
-                <div className="flex justify-end w-full">
-                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                </div>
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter}/>
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
                 <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
               </div>
             )}
@@ -583,13 +579,13 @@ export default function CollectionPage(props: any) {
                 "@context": "https://schema.org/",
                 "@type": "ItemList",
                 "itemListElement": ${JSON.stringify(
-                  data?.products?.results?.map((product: any, pId: number) => ({
-                    '@type': 'ListItem',
-                    position: pId + 1,
-                    name: product?.name,
-                    url: `${SITE_ORIGIN_URL}/${product?.slug}`,
-                  }))
-                )}
+                data?.products?.results?.map((product: any, pId: number) => ({
+                  '@type': 'ListItem',
+                  position: pId + 1,
+                  name: product?.name,
+                  url: `${SITE_ORIGIN_URL}/${product?.slug}`,
+                }))
+              )}
               }
             `,
             }}
@@ -622,7 +618,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
       collectionUIDData = await getCollectionBySlug(slug[0])
       await setData([{ key: cachedDataUID.collectionUID, value: collectionUIDData }])
     }
-    if(!infraUIDData){
+    if (!infraUIDData) {
       const infraPromise = commerce.getInfra()
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])

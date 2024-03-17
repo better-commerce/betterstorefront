@@ -41,7 +41,7 @@ export default function NotFound({ deviceInfo }: any) {
               name="viewport"
               content="width=device-width, initial-scale=1, maximum-scale=1"
             />
-            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
             <title>{translate('label.404.titleText')}</title>
             <meta name="title" content={translate('label.404.titleText')} />
             <meta name="description" content={translate('label.404.titleText')} />
@@ -50,20 +50,19 @@ export default function NotFound({ deviceInfo }: any) {
             <meta property="og:title" content={translate('label.404.titleText')} key="ogtitle" />
             <meta property="og:description" content={translate('label.404.titleText')} key="ogdesc" />
           </NextHead>
-          <div className="w-full py-14 p-5">
-            <div className="error-container">
-              <div className="error-text-section w-full text-center mb-8 mt-24">
-                <h1 className="text-black sm:text-2xl font-semibold mb-2">
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-yellow-100">
+            <div className="py-4 error-container sm:py-12">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold text-yellow-800 font-h1-xl'>404</h1>
+                <h2 className="mb-2 font-semibold text-yellow-600 font-32">
                   {translate('label.404.pageNotFoundText')}
-                </h1>
-                <p className="text-black">
-                  {translate('common.label.pageErrorDesc')} </p>
+                </h2>
+                <p className="font-16 text-brown-light">
+                  {translate('common.label.pageErrorDesc')}
+                </p>
               </div>
-              <div className="w-40 mx-auto text-center mt-5">
-                <Link
-                  href="/"
-                  className="btn btn-primary"
-                >
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
                   {translate('common.label.backToHomepageText')}
                 </Link>
               </div>
@@ -73,21 +72,19 @@ export default function NotFound({ deviceInfo }: any) {
       )}
       {isMobile && (
         <>
-          <div className="w-full py-8 px-10 pr-10">
-            <div className="error-container">
-              <div className="error-text-section w-full text-left mb-8 mt-24 px-10 pr-10">
-                <h1 className="text-black text-base font-semibold mb-2">
-                  {translate('label.404.pageNotFoundText')} 
-                </h1>
-                <p className="text-brown-light text-xs">
-                 {translate('common.label.pageErrorDesc')}
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-yellow-100">
+            <div className="py-4 error-container sm:py-12">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold font-h1-xl'>404</h1>
+                <h2 className="mb-2 font-semibold text-black font-32">
+                  {translate('label.404.pageNotFoundText')}
+                </h2>
+                <p className="font-16 text-brown-light">
+                  {translate('common.label.pageErrorDesc')}
                 </p>
               </div>
-              <div className="w-40 mx-auto text-center mt-5">
-                <Link
-                  href="/"
-                  className="btn btn-primary"
-                >
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
                   {translate('common.label.backToHomepageText')}
                 </Link>
               </div>
