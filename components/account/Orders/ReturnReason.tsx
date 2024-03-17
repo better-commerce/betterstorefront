@@ -21,6 +21,7 @@ import { Button, LoadingDots } from '@components/ui'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const ReturnReason = ({
   returnsReasons,
@@ -29,6 +30,7 @@ const ReturnReason = ({
   itemReturnLoadingState,
   qty,
 }: any) => {
+  const translate = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)
   const [reason, setReason] = useState('')
@@ -79,16 +81,14 @@ const ReturnReason = ({
         <div className="mx-auto cancel-continer">
           <Link href="/my-account/orders" className="mobile-view">
             <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
-              <i className="sprite-icon sprite-left-arrow mr-2"></i> Return Item
+              <i className="sprite-icon sprite-left-arrow mr-2"></i> {translate('label.help.returnItemText')}
             </h4>
           </Link>
           <div className="w-full py-4">
             <h4 className="text-base font-bold text-primary">
-              Why are you returning this item?
-            </h4>
+              {translate('label.returnReason.returnReasonHeadingText')} </h4>
             <p className="text-xs text-gray-700">
-              This Information will help us to improve our service
-            </p>
+              {translate('common.label.serviceText')} </p>
             <div className="w-full py-4">
               {returnsReasons?.map((returnReason: any, idx: number) => (
                 <div
@@ -125,12 +125,11 @@ const ReturnReason = ({
             </div>
             <div className="w-full">
               <h4 className="text-base font-bold text-primary">
-                Add upto 5 pictures{' '}
+                {translate('label.exchangeReason.picturesUploadLimitText')}s{' '}
               </h4>
               {/* <p>(Images exceeding {formatBytes(PDP_REVIEW_IMAGE_SIZE_IN_BYTES)} will be ignored)</p> */}
               <p className="text-sm mb-1 text-gray-700">
-                This will help us to identify your problem better
-              </p>
+                {translate('label.exchangeReason.identifyProblemText')} </p>
               <p className="text-sm text-gray-700">
                 <InformationCircleIcon className="inline-block w-4 h-4 mb-1" />{' '}
                 Files must be <em>less than 5MB</em>
@@ -171,23 +170,18 @@ const ReturnReason = ({
                 <InformationCircleIcon className="inline-block w-4 h-4 mb-1" />
                 <span className="text-sm font-normal">
                   {' '}
-                  Refund of {item?.price?.currencySymbol}
-                  {item?.price?.raw?.withTax * qty} will be processed within 3-5
-                  business days after the item is received and inspected.
-                </span>
+                  {translate('label.orderDetails.itemRefundText1')} {item?.price?.currencySymbol}
+                  {item?.price?.raw?.withTax * qty} {translate('label.orderDetails.itemRefundText2')} </span>
               </p>
               <p className="relative pt-0 pb-4 text-sm info-text">
-                <b>Note:</b> Please keep the items in their original condition
-                with the MRP tag intact.
-              </p>
+                <b>Note:</b> {translate('label.returnReason.returnReasonNoteText')} </p>
               <Button
                 type="button"
                 className="!py-3 !font-bold !w-auto"
                 disabled={!(!isDisabled && reason)}
                 onClick={openModal}
               >
-                Request for Return
-              </Button>
+                {translate('label.returnReason.requestReturnBtnText')} </Button>
             </div>
           </div>
         </div>
@@ -229,7 +223,7 @@ const ReturnReason = ({
                         <div className="flex justify-between px-4 py-3 border-b">
                           <div>
                             <h3 className="text-base font-bold text-black dark:text-black">
-                              Return item{' '}
+                            {translate('label.help.returnItemText')} {' '}
                             </h3>
                           </div>
                           <button
@@ -237,7 +231,7 @@ const ReturnReason = ({
                             className="text-black rounded-md outline-none hover:text-gray-500"
                             onClick={closeModal}
                           >
-                            <span className="sr-only">Close panel</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon
                               className="relative top-0 w-7 h-7"
                               aria-hidden="true"
@@ -247,7 +241,7 @@ const ReturnReason = ({
                         <div className="w-full p-6 overflow-y-auto">
                           <div className="w-full">
                             <p className="text-sm text-black">
-                              Are you certain you want to return this item?{' '}
+                              {translate('label.returnReason.returnConfirmText')}{translate('common.label.questionMark')}{' '}
                               {/*You'll miss out on savings of 648!*/}
                             </p>
                           </div>
@@ -259,8 +253,7 @@ const ReturnReason = ({
                               onClick={closeModal}
                               className="mb-3 !py-3 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200"
                             >
-                              Don't Return
-                            </Button>
+                              {translate('label.returnReason.dontReturnBtnText')} </Button>
                             <Button
                               type="button"
                               onClick={async () => {

@@ -1,15 +1,14 @@
 "use client";
 
-import React, { createRef, FC, useState } from "react";
+import React, { FC, } from "react";
 import Link from "next/link";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { IExtraProps } from "@components/common/Layout/Layout";
 import { Logo, useUI } from "@components/ui";
 import { Searchbar } from "@components/common";
 import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
+import { useTranslation } from "@commerce/utils/use-translation";
 const AvatarDropdown = dynamic(() => import('@new-components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@new-components/Header/LangDropdown'))
 const CartDropdown = dynamic(() => import('@new-components/Header/CartDropdown'))
@@ -37,16 +36,17 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   };
 
   const renderContent = () => {
+    const translate = useTranslation()
     return (
       <div className="fixed inset-x-0 top-0 z-20 w-full py-2 sm:py-0 bg-white/80 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/80">
         <div className="container justify-between hidden mx-auto sm:flex">
           <div className="promotion-banner mob-marquee"></div>
           <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
             {b2bEnabled && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">Prices inc VAT</div>
+            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
             <div className="flow-root w-10 px-2 sm:w-12">
               <div className="flex justify-center flex-1 mx-auto">
-                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
               </div>
             </div>
           </div>

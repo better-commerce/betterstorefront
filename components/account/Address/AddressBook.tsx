@@ -5,7 +5,6 @@ import axios from 'axios'
 import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
 import { LoadingDots } from '@components/ui'
-import { DETAILS_SUCCESS, DETAILS_ERROR, ADDRESS_BOOK_TITLE, DETAILS_SUBTITLE, EMPTY_ADDRESS, ADD_ADDRESS, } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
@@ -17,7 +16,7 @@ import Link from 'next/link'
 import { Guid } from '@commerce/types'
 import { AlertType } from '@framework/utils/enums'
 import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -55,8 +54,9 @@ export function asyncHandler() {
 
 export default function AddressBook({ deviceInfo }: any) {
   const [data, setData] = useState([])
+  const translate = useTranslation();
   const [isNewFormMode, setNewFormMode] = useState(false)
-  const [title, setTitle] = useState(ADDRESS_BOOK_TITLE)
+  const [title, setTitle] = useState(translate('label.addressBook.addressBookTitleText'))
   const [isLoading, setIsLoading] = useState(true)
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
@@ -227,12 +227,12 @@ export default function AddressBook({ deviceInfo }: any) {
 
   const success = () => {
     fetchAddress()
-    setTitle(DETAILS_SUCCESS)
+    setTitle(translate('label.addressBook.detailsUPdatedText'))
     window.scrollTo(0, 0)
   }
 
   const failCb = () => {
-    setTitle(DETAILS_ERROR)
+    setTitle(translate('label.addressBook.updateFailedText'))
     window.scrollTo(0, 0)
   }
 
@@ -442,8 +442,7 @@ export default function AddressBook({ deviceInfo }: any) {
               <i className="sprite-icon sprite-left-arrow"></i>
             </span>
           </Link>
-          Addresses
-        </h3>
+          {translate('label.checkout.addressesText')} </h3>
       </div>
       <main className="px-4 mt-4 lg:px-8">
         {!isB2B && (
@@ -451,14 +450,14 @@ export default function AddressBook({ deviceInfo }: any) {
             <div className="px-0 pt-10 sm:px-0">
               <h1 className="mb-3 font-bold tracking-tight text-primary sm:mb-5 dark:text-black">
                 <span className="hidden text-xl sm:inline-block">{title}</span>
-                <span className="inline-block sm:hidden">Saved Addresses</span>
+                <span className="inline-block sm:hidden">{translate('label.addressBook.savedAddressesText')}</span>
               </h1>
             </div>
           </div>
         )}
         <div className="max-w-4xl mx-auto">
           {!data.length && !isLoading && (
-            <div className="py-4 sm:py-10 lg:mx-0">{EMPTY_ADDRESS}</div>
+            <div className="py-4 sm:py-10 lg:mx-0">{translate('label.addressBook.emptyAddressBookText')}</div>
           )}
           {isLoading ? <LoadingDots /> : null}
         </div>
@@ -506,10 +505,10 @@ export default function AddressBook({ deviceInfo }: any) {
                     className="w-full p-4 font-semibold text-center text-black border border-gray-200 cursor-pointer"
                   >
                     <span className="hidden sm:inline-block">
-                      {ADD_ADDRESS}{' '}
+                      {translate('label.addressBook.addNewAddress')}{' '}
                     </span>
                     <span className="inline-block text-sm sm:hidden">
-                      Add New Address{' '}
+                      {translate('label.addressBook.addNewAddress')} {' '}
                     </span>
                     <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                       <i className="sprite-icon icon-location-orange"></i>
@@ -525,7 +524,7 @@ export default function AddressBook({ deviceInfo }: any) {
                   onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="btn-primary btn"
                 >
-                  {ADD_ADDRESS}{' '}
+                  {translate('label.addressBook.addNewAddress')}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
                     <i className="sprite-icon icon-location-orange"></i>
                   </span>

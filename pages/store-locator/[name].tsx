@@ -1,6 +1,8 @@
 import { Layout } from '@components/common'
 import type { GetStaticPropsContext } from 'next'
 import getStores from '@framework/storeLocator/getStores'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 interface Props {
   data: any
@@ -29,10 +31,14 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
+  const { locale, locales }: any = params
   //this would require an endpoint to fetch a specific store
   const response = await getStores('')
   return {
-    props: { data: response[0] },
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      data: response[0]
+    },
   }
 }
 

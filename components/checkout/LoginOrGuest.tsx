@@ -9,10 +9,8 @@ import {
 import { LoadingDots, useUI } from '@components/ui'
 import { GUEST_LOGIN_CHECKOUT2_SCHEMA } from './config'
 import ShippingAddressForm from './ShippingAddressForm'
-import {
-  SAVE_AND_CONTINUE_TO_COLLECT,
-} from '@components/utils/textVariables'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const loginCheckoutFormSchema = yup.object({
   email: yup
@@ -45,6 +43,7 @@ const LoginOrGuest: React.FC<any> = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod
 }) => {
+  const translate = useTranslation()
   const [isLogin, setIsLogin] = useState<boolean>(false)
   const { user } = useUI()
   const guestCheckoutFormik: any = useFormik({
@@ -89,17 +88,17 @@ const LoginOrGuest: React.FC<any> = ({
           <div className="flex items-center justify-between w-full">
             <div>
               <h5 className="font-semibold text-black uppercase font-18">
-                Login
+                {translate('label.login.loginBtnText')}
               </h5>
             </div>
             <div>
               <span className="font-12">
-                Want to checkout without login?
-                <button
+                {translate('label.checkout.checkoutWithoutLoginText')} 
+              <button
                   className="py-4 pl-1 font-semibold text-orange-600"
                   onClick={onToggleLoginView}
                 >
-                  {isLogin ? 'Guest Checkout' : 'Log in'}
+                  {isLogin ? translate('label.checkout.guestCheckoutText') :translate('label.checkout.loginText')}
                 </button>
               </span>
             </div>
@@ -114,7 +113,7 @@ const LoginOrGuest: React.FC<any> = ({
               value={loginCheckoutFormik.values.email}
               name="email"
               onChange={loginCheckoutFormik.handleChange}
-              placeholder="Email Address"
+              placeholder={translate('label.myAccount.emailAddressText')}
             />
             {loginCheckoutFormik.errors.email &&
               loginCheckoutFormik.touched.email && (
@@ -128,7 +127,7 @@ const LoginOrGuest: React.FC<any> = ({
               name="password"
               value={loginCheckoutFormik.values.password}
               onChange={loginCheckoutFormik.handleChange}
-              placeholder="Password"
+              placeholder={translate('label.myAccount.passwordText')}
             />
             {loginCheckoutFormik.errors.password &&
               loginCheckoutFormik.touched.password && (
@@ -141,7 +140,7 @@ const LoginOrGuest: React.FC<any> = ({
               className="px-1 py-3 btn-c btn-primary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
               disabled={loginCheckoutFormik.isSubmitting}
             >
-              {loginCheckoutFormik.isSubmitting ? <LoadingDots /> : 'Login'}
+              {loginCheckoutFormik.isSubmitting ? <LoadingDots /> : translate('label.login.loginBtnText')}
             </button>
           </form>
         </>
@@ -150,17 +149,17 @@ const LoginOrGuest: React.FC<any> = ({
           <div className="flex items-center justify-between w-full">
             <div>
               <h5 className="font-semibold text-black uppercase font-18">
-                Guest Checkout
+                {translate('label.checkout.guestCheckoutText')} 
               </h5>
             </div>
             <div>
               <span className="font-12">
-                Have an account?
+                {translate('label.checkout.haveAnAccountText')} 
                 <button
                   className="py-4 pl-1 font-semibold text-orange-600"
                   onClick={onToggleLoginView}
                 >
-                  {isLogin ? 'Guest Checkout' : 'Log in'}
+                  {isLogin ? translate('label.checkout.guestCheckoutText') :translate('label.checkout.loginText')}
                 </button>
               </span>
             </div>
@@ -175,7 +174,7 @@ const LoginOrGuest: React.FC<any> = ({
               value={guestCheckoutFormik.values.email}
               name="email"
               onChange={guestCheckoutFormik.handleChange}
-              placeholder="Email Address"
+              placeholder={translate('label.myAccount.emailAddressText')}
             />
             {guestCheckoutFormik.errors.email && (
               <span className="form-input-error">
@@ -207,7 +206,7 @@ const LoginOrGuest: React.FC<any> = ({
                       className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                       onClick={handleCollect}
                     >
-                      {SAVE_AND_CONTINUE_TO_COLLECT}
+                      {translate('label.checkout.saveAndContinueToCollectBtnText')}
                     </button>
                   </>
                 ) : (
@@ -218,7 +217,7 @@ const LoginOrGuest: React.FC<any> = ({
                         disabled={guestCheckoutFormik.isSubmitting}
                         className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                       >
-                        {SAVE_AND_CONTINUE_TO_COLLECT}
+                        {translate('label.checkout.saveAndContinueToCollectBtnText')}
                       </button>
                     </form>
                   </>

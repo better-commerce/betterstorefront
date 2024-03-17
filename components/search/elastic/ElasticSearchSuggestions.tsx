@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { withSearch } from '@elastic/react-search-ui'
 import cn from 'classnames'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function ElasticSearchSuggestions(props: any) {
+  const translate = useTranslation()
   const { autocompletedSuggestions, searchTerm, setSearchTerm } = props
   const [suggestionList, setSuggestionList] = useState([])
 
@@ -34,7 +36,7 @@ function ElasticSearchSuggestions(props: any) {
     <fieldset className="sui-facet !mb-4">
       {suggestionList?.length > 0 && (
         <legend className="mb-3 font-bold text-black uppercase font-18 sm:mb-4">
-          Top Suggestions
+          {translate('label.search.topSuggestionsText')}
         </legend>
       )}
       <div className="flex flex-wrap justify-start gap-1">

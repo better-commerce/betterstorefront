@@ -6,9 +6,8 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import PaymentButton from './PaymentButton'
 
 // Other Imports
-import { GENERAL_CONFIRM } from '@components/utils/textVariables'
 import { IDispatchState } from './PaymentButton/BasePaymentButton'
-import { CreditCardIcon } from '@heroicons/react/24/outline'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface IPaymentMethodsProps {
   readonly paymentData: Function
@@ -27,6 +26,7 @@ export default function PaymentMethods({
   const [activePaymentMethod, setActivePaymentMethod] = useState<any>({
     id: null,
   })
+  const translate = useTranslation()
   useEffect(() => {
     paymentData()
       .then((response: any) => {
@@ -72,7 +72,7 @@ export default function PaymentMethods({
       {activePaymentMethod.id &&
         selectedPaymentMethod?.id !== activePaymentMethod.id ? (
         <div className="flex justify-start w-full py-5">
-          <PaymentButton btnTitle={GENERAL_CONFIRM} paymentMethod={activePaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatchState} />
+          <PaymentButton btnTitle={translate('common.label.confirmText')} paymentMethod={activePaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatchState} />
         </div>
       ) : null}
     </ul>

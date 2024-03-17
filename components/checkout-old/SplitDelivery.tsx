@@ -1,22 +1,17 @@
-import {
-  IMG_PLACEHOLDER,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_DELIVERY_METHOD,
-  GENERAL_SPLIT_DELIVERY,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { CheckCircleIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { vatIncluded } from '@framework/utils/app-util'
-import { RadioGroup } from '@headlessui/react'
-import classNames from 'classnames'
-import CncInput from './CheckoutForm/CncInput'
-import CncList from './CheckoutForm/CncList'
-import Delivery from './CheckoutForm/Delivery'
+// import { RadioGroup } from '@headlessui/react'
+// import classNames from 'classnames'
+// import CncInput from './CheckoutForm/CncInput'
+// import CncList from './CheckoutForm/CncList'
+// import Delivery from './CheckoutForm/Delivery'
 import DeliveryOptions from './DeliveryOptions'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function SplitDelivery({
   splitDeliveryItems = null,
@@ -36,6 +31,7 @@ function SplitDelivery({
   geoData = null,
   showDeliveryOptions = false,
 }: any) {
+  const translate = useTranslation()
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
   const isIncludeVAT = vatIncluded()
 
@@ -73,7 +69,7 @@ function SplitDelivery({
   }
   return (
     <section>
-      <h1 className="text-md">{GENERAL_SPLIT_DELIVERY}</h1>
+      <h1 className="text-md">{translate('label.checkout.splitDeliveryText')}</h1>
       {splitDeliveryItems && (
         <div className="mt-4 flex flex-col  \grid \grid-cols-1 gap-y-8 \sm:grid-cols-2 sm:gap-x-4 ">
           {splitDeliveryDates?.map((deliveryDate: any, Idx: any) => (
@@ -82,7 +78,7 @@ function SplitDelivery({
               className="flex w-full  border-gray-30 gap-x-5 flex-row"
             >
               <div className="\h-full w-full">
-                <h2 className="text-sm font-bold">{`Delivery ${Idx + 1}`}</h2>
+                <h2 className="text-sm font-bold">{translate('label.checkout.deliveryText')}{' '}{Idx + 1}</h2>
                 <ul role="list" className="divide-y divide-gray-200">
                   {splitDeliveryItems[deliveryDate]?.map(
                     (product: any, Idx: any) => (
@@ -124,7 +120,6 @@ function SplitDelivery({
                                     product.listPrice?.raw.withTax !=
                                       product.price?.raw?.withTax ? (
                                       <span className="px-2 text-sm text-red-400 line-through">
-                                        {GENERAL_PRICE_LABEL_RRP}{' '}
                                         {isIncludeVAT
                                           ? product.listPrice?.formatted
                                               ?.withTax
@@ -178,7 +173,7 @@ function SplitDelivery({
                                         {customInfo1FormattedData && (
                                           <div className="text-gray-700 text-ms">
                                             <span
-                                              title="Message"
+                                              title={translate('label.product.messageText')}
                                               className={personalizationFont}
                                             >
                                               {

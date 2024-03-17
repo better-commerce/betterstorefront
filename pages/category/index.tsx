@@ -4,13 +4,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
-import { IMG_PLACEHOLDER, SHOP_BY_CATEGORY } from '@components/utils/textVariables'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function CategoryList(props: any) {
   let absPath = ''
@@ -18,6 +20,7 @@ export default function CategoryList(props: any) {
     absPath = window?.location?.href
   }
   const router = useRouter()
+  const translate = useTranslation()
   return (
     <>
       <NextHead>
@@ -26,14 +29,14 @@ export default function CategoryList(props: any) {
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>Category</title>
-        <meta name="title" content="Category" />
-        <meta name="description" content="Category" />
-        <meta name="keywords" content="Category" />
+        <title>{translate('label.category.categoryText')}</title>
+        <meta name="title" content={translate('label.category.categoryText')} />
+        <meta name="description" content={translate('label.category.categoryText')} />
+        <meta name="keywords" content={translate('label.category.categoryText')} />
 
         <meta property="og:image" content="" />
-        <meta property="og:title" content="Category" key="ogtitle" />
-        <meta property="og:description" content="Category" key="ogdesc" />
+        <meta property="og:title" content={translate('label.category.categoryText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.category.categoryText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta
           property="og:url"
@@ -44,7 +47,7 @@ export default function CategoryList(props: any) {
       <main className="w-full px-4 mx-auto sm:px-6 container lg:px-6 2xl:px-0">
         <section aria-labelledby="products-heading ">
           <h1 className="mt-4 tracking-tight pt-5 dark:text-gray-700">
-            {SHOP_BY_CATEGORY}
+            {translate('label.category.shopByCategoryText')}
           </h1>
           {props?.data.length > 0 && (
             <div className="flow-root mt-1 sm:mt-0 ">
@@ -103,7 +106,7 @@ export default function CategoryList(props: any) {
             <>
               <div className="flex flex-col py-32 text-center">
                 <h1 className="w-full mx-auto text-4xl font-bold text-gray-200">
-                  No Category Available
+                  {translate('label.category.noCategoryAvailableText')}
                 </h1>
               </div>
             </>
@@ -148,6 +151,7 @@ export async function getStaticProps({
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: categoryUIDData,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)

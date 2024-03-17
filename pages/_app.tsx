@@ -19,7 +19,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import OverlayLoader from '@components/common/OverlayLoader'
 import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
-import { ContentSnippet } from '@components/common/Content'
+import { appWithTranslation } from 'next-i18next'
 import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
@@ -625,4 +625,4 @@ MyApp.getInitialProps = async (
   }
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

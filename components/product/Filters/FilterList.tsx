@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
-import { BTN_SEARCH } from '@components/utils/textVariables'
 import { useUI } from '@components/ui'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -103,10 +103,11 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 }
 
 const SearchInput = ({ placeholder, handleSearch }: any) => {
+  const translate = useTranslation()
   return (
     <>
-      <label className="sr-only">{BTN_SEARCH}</label>
-      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={BTN_SEARCH} placeholder={BTN_SEARCH} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+      <label className="sr-only">{translate('label.search.searchText')}</label>
+      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={translate('label.search.searchText')} placeholder={translate('label.search.searchText')} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
     </>
   )
 }

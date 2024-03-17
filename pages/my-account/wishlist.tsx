@@ -1,29 +1,28 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
 import Wishlist from '@components/account/Wishlist'
-import wishlist from 'pages/wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
 import SideMenu from '@components/account/MyAccountMenu'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
+  const translate = useTranslation()
   const { user, deleteUser, isGuestUser } = useUI()
   const isIncludeVAT = vatIncluded()
   const currentOption = "Wishlist"
@@ -70,14 +69,14 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
-        <title>{currentOption}</title>
-        <meta name="title" content={currentOption} />
-        <meta name="description" content={currentOption} />
-        <meta name="keywords" content={currentOption} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.wishlist.wishlistText')}</title>
+        <meta name="title" content={translate('label.wishlist.wishlistText')} />
+        <meta name="description" content={translate('label.wishlist.wishlistText')} />
+        <meta name="keywords" content={translate('label.wishlist.wishlistText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={currentOption} key="ogtitle" />
-        <meta property="og:description" content={currentOption} key="ogdesc" />
+        <meta property="og:title" content={translate('label.wishlist.wishlistText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.wishlist.wishlistText')} key="ogdesc" />
       </NextHead>
       <section className="relative pb-10 text-gray-900">
         <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
@@ -99,7 +98,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
                   <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
                 </svg>
               </Link>
-              <span className="leading-none">Wishlist</span>
+              <span className="leading-none">{translate('label.wishlist.wishlistText')}</span>
             </h3>
           </div>
           <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
@@ -193,11 +192,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               handleClick={handleClick}
               setShow={setShow}
               currentOption={currentOption}
-                  />
+            />
             <div
-              className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
-                isShow ? `` : ''
-              }`}
+              className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
+                }`}
             >
               <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
                 <Wishlist />
@@ -215,11 +213,13 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex,
+    }, // will be passed to the page component as props
   }
 }
 

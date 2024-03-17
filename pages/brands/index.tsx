@@ -1,21 +1,22 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
-import { GetServerSideProps } from 'next'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useState } from 'react'
+import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -45,6 +46,7 @@ const dataNormalizr = (data: any = []) => {
 function BrandsPage({ brands }: any) {
   const router = useRouter()
   const data = dataNormalizr(brands.results)
+  const translate = useTranslation()
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
     const filteredData = data.filter((item: any) => {
@@ -86,23 +88,23 @@ function BrandsPage({ brands }: any) {
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL+ router.asPath} />
-        <title>Brands</title>
-        <meta name="title" content="Brands" />
-        <meta name="description" content="Brands" />
-        <meta name="keywords" content="Brands" />
+        <title>{translate('common.label.brandsText')}</title>
+        <meta name="title" content={translate('common.label.brandsText')} />
+        <meta name="description" content={translate('common.label.brandsText')} />
+        <meta name="keywords" content={translate('common.label.brandsText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="Brands" key="ogtitle" />
-        <meta property="og:description" content="Brands" key="ogdesc" />
+        <meta property="og:title" content={translate('common.label.brandsText')} key="ogtitle" />
+        <meta property="og:description" content={translate('common.label.brandsText')} key="ogdesc" />
       </NextHead>
       <div className="bg-white">
         {/* Mobile menu */}
         <main className="container pb-24 mx-auto overflow-hidden">
           <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-6">
             <h1 className="font-extrabold tracking-tight text-gray-900">
-              Brands
+              {translate('common.label.brandsText')}
             </h1>
             <h2 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl">
-              {totalResults} results
+              {totalResults} {translate('common.label.resultsText')}
             </h2>
             <div className="flex flex-wrap items-center justify-center w-full py-5">
               {ALPHABET.split('').map((letter: any, key: number) => {
@@ -145,7 +147,7 @@ function BrandsPage({ brands }: any) {
             <div className="flex items-center justify-center w-full py-5">
               <div className="flex flex-row w-1/3 px-4 py-2 border border-gray-300 rounded-md shadow-sm min-w-searchbar ">
                 <label className="hidden" htmlFor={'search-bar'}>
-                  Search
+                  {translate('label.search.searchText')}
                 </label>
                 <input
                   id={'search-bar'}
@@ -213,6 +215,7 @@ export async function getStaticProps({
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       brands: brandsUIDData?.result,
       snippets: brandsUIDData?.snippets ?? [],
     },

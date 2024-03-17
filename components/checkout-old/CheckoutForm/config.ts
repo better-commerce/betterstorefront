@@ -2,8 +2,6 @@ import * as Yup from 'yup'
 
 import {
   GENERAL_DELIVERY_METHOD,
-  GENERAL_DELIVERY_ADDRESS,
-  GENERAL_PAYMENT_METHOD,
   GENERAL_TITLE,
   GENERAL_MISS,
   GENERAL_MR,
@@ -27,11 +25,11 @@ export const PANELS = [
     key: 'deliveryMethod',
   },
   {
-    title: GENERAL_DELIVERY_ADDRESS,
+    title: "Delivery Address",
     key: 'deliveryAddress',
   },
   {
-    title: GENERAL_PAYMENT_METHOD,
+    title: "Payment Method",
     key: 'paymentMethod',
   },
 ]

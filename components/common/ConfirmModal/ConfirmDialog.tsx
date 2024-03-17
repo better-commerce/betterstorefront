@@ -7,13 +7,11 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 // Component Imports
 import { useUI } from "@components/ui/context";
-
-// Other Imports
-import { CLOSE_PANEL } from "@components/utils/textVariables";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 
 const ConfirmDialog = () => {
-
+    const translate = useTranslation()
     const { confirmDialogData, resetConfirmDialogData } = useUI();
     const { title = "", show = false, message = "", okText = "OK", cancelText = "Cancel", okCallback = () => { }, cancelCallback = () => { } } = confirmDialogData || {};
 
@@ -45,7 +43,7 @@ const ConfirmDialog = () => {
                                                         className="inline p-0 text-black hover:text-black"
                                                         onClick={() => resetConfirmDialogData()}
                                                     >
-                                                        <span className="sr-only">{CLOSE_PANEL}</span>
+                                                        <span className="sr-only">{translate('common.label.closePanelText')}</span>
                                                         <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                                                     </button>
 

@@ -2,13 +2,13 @@
 
 import React, { FC, useState } from "react";
 import backgroundLineSvg from "images/Moon.svg";
-
 import useInterval from "react-use/lib/useInterval";
 import useBoolean from "react-use/lib/useBoolean";
 import Image from "next/image";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import Prev from "../shared/NextPrev/Prev";
 import Next from "../shared/NextPrev/Next";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionHero2Props {
   className?: string;
@@ -19,6 +19,7 @@ let TIME_OUT: NodeJS.Timeout | null = null;
 
 const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
   // =================
+  const translate = useTranslation()
   const [indexActive, setIndexActive] = useState(0);
   const [isRunning, toggleIsRunning] = useBoolean(true);
 
@@ -114,7 +115,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
               </div>
 
               <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={item?.btnLink} >
-                <span>Explore More</span>
+                <span>{translate('label.home.exploreMoreBtnText')}</span>
                 <span>
                   <svg className="w-5 h-5 ms-2.5" viewBox="0 0 24 24" fill="none">
                     <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
