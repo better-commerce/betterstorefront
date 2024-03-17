@@ -12,6 +12,8 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import React from 'react'
 import MyReturns from '@components/account/MyReturns'
 import SideMenu from '@components/account/MyAccountMenu'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
@@ -173,9 +175,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
             currentOption={currentOption}
           />
           <div
-            className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-              isShow ? `` : ''
-            }`}
+            className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
+              }`}
           >
             <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
               <MyReturns />
@@ -192,11 +193,13 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex,
+    }, // will be passed to the page component as props
   }
 }
 

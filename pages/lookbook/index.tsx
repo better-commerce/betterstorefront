@@ -14,6 +14,8 @@ import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 SwiperCore.use([Navigation])
 
 function LookbookPage({ data }: any) {
@@ -122,6 +124,7 @@ export async function getStaticProps({
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: lookbookData,
       globalSnippets: infra?.snippets ?? [],
       snippets: [],

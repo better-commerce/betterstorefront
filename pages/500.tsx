@@ -13,6 +13,8 @@ import LayoutError from '../components/common/Layout/LayoutError'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 export async function getStaticProps({
   preview,
@@ -22,6 +24,7 @@ export async function getStaticProps({
   const config = { locale, locales }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }

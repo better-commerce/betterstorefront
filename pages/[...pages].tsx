@@ -5,6 +5,8 @@ import { PlainText, ProductCollection, Video, Image, ImageCollection } from '@co
 import React from 'react'
 import commerce from '@lib/api/commerce'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 const COMPONENTS_MAP: any = {
   PlainText: (props: any) => <PlainText {...props} />,
@@ -47,6 +49,7 @@ const PAGE_TYPE = PAGE_TYPES['Brand']
 export default withDataLayer(BrandPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   const slug: any = context?.query?.pages[0] || ''
   const response = await getBrandBySlug(slug, context.req.cookies)
 
@@ -62,6 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
       slug: slug,
       brandDetails: response,

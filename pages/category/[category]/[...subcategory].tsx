@@ -18,7 +18,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
@@ -28,6 +28,7 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
@@ -38,6 +39,7 @@ const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 
 export async function getStaticProps(context: any) {
+  const { locale, locales} = context
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
   const slug =
@@ -100,6 +102,7 @@ export async function getStaticProps(context: any) {
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -112,6 +115,7 @@ export async function getStaticProps(context: any) {
     else {
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -124,6 +128,7 @@ export async function getStaticProps(context: any) {
   } else
     return {
       props: {
+        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         category: categorySlugUIDData,
         slug,
         products: null,

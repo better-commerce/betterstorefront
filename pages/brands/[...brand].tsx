@@ -7,7 +7,7 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -35,6 +35,7 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
@@ -656,6 +657,7 @@ export async function getStaticProps({
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
       slug: slug,

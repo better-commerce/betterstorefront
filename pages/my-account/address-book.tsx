@@ -11,8 +11,9 @@ import { useUI } from '@components/ui/context'
 import React from 'react'
 import AddressBook from '@components/account/Address/AddressBook'
 import SideMenu from '@components/account/MyAccountMenu'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
@@ -211,11 +212,13 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex, 
+    }, // will be passed to the page component as props
   }
 }
 

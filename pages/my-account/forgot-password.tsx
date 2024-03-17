@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import { Button } from '@components/ui'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_FORGOT_PASSWORD,
 } from '@components/utils/constants'
 import axios from 'axios'
@@ -12,6 +13,7 @@ import { useUI } from '@components/ui/context'
 import { Messages, EmptyString } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function ForgotPasswordPage() {
   const { setAlert } = useUI()
   const translate = useTranslation()
@@ -136,7 +138,10 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(ForgotPasswordPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
   }
 }

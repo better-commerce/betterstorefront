@@ -15,12 +15,14 @@ import MyOrders from '@components/account/Orders/MyOrders'
 import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import SideMenu from '@components/account/MyAccountMenu'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const PAGE_SIZE = 10
 
 function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
@@ -167,7 +169,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{currentOption}</title>
         <meta name="title" content={currentOption} />
         <meta name="description" content={currentOption} />
@@ -294,9 +296,8 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
               currentOption={currentOption}
             />
             <div
-              className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-                isShow ? `` : ''
-              }`}
+              className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
+                }`}
             >
               <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
                 <MyOrders
@@ -320,11 +321,13 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex,
+    }, // will be passed to the page component as props
   }
 }
 

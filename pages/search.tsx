@@ -15,13 +15,14 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import commerce from '@lib/api/commerce'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -400,9 +401,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const allProducts = await commerce.getAllProducts({ ...DEFAULT_STATE })
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
       snippets: allProducts?.snippets ?? [],
     }, // will be passed to the page component as props

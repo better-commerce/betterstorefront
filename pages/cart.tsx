@@ -24,13 +24,14 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
 import { vatIncluded , getCartValidateMessages, maxBasketItemsCount  } from '@framework/utils/app-util'
-import { LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'))
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -1240,6 +1241,7 @@ Cart.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketRef: any = cookies.basketId
   if (!basketRef) {
@@ -1254,6 +1256,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],
     }, // will be passed to the page component as props

@@ -13,8 +13,9 @@ import React from 'react'
 import Wishlist from '@components/account/Wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
 import SideMenu from '@components/account/MyAccountMenu'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
@@ -68,7 +69,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('label.wishlist.wishlistText')}</title>
         <meta name="title" content={translate('label.wishlist.wishlistText')} />
         <meta name="description" content={translate('label.wishlist.wishlistText')} />
@@ -191,11 +192,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
               handleClick={handleClick}
               setShow={setShow}
               currentOption={currentOption}
-                  />
+            />
             <div
-              className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
-                isShow ? `` : ''
-              }`}
+              className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
+                }`}
             >
               <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
                 <Wishlist />
@@ -213,11 +213,13 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex,
+    }, // will be passed to the page component as props
   }
 }
 
