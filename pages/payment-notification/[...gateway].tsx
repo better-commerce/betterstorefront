@@ -10,7 +10,7 @@ import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayN
 
 // Other Imports
 import { getItem } from '@components/utils/localStorage'
-import { EmptyString } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
 import {
   PaymentMethodType,
   PaymentMethodTypeId,
@@ -18,6 +18,7 @@ import {
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { CARD_PAYMENT_3DS_ENABLED } from '@components/checkout-old/CheckoutForm/PaymentButton/CheckoutPaymentButton'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const GatewayPage = (props: IGatewayPageProps) => {
   const { gateway, isCancelled } = props
@@ -53,6 +54,7 @@ const GatewayPage = (props: IGatewayPageProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   let propParams: any
   const params: any = context?.query
   const gateway = params?.gateway?.length ? params?.gateway[0] : ''
@@ -119,6 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       gateway: gateway, // Generic
       isCancelled: isCancelled, // Generic
       params: propParams, // Values depend on payment gateway provider

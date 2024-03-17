@@ -6,8 +6,8 @@ import Heading from "@new-components/Heading/Heading";
 import Glide from "@glidejs/glide/dist/glide.esm";
 import CollectionCard from "./CollectionCard";
 import CollectionCard2 from "./CollectionCard2";
-import { DEMO_LARGE_PRODUCTS } from "./SectionSliderLargeProduct2";
 import Link from "next/link";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionSliderLargeProductProps {
   className?: string;
@@ -21,7 +21,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
   const sliderRef = useRef(null);
 
   const [isShow, setIsShow] = useState(false);
-
+  const translate = useTranslation()
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
       perView: 3,
@@ -92,7 +92,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
                   <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
                   <div className="absolute flex flex-col items-center justify-center inset-y-6 inset-x-10">
                     <div className="relative flex items-center justify-center">
-                      <span className="text-xl font-semibold">More Looks</span>
+                      <span className="text-xl font-semibold">{translate('common.label.moreLooksText')}</span>
                       <svg
                         className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110"
                         viewBox="0 0 24 24"
@@ -117,7 +117,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
                         />
                       </svg>
                     </div>
-                    <span className="mt-1 text-sm">Show me more</span>
+                    <span className="mt-1 text-sm">{translate('common.label.showMeMoreText')}</span>
                   </div>
                 </div>
               </Link>

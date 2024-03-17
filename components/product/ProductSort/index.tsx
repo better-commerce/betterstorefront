@@ -3,14 +3,12 @@ import { Fragment, useEffect, useState } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
-import { GENERAL_SORT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { getItem } from '@components/utils/localStorage'
 import { useUI } from '@components/ui'
 import { Switch } from '@headlessui/react'
 import Radio from '@new-components/shared/Radio/Radio'
-import ButtonThird from '@new-components/shared/Button/ButtonThird'
-import ButtonPrimary from '@new-components/shared/Button/ButtonPrimary'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {
   products: any
@@ -23,6 +21,7 @@ export default function ProductSort({
   action,
   routerSortOption,
 }: Props) {
+  const translate = useTranslation()
   const router = useRouter()
   const { isCompared, setIsCompared } = useUI()
   const [enabled, setEnabled] = useState(false)
@@ -65,12 +64,12 @@ export default function ProductSort({
       <div>
         <div className="container flex items-center justify-end w-full px-4 pt-1 mx-auto">
           <div className="flex flex-col py-0 pr-1 text-xs font-normal text-black font-14 whitespace-nowrap dark:text-white">
-            Compare Items
+          {translate('label.product.compareItemsText')}
           </div>
           <div className="flow-root w-10 px-2 sm:w-14">
             <div className="flex justify-center flex-1 mx-auto">
               <Switch checked={enabled} onChange={handleChange} className={`${enabled ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
-                <span className="sr-only">Compare Items</span>
+                <span className="sr-only">{translate('label.product.compareItemsText')}</span>
                 <span aria-hidden="true" className={`${enabled ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
               </Switch>
             </div>

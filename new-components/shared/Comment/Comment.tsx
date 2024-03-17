@@ -2,12 +2,14 @@ import { _getPersonNameRd } from "@components/common/Header/fakeData";
 import React from "react";
 import { FC } from "react";
 import Avatar from "../Avatar/Avatar";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface CommentProps {
   isSmall?: boolean;
 }
 
 const Comment: FC<CommentProps> = ({ isSmall }) => {
+  const translate = useTranslation()
   return (
     <div className="flex nc-CommentCard ">
       <div className="pt-1">
@@ -23,13 +25,11 @@ const Comment: FC<CommentProps> = ({ isSmall }) => {
           </a>
           <span className="mx-2">·</span>
           <span className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1 sm:text-sm">
-            May 20, 2021
+            {translate('common.label.may20Text')}
           </span>
         </div>
         <span className="block mt-2 mb-3 text-neutral-700 sm:mt-3 sm:mb-4 dark:text-neutral-300">
-          In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at,
-          feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend
-          quam a odio. In hac habitasse platea dictumst.
+          {translate('common.label.loremIpsumText')}
         </span>
         <div>
           <button
@@ -51,7 +51,7 @@ const Comment: FC<CommentProps> = ({ isSmall }) => {
               ></path>
             </svg>
             <span className="text-xs leading-none text-neutral-900 dark:text-neutral-200">
-              Reply
+              {translate('common.label.replyText')}
             </span>
           </button>
         </div>

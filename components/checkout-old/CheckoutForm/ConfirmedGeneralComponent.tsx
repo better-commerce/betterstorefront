@@ -1,4 +1,4 @@
-import { GENERAL_EDIT } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation';
 
 export default function ConfirmedGeneralComponent({
   onStateChange,
@@ -7,6 +7,7 @@ export default function ConfirmedGeneralComponent({
   handleOpenEditAddressModal=() => {},
   isPaymentLink = false,
 }: any) {
+  const translate = useTranslation();
   return (
     <div className="flex flex-col text-gray-900">
       <div className="flex">
@@ -28,7 +29,7 @@ export default function ConfirmedGeneralComponent({
             className="font-bold uppercase btn font-xs"
             type="button"
           >
-            {GENERAL_EDIT}
+            {translate('common.label.editText')}
           </button>
         </div>
       )}

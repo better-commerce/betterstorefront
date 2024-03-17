@@ -5,8 +5,10 @@ import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { matchStrings } from '@framework/utils/parse-util'
 import { getCurrency } from '@framework/utils/app-util'
 import { useUI } from '@components/ui'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CurrencySwitcher({ config = [], title, action }: any) {
+  const translate = useTranslation()
   const { setCurrency } = useUI()
   const [currencySymbol, setCurrencySymbol] = useState('')
 
@@ -21,7 +23,7 @@ export default function CurrencySwitcher({ config = [], title, action }: any) {
       <Menu.Button className="grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" aria-label="Currency" >
         <CurrencyDollarIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Currency" />
         <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display">
-          Currency
+          {translate('label.navBar.currencyText')} 
         </span>
       </Menu.Button>
       <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95" >

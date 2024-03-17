@@ -4,12 +4,14 @@ import commerce from '@lib/api/commerce'
 import ProductLayout from '@components/common/Layout/ProductLayout'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { LOADER_LOADING } from '@components/utils/textVariables'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { logError, notFoundRedirect } from '@framework/utils/app-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
@@ -138,6 +140,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: productSlugUIDData,
       slug: slug,
       globalSnippets: infraUIDData?.snippets ?? [],
@@ -181,8 +184,9 @@ function Slug({
   config,
 }: any) {
   const router = useRouter()
+  const translate = useTranslation()
   return router.isFallback ? (
-    <h1>{LOADER_LOADING}</h1>
+    <h1>{translate('common.message.loaderLoadingText')}</h1>
   ) : (
     data && (
       <ProductView

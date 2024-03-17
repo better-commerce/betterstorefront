@@ -1,1 +1,1 @@
-{"locales":["en-GB","en-US","es-ES"],"defaultLocale":"en-GB"}
+{"locales":["en-GB","en-US","es-ES"],"defaultLocale":"en-GB","localizations":[{"culture":"en-GB","countryName":"United Kingdom","countryCode":"GB","languageCode":"en","languageName":"en","currencyCode":"GBP","isActive":true},{"culture":"en-US","countryName":"United States","countryCode":"US","languageCode":"en","languageName":"en","currencyCode":"USD","isActive":false},{"culture":"es-ES","countryName":"Spain","countryCode":"ES","languageCode":"es","languageName":"es","currencyCode":"EUR","isActive":true}]}

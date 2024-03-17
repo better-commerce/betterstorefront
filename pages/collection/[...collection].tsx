@@ -22,7 +22,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -33,6 +33,8 @@ import { Redis } from '@framework/utils/redis-constants'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CompareSelectionBar = dynamic(() => import('@components/product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
@@ -115,6 +117,7 @@ export default function CollectionPage(props: any) {
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery: any = { ...router.query }
+  const translate = useTranslation()
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
     filters: [],
     sortBy: '',
@@ -454,7 +457,7 @@ export default function CollectionPage(props: any) {
                                 <>
                                   <Link legacyBehavior href={img?.link} passHref >
                                     <span className="font-medium text-left text-white underline text-12">
-                                      Shop now
+                                      {translate('common.label.shopNowText')}
                                     </span>
                                   </Link>
                                 </>
@@ -550,12 +553,12 @@ export default function CollectionPage(props: any) {
           <div className="w-full py-32 mx-auto text-center">
             <h3 className="py-3 text-3xl font-semibold text-gray-200">
               {' '}
-              No Item Available in {props?.name} Collection!
+              {translate('label.collection.noItemAvailableText')} {props?.name} {translate('label.collection.collectionsTextWithExclamationMark')}
             </h3>
             <Link href="/collection" passHref>
               <span className="text-lg font-semibold text-indigo-500">
                 <ChevronLeftIcon className="relative top-0 inline-block w-4 h-4"></ChevronLeftIcon>{' '}
-                Back to collections
+                {translate('label.collection.backToCollectionsText')}
               </span>
             </Link>
           </div>
@@ -595,7 +598,7 @@ export default function CollectionPage(props: any) {
 
 CollectionPage.Layout = Layout
 
-export async function getStaticProps({ params, ...context }: any) {
+export async function getStaticProps({ params, locale, locales, ...context }: any) {
   const slug: any = params!.collection
   const cachedDataUID = {
     infraUID: Redis.Key.INFRA_CONFIG,
@@ -644,6 +647,7 @@ export async function getStaticProps({ params, ...context }: any) {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       ...collectionUIDData,
       query: context,
       slug: params!.collection[0],

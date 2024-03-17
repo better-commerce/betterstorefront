@@ -24,19 +24,7 @@ const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
 const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 import {
-  BTN_SIGN_OUT,
-  GENERAL_LOGIN,
   GENERAL_MY_ORDERS,
-  GENERAL_RECENTLY_VIEWED,
-  GENERAL_REGISTER,
-  MY_ACCOUNT_TITLE,
-  GENERAL_WORKFLOW_TITLE,
-  SELECT_CURRENCY,
-  SELECT_LANGUAGE,
-  GENERAL_ITEM_IN_CART,
-  SOCIAL_REGISTER_GOOGLE,
-  SOCIAL_REGISTER_FACEBOOK,
-  SOCIAL_REGISTER_APPLE,
 } from '@components/utils/textVariables'
 import {
   getCurrentPage,
@@ -58,6 +46,7 @@ import {
   getConfig,
 } from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
@@ -88,6 +77,7 @@ interface Props {
 
 
 const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [] }) => {
+  const translate = useTranslation();
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
   const router = useRouter()
@@ -107,7 +97,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const socialMediaConfigs = [
     {
         type: SocialMediaType.GOOGLE,
-        title: SOCIAL_REGISTER_GOOGLE,
+        title: translate('label.login.googleLoginText'),
         className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
         head: (
             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded google-plus-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -118,7 +108,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     },
     {
         type: SocialMediaType.FACEBOOK,
-        title: SOCIAL_REGISTER_FACEBOOK,
+        title: translate('label.login.facebookLoginText'),
         className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
         head: (
             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded fb-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -129,7 +119,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     },
     {
         type: SocialMediaType.APPLE,
-        title: SOCIAL_REGISTER_APPLE,
+        title: translate('label.login.appleLoginText'),
         className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
         head: (
             <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded apple-logo" width="4" height="4" viewBox="0 0 496.255 608.728">
@@ -141,8 +131,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
  ];
 
   const accountDropDownConfigUnauthorized: any = [
-    { href: '/my-account/login', title: GENERAL_LOGIN, className: 'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full', head: null, tail: null, },
-    { href: '/my-account/register', title: GENERAL_REGISTER, className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full', head: null, tail: null, },  
+    { href: '/my-account/login', title: translate('label.login.loginBtnText'), className: 'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full', head: null, tail: null, },
+    { href: '/my-account/register', title: translate('common.label.registerText'), className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full', head: null, tail: null, },  
   ]
 
   socialMediaConfigs?.forEach(socialMediaConfig => {
@@ -158,7 +148,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   });
 
   const accountDropDownConfigAuthorized: any = [
-    { href: '/my-account', title: MY_ACCOUNT_TITLE, className: 'text-left p-2 cursor-pointer', },
+    { href: '/my-account', title: translate('common.label.myAccountText'), className: 'text-left p-2 cursor-pointer', },
     { href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders', title: GENERAL_MY_ORDERS, className: 'text-left p-2 cursor-pointer', },
     {
       href: '/',
@@ -168,13 +158,13 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
           await signOut()
         }
       },
-      title: BTN_SIGN_OUT,
+      title: translate('label.common.signOutText'),
       className: 'text-left p-2 cursor-pointer text-red-600',
     },
   ]
 
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = !isGuestUser ? user.userId ? `Hi, ${user.firstName}` : 'My account' : ''
+  let title = !isGuestUser ? user.userId ? `Hi, ${user.firstName}` : translate('common.label.myAccountText') : ''
   if (!isGuestUser && user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
@@ -345,11 +335,11 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
             <div className="relative flex flex-col w-full max-w-xs pb-12 overflow-y-auto bg-white shadow-xl sm:max-w-xl md:max-w-xl bg-header-color z-9999">
               <div className="flex justify-between px-4 pt-5 pb-2 item-center">
                 <div className="px-0 text-sm font-bold text-black sm:text-lg whitespace-nowrap ">
-                  INC VAT
-                  <ToggleSwitch className="px-4 include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                  {translate('label.navBar.includeVatText')} 
+                  <ToggleSwitch className="px-4 include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
                 </div>
                 <button type="button" onClick={() => setOpen(false)} className="absolute inline-flex items-center justify-center p-0 -m-2 text-gray-400 rounded-md right-3 top-3" >
-                  <span className="sr-only">Close menu</span>
+                  <span className="sr-only">{translate('common.label.closeMenuText')}</span>
                   <XMarkIcon className="mt-1 text-white w-7 h-7" aria-hidden="true" />
                 </button>
               </div>
@@ -406,10 +396,10 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
           <div className="promotion-banner mob-marquee"></div>
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
             {b2bEnabled && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> Prices inc VAT </div>
+            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> {translate('label.navBar.pricesIncludingVatText')} </div>
             <div className="flow-root w-10 px-2 sm:w-12">
               <div className="flex justify-center flex-1 mx-auto">
-                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">Yes</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">No</div>} onToggleChanged={onIncludeVATChanged} />
+                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
               </div>
             </div>
           </div>
@@ -419,12 +409,12 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       <header className={cn('fixed top-0 right-0 w-full bg-white shadow-md lg:top-6 sm:py-1 py-0 bg-header-color z-999 navbar-min-64', { fixed: showSearchBar })} >
         <nav aria-label="Top" className="container relative flex items-center justify-between w-full h-16 px-4 pb-0 mx-auto sm:pb-0 sm:px-4 md:px-4 lg:px-4 ipad-nav" >
           <button type="button" className="py-4 pl-2 pr-2 -ml-2 text-gray-400 bg-transparent rounded-md lg:hidden" onClick={() => { hamburgerMenu(); setOpen(true) }} >
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{translate('common.label.openMenu')}</span>
             <Bars3Icon className="w-6 h-6 sm:h-8 sm:w-8 mob-menu-icon" aria-hidden="true" />
           </button>
           <Link href="/" title="BetterCommerce">
             <div className="flex w-20 cursor-pointer xl:w-20">
-              <span className="sr-only">{GENERAL_WORKFLOW_TITLE}</span>
+              <span className="sr-only">{translate('label.navBar.betterCommerceText')}</span>
               <Logo />
             </div>
           </Link>
@@ -477,21 +467,20 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
             <Searchbar onClick={setShowSearchBar} keywords={keywords} />
             <Account title={title} config={accountDropdownConfig} deviceInfo={deviceInfo} />
             <div className="hidden sm:flex ">
-              <CurrencySwitcher config={currencies} title={SELECT_CURRENCY} action={configAction} />
-              <LanguageSwitcher config={languages} title={SELECT_LANGUAGE} action={configAction} />
+              <CurrencySwitcher config={currencies} title={translate('label.navBar.selectCurrencyText')} action={configAction} />
+              <LanguageSwitcher config={languages} title={translate('label.navBar.selectLanguageText')} action={configAction} />
             </div>
             <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-16">
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { handleWishlist() }} >
                 <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display ">
-                  Wishlist
-                </span>
+                  {translate('label.wishlist.wishlistText')} </span>
                 {wishListItems?.length > 0 && delayEffect && (
                   <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white bg-black rounded-full -top-1 sm:block -right-1">
                     {wishListItems?.length}
                   </span>
                 )}
-                <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
               </button>
             </div>
 
@@ -499,8 +488,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
               <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { viewCart(cartItems); openCart() }} >
                 <ShoppingCartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Add to cart" />
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display ">
-                  Cart
-                </span>
+                {translate('label.navBar.cartText')} </span>
                 {renderState && (
                   <>
                     {cartItems?.lineItems?.length > 0 && (
@@ -508,7 +496,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                         {cartItems?.lineItems?.length}
                       </span>
                     )}
-                    <span className="sr-only">{GENERAL_ITEM_IN_CART}</span>
+                    <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
                   </>
                 )}
               </button>

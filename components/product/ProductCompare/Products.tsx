@@ -12,8 +12,6 @@ import {
 } from '@components/utils/constants'
 import { round } from 'lodash'
 import {
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -25,6 +23,7 @@ import { matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 import ButtonNotifyMe from '../ButtonNotifyMe'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView')
@@ -56,7 +55,6 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   maxBasketItemsCount,
   attributesCount = 0,
 }) => {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
     link: productData.slug,
@@ -73,6 +71,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     setAlert,
     //includeVAT,
   } = useUI()
+  const translate = useTranslation();
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -219,7 +218,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
@@ -264,7 +263,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage

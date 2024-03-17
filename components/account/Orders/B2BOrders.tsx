@@ -13,7 +13,6 @@ import { useUI } from '@components/ui/context'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
 
 // Other Imports
-import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
 import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
@@ -234,7 +233,7 @@ export default function B2BOrders({
                           className="mt-2 pt-5"
                         >
                           <h2 id="recent-heading" className="sr-only">
-                            {GENERAL_RECENT_ORDERS}
+                            {translate('label.orderDetails.recentOrdersText')}
                           </h2>
                           <div className="w-full mx-auto overflow-hidden sm:px-4 lg:px-0 paged-orders">
                             <InfiniteScroll

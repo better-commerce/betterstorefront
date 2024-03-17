@@ -1,5 +1,4 @@
 import { DeviceIdKey, NEXT_GET_CART, SessionIdCookieKey, } from '@components/utils/constants'
-import { GENERAL_PROMOCODE, GENERAL_QUOTE_SUMMARY, GENERAL_SHIPPING, GENERAL_TAXES, GENERAL_TOTAL, ITEM_TYPE_ADDON, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX, } from '@components/utils/textVariables'
 import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
@@ -15,7 +14,6 @@ import { Disclosure, Transition, Dialog } from '@headlessui/react'
 import { Fragment, useReducer } from 'react'
 import { LoadingDots } from '@components/ui'
 import {  ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { CLOSE_PANEL, GENERAL_REMOVE, SHARE_IN_PERSON, } from '@components/utils/textVariables'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { CheckoutStepType, LoadingActionType, NEXT_BASKET_VALIDATE, } from '@components/utils/constants'
@@ -31,8 +29,10 @@ import { v4 as uuid_v4 } from 'uuid'
 import Cookies from 'js-cookie'
 import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import DataLayerInstance from '@components/utils/dataLayer'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData, config, location, }: any) {
+  const translate = useTranslation()
   const isBrowser = typeof window !== 'undefined'
   const INITIAL_STATE = {
     step: CheckoutStepType.NONE,
@@ -241,7 +241,6 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
           (x: any) => x.key === 'OrderSettings.EnabledPartialDelivery'
         )?.value || ''
     )
-
   const uiContext = useUI()
   const { setCartItems, cartItems, isPaymentLink, user, isGuestUser, basketId, referralProgramActive, setIsSplitDelivery, openLoginSideBar, isSplitDelivery, resetKitCart } = useUI()
   const { addToCart } = cartHandler()
@@ -498,10 +497,10 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                 <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
                   <div className="flex flex-col h-full p-0 px-0 pb-6 mx-auto bg-white shadow-xl sm:rounded-md">
                     <div className='flex items-center justify-between w-full py-4'>
-                      <h5 className='font-semibold text-black uppercase font-18'>Quote Detail-{quoteData?.customQuoteNo}</h5>
+                      <h5 className='font-semibold text-black uppercase font-18'>{translate('label.quotes.quoteDetailHeadingText')}{quoteData?.customQuoteNo}</h5>
                       <div className='justify-end'>
                         <button type="button" className="justify-end lg:-top-12 lg:-right-10 p-0.5 z-10 rounded-full dark:text-black" onClick={() => setQuoteModelClose()}>
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-8 h-8" aria-hidden="true" />
                         </button>
                       </div>
@@ -560,7 +559,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                           </div>
                           <div className="grid grid-cols-2 gap-4 mt-4">
                             <div className='flex flex-col gap-0 p-4 border border-gray-200'>
-                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>Billing Address</h4>
+                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>{translate('label.addressBook.BillingAddressHeadingText')}</h4>
                               <span className='font-semibold font-14'>{quoteViewData?.billingAddress?.firstName}, {quoteViewData?.billingAddress?.lastName}</span>
                               <span>{quoteViewData?.billingAddress?.address1}</span>
                               <span>{quoteViewData?.billingAddress?.address2}</span>
@@ -568,7 +567,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                               <span>{quoteViewData?.billingAddress?.countryCode}, {quoteViewData?.billingAddress?.postCode}</span>
                             </div>
                             <div className='flex flex-col gap-0 p-4 border border-gray-200'>
-                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>Shipping Address</h4>
+                              <h4 className='mb-4 font-semibold text-black uppercase font-18'>{translate('label.addressBook.shippingAddressHeadingText')}</h4>
                               <span className='font-semibold font-14'>{quoteViewData?.shippingAddress?.firstName}, {quoteViewData?.shippingAddress?.lastName}</span>
                               <span>{quoteViewData?.shippingAddress?.address1}</span>
                               <span>{quoteViewData?.shippingAddress?.address2}</span>
@@ -580,12 +579,12 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         <div className='sm:col-span-4'>
                           <>
                             <section aria-labelledby="summary-heading" className="p-4 px-4 mt-4 bg-white border border-gray-200 rounded-sm md:sticky top-24 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
-                              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{GENERAL_QUOTE_SUMMARY}</h4>
+                              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{translate('label.quotes.quoteSummaryText')}</h4>
                               <Disclosure defaultOpen>
                                 {({ open }) => (
                                   <>
                                     <Disclosure.Button className="flex items-center justify-between w-full gap-2 px-0 py-2 text-sm font-medium text-left text-black uppercase bg-white rounded-lg hover:bg-white">
-                                      <span>View Details</span>
+                                      <span>{translate('common.label.viewDetailsText')}</span>
                                       <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5`}/>
                                       {/* <i className={`${open ? 'rotate-180 transform' : ''} sprite-icons sprite-dropdown`} /> */}
                                     </Disclosure.Button>
@@ -593,7 +592,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                       <dl className="mt-2 space-y-2 sm:space-y-2">
                                         <div className="flex items-center justify-between py-3 border-gray-200 border-y">
                                           <dt className="text-sm text-black">
-                                            {isIncludeVAT ? SUBTOTAL_INCLUDING_TAX : SUBTOTAL_EXCLUDING_TAX}
+                                            {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {isIncludeVAT ? quoteViewData?.subTotal?.formatted?.withTax : quoteViewData?.subTotal?.formatted?.withoutTax}
@@ -601,7 +600,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                         </div>
                                         <div className="flex items-center justify-between pt-2 sm:pt-1">
                                           <dt className="flex items-center text-sm text-black">
-                                            <span>{GENERAL_SHIPPING}</span>
+                                            <span>{translate('label.orderSummary.shippingText')}</span>
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {isIncludeVAT ? quoteViewData?.shippingCharge?.formatted?.withTax : quoteViewData?.shippingCharge?.formatted?.withoutTax}
@@ -612,8 +611,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                             <div className="flex items-center justify-between pt-2 pb-2 border-b border-gray-200 sm:pt-1">
                                               <dt className="flex flex-col items-start text-sm text-black">
                                                 <span className="block text-xs">
-                                                  Discount
-                                                </span>
+                                                  {translate('label.orderSummary.discountText')} </span>
                                                 {groupedPromotions?.autoAppliedPromos?.map(
                                                   (promo: any, promoId: number) => {
                                                     return (
@@ -644,7 +642,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                             <div className="flex items-center justify-between pt-2 pb-2 border-b border-gray-200 sm:pt-1">
                                               <dt className="flex flex-col items-start text-sm text-black">
                                                 <span className="block text-xs">
-                                                  {GENERAL_PROMOCODE}
+                                                  {translate('label.basket.promoCodeText')}
                                                 </span>
                                                 {groupedPromotions?.appliedPromos?.map(
                                                   (promo: any, promoId: number) => {
@@ -673,7 +671,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                         )}
                                         <div className="flex items-center justify-between pt-2 sm:pt-1">
                                           <dt className="flex items-center text-sm text-black">
-                                            <span>{GENERAL_TAXES}</span>
+                                            <span>{translate('label.orderSummary.taxesText')}</span>
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {quoteViewData?.grandTotal?.formatted?.tax}
@@ -685,7 +683,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                 )}
                               </Disclosure>
                               <div className="flex items-center justify-between py-2 my-3 text-gray-900 border-y">
-                                <dt className="text-lg font-semibold text-black">{GENERAL_TOTAL}</dt>
+                                <dt className="text-lg font-semibold text-black">{translate('label.orderSummary.totalText')}</dt>
                                 <dd className="text-xl font-semibold text-black">
                                   {quoteViewData?.grandTotal?.formatted?.withTax}
                                 </dd>
@@ -766,8 +764,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                     as="div"
                     className="flex items-center justify-between w-full px-6 py-3 font-semibold leading-6 text-gray-900 uppercase font-18 xsm:text-md"
                   >
-                    You're about to lose Free Delivery!
-                    {loadingAction === LoadingActionType.NONE && (
+                    {translate('label.orderSummary.loseDeliveryText')} {loadingAction === LoadingActionType.NONE && (
                       <XMarkIcon
                         className="w-8 h-8 text-black border border-black rounded-md cursor-pointer hover:text-orange-500 hover:border-orange-500"
                         onClick={closeModal}
@@ -776,10 +773,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                   </Dialog.Title>
                   {/* <hr className="w-full my-2 shadow-md "></hr> */}
                   <p className="px-6 pb-2 text-sm font-normal text-black">
-                    Removing this item means you'll lose Free Delivery on this
-                    order. Are you sure you want to remove this item from your
-                    basket?
-                  </p>
+                    {translate('label.orderSummary.loseFreeDeliveryConfirmText')} </p>
                   <div className="flex items-center justify-start w-full gap-4 px-6 mt-2">
                     <button
                       onClick={() => {
@@ -791,7 +785,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                       {loadingAction === LoadingActionType.REMOVE_ITEM ? (
                         <>{LoadingDots}</>
                       ) : (
-                        <>{GENERAL_REMOVE}</>
+                        <>{translate('common.label.removeText')}</>
                       )}
                     </button>
 

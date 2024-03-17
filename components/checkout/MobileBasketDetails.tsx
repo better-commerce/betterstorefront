@@ -6,14 +6,7 @@ import {
   NEXT_REFERRAL_BY_SLUG,
   NEXT_REFERRAL_INFO,
 } from '@components/utils/constants'
-import {
-  BEEN_REFERRED_BY_A_FRIEND,
-  CLOSE_PANEL,
-  FIND_THEM,
-  GENERAL_SHIPPING,
-  IMG_PLACEHOLDER,
-  USER_NOT_FOUND,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { formatFromToDates, tryParseJson } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
@@ -29,6 +22,7 @@ import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/cart/PromotionInput'
+import { useTranslation } from '@commerce/utils/use-translation'
 interface BasketItem {
   id: string
   name: string
@@ -37,6 +31,7 @@ interface BasketItem {
 }
 
 const MobileBasketDetails = ({ data, deviceInfo }: any) => {
+  const translate = useTranslation()
   const { user, isGuestUser, cartItems, setAlert } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
@@ -82,7 +77,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
       setError(voucherInfo?.referralDetails?.message)
     } else {
       setIsLoading(false)
-      setError('Referral Vouchers not available for this user!')
+      setError(translate('label.checkout.referralNotAvailableUserText'))
     }
   }
   const handleInputChange = (e: any) => {
@@ -100,15 +95,15 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(USER_NOT_FOUND)
+          setError(translate('common.message.userWithNameNotFoundErrorMsg'))
         }
       } else {
         setIsLoading(false)
-        setError('Referral Code not found')
+        setError(translate('label.checkout.referralCodeNotFoundErrorMsg'))
       }
     } else {
       setIsLoading(false)
-      setError('Please enter appropriate Referral Code')
+      setError(translate('label.checkout.EnterReferralCodeText'))
     }
   }
 
@@ -146,7 +141,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
             <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-300 bg-gray-50">
               <span className="font-medium text-orange-700 font-12">
                 <ShoppingCartIcon className="inline-block w-4 h-4 text-orange-700" />{' '}
-                {open ? 'Hide' : 'Show'} order summary{' '}
+                {open ? translate('common.label.hideText') : translate('common.label.showText') }{translate('label.orderSummary.orderSummaryText')}{' '}
                 <ChevronDownIcon
                   className={`inline-block w-4 h-4 text-orange-700 ${
                     open ? 'rotate-180 transform' : ''
@@ -252,25 +247,24 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                                             </span>
                                           ) : null}
                                           <span className="pl-2 font-light text-black font-12">
-                                            {isIncludeVAT ? 'inc.' : 'excl.'}{' '}
-                                            VAT
+                                            {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText') }
                                           </span>
                                         </span>
                                       </>
                                     ) : (
                                       <>
                                         <span className="flex flex-col font-semibold text-red-500">
-                                          FREE
+                                          {translate('label.orderSummary.freeText')}
                                         </span>
                                         <span className="flex flex-col font-semibold text-black">
-                                          Qty: {product?.qty}
+                                          {translate('common.label.qtyText')} {product?.qty}
                                         </span>
                                       </>
                                     )}
                                   </div>
                                   <div className="justify-end">
                                     <span className="flex flex-col font-semibold text-black">
-                                      Qty: {product?.qty}
+                                      {translate('common.label.qtyText')} {product?.qty}
                                     </span>
                                   </div>
                                 </div>
@@ -291,7 +285,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         setReferralModalShow(true)
                       }}
                     >
-                      {BEEN_REFERRED_BY_A_FRIEND}
+                      {translate('label.myAccount.beenReferredByFriendHeadingText')}
                     </h3>
                   )}
                 <div className="px-4 mt-0">
@@ -317,7 +311,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                           {data?.estimatedDeliveryDate && (
                             <>
                               <dt className="flex flex-col items-start text-sm text-black">
-                                <span className="font-14">Delivery</span>
+                                <span className="font-14">{translate('label.checkout.deliveryText')}</span>
                               </dt>
                               <dd className="block text-black font-18">
                                 {isIncludeVAT
@@ -338,7 +332,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                       {groupedPromotions?.autoAppliedPromos?.length > 0 && (
                         <div className="flex items-end justify-between pt-2 mb-2 sm:pt-1">
                           <dt className="flex flex-col items-start text-sm text-black">
-                            <span className="font-14">Discount</span>
+                            <span className="font-14">{translate('label.orderSummary.discountText')}</span>
                             {groupedPromotions?.autoAppliedPromos?.map(
                               (promo: any, idx: number) => (
                                 <span key={idx} className="block mt-1 font-18">
@@ -367,7 +361,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                       {groupedPromotions?.appliedPromos?.length > 0 && (
                         <div className="flex items-end justify-between pt-2 mb-2 sm:pt-1">
                           <dt className="flex flex-col items-start text-sm text-black">
-                            <span className="font-14">Promo code</span>
+                            <span className="font-14">{translate('label.basket.promoCodeText')}</span>
                             {groupedPromotions?.appliedPromos?.map(
                               (promo: any, idx: number) => (
                                 <span key={idx} className="block mt-1 font-18">
@@ -394,7 +388,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     </div>
                     <div className="flex items-center justify-between pt-2 sm:pt-1">
                       <dt className="flex items-center text-black font-18">
-                        <span>Subtotal (ex. VAT)</span>
+                        <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
                       </dt>
                       <dd className="font-semibold text-black text-md">
                         {data?.subTotal?.formatted?.withoutTax}
@@ -402,7 +396,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     </div>
                     <div className="flex items-center justify-between pt-2 sm:pt-1">
                       <dt className="flex items-center text-black font-18">
-                        <span>Total VAT</span>
+                        <span>{translate('label.orderSummary.totalVATText')}</span>
                       </dt>
                       <dd className="font-semibold text-black text-md">
                         {data?.grandTotal?.formatted?.tax}
@@ -412,16 +406,16 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     {cartItems?.deliveryPlans?.length > 0 && (
                       <div className="flex items-center justify-between pt-2 sm:pt-1">
                         <dt className="flex items-center text-black font-18">
-                          <span>{GENERAL_SHIPPING}</span>
+                          <span>{translate('label.orderSummary.shippingText')}</span>
                         </dt>
                         <dd className="font-semibold text-black text-md">
                           {isIncludeVAT
                             ? cartItems?.shippingCharge?.raw?.withTax == 0
-                              ? 'FREE'
+                              ? translate('label.orderSummary.freeText')
                               : cartItems?.shippingCharge?.formatted?.withTax ||
                                 EmptyString
                             : cartItems?.shippingCharge?.raw?.withoutTax == 0
-                            ? 'FREE'
+                            ? translate('label.orderSummary.freeText')
                             : cartItems?.shippingCharge?.formatted
                                 ?.withoutTax || EmptyString}
                         </dd>
@@ -431,7 +425,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     <div
                       className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`}
                     >
-                      <dt className="font-bold text-black font-18">Total</dt>
+                      <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
                       <dd className="text-xl font-bold text-black">
                         {data?.grandTotal?.formatted?.withTax}
                         {/*{isIncludeVAT
@@ -489,7 +483,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          {BEEN_REFERRED_BY_A_FRIEND}
+                        {translate('label.myAccount.beenReferredByFriendHeadingText')}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button
@@ -499,7 +493,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                               setReferralModalShow(!referralModalShow)
                             }}
                           >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -509,15 +503,14 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         {referralAvailable && !referralInfo && (
                           <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                             <h2 className="mx-2 text-[30px] text-center">
-                              Search your Friend by their Referral Code
+                              {translate('label.checkout.searchFriendByReferralCodeText')}
                             </h2>
                             <p className="px-8 text-[18px] text-center">
-                              If you think they have signed up, please check and
-                              confirm their details below
+                              {translate('label.checkout.friendSignupConfirmationText')}
                             </p>
                             <input
                               type="text"
-                              placeholder="Enter your friend's Referral Code.."
+                              placeholder={translate('label.checkout.enterReferralCodeText')}
                               className="px-5 w-full my-2 py-3 border-[1px] border-gray-500"
                               onChange={handleInputChange}
                             />
@@ -530,7 +523,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                                 handleReferralSearch()
                               }}
                             >
-                              {isLoading ? <LoadingDots /> : FIND_THEM}
+                              {isLoading ? <LoadingDots /> : translate('label.myAccount.findReferralBtnText')}
                             </Button>
                           </div>
                         )}
@@ -541,11 +534,11 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                             )}
                           >
                             <h2 className="px-5 text-center">
-                              Congratulations, We found your friend!
+                              {translate('label.checkout.friendFoundConfirmationText')}
                             </h2>
                             <div className="py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600">
                               <p className="px-3 !mt-0 text-center font-bold ">
-                                Voucher-code: {referralInfo?.voucherCode}
+                                {translate('label.checkout.voucherCodeText')}: {referralInfo?.voucherCode}
                               </p>
                               <div
                                 className="w-5 m-0 "
@@ -563,7 +556,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                               Offer: {referralInfo?.promoName}
                             </p>
                             <p className="font-bold">
-                              Validity:{' '}
+                              {translate('label.checkout.validityText')}:{' '}
                               {/* {`This offer is valid for ${referralInfo?.validityDays} Days`} */}
                               {`${formatFromToDates(
                                 referralInfo?.validFrom,
@@ -571,9 +564,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                               )}`}
                             </p>
                             <p className="px-12 text-center">
-                              Use this voucher code in the Apply promotion
-                              section to avail this offer
-                            </p>
+                              {translate('common.label.availGiftText')}</p>
                           </div>
                         )}
                         <div className="flex w-full xl:h-[439px] 2xl:h-auto 2xl:object-none xl:object-cover">

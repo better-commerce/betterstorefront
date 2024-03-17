@@ -3,13 +3,15 @@ import { Transition, Dialog } from '@headlessui/react';
 import ImageZoom from 'react-image-zooom'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FC } from 'react'
-import { IMG_PLACEHOLDER, CLOSE_PANEL } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation';
 interface Props {
   previewImg: any
   handlePreviewClose: any
 }
 // Define the Preview
 const Preview: FC<React.PropsWithChildren<Props>> = ({ previewImg, handlePreviewClose }) => {
+  const translate = useTranslation()
   return (
     <>
       <Transition.Root show={previewImg != undefined} as={Fragment}>
@@ -51,7 +53,7 @@ const Preview: FC<React.PropsWithChildren<Props>> = ({ previewImg, handlePreview
                       className="absolute p-2 text-gray-400 hover:text-gray-500 right-2 top-2 z-99"
                       onClick={handlePreviewClose}
                     >
-                      <span className="sr-only">{CLOSE_PANEL}</span>
+                      <span className="sr-only">{translate('common.label.closePanelText')}</span>
                       <XMarkIcon
                         className="w-6 h-6 text-black"
                         aria-hidden="true"

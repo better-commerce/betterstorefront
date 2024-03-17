@@ -6,9 +6,11 @@ import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import ProductSaleCountdown from './SaleCountDown'
 import { priceFormat } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 declare const window: any
 SwiperCore.use([Navigation])
 export default function AvailableOffers({ currency, offers, key }: any) {
+  const translate = useTranslation()
   const [isOffers, setOffers] = useState(false)
   const [isCopied, showCopied] = useState(false)
   const [copyData, setCode] = useState<any>()
@@ -39,20 +41,20 @@ export default function AvailableOffers({ currency, offers, key }: any) {
           <div className="col-span-7 sm:col-span-3 mob-left-7">
             <h2 className="font-semibold font-16 text-16 dark:text-black">
               <span className="font-medium opacity_056 text-primary dark:text-black">
-                BEST PRICE:{' '}
+              {translate('label.product.bestPriceText')}{' '}
               </span>
               <span className="inline-block pl-1 text-sm text-black">
                 {priceFormat(bestprice, undefined, currency?.currencySymbol)}
               </span>
             </h2>
             <p className="text-xs font-medium text-gray-900">
-              {offers?.bestAvailablePromotion?.code} (Apply on checkout)
+              {offers?.bestAvailablePromotion?.code} {translate('label.product.applyOnCheckoutText')}
             </p>
             <ProductSaleCountdown startDate={offers?.bestAvailablePromotion?.fromDate} endDate={offers?.bestAvailablePromotion?.toDate} />
           </div>
           <div className="relative col-span-5 sm:col-span-3 item-right mob-left-5">
             <div className={`bg-black px-2 py-1 promo-copied text-xs capitalize text-white text-center rounded-md ${isCopied && copyData == offers?.bestAvailablePromotion?.code ? 'block' : 'hidden'}`} >
-              Copied!
+              {translate('label.product.copiedText')}
             </div>
             <div className="coupon-panel">
               <div className="coupon-text">

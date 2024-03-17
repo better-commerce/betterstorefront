@@ -16,6 +16,7 @@ import { useUI } from '@components/ui'
 import { getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
 import { EmptyString } from '@components/utils/constants';
 import { isMobile } from 'react-device-detect'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const INDEX_NAME = process.env.ALGOLIA_SEARCH_INDEX
 const ORIGINAL_SEARCH_CLIENT = algoliaSearch(process.env.ALGOLIA_SEARCH_APPLICATION_ID!, process.env.ALGOLIA_SEARCH_API_KEY!)
@@ -40,6 +41,7 @@ const ALGOLIA_SEARCH_SUGGESTIONS_INDEX = process.env.ALGOLIA_SEARCH_SUGGESTIONS_
 const ALGOLIA_SEARCH_SUGGESTIONS_INDEX_SOURCE_ID = process.env.ALGOLIA_SEARCH_SUGGESTIONS_INDEX_SOURCE_ID! || 'productindex_dev'
 
 const InstantSearchBar = (props: any) => {
+    const translate = useTranslation()
     const { maxBasketItemsCount } = props
     const isIncludeVAT = vatIncluded()
     const priceStatAttrKey = getAlgoliaSearchPriceColumn(isIncludeVAT)
@@ -72,7 +74,7 @@ const InstantSearchBar = (props: any) => {
             <div id="searchbox" className="relative justify-start w-full min-w-0 pr-0 text-left text-gray-400 sm:pr-3 sm:p-1 hover:text-gray-500" aria-label="Search">
                 <span className='absolute search-icon-pos'><i className='sprite-icons sprite-search'></i></span>
                 <SearchBox
-                    placeholder="Search"
+                    placeholder={translate('label.search.searchText')}
                     onChangeCapture={handleChange}
                     onResetCapture={handleClearSearch}
                 />
@@ -99,7 +101,7 @@ const InstantSearchBar = (props: any) => {
                                     <div className='block sm:hidden'>
                                         <button type="button"
                                             onClick={openPanel}
-                                            className='w-full my-2 btn-primary-blue'>Show Filters</button>
+                                            className='w-full my-2 btn-primary-blue'>{translate('label.search.showFiltersText')}</button>
                                     </div>
                                 </div>
 

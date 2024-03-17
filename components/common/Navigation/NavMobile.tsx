@@ -11,6 +11,7 @@ import SocialsList from "@new-components/shared/SocialsList/SocialsList";
 import SwitchDarkMode from "@new-components/shared/SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "@new-components/shared/ButtonClose/ButtonClose";
 import ButtonPrimary from "@new-components/shared/Button/ButtonPrimary";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -21,6 +22,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
   data = NAVIGATION_DEMO_2,
   onClickClose,
 }) => {
+  const translate = useTranslation()
   const _renderMenuChild = (
     item: NavItemType,
     itemClass = " pl-3 text-neutral-900 dark:text-neutral-200 font-medium "
@@ -153,7 +155,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
           {renderMagnifyingGlassIcon()}
           <input
             type="search"
-            placeholder="Type and press enter"
+            placeholder={translate('common.label.typeAndEnterText')}
             className="w-full text-sm bg-transparent border-none focus:outline-none focus:ring-0 "
           />
         </div>
@@ -168,8 +170,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
         <Logo />
         <div className="flex flex-col mt-5 text-sm text-slate-600 dark:text-slate-300">
           <span>
-            Discover the most outstanding articles on all topics of life. Write
-            your stories and share them
+            {translate('label.navBar.articleDescText')} 
           </span>
 
           <div className="flex items-center justify-between mt-4">
@@ -190,7 +191,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
       </ul>
       <div className="flex items-center justify-between px-5 py-6 space-x-2">
         <ButtonPrimary href={"/"} className="!px-10">
-          Buy this template
+          {translate('label.navBar.buytemplateText')} 
         </ButtonPrimary>
       </div>
     </div>

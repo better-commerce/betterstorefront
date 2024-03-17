@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
-import { BTN_NOTIFY_ME, BTN_PRE_ORDER } from '@components/utils/textVariables'
 import { PRODUCT_TAGS } from '@components/utils/constants'
 import { BellIcon, ClockIcon, ShoppingBagIcon, SparklesIcon, StarIcon, TagIcon } from '@heroicons/react/24/outline'
 import IconDiscount from '@new-components/IconDiscount'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {
   product: any
 }
 
 export default function ProductTag({ product }: Props) {
+  const translate = useTranslation()
   const [isNotifyMeEnabled, setIsNotifyMeEnabled] = useState(false)
   const [isPreorderEnabled, setIsPreorderEnabled] = useState(false)
   const [tagValues, setTagValues] = useState({
@@ -50,7 +51,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <BellIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          {BTN_NOTIFY_ME}
+          {translate('label.product.notifyMeText')}
         </div>
       </div>
     )
@@ -60,7 +61,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <ShoppingBagIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          {BTN_PRE_ORDER}
+          {translate('label.product.preOrderText')}
         </div>
       </div>
     )
@@ -78,7 +79,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <StarIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          Best Seller
+        {translate('label.product.bestSellerText')}
         </div>
       </div>
     )
@@ -89,7 +90,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <TagIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          Trending
+        {translate('label.product.trendingText')}
         </div>
       </div>
     )
@@ -100,7 +101,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <ClockIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          Exclusive
+        {translate('label.product.exclusiveText')}
         </div>
       </div>
     )

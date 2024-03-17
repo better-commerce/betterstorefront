@@ -11,13 +11,9 @@ import {
   NEXT_SHIPPING_ENDPOINT,
   NEXT_CLICK_AND_COLLECT,
 } from '@components/utils/constants'
-import geoData from '@components/utils/geographicService'
 import { vatIncluded } from '@framework/utils/app-util'
 import axios from 'axios'
-import {
-  ADDRESS_OF_YOUR_CHOICE,
-  IN_STORE_OR_COLLECT_PLUS,
-} from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function DeliveryOptions({
   products,
@@ -27,20 +23,21 @@ function DeliveryOptions({
   geoData,
   count,
 }: any) {
+  const translate = useTranslation()
   //split delivery options pending, hence using standard shipping options
   const DELIVERY_METHODS_TYPE = [
     {
       id: 1,
-      title: 'Deliver',
-      content: ADDRESS_OF_YOUR_CHOICE,
+      title: translate('label.checkout.deliverText'),
+      content: translate('label.checkout.toChoiceAddressText'),
       children: [],
       type: 2,
     },
     {
       id: 2,
       type: 1,
-      title: 'Collect',
-      content: IN_STORE_OR_COLLECT_PLUS,
+      title: translate('label.checkout.collectText'),
+      content: translate('common.label.inStoreUsingCollectPlusText'),
       children: [],
     },
   ]
@@ -48,7 +45,7 @@ function DeliveryOptions({
   const isIncludeVAT = vatIncluded()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState({
-    name: 'Country',
+    name: translate('label.checkout.countryText'),
     twoLetterIsoCode: geoData.CountryCode,
   })
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
@@ -64,7 +61,6 @@ function DeliveryOptions({
     children: [],
     type: 0,
   })
-  const [isSelected, setIsSelected] = useState(true)
   const [availableLocations, setAvailableLocations] = useState([])
   const [selectedStore, setSelectedStore] = useState({
     storeId: '',
@@ -130,7 +126,7 @@ function DeliveryOptions({
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
       else {
         const defaultCountry = appConfig.shippingCountries[0] || {
-          name: 'United Kingdom',
+          name: translate('label.checkout.defaultShippingCountryText'),
           twoLetterIsoCode: 'GB',
         }
         setSelectedCountry(defaultCountry)
@@ -278,7 +274,7 @@ function DeliveryOptions({
                   >
                     <div>
                       <h4 className="font-bold text-gray-900 uppercase">
-                        {'Standard Shipping'} {/* {item.displayName} */}
+                        {translate('label.checkout.standardShippingText')} {/* {item.displayName} */}
                       </h4>
                       <p className="py-2 text-sm">
                         {products[0]?.shippingSpeed}

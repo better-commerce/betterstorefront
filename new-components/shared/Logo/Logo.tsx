@@ -3,6 +3,7 @@ import logoImg from "images/logo.svg";
 import logoLightImg from "images/logo-light.svg";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface LogoProps {
   img?: string;
@@ -15,6 +16,7 @@ const Logo: React.FC<LogoProps> = ({
   imgLight = logoLightImg,
   className = "flex-shrink-0",
 }) => {
+  const translate = useTranslation();
   return (
     <Link
       href="/"
@@ -33,7 +35,7 @@ const Logo: React.FC<LogoProps> = ({
           priority
         />
       ) : (
-        "Logo Here"
+        translate('common.label.logoHereText')
       )}
       {imgLight && (
         <Image

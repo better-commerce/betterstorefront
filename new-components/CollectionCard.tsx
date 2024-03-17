@@ -6,6 +6,7 @@ import Prices from "./Prices";
 import Link from "next/link";
 import { StaticImageData } from "next/image";
 import NcImage from "./shared/NcImage/NcImage";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface CollectionCard2Props {
   className?: string;
@@ -22,6 +23,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
   description = "Product Description",
   price,
 }) => {
+  const translate = useTranslation();
   return (
     <div className={`CollectionCard2 group relative ${className}`}>
       <div className="relative flex flex-col">
@@ -69,7 +71,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
             <span className="h-5 mx-1 border-l sm:mx-2 border-slate-200 dark:border-slate-700"></span>
             <StarIcon className="w-4 h-4 text-orange-400" />
             <span className="ml-1 text-sm ">
-              <span className="line-clamp-1">4.9 (269 reviews)</span>
+              <span className="line-clamp-1">{translate('common.label.dummyReviewsText')}</span>
             </span>
           </div>
         </div>

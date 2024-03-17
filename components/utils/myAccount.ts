@@ -3,7 +3,6 @@ import {
   GENERAL_MY_RETURNS,
   WISHLIST_TITLE,
   GENERAL_MY_DETAILS,
-  ADDRESS_BOOK_TITLE,
   GENERAL_CONTACT_PREFERENCES
 } from '@components/utils/textVariables'
 

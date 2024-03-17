@@ -4,8 +4,10 @@ import moment from "moment";
 import OrderStatusMapping from "./OrderStatusMapping";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
+   const translate = useTranslation()
    let totalQty = 0;
    order?.itemsBasic?.forEach((x: any) => { totalQty = totalQty + x.qty; });
    let itemLabel = order?.itemsBasic?.length > 1 ? "ITEMS" : "ITEM";
@@ -27,14 +29,14 @@ const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
                      order?.orderDetails?.order?.id && (
                         <p className='text-sm font-medium text-black'>
                            {order?.orderDetails?.order?.deliveryPlans?.length > 0 ? (
-                              <span>Package {idx + 1}/{order?.orderDetails?.order?.deliveryPlans?.length} • </span>
+                              <span>{translate('label.orderDetails.packageText')} {idx + 1}/{order?.orderDetails?.order?.deliveryPlans?.length} • </span>
                            ) : (
-                              <span>Package {idx + 1}/1 • </span>
+                              <span>{translate('label.orderDetails.packageText')} {idx + 1}/1 • </span>
                            )}
 
                            <span className='mx-2'>{order?.orderDetails?.order?.items?.length > 1
-                              ? <span>Items</span>
-                              : <span>Item</span>
+                              ? <span>{translate('common.label.itemPluralText')}</span>
+                              : <span>{translate('common.label.itemSingularText')}</span>
                            }: {order?.orderDetails?.order?.items?.length}</span>
                            {
                               order?.showETA && (
