@@ -3,6 +3,7 @@ import React from 'react'
 
 // Package Imports
 import Router from 'next/router'
+import { t as translate } from "i18next";
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, } from '@paypal/paypal-js/types/components/buttons'
 
@@ -51,7 +52,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {

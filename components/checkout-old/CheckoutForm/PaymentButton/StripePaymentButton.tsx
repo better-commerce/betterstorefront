@@ -15,7 +15,6 @@ import { IPaymentButtonProps } from './BasePaymentButton'
 import { EmptyString, Messages } from '@components/utils/constants'
 import getStripe from '@components/utils/get-stripe'
 import { initPayment } from '@framework/utils/payment-util'
-import { GENERAL_PAY } from '@components/utils/textVariables'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
@@ -50,7 +49,7 @@ export class StripePaymentButton extends BasePaymentButton {
   ) {
     uiContext?.setOverlayLoaderState({
       visible: true,
-      message: 'Initiating order...',
+      message: translate('common.label.initiatingOrderText'),
     })
 
     const { state, result: orderResult } = await super.confirmOrder(
@@ -79,7 +78,7 @@ export class StripePaymentButton extends BasePaymentButton {
       }
       uiContext?.setOverlayLoaderState({
         visible: true,
-        message: 'Initiating payment...',
+        message: translate('common.label.initiatingPaymentText'),
       })
       const clientResult: any = await initPayment(
         this.state?.paymentMethod?.systemName,
@@ -136,7 +135,7 @@ export class StripePaymentButton extends BasePaymentButton {
     if (!submitResult?.error) {
       uiContext?.setOverlayLoaderState({
         visible: true,
-        message: 'Please wait...',
+        message: translate('common.label.pleaseWaitText'),
       })
       const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
 
@@ -226,7 +225,7 @@ export class StripePaymentButton extends BasePaymentButton {
                           elements
                         ),
                       disabled: !stripe || !elements,
-                      btnTitle: GENERAL_PAY,
+                      btnTitle: translate('label.checkout.payText'),
                     },
                   })}
                 </form>
