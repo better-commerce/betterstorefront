@@ -1,18 +1,18 @@
-import { Modal } from '@components/ui'
-import { Formik, Field, Form } from 'formik'
+import { Formik, Form } from 'formik'
 import { useState, useEffect, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios'
 import { NEXT_GET_RETURN_DATA } from '@components/utils/constants'
 import LoadingDots from '@components/ui/LoadingDots'
-import { BTN_SUBMIT } from '@components/utils/textVariables'
 import * as Yup from 'yup'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function ReturnModal({
   handleClose,
   returnData,
   handlePostReturn,
 }: any) {
+  const translate = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [orderReturnData, setOrderReturnData] = useState(null)
 
@@ -59,20 +59,20 @@ export default function ReturnModal({
 
   const config = [
     {
-      placeholder: 'Reason',
-      label: 'Select reason',
+      placeholder: translate('label.returnReason.reasonText'),
+      label: translate('label.returnReason.selectReasonText'),
       as: 'select',
       name: 'reasonsForReturn',
     },
     {
-      placeholder: 'Required action',
-      label: 'Select action',
+      placeholder: translate('label.returnReason.requiredActionText'),
+      label: translate('label.returnReason.selectActionText'),
       as: 'select',
       name: 'requiredActions',
     },
     {
-      placeholder: 'Comment',
-      label: 'Leave a comment',
+      placeholder: translate('common.label.commentText'),
+      label: translate('common.label.leaveCommentText'),
       as: 'text',
       name: 'comment',
     },
@@ -133,7 +133,7 @@ export default function ReturnModal({
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Create return
+                      {translate('label.orderDetails.createReturnBtnText')}
                     </Dialog.Title>
                     <div className="mt-2 flex justify-center items-center text-gray-900">
                       {isLoading ? (
@@ -213,7 +213,7 @@ export default function ReturnModal({
                                 type="submit"
                                 className="my-4 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                               >
-                                {isSubmitting ? <LoadingDots /> : BTN_SUBMIT}
+                                {isSubmitting ? <LoadingDots /> : translate('common.label.submitText')}
                               </button>
                             </Form>
                           )}

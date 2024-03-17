@@ -4,7 +4,6 @@ import s from './Swatch.module.css'
 import { Check } from '@components/icons'
 import Button, { ButtonProps } from '@components/ui/Button'
 import { isDark } from '@lib/colors'
-import { VARIANT_SWATCH } from '@components/utils/textVariables'
 interface SwatchProps {
   active?: boolean
   children?: any
@@ -43,7 +42,7 @@ const Swatch: React.FC<React.PropsWithChildren<Omit<ButtonProps, 'variant'> & Sw
 
     return (
       <Button
-        aria-label={VARIANT_SWATCH}
+        aria-label={"Variant Swatch"}
         className={swatchClassName}
         {...(label && color && { title: label })}
         style={color ? { backgroundColor: color } : {}}

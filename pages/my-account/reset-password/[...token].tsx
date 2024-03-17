@@ -1,11 +1,7 @@
 import { Layout } from '@components/common'
-import {
-  CHANGE_PASSWORD,
-} from '@components/utils/textVariables'
 import { useEffect, useState } from 'react'
 import {
     EmptyString,
-  NEXT_FORGOT_PASSWORD,
   NEXT_RESET_PASSWORD,
   NEXT_VALIDATE_TOKEN,
 } from '@components/utils/constants'
@@ -17,9 +13,11 @@ import Spinner from '@components/ui/Spinner'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { Messages } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [token, setToken] = useState(null)
+  const translate = useTranslation()
   const router: any = useRouter()
   const { setAlert } = useUI()
 
@@ -121,7 +119,7 @@ export default function ForgotPasswordPage() {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">
-            {CHANGE_PASSWORD}
+            {translate('common.label.changePasswordText')}
           </h1>
         </div>
         <form
@@ -157,7 +155,7 @@ export default function ForgotPasswordPage() {
               loading={formik.isSubmitting}
               disabled={!formik.isValid || formik.isSubmitting}
             >
-              {CHANGE_PASSWORD}
+              {translate('common.label.changePasswordText')}
             </Button>
           </div>
         </form>

@@ -7,6 +7,7 @@ import Badge from "./shared/Badge/Badge";
 import Input from "./shared/Input/Input";
 import ButtonCircle from "./shared/Button/ButtonCircle";
 import NcImage from "./shared/NcImage/NcImage";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionPromo3Props {
   className?: string;
@@ -14,6 +15,7 @@ export interface SectionPromo3Props {
 }
 
 const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data }) => {
+  const translate = useTranslation()
   return (
     <div className={`nc-SectionPromo3 ${className}`}>
       {data?.map((subs: any, subsIdx: number) => (
@@ -44,7 +46,7 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
               <Input
                 required
                 aria-required
-                placeholder="Enter your email"
+                placeholder={translate('common.message.enterYourEmailText')}
                 type="email"
                 rounded="rounded-full"
               />

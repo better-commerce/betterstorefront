@@ -1,7 +1,8 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
-import { PRODUCT_DESCRIPTION, GENERAL_SHIPPING, GENERAL_RETURNS } from '@components/utils/textVariables'
+import { GENERAL_RETURNS } from '@components/utils/textVariables'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -32,13 +33,14 @@ const Attributes = ({ attributes = [] }: any) => {
 }
 
 export default function ProductDetails({ product, description }: any) {
+  const translate = useTranslation()
   const detailsConfig = [
     // {
     //   title: PRODUCT_SPECIFICATION,
     //   InnerComponent: (props: any) => <Attributes {...props} />,
     // },
     {
-      title: GENERAL_SHIPPING,
+      title: translate('label.orderSummary.shippingText'),
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.shippingMessage || (
@@ -55,7 +57,7 @@ export default function ProductDetails({ product, description }: any) {
       ),
     },
     {
-      title: GENERAL_RETURNS,
+      title: translate('common.label.returnsText'),
       InnerComponent: (props: any) => (
         <p className="text-gray-900">
           {props.returnsMessage || (
@@ -71,7 +73,7 @@ export default function ProductDetails({ product, description }: any) {
 
   const descriptionConfig = [
     {
-      title: PRODUCT_DESCRIPTION,
+      title: translate('label.product.bundles.productInformationText'),
       InnerComponent: (props: any) => (
         <div
           className="space-y-2 text-sm text-gray-700 sm:text-md sm:space-y-6 font-h2-desc"

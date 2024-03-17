@@ -7,8 +7,8 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { BTN_RECOMMENDED_PROD, BTN_SEE_ALL, FEATURES_HEADING, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -34,6 +34,8 @@ import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
@@ -112,6 +114,7 @@ function BrandDetailPage({
   config,
   collections, // ...for Attribute Collection api response
 }: any) {
+  const translate = useTranslation()
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
@@ -406,9 +409,9 @@ function BrandDetailPage({
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          This is a bad url. please go back to
+          {translate('common.label.badUrlText')}
           <Link href="/brands">
-            <span className="px-3 text-indigo-500">All brands</span>
+            <span className="px-3 text-indigo-500">{translate('common.label.allBrandsText')}</span>
           </Link>
         </h1>
       </div>
@@ -428,7 +431,7 @@ function BrandDetailPage({
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
-        <meta name="title" content={brandDetails?.name || 'Brands'} />
+        <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
@@ -444,7 +447,7 @@ function BrandDetailPage({
               <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
                 <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5" />
-                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {SHOP_NOW} </button>
+                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
               <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
@@ -457,8 +460,8 @@ function BrandDetailPage({
             <div className="mt-10">
               <div className="flex flex-col gap-4 sm:px-4">
                 <div className="flex flex-row justify-between">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {BTN_RECOMMENDED_PROD} </p>
-                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
+                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {translate('label.product.recommendedProductText')} </p>
+                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {translate('common.label.seeAllText')}  </button>
                 </div>
                 <RecommendedProductCollection recommendedProducts={productCollectionRes} deviceInfo={deviceInfo} config={config} />
               </div>
@@ -473,9 +476,9 @@ function BrandDetailPage({
 
           <div className="container w-full pb-20 mx-auto">
             <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {FEATURES_HEADING} {` `} {brandDetails.name} </p>
+              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {translate('common.label.featuresText')} {` `} {brandDetails.name} </p>
               {!isOnlyMobile && (
-                <button className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
+                <button className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline" onClick={handleClick} > {translate('common.label.seeAllText')} </button>
               )}
             </div>
             {isOnlyMobile ? (
@@ -502,7 +505,7 @@ function BrandDetailPage({
         <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
           <div className="max-w-screen-sm">
             <Link href="/brands" passHref>
-              <span className="flex items-end upper case font-12">Brands</span>
+              <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
             </Link>
             <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
               {brandDetails?.name}
@@ -514,7 +517,7 @@ function BrandDetailPage({
             }
           </div>
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> Showing {data?.products?.total} {RESULTS}</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -660,6 +663,7 @@ export async function getStaticProps({
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
       slug: slug,

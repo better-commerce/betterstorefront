@@ -14,7 +14,7 @@ import { useUI } from '@components/ui'
 import { findByFieldName } from '@framework/utils/app-util'
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'
 import { Messages } from '@components/utils/constants'
-import { matchStrings } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export const NEW_ADDRESS_FORM_ID = 'newAddressForm'
 export const NEW_ADDRESS_FORM_FIELDS = [
@@ -293,7 +293,7 @@ const NewAddressModal = (props: INewAddressModalProps) => {
     btnTitle,
     isRegisterAsGuestUser,
   } = props
-
+  const translate = useTranslation()
   const { user, selectedAddressId } = useUI()
 
   return (
@@ -325,9 +325,9 @@ const NewAddressModal = (props: INewAddressModalProps) => {
                               <i className="mr-2 sprite-icon sprite-left-arrow"></i>
                             </a>
                             {selectedAddressId ? (
-                              <>Edit Address</>
+                              <>{translate('common.label.editAddressText')}</>
                             ) : (
-                              <>Add Address</>
+                              <>{translate('common.label.addAddressText')}</>
                             )}
                           </h3>
                           <button
@@ -335,7 +335,7 @@ const NewAddressModal = (props: INewAddressModalProps) => {
                             className="hidden text-black rounded-md outline-none hover:text-gray-500 sm:inline-block"
                             onClick={onCloseModal}
                           >
-                            <span className="sr-only">Close panel</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"

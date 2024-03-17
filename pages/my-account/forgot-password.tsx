@@ -1,29 +1,22 @@
 import { Layout } from '@components/common'
 import { GetServerSideProps } from 'next'
-import {
-  BTN_SUBMIT,
-  FORGOT_PASSWORD,
-  DETAILS_ERROR,
-  ERROR_WOOPS_SOMETHING_WENT_WRONG,
-} from '@components/utils/textVariables'
 import { useEffect, useState } from 'react'
 import { Button } from '@components/ui'
-import LoadingDots from '@components/ui/LoadingDots'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_FORGOT_PASSWORD,
-  NEXT_RESET_PASSWORD,
-  NEXT_VALIDATE_TOKEN,
 } from '@components/utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
 import { useUI } from '@components/ui/context'
-import classNames from 'classnames'
 import { Messages, EmptyString } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function ForgotPasswordPage() {
   const { setAlert } = useUI()
+  const translate = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [emailStatus, setEmailStatus] = useState('')
@@ -78,7 +71,7 @@ function ForgotPasswordPage() {
       }
       setIsLoading(false)
     } catch (error) {
-      setAlert({ type: 'error', msg: DETAILS_ERROR })
+      setAlert({ type: 'error', msg: translate('label.addressBook.updateFailedText') })
       setIsLoading(false)
     }
   }
@@ -98,7 +91,7 @@ function ForgotPasswordPage() {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">
-            {FORGOT_PASSWORD}
+            {translate('label.myAccount.forgotPasswordText')}
           </h1>
           <form
             onSubmit={handleSubmit}
@@ -131,7 +124,7 @@ function ForgotPasswordPage() {
               loading={isLoading}
               disabled={isLoading}
             >
-              {!isLoading && BTN_SUBMIT}
+              {!isLoading && translate('common.label.submitText')}
             </Button>
           </form>
         </div>
@@ -145,7 +138,10 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(ForgotPasswordPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
   }
 }

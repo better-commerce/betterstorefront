@@ -25,6 +25,7 @@ import Link from "next/link";
 import Nav from "./shared/Nav/Nav";
 import Next from "./shared/NextPrev/Next";
 import Prev from "./shared/NextPrev/Prev";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionSliderLargeProduct2Props {
   className?: string;
@@ -32,40 +33,42 @@ export interface SectionSliderLargeProduct2Props {
   cardStyle?: "style1" | "style2";
 }
 
-export const DEMO_LARGE_PRODUCTS = [
-  {
-    id: 1,
-    images: [full1Img, full11Img, full12Img, full13Img],
-    name: "Suede Bomber Jacket",
-    desc: "Orange",
-    price: 52,
-  },
-  {
-    id: 2,
-    images: [full2Img, full21Img, full22Img, full23Img],
-    name: "Downtown Pet Tote",
-    desc: "Black and Orange",
-    price: 88,
-  },
-  {
-    id: 3,
-    images: [full3Img, full31Img, full32Img, full33Img],
-    name: "Cader Leather Sneakers",
-    desc: "3 Sizes Available",
-    price: 60,
-  },
-];
+
 
 const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
   className = "",
   cardStyle = "style1",
 }) => {
+  const translate = useTranslation()
   const [tabActive, setTabActive] = useState("Last 24 hours");
 
   const sliderRef = useRef(null);
 
   const [isShow, setIsShow] = useState(false);
 
+  const DEMO_LARGE_PRODUCTS = [
+    {
+      id: 1,
+      images: [full1Img, full11Img, full12Img, full13Img],
+      name: translate('common.label.bomberJacketText'),
+      desc: translate('common.color.orangeText'),
+      price: 52,
+    },
+    {
+      id: 2,
+      images: [full2Img, full21Img, full22Img, full23Img],
+      name: translate('common.label.downtownPetText'),
+      desc: translate('common.color.blackAndOrangeText'),
+      price: 88,
+    },
+    {
+      id: 3,
+      images: [full3Img, full31Img, full32Img, full33Img],
+      name: translate('common.label.sneakersText'),
+      desc: translate('common.label.3SizesAvailText'),
+      price: 60,
+    },
+  ];
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
       perView: 3,
@@ -113,7 +116,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
         isCenter
         desc=""
       >
-        Top List Collections.
+        {translate('label.collection.topListCollectionText')}
       </Heading>
       <Nav
         className="p-1 bg-white rounded-full shadow-lg dark:bg-neutral-800"
@@ -175,7 +178,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
       <div ref={sliderRef} className={`relative ${isShow ? "" : "invisible"}`}>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {DEMO_LARGE_PRODUCTS.map((item, index) => {
+            {DEMO_LARGE_PRODUCTS?.map((item, index) => {
               return (
                 <li key={index} className={`glide__slide`}>
                   <MyCollectionCard imgs={item.images} />
@@ -191,7 +194,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
                     <div className="absolute flex flex-col items-center justify-center inset-y-6 inset-x-10">
                       <div className="relative flex items-center justify-center">
                         <span className="text-xl font-semibold">
-                          More items
+                          {translate('common.label.moreItemsText')}
                         </span>
                         <svg
                           className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110"
@@ -217,7 +220,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
                           />
                         </svg>
                       </div>
-                      <span className="mt-1 text-sm">Show me more</span>
+                      <span className="mt-1 text-sm">{translate('common.label.showMeMoreText')}</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-1.5 mt-1.5">

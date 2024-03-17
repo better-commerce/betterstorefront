@@ -9,17 +9,12 @@ import { XMarkIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import useWishlist from '@components/services/wishlist'
 import {
   WISHLIST_TITLE,
-  WISHLIST_SIDEBAR_MESSAGE,
-  GENERAL_CATALOG,
-  GENERAL_REMOVE,
-  GENERAL_ADD_TO_BASKET,
-  WISHLIST_SUCCESS_MESSAGE,
-  GENERAL_CONTINUE_SHOPPING,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
   const {
@@ -34,6 +29,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     removeFromWishlist,
     openCart,
   } = useUI()
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const { getWishlist, deleteWishlistItem } = useWishlist()
   const [openWishlistSidebar, setOpenWishlistSidebar] = useState(false)
@@ -173,7 +169,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
-                          <span className="sr-only">Close panel</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>
@@ -183,14 +179,14 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                       <div className="flow-root">
                         {isEmpty && (
                           <div className="flex flex-col items-center justify-center w-full h-full text-gray-900">
-                            {WISHLIST_SIDEBAR_MESSAGE}
+                            {translate('common.label.noItemsPresentText')}
                             <Link href="/search">
                               <button
                                 type="button"
                                 className="font-medium text-indigo-600 hover:text-indigo-500"
                                 onClick={handleClose}
                               >
-                                {GENERAL_CATALOG}
+                                {translate('label.basket.catalogText')}
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
@@ -250,7 +246,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                         deleteItemFromWishlist(product)
                                       }
                                     >
-                                      {GENERAL_REMOVE}
+                                      {translate('common.label.removeText')}
                                     </button>
                                   </div>
                                   <div className="flex justify-end w-full">
@@ -259,7 +255,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                       className="font-medium text-black hover:text-indigo-500"
                                       onClick={() => handleAddToCart(product)}
                                     >
-                                      {GENERAL_ADD_TO_BASKET}
+                                      {translate('label.basket.addToBagText')}
                                     </button>
                                   </div>
                                 </div>
@@ -276,7 +272,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                       <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
                         <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
                         <p className="mt-5 text-center">
-                          {WISHLIST_SUCCESS_MESSAGE}
+                        {translate('common.message.wishlistSuccessMsg')}
                         </p>
                       </div>
                     )}
@@ -287,7 +283,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           className="flex items-center justify-center btn btn-primary"
                           onClick={handleClose}
                         >
-                          {GENERAL_CONTINUE_SHOPPING}
+                         {translate('common.label.continueShoppingText')}
                           <span className="ml-2" aria-hidden="true">
                             {' '}
                             &rarr;

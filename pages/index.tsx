@@ -5,9 +5,10 @@ import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -76,6 +77,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const hostName = os.hostname()
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       globalSnippets: infra?.snippets ?? [],
       snippets: slugs?.snippets ?? [],
       pageContentsWeb: pageContentWebUIDData,

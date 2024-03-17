@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { IMG_PLACEHOLDER, SHOP_NOW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Router from 'next/router'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const OfferCard = ({ title, description, src, link, index, buttonText, key }: any) => {
   const [bgColour, setBgColor] = useState('')
   const [fontColor, setFontColour] = useState('text-black')
+  const translate = useTranslation()
 
   useEffect(() => {
     if (index === 0) {
@@ -52,7 +54,7 @@ const OfferCard = ({ title, description, src, link, index, buttonText, key }: an
         } font-semibold uppercase py-3 px-6 rounded-md`}
         onClick={() => handleClick(link)}
       >
-        {buttonText ? buttonText : { SHOP_NOW }}
+        {buttonText ? buttonText : translate('common.label.shopNowText')}
       </button>
     </div>
   )

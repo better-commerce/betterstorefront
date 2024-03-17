@@ -11,72 +11,17 @@ import ButtonThird from "./shared/Button/ButtonThird";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import Radio from "./shared/Radio/Radio";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
+import { useTranslation } from '@commerce/utils/use-translation'
 
-// DEMO DATA
-const DATA_categories = [
-  {
-    name: "New Arrivals",
-  },
-  {
-    name: "Sale",
-  },
-  {
-    name: "Backpacks",
-  },
-  {
-    name: "Travel Bags",
-  },
-  {
-    name: "Laptop Sleeves",
-  },
-  {
-    name: "Organization",
-  },
-  {
-    name: "Accessories",
-  },
-];
-
-const DATA_colors = [
-  { name: "White" },
-  { name: "Beige" },
-  { name: "Blue" },
-  { name: "Black" },
-  { name: "Brown" },
-  { name: "Green" },
-  { name: "Navy" },
-];
-
-const DATA_sizes = [
-  { name: "XXS" },
-  { name: "XS" },
-  { name: "S" },
-  { name: "M" },
-  { name: "L" },
-  { name: "XL" },
-  { name: "2XL" },
-];
-
-const DATA_sortOrderRadios = [
-  { name: "Most Popular", id: "Most-Popular" },
-  { name: "Best Rating", id: "Best-Rating" },
-  { name: "Newest", id: "Newest" },
-  { name: "Price Low - Hight", id: "Price-low-hight" },
-  { name: "Price Hight - Low", id: "Price-hight-low" },
-];
-
-const PRICE_RANGE = [1, 500];
-//
 const TabFilters = () => {
+  const translate = useTranslation()
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
-  //
   const [isOnSale, setIsIsOnSale] = useState(false);
   const [rangePrices, setRangePrices] = useState([100, 500]);
   const [categoriesState, setCategoriesState] = useState<string[]>([]);
   const [colorsState, setColorsState] = useState<string[]>([]);
   const [sizesState, setSizesState] = useState<string[]>([]);
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
-
   //
   const closeModalMoreFilter = () => setisOpenMoreFilter(false);
   const openModalMoreFilter = () => setisOpenMoreFilter(true);
@@ -100,7 +45,60 @@ const TabFilters = () => {
       : setSizesState(sizesState.filter((i) => i !== name));
   };
 
-  //
+// DEMO DATA
+const DATA_categories = [
+  {
+    name: translate('label.category.newArrivalsText'),
+  },
+  {
+    name: translate('label.category.saleText'),
+  },
+  {
+    name: translate('label.category.backpacksText'),
+  },
+  {
+    name: translate('label.category.travelBagsText'),
+  },
+  {
+    name: translate('label.category.laptopSleevesText'),
+  },
+  {
+    name: translate('label.category.organizationText'),
+  },
+  {
+    name: translate('label.category.accessoriesText'),
+  },
+];
+
+const DATA_colors = [
+  { name: translate('common.color.whiteText') },
+  { name: translate('common.color.beigeText') },
+  { name: translate('common.color.blueText') },
+  { name: translate('common.color.blackText') },
+  { name: translate('common.color.brownText') },
+  { name: translate('common.color.greenText') },
+  { name: translate('common.color.navyText') },
+];
+
+const DATA_sizes = [
+  { name: "XXS" },
+  { name: "XS" },
+  { name: "S" },
+  { name: "M" },
+  { name: "L" },
+  { name: "XL" },
+  { name: "2XL" },
+];
+
+const DATA_sortOrderRadios = [
+  { name: translate('common.sortOrder.mostPopularText'), id: "Most-Popular" },
+  { name: translate('common.sortOrder.bestRatingText'), id: "Best-Rating" },
+  { name: translate('common.sortOrder.newestText'), id: "Newest" },
+  { name: translate('common.sortOrder.priceLowToHighText'), id: "Price-low-hight" },
+  { name: translate('common.sortOrder.priceHightToLowText'), id: "Price-hight-low" },
+];
+
+const PRICE_RANGE = [1, 500];
 
   // OK
   const renderXClear = () => {
@@ -124,6 +122,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsCategories = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -190,7 +189,7 @@ const TabFilters = () => {
                 />
               </svg>
 
-              <span className="ml-2">Categories</span>
+              <span className="ml-2">{translate('label.category.catogoriesText')}</span>
               {!categoriesState.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
@@ -243,14 +242,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -263,6 +260,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsSortOrder = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -321,7 +319,7 @@ const TabFilters = () => {
 
               <span className="ml-2">
                 {sortOrderStates
-                  ? DATA_sortOrderRadios.filter(
+                  ? DATA_sortOrderRadios?.filter(
                       (i) => i.id === sortOrderStates
                     )[0].name
                   : "Sort order"}
@@ -346,7 +344,7 @@ const TabFilters = () => {
               <Popover.Panel className="absolute right-0 z-40 w-screen max-w-sm px-4 mt-3 sm:px-0 lg:max-w-sm">
                 <div className="overflow-hidden bg-white border shadow-xl rounded-2xl dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-5">
-                    {DATA_sortOrderRadios.map((item) => (
+                    {DATA_sortOrderRadios?.map((item) => (
                       <Radio
                         id={item.id}
                         key={item.id}
@@ -365,14 +363,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -385,6 +381,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsColor = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -446,7 +443,7 @@ const TabFilters = () => {
                 />
               </svg>
 
-              <span className="ml-2">Colors</span>
+              <span className="ml-2">{translate('common.label.colorsText')}</span>
               {!colorsState.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
@@ -486,14 +483,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -506,6 +501,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsSize = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -556,7 +552,7 @@ const TabFilters = () => {
                 />
               </svg>
 
-              <span className="ml-2">Sizes</span>
+              <span className="ml-2">{translate('common.label.sizesText')}</span>
               {!sizesState.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
@@ -596,14 +592,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -616,6 +610,7 @@ const TabFilters = () => {
 
   // OK
   const renderTabsPriceRage = () => {
+    const translate = useTranslation()
     return (
       <Popover className="relative">
         {({ open, close }) => (
@@ -673,7 +668,7 @@ const TabFilters = () => {
                 <div className="overflow-hidden bg-white border shadow-xl rounded-2xl dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-8">
                     <div className="space-y-5">
-                      <span className="font-medium">Price range</span>
+                      <span className="font-medium">{translate('label.price.priceRangeText')}</span>
                       <Slider
                         range
                         min={PRICE_RANGE[0]}
@@ -693,11 +688,11 @@ const TabFilters = () => {
                           htmlFor="minPrice"
                           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                         >
-                          Min price
+                          {translate('label.price.minPriceText')} 
                         </label>
                         <div className="relative mt-1 rounded-md">
                           <span className="absolute inset-y-0 flex items-center pointer-events-none right-4 text-neutral-500 sm:text-sm">
-                            $
+                           {translate('common.label.dollarCurrencySymbol')}
                           </span>
                           <input
                             type="text"
@@ -714,11 +709,11 @@ const TabFilters = () => {
                           htmlFor="maxPrice"
                           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                         >
-                          Max price
+                          {translate('label.price.maxPricetext')} 
                         </label>
                         <div className="relative mt-1 rounded-md">
                           <span className="absolute inset-y-0 flex items-center pointer-events-none right-4 text-neutral-500 sm:text-sm">
-                            $
+                            {translate('common.label.dollarCurrencySymbol')}
                           </span>
                           <input
                             type="text"
@@ -740,14 +735,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={close}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -805,7 +798,7 @@ const TabFilters = () => {
           />
         </svg>
 
-        <span className="ml-2 line-clamp-1">On sale</span>
+        <span className="ml-2 line-clamp-1">{translate('label.filters.onSaleText')}</span>
         {isOnSale && renderXClear()}
       </div>
     );
@@ -851,6 +844,7 @@ const TabFilters = () => {
 
   // FOR RESPONSIVE MOBILE
   const renderTabMobileFilter = () => {
+    const translate = useTranslation()
     return (
       <div className="flex-shrink-0">
         <div
@@ -913,7 +907,7 @@ const TabFilters = () => {
             />
           </svg>
 
-          <span className="ml-2">Products filters (3)</span>
+          <span className="ml-2">{translate('label.filters.productFilter3Text')}</span>
           {renderXClear()}
         </div>
 
@@ -958,7 +952,7 @@ const TabFilters = () => {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Products filters
+                      {translate('label.filters.productFilterText')} 
                     </Dialog.Title>
                     <span className="absolute left-3 top-3">
                       <ButtonClose onClick={closeModalMoreFilter} />
@@ -970,7 +964,7 @@ const TabFilters = () => {
                       {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Categories</h3>
+                        <h3 className="text-xl font-medium">{translate('label.category.catogoriesText')}</h3>
                         <div className="relative mt-6 ">
                           {renderMoreFilterItem(DATA_categories)}
                         </div>
@@ -978,7 +972,7 @@ const TabFilters = () => {
                       {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Colors</h3>
+                        <h3 className="text-xl font-medium">{translate('common.label.colorsText')}</h3>
                         <div className="relative mt-6 ">
                           {renderMoreFilterItem(DATA_colors)}
                         </div>
@@ -986,7 +980,7 @@ const TabFilters = () => {
                       {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Size</h3>
+                        <h3 className="text-xl font-medium">{translate('label.thankyou.sizeText')}</h3>
                         <div className="relative mt-6 ">
                           {renderMoreFilterItem(DATA_sizes)}
                         </div>
@@ -995,7 +989,7 @@ const TabFilters = () => {
                       {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Range Prices</h3>
+                        <h3 className="text-xl font-medium">{translate('label.price.rangePricesText')}</h3>
                         <div className="relative mt-6 ">
                           <div className="relative flex flex-col space-y-8">
                             <div className="space-y-5">
@@ -1018,12 +1012,12 @@ const TabFilters = () => {
                                   htmlFor="minPrice"
                                   className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                                 >
-                                  Min price
+                                  {translate('label.price.minPriceText')} 
                                 </label>
                                 <div className="relative mt-1 rounded-md">
                                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <span className="text-neutral-500 sm:text-sm">
-                                      $
+                                      {translate('common.label.dollarCurrencySymbol')}
                                     </span>
                                   </div>
                                   <input
@@ -1041,12 +1035,12 @@ const TabFilters = () => {
                                   htmlFor="maxPrice"
                                   className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                                 >
-                                  Max price
+                                  {translate('label.price.maxPricetext')} 
                                 </label>
                                 <div className="relative mt-1 rounded-md">
                                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <span className="text-neutral-500 sm:text-sm">
-                                      $
+                                      {translate('common.label.dollarCurrencySymbol')}
                                     </span>
                                   </div>
                                   <input
@@ -1067,10 +1061,10 @@ const TabFilters = () => {
                       {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Sort Order</h3>
+                        <h3 className="text-xl font-medium">{translate('label.filters.sortOrderText')}</h3>
                         <div className="relative mt-6 ">
                           <div className="relative flex flex-col space-y-5">
-                            {DATA_sortOrderRadios.map((item) => (
+                            {DATA_sortOrderRadios?.map((item) => (
                               <Radio
                                 id={item.id}
                                 key={item.id}
@@ -1087,11 +1081,11 @@ const TabFilters = () => {
                       {/* --------- */}
                       {/* ---- */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">On sale!</h3>
+                        <h3 className="text-xl font-medium">{translate('label.filters.onSaleWithMarkText')}</h3>
                         <div className="relative mt-6 ">
                           <MySwitch
-                            label="On sale!"
-                            desc="Products currently on sale"
+                            label={translate('label.filters.onSaleWithMarkText')}
+                            desc={translate('common.label.productCurrentlyOnSaleText')}
                             enabled={isOnSale}
                             onChange={setIsIsOnSale}
                           />
@@ -1111,14 +1105,12 @@ const TabFilters = () => {
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
-                    </ButtonThird>
+                      {translate('common.label.clearText')} </ButtonThird>
                     <ButtonPrimary
                       onClick={closeModalMoreFilter}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Apply
-                    </ButtonPrimary>
+                      {translate('common.label.applyText')} </ButtonPrimary>
                   </div>
                 </div>
               </Transition.Child>

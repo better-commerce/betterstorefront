@@ -7,6 +7,7 @@ import { Transition } from "@headlessui/react";
 import Nav from "./shared/Nav/Nav";
 import NavItem from "./shared/NavItem/NavItem";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface HeaderFilterSearchPageProps {
   className?: string;
@@ -15,8 +16,9 @@ export interface HeaderFilterSearchPageProps {
 const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
   className = "mb-12",
 }) => {
+  const translate = useTranslation();
   const [isOpen, setIsOpen] = useState(true);
-  const [tabActive, setTabActive] = useState("All items");
+  const [tabActive, setTabActive] = useState(translate('common.label.allItemsText'));
 
   return (
     <div className={`flex flex-col relative ${className}`}>
@@ -74,7 +76,7 @@ const HeaderFilterSearchPage: FC<HeaderFilterSearchPageProps> = ({
               />
             </svg>
 
-            <span className="block truncate ml-2.5">Filter</span>
+            <span className="block truncate ml-2.5">{translate('label.filters.filterText')}</span>
             <span className="absolute -translate-y-1/2 top-1/2 right-5">
               <ChevronDownIcon
                 className={`w-4 h-4 sm:w-5 sm:h-5 ${

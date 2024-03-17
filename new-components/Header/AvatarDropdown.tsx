@@ -5,14 +5,14 @@ import { avatarImgs } from "@components/common/Header/fakeData";
 import { Fragment } from "react";
 import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
-import SwitchDarkMode2 from "../shared/SwitchDarkMode/SwitchDarkMode2";
 import { getCurrentPage } from "@framework/utils/app-util";
 import { useUI } from "@components/ui";
-import { BTN_SIGN_OUT, GENERAL_LOGIN, GENERAL_MY_ORDERS, GENERAL_REGISTER, MY_ACCOUNT_TITLE, SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE, WISHLIST_TITLE } from "@components/utils/textVariables";
+import { GENERAL_LOGIN, GENERAL_MY_ORDERS, GENERAL_REGISTER, SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE, WISHLIST_TITLE } from "@components/utils/textVariables";
 import { Guid } from "@commerce/types";
 import { Router } from "next/router";
 import { signOut } from "next-auth/react";
 import { SocialMediaType } from "@components/utils/constants";
+import { useTranslation } from "@commerce/utils/use-translation";
 const accountDropDownConfigUnauthorized: any = [
   {
     href: '/my-account/login',
@@ -78,12 +78,13 @@ const accountDropDownConfigUnauthorized: any = [
   },
 ]
 export default function AvatarDropdown() {
+  const translate = useTranslation()
   const { wishListItems, cartItems, isGuestUser, user, deleteUser, openCart, openWishlist, setShowSearchBar, openLoginSideBar, openBulkAdd, showSearchBar, } = useUI()
   let currentPage = getCurrentPage()
   const accountDropDownConfigAuthorized: any = [
     {
       href: '/my-account',
-      title: MY_ACCOUNT_TITLE,
+      title: translate('common.label.myAccountText'),
       className: 'text-left p-2 cursor-pointer',
       head: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >

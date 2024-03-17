@@ -2,12 +2,11 @@ import { useState } from 'react'
 import Form from './AddressBookForm'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { GENERAL_EDIT, GENERAL_DELETE, GENERAL_DEFAULT_DELIVERY_ADDRESS, GENERAL_DEFAULT_BILLING_ADDRESS, } from '@components/utils/textVariables'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function AddressItem({
   item,
   updateAddress,
@@ -17,6 +16,7 @@ export default function AddressItem({
   deleteAddress,
   onEditAddress = (id: number) => { },
 }: any) {
+  const translate = useTranslation();
   const [isEditMode, setEditMode] = useState(false)
   const {
     title,
@@ -152,8 +152,7 @@ export default function AddressItem({
                   {item?.isDefault && (
                     <div className="p-1 px-2 bg-black border rounded-md">
                       <span className="font-medium text-white font-12">
-                        Default
-                      </span>
+                        {translate('common.label.defaultText')} </span>
                     </div>
                   )}
                 </div>
@@ -175,13 +174,13 @@ export default function AddressItem({
                       }}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_EDIT}
+                      {translate('common.label.editText')}
                     </button>
                     <button
                       onClick={deleteOpenModal}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_DELETE}
+                      {translate('common.label.deleteText')}
                     </button>
                   </div>}
 
@@ -207,8 +206,7 @@ export default function AddressItem({
                   {item?.isDefault && (
                     <div className="p-1 px-2 bg-black border rounded-md">
                       <span className="font-medium text-white font-12">
-                        Default
-                      </span>
+                        {translate('common.label.defaultText')} </span>
                     </div>
                   )}
                 </div>
@@ -230,13 +228,13 @@ export default function AddressItem({
                       }}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_EDIT}
+                      {translate('common.label.editText')}
                     </button>
                     <button
                       onClick={deleteOpenModal}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_DELETE}
+                      {translate('common.label.deleteText')}
                     </button>
                   </div>
 

@@ -7,6 +7,7 @@ import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 import { groupBy, isString, round } from 'lodash'
 import { matchStrings } from '@framework/utils/parse-util'
 import SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
+import { useTranslation } from '@commerce/utils/use-translation'
 function RenderRadioOptions({
    items,
    itemsCount,
@@ -18,6 +19,7 @@ function RenderRadioOptions({
    setSizeInit,
    currentAttribute,
 }: any) {
+   const translate = useTranslation()
    const [showMoreSize, setShowMoreSize] = useState(true)
    items.sort((s1: any, s2: any) => {
       return s1.displayOrder - s2.displayOrder
@@ -62,7 +64,7 @@ function RenderRadioOptions({
             )
             ))}
          </div>
-         <div className={classNames(sizeInit === 'error' ? '' : 'hidden', 'text-red-500 text-sm')}>Please select a Size</div>
+         <div className={classNames(sizeInit === 'error' ? '' : 'hidden', 'text-red-500 text-sm')}>{translate('label.product.selectSizeText')}</div>
       </>
    )
 }

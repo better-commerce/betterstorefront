@@ -1,9 +1,9 @@
 import { useUI } from '@components/ui/context'
 import { FC, useEffect, useState } from 'react'
 
-import { CLOSE_PANEL } from '@components/utils/textVariables'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Login from './index'
+import { useTranslation } from '@commerce/utils/use-translation';
 
 interface LoginSideBarViewProps {
   pluginConfig: any;
@@ -12,7 +12,7 @@ interface LoginSideBarViewProps {
 const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) => {
   const { closeSidebar, displaySidebar } = useUI()
   const [openSidebar, setOpenSidebar] = useState(false)
-
+  const translate = useTranslation()
   useEffect(() => {
     // set to 'true'
     setOpenSidebar(displaySidebar)
@@ -35,7 +35,7 @@ const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) 
           className="text-gray-400 transition hover:text-gray-500"
           onClick={handleClose}
         >
-          <span className="sr-only">{CLOSE_PANEL}</span>
+          <span className="sr-only">{translate('common.label.closePanelText')}</span>
           <XMarkIcon className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>

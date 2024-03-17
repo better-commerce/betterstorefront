@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
-import Image from 'next/image'
-import _, { sumBy } from 'lodash'
+import sumBy from 'lodash/sumBy'
 import Link from 'next/link'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 
 //
 import { generateUri } from '@commerce/utils/uri-util'
-import {
-  GENERAL_EDIT_KIT,
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { NEXT_BULK_ADD_TO_CART } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const maxKitBasketItemsCount = 5
 
@@ -24,6 +21,7 @@ export default function BasketGroupProduct({
   openModal,
   setItemClicked,
 }: any) {
+  const translate = useTranslation()
   const { basketId, setCartItems, cartItems, kitCartLoaded, setKitCartLoaded, includeVAT, currency, openBasketRemoveItemView } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [brandInfo, setBrandInfo] = useState<any>({})
@@ -122,7 +120,7 @@ export default function BasketGroupProduct({
         <div className="col-span-9">
           <div className="flex justify-between">
             <h5 className="box-border pr-4 font-14 dark:text-black">
-              {brandInfo?.brand} {brandInfo?.platform} Custom Kit
+              {brandInfo?.brand} {brandInfo?.platform}{translate('label.basket.customKitText')}
             </h5>
             <span className='dark:text-black'>
               {currency?.currencySymbol}
@@ -130,7 +128,7 @@ export default function BasketGroupProduct({
             </span>
           </div>
           <div className="flex items-center justify-end mt-4 show-on-checkout">
-            <div className='justify-end'><span className='flex flex-col font-semibold text-black'>Qty: {kitQty}</span></div>
+            <div className='justify-end'><span className='flex flex-col font-semibold text-black'>{translate('common.label.qtyText')}{' '}{kitQty}</span></div>
           </div>
           <div className="flex items-center justify-between mt-4 hide-on-checkout">
             <select
@@ -150,7 +148,7 @@ export default function BasketGroupProduct({
             <div>
               <span
                 className="block p-2 cursor-pointer"
-                title="Remove kit"
+                title={translate('label.basket.removeKitText')}
                 onClick={() => {
                   openModal()
                   setItemClicked(products)
@@ -170,7 +168,7 @@ export default function BasketGroupProduct({
             <>
               <div className="flex items-center justify-between pb-1 font-semibold dark:text-black">
                 <span className='font-bold text-black uppercase'>
-                  Kit items ({products?.length})
+                  {translate('label.basket.kitItemsText')}({products?.length})
                   {kitCartLoaded && (
                     <span className="ml-2">
                       <LoadingDots />
@@ -179,7 +177,7 @@ export default function BasketGroupProduct({
                 </span>
                 <Disclosure.Button className="py-2">
                   <span className="border-b-2 border-red-500">
-                    {open ? 'Hide' : 'View'}
+                    {open ? translate('common.label.hideText') : translate('common.label.viewText')}
                   </span>
                 </Disclosure.Button>
               </div>
@@ -200,7 +198,7 @@ export default function BasketGroupProduct({
                   className="block w-full p-2 mt-4 font-semibold text-center text-black uppercase bg-white border border-gray-400 rounded hover:border-orange-600 hover:text-orange-600"
                   onClick={closeSidebar}
                 >
-                  {GENERAL_EDIT_KIT}
+                 {translate('label.kitBuilder.editMyKitBtnText')}
                 </Link>
               </Disclosure.Panel>
             </>

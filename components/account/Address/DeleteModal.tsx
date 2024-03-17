@@ -2,8 +2,10 @@ import useDevice from '@commerce/utils/use-device'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function DeleteModal({isOpen, setIsOpen, deleteItem = () => {}}:any) {
+  const translate = useTranslation()
   const { isMobile } = useDevice()
   function closeModal() {
     setIsOpen(false)
@@ -41,12 +43,12 @@ export default function DeleteModal({isOpen, setIsOpen, deleteItem = () => {}}:a
                     className="text-2xl font-semibold leading-7 text-blue-dark"
                   >
                     <div className={`flex ${isMobile ? `justify-end` : `justify-between`} items-start`}>
-                      {!isMobile && <span className='w-2/3 pb-10 dark:text-black'>Are you sure you want to delete this address?</span>}
+                      {!isMobile && <span className='w-2/3 pb-10 dark:text-black'>{translate('label.addressBook.deleteAddressConfirmText')}</span>}
                       <button className='btn-default justify-center w-auto !py-1 !px-3 rounded-md' onClick={closeModal}>
                         <XMarkIcon className='w-6 h-6'/>
                       </button>
                     </div>
-                    {isMobile && <span className='pb-10 dark:text-black mob-font-18'>Are you sure you want to delete this address?</span>}
+                    {isMobile && <span className='pb-10 dark:text-black mob-font-18'>{translate('label.addressBook.deleteAddressConfirmText')}</span>}
                     
                   </Dialog.Title>
                   <div className="flex flex-col md:flex-row gap-2 mt-4">
@@ -55,15 +57,13 @@ export default function DeleteModal({isOpen, setIsOpen, deleteItem = () => {}}:a
                       className="btn-default inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={deleteItem}
                     >
-                      Delete address
-                    </button>
+                      {translate('label.addressBook.deleteAddressBtnText')} </button>
                     <button
                       type="button"
                       className="btn-default inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
-                      Cancel
-                    </button>
+                      {translate('common.label.cancelText')} </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

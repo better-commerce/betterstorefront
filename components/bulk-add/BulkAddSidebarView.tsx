@@ -18,16 +18,10 @@ import useDataSubmit from '@commerce/utils/use-data-submit'
 // Other Imports
 import { Guid } from '@commerce/types'
 import cartHandler from '@components/services/cart'
-import {
-  CLOSE_PANEL,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_BULK_ORDER_PAD,
-  GENERAL_COPY_AND_PASTE,
-  GENERAL_LINE_BY_LINE,
-} from '@components/utils/textVariables'
 import { stringToNumber } from '@framework/utils/parse-util'
 import { Messages, PageActions } from '@components/utils/constants'
 import { resetSubmitData, submitData } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const BulkAddSidebarView: FC = () => {
   const [bulkOrderSidebarOpen, setBulkOrderSidebarOpen] = useState(false)
@@ -39,6 +33,7 @@ const BulkAddSidebarView: FC = () => {
     openCart,
     closeSidebar,
   } = useUI()
+  const translate = useTranslation();
   const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
   const [isLineByLine, setIsLineByLine] = useState<boolean>(true)
 
@@ -146,7 +141,7 @@ const BulkAddSidebarView: FC = () => {
       cssClass=""
       submitState={submitState}
       source={PageActions.BulkOrder.ADD_TO_CART}
-      buttonText={GENERAL_ADD_TO_BASKET}
+      buttonText={translate('label.basket.addToBagText')}
     />
   )
 
@@ -190,7 +185,7 @@ const BulkAddSidebarView: FC = () => {
                     {/* Dialog title */}
                     <div className="flex items-start justify-between pb-3 border-b">
                       <Dialog.Title className="pl-6 text-lg font-medium text-gray-900">
-                        {GENERAL_BULK_ORDER_PAD}
+                      {translate('label.bulkAdd.bulkOrderText')}
                       </Dialog.Title>
                       <div className="flex">
                         {isLineByLine ? (
@@ -198,14 +193,14 @@ const BulkAddSidebarView: FC = () => {
                             className="flex justify-center px-6 py-2 mr-3 text-sm font-medium text-black uppercase transition bg-white border border-black rounded hover:opacity-75"
                             onClick={() => setIsLineByLine(false)}
                           >
-                            {GENERAL_COPY_AND_PASTE}
+                            {translate('label.bulkAdd.copyPasteText')}
                           </button>
                         ) : (
                           <button
                             className="flex justify-center px-6 py-2 mr-3 text-sm font-medium text-black uppercase transition bg-white border border-black rounded hover:opacity-75"
                             onClick={() => setIsLineByLine(true)}
                           >
-                            {GENERAL_LINE_BY_LINE}
+                            {translate('label.bulkAdd.lineByLineText')}
                           </button>
                         )}
 
@@ -214,7 +209,7 @@ const BulkAddSidebarView: FC = () => {
                           className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                           onClick={handleClose}
                         >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
                       </div>

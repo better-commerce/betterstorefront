@@ -1,8 +1,10 @@
 import { ChangeEvent, useState } from 'react'
 import BundleCard from './BundleCard'
 import ProductCard from '../ProductCard/ProductCard'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Bundles({ onClose = () => {}, price = '', products = [], productBundleUpdate = () => {}, deviceInfo, onBundleAddToCart = () => {} }: any) {
+  const translate = useTranslation()
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
     setProductData(product)
@@ -63,11 +65,11 @@ export default function Bundles({ onClose = () => {}, price = '', products = [],
     >
       <div className="flex items-center justify-between w-full p-0 mb-2">
         <h2 id="bundle" className="text-xl font-bold text-left text-gray-900">
-          Buy together and save
+          {translate('label.product.bundles.buyTogetherText')}
         </h2>
         <div className="flex">
           <p className="font-semibold text-right text-black text-md flext-col align-right item-right">
-            Total
+          {translate('label.product.orderSummary.totalText')}
           </p>
           <p className="flex flex-col pb-2 text-3xl font-bold text-right text-gray-900 align-right item-right">
             {price}
@@ -76,7 +78,7 @@ export default function Bundles({ onClose = () => {}, price = '', products = [],
             className="ml-2 flex-1 bg-black border rounded-sm uppercase py-2 sm:px-4 px-1 flex items-center justify-center font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full  btn-c btn-primary button"
             onClick={onBundleAddToCart}
           >
-            Add Bundle To basket
+           {translate('label.product.bundles.addBundleText')}
           </button>
         </div>
       </div>

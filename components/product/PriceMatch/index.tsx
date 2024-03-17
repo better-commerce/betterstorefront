@@ -5,8 +5,10 @@ import Form from './form'
 import axios from 'axios'
 import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
 import Image from 'next/image'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function PriceMatch({ show, onClose, productImage, productId, stockCode, productName, ourCost, ourDeliveryCost, rrp }: any) {
+  const translate = useTranslation()
   const submitContactForm = (values: any) => {
     const priceMatch = {
       productId: productId,
@@ -78,19 +80,13 @@ export default function PriceMatch({ show, onClose, productImage, productId, sto
                   className="absolute text-gray-400 top-4 right-4 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8"
                   onClick={() => onClose(false)}
                 >
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only">{translate('common.label.closeText')}</span>
                   <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
                 <section className="flex py-10">
                   <div className="w-1/2 p-2 bg-gray-50">
                     <p className="py-5 font-bold text-justify text-black">
-                      Find it cheaper & we'll match the price plus 15% of the
-                      difference! terms apply Like the reasurrance of buying
-                      from one of the largest independent retailers in the
-                      country but don't like the idea of paying too much? Not a
-                      problem! We work hard every day to bring you the best
-                      possible prices. But sometimes, somewhere, someone is
-                      selling the item you want for less. Let us help!
+                    {translate('label.product.priceMatchDesriptionText')}
                     </p>
                     <Image
                       alt="product-Image"
@@ -103,7 +99,7 @@ export default function PriceMatch({ show, onClose, productImage, productId, sto
                   </div>
                   <div className="w-1/2 px-5">
                     <p className="py-5 text-lg font-bold text-center text-black center">
-                      Contact
+                    {translate('label.contactPreferences.contactPreferencesHeadingText')}
                     </p>
                     <Form submitContactForm={submitContactForm} />
                   </div>

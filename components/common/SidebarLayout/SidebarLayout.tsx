@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Cross, ChevronLeft } from '@components/icons'
 import cn from 'classnames'
 import s from './SidebarLayout.module.css'
-import { GENERAL_BACK, GENERAL_CLOSE } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 type ComponentProps = { className?: string } & (
   | { handleClose: () => any; handleBack?: never }
@@ -15,6 +15,7 @@ const SidebarLayout: FC<React.PropsWithChildren<ComponentProps>> = ({
   handleClose,
   handleBack,
 }) => {
+  const translate = useTranslation()
   return (
     <div className={cn(s.root, className)}>
       <header className={s.header}>
@@ -25,7 +26,7 @@ const SidebarLayout: FC<React.PropsWithChildren<ComponentProps>> = ({
             className="hover:text-accent-5 transition ease-in-out duration-150 flex items-center focus:outline-none"
           >
             <Cross className="h-6 w-6 hover:text-accent-3" />
-            <span className="ml-2 text-accent-7 text-sm ">{GENERAL_CLOSE}</span>
+            <span className="ml-2 text-accent-7 text-sm ">{translate('common.label.closeText')}</span>
           </button>
         )}
         {handleBack && (
@@ -35,7 +36,7 @@ const SidebarLayout: FC<React.PropsWithChildren<ComponentProps>> = ({
             className="hover:text-accent-5 transition ease-in-out duration-150 flex items-center focus:outline-none"
           >
             <ChevronLeft className="h-6 w-6 hover:text-accent-3" />
-            <span className="ml-2 text-accent-7 text-xs">{GENERAL_BACK}</span>
+            <span className="ml-2 text-accent-7 text-xs">{translate('common.label.backText')}</span>
           </button>
         )}
       </header>
