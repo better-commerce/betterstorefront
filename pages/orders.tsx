@@ -4,6 +4,8 @@ import { Bag } from '@components/icons'
 import { Layout } from '@components/common'
 import { Container, Text } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 export async function getStaticProps({
   preview,
@@ -17,7 +19,11 @@ export async function getStaticProps({
   const { categories } = await siteInfoPromise
 
   return {
-    props: { pages, categories },
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      pages, 
+      categories 
+    },
   }
 }
 

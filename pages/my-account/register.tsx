@@ -2,7 +2,7 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
@@ -18,6 +18,7 @@ import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
@@ -65,7 +66,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       </div>
       {
         socialLogins && (
-          <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto md:w-1/2 px-3 sm:w-full sm:px-0 width-md-full" pluginSettings={pluginSettings}/>
+          <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto md:w-1/2 px-3 sm:w-full sm:px-0 width-md-full" pluginSettings={pluginSettings} />
         )
       }
     </div>
@@ -147,8 +148,8 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
 
       userCreated =
         tradingAccountResponse &&
-        tradingAccountResponse.data?.recordId &&
-        tradingAccountResponse.data?.recordId != Guid.empty
+          tradingAccountResponse.data?.recordId &&
+          tradingAccountResponse.data?.recordId != Guid.empty
           ? true
           : false
       recordId = tradingAccountResponse.data?.recordId
@@ -242,7 +243,10 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(RegisterPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
   }
 }

@@ -8,6 +8,8 @@ import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 
 export async function getStaticProps({
@@ -30,6 +32,7 @@ export async function getStaticProps({
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       pages,
       categories,
     },

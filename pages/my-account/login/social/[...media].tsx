@@ -16,10 +16,12 @@ import { parseFullName } from '@framework/utils/app-util'
 import cartHandler from '@components/services/cart'
 import useWishlist from '@components/services/wishlist'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_SSO_AUTHENTICATE,
   SocialMediaType,
 } from '@components/utils/constants'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 interface ISocialLoginPageProps {
   readonly medium: SocialMediaType
@@ -134,10 +136,12 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   const params: any = context?.query
   const media = params?.media?.length ? params?.media[0] : ''
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       medium: media, // Generic
     }, // will be passed to the page component as props
   }

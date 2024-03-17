@@ -5,13 +5,14 @@ import { useRouter } from 'next/router'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function CategoryList(props: any) {
   let absPath = ''
@@ -150,6 +151,7 @@ export async function getStaticProps({
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: categoryUIDData,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)

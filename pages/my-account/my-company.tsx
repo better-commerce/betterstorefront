@@ -14,6 +14,7 @@ import React from 'react'
 // import MyOrders from '@components/account/MyOrders'
 import axios from 'axios'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_ADDRESS,
   NEXT_B2B_GET_QUOTES,
   NEXT_B2B_GET_USERS,
@@ -31,6 +32,7 @@ import { Guid } from '@commerce/types'
 import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
@@ -396,11 +398,13 @@ MyCompany.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex,
+    }, // will be passed to the page component as props
   }
 }
 

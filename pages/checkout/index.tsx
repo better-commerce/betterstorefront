@@ -14,6 +14,7 @@ import cookie from 'cookie'
 import { loqateAddress } from '@components/checkout-old/CheckoutForm'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   CURRENT_THEME,
   EmptyGuid,
   EmptyObject,
@@ -47,6 +48,7 @@ import { Logo } from '@components/ui'
 import { compact } from 'lodash'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 export enum BasketStage {
   CREATED = 0,
   ANONYMOUS = 1,
@@ -974,10 +976,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   )
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
   return {
-    props: { basketId }
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      basketId, 
+    }
   }
 }
 const PAGE_TYPE = PAGE_TYPES['Checkout']

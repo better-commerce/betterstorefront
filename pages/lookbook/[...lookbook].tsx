@@ -9,6 +9,7 @@ const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid')
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
@@ -22,6 +23,7 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
   const translate = useTranslation()
@@ -161,6 +163,7 @@ export async function getStaticProps({
   const infra = await infraPromise
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: response,
       slug: slug[0],
       globalSnippets: infra?.snippets ?? [],

@@ -3,10 +3,11 @@ import NextHead from 'next/head'
 import commerce from '@lib/api/commerce'
 import LayoutError from '../components/common/Layout/LayoutError'
 import Link from 'next/link'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export async function getStaticProps({
   preview,
@@ -18,6 +19,7 @@ export async function getStaticProps({
   const { categories, brands } = await commerce.getSiteInfo({ config, preview })
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       pages,
       categories,
       brands,

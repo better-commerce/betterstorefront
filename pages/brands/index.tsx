@@ -10,12 +10,13 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -214,6 +215,7 @@ export async function getStaticProps({
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       brands: brandsUIDData?.result,
       snippets: brandsUIDData?.snippets ?? [],
     },

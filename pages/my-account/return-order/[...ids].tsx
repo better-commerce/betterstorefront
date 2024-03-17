@@ -19,12 +19,14 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_RETURN_ORDER_LINE,
   Messages,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
 } from '@components/utils/constants'
 import { sanitizeBase64, vatIncluded } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function ReturnOrder({
   orderId = Guid.empty,
@@ -331,9 +333,11 @@ export default function ReturnOrder({
   )
 }
 export async function getServerSideProps(context: any) {
+  const { locale } = context
   const ids = context?.query?.ids
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props

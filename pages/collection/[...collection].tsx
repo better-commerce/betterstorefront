@@ -22,7 +22,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -34,6 +34,7 @@ import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CompareSelectionBar = dynamic(() => import('@components/product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
@@ -601,7 +602,7 @@ export default function CollectionPage(props: any) {
 
 CollectionPage.Layout = Layout
 
-export async function getStaticProps({ params, ...context }: any) {
+export async function getStaticProps({ params, locale, locales, ...context }: any) {
   const slug: any = params!.collection
   const cachedDataUID = {
     infraUID: Redis.Key.INFRA_CONFIG,
@@ -650,6 +651,7 @@ export async function getStaticProps({ params, ...context }: any) {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       ...collectionUIDData,
       query: context,
       slug: params!.collection[0],
