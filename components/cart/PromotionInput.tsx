@@ -330,7 +330,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
             </div>
             {error && (
               <div className="mb-2 text-xs text-red-400 capitalize">
-                {translate('message.promoCodeInvalidErrorMsg')}
+                {translate('common.message.promoCodeInvalidErrorMsg')}
               </div>
             )}
           </div>

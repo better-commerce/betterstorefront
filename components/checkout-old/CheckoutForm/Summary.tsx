@@ -117,7 +117,7 @@ export default function Summary({
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(translate('message.userWithNameNotFoundErrorMsg'))
+          setError(translate('common.message.userWithNameNotFoundErrorMsg'))
         }
       }
     } else {

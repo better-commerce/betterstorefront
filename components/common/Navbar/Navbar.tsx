@@ -480,7 +480,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                     {wishListItems?.length}
                   </span>
                 )}
-                <span className="sr-only">{translate('label.cart.itemsCartViewBagText')}</span>
+                <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
               </button>
             </div>
 
@@ -496,7 +496,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                         {cartItems?.lineItems?.length}
                       </span>
                     )}
-                    <span className="sr-only">{translate('label.cart.itemsCartViewBagText')}</span>
+                    <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
                   </>
                 )}
               </button>

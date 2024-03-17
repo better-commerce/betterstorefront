@@ -543,7 +543,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     <div className="flex-1">
                       <div className="sticky top-0 z-10 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow sm:px-6">
                         <Dialog.Title className="text-lg font-medium text-gray-900 ">
-                          {translate('label.cart.shoppingCartText')}
+                          {translate('label.basket.shoppingCartText')}
                           {itemsInBag() > 0 ? (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? ' items' : ' item'}{' '} </span>
                           ) : (
@@ -560,7 +560,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
                           <h4 className="font-semibold text-green-dark">
-                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {translate('label.cart.totalSavingsText')}
+                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {translate('label.basket.totalSavingsText')}
                           </h4>
                         </div>
                       )}
@@ -698,7 +698,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                               <p className="mt-5 text-gray-700">{translate('common.label.noItemsPresentText')}</p>
                               <Link href="/search">
                                 <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={handleClose} >
-                                    {translate('label.cart.catalogText')}
+                                    {translate('label.basket.catalogText')}
                                   <span aria-hidden="true"> &rarr;</span>
                                 </button>
                               </Link>

@@ -164,7 +164,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                           {details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='w-full dark:hover:bg-accent-8 mb-2 border btn-primary btn'
                                                    onClick={() => onCancelOrder("Cancel")}>
-                                                   {translate('label.cancelOrder.cancelOrderText')}
+                                                   {translate('label.order.cancelOrderText')}
                                                 </a>
                                           }
                                        </div>

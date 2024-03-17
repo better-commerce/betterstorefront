@@ -14,147 +14,6 @@
       "freeNextDayDeliveryMethod": "To carry on shopping with free next day delivery",
       "internal-server-error": "Internal Server Error"
     },
-    "cancelReason": {
-      "cancelTitle": "Why are you cancelling this",
-      "cancelConfirmationText": "Are you certain you want to cancel this",
-      "cancelReasonHeadingText": "Reason for cancellation"
-    },
-    "cart": {
-      "youMayAlsoNeedText": "You may also need",
-      "noAddonProdText": "No Addon Product Available!",
-      "shoppingCartText": "Shopping cart",
-      "totalSavingsText": "Total Savings",
-      "itemsCartViewBagText": "items in cart, view bag",
-      "catalogText": "Catalog",
-      "customKitText": "Custom Kit",
-      "removeKitText": "Remove kit",
-      "kitItemsText": "Kit items",
-      "offerText": "50% OFF on 3rd Item",
-      "multipleCodesApplyText": "You may apply mutliple codes",
-      "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later.",
-      "youDontHaveAnyItems": "Uh-oh, you don't have any items in here",
-      "priceLabelText": "RRP"
-    },
-    "login": {
-      "loginBtnText": "Login",
-      "forgotPasswordBtnText": "Forgot password?",
-      "googleLoginText": "Google Login",
-      "facebookLoginText": "Facebook Login",
-      "appleLoginText": "Apple Login",
-      "loginViaOTPHeadingText": "Login via OTP",
-      "noMobileAccountFoundText": "No account has been found with this mobile"
-    },
-    "price": {
-      "priceRangeText": "Price range",
-      "minPriceText": "Min price",
-      "maxPricetext": "Max price",
-      "rangePricesText": "Range Prices"
-    },
-    "orderDetails": {
-      "myOrderHeadingText": "Check the status of recent orders, manage returns, and download invoices.",
-      "packageText": "Package",
-      "trackPackageBtnText": "Track Package",
-      "trackingDetailsBtnText": "Tracking Details →",
-      "returnTrackingDetailHeadingText": "Return Tracking Detail",
-      "rateItemText": "Rate Item:",
-      "downloadInvoiceBtnText": "Download Invoice",
-      "orderDetailTitleText": "Order Detail :",
-      "orderDetailsHeadingText": "Order Details",
-      "replacementOrderText": "Replacement Order",
-      "originalOrderText": "Original Order:",
-      "orderNumText": "Order Number",
-      "orderPlacedOnHeadingText": "Order PLACED ON",
-      "datePlacedText": "Date Placed",
-      "orderTotalHeadingText": "ORDER TOTAL",
-      "deliveryAddressHeadingText": "Delivery Address",
-      "noOrderFoundHeadingText": "No Order Available",
-      "startShoppingBtnText": "Start Shopping",
-      "needHelpWithOrderBtnText": "Need Help with Your Order?",
-      "itemRefundText1": "Refund of",
-      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected.",
-      "courierPartnerHeadingText": "COURIER PARTNER",
-      "awbNumberHeadingText": "AWB Number",
-      "returnNotCreatedMsg": "Woops! Could not create a return",
-      "statusText": "Status",
-      "trackingText": "Tracking",
-      "trackingLinkBtnText": "Tracking link",
-      "createReturnBtnText": "Create return",
-      "returnCreatedText": "Return is created",
-      "orderRefundInfo": "Refund will be processed within 3-4 working days to your payment method",
-      "refundAmtText": "Refund Amount",
-      "recentOrdersText": "Recent orders"
-    },
-    "exchange": {
-      "exchangeReasonHeadingText": "Reason for Exchange"
-    },
-    "exchangeReason": {
-      "exchangeReasonTitle": "Why are you exchanging this item?",
-      "picturesUploadLimitText": "Add upto 5 pictures",
-      "identifyProblemText": "This will help us to identify your problem better",
-      "uploadFileSizeLimitText": "Files must be less than 5MB",
-      "allowedFileExtensionsText": "Allowed file types: .jpeg, .jpg, .png",
-      "chooseNewItemText": "Choose New Item"
-    },
-    "exchangeSelection": {
-      "exchangeVariantHeadingText": "Choose Size & Color",
-      "exchangeVariantText": "Select color and size of the item you want in exchange",
-      "requestExchangeBtnText": "Request for Exchange",
-      "exchangeItemText": "Exchange item",
-      "exchangeConfirmText": "Are you certain you want to exchange this item?",
-      "dontExchangeText": "Don't Exchange"
-    },
-    "help": {
-      "getHelpOnItemText": "Get Help with this item",
-      "returnWindowClosedText1": "Return window is now closed since It's been over",
-      "returnWindowClosedText2": "Days you've received this item.",
-      "returnItemText": "Return Item",
-      "cancelItemText": "Cancel Item",
-      "helpText": "Help?"
-    },
-    "orderSummary": {
-      "orderSummaryText": "Order Summary",
-      "paymentDetailsBtnText": "Payment Details",
-      "priceTaxInclusiveText": "Prices are inclusive of all taxes",
-      "totalText": "Total",
-      "bagTotalText": "Bag Total",
-      "discountText": "Discount",
-      "bagDiscountText": "Bag Discount",
-      "subTotalText": "Subtotal",
-      "subTotalTaxIncText": "Subtotal (taxes included)",
-      "subTotalTaxExcText": "Subtotal (taxes excluded)",
-      "subTotalVATIncText": "Subtotal (ex. VAT)",
-      "shippingChargesText": "Shipping charges",
-      "totalVATText": "Total VAT",
-      "shippingText": "Shipping",
-      "taxesText": "Taxes",
-      "freeText": "Free",
-      "additionalChargesText": "Additional charges",
-      "taxText": "Tax",
-      "youPayText": "You pay",
-      "placeOrderBtnText": "Place Order",
-      "loseDeliveryText": "You're about to lose Free Delivery!",
-      "loseFreeDeliveryConfirmText": "Removing this item means you'll lose Free Delivery on this order. Are you sure you want to remove this item from your basket?",
-      "incVATText": "inc. VAT",
-      "excVATText": "ex. VAT",
-      "getHelpText": "Get help with this order"
-    },
-    "cancelOrder": {
-      "cancelOrderText": "Cancel Order"
-    },
-    "returnReason": {
-      "returnReasonHeadingText": "Why are you returning this item?",
-      "returnReasonNoteText": "Please keep the items in their original condition with the MRP tag intact.",
-      "requestReturnBtnText": "Request for Return",
-      "returnConfirmText": "Are you certain you want to return this item?",
-      "dontReturnBtnText": "Don't Return",
-      "returnNumText": "Return Number",
-      "returnHistoryText": "Return History",
-      "returnOrderMsgText": "Check the products you’ve returned",
-      "reasonText": "Reason",
-      "selectReasonText": "Select reason",
-      "requiredActionText": "Required action",
-      "selectActionText": "Select action"
-    },
     "addressBook": {
       "deleteAddressConfirmText": "Are you sure you want to delete this address?",
       "deleteAddressBtnText": "Delete address",
@@ -169,63 +28,9 @@
       "saveAddressBtn": "Save Address",
       "firstNameText": "First name",
       "lastNameText": "Last name",
-      "emailText": "Email"
-    },
-    "quotes": {
-      "validUntilText": "Valid Until:",
-      "validityDaysText": "Validity Days:",
-      "quoteDetailHeadingText": "Quote Detail-",
-      "quoteSummaryText": "Quote summary"
-    },
-    "companyUsers": {
-      "usernameText": "Username:",
-      "emailText": "Email:",
-      "phoneNoText": "Phone No:"
-    },
-    "contactPreferences": {
-      "contactPreferencesHeadingText": "Contact",
-      "contactPrefDescTitle": "Please note, when you update your preferences they will be saved but they won’t be reflected right away.",
-      "contactPrefDescText": "Receive emails and texts containing tips, guidance, offers and news on new products and services."
-    },
-    "myAccount": {
-      "emailAddressText": "Email Address",
-      "referAFriendText": "Refer a Friend",
-      "myCompanyText": "My Company",
-      "myDetailsHeadingText": "My Details",
-      "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
-      "myOrders": {
-        "fetchReturnsErrorMsg": "Woops! Error fetching returns"
-      },
-      "passwordText": "Password",
-      "passwordMustMatchText": "Passwords must match",
-      "shareReferralLinkByEmailBtnText": "Click here to share Referral link by Email",
-      "noVouchersEarnedYetMsg": "No Vouchers Earned Yet",
-      "vouchersEarnedHeadingText": "Vouchers Earned",
-      "findReferralBtnText": "Find Them!",
-      "beenReferredByFriendHeadingText": "Been Referred by a Friend?",
-      "shareByEmailHeadingText": "Share by Email",
-      "shareInPersonBtnText": "Tell them in Person",
-      "noInvitesText": "No Successful Invites Yet",
-      "successfulInviteHeadingText": "Successful Invite",
-      "successfulInvitesHeadingText": "Successful Invites",
-      "clicksOnInvitesText": "Clicks on Invites",
-      "ClaimedText": "Claimed On",
-      "validTillText": "Valid Till",
-      "valifFromText": "Valid From",
-      "VoucherText": "Voucher Code",
-      "orderStatusText": "Order Status",
-      "referralText": "Referral",
-      "shareReferralByEmail": "Share Referral by Email",
-      "yourFriendsEnterText": "Your friends Enter:",
-      "invitesSentText": "Invites Sent",
-      "mySavedAddressText": "My Saved Address",
-      "forgotPasswordText": "Forgot Password",
-      "reasonForReturn": "Reason for Return",
-      "proceedToReturnText": "Proceed to Return",
-      "selectQuantityText": "Select Quantity",
-      "myReturnText": "My Return",
-      "noLookbookAvaiableText": "No Lookbook Available",
-      "shopTheLookText": "Shop the look"
+      "emailText": "Email",
+      "townCityText": "Town / city",
+      "selectCountryText": "Select a Country"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -260,19 +65,20 @@
       "getItByText": "Get it by",
       "addOnText": "Add on's for this product",
       "discountText": "discount",
-      "itemsYourCartText": "Items in your cart"
-    },
-    "wishlist": {
-      "emptyWishlistText": "You haven’t wished for anything yet.",
-      "wishlistText": "Wishlist",
-      "saveItemsText": "Explore more and save items in your wishlist.",
-      "myWishlistText": "My Wishlist",
-      "moveToWishlistText": "Move to Wishlist",
-      "addedToWishlistText": "Added to Wishlist"
-    },
-    "kitBuilder": {
-      "buildPackageHeadingText": "BUILD A BESPOKE PACKAGE WITH OUR KIT BUILDER",
-      "editMyKitBtnText": "Edit my kit"
+      "itemsYourCartText": "Items in your cart",
+      "youMayAlsoNeedText": "You may also need",
+      "noAddonProdText": "No Addon Product Available!",
+      "shoppingCartText": "Shopping cart",
+      "totalSavingsText": "Total Savings",
+      "itemsCartViewBagText": "items in cart, view bag",
+      "catalogText": "Catalog",
+      "customKitText": "Custom Kit",
+      "removeKitText": "Remove kit",
+      "kitItemsText": "Kit items",
+      "offer50PercOffOnThirdItemText": "50% OFF on 3rd Item",
+      "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later.",
+      "youDontHaveAnyItems": "Uh-oh, you don't have any items in here",
+      "priceLabelText": "RRP"
     },
     "brand": {
       "brandHeadingText": "The brand represents performance, innovation, andreliability, with a hard-earned reputation for quality and highlevels of durability.",
@@ -286,6 +92,27 @@
       "quickOrderText": "Quick Order",
       "lineByLineText": "Line by Line",
       "copyPasteText": "Copy & Paste"
+    },
+    "cancelReason": {
+      "cancelTitle": "Why are you cancelling this",
+      "cancelConfirmationText": "Are you certain you want to cancel this",
+      "cancelReasonHeadingText": "Reason for cancellation"
+    },
+    "category": {
+      "catogoriesText": "Categories",
+      "shopByCategoryText": "Shop by Category",
+      "categoryText": "Category",
+      "noCategoryAvailableText": "No Category Available",
+      "allCategoriesText": "all categories",
+      "relatedCategoriesText": "Related categories",
+      "popularCategoriesText": "Popular categories",
+      "newArrivalsText": "New Arrivals",
+      "saleText": "Sale",
+      "backpacksText": "Backpacks",
+      "travelBagsText": "Travel Bags",
+      "laptopSleevesText": "Laptop Sleeves",
+      "organizationText": "Organization",
+      "accessoriesText": "Accessories"
     },
     "checkout": {
       "availableCreditText": "Available Credit",
@@ -370,35 +197,263 @@
       "streetAndHouseNoText": "Street and House Number",
       "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)"
     },
-    "formField": {
-      "selectCountryText": "Select a Country"
+    "collection": {
+      "topListCollectionText": "Top List Collections.",
+      "shopByCollectionText": "Shop by Collection",
+      "shopByLifestyleText": "Shop by Lifestyle",
+      "noCollectionAvailableText": "No Collection Available",
+      "productAvailableText": "Products available",
+      "collectionsText": "Collections",
+      "backToCollectionsText": "Back to collections",
+      "noItemAvailableText": "No Item Availabe in",
+      "collectionsTextWithExclamationMark": "Collection!"
     },
-    "ui": {
-      "homeText": "Home",
+    "companyUsers": {
+      "usernameText": "Username:",
+      "emailText": "Email:",
+      "phoneNoText": "Phone No:"
+    },
+    "common": {
+      "orderNumberText": "Order number",
+      "datePlacedText": "Date placed",
+      "sportsEquipmentCollectionText": "Sports equipment collection."
+    },
+    "contactPreferences": {
+      "contactPreferencesHeadingText": "Contact",
+      "contactPrefDescTitle": "Please note, when you update your preferences they will be saved but they won’t be reflected right away.",
+      "contactPrefDescText": "Receive emails and texts containing tips, guidance, offers and news on new products and services."
+    },
+    "exchangeReason": {
+      "exchangeReasonHeadingText": "Reason for Exchange",
+      "exchangeReasonTitle": "Why are you exchanging this item?",
+      "picturesUploadLimitText": "Add upto 5 pictures",
+      "identifyProblemText": "This will help us to identify your problem better",
+      "uploadFileSizeLimitText": "Files must be less than 5MB",
+      "allowedFileExtensionsText": "Allowed file types: .jpeg, .jpg, .png",
+      "chooseNewItemText": "Choose New Item"
+    },
+    "exchangeSelection": {
+      "exchangeVariantHeadingText": "Choose Size & Color",
+      "exchangeVariantText": "Select color and size of the item you want in exchange",
+      "requestExchangeBtnText": "Request for Exchange",
+      "exchangeItemText": "Exchange item",
+      "exchangeConfirmText": "Are you certain you want to exchange this item?",
+      "dontExchangeText": "Don't Exchange"
+    },
+    "filters": {
+      "clearAllText": "Clear All",
+      "filtersText": "Filters",
+      "appliedFiltersText": "Applied Filters",
+      "sortByText": "Sort By",
+      "onSaleText": "On sale",
+      "productFilter3Text": "Products filters (3)",
+      "productFilterText": "Products filters",
+      "onSaleWithMarkText": "On sale!",
+      "sortOrderText": "Sort order",
+      "filterAndSortingText": "Filter & Sorting",
+      "changeSizeText": "Change Size",
+      "filterText": "Filter",
+      "highestRatingText": "Highest rating",
+      "lowestRatingText": "Lowest rating",
+      "newestRatingsText": "Newest rating"
+    },
+    "footer": {
+      "footerText": "Footer",
+      "companyRightsText": "BetterCommerce, Inc. All rights reserved."
+    },
+    "help": {
+      "getHelpOnItemText": "Get Help with this item",
+      "returnWindowClosedText1": "Return window is now closed since It's been over",
+      "returnWindowClosedText2": "Days you've received this item.",
+      "returnItemText": "Return Item",
+      "cancelItemText": "Cancel Item",
+      "helpText": "Help?"
+    },
+    "header": {
+      "gotoShopText": "Go to our shop",
+      "lookForWhatYouNeedText": "Look for what you need and love.",
+      "233StaysText": "233 stays",
+      "aug12To18Text": "Aug 12 - 18",
+      "2GuestsText": "2 Guests"
+    },
+    "home": {
       "HomePageText": "Home Page",
-      "PageEndText": "You have seen it all",
-      "notifyMeText": "Notify me",
-      "preOrderText": "Pre-order",
-      "notifyDescText": "Be the ﬁrst to know when your size is back in stock"
+      "exploreMoreBtnText": "Explore More"
     },
-    "search": {
-      "searchText": "Search",
-      "resultCountText1": "Showing",
-      "resultCountText2": "Results for",
-      "includeOOSProductsText": "Include out of stock products",
-      "topSuggestionsText": "Top Suggestions",
-      "noProductFoundText": "No Product Found",
-      "productSuggestionsText": "Product Suggestions",
-      "searchForProductsText": "Search for products",
-      "showFiltersText": "Show Filters",
-      "noResultFoundForText": "No results found for",
-      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
+    "kitBuilder": {
+      "buildPackageHeadingText": "BUILD A BESPOKE PACKAGE WITH OUR KIT BUILDER",
+      "editMyKitBtnText": "Edit my kit"
+    },
+    "login": {
+      "loginBtnText": "Login",
+      "forgotPasswordBtnText": "Forgot password?",
+      "googleLoginText": "Google Login",
+      "facebookLoginText": "Facebook Login",
+      "appleLoginText": "Apple Login",
+      "loginViaOTPHeadingText": "Login via OTP",
+      "noMobileAccountFoundText": "No account has been found with this mobile",
+      "verificationCodeText": "Verification Code",
+      "resendCodeText": "Resend Code",
+      "requestOTPText": "Request OTP",
+      "verifyOTPText": "Verify OTP"
+    },
+    "myAccount": {
+      "emailAddressText": "Email Address",
+      "referAFriendText": "Refer a Friend",
+      "myCompanyText": "My Company",
+      "myDetailsHeadingText": "My Details",
+      "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
+      "myOrders": {
+        "fetchReturnsErrorMsg": "Woops! Error fetching returns"
+      },
+      "passwordText": "Password",
+      "passwordMustMatchText": "Passwords must match",
+      "shareReferralLinkByEmailBtnText": "Click here to share Referral link by Email",
+      "noVouchersEarnedYetMsg": "No Vouchers Earned Yet",
+      "vouchersEarnedHeadingText": "Vouchers Earned",
+      "findReferralBtnText": "Find Them!",
+      "beenReferredByFriendHeadingText": "Been Referred by a Friend?",
+      "shareByEmailHeadingText": "Share by Email",
+      "shareInPersonBtnText": "Tell them in Person",
+      "noInvitesText": "No Successful Invites Yet",
+      "successfulInviteHeadingText": "Successful Invite",
+      "successfulInvitesHeadingText": "Successful Invites",
+      "clicksOnInvitesText": "Clicks on Invites",
+      "ClaimedText": "Claimed On",
+      "validTillText": "Valid Till",
+      "valifFromText": "Valid From",
+      "VoucherText": "Voucher Code",
+      "orderStatusText": "Order Status",
+      "referralText": "Referral",
+      "shareReferralByEmail": "Share Referral by Email",
+      "yourFriendsEnterText": "Your friends Enter:",
+      "invitesSentText": "Invites Sent",
+      "mySavedAddressText": "My Saved Address",
+      "forgotPasswordText": "Forgot Password",
+      "reasonForReturn": "Reason for Return",
+      "proceedToReturnText": "Proceed to Return",
+      "selectQuantityText": "Select Quantity",
+      "myReturnText": "My Return",
+      "noLookbookAvaiableText": "No Lookbook Available",
+      "shopTheLookText": "Shop the look"
+    },
+    "navBar": {
+      "currencyText": "Currency",
+      "selectCurrencyText": "Select currency",
+      "selectLanguageText": "Select language",
+      "profileText": "Profile",
+      "languageText": "Lang",
+      "includeVatText": "INC VAT",
+      "pricesIncludingVatText": "Prices inc VAT",
+      "cartText": "Cart",
+      "articleDescText": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
+      "buytemplateText": "Buy this template",
+      "betterCommerceText": "BetterCommerce"
+    },
+    "newsLetter": {
+      "successText": "Email Registered Successfully for Newsletter",
+      "signupText": "Sign up for our newsletter",
+      "signupTitle": "The latest deals and savings, sent to your inbox weekly.",
+      "emailLabelText": "Email address",
+      "signupBtnTitle": "Sign up"
+    },
+    "order": {
+      "viewOrderBtnText": "View Order",
+      "viewInvoiceBtnText": "View Invoice",
+      "buyAgainBtnText": "Buy Again",
+      "deliveredText": "Delivered",
+      "returnHistoryHeadingText": "Return history",
+      "outForDeliveryText": "Out For Delivery",
+      "cancelledText": "Cancelled",
+      "bestRatingText": "Best Rating",
+      "orderHistory": "Order history",
+      "cancelOrderText": "Cancel Order",
+      "NoOrderFoundText": "No orders found",
+      "noOrderFoundDisplayText": "Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.",
+      "myOrdersText": "My Orders",
+      "forOrderText": "for order",
+      "orderCancelledSuccessfullyText": "Order Cancelled Successfully"
+    },
+    "orderDetails": {
+      "myOrderHeadingText": "Check the status of recent orders, manage returns, and download invoices.",
+      "packageText": "Package",
+      "trackPackageBtnText": "Track Package",
+      "trackingDetailsBtnText": "Tracking Details →",
+      "returnTrackingDetailHeadingText": "Return Tracking Detail",
+      "rateItemText": "Rate Item:",
+      "downloadInvoiceBtnText": "Download Invoice",
+      "orderDetailTitleText": "Order Detail :",
+      "orderDetailsHeadingText": "Order Details",
+      "replacementOrderText": "Replacement Order",
+      "originalOrderText": "Original Order:",
+      "orderNumText": "Order Number",
+      "orderPlacedOnHeadingText": "Order PLACED ON",
+      "datePlacedText": "Date Placed",
+      "orderTotalHeadingText": "ORDER TOTAL",
+      "deliveryAddressHeadingText": "Delivery Address",
+      "noOrderFoundHeadingText": "No Order Available",
+      "startShoppingBtnText": "Start Shopping",
+      "needHelpWithOrderBtnText": "Need Help with Your Order?",
+      "itemRefundText1": "Refund of",
+      "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected.",
+      "courierPartnerHeadingText": "COURIER PARTNER",
+      "awbNumberHeadingText": "AWB Number",
+      "returnNotCreatedMsg": "Woops! Could not create a return",
+      "statusText": "Status",
+      "trackingText": "Tracking",
+      "trackingLinkBtnText": "Tracking link",
+      "createReturnBtnText": "Create return",
+      "returnCreatedText": "Return is created",
+      "orderRefundInfo": "Refund will be processed within 3-4 working days to your payment method",
+      "refundAmtText": "Refund Amount",
+      "recentOrdersText": "Recent orders"
+    },
+    "orderSummary": {
+      "orderSummaryText": "Order Summary",
+      "paymentDetailsBtnText": "Payment Details",
+      "priceTaxInclusiveText": "Prices are inclusive of all taxes",
+      "totalText": "Total",
+      "bagTotalText": "Bag Total",
+      "discountText": "Discount",
+      "bagDiscountText": "Bag Discount",
+      "subTotalText": "Subtotal",
+      "subTotalTaxIncText": "Subtotal (taxes included)",
+      "subTotalTaxExcText": "Subtotal (taxes excluded)",
+      "subTotalVATIncText": "Subtotal (ex. VAT)",
+      "shippingChargesText": "Shipping charges",
+      "totalVATText": "Total VAT",
+      "shippingText": "Shipping",
+      "taxesText": "Taxes",
+      "freeText": "Free",
+      "additionalChargesText": "Additional charges",
+      "taxText": "Tax",
+      "youPayText": "You pay",
+      "placeOrderBtnText": "Place Order",
+      "loseDeliveryText": "You're about to lose Free Delivery!",
+      "loseFreeDeliveryConfirmText": "Removing this item means you'll lose Free Delivery on this order. Are you sure you want to remove this item from your basket?",
+      "incVATText": "inc. VAT",
+      "excVATText": "ex. VAT",
+      "getHelpText": "Get help with this order"
+    },
+    "password": {
+      "enterPasswordText": "Enter password",
+      "passwordMatchedText": "Password matched! Redirecting...",
+      "incorrectPasswordText": "Incorrect password. Please try again.",
+      "passwordProtectionText": "- Password Protection"
+    },
+    "price": {
+      "priceRangeText": "Price range",
+      "minPriceText": "Min price",
+      "maxPricetext": "Max price",
+      "rangePricesText": "Range Prices"
     },
     "product": {
+      "notifyMeText": "Notify me",
       "viewProductText": "View Product",
       "relatedProductsText": "Related Products",
       "updateSizeText": "Update size",
       "sizeSelectiontext": "Select a size",
+      "notifyDescText": "Be the first to know when your size is back in stock",
       "bestSeller": {
         "h2": "TO EACH HIS OWN SHARK",
         "h3": "DISCOVER OUR NEW PRODUCTS"
@@ -536,80 +591,11 @@
       "recommendedProductText": "Recommended products",
       "productSpecificationText": "Product specification"
     },
-    "category": {
-      "catogoriesText": "Categories",
-      "shopByCategoryText": "Shop by Category",
-      "categoryText": "Category",
-      "noCategoryAvailableText": "No Category Available",
-      "allCategoriesText": "all categories",
-      "relatedCategoriesText": "Related categories",
-      "popularCategoriesText": "Popular categories",
-      "newArrivalsText": "New Arrivals",
-      "saleText": "Sale",
-      "backpacksText": "Backpacks",
-      "travelBagsText": "Travel Bags",
-      "laptopSleevesText": "Laptop Sleeves",
-      "organizationText": "Organization",
-      "accessoriesText": "Accessories"
+    "promotion": {
+      "applyPromotionText": "Apply promotion"
     },
-    "filters": {
-      "clearAllText": "Clear All",
-      "filtersText": "Filters",
-      "appliedFiltersText": "Applied Filters",
-      "sortByText": "Sort By",
-      "onSaleText": "On sale",
-      "productFilter3Text": "Products filters (3)",
-      "productFilterText": "Products filters",
-      "onSaleWithMarkText": "On sale!",
-      "sortOrderText": "Sort order",
-      "filterAndSortingText": "Filter & Sorting",
-      "changeSizeText": "Change Size",
-      "filterText": "Filter",
-      "highestRatingText": "Highest rating",
-      "lowestRatingText": "Lowest rating",
-      "newestRatingsText": "Newest rating"
-    },
-    "footer": {
-      "footerText": "Footer",
-      "companyRightsText": "BetterCommerce, Inc. All rights reserved."
-    },
-    "newsLetter": {
-      "successText": "Email Registered Successfully for Newsletter",
-      "signupText": "Sign up for our newsletter",
-      "signupTitle": "The latest deals and savings, sent to your inbox weekly.",
-      "emailLabelText": "Email address",
-      "signupBtnTitle": "Sign up"
-    },
-    "social": {
-      "generalText": "Join the community",
-      "facebookText": "Facebook",
-      "youtubeText": "Youtube",
-      "telegramText": "Telegram",
-      "twitterText": "Twitter"
-    },
-    "navBar": {
-      "currencyText": "Currency",
-      "selectCurrencyText": "Select currency",
-      "selectLanguageText": "Select language",
-      "profileText": "Profile",
-      "languageText": "Lang",
-      "includeVatText": "INC VAT",
-      "pricesIncludingVatText": "Prices inc VAT",
-      "cartText": "Cart",
-      "articleDescText": "Discover the most outstanding articles on all topics of life. Write your stories and share them",
-      "buytemplateText": "Buy this template",
-      "betterCommerceText": "BetterCommerce"
-    },
-    "common": {
-      "orderNumberText": "Order number",
-      "datePlacedText": "Date placed",
-      "sportsEquipmentCollectionText": "Sports equipment collection."
-    },
-    "loginWithOTP": {
-      "verificationCodeText": "Verification Code",
-      "resendCodeText": "Resend Code",
-      "requestOTPText": "Request OTP",
-      "verifyOTPText": "Verify OTP"
+    "register": {
+      "freeRegisterText": "Register for free"
     },
     "referral": {
       "claimText": "Claim your Gift!",
@@ -621,48 +607,52 @@
       "shareLinkText": "or share a link:",
       "inviteNowUsingText": "Invite now using:"
     },
-    "orders": {
-      "NoOrderFoundText": "No orders found",
-      "noOrderFoundDisplayText": "Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.",
-      "myOrdersText": "My Orders",
-      "forOrderText": "for order",
-      "orderCancelledSuccessfullyText": "Order Cancelled Successfully"
+    "returnReason": {
+      "returnReasonHeadingText": "Why are you returning this item?",
+      "returnReasonNoteText": "Please keep the items in their original condition with the MRP tag intact.",
+      "requestReturnBtnText": "Request for Return",
+      "returnConfirmText": "Are you certain you want to return this item?",
+      "dontReturnBtnText": "Don't Return",
+      "returnNumText": "Return Number",
+      "returnHistoryText": "Return History",
+      "returnOrderMsgText": "Check the products you’ve returned",
+      "reasonText": "Reason",
+      "selectReasonText": "Select reason",
+      "requiredActionText": "Required action",
+      "selectActionText": "Select action"
     },
-    "password": {
-      "enterPasswordText": "Enter password",
-      "passwordMatchedText": "Password matched! Redirecting...",
-      "incorrectPasswordText": "Incorrect password. Please try again.",
-      "passwordProtectionText": "- Password Protection"
+    "quotes": {
+      "validUntilText": "Valid Until:",
+      "validityDaysText": "Validity Days:",
+      "quoteDetailHeadingText": "Quote Detail-",
+      "quoteSummaryText": "Quote summary"
     },
-    "address": {
-      "townCityText": "Town / city"
-    },
-    "order": {
-      "viewOrderBtnText": "View Order",
-      "viewInvoiceBtnText": "View Invoice",
-      "buyAgainBtnText": "Buy Again",
-      "deliveredText": "Delivered",
-      "returnHistoryHeadingText": "Return history",
-      "outForDeliveryText": "Out For Delivery",
-      "cancelledText": "Cancelled",
-      "bestRatingText": "Best Rating",
-      "orderHistory": "Order history"
-    },
-    "promotion": {
-      "applyPromotionText": "Apply promotion"
-    },
-    "home": {
-      "exploreMoreBtnText": "Explore More"
-    },
-    "header": {
-      "gotoShopText": "Go to our shop",
-      "lookForWhatYouNeedText": "Look for what you need and love.",
-      "233StaysText": "233 stays",
-      "aug12To18Text": "Aug 12 - 18",
-      "2GuestsText": "2 Guests"
+    "search": {
+      "searchText": "Search",
+      "resultCountText1": "Showing",
+      "resultCountText2": "Results for",
+      "includeOOSProductsText": "Include out of stock products",
+      "topSuggestionsText": "Top Suggestions",
+      "noProductFoundText": "No Product Found",
+      "productSuggestionsText": "Product Suggestions",
+      "searchForProductsText": "Search for products",
+      "showFiltersText": "Show Filters",
+      "noResultFoundForText": "No results found for",
+      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
     },
     "section": {
       "findTheBestText": "In this season, find the best 🔥"
+    },
+    "social": {
+      "generalText": "Join the community",
+      "facebookText": "Facebook",
+      "youtubeText": "Youtube",
+      "telegramText": "Telegram",
+      "twitterText": "Twitter"
+    },
+    "store": {
+      "findStoresText": "Find Stores",
+      "findStoreNearYouText": "Find Store Near You"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -675,20 +665,16 @@
       "noOrderProvidedText": "Woops! No order provided",
       "thankyouText": "Thank you!"
     },
-    "register": {
-      "freeRegisterText": "Register for free"
-    },
-    "collection": {
-      "topListCollectionText": "Top List Collections.",
-      "shopByCollectionText": "Shop by Collection",
-      "shopByLifestyleText": "Shop by Lifestyle",
-      "noCollectionAvailableText": "No Collection Available",
-      "productAvailableText": "Products available",
-      "collectionsText": "Collections",
-      "backToCollectionsText": "Back to collections",
-      "noItemAvailableText": "No Item Availabe in",
-      "collectionsTextWithExclamationMark": "Collection!"
-    },
+    "wishlist": {
+      "emptyWishlistText": "You haven’t wished for anything yet.",
+      "wishlistText": "Wishlist",
+      "saveItemsText": "Explore more and save items in your wishlist.",
+      "myWishlistText": "My Wishlist",
+      "moveToWishlistText": "Move to Wishlist",
+      "addedToWishlistText": "Added to Wishlist"
+    }
+  },
+  "common": {
     "color": {
       "whiteText": "White",
       "beigeText": "Beige",
@@ -700,51 +686,8 @@
       "orangeText": "Orange",
       "blackAndOrangeText": "Black and Orange"
     },
-    "sortOrder": {
-      "mostPopularText": "Most Popular",
-      "bestRatingText": "Best Rating",
-      "newestText": "Newest",
-      "priceHightToLowText": "Price Hight - Low",
-      "priceLowToHighText": "Price Low - Hight"
-    },
-    "store": {
-      "findStoresText": "Find Stores",
-      "findStoreNearYouText": "Find Store Near You"
-    }
-  },
-  "message": {
-    "invalidAccountMsg": "No account has been found with this email/password",
-    "alreadyLoggedInMsg": "You're already logged in",
-    "loginSuccessMsg": "login successfully",
-    "promoCodeInvalidErrorMsg": "Promotion code is not valid",
-    "loginSuccesfulMsg": "Login Successful",
-    "wishlistSuccessMsg": "Item was added in the cart",
-    "completeThisFieldMsg": "Please compelte this field",
-    "shippingMsg1": "We currently ship in the UK and worldwide.",
-    "shippingMsg2": "We accept payment via PayPal, Clearpay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more.",
-    "returnsMsg": "Items may be returned for a full refund within 14 days from the date an order was received.",
-    "chooseShippingBillingAddressMsg": "Please choose shipping / billing address to continue.",
-    "selectStoreErrorMsg": "Please select a store to continue.",
-    "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
-    "noStoreFoundErrorMsg": "No store found.Try with different postcode",
-    "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
-    "validEmailErrorMsg": "Enter a valid email",
-    "enterEmailText": "Enter Email ID",
-    "enterYourEmailText": "Enter your email",
-    "reviewSubmitSuccessfulMsg": "Review submitted successfully.",
-    "somethingWentWrongMsg": "Woops!, Something went wrong",
-    "orderDeliveryMsg": "For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.",
-    "emailEmptyErrorMsg": "Email field cannot be empty!",
-    "userWithNameNotFoundErrorMsg": "Unfortunately, couldn't find a user with this name",
-    "pleaseEnterAValidEmailText": "Please enter a valid email",
-    "emailAlreadyInUseText": "This email is already in use",
-    "loaderLoadingText": "Loading...",
-    "itemCancelledSuccessfullyText": "Item Cancelled Successfully",
-    "proceedToCancelText": "Proceed to Cancel",
-    "logoutSuccessfulText": "Logout Successful"
-  },
-  "common": {
     "label": {
+      "homeText": "Home",
       "reviews": "reviews",
       "backToHomepageText": "Back to Homepage",
       "closePanelText": "Close panel",
@@ -939,10 +882,49 @@
       "addToCartText": "Added to cart!",
       "initiatingOrderText": "Initiating order...",
       "pleaseWaitText": "Please wait...",
-      "authorizingPaymentText": "Authorizing payment..."
+      "authorizingPaymentText": "Authorizing payment...",
+      "PageEndText": "You have seen it all"
+    },
+    "message": {
+      "invalidAccountMsg": "No account has been found with this email/password",
+      "alreadyLoggedInMsg": "You're already logged in",
+      "loginSuccessMsg": "login successfully",
+      "promoCodeInvalidErrorMsg": "Promotion code is not valid",
+      "loginSuccesfulMsg": "Login Successful",
+      "wishlistSuccessMsg": "Item was added in the cart",
+      "completeThisFieldMsg": "Please compelte this field",
+      "shippingMsg1": "We currently ship in the UK and worldwide.",
+      "shippingMsg2": "We accept payment via PayPal, Clearpay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more.",
+      "returnsMsg": "Items may be returned for a full refund within 14 days from the date an order was received.",
+      "chooseShippingBillingAddressMsg": "Please choose shipping / billing address to continue.",
+      "selectStoreErrorMsg": "Please select a store to continue.",
+      "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
+      "noStoreFoundErrorMsg": "No store found.Try with different postcode",
+      "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
+      "validEmailErrorMsg": "Enter a valid email",
+      "enterEmailText": "Enter Email ID",
+      "enterYourEmailText": "Enter your email",
+      "reviewSubmitSuccessfulMsg": "Review submitted successfully.",
+      "somethingWentWrongMsg": "Woops!, Something went wrong",
+      "orderDeliveryMsg": "For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.",
+      "emailEmptyErrorMsg": "Email field cannot be empty!",
+      "userWithNameNotFoundErrorMsg": "Unfortunately, couldn't find a user with this name",
+      "pleaseEnterAValidEmailText": "Please enter a valid email",
+      "emailAlreadyInUseText": "This email is already in use",
+      "loaderLoadingText": "Loading...",
+      "itemCancelledSuccessfullyText": "Item Cancelled Successfully",
+      "proceedToCancelText": "Proceed to Cancel",
+      "logoutSuccessfulText": "Logout Successful"
     },
     "numberText": {
       "one": "1"
+    },
+    "sortOrder": {
+      "mostPopularText": "Most Popular",
+      "bestRatingText": "Best Rating",
+      "newestText": "Newest",
+      "priceHightToLowText": "Price Hight - Low",
+      "priceLowToHighText": "Price Low - Hight"
     }
   }
 }

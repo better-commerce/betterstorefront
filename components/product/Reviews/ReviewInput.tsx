@@ -61,7 +61,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
         if (cb) cb()
         setAsyncMessage('Review submitted successfully.')
       } catch (error) {
-        setAsyncMessage(translate('message.somethingWentWrongMsg'))
+        setAsyncMessage(translate('common.message.somethingWentWrongMsg'))
         if (cb) cb()
       }
     }

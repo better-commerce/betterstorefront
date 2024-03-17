@@ -23,7 +23,7 @@ export default function Newsletter() {
         type: 'success',
         msg: translate('label.newsLetter.successText'),
       })
-    } else setErr(translate('message.validEmailErrorMsg'))
+    } else setErr(translate('common.message.validEmailErrorMsg'))
   }
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Newsletter() {
           id="email-address"
           type="text"
           name={'email-address'}
-          placeholder={translate('message.enterEmailText')}
+          placeholder={translate('common.message.enterEmailText')}
           value={value}
           onChange={handleChange}
           className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"

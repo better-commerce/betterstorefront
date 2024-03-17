@@ -335,18 +335,18 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{translate('label.cart.catalogText')}</title>
-        <meta name="title" content={translate('label.cart.catalogText')} />
-        <meta name="description" content={translate('label.cart.catalogText')} />
+        <title>{translate('label.basket.catalogText')}</title>
+        <meta name="title" content={translate('label.basket.catalogText')} />
+        <meta name="description" content={translate('label.basket.catalogText')} />
         <meta name="keywords" content="Search" />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={translate('label.cart.catalogText')} key="ogtitle" />
-        <meta property="og:description" content={translate('label.cart.catalogText')} key="ogdesc" />
+        <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
       <div className="container pt-6 pb-24 mx-auto">
         <div className="max-w-screen-sm">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
-            {translate('label.cart.catalogText')}
+            {translate('label.basket.catalogText')}
           </h1>
           <div className='flex justify-between w-full align-bottom'>
             <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
@@ -372,7 +372,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>
-          <CompareSelectionBar name={translate('label.cart.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+          <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
         </div>
       </div>
       <Script

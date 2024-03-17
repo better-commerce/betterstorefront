@@ -94,12 +94,12 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
       shortMessage: '',
     }
     if (hit?.webstock <= 0 && hit?.itemvisibleonwebsite) {
-      buttonConfig.title = translate('label.ui.notifyMeText')
+      buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
       buttonConfig.buttonType = 'button'
     } else if (!hit?.webstock && hit?.preorder) {
-      buttonConfig.title = translate('label.ui.preOrderText')
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = hit?.preordershortmessage

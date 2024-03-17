@@ -32,7 +32,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       error ? setError('') : false
       await submit(value)
     } else {
-      setError(translate('message.pleaseEnterAValidEmailText'))
+      setError(translate('common.message.pleaseEnterAValidEmailText'))
     }
   }
 
@@ -106,7 +106,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {translate('message.alreadyLoggedInMsg')}
+        {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -193,7 +193,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
       if (!data.length) {
         setHasPassedEmailValidation(true)
       } else {
-        setError(translate('message.emailAlreadyInUseText'))
+        setError(translate('common.message.emailAlreadyInUseText'))
       }
     } catch (error) {
       console.log(error)

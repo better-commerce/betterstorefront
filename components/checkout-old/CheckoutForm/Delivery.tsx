@@ -217,7 +217,7 @@ export default function Delivery({
         <>
           <div className="py-5">
             <h1 className="text-lg font-semibold text-gray-900">
-            {translate('label.formField.selectCountryText')}
+            {translate('label.addressBook.selectCountryText')}
             </h1>
 
             {isSelected ? (

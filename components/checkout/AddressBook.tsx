@@ -76,7 +76,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
     } else {
       setAlert({
         type: AlertType.ERROR,
-        msg: translate('message.chooseShippingBillingAddressMsg'),
+        msg: translate('common.message.chooseShippingBillingAddressMsg'),
       })
     }
   }

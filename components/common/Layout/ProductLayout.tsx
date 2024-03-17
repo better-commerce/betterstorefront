@@ -37,7 +37,7 @@ const Content = () => {
   return (
   <>
     <h3></h3>
-    <p>{translate('message.cookiesText')}</p>
+    <p>{translate('common.message.cookiesText')}</p>
   </>
 )}
 interface Props {

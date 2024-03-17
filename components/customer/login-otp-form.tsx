@@ -136,14 +136,14 @@ function LoginOTPForm({ handleUserLogin }: any) {
         {shouldDisplayOTPField && (
           <div className="mt-2">
             <div className="flex justify-between">
-              <label className="text-gray-700 text-sm">{translate('label.loginWithOTP.verificationCodeText')}</label>
+              <label className="text-gray-700 text-sm">{translate('label.login.verificationCodeText')}</label>
               <button
                 type="button"
                 disabled={timer > 0}
                 onClick={() => resendOTP(formik.values.mobile)}
                 className="disabled:cursor-not-allowed disabled:opacity-60 text-sm"
               >
-                {timer > 0 && `(${timer}s)`} {translate('label.loginWithOTP.resendCodeText')}
+                {timer > 0 && `(${timer}s)`} {translate('label.login.resendCodeText')}
               </button>
             </div>
             <input
@@ -169,7 +169,7 @@ function LoginOTPForm({ handleUserLogin }: any) {
             disabled={formik.isSubmitting}
             loading={formik.isSubmitting}
           >
-            {!shouldDisplayOTPField ? translate('label.loginWithOTP.requestOTPText') : translate('label.loginWithOTP.verifyOTPText')}
+            {!shouldDisplayOTPField ? translate('label.login.requestOTPText') : translate('label.login.verifyOTPText')}
           </Button>
         </div>
       </form>

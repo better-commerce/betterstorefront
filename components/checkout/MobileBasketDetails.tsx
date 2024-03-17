@@ -95,7 +95,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(translate('message.userWithNameNotFoundErrorMsg'))
+          setError(translate('common.message.userWithNameNotFoundErrorMsg'))
         }
       } else {
         setIsLoading(false)

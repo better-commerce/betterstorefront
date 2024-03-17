@@ -29,7 +29,7 @@ export default function NotifyUserPopup() {
           closeNotifyUser()
         }, 1500)
       } else {
-        setIsPosted(translate('message.somethingWentWrongMsg'))
+        setIsPosted(translate('common.message.somethingWentWrongMsg'))
         setTimeout(() => {
           closeNotifyUser()
         }, 1500)
@@ -98,11 +98,11 @@ export default function NotifyUserPopup() {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      {translate('label.ui.notifyMeText')}
+                      {translate('label.product.notifyMeText')}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        {translate('label.ui.notifyDescText')} </p>
+                        {translate('label.product.notifyDescText')} </p>
                       {isPostedMessage ? (
                         <div className="font-semibold text-indigo-600">
                           {isPostedMessage}
@@ -142,7 +142,7 @@ export default function NotifyUserPopup() {
                     className="inline-flex justify-center w-full px-4 py-2 font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => handleModal()}
                   >
-                    {translate('label.ui.notifyMeText')}</button>
+                    {translate('label.product.notifyMeText')}</button>
                   <button
                     type="button"
                     className="inline-flex justify-center w-full px-4 py-2 mt-3 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"

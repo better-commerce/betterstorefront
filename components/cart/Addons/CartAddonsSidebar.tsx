@@ -49,7 +49,7 @@ export default function CartAddonsSidebar({
                   <div className="flex flex-col">
                     <div className="sticky top-0 z-10 flex items-center justify-between px-4 pt-6 mb-1 bg-white sm:px-6">
                       <Dialog.Title className="font-semibold text-black font-18 ">
-                        <div>{translate('label.cart.youMayAlsoNeedText')}</div>
+                        <div>{translate('label.basket.youMayAlsoNeedText')}</div>
                       </Dialog.Title>
                       <div className="relative flex items-center ml-3 -top-1 outline-none-s">
                         <button
@@ -79,7 +79,7 @@ export default function CartAddonsSidebar({
                         className="text-center"
                       />
                       <p className="my-5 text-3xl font-semibold text-center text-black uppercase">
-                        {translate('label.cart.noAddonProdText')}
+                        {translate('label.basket.noAddonProdText')}
                       </p>
                       <button
                         type="button"

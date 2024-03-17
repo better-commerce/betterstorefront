@@ -223,9 +223,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       const userRes: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       cb()
       if (!userRes?.data) {
-        return setAlert({ type: AlertType.ERROR, msg: translate('message.invalidAccountMsg') })
+        return setAlert({ type: AlertType.ERROR, msg: translate('common.message.invalidAccountMsg') })
       }
-      setAlert({ type: AlertType.SUCCESS, msg: translate('message.loginSuccessMsg') })
+      setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.loginSuccessMsg') })
       const { userToken, ...rest } = userRes?.data
       saveUserToken(userToken)
       let userObj = { ...rest }

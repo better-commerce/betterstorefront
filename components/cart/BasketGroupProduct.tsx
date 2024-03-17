@@ -120,7 +120,7 @@ export default function BasketGroupProduct({
         <div className="col-span-9">
           <div className="flex justify-between">
             <h5 className="box-border pr-4 font-14 dark:text-black">
-              {brandInfo?.brand} {brandInfo?.platform}{translate('label.cart.customKitText')}
+              {brandInfo?.brand} {brandInfo?.platform}{translate('label.basket.customKitText')}
             </h5>
             <span className='dark:text-black'>
               {currency?.currencySymbol}
@@ -148,7 +148,7 @@ export default function BasketGroupProduct({
             <div>
               <span
                 className="block p-2 cursor-pointer"
-                title={translate('label.cart.removeKitText')}
+                title={translate('label.basket.removeKitText')}
                 onClick={() => {
                   openModal()
                   setItemClicked(products)
@@ -168,7 +168,7 @@ export default function BasketGroupProduct({
             <>
               <div className="flex items-center justify-between pb-1 font-semibold dark:text-black">
                 <span className='font-bold text-black uppercase'>
-                  {translate('label.cart.kitItemsText')}({products?.length})
+                  {translate('label.basket.kitItemsText')}({products?.length})
                   {kitCartLoaded && (
                     <span className="ml-2">
                       <LoadingDots />

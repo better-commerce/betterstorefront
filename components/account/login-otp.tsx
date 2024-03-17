@@ -52,7 +52,7 @@ function LoginOTPComp() {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {translate('message.alreadyLoggedInMsg')}
+        {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
   }

@@ -141,7 +141,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       shortMessage: '',
     }
     if (!data?.currentStock && data?.preOrder?.isEnabled) {
-      buttonConfig.title = translate('label.ui.preOrderText')
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = data?.preOrder?.shortMessage

@@ -215,7 +215,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = translate('label.ui.preOrderText')
+        buttonConfig.title = translate('label.product.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -320,7 +320,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = translate('label.ui.notifyMeText')
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
