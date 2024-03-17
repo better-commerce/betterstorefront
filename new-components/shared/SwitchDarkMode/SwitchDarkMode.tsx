@@ -1,3 +1,4 @@
+import { useTranslation } from "@commerce/utils/use-translation";
 import { useThemeMode } from "hooks/useThemeMode";
 import React from "react";
 
@@ -5,6 +6,7 @@ export interface SwitchDarkModeProps {
   className?: string;
 }
 const SwitchDarkMode: React.FC<SwitchDarkModeProps> = ({ className = "" }) => {
+  const translate = useTranslation()
   const { _toogleDarkMode, isDarkMode, toDark, toLight } = useThemeMode();
 
   return (
@@ -12,7 +14,7 @@ const SwitchDarkMode: React.FC<SwitchDarkModeProps> = ({ className = "" }) => {
       onClick={_toogleDarkMode}
       className={`text-2xl md:text-3xl w-12 h-12 rounded-full text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:outline-none flex items-center justify-center ${className}`}
     >
-      <span className="sr-only">Enable dark mode</span>
+      <span className="sr-only">{translate('common.label.EnableDarkModeText')}</span>
       {isDarkMode ? (
         <svg
           width="24"

@@ -8,11 +8,8 @@ import { useEffect, useState } from 'react'
 import { postData } from '@components/utils/clientFetcher'
 import { useUI } from '@components/ui'
 import { groupBy } from 'lodash'
-import {
-  ADDRESS_OF_YOUR_CHOICE,
-  IN_STORE_OR_COLLECT_PLUS,
-} from '@components/utils/textVariables'
 import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface DeliveryTypeSelectionProps {
   basket: any
@@ -25,11 +22,12 @@ const DeliveryTypeSelection = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod,
 }: DeliveryTypeSelectionProps) => {
+  const translate = useTranslation()
   const DELIVERY_METHODS_TYPE = [
     {
       id: 0,
       title: 'Deliver',
-      content: ADDRESS_OF_YOUR_CHOICE,
+      content: translate('label.checkout.toChoiceAddressText'),
       children: [],
       type: 1,
     },
@@ -37,7 +35,7 @@ const DeliveryTypeSelection = ({
       id: 1,
       type: 2,
       title: 'Collect',
-      content: IN_STORE_OR_COLLECT_PLUS,
+      content: translate('common.label.inStoreUsingCollectPlusText'),
       children: [],
     },
   ]
@@ -77,7 +75,7 @@ const DeliveryTypeSelection = ({
   return (
     <>
       <h5 className="mt-4 mb-2 font-medium text-black font-18 sm:mt-6 sm:mb-4">
-        Delivery Type
+        {translate('label.checkout.deliveryTypeText')}
       </h5>
 
       <div className="flex justify-between w-full gap-4">

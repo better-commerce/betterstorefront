@@ -10,25 +10,10 @@ import {
   CLOTH_SIZE_ATTRIB_NAME,
   NEXT_CREATE_WISHLIST,
   Messages,
-  MAX_ADD_TO_CART_LIMIT,
   NEXT_REMOVE_WISHLIST,
 } from '@components/utils/constants'
-import {
-  HeartIcon,
-  CheckCircleIcon,
-  StarIcon,
-} from '@heroicons/react/24/outline'
-import { CheckCircleIcon as CheckSolidCircleIcon } from '@heroicons/react/24/solid'
 import _, { round } from 'lodash'
-import {
-  BTN_NOTIFY_ME,
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BASKET,
-  IMG_PLACEHOLDER,
-  ITEM_WISHLISTED,
-  QUICK_VIEW,
-  WISHLIST_TITLE,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -36,8 +21,8 @@ import { vatIncluded, validateAddToCart, cartItemsValidateAddToCart } from '@fra
 import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
-import classNames from 'classnames'
 import ButtonNotifyMe from '@components/product/ButtonNotifyMe'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
@@ -80,6 +65,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     setCompareProducts,
     removeFromWishlist,
   } = useUI()
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -252,7 +238,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
@@ -298,7 +284,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
    if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage
@@ -479,7 +465,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 </>)}
               </div>
               <div className="items-end text-xs font-light text-right text-gray-400">
-                {isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}
+                {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText') }
               </div>
             </div>
           </div>

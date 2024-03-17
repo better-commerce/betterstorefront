@@ -11,6 +11,7 @@ import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import { Logo } from "@components/ui";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -92,11 +93,12 @@ const NavMobile: React.FC<NavMobileProps> = ({
   };
 
   const renderSearchForm = () => {
+    const translate = useTranslation();
     return (
       <form action="" method="POST" className="flex-1 text-slate-900 dark:text-slate-200" >
         <div className="flex items-center h-full px-4 py-2 space-x-1 bg-slate-50 dark:bg-slate-800 rounded-xl">
           {renderMagnifyingGlassIcon()}
-          <input type="search" placeholder="Type and press enter" className="w-full text-sm bg-transparent border-none focus:outline-none focus:ring-0 " />
+          <input type="search" placeholder={translate('common.label.typeAndPressEnterText')} className="w-full text-sm bg-transparent border-none focus:outline-none focus:ring-0 " />
         </div>
         <input type="submit" hidden value="" />
       </form>

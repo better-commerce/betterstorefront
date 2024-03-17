@@ -19,11 +19,14 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_RETURN_ORDER_LINE,
   Messages,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
 } from '@components/utils/constants'
 import { sanitizeBase64, vatIncluded } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function ReturnOrder({
   orderId = Guid.empty,
@@ -37,6 +40,7 @@ export default function ReturnOrder({
   const [showReturnReasons, setShowReturnReasons] = useState(false)
   const [returnsReasons, setReturnsReasons] = useState<any>(undefined)
   const [value, setValue] = useState<any>('')
+  const translate = useTranslation()
   const handleChange = (e: any) => {
     setValue(e.target.value)
   }
@@ -180,16 +184,16 @@ export default function ReturnOrder({
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i> Return
-                  Item
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i> 
+                  {translate('label.help.returnItemText')}
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i> Return
-                  Item
+                  <i className="mr-2 sprite-icon sprite-left-arrow"></i> 
+                 {translate('label.help.returnItemText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -233,12 +237,12 @@ export default function ReturnOrder({
                                 <div className="flex mt-3">
                                   <div className="w-24">
                                     <label className="font-medium dark:text-gray-900">
-                                      Size: {itemData?.size}
+                                      {translate('common.label.sizeText')} {itemData?.size}
                                     </label>
                                   </div>
                                   <div className="w-full">
                                     <label className="font-medium dark:text-gray-900">
-                                      Qty: {itemData?.qty}
+                                      {translate('common.label.qtyText')} {itemData?.qty}
                                     </label>
                                   </div>
                                 </div>
@@ -249,13 +253,13 @@ export default function ReturnOrder({
                         <div className="flex items-center justify-between pb-2 border-gray-300 border-dashed border-y">
                           <div className="flex items-end flex-1 px-3 py-2 pl-0 mt-1">
                             <label className="text-base font-bold text-primary">
-                              Select Quantity
+                              {translate('label.myAccount.selectQuantityText')}
                             </label>
                           </div>
                           <div className="flex items-end px-3 py-2 pl-0 mt-1 ml-2">
                             <div className="flex items-end flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
                               <label className="text-xs text-primary">
-                                Qty:{' '}
+                                {translate('common.label.qtyText')}{' '}
                               </label>
                               <select
                                 className="w-full px-1 text-xs bg-white sm:w-22 text-primary"
@@ -284,14 +288,14 @@ export default function ReturnOrder({
                               }}
                               className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
-                              Proceed to Return
+                              {translate('label.myAccount.proceedToReturnText')}
                             </button>
                           ) : (
                             <button
                               type="button"
                               className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
-                              Proceed to Return
+                              {translate('label.myAccount.proceedToReturnText')}
                             </button>
                           )}
                         </div>
@@ -311,8 +315,7 @@ export default function ReturnOrder({
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <h3 className="max-w-4xl mx-auto text-xl font-semibold text-black">
                 <Link className="mr-2 leading-none" href="/my-account">
-                  <i className="sprite-icon sprite-left-arrow"></i> Reason for
-                  Return
+                  <i className="sprite-icon sprite-left-arrow"></i> {translate('label.myAccount.reasonForReturn')}
                 </Link>
               </h3>
             </div>
@@ -330,9 +333,11 @@ export default function ReturnOrder({
   )
 }
 export async function getServerSideProps(context: any) {
+  const { locale } = context
   const ids = context?.query?.ids
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props

@@ -10,6 +10,7 @@ import { vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import FindStore from './FindStore'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ShippingMethod {
   id: string
@@ -33,6 +34,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   onContinue,
   goToStep = () => {}
 }) => {
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const { setAlert } = useUI()
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<any>(null)
@@ -53,11 +55,11 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   
     if (showFindStore) {
       isValid = selectedStore !== null;
-      errorMessage = 'Please select a store to continue.';
+      errorMessage = translate('common.message.selectStoreErrorMsg');
     } else {
       isValid =
         selectedShippingMethod?.type === 1 && selectedDeliveryMethod?.type === 1;
-      errorMessage = 'Please select a delivery method to continue.';
+      errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg');
     }
   
     if (isValid) {
@@ -108,7 +110,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
       {selectedDeliveryMethod?.children?.length > 0 ? (
         <>
           <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
-            <h5 className="font-semibold uppercase font-18 dark:text-black">Delivery</h5>
+            <h5 className="font-semibold uppercase font-18 dark:text-black">{translate('label.checkout.deliveryText')}</h5>
             <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
               {selectedDeliveryMethod?.children?.map((method: any) => (
                 <div key={method?.id} className={`${selectedShippingMethodId === method?.id ? 'bg-gray-200' : 'bg-white border-gray-200'} border flex sm:flex-row flex-col items-center sm:justify-between justify-start sm:p-4 p-2 cursor-pointer rounded`}
@@ -125,8 +127,8 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                         <div dangerouslySetInnerHTML={{ __html: method?.description, }} className="my-0 font-12 dark:text-black" />
                         {basket?.estimatedDeliveryDate && (
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
-                            Expected Delivery Date:{' '}
-                            <span className="font-bold">
+                            {translate('common.label.expectedDeliveryDateText')}:{' '}
+                          <span className="font-bold">
                               {eddDateFormat(basket?.estimatedDeliveryDate)}{' '}
                             </span>
                           </span>
@@ -134,9 +136,9 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                       </span>
                       <span className="flex justify-start font-bold text-black sm:justify-end">
                         {method?.id === basket?.shippingMethodId ? (
-                          basket?.shippingCharge?.raw?.withTax == 0 ? 'FREE' : isIncludeVAT ? basket?.shippingCharge?.formatted?.withTax : basket?.shippingCharge?.formatted?.withoutTax
+                          basket?.shippingCharge?.raw?.withTax == 0 ? translate('label.orderSummary.freeText') : isIncludeVAT ? basket?.shippingCharge?.formatted?.withTax : basket?.shippingCharge?.formatted?.withoutTax
                         ) : (
-                          method?.price?.raw?.withTax == 0 ? 'FREE' : isIncludeVAT ? method?.price?.formatted?.withTax : method?.price?.formatted?.withoutTax
+                          method?.price?.raw?.withTax == 0 ? translate('label.orderSummary.freeText') : isIncludeVAT ? method?.price?.formatted?.withTax : method?.price?.formatted?.withoutTax
                         )}
                       </span>
                     </div>
@@ -154,14 +156,14 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
               onClick={handleContinue}
               disabled={!selectedShippingMethodId}
             >
-              Continue to Payment
+              {translate('label.checkout.continueToPaymentText')}
             </button>
           </div>
         </>
       ) : (
         <>
           <div className='flex flex-col w-full'>
-            <span className='font-medium text-gray-400'>No Delivery Method Available</span>
+            <span className='font-medium text-gray-400'>{translate('label.checkout.noDeliveryMethodAvailableText')}</span>
           </div>
         </>
       )}

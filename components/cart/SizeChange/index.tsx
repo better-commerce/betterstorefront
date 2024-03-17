@@ -5,8 +5,6 @@ import { RadioGroup } from '@headlessui/react'
 import cn from 'classnames'
 import * as yup from 'yup'
 import axios from 'axios'
-
-import { CHANGE_SIZE } from '@components/utils/textVariables'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import {
   NEXT_BULK_ADD_TO_CART,
@@ -15,10 +13,12 @@ import {
 } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const SIZE_ATTRIBUTE = 'clothing.size'
 
 function SizeChangeModal({ open, handleToggleOpen, product }: any) {
+  const translate = useTranslation()
   const { setCartItems, cartItems, basketId } = useUI()
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState('')
@@ -268,7 +268,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
             <Dialog.Panel className="w-full max-w-lg mx-auto bg-white">
               <Dialog.Title className="p-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-lg font-bold">{CHANGE_SIZE}</p>
+                  <p className="text-lg font-bold">{translate('label.filters.changeSizeText')}</p>
                   <span
                     className="p-2 -mr-2 cursor-pointer hover:bg-gray-100"
                     role="button"
@@ -332,8 +332,9 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                   {isSizeUpdateLoading
                     ? 'Updating...'
                     : value
-                    ? 'Update size'
-                    : 'Select a size'}
+                    ? translate('label.product.uodqateSizeText')
+                    : translate('label.product.sizeSelectionText')
+                  }
                 </Button>
               </div>
             </Dialog.Panel>

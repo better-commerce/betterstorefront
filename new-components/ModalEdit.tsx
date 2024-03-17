@@ -4,6 +4,7 @@ import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
 import Input from "./shared/Input/Input";
 import NcModal from "./shared/NcModal/NcModal";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ModalEditProps {
   show: boolean;
@@ -29,18 +30,19 @@ const ModalEdit: FC<ModalEditProps> = ({ show, onCloseModalEdit }) => {
   }, [show]);
 
   const renderContent = () => {
+    const translate = useTranslation()
     return (
       <form action="#">
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-200">
-          Change price
+          {translate('common.label.changePriceText')}
         </h3>
-        <span className="text-sm">Are you sure you want to change price?</span>
+        <span className="text-sm">{translate('common.label.changePriceConfirmationText')}</span>
         <div className="relative mt-8 rounded-md shadow-sm">
           <Input ref={textareaRef} defaultValue={"1.000"} type={"text"} />
 
           <div className="absolute inset-y-0 right-0 flex items-center">
             <label htmlFor="currency" className="sr-only">
-              Currency
+              {translate('label.navBar.currencyText')}
             </label>
             <select
               id="currency"
@@ -54,9 +56,9 @@ const ModalEdit: FC<ModalEditProps> = ({ show, onCloseModalEdit }) => {
           </div>
         </div>
         <div className="mt-4 space-x-3">
-          <ButtonPrimary type="submit">Submit</ButtonPrimary>
+          <ButtonPrimary type="submit">{translate('common.label.submitText')}</ButtonPrimary>
           <ButtonSecondary type="button" onClick={onCloseModalEdit}>
-            Cancel
+            {translate('common.label.cancelText')}
           </ButtonSecondary>
         </div>
       </form>

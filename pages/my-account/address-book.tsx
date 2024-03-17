@@ -1,28 +1,26 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect } from 'react'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Tab } from '@headlessui/react'
 import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-import { stringToBoolean } from '@framework/utils/parse-util'
 import React from 'react'
 import AddressBook from '@components/account/Address/AddressBook'
 import SideMenu from '@components/account/MyAccountMenu'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
   const { user, deleteUser, isGuestUser } = useUI()
   const router = useRouter()
+  const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const currentOption = 'My Saved Address'
@@ -70,13 +68,13 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
         <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
-        <title>{currentOption}</title>
-        <meta name="title" content={currentOption} />
-        <meta name="description" content={currentOption} />
-        <meta name="keywords" content={currentOption} />
+        <title>{translate('label.myAccount.mySavedAddressText')}</title>
+        <meta name="title" content={translate('label.myAccount.mySavedAddressText')} />
+        <meta name="description" content={translate('label.myAccount.mySavedAddressText')} />
+        <meta name="keywords" content={translate('label.myAccount.mySavedAddressText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={currentOption} key="ogtitle" />
-        <meta property="og:description" content={currentOption} key="ogdesc" />
+        <meta property="og:title" content={translate('label.myAccount.mySavedAddressText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.myAccount.mySavedAddressText')} key="ogdesc" />
       </NextHead>
   
       <section className="relative pb-10 text-gray-900 sm:text-sm">
@@ -214,11 +212,13 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
+  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultView: defaultIndex, 
+    }, // will be passed to the page component as props
   }
 }
 

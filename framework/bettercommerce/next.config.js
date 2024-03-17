@@ -9,7 +9,9 @@ const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
 const fs = require('fs')
-const locales = require('./locales.json')
+const localeSettings = require('./locales.json')
+const { localizations, ...rest } = localeSettings
+const locales = { ...rest }
 
 const url = new URL('oAuth/token', AUTH_URL)
 
@@ -55,7 +57,7 @@ const getSeoConfig = async function (token) {
       JSON.stringify(seoConfig),
       (err) => console.log(err)
     )
-  } catch (error) {}
+  } catch (error) { }
 }
 
 const handler = async () => {

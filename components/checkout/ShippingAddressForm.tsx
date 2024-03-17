@@ -11,6 +11,7 @@ import {
 import { retrieveAddress } from '@components/checkout-old/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -24,6 +25,7 @@ const ShippingAddressForm: React.FC<any> = ({
   onEditAddressToggleView,
   shippingCountries,
 }) => {
+  const translate = useTranslation()
   const [searchedAddresses, setSearchedAddresses] = useState([])
   const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } =
     useUI()
@@ -140,7 +142,7 @@ const ShippingAddressForm: React.FC<any> = ({
         }`}
       >
         <h5 className="font-medium font-18 dark:text-black">
-          {editAddressValues ? 'Edit' : ''} Shipping Address
+          {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.shippingAddressHeadingText')}
         </h5>
         <div className="p-0 mb-4 rounded-md sm:bg-transparent sm:border-0 sm:rounded-none sm:mb-0">
           {/* address finder form */}
@@ -155,7 +157,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={addressFinderFormik.values.postCode}
                   onChange={addressFinderFormik.handleChange}
-                  placeholder="Enter your postcode"
+                  placeholder={translate('common.label.enterYourPostCodePlaceholder')}
                   className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
                 />
                 {addressFinderFormik.errors.postCode &&
@@ -192,9 +194,9 @@ const ShippingAddressForm: React.FC<any> = ({
                 {addressFinderFormik.isSubmitting ? (
                   <LoadingDots />
                 ) : isMobile ? (
-                  'Find'
+                  translate('common.label.findText')
                 ) : (
-                  'Find Address'
+                  translate('common.label.findAddressText')
                 )}
               </button>
             </form>
@@ -212,7 +214,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   onChange={formik.handleChange}
                   className="checkout-input-field dark:bg-white dark:text-black"
                 >
-                  <option value="">Select Country</option>
+                  <option value="">{translate('label.addressBook.selectCountryText')}</option>
                   {shippingCountries?.map((country: any, idx: number) => (
                     <option key={idx} value={country.name}>
                       {country.name}
@@ -231,7 +233,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
-                  placeholder="First Name"
+                  placeholder={translate('common.label.firstNameText')}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
                 />
                 {formik.errors.firstName && (
@@ -246,7 +248,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.lastName}
                   onChange={formik.handleChange}
-                  placeholder="Last Name"
+                  placeholder={translate('common.label.lastNameText')}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
                 />
                 {formik.errors.lastName && (
@@ -263,7 +265,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.phoneNo}
                   onChange={formik.handleChange}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder="Mobile number"
+                  placeholder={translate('common.label.mobileNumText')}
                   onKeyDown={(ev: any) => {
                     const target = ev?.target
                     if (target && target?.value) {
@@ -312,7 +314,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.companyName}
                   onChange={formik.handleChange}
-                  placeholder="Company name and VAT number (optional)"
+                  placeholder={translate('common.label.companyNameAndVATNumText')}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
                 />
                 {formik.errors.companyName && (
@@ -327,7 +329,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address1}
                   onChange={formik.handleChange}
-                  placeholder="Address Line 1"
+                  placeholder={translate('common.label.addressLine1Text')}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
                 />
                 {formik.errors.address1 && (
@@ -343,7 +345,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.address2}
                   onChange={formik.handleChange}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder="Address Line 2"
+                  placeholder={translate('common.label.addressLine2Text')}
                 />
                 {formik.errors.address2 && (
                   <span className="form-input-error">
@@ -358,7 +360,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.address3}
                   onChange={formik.handleChange}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder="Address Line 3"
+                  placeholder={translate('common.label.addressLine3Text')}
                 />
                 {formik.errors.address3 && (
                   <span className="form-input-error">
@@ -373,7 +375,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.city}
                   onChange={formik.handleChange}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder="City"
+                  placeholder={translate('common.label.cityText')}
                 />
                 {formik.errors.city && (
                   <span className="form-input-error">{formik.errors.city}</span>
@@ -386,7 +388,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.postCode}
                   onChange={formik.handleChange}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder="Postcode"
+                  placeholder={translate('common.label.postcodeText')}
                 />
                 {formik.errors.postCode && (
                   <span className="form-input-error">
@@ -402,7 +404,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.state}
                   onChange={formik.handleChange}
                   className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder="County, state, province, etc.. (optional)"
+                  placeholder={translate('common.label.countyStateEtcText')}
                 />
                 {formik.errors.state && (
                   <span className="form-input-error">
@@ -426,7 +428,7 @@ const ShippingAddressForm: React.FC<any> = ({
                 htmlFor="useSameForBilling"
                 className="pl-1 font-medium text-black font-14"
               >
-                Use same address for Billing
+                {translate('label.checkout.useSameAddressForBillingText')}
               </label>
             </div>
 
@@ -437,7 +439,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="button"
                   onClick={() => onEditAddressToggleView(undefined)}
                 >
-                  Cancel
+                  {translate('common.label.cancelText')}
                 </button>
               )}
               <button
@@ -446,8 +448,8 @@ const ShippingAddressForm: React.FC<any> = ({
                 disabled={formik.isSubmitting}
               >
                 {useSameForBilling
-                  ? 'Save And Continue to Delivery'
-                  : 'Save And Continue to Billing'}
+                  ? translate('label.checkout.saveAndContinueToDeliveryText')
+                  : translate('label.checkout.saveAndContinueToBillingText')}
               </button>
             </div>
           </form>

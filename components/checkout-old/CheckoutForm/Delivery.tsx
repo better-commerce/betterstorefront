@@ -11,27 +11,12 @@ import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
 import CncList from './CncList'
-import { ADDRESS_OF_YOUR_CHOICE, IN_STORE_OR_COLLECT_PLUS, GENERAL_SELECT_COUNTRY, GENERAL_EDIT, GENERAL_CONFIRM, GENERAL_DELIVERY_METHOD, GENERAL_COMBINED_DELIVERY, } from '@components/utils/textVariables'
+import { GENERAL_DELIVERY_METHOD } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
 import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY } from '@components/utils/constants'
-const DELIVERY_METHODS_TYPE = [
-  {
-    id: 1,
-    title: 'Deliver',
-    content: ADDRESS_OF_YOUR_CHOICE,
-    children: [],
-    type: 2,
-  },
-  {
-    id: 2,
-    type: 1,
-    title: 'Collect',
-    content: IN_STORE_OR_COLLECT_PLUS,
-    children: [],
-  },
-]
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Delivery({
   toggleDelivery,
@@ -42,10 +27,27 @@ export default function Delivery({
   splitDeliveryItems,
   onShippingPlansUpdated,
 }: any) {
+  const translate = useTranslation();
+  const DELIVERY_METHODS_TYPE = [
+    {
+      id: 1,
+      title: translate('label.checkout.deliverText'),
+      content: translate('label.checkout.toChoiceAddressText'),
+      children: [],
+      type: 2,
+    },
+    {
+      id: 2,
+      type: 1,
+      title: translate('label.checkout.collectText'),
+      content: translate('common.label.inStoreUsingCollectPlusText'),
+      children: [],
+    },
+  ]
   const { basketId, setCartItems, cartItems, isPaymentLink, isSplitDelivery } = useUI()
   const isIncludeVAT = vatIncluded()
   const [selectedCountry, setSelectedCountry] = useState({
-    name: 'Country',
+    name: translate('label.checkout.countryText'),
     twoLetterIsoCode: geoData.CountryCode,
   })
   const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
@@ -202,7 +204,7 @@ export default function Delivery({
         <>
           <h4 className="font-bold text-black uppercase">
             {isSplitDelivery
-              ? GENERAL_COMBINED_DELIVERY
+              ? translate('label.checkout.combinedDeliveryHeadingText')
               : GENERAL_DELIVERY_METHOD}
           </h4>
           <ConfirmedGeneralComponent
@@ -215,7 +217,7 @@ export default function Delivery({
         <>
           <div className="py-5">
             <h1 className="text-lg font-semibold text-gray-900">
-              {GENERAL_SELECT_COUNTRY}
+            {translate('label.addressBook.selectCountryText')}
             </h1>
 
             {isSelected ? (
@@ -231,7 +233,7 @@ export default function Delivery({
                         className="btn text-pink font-xs"
                         type="button"
                       >
-                        {GENERAL_EDIT}
+                        {translate('common.label.editText')}
                       </button>
                     </div>
                   </div>
@@ -261,7 +263,7 @@ export default function Delivery({
                   <Button
                     buttonType="button"
                     action={async () => setIsSelected(true)}
-                    title={GENERAL_CONFIRM}
+                    title={translate('common.label.confirmText')}
                   />
                 </div>
               </>
@@ -283,7 +285,7 @@ export default function Delivery({
           >
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
               {isSplitDelivery
-                ? GENERAL_COMBINED_DELIVERY
+                ? translate('label.checkout.combinedDeliveryHeadingText')
                 : GENERAL_DELIVERY_METHOD}
             </RadioGroup.Label>
 
@@ -391,7 +393,7 @@ export default function Delivery({
               <Button
                 buttonType="button"
                 action={submitShippingMethod}
-                title={GENERAL_CONFIRM}
+                title={translate('common.label.confirmText')}
               />
             </div>
           ) : null}

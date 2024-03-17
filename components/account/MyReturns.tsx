@@ -2,29 +2,19 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import axios from 'axios'
 import {
-  GENERAL_RECENT_ORDERS,
-  RETURN_ORDER_TITLE,
-  RETURN_ORDER_TEXT,
-  GENERAL_ORDER_NUMBER,
-  GENERAL_ORDER_PLACED_ON,
-  GENERAL_DATE_PLACED,
-  GENERAL_VIEW_PRODUCT,
-  GENERAL_REFUND_AMOUNT,
-  GENERAL_ADD_TO_BASKET,
-  GENERAL_RETURN_NUMBER,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
-import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
 
 export default function MyReturns() {
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
-
+  const translate = useTranslation();
   const [returns, setReturns] = useState([])
   const isIncludeVAT = vatIncluded()
   const fetchReturns = async () => {
@@ -34,7 +24,7 @@ export default function MyReturns() {
       })
       setReturns(data.response.result)
     } catch (error) {
-      alert('Woops! Error fetching returns')
+      alert(translate('label.myAccount.myOrders.fetchReturnsErrorMsg'))
       console.log(error)
     }
   }
@@ -95,23 +85,23 @@ export default function MyReturns() {
         <div className="max-w-4xl lg:mx-12">
           <div className="lg:px-0 sm:px-5 px-5 pt-5">
             <h1 className="font-extrabold text-lg tracking-tight text-gray-900">
-              {RETURN_ORDER_TITLE}
+              {translate('label.returnReason.returnHistoryText')}
             </h1>
             <p className="mt-2 text-sm font-normal text-black">
-              {RETURN_ORDER_TEXT}
+              {translate('label.returnReason.returnOrderMsgText')}
             </p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
-              {GENERAL_RECENT_ORDERS}
+              {translate('label.orderDetails.recentOrdersText')}
             </h2>
 
             <div className="space-y-16 sm:space-y-24">
               {returns.map((order: any) => (
                 <div key={order.number}>
                   <h3 className="sr-only">
-                    {GENERAL_ORDER_PLACED_ON}{' '}
+                    {translate('common.label.orderPlacedText')}{' '}
                     <time dateTime={order.returnDate}>
                       {new Date(order.returnDate).toDateString()}
                     </time>
@@ -121,13 +111,13 @@ export default function MyReturns() {
                     <dl className="flex-auto space-y-4 text-sm text-gray-600 divide-y divide-gray-200 md:divide-y-0 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 lg:w-full lg:flex-none lg:gap-x-8">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
-                          {GENERAL_RETURN_NUMBER}
+                        {translate('label.returnReason.returnNumText')}
                         </dt>
                         <dd className="md:mt-1">{order.returnNo}</dd>
                       </div>
                       <div className="flex justify-between pt-4 md:block md:pt-0">
                         <dt className="font-medium text-gray-900">
-                          {GENERAL_DATE_PLACED}
+                          {translate('label.common.datePlacedText')}
                         </dt>
                         <dd className="md:mt-1">
                           <time dateTime={order.returnDate}>
@@ -136,7 +126,7 @@ export default function MyReturns() {
                         </dd>
                       </div>
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                        <dt>{GENERAL_REFUND_AMOUNT}</dt>
+                        <dt>{translate('label.orderDetails.refundAmtText')}</dt>
                         <dd className="md:mt-1">
                           {order.refundAmount?.formatted?.withTax}
                         </dd>
@@ -171,7 +161,7 @@ export default function MyReturns() {
                                   passHref
                                   className="text-indigo-600 hover:text-indigo-500"
                                 >
-                                  {GENERAL_VIEW_PRODUCT}
+                                  {translate('label.product.viewProductText')}
                                 </Link>
                                 <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
                                   <div className="pl-4 ml-4 border-l border-gray-200 sm:ml-6 sm:pl-6">
@@ -179,7 +169,7 @@ export default function MyReturns() {
                                       onClick={() => handleAddToCart(product)}
                                       className="text-indigo-600 hover:text-indigo-500"
                                     >
-                                      {GENERAL_ADD_TO_BASKET}
+                                      {translate('label.basket.addToBagText')}
                                     </button>
                                   </div>
                                 </div>

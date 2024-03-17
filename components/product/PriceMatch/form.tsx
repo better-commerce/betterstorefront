@@ -1,5 +1,4 @@
 import { 
-  BTN_SUBMIT, 
   VALIDATION_ENTER_CORRECT_URL, 
   VALIDATION_ENTER_PRODUCT_LINK, 
   VALIDATION_ENTER_WEBSITE_LINK
@@ -8,6 +7,7 @@ import {
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { config } from './config'
+import { useTranslation } from '@commerce/utils/use-translation'
 const schema = Yup.object().shape({
   websiteName: Yup.string()
     .matches(
@@ -30,6 +30,7 @@ const schema = Yup.object().shape({
 })
 
 export default function PriceMatchForm({ submitContactForm }: any) {
+  const translate = useTranslation()
   return (
     <Formik
       initialValues={{
@@ -77,7 +78,7 @@ export default function PriceMatchForm({ submitContactForm }: any) {
               onClick={handleSubmit}
               className="w-full max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
             >
-              {BTN_SUBMIT}
+              {translate('common.label.submitText')}
             </button>
           </div>
         </Form>

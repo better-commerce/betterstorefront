@@ -7,8 +7,10 @@ import CardCategory3 from "@new-components/CardCategories/CardCategory3";
 import Link from "next/link";
 import { MEGAMENU_TEMPLATES } from "@components/data/navigation";
 import { NavItemType } from "../shared/Navigation/NavigationItem";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export default function TemplatesDropdown() {
+  const translate = useTranslation()
   const renderMegaMenuNavlink = (item: NavItemType) => {
     return (
       <li key={item.id} className={`${item.isNew ? "menuIsNew" : ""}`}>
@@ -34,7 +36,7 @@ export default function TemplatesDropdown() {
                 ${open ? "" : "text-opacity-80"}
                 group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-slate-300 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
-              <span className="">Templates</span>
+              <span className="">{translate('common.label.templatesText')}</span>
               <ChevronDownIcon
                 className={`${open ? "-rotate-180" : ""}
                   ml-1 h-4 w-4 transition ease-in-out duration-150 `}

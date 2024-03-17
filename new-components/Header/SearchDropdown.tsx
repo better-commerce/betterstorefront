@@ -1,6 +1,7 @@
 import { Popover, Transition } from "@headlessui/react";
 import React, { FC, Fragment } from "react";
 import Input from "../shared/Input/Input";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 interface Props {
   className?: string;
@@ -8,7 +9,7 @@ interface Props {
 
 const SearchDropdown: FC<Props> = ({ className = "" }) => {
   const inputRef = React.createRef<HTMLInputElement>();
-
+  const translate = useTranslation()
   return (
     <React.Fragment>
       <Popover className={`relative ${className}`}>
@@ -64,7 +65,7 @@ const SearchDropdown: FC<Props> = ({ className = "" }) => {
                     <Input
                       ref={inputRef}
                       type="search"
-                      placeholder="Type and press enter"
+                      placeholder={translate('common.label.typeAndPressEnterText')}
                     />
                     <input type="submit" hidden value="" />
                   </form>

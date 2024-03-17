@@ -1,11 +1,12 @@
 import { ArrowLeft } from "@components/icons";
 import ReviewInput from "@components/product/Reviews/ReviewInput";
-import { CLOSE_PANEL } from "@components/utils/textVariables";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const OrderReviewModal = ({ isSubmitReview, setSubmitReview, isReviewdata }: any) => {
+   const translate = useTranslation();
    return (
       <>
          <Transition.Root show={isSubmitReview} as={Fragment}>
@@ -48,13 +49,13 @@ const OrderReviewModal = ({ isSubmitReview, setSubmitReview, isReviewdata }: any
                                           className="p-0 mr-5 text-black hover:text-black"
                                           onClick={() => setSubmitReview(false)}
                                        >
-                                          <span className="sr-only">{CLOSE_PANEL}</span>
+                                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                                           <XMarkIcon className="hidden w-6 h-6 sm:block" aria-hidden="true" />
                                           <ArrowLeft className="block w-6 h-6 sm:hidden" aria-hidden="true" />
                                        </button>
                                     </Dialog.Title>
                                     <div className="relative -top-1">
-                                       <span className="text-xl font-bold dark:text-black">Rate & Review</span>
+                                       <span className="text-xl font-bold dark:text-black">{translate('common.label.rateAndReviewText')}</span>
                                     </div>
                                  </div>
                               </div>

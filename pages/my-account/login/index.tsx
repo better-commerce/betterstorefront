@@ -5,10 +5,11 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useUI } from '@components/ui/context'
 import Login from '@components/account/Login'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { decrypt } from '@framework/utils/cipher'
 import { matchStrings } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function LoginPage({appConfig, pluginConfig = []}: any) {
   const  router  = useRouter()
   let b2bSettings: any = []
@@ -71,7 +72,10 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(LoginPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
   }
 }

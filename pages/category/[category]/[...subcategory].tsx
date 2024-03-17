@@ -10,7 +10,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import { postData } from '@components/utils/clientFetcher'
-import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
@@ -18,7 +18,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
@@ -26,7 +26,9 @@ import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-ut
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
+import { useTranslation } from '@commerce/utils/use-translation'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
@@ -37,6 +39,7 @@ const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 
 export async function getStaticProps(context: any) {
+  const { locale, locales} = context
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
   const slug =
@@ -99,6 +102,7 @@ export async function getStaticProps(context: any) {
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -111,6 +115,7 @@ export async function getStaticProps(context: any) {
     else {
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -123,6 +128,7 @@ export async function getStaticProps(context: any) {
   } else
     return {
       props: {
+        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         category: categorySlugUIDData,
         slug,
         products: null,
@@ -216,6 +222,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
@@ -372,9 +379,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          {BAD_URL_TEXT}
+          {translate('common.label.badUrlText')}
           <Link href="/category">
-            <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
+            <span className="px-3 text-indigo-500">{translate('label.category.allCategoriesText')}</span>
           </Link>
         </h1>
       </div>
@@ -480,7 +487,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
           ) : (
             <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
               <h4 className="text-3xl font-bold text-gray-300">
-                No Products availabe in {category?.name}
+                {translate('common.label.noProductAvailableText')} {category?.name}
               </h4>
             </div>
           )}

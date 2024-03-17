@@ -5,7 +5,6 @@ import Heading from "./Heading/Heading";
 import CardCategory3 from "./CardCategories/CardCategory3";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import { CATS_DISCOVER } from "./CardCategories/data";
 
 const DiscoverMoreSlider = ({ heading, data }: any) => {
   const sliderRef = useRef(null);

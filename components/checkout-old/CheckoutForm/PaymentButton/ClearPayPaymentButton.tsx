@@ -1,5 +1,6 @@
 // Package Imports
 import Cookies from 'js-cookie'
+import { t as translate } from "i18next";
 import { ClearPayPaymentIntent, PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -53,7 +54,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
@@ -84,7 +85,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
     if (AfterPay) {
       const shippingMethodId = uiContext?.cartItems?.shippingMethodId
       const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
-      uiContext?.setOverlayLoaderState({ visible: true, message: 'initiating payment...', })
+      uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingPaymentText'), })
       const data = this.getOrderInputPayload()
       initPayment(this.state?.paymentMethod?.systemName, data).then(
         (clientResult: any) => {
@@ -107,7 +108,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
             // If you fail to get a token you can call AfterPay.close()
             AfterPay.onComplete = (event: any) => {
               if (event?.data?.status == 'SUCCESS') {
-                uiContext?.setOverlayLoaderState({ visible: true, message: 'capturing payment...', })
+                uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.capturingPaymentText'), })
 
                 // The consumer confirmed the payment schedule.
                 // The token is now ready to be captured from your server backend.

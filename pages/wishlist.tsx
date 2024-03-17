@@ -7,11 +7,10 @@ import { useCustomer } from '@framework/customer'
 import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
-import { 
-  GENERAL_WISHLIST, 
-  MESSAGE_NO_ORDER_FOUND_TEXT, 
-  WISHLIST_SUB_TITLE
-} from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+
 
 export async function getStaticProps({
   preview,
@@ -33,6 +32,7 @@ export async function getStaticProps({
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       pages,
       categories,
     },
@@ -43,12 +43,13 @@ export default function Wishlist() {
   const { data: customer } = useCustomer()
   // @ts-ignore  - Fix this types
   const { data, isLoading, isEmpty } = useWishlist({ includeProducts: true })
+  const translate = useTranslation()
 
   return (
     <Container>
       <div className="mt-3 mb-20">
         <Text variant="pageHeading">
-          {GENERAL_WISHLIST}
+          {translate('label.wishlist.myWishlistText')}
         </Text>
         <div className="group flex flex-col">
           {isLoading ? (
@@ -65,10 +66,10 @@ export default function Wishlist() {
                 <Heart className="absolute" />
               </span>
               <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-                {WISHLIST_SUB_TITLE}
+                {translate('label.wishlist.emptyWishlistText')}
               </h2>
               <p className="text-accent-6 px-10 text-center pt-2">
-                {MESSAGE_NO_ORDER_FOUND_TEXT}
+                {translate('label.order.noOrderFoundDisplayText')}
               </p>
             </div>
           ) : (

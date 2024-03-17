@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@commerce/utils/use-translation";
 import React, { FC } from "react";
 
 export interface NextPrevProps {
@@ -21,6 +22,7 @@ const NextPrev: FC<NextPrevProps> = ({
   onlyPrev = false,
 }) => {
   const [focus, setFocus] = React.useState<"left" | "right">("right");
+  const translate = useTranslation();
 
   return (
     <div
@@ -39,7 +41,7 @@ const NextPrev: FC<NextPrevProps> = ({
             e.preventDefault();
             onClickPrev();
           }}
-          title="Prev"
+          title={translate('common.label.prevText')}
           data-glide-dir="<"
           onMouseEnter={() => setFocus("left")}
         >
@@ -76,7 +78,7 @@ const NextPrev: FC<NextPrevProps> = ({
             e.preventDefault();
             onClickNext();
           }}
-          title="Next"
+          title={translate('common.label.nextText')}
           data-glide-dir=">"
           onMouseEnter={() => setFocus("right")}
         >

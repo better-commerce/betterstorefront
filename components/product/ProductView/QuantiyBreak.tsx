@@ -1,17 +1,18 @@
+import { useTranslation } from "@commerce/utils/use-translation";
 import { QuantityBreakRule } from "@components/utils/constants";
-import { QUANTITY_BREAK_PRICE, QUANTITY_BREAK_QTY, QUANTITY_BREAK_SAVE, QUANTITY_BREAK_SAVINGS } from "@components/utils/textVariables";
 import { isIncludeVATInPriceDisplay, vatIncluded } from "@framework/utils/app-util";
 import { roundToDecimalPlaces } from "@framework/utils/parse-util";
 
 export default function QuantityBreak({ product, rules, selectedAttrData }: any) {
   const isIncludeVAT = vatIncluded()
+  const translate = useTranslation()
   return (
     <div className='flex flex-col w-full'>
-      <div className='items-center justify-center p-1 font-semibold text-center text-white uppercase bg-orange-600 font-12'>{QUANTITY_BREAK_SAVE}</div>
+      <div className='items-center justify-center p-1 font-semibold text-center text-white uppercase bg-orange-600 font-12'>{translate('label.product.buyMoreAndSaveMoreText')}</div>
       <div className='flex font-semibold text-black bg-gray-300 border border-gray-200 font-12 justify-evenly'>
-        <div className='w-1/3 p-1 text-center uppercase border-r border-gray-100'>{QUANTITY_BREAK_QTY}</div>
-        <div className='w-1/3 p-1 text-center uppercase border-r border-gray-100'>{QUANTITY_BREAK_PRICE}</div>
-        <div className='w-1/3 p-1 text-center uppercase'>{QUANTITY_BREAK_SAVINGS}</div>
+        <div className='w-1/3 p-1 text-center uppercase border-r border-gray-100'>{translate('label.product.qtyText')}</div>
+        <div className='w-1/3 p-1 text-center uppercase border-r border-gray-100'>{translate('label.product.pricePerItemText')}</div>
+        <div className='w-1/3 p-1 text-center uppercase'>{translate('label.product.savingText')}</div>
       </div>
       {rules?.map((rule: any, ruleIdx: number) => {
         let productPrice = isIncludeVATInPriceDisplay(isIncludeVAT, selectedAttrData) ? selectedAttrData?.price?.raw?.withTax : selectedAttrData?.price?.raw?.withoutTax

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
-import { GENERAL_ADD_TO_BASKET } from '@components/utils/textVariables'
 import { ProductPersonaliser } from '../ProductPersonaliser'
 import LoadingDots from '@components/ui/LoadingDots'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function Engraving({ engravingPrice = '5.99', show = false, handleToggleDialog, submitForm, product, isPersonalizeLoading, readOnly = false }: any) {
   const [data, setData] = useState<any>(null)
-
+  const translate = useTranslation();
   const getData = async () => {
     const productSlug = product.slug || product.link || null
     if (!productSlug) return
@@ -56,7 +56,7 @@ export default function Engraving({ engravingPrice = '5.99', show = false, handl
                 characters="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 maxTextLength={7}
                 submitText={
-                  isPersonalizeLoading ? <LoadingDots /> : GENERAL_ADD_TO_BASKET
+                  isPersonalizeLoading ? <LoadingDots /> : translate('label.basket.addToBagText')
                 }
                 onSubmit={onSubmit}
                 readOnly={data?.readOnly}

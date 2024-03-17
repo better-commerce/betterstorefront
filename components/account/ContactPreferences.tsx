@@ -9,10 +9,9 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import {
   GENERAL_WANT_RECEIVE_OFFERS,
   GENERAL_NOT_WANT_RECEIVE_OFFERS,
-  CONTACT_PREFERENCES_TITLE,
-  CONTACT_PREFERENCES_SUBTITLE,
-  GENERAL_SAVE_CHANGES,
 } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
+
 const radioBtnsConfig = [
   {
     type: 'radio',
@@ -41,6 +40,7 @@ export default function ContactPreferences() {
   const [data, setData] = useState({})
   const [defaultData, setDefaultData] = useState({})
   const { user, setUser } = useUI()
+  const translate = useTranslation()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const initialValues = {
@@ -139,8 +139,8 @@ export default function ContactPreferences() {
             {title}
           </h1> */}
           <p className="mt-2 text-sm flex flex-col text-black">
-            <span className="font-medium"> {CONTACT_PREFERENCES_TITLE}</span>
-            <span className="font-medium"> {CONTACT_PREFERENCES_SUBTITLE}</span>
+            <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescTitle')}</span>
+            <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescText')}</span>
           </p>
         </div>
       </div>
@@ -231,7 +231,7 @@ export default function ContactPreferences() {
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting && GENERAL_SAVE_CHANGES}
+                  {!isSubmitting && translate('common.label.saveChangesText')}
                 </Button>
               </div>
             )
