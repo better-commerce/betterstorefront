@@ -2,6 +2,7 @@
 import Router from 'next/router'
 import Script from 'next/script'
 import Cookies from 'js-cookie'
+import { t as translate } from "i18next";
 import { KlarnaOrderLine } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -13,7 +14,6 @@ import { Cookie } from '@framework/utils/constants'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo, sanitizeAmount, } from '@framework/utils/app-util'
-import { GENERAL_PAY, GENERAL_PAY_WITH_KLARNA, } from '@components/utils/textVariables'
 import { createOneTimePaymentOrder, initPayment, } from '@framework/utils/payment-util'
 import {
   BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages,
@@ -46,14 +46,14 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
       super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.KLARNA)
       uiContext?.hideOverlayLoaderState()
 
-      uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating payment...', })
+      uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingPaymentText'), })
       const orderInput = this.getOrderInputPayload(uiContext)
       const clientResult: any = await initPayment(this.state?.paymentMethod?.systemName, orderInput)
       if (clientResult?.session_id) {
@@ -89,7 +89,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Please wait...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     const gatewayName = this.state.paymentMethod?.systemName
     const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
 
@@ -150,7 +150,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
             },*/
     }
 
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Authorizing payment...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.authorizingPaymentText'), })
     Klarna.Payments.authorize(
       {
         payment_method_category: PaymentMethodType.KLARNA,
@@ -359,7 +359,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                     uiContext,
                     dispatchState
                   ),
-                btnTitle: GENERAL_PAY_WITH_KLARNA,
+                btnTitle: translate('label.checkout.payLaterWithKlarnaBtnText'),
               },
             })}
           </div>
@@ -383,7 +383,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
                         uiContext,
                         dispatchState
                       ),
-                    btnTitle: GENERAL_PAY,
+                    btnTitle: translate('label.checkout.payText'),
                   },
                 })}
             </div>

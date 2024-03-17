@@ -307,7 +307,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               ) => {
                 uiContext?.setOverlayLoaderState({
                   visible: true,
-                  message: 'loading...',
+                  message: translate('common.message.loaderLoadingText'),
                 })
                 that.setState({ confirmed: true })
               },
