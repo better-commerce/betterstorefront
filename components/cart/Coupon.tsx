@@ -118,7 +118,7 @@ const Coupon = (props: IPromotionInputProps) => {
     }
 
     if (promo?.promoType == 16) {
-      promoDiscount = translate('label.cart.offerText')
+      promoDiscount = translate('label.basket.offer50PercOffOnThirdItemText')
     }
   }
 

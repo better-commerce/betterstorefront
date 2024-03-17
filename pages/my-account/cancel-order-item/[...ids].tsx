@@ -97,7 +97,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
           qty: value,
         })
         setCancelLineItemLoading(false)
-        setAlert({ type: 'success', msg: translate('message.itemCancelledSuccessfullyText') })
+        setAlert({ type: 'success', msg: translate('common.message.itemCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
           recordGA4Event(window, 'cancel_confirm', {
@@ -256,14 +256,14 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                               }}
                               className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
-                              {translate('message.proceedToCancelText')}
+                              {translate('common.message.proceedToCancelText')}
                             </button>
                           ) : (
                             <button
                               type="button"
                               className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
-                              {translate('message.proceedToCancelText')}
+                              {translate('common.message.proceedToCancelText')}
                             </button>
                           )}
                         </div>

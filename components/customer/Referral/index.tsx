@@ -45,7 +45,7 @@ const CustomerReferral = ({ router }: any) => {
     const onNewReferral = async (e: any) => {
         e.preventDefault()
         if(referralEmail?.length < 1){
-            setErrors(translate('message.emailEmptyErrorMsg'))
+            setErrors(translate('common.message.emailEmptyErrorMsg'))
         } else{
             setIsLoading(true)
             let { data } = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE, { referralId: referralInfoObj?.id, email: referralEmail })

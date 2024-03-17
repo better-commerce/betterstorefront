@@ -55,11 +55,11 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   
     if (showFindStore) {
       isValid = selectedStore !== null;
-      errorMessage = translate('message.selectStoreErrorMsg');
+      errorMessage = translate('common.message.selectStoreErrorMsg');
     } else {
       isValid =
         selectedShippingMethod?.type === 1 && selectedDeliveryMethod?.type === 1;
-      errorMessage = translate('message.selectDeliveryToContinueErrorMsg');
+      errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg');
     }
   
     if (isValid) {

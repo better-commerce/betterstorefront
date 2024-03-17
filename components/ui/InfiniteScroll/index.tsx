@@ -11,7 +11,7 @@ export default function InfiniteScrollComponent({ component, total, fetchData, c
       loader={null}
       endMessage={
         <p className="py-5 dark:text-black" style={{ textAlign: 'center' }}>
-          <b>{translate('label.ui.PageEndText')}</b>
+          <b>{translate('common.label.PageEndText')}</b>
         </p>
       }
     >

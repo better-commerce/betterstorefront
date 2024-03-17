@@ -56,10 +56,10 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
-        setAlert({type:'error',msg: translate('message.invalidAccountMsg')})
+        setAlert({type:'error',msg: translate('common.message.invalidAccountMsg')})
       } else if (result.data) {
         setNoAccount(false)
-        setAlert({type:'success',msg: translate('message.loginSuccessMsg')})
+        setAlert({type:'success',msg: translate('common.message.loginSuccessMsg')})
         let userObj = { ...result.data }
         // get user updated details
         const updatedUserObj = await axios.post(
@@ -94,7 +94,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
   if (!isGuestUser && user.userId) {
     return (
       <div className="w-full h-full font-extrabold text-center text-gray-900">
-        {translate('message.alreadyLoggedInMsg')}
+        {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -115,14 +115,14 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
           btnText="Login"
           type="login"
           onSubmit={handleUserLogin}
-          apiError={noAccount ? translate('message.invalidAccountMsg') : ''}
+          apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''}
           isLoginSidebarOpen={isLoginSidebarOpen}
         />
         {/* <div className="flex flex-col items-center justify-center w-full">
           {noAccount && (
-            setAlert({type:'success',msg:translate('message.invalidAccountMsg')})
+            setAlert({type:'success',msg:translate('common.message.invalidAccountMsg')})
             <span className="text-lg text-red-700">
-              {translate('message.invalidAccountMsg')}
+              {translate('common.message.invalidAccountMsg')}
             </span>
           )}
         </div> */}

@@ -51,7 +51,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <BellIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          {translate('label.ui.notifyMeText')}
+          {translate('label.product.notifyMeText')}
         </div>
       </div>
     )
@@ -61,7 +61,7 @@ export default function ProductTag({ product }: Props) {
       <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
         <ShoppingBagIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
-          {translate('label.ui.preOrderText')}
+          {translate('label.product.preOrderText')}
         </div>
       </div>
     )

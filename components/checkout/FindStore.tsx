@@ -29,7 +29,7 @@ const FindStore: React.FC<FindStoreProps> = ({ onStoreSelected }) => {
         setStores(data)
       } else {
         setStores(null)
-        setAlert({ type: AlertType.ERROR, msg: translate('message.noStoreFoundErrorMsg') })
+        setAlert({ type: AlertType.ERROR, msg: translate('common.message.noStoreFoundErrorMsg') })
       }
     } catch (error) {
       console.error(error)

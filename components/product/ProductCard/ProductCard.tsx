@@ -275,7 +275,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = translate('label.ui.preOrderText')
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage

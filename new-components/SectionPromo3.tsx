@@ -46,7 +46,7 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
               <Input
                 required
                 aria-required
-                placeholder={translate('message.enterYourEmailText')}
+                placeholder={translate('common.message.enterYourEmailText')}
                 type="email"
                 rounded="rounded-full"
               />

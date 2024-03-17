@@ -166,12 +166,12 @@ const CustomResultView = (
       shortMessage: '',
     }
     if (result?.webstock?.raw <= 0 && result?.itemvisibleonwebsite?.raw) {
-      buttonConfig.title = translate('label.ui.notifyMeText')
+      buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
       buttonConfig.buttonType = 'button'
     } else if (!result?.currentStock && result?.preOrder?.isEnabled) {
-      buttonConfig.title = translate('label.ui.preOrderText')
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = result?.preOrder?.shortMessage

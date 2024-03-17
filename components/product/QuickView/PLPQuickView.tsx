@@ -178,7 +178,7 @@ export default function PLPQuickView({
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
-        buttonConfig.title = translate('label.ui.notifyMeText')
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
     } else if (
@@ -190,7 +190,7 @@ export default function PLPQuickView({
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = translate('label.ui.preOrderText')
+        buttonConfig.title = translate('label.product.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -296,7 +296,7 @@ export default function PLPQuickView({
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = translate('label.ui.notifyMeText')
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig

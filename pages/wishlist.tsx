@@ -66,7 +66,7 @@ export default function Wishlist() {
                 {translate('label.wishlist.emptyWishlistText')}
               </h2>
               <p className="text-accent-6 px-10 text-center pt-2">
-                {translate('label.orders.noOrderFoundDisplayText')}
+                {translate('label.order.noOrderFoundDisplayText')}
               </p>
             </div>
           ) : (

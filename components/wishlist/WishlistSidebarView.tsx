@@ -186,7 +186,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                 className="font-medium text-indigo-600 hover:text-indigo-500"
                                 onClick={handleClose}
                               >
-                                {translate('label.cart.catalogText')}
+                                {translate('label.basket.catalogText')}
                                 <span aria-hidden="true"> &rarr;</span>
                               </button>
                             </Link>
@@ -272,7 +272,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                       <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
                         <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
                         <p className="mt-5 text-center">
-                        {translate('message.wishlistSuccessMsg')}
+                        {translate('common.message.wishlistSuccessMsg')}
                         </p>
                       </div>
                     )}

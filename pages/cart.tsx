@@ -493,7 +493,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       </NextHead>
       <div className="container w-full px-4 mx-auto mt-6 mb-10 bg-white sm:px-6 sm:mt-10">
         <h1 className="relative flex items-baseline font-semibold tracking-tighter text-black uppercase">
-            {translate('label.cart.shoppingCartText')}{' '}
+            {translate('label.basket.shoppingCartText')}{' '}
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
@@ -566,7 +566,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             product.listPrice?.raw.withTax !=
                               product.price?.raw?.withTax && (
                               <span className="px-2 text-sm text-red-400 line-through">
-                                  {translate('label.cart.priceLabelText')}{' '}
+                                  {translate('label.basket.priceLabelText')}{' '}
                                 {isIncludeVAT
                                   ? product.listPrice.formatted?.withTax
                                   : product.listPrice.formatted?.withoutTax}
@@ -833,7 +833,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                 product?.listPrice?.raw?.withTax !=
                                   product.price?.raw?.withTax && (
                                   <span className="px-2 text-sm text-red-400 line-through">
-                                    {translate('label.cart.priceLabelText')}{' '}
+                                    {translate('label.basket.priceLabelText')}{' '}
                                     {isIncludeVAT
                                       ? product?.listPrice.formatted?.withTax
                                       : product?.listPrice.formatted?.withoutTax}
@@ -1069,13 +1069,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         )}
         {isEmpty && (
           <div className="flex flex-col items-center justify-center w-full h-full py-10 text-gray-900">
-            {translate('label.cart.youDontHaveAnyItems')}
+            {translate('label.basket.youDontHaveAnyItems')}
             <Link href="/search">
               <button
                 type="button"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                  {translate('label.cart.catalogText')}
+                  {translate('label.basket.catalogText')}
                 <span aria-hidden="true"> &rarr;</span>
               </button>
             </Link>

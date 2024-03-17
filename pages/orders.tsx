@@ -25,16 +25,16 @@ export default function Orders() {
   const translate = useTranslation()
   return (
     <Container>
-      <Text variant="pageHeading">{translate('label.orders.myOrdersText')}</Text>
+      <Text variant="pageHeading">{translate('label.order.myOrdersText')}</Text>
       <div className="flex-1 p-24 flex flex-col justify-center items-center ">
         <span className="border border-dashed border-secondary rounded-full flex items-center justify-center w-16 h-16 p-12 bg-primary text-primary">
           <Bag className="absolute" />
         </span>
         <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-          {translate('label.orders.NoOrderFoundText')}
+          {translate('label.order.NoOrderFoundText')}
         </h2>
         <p className="text-accent-6 px-10 text-center pt-2">
-          {translate('label.orders.noOrderFoundDisplayText')}
+          {translate('label.order.noOrderFoundDisplayText')}
         </p>
       </div>
     </Container>

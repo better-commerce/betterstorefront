@@ -42,13 +42,13 @@ const SidebarFilters = () => {
   ];
   
   const DATA_colors = [
-    { name: translate('label.color.whiteText') },
-    { name: translate('label.color.beigeText') },
-    { name: translate('label.color.blueText') },
-    { name: translate('label.color.blackText') },
-    { name: translate('label.color.brownText') },
-    { name: translate('label.color.greenText') },
-    { name: translate('label.color.navyText') },
+    { name: translate('common.color.whiteText') },
+    { name: translate('common.color.beigeText') },
+    { name: translate('common.color.blueText') },
+    { name: translate('common.color.blackText') },
+    { name: translate('common.color.brownText') },
+    { name: translate('common.color.greenText') },
+    { name: translate('common.color.navyText') },
   ];
   
   const DATA_sizes = [
@@ -62,11 +62,11 @@ const SidebarFilters = () => {
   ];
   
   const DATA_sortOrderRadios = [
-    { name: translate('label.sortOrder.mostPopularText'), id: "Most-Popular" },
-    { name: translate('label.sortOrder.bestRatingText'), id: "Best-Rating" },
-    { name: translate('label.sortOrder.newestText'), id: "Newest" },
-    { name: translate('label.sortOrder.priceLowToHighText'), id: "Price-low-hight" },
-    { name: translate('label.sortOrder.priceHightToLowText'), id: "Price-hight-low" },
+    { name: translate('common.sortOrder.mostPopularText'), id: "Most-Popular" },
+    { name: translate('common.sortOrder.bestRatingText'), id: "Best-Rating" },
+    { name: translate('common.sortOrder.newestText'), id: "Newest" },
+    { name: translate('common.sortOrder.priceLowToHighText'), id: "Price-low-hight" },
+    { name: translate('common.sortOrder.priceHightToLowText'), id: "Price-hight-low" },
   ];
 
   const PRICE_RANGE = [1, 500];

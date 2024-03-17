@@ -51,14 +51,14 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
       id: 1,
       images: [full1Img, full11Img, full12Img, full13Img],
       name: translate('common.label.bomberJacketText'),
-      desc: translate('label.color.orangeText'),
+      desc: translate('common.color.orangeText'),
       price: 52,
     },
     {
       id: 2,
       images: [full2Img, full21Img, full22Img, full23Img],
       name: translate('common.label.downtownPetText'),
-      desc: translate('label.color.blackAndOrangeText'),
+      desc: translate('common.color.blackAndOrangeText'),
       price: 88,
     },
     {

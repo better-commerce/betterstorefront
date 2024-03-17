@@ -70,7 +70,7 @@ const CartItemRemoveModal = ({
                                 </Dialog.Title>
                                 {/* <hr className="w-full my-2 shadow-md "></hr> */}
                                 <p className="p-6 text-sm font-normal text-black">
-                                    {translate('label.cart.cartItemRemoveText')} 
+                                    {translate('label.basket.cartItemRemoveText')} 
                                 </p>
                                 <div className="flex items-center justify-around w-full px-6 mt-2">
                                     <button

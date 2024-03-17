@@ -31,7 +31,7 @@ const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
   const translate = useTranslation()
   return (
     <>
-      <h1 className="sr-only">{translate('label.ui.HomePageText')}</h1>
+      <h1 className="sr-only">{translate('label.home.HomePageText')}</h1>
       <Swiper
         navigation={true}
         loop={true}

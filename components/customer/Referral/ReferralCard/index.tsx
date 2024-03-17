@@ -80,7 +80,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
             >
               <input
                 type="email"
-                placeholder={translate('message.enterYourEmailText')}
+                placeholder={translate('common.message.enterYourEmailText')}
                 className="bg-gray-100 rounded-lg w-full px-6 py-3"
                 onChange={onInputChange}
               />

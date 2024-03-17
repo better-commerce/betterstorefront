@@ -277,7 +277,7 @@ export default function MyReturns() {
                       >
                         {translate('label.order.viewInvoiceBtnText')}
                         <span className="sr-only">
-                        {translate('label.orders.forOrderText')}{' '}{order.number}
+                        {translate('label.order.forOrderText')}{' '}{order.number}
                         </span>
                       </a>
                     </div>

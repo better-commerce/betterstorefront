@@ -66,7 +66,7 @@ function Slug({
   const router = useRouter()
   const translate = useTranslation()
   return router.isFallback ? (
-    <h1>{translate('message.loaderLoadingText')}</h1>
+    <h1>{translate('common.message.loaderLoadingText')}</h1>
   ) : (
     data && (
       <ProductView

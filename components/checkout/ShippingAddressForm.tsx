@@ -214,7 +214,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   onChange={formik.handleChange}
                   className="checkout-input-field dark:bg-white dark:text-black"
                 >
-                  <option value="">{translate('label.formField.selectCountryText')}</option>
+                  <option value="">{translate('label.addressBook.selectCountryText')}</option>
                   {shippingCountries?.map((country: any, idx: number) => (
                     <option key={idx} value={country.name}>
                       {country.name}

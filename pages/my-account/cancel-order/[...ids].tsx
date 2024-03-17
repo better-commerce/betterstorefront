@@ -87,7 +87,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
       const response = await cancelOrder({ id: orderDetails?.order?.id })
       if (response) {
         setCancelLoading(false)
-        setAlert({ type: 'cancel', msg: translate('label.orders.orderCancelledSuccessfullyText') })
+        setAlert({ type: 'cancel', msg: translate('label.order.orderCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
       }
     } catch (error) {
@@ -140,7 +140,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {translate('label.cancelOrder.cancelOrderText')}
+                  {translate('label.order.cancelOrderText')}
                 </h3>
               </Link>
             </div>
@@ -149,7 +149,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {translate('label.cancelOrder.cancelOrderText')}
+                  {translate('label.order.cancelOrderText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -221,7 +221,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                         type="button"
                       >
                         <span className="block py-1 font-bold">
-                          {translate('message.proceedToCancelText')}
+                          {translate('common.message.proceedToCancelText')}
                         </span>
                       </Button>
                     </div>

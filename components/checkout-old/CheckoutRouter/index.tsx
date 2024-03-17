@@ -124,7 +124,7 @@ export default function CheckoutRouter({
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && activeTab.key === 'logIn' && (
             <span className="text-red-700 text-lg">
-              {translate('message.invalidAccountMsg')}
+              {translate('common.message.invalidAccountMsg')}
             </span>
           )}
         </div>
