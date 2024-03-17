@@ -186,6 +186,7 @@
       "splitDeliveryText": "Split Delivery",
       "deliverToThisAddressText": "Deliver to this address",
       "payText": "Pay",
+      "payLaterWithKlarnaBtnText": "Pay Later with Klarna",
       "purchaseConfirmationText": "Confirm Purchase",
       "confirmOrderText": "Confirm Order",
       "newCustomerText": "New customer?",
@@ -883,6 +884,8 @@
       "initiatingOrderText": "Initiating order...",
       "pleaseWaitText": "Please wait...",
       "authorizingPaymentText": "Authorizing payment...",
+      "initiatingPaymentText": "initiating payment...",
+      "capturingPaymentText": "capturing payment...",
       "PageEndText": "You have seen it all"
     },
     "message": {
