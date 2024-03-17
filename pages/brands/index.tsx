@@ -98,7 +98,7 @@ function BrandsPage({ brands }: any) {
       </NextHead>
       <div className="bg-white">
         {/* Mobile menu */}
-        <main className="container pb-24 mx-auto overflow-hidden sm:px-0 lg:px-0">
+        <main className="container pb-24 mx-auto overflow-hidden">
           <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-6">
             <h1 className="font-extrabold tracking-tight text-gray-900">
               {translate('common.label.brandsText')}

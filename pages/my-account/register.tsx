@@ -18,6 +18,7 @@ import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
+import Link from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
@@ -44,40 +45,49 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
   }
 
   return (
-    <div className="w-full flex justify-center mt-10 flex-col items-center sm:pl-10 sm:pr-10">
-      <div className="font-semibold w-full px-5 sm:px-0 md:w-1/2">
-        <label className="text-gray-700 text-sm">{translate('label.addressBook.emailText')}</label>
-        <input
-          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-          value={value}
-          type="email"
-          onChange={onChange}
-          onKeyUp={(e: any) => handleKeyPress(e)}
-        />
+    <>
+      <div className="flex flex-1 w-full">
+        {
+          socialLogins && (
+            <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto w-full" pluginSettings={pluginSettings} />
+          )
+        }
       </div>
-      {error ? <span className="text-red-500 capitalize">{error}</span> : null}
-      <div className="w-full px-5 sm:px-0 md:w-1/2 flex justify-center items-center my-5">
-        <Button
-          className="btn btn-c btn-primary"
-          buttonType="default"
-          action={handleSubmit}
-          title={'Submit'}
-        />
+      <div className="relative text-center">
+        <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
+          OR
+        </span>
+        <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
       </div>
-      {
-        socialLogins && (
-          <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto md:w-1/2 px-3 sm:w-full sm:px-0 width-md-full" pluginSettings={pluginSettings} />
-        )
-      }
-    </div>
+      <div className="flex flex-col items-center justify-center w-full">
+        <div className="w-full px-5 font-semibold sm:px-0">
+          <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
+          <input
+            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
+            value={value}
+            type="email"
+            onChange={onChange}
+            onKeyUp={(e: any) => handleKeyPress(e)}
+          />
+        </div>
+        {error ? <span className="text-red-500 capitalize">{error}</span> : null}
+        <div className="flex items-center justify-center w-full my-5">
+          <Button
+            className="w-full border border-black btn btn-c btn-primary rounded-2xl"
+            buttonType="default"
+            action={handleSubmit}
+            title={'Submit'}
+          />
+        </div>
+      </div>
+    </>
   )
 }
 
 function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   let b2bSettings = []
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
-  const [hasPassedEmailValidation, setHasPassedEmailValidation] =
-    useState(false)
+  const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const translate = useTranslation()
   const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
@@ -106,7 +116,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   }
   if (!isGuestUser && user.userId) {
     return (
-      <div className="font-extrabold text-center w-full h-full text-gray-900">
+      <div className="w-full h-full font-extrabold text-center text-gray-900">
         {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
@@ -201,39 +211,48 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
     }
   }
   return (
-    <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h1 className="font-extrabold text-center tracking-tight text-gray-900">
-            {translate('label.register.freeRegisterText')}
-          </h1>
-        </div>
-        {!successMessage && (
-          <>
-            {!hasPassedEmailValidation ? (
-              <EmailInput
-                value={userEmail}
-                onChange={(e: any) => setUserEmail(e.target.value)}
-                submit={handleEmailSubmit}
-                apiError={error}
-                pluginSettings={pluginConfig}
-                socialLogins={SOCIAL_LOGINS_ENABLED}
-              />
-            ) : (
-              <Form
-                type="register"
-                b2bSettings={b2bSettings}
-                email={userEmail}
-                onSubmit={handleUserRegister}
-              />
+    <>
+      <section aria-labelledby="trending-heading" className="bg-white">
+        <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
+          <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+            <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+              {translate('label.register.freeRegisterText')}
+            </h1>
+          </div>
+          <div className="max-w-md mx-auto space-y-6">
+            {!successMessage && (
+              <>
+                {!hasPassedEmailValidation ? (
+                  <EmailInput
+                    value={userEmail}
+                    onChange={(e: any) => setUserEmail(e.target.value)}
+                    submit={handleEmailSubmit}
+                    apiError={error}
+                    pluginSettings={pluginConfig}
+                    socialLogins={SOCIAL_LOGINS_ENABLED}
+                  />
+                ) : (
+                  <Form
+                    type="register"
+                    b2bSettings={b2bSettings}
+                    email={userEmail}
+                    onSubmit={handleUserRegister}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-        <span className="flex w-full justify-center items-center text-2xl text-indigo-600">
-          {successMessage}
-        </span>
-      </div>
-    </section>
+
+            <span className="block text-center text-neutral-700 dark:text-neutral-300">
+              Already have an account? {` `}
+              <Link className="text-green-600" href="/my-account/login">
+                Sign in
+              </Link>
+            </span>
+          </div>
+        </div>
+      </section>
+
+    </>
   )
 }
 

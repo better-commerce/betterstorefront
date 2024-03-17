@@ -17,10 +17,10 @@ import { useTranslation } from '@commerce/utils/use-translation'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
-  pluginConfig: any; 
+  pluginConfig: any;
 }
 
-export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [],  }: LoginProps) {
+export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], }: LoginProps) {
   const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -56,10 +56,10 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
-        setAlert({type:'error',msg: translate('common.message.invalidAccountMsg')})
+        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
       } else if (result.data) {
         setNoAccount(false)
-        setAlert({type:'success',msg: translate('common.message.loginSuccessMsg')})
+        setAlert({ type: 'success', msg: translate('common.message.loginSuccessMsg') })
         let userObj = { ...result.data }
         // get user updated details
         const updatedUserObj = await axios.post(
@@ -105,51 +105,40 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
+      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-          <h1 className="font-extrabold tracking-tight text-center text-gray-900">
+          <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
             {translate('label.login.loginBtnText')}
           </h1>
         </div>
-        <Form
-          btnText="Login"
-          type="login"
-          onSubmit={handleUserLogin}
-          apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''}
-          isLoginSidebarOpen={isLoginSidebarOpen}
-        />
-        {/* <div className="flex flex-col items-center justify-center w-full">
-          {noAccount && (
-            setAlert({type:'success',msg:translate('common.message.invalidAccountMsg')})
-            <span className="text-lg text-red-700">
-              {translate('common.message.invalidAccountMsg')}
+        <div className="max-w-md mx-auto space-y-6">
+          <div className="grid gap-3">
+            {SOCIAL_LOGINS_ENABLED && (
+              <div className='social-login-section'>
+                <SocialSignInLinks isLoginSidebarOpen={isLoginSidebarOpen} containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full'}`} redirectUrl={redirectUrl} pluginSettings={pluginConfig} />
+              </div>
+            )}
+          </div>
+          <div className="relative text-center">
+            <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
+              OR
             </span>
-          )}
-        </div> */}
-       {
-          SOCIAL_LOGINS_ENABLED && (
-            <div className='social-login-section'>
-              <SocialSignInLinks
-                isLoginSidebarOpen={isLoginSidebarOpen}
-                containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen
-                  ? 'sm:w-full width-md-full !px-0'
-                  : 'width-md-full sm:w-1/2'
-                  }`}
-                redirectUrl={redirectUrl}
-                pluginSettings={pluginConfig}
-              />
-            </div>
-          )
-        }
-        <div
-          className={`flex flex-col items-end justify-end w-full mx-auto mt-4 ${
-            isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-1/2'
-          }`}
-        >
-          <Link href="/my-account/forgot-password" passHref>
-            <span className="block font-medium text-indigo-600 underline cursor-pointer hover:text-indigo-800 hover:underline">
-              {translate('label.login.forgotPasswordBtnText')} </span>
-          </Link>
+            <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
+          </div>
+          <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
+          <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
+            <Link href="/my-account/forgot-password" passHref>
+              <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
+                {translate('label.login.forgotPasswordBtnText')}
+              </span>
+            </Link>
+          </div>
+          <span className="block text-center text-neutral-700 dark:text-neutral-300">
+            New user? {` `}
+            <Link className="text-green-600" href="/my-account/register">
+              Create an account
+            </Link>
+          </span>
         </div>
       </div>
     </section>

@@ -17218,3 +17218,9 @@ input[type=time]::-webkit-calendar-picker-indicator {
     color: #393939;
     font-weight: 600;
 }
+
+.search-fixed{
+  width: 100% !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+}

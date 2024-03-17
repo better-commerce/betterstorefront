@@ -70,7 +70,7 @@ const DiscoverMoreSlider = ({ heading, data }: any) => {
 
       <div className="" data-glide-el="track">
         <ul className="glide__slides">
-          {data.map((item:any, index:number) => (
+          {data?.map((item:any, index:number) => (
             <li key={index} className={`glide__slide`}>
               <CardCategory3
                 name={item?.category_subtitle}
