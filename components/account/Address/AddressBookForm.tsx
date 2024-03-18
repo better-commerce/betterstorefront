@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik'
-import { formConfig, schema } from '../configs/address'
+import { formConfig, useSchema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
 import LoadingDots from '@components/ui/LoadingDots'
@@ -11,6 +11,7 @@ const COMPONENTS_MAP: any = {
 
 export default function AddressForm({ initialValues = {}, onSubmit = () => {}, closeEditMode }: any) {
   const translate = useTranslation();
+  const schema = useSchema();
   return (
     <Formik
       validationSchema={schema}

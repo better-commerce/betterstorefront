@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
-import { formConfig, schema } from './configs/details'
+import { formConfig, useSchema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -15,8 +15,8 @@ import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyDetails({ handleToggleShowState }: any) {
   const translate = useTranslation();
-  const [title, setTitle] = useState('My Details')
-  const [phoneVal, setPhoneVal] = useState('')
+  const schema = useSchema(); 
+  const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 

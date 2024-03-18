@@ -8,6 +8,7 @@ import {
   GENERAL_PHONE,
 } from '@components/utils/textVariables'
 import { Messages } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 export const formConfig = [
   {
     type: 'text',
@@ -67,19 +68,23 @@ export const formConfig = [
   },
 ]
 
-export const schema = Yup.object({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  email: Yup.string().email().required(),
-  mobile: Yup.string()
-    .max(10)
-    .min(10)
-    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
-    }),
-  phone: Yup.string()
-    .max(10)
-    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
-    }),
-})
+export const useSchema = () => {
+  const translate = useTranslation();
+  const schema = Yup.object({
+    firstName: Yup.string().required(),
+    lastName: Yup.string().required(),
+    email: Yup.string().email().required(),
+    mobile: Yup.string()
+      .max(10)
+      .min(10)
+      .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+        message: translate('common.message.mobileNumInputMsg'),
+      }),
+    phone: Yup.string()
+      .max(10)
+      .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+        message: translate('common.message.phoneNumInputMsg'),
+      }),
+  })
+  return schema;
+}
