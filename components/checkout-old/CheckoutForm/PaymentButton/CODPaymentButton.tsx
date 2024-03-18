@@ -5,9 +5,8 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
-import { EmptyString, Messages } from '@components/utils/constants'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
-import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { EmptyString } from '@components/utils/constants'
 
 export class CODPaymentButton extends BasePaymentButton {
   /**
@@ -35,6 +34,7 @@ export class CODPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const translate = useTranslation()
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: 'Please wait...',
@@ -63,7 +63,7 @@ export class CODPaymentButton extends BasePaymentButton {
       } else {
         dispatchState({
           type: 'SET_ERROR',
-          payload: Messages.Errors['GENERIC_ERROR'],
+          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
     }

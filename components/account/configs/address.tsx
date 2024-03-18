@@ -1,107 +1,93 @@
 import * as Yup from 'yup'
 import countryList from '@components/utils/countryList'
-import {
-  GENERAL_TITLE,
-  GENERAL_MISS,
-  GENERAL_MR,
-  GENERAL_MRS,
-  GENERAL_FIRST_NAME,
-  GENERAL_LAST_NAME,
-  GENERAL_ADDRESS_LINE1,
-  GENERAL_ADDRESS_LINE2,
-  GENERAL_CITY,
-  GENERAL_POSTCODE,
-  GENERAL_COUNTRY,
-  GENERAL_PHONE,
-  GENERAL_IS_DEFAULT_DELIVERY_ADDRESS,
-  GENERAL_IS_DEFAULT_BILLING_ADDRESS,
-} from '@components/utils/textVariables'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 
-export const formConfig = [
+export const useAddressFormConfig = () => {
+  const translate = useTranslation();
+  return [
     {
       as: 'select',
       name: 'title',
       options: [
         {
-          title: GENERAL_TITLE,
-          value: GENERAL_TITLE,
+          title: translate('common.label.titleText'),
+          value: translate('common.label.titleText'),
         },
         {
-          title: GENERAL_MISS,
-          value: GENERAL_MISS,
+          title: translate('common.label.missText'),
+          value: translate('common.label.missText'),
         },
         {
-          title: GENERAL_MR,
-          value: GENERAL_MR,
+          title: translate('common.label.mrText'),
+          value: translate('common.label.mrText'),
         },
         {
-          title: GENERAL_MRS,
-          value: GENERAL_MRS,
+          title: translate('common.label.mrsText'),
+          value: translate('common.label.mrsText'),
         },
       ],
-      label: GENERAL_TITLE,
+      label: translate('common.label.titleText'),
     },
     {
       type: 'text',
       name: 'firstName',
-      placeholder: GENERAL_FIRST_NAME,
-      label: GENERAL_FIRST_NAME,
+      placeholder: translate('label.addressBook.firstNameText'),
+      label: translate('label.addressBook.firstNameText'),
     },
     {
       type: 'text',
       name: 'lastName',
-      placeholder: GENERAL_LAST_NAME,
-      label: GENERAL_LAST_NAME,
+      placeholder: translate('label.addressBook.lastNameText'),
+      label: translate('label.addressBook.lastNameText'),
     },
     {
       type: 'text',
       name: 'address1',
-      placeholder: GENERAL_ADDRESS_LINE1,
-      label: GENERAL_ADDRESS_LINE1,
+      placeholder: translate('common.label.addressLine1Text'),
+      label: translate('common.label.addressLine1Text'),
     },
     {
       type: 'text',
       name: 'address2',
-      placeholder: GENERAL_ADDRESS_LINE2,
-      label: GENERAL_ADDRESS_LINE2,
+      placeholder: translate('common.label.addressLine2Text'),
+      label: translate('common.label.addressLine2Text'),
     },
     {
       type: 'text',
       name: 'city',
-      placeholder: GENERAL_CITY,
-      label: GENERAL_CITY,
+      placeholder: translate('label.addressBook.townCityText'),
+      label: translate('label.addressBook.townCityText'),
     },
     {
       type: 'text',
       name: 'postCode',
-      placeholder: GENERAL_POSTCODE,
-      label: GENERAL_POSTCODE,
+      placeholder: translate('common.label.postcodeText'),
+      label: translate('common.label.postcodeText'),
     },
     {
       as: 'select',
       name: 'country',
       options: countryList,
-      label: GENERAL_COUNTRY,
+      label: translate('label.checkout.countryText'),
     },
     {
       type: 'phone',
       name: 'phoneNo',
-      placeholder: GENERAL_PHONE,
-      label: GENERAL_PHONE,
+      placeholder: translate('label.b2b.phoneNumberText'),
+      label: translate('label.b2b.phoneNumberText'),
     },
     {
       customComponent: 'CustomCheckbox',
       name: 'isDefaultDelivery',
-      label: GENERAL_IS_DEFAULT_DELIVERY_ADDRESS,
+      label: translate('common.label.isDefaultDeliveryAddressText'),
       className: 'flex-inline',
     },
     {
       customComponent: 'CustomCheckbox',
       name: 'isDefaultBilling',
-      label: GENERAL_IS_DEFAULT_BILLING_ADDRESS,
+      label: translate('common.label.isDefaultBillingAddressText'),
       className: 'flex-inline',
     },
     {
@@ -109,21 +95,22 @@ export const formConfig = [
       name: 'label',
       options: [
         {
-          title: 'Home',
-          value: 'Home',
+          title: translate('common.label.homeText'),
+          value: translate('common.label.homeText'),
         },
         {
-          title: 'Work',
-          value: 'Work',
+          title: translate('common.label.workText'),
+          value: translate('common.label.workText'),
         },
         {
-          title: 'Other',
-          value: 'Other',
+          title: translate('common.label.otherText'),
+          value: translate('common.label.otherText'),
         },
       ],
-      label: 'Save As',
+      label: translate('common.label.saveAsText'),
     },
   ]
+}
 
 
 export const useSchema = () => {

@@ -1,72 +1,67 @@
 import * as Yup from 'yup'
-import {
-  GENERAL_EMAIL,
-  GENERAL_FIRST_NAME,
-  GENERAL_GENDER,
-  GENERAL_LAST_NAME,
-  GENERAL_MOBILE_NUMBER,
-  GENERAL_PHONE,
-} from '@components/utils/textVariables'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-export const formConfig = [
-  {
-    type: 'text',
-    name: 'firstName',
-    placeholder: GENERAL_FIRST_NAME,
-    label: GENERAL_FIRST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'lastName',
-    placeholder: GENERAL_LAST_NAME,
-    label: GENERAL_LAST_NAME,
-  },
-  {
-    type: 'email',
-    name: 'email',
-    placeholder: GENERAL_EMAIL,
-    label: GENERAL_EMAIL,
-  },
-  {
-    type: 'mobile',
-    name: 'mobile',
-    placeholder: GENERAL_MOBILE_NUMBER,
-    label: GENERAL_MOBILE_NUMBER,
-  },
-  {
-    type: 'phone',
-    name: 'phone',
-    placeholder: GENERAL_PHONE,
-    label: GENERAL_PHONE,
-  },
-  {
-    type: 'singleSelectButtonGroup',
-    name: 'gender',
-    placeholder: '',
-    label: GENERAL_GENDER,
-    labelClassName: 'text-black font-medium text-sm mb-4',
-    options: [
-      {
-        label: 'Female',
-        value: 'Female',
-      },
-      {
-        label: 'Male',
-        value: 'Male',
-      },
-      {
-        label: 'Other',
-        value: 'Other',
-      },
-    ],
-    activeOptionIndex: '',
-    optionClassName: 'inline-block mb-3 mr-2',
-    lastOptionClassName: 'inline-block mb-3 mr-2',
-    required: false,
-    disabled: false,
-  },
-]
+export const useDetailsFormConfig = () => {
+  const translate = useTranslation()
+  return [
+    {
+      type: 'text',
+      name: 'firstName',
+      placeholder: translate('label.addressBook.firstNameText'),
+      label: translate('label.addressBook.firstNameText'),
+    },
+    {
+      type: 'text',
+      name: 'lastName',
+      placeholder: translate('label.addressBook.lastNameText'),
+      label: translate('label.addressBook.lastNameText'),
+    },
+    {
+      type: 'email',
+      name: 'email',
+      placeholder: translate('label.addressBook.emailText'),
+      label: translate('label.addressBook.emailText'),
+    },
+    {
+      type: 'mobile',
+      name: 'mobile',
+      placeholder: translate('common.label.mobileNumText'),
+      label: translate('common.label.mobileNumText'),
+    },
+    {
+      type: 'phone',
+      name: 'phone',
+      placeholder: translate('label.b2b.phoneNumberText'),
+      label: translate('label.b2b.phoneNumberText'),
+    },
+    {
+      type: 'singleSelectButtonGroup',
+      name: 'gender',
+      placeholder: '',
+      label: translate('common.label.genderText'),
+      labelClassName: 'text-black font-medium text-sm mb-4',
+      options: [
+        {
+          label: translate('common.label.femaleText'),
+          value: translate('common.label.femaleText'),
+        },
+        {
+          label: translate('common.label.maleText'),
+          value: translate('common.label.maleText'),
+        },
+        {
+          label: translate('common.label.otherText'),
+          value: translate('common.label.otherText'),
+        },
+      ],
+      activeOptionIndex: '',
+      optionClassName: 'inline-block mb-3 mr-2',
+      lastOptionClassName: 'inline-block mb-3 mr-2',
+      required: false,
+      disabled: false,
+    },
+  ]
+}
 
 export const useSchema = () => {
   const translate = useTranslation();

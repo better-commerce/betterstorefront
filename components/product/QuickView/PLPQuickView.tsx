@@ -101,7 +101,7 @@ export default function PLPQuickView({
         const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount,)
         if (!isValid) {
           setAlert({
-            type: 'error', msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], { maxBasketItemsCount, }),
+            type: 'error', msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), { maxBasketItemsCount, }),
           })
         }
         return isValid
@@ -215,10 +215,8 @@ export default function PLPQuickView({
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: stringFormat(
-                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
-                  { maxBasketItemsCount }
-                ),
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
+
               })
             }
             return isValid
