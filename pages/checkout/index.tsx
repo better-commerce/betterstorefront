@@ -280,7 +280,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       }
     } catch (error) {
       cb()
-      setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       setIsLoggedIn(false)
     }
   }
@@ -360,7 +360,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
         hideOverlayLoaderState()
         return setAlert({
           type: AlertType.ERROR,
-          msg: Messages.Errors['GENERIC_ERROR'],
+          msg: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
       cb()
@@ -369,7 +369,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     } catch (error) {
       cb()
       hideOverlayLoaderState()
-      setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
     }
   }
 
@@ -388,12 +388,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       if (postCodeAddressRes?.length < 1) {
         return setAlert({
           type: AlertType.ERROR,
-          msg: Messages.Errors['ADDRESS_NOT_FOUND'],
+          msg: translate('common.message.checkout.noAddressFoundErrorMsg'),
         })
       }
       return postCodeAddressRes
     } catch (error) {
-      setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       return null
     }
   }

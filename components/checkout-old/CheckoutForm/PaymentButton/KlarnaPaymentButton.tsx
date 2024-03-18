@@ -69,14 +69,14 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         }
       } else {
         uiContext?.hideOverlayLoaderState()
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     } else {
       uiContext?.hideOverlayLoaderState()
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -215,14 +215,14 @@ export class KlarnaPaymentButton extends BasePaymentButton {
               uiContext?.hideOverlayLoaderState()
               dispatchState({
                 type: 'SET_ERROR',
-                payload: Messages.Errors['GENERIC_ERROR'],
+                payload: translate('common.message.requestCouldNotProcessErrorMsg'),
               })
             }
           }).catch((error: any) => {
             uiContext?.hideOverlayLoaderState()
             dispatchState({
               type: 'SET_ERROR',
-              payload: Messages.Errors['GENERIC_ERROR'],
+              payload: translate('common.message.requestCouldNotProcessErrorMsg'),
             })
           })
         } else if (authorizeResult?.approved && authorizeResult?.show_form) {
@@ -262,7 +262,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
       }, 300)
     } else {
       uiContext?.hideOverlayLoaderState()
-      dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+      dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
     }
   }
 

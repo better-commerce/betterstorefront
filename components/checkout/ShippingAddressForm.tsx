@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import {
-  ADDRESS_FINDER_SCHEMA,
-  CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA,
+  addressFinderSchema,
+  checkout2AddressWithPhoneSchema,
 } from './config'
 import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
@@ -25,10 +25,11 @@ const ShippingAddressForm: React.FC<any> = ({
   onEditAddressToggleView,
   shippingCountries,
 }) => {
+  const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
+  const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
   const translate = useTranslation()
   const [searchedAddresses, setSearchedAddresses] = useState([])
-  const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } =
-    useUI()
+  const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } = useUI()
   const [useSameForBilling, setUseSameForBilling] = useState(true)
   const [isGuestCheckoutSubmit, setIsGuestCheckoutSubmit] = useState(false)
 

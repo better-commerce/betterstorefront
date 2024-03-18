@@ -8,6 +8,7 @@ import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayN
 import { EmptyString, Messages } from '@components/utils/constants'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { matchStrings } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export class AccountPaymentButton extends BasePaymentButton {
   /**
@@ -38,6 +39,7 @@ export class AccountPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const translate = useTranslation()
     if (uiContext?.user?.userId) {
       const userId = uiContext?.user?.userId
       uiContext?.setOverlayLoaderState({
@@ -102,7 +104,7 @@ export class AccountPaymentButton extends BasePaymentButton {
               } else {
                 dispatchState({
                   type: 'SET_ERROR',
-                  payload: Messages.Errors['GENERIC_ERROR'],
+                  payload: translate('common.message.requestCouldNotProcessErrorMsg'),
                 })
               }
             }
@@ -110,14 +112,14 @@ export class AccountPaymentButton extends BasePaymentButton {
             uiContext?.hideOverlayLoaderState()
             dispatchState({
               type: 'SET_ERROR',
-              payload: Messages.Errors['COMPANY_CREDIT_LIMIT_EXCEEDED'],
+              payload: translate('common.message.checkout.notEnoughCreditErrorMsg'),
             })
           }
         } else {
           uiContext?.hideOverlayLoaderState()
           dispatchState({
             type: 'SET_ERROR',
-            payload: Messages.Errors['COMPANY_NOT_FOUND'],
+            payload: translate('common.message.companyNotFoundErrorMsg'),
           })
         }
       }

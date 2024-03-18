@@ -79,7 +79,7 @@ export default function ForgotPasswordPage() {
       setIsLoading(false)
     } catch (error) {
       // setIsLoading(false)
-      setAlert({ type: 'error', msg: Messages.Errors.TOKEN_EXPIRED })
+      setAlert({ type: 'error', msg: translate('common.message.tokenExpiredErrorMsg') })
       router.push('/my-account/forgot-password')
     }
   }
