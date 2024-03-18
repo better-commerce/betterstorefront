@@ -189,12 +189,12 @@ const PromotionInput = (props: IPromotionInputProps) => {
         )}
       </div>
 
-      <div className="flex flex-col justify-start my-0 sm:my-0">
+      <div className="mt-7 text-sm text-slate-500 dark:text-slate-400 divide-y divide-slate-200/70 dark:divide-slate-700/80">
         {cartItems.promotionsApplied?.length
           ? cartItems.promotionsApplied.map((promo: any, key: number) => {
               return (
                 <div
-                  className="pt-2 mt-2 border-t border-gray-200"
+                  className="pt-2 mt-2"
                   key={`promo-${key}`}
                 >
                   <div
@@ -202,13 +202,13 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     key={key}
                   >
                     <div className="flex">
-                      <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
+                      <h5 className="text-sm text-gray-600">
                         {' '}
                         {promo.promoCode}
                       </h5>
                     </div>
                     <div className="flex justify-end">
-                      <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                      <h5 className="font-semibold text-black text-md">
                         {promo?.discountAmt?.raw?.withTax > 0 ? (
                           <div className="flex">
                             <span>
@@ -225,7 +225,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                             />
                           </div>
                         ) : (
-                          <span>{translate('label.basket.freeGiftAddedText')}</span>
+                          <span className='text-emerald-600'>{translate('label.basket.freeGiftAddedText')}</span>
                         )}
                         {!promo?.autoApply && (
                           <a href="javascript: void(0);">
@@ -312,7 +312,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   placeholder={translate('label.promotion.applyPromotionText')}
                   onChange={handleChange}
                   value={value}
-                  className="w-full min-w-0 placeholder-gray-500 border border-gray-300 appearance-none placeholder:text-sm focus:outline-none focus:border-gray-700 btn"
+                  className="w-full min-w-0 placeholder-gray-500 border border-gray-300 appearance-none placeholder:text-sm focus:outline-none focus:border-gray-700 btn !font-semibold"
                   required
                 />
 
@@ -322,7 +322,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   }
                   type="submit"
                   title={translate('common.label.applyText')}
-                  className={`flex items-center justify-center btn btn-secondary w-full`}
+                  className={`flex items-center justify-center btn btn-secondary w-full !font-medium`}
                 >
                   {translate('common.label.applyText')}
                 </button>

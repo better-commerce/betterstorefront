@@ -17225,3 +17225,9 @@ input[type=time]::-webkit-calendar-picker-indicator {
   height: 100vh !important;
   z-index: 99999 !important;
 }
+@media screen and  (max-width: 767px) {
+  .mob-flex-cart-pro{
+    flex-direction: column;
+    gap: 10px;
+  }
+}

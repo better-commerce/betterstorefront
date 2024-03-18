@@ -23,7 +23,7 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/cart/SizeChange'
-import { vatIncluded , getCartValidateMessages, maxBasketItemsCount  } from '@framework/utils/app-util'
+import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
@@ -96,7 +96,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   if (cartItems?.lineItems?.length > 0) {
     firstProductId = cartItems?.lineItems?.length
       ? cartItems?.lineItems?.filter((x: any, idx: number) => idx == 0)[0]
-          ?.productId
+        ?.productId
       : ''
   }
 
@@ -445,7 +445,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     }
     asyncHandleItem()
   }
-  
+
   const openModal = () => {
     setIsOpen(true)
   }
@@ -453,7 +453,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const closeModal = () => {
     setIsOpen(false)
   }
-  
+
   const isIncludeVAT = vatIncluded()
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
@@ -492,125 +492,138 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           key="ogurl"
         />
       </NextHead>
-      <div className="container w-full px-4 mx-auto mt-6 mb-10 bg-white sm:px-6 sm:mt-10">
-        <h1 className="relative flex items-baseline font-semibold tracking-tighter text-black uppercase">
-            {translate('label.basket.shoppingCartText')}{' '}
+      <div className="container w-full py-16 lg:pb-28 lg:pt-20 bg-white">
+        <h1 className="block text-2xl sm:text-3xl lg:text-4xl font-semibold mb-12 sm:mb-16">
+          {translate('label.basket.shoppingCartText')}{' '}
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
+        <hr className='border-slate-200 dark:border-slate-700 my-10 xl:my-12' />
         {!isEmpty && !isSplitDelivery && (
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
               <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                {userCart.lineItems?.map((product: any, productIdx: number) =>{      
-                  const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
-                  return(
-                      <div key={productIdx} className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3" >
-                        <div className="flex-shrink-0">
+                <div className='divide-y divide-slate-200 dark:divide-slate-700 w-full'>
+                  {userCart.lineItems?.map((product: any, productIdx: number) => {
+                    const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                    return (
+                      <div key={productIdx} className="relative flex py-8 sm:py-10 xl:py-12 first:pt-0 last:pb-0" >
+                        <div className='relative h-36 w-24 sm:w-32 flex-shrink-0 overflow-hidden rounded-xl'>
                           <img
                             style={css}
                             width={140}
                             height={180}
-                            src={ generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER }
-                            alt={product.name ||'cart-item'}
+                            src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER}
+                            alt={product.name || 'cart-item'}
                             className="object-cover object-center w-16 rounded-lg sm:w-28 image"
                           />
-                          <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                          { reValidateData?.message != null && soldOutMessage != '' && (
-                              matchStrings(soldOutMessage, "sold out", true) ? (
-                                <div className="flex flex-col col-span-12">
-                                  <div className="flex text-xs font-semibold text-left text-red-500">
-                                    <span className="relative mr-1">
-                                      <img
-                                        alt="Sold Out"
-                                        src="/assets/images/not-shipped-edd.svg"
-                                        width={20}
-                                        height={20}
-                                        className="relative inline-block mr-1 top-2"
-                                      />
-                                    </span>
-                                    <span className="mt-2">{soldOutMessage}</span>
-                                  </div>
-                                </div>
-                              ) : matchStrings(soldOutMessage, "price changed", true) && (
-                                <div className="items-center w-full col-span-12">
-                                  <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
-                                    {soldOutMessage}
-                                  </div>
-                                </div>
-                              )
-                            )}
-                          </div>
                         </div>
-                        <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                          <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
-                            {product.brand}
-                          </h3>
-                          <h3 className="my-2 text-sm sm:text-sm sm:my-1">
-                            <Link href={`/${product.slug}`}>
-                              <span className="font-normal text-gray-700 hover:text-gray-800 pr-6">
-                                {product.name}
-                              </span>
-                            </Link>
-                          </h3>
-                          <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                            { product?.price?.raw?.withTax > 0 ? (
-                              isIncludeVAT
-                                ? product.price?.formatted?.withTax
-                                : product.price?.formatted?.withoutTax)
-                              :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
-                            }
-                            {product?.price?.raw?.withTax > 0 &&
-                            product.listPrice?.raw.withTax > 0 &&
-                            product.listPrice?.raw.withTax !=
-                              product.price?.raw?.withTax && (
-                              <span className="px-2 text-sm text-red-400 line-through">
-                                  {translate('label.basket.priceLabelText')}{' '}
-                                {isIncludeVAT
-                                  ? product.listPrice.formatted?.withTax
-                                  : product.listPrice.formatted?.withoutTax}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                            {product?.variantProducts?.length > 0 ? (
-                              <div
-                                role="button"
-                                onClick={handleToggleOpenSizeChangeModal.bind(
-                                  null,
-                                  product
-                                )}
-                              >
-                                <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                                  <div className="mr-1 text-sm text-gray-700">
-                                    Size:{' '}
-                                    <span className="font-semibold text-black uppercase">
-                                      {getLineItemSizeWithoutSlug(product)}
+                        <div className="ml-3 sm:ml-6 flex flex-1 flex-col">
+                          <div className=''>
+                            <div className='flex justify-between mob-flex-cart-pro'>
+                              <div className='flex=[1.5] box-border sm:max-w-64  sm:min-w-64 pr-2 sm:pr-6'>
+                                <h3 className="text-sm text-slate-600 dark:text-slate-300">
+                                  {product.brand}
+                                </h3>
+                                <h3 className="my-2 text-sm sm:text-sm sm:my-1">
+                                  <Link href={`/${product.slug}`}>
+                                    <span className="text-base font-semibold">
+                                      {product.name}
                                     </span>
+                                  </Link>
+                                </h3>
+                                <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
+                                  {product?.variantProducts?.length > 0 ? (
+                                    <div
+                                      role="button"
+                                      onClick={handleToggleOpenSizeChangeModal.bind(
+                                        null,
+                                        product
+                                      )}
+                                    >
+                                      <div className="border w-[fit-content] flex items-center  py-2 px-2">
+                                        <div className="mr-1 text-sm text-gray-700">
+                                          Size:{' '}
+                                          <span className="font-semibold text-black uppercase">
+                                            {getLineItemSizeWithoutSlug(product)}
+                                          </span>
+                                        </div>
+                                        <ChevronDownIcon className="w-4 h-4 text-black" />
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  <div className="flex-shrink-0">
+                                    <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                                      {reValidateData?.message != null && soldOutMessage != '' && (
+                                        matchStrings(soldOutMessage, "sold out", true) ? (
+                                          <div className="flex flex-col col-span-12">
+                                            <div className="flex text-xs font-semibold text-left text-red-500">
+                                              <span className="relative mr-1">
+                                                <img
+                                                  alt="Sold Out"
+                                                  src="/assets/images/not-shipped-edd.svg"
+                                                  width={20}
+                                                  height={20}
+                                                  className="relative inline-block mr-1 top-2"
+                                                />
+                                              </span>
+                                              <span className="mt-2">{soldOutMessage}</span>
+                                            </div>
+                                          </div>
+                                        ) : matchStrings(soldOutMessage, "price changed", true) && (
+                                          <div className="items-center w-full col-span-12">
+                                            <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
+                                              {soldOutMessage}
+                                            </div>
+                                          </div>
+                                        )
+                                      )}
+                                    </div>
                                   </div>
-                                  <ChevronDownIcon className="w-4 h-4 text-black" />
                                 </div>
                               </div>
-                            ) : (
-                              <div></div>
-                            )}
-                            <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                              <MinusSmallIcon
-                                onClick={() => handleItem(product, 'decrease')}
-                                className="w-4 cursor-pointer"
-                              />
-                              <span className="px-4 py-2 text-md sm:py-2">
-                                {product.qty}
-                              </span>
-                              <PlusSmallIcon
-                                className="w-4 cursor-pointer"
-                                onClick={() => handleItem(product, 'increase')}
-                              />
+                              <div className='block text-left sm:text-center relative'>
+                                <div className='inline-block'>
+                                  <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
+                                    <MinusSmallIcon
+                                      onClick={() => handleItem(product, 'decrease')}
+                                      className="w-4 cursor-pointer"
+                                    />
+                                    <span className="px-4 py-2 text-md sm:py-2">
+                                      {product.qty}
+                                    </span>
+                                    <PlusSmallIcon
+                                      className="w-4 cursor-pointer"
+                                      onClick={() => handleItem(product, 'increase')}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className='flex-1 sm:flex justify-end font-semibold text-green'>
+                                {product?.price?.raw?.withTax > 0 ? (
+                                  isIncludeVAT
+                                    ? product.price?.formatted?.withTax
+                                    : product.price?.formatted?.withoutTax)
+                                  : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
+                                }
+                                {product?.price?.raw?.withTax > 0 &&
+                                  product.listPrice?.raw.withTax > 0 &&
+                                  product.listPrice?.raw.withTax !=
+                                  product.price?.raw?.withTax && (
+                                    <span className="px-2 text-sm text-red-400 line-through">
+                                      {translate('label.basket.priceLabelText')}{' '}
+                                      {isIncludeVAT
+                                        ? product.listPrice.formatted?.withTax
+                                        : product.listPrice.formatted?.withoutTax}
+                                    </span>
+                                  )}
+                              </div>
                             </div>
                           </div>
-
                           {product.children?.map((child: any, idx: number) => (
                             <div className="flex mt-10" key={'child' + idx}>
                               <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
@@ -644,26 +657,27 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                               )}
                             </div>
                           ))}
-                          <div className="absolute top-0 right-0">
+                          <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
+                            {product.shippingPlan?.shippingSpeed}
+                          </div>
+                          <div className="flex mt-auto pt-4 items-end justify-end text-sm">
                             <button
                               type="button"
                               onClick={() => {
                                 openModal()
                                 setItemClicked(product)
                               }}
-                              className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                              className="relative z-10 flex items-center mt-3 font-medium text-primary-6000 hover:text-primary-500 text-sm "
                             >
-                              <span className="sr-only">{translate('common.label.removeText')}</span>
-                              <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" />
+                              <span>{translate('common.label.removeText')}</span>
+                              {/* <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" /> */}
                             </button>
-                          </div>
-                          <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                            {product.shippingPlan?.shippingSpeed}
                           </div>
                         </div>
                       </div>
-                  )
-                })}
+                    )
+                  })}
+                </div>
               </section>
               {/* <section>
                   {splitDeliveryItems && (
@@ -679,19 +693,19 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
               >
                 <h4
                   id="summary-heading"
-                  className="mb-1 font-semibold text-black uppercase"
+                  className="text-lg font-semibold "
                 >
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
-                <div className="mt-4 lg:-mb-3">
+                <div className="">
                   <PromotionInput
                     basketPromos={basketPromos}
                     items={cartItems}
                     getBasketPromoses={getBasketPromos}
                   />
                 </div>
-                <dl className="mt-6 space-y-2 sm:space-y-2">
-                  <div className="flex items-center justify-between">
+                <dl className="mt-7 text-sm text-slate-500 dark:text-slate-400 divide-y divide-slate-200/70 dark:divide-slate-700/80">
+                  <div className="flex items-center justify-between py-4">
                     <dt className="text-sm text-gray-600">
                       {isIncludeVAT
                         ? translate('label.orderSummary.subTotalTaxIncText')
@@ -703,7 +717,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                         : cartItems.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between pt-2 sm:pt-1">
+                  <div className="flex items-center justify-between py-4">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>{translate('label.orderSummary.shippingText')}</span>
                     </dt>
@@ -714,7 +728,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     </dd>
                   </div>
                   {userCart.promotionsApplied?.length > 0 && (
-                    <div className="flex items-center justify-between pt-2 sm:pt-2">
+                    <div className="flex items-center justify-between py-4">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>
                       </dt>
@@ -728,7 +742,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       </dd>
                     </div>
                   )}
-                  <div className="flex items-center justify-between pt-2 sm:pt-1">
+                  <div className="flex items-center justify-between py-4">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>{translate('label.orderSummary.taxText')}</span>
                     </dt>
@@ -737,10 +751,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     </dd>
                   </div>
                   <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
-                    <dt className="text-lg font-bold text-black">
+                    <dt className="text-lg font-semibold text-black">
                       {translate('label.orderSummary.totalText')}
                     </dt>
-                    <dd className="text-xl font-bold text-black">
+                    <dd className="text-xl font-semibold text-black">
                       {isIncludeVAT
                         ? cartItems.grandTotal?.formatted?.withTax
                         : cartItems.grandTotal?.formatted?.withTax}
@@ -748,11 +762,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                 </dl>
 
-                <div className="mt-6 mb-6 sm:mb-0">
+                <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button
                       type="submit"
-                      className="w-full btn btn-primary"
+                      className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 "
                     >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
@@ -781,188 +795,190 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
               <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                {Object.keys(splitBasketProducts)?.map(
-                  (deliveryDate: any, Idx: any) => (
-                    <>
-                      {Object.keys(splitBasketProducts)[0] ===
-                      'Invalid Date' ? (
-                        <LoadingDots />
-                      ) : (
-                        <h2 className="text-sm font-bold">
-                          {`Delivery ${Idx + 1}`}
-                        </h2>
-                      )}
-                      {splitBasketProducts[deliveryDate]?.map(
-                        (product: any, productIdx: number) => (
-                          <div
-                            key={productIdx}
-                            className="flex p-2 mb-2 border border-gray-200 rounded-md sm:p-3"
-                          >
-                            <div className="flex-shrink-0">
-                              <img
-                                style={css}
-                                width={140}
-                                height={180}
-                                src={
-                                  generateUri(product.image, 'h=200&fm=webp') ||
-                                  IMG_PLACEHOLDER
-                                }
-                                alt={product.name || 'cart-item'}
-                                className="object-cover object-center w-16 rounded-lg sm:w-28 image"
-                              />
-                            </div>
-                            <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                              <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
-                                {product.brand}
-                              </h3>
-                              <h3 className="my-2 text-sm sm:text-sm sm:my-1">
-                                <Link href={`/${product.slug}`}>
-                                  <span className="font-normal text-gray-700 hover:text-gray-800">
-                                    {product.name}
-                                  </span>
-                                </Link>
-                              </h3>
-                              <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                                {product?.price?.raw?.withTax > 0 ? 
-                                  (isIncludeVAT
-                                    ? product.price?.formatted?.withTax
-                                    : product.price?.formatted?.withoutTax)
-                                  :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
+                <div className='divide-y divide-slate-200 dark:divide-slate-700 w-full'>
+                  {Object.keys(splitBasketProducts)?.map(
+                    (deliveryDate: any, Idx: any) => (
+                      <>
+                        {Object.keys(splitBasketProducts)[0] ===
+                          'Invalid Date' ? (
+                          <LoadingDots />
+                        ) : (
+                          <h2 className="text-sm font-bold">
+                            {`Delivery ${Idx + 1}`}
+                          </h2>
+                        )}
+                        {splitBasketProducts[deliveryDate]?.map(
+                          (product: any, productIdx: number) => (
+                            <div
+                              key={productIdx}
+                              className="relative flex py-8 sm:py-10 xl:py-12 first:pt-0 last:pb-0"
+                            >
+                              <div className="flex-shrink-0">
+                                <img
+                                  style={css}
+                                  width={140}
+                                  height={180}
+                                  src={
+                                    generateUri(product.image, 'h=200&fm=webp') ||
+                                    IMG_PLACEHOLDER
                                   }
-                                {product?.price?.raw?.withTax > 0 &&
-                                product?.listPrice?.raw?.withTax > 0 &&
-                                product?.listPrice?.raw?.withTax !=
-                                  product.price?.raw?.withTax && (
-                                  <span className="px-2 text-sm text-red-400 line-through">
-                                    {translate('label.basket.priceLabelText')}{' '}
-                                    {isIncludeVAT
-                                      ? product?.listPrice.formatted?.withTax
-                                      : product?.listPrice.formatted?.withoutTax}
-                                  </span>
-                                )}
+                                  alt={product.name || 'cart-item'}
+                                  className="object-cover object-center w-16 rounded-lg sm:w-28 image"
+                                />
                               </div>
-                              <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                                {product?.variantProducts?.length > 0 ? (
-                                  <div
-                                    role="button"
-                                    onClick={handleToggleOpenSizeChangeModal.bind(
-                                      null,
-                                      product
+                              <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
+                                <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
+                                  {product.brand}
+                                </h3>
+                                <h3 className="my-2 text-sm sm:text-sm sm:my-1">
+                                  <Link href={`/${product.slug}`}>
+                                    <span className="font-normal text-gray-700 hover:text-gray-800">
+                                      {product.name}
+                                    </span>
+                                  </Link>
+                                </h3>
+                                <div className="mt-0 font-bold text-black text-md sm:font-semibold">
+                                  {product?.price?.raw?.withTax > 0 ?
+                                    (isIncludeVAT
+                                      ? product.price?.formatted?.withTax
+                                      : product.price?.formatted?.withoutTax)
+                                    : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
+                                  }
+                                  {product?.price?.raw?.withTax > 0 &&
+                                    product?.listPrice?.raw?.withTax > 0 &&
+                                    product?.listPrice?.raw?.withTax !=
+                                    product.price?.raw?.withTax && (
+                                      <span className="px-2 text-sm text-red-400 line-through">
+                                        {translate('label.basket.priceLabelText')}{' '}
+                                        {isIncludeVAT
+                                          ? product?.listPrice.formatted?.withTax
+                                          : product?.listPrice.formatted?.withoutTax}
+                                      </span>
                                     )}
-                                  >
-                                    <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                                      <div className="mr-1 text-sm text-gray-700">
-                                        Size:{' '}
-                                        <span className="font-semibold text-black uppercase">
-                                          {getLineItemSizeWithoutSlug(product)}
-                                        </span>
+                                </div>
+                                <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                                  {product?.variantProducts?.length > 0 ? (
+                                    <div
+                                      role="button"
+                                      onClick={handleToggleOpenSizeChangeModal.bind(
+                                        null,
+                                        product
+                                      )}
+                                    >
+                                      <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
+                                        <div className="mr-1 text-sm text-gray-700">
+                                          Size:{' '}
+                                          <span className="font-semibold text-black uppercase">
+                                            {getLineItemSizeWithoutSlug(product)}
+                                          </span>
+                                        </div>
+                                        <ChevronDownIcon className="w-4 h-4 text-black" />
                                       </div>
-                                      <ChevronDownIcon className="w-4 h-4 text-black" />
                                     </div>
+                                  ) : (
+                                    <div></div>
+                                  )}
+                                  {isSplitDelivery && splitDeliveryDates && (
+                                    <p className="w-full">
+                                      {product?.shippingSpeed}
+                                    </p>
+                                  )}
+                                  <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
+                                    <MinusSmallIcon
+                                      onClick={() =>
+                                        handleItem(product, 'decrease')
+                                      }
+                                      className="w-4 cursor-pointer"
+                                    />
+                                    <span className="px-4 py-2 text-md sm:py-2">
+                                      {product.qty}
+                                    </span>
+                                    <PlusSmallIcon
+                                      className="w-4 cursor-pointer"
+                                      onClick={() =>
+                                        handleItem(product, 'increase')
+                                      }
+                                    />
                                   </div>
-                                ) : (
-                                  <div></div>
+                                </div>
+
+                                {product.children?.map(
+                                  (child: any, idx: number) => (
+                                    <div
+                                      className="flex mt-10"
+                                      key={'child' + idx}
+                                    >
+                                      <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
+                                        <Image
+                                          src={child.image}
+                                          alt={child.name || 'cart-image'}
+                                          className="object-cover object-center w-full h-full"
+                                        />
+                                      </div>
+                                      <div className="flex justify-between ml-5 font-medium text-gray-900">
+                                        <Link href={`/${child.slug}`}>
+                                          {child.name}
+                                        </Link>
+                                        <p className="ml-4">
+                                          {child.price?.formatted?.withTax > 0
+                                            ? isIncludeVAT
+                                              ? child.price?.formatted?.withTax
+                                              : child.price?.formatted?.withoutTax
+                                            : ''}
+                                        </p>
+                                      </div>
+                                      {!child.parentProductId ? (
+                                        <div className="flex items-center justify-end flex-1 text-sm">
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              handleItem(child, 'delete')
+                                            }
+                                            className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                                          >
+                                            <span className="sr-only">
+                                              {translate('common.label.removeText')}
+                                            </span>
+                                            <TrashIcon
+                                              className="w-5 h-5"
+                                              aria-hidden="true"
+                                            />
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
+                                          {child.qty}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )
                                 )}
-                                {isSplitDelivery && splitDeliveryDates && (
-                                  <p className="w-full">
-                                    {product?.shippingSpeed}
-                                  </p>
-                                )}
-                                <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                  <MinusSmallIcon
-                                    onClick={() =>
-                                      handleItem(product, 'decrease')
-                                    }
-                                    className="w-4 cursor-pointer"
-                                  />
-                                  <span className="px-4 py-2 text-md sm:py-2">
-                                    {product.qty}
-                                  </span>
-                                  <PlusSmallIcon
-                                    className="w-4 cursor-pointer"
-                                    onClick={() =>
-                                      handleItem(product, 'increase')
-                                    }
-                                  />
+                                <div className="absolute top-0 right-0">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleItem(product, 'delete')}
+                                    className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
+                                  >
+                                    <span className="sr-only">
+                                      {translate('common.label.removeText')}
+                                    </span>
+                                    <TrashIcon
+                                      className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </button>
+                                </div>
+                                <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
+                                  {product.shippingPlan?.shippingSpeed}
                                 </div>
                               </div>
-
-                              {product.children?.map(
-                                (child: any, idx: number) => (
-                                  <div
-                                    className="flex mt-10"
-                                    key={'child' + idx}
-                                  >
-                                    <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                                      <Image
-                                        src={child.image}
-                                        alt={child.name||'cart-image'}
-                                        className="object-cover object-center w-full h-full"
-                                      />
-                                    </div>
-                                    <div className="flex justify-between ml-5 font-medium text-gray-900">
-                                      <Link href={`/${child.slug}`}>
-                                        {child.name}
-                                      </Link>
-                                      <p className="ml-4">
-                                        {child.price?.formatted?.withTax > 0
-                                          ? isIncludeVAT
-                                            ? child.price?.formatted?.withTax
-                                            : child.price?.formatted?.withoutTax
-                                          : ''}
-                                      </p>
-                                    </div>
-                                    {!child.parentProductId ? (
-                                      <div className="flex items-center justify-end flex-1 text-sm">
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            handleItem(child, 'delete')
-                                          }
-                                          className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
-                                        >
-                                          <span className="sr-only">
-                                            {translate('common.label.removeText')}
-                                          </span>
-                                          <TrashIcon
-                                            className="w-5 h-5"
-                                            aria-hidden="true"
-                                          />
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
-                                        {child.qty}
-                                      </div>
-                                    )}
-                                  </div>
-                                )
-                              )}
-                              <div className="absolute top-0 right-0">
-                                <button
-                                  type="button"
-                                  onClick={() => handleItem(product, 'delete')}
-                                  className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
-                                >
-                                  <span className="sr-only">
-                                    {translate('common.label.removeText')}
-                                  </span>
-                                  <TrashIcon
-                                    className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5"
-                                    aria-hidden="true"
-                                  />
-                                </button>
-                              </div>
-                              <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                                {product.shippingPlan?.shippingSpeed}
-                              </div>
                             </div>
-                          </div>
-                        )
-                      )}
-                    </>
-                  )
-                )}
+                          )
+                        )}
+                      </>
+                    )
+                  )}
+                </div>
               </section>
               <section
                 aria-labelledby="summary-heading"
@@ -974,7 +990,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                 >
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
-                <div className="mt-4 lg:-mb-3">
+                <div className="">
                   <PromotionInput
                     basketPromos={basketPromos}
                     items={cartItems}
@@ -1039,11 +1055,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   </div>
                 </dl>
 
-                <div className="mt-6 mb-6 sm:mb-0">
+                <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button
                       type="submit"
-                      className="w-full btn btn-primary"
+                      className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 "
                     >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
@@ -1076,7 +1092,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                 type="button"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                  {translate('label.basket.catalogText')}
+                {translate('label.basket.catalogText')}
                 <span aria-hidden="true"> &rarr;</span>
               </button>
             </Link>
