@@ -89,16 +89,16 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           return
         }
 
-        const sizeObj = variantItemObj.attributes.find(
+        const sizeObj = variantItemObj?.attributes?.find(
           (o: any) => o.fieldCode === SIZE_ATTRIBUTE
         )
 
         setProductStockCodesWithSize((v: any) => ({
           ...v,
-          [sizeObj.fieldValue]: {
-            sizeValue: sizeObj.fieldValue,
-            stockCode: variantItemObj.stockCode,
-            productId: variantItemObj.productId,
+          [sizeObj?.fieldValue]: {
+            sizeValue: sizeObj?.fieldValue,
+            stockCode: variantItemObj?.stockCode,
+            productId: variantItemObj?.productId,
           },
         }))
       }
