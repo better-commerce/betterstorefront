@@ -573,7 +573,7 @@ a {
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
+  background: transparent;
 
   /* Center slide text vertically */
   display: -webkit-box;
@@ -3635,6 +3635,7 @@ select {
 }
 .inset-0 {
   inset: 0px;
+  z-index: 9999 !important;
 }
 .inset-0\.5 {
   inset: 0.125rem;
@@ -17223,4 +17224,10 @@ input[type=time]::-webkit-calendar-picker-indicator {
   width: 100% !important;
   height: 100vh !important;
   z-index: 99999 !important;
+}
+@media screen and  (max-width: 767px) {
+  .mob-flex-cart-pro{
+    flex-direction: column;
+    gap: 10px;
+  }
 }

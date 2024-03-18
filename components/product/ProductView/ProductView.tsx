@@ -743,44 +743,26 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const renderReviews = () => {
     return (
-      <div className="">
-        {/* HEADING */}
+      <div className="" id='productReview'>
         <h2 className="flex items-center text-2xl font-semibold">
-          <StarIcon className="w-7 h-7 mb-0.5" />
-          <span className="ml-1.5"> 4,87 · 142 Reviews</span>
+          <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
+          <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
         </h2>
 
-        {/* comment */}
         <div className="mt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
-            <ReviewItem />
-            <ReviewItem
-              data={{
-                comment: `I love the charcoal heavyweight hoodie. Still looks new after plenty of washes. 
-                  If you’re unsure which hoodie to pick.`,
-                date: "December 22, 2021",
-                name: "Stiven Hokinhs",
-                starPoint: 5,
-              }}
-            />
-            <ReviewItem
-              data={{
-                comment: `The quality and sizing mentioned were accurate and really happy with the purchase. Such a cozy and comfortable hoodie. 
-                Now that it’s colder, my husband wears his all the time. I wear hoodies all the time. `,
-                date: "August 15, 2022",
-                name: "Gropishta keo",
-                starPoint: 5,
-              }}
-            />
-            <ReviewItem
-              data={{
-                comment: `Before buying this, I didn't really know how I would tell a "high quality" sweatshirt, but after opening, I was very impressed. 
-                The material is super soft and comfortable and the sweatshirt also has a good weight to it.`,
-                date: "December 12, 2022",
-                name: "Dahon Stiven",
-                starPoint: 5,
-              }}
-            />
+            {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
+              <div key={`review-${reviewIdx}`}>
+                <ReviewItem
+                  data={{
+                    comment: review?.comment,
+                    date: review?.postedOn,
+                    name: review?.title,
+                    starPoint: review?.rating,
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -797,13 +779,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
             <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
             <div className="flex items-center">
-              <Link href={`/${product?.slug}`} className="flex items-center text-sm font-medium" >
+              <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                 <div className="ms-1.5 flex">
                   <span>{reviews?.review?.ratingAverage}</span>
                   <span className="block mx-2">·</span>
                   <span className="underline text-slate-600 dark:text-slate-400">
-                    {product?.reviewCount} {translate('common.label.reviews')}
+                    {reviews?.review?.totalRecord} {translate('common.label.reviews')}
                   </span>
                 </div>
               </Link>
@@ -902,7 +884,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
           </div>
-          {renderReviews()}
+          {reviews?.review?.productReviews?.length > 0 &&
+            renderReviews()
+          }
         </div>
         <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
@@ -928,12 +912,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </>
           )}
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
-          {reviews?.review?.productReviews?.length > 0 && (
-            <>
-              <div className="flex flex-col section-devider" aria-hidden="true" ></div>
-              <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
-            </>
-          )}
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
           )}
