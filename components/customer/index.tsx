@@ -8,23 +8,10 @@ import {
 } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
 import Button from '@components/ui/Button'
-import {
-  GENERAL_REGISTER,
-  VALIDATION_PASSWORD_MUST_MATCH,
-} from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { mergeSchema } from '@framework/utils/schema-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 import { Checkbox } from '@components/account/Address'
-
-const registerSchema = Yup.object({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  password: Yup.string().min(8).max(24).required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], VALIDATION_PASSWORD_MUST_MATCH)
-    .required(),
-})
 
 /**
  * This is a schema for registration to enable Trading account registration.
@@ -99,18 +86,7 @@ const loginInitialValues = {
   password: '',
 }
 
-const VALUES_MAP: any = {
-  register: {
-    schema: registerSchema,
-    initialValues: registerInitialValues,
-    config: registrationConfig,
-  },
-  login: {
-    schema: loginSchema,
-    initialValues: loginInitialValues,
-    config: loginConfig,
-  },
-}
+
 
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
@@ -120,10 +96,32 @@ export default function CustomerForm({
   type = 'register',
   isLoginSidebarOpen,
   onSubmit = () => { },
-  btnText = GENERAL_REGISTER,
+  btnText = "Register",
   email = '', // This prop contains the value of "Email Address" that is validated for availability at first step.
   b2bSettings = new Array<{ key: string; value: string }>(), // B2B settings passed from parent.
 }: any) {
+  const translate = useTranslation()
+  const registerSchema = Yup.object({
+    firstName: Yup.string().required(),
+    lastName: Yup.string().required(),
+    password: Yup.string().min(8).max(24).required(),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password')],translate('label.myAccount.passwordMustMatchText'))
+      .required(),
+  })
+
+  const VALUES_MAP: any = {
+    register: {
+      schema: registerSchema,
+      initialValues: registerInitialValues,
+      config: registrationConfig,
+    },
+    login: {
+      schema: loginSchema,
+      initialValues: loginInitialValues,
+      config: loginConfig,
+    },
+  }
   const { config, initialValues, schema } = VALUES_MAP[type]
 
   // Read b2b enabled value from settings

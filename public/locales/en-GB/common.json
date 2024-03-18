@@ -500,6 +500,7 @@
       "selectTocompareText1": "Select other",
       "selectToCompareText2": "items to compare products",
       "comparingItemsText1": "Comparing",
+      "ItemTypeAddOn10":10,
       "specifications": {
         "fabricText": "Fabric",
         "occasionText": "Occasion",
@@ -606,6 +607,16 @@
         "leftText": "LEFT",
         "preOrderText": "PRE-ORDER"
       },
+
+      "priceMatchWebsiteNameText" : "Name of website you have found cheaper to*",
+      "priceMatchDirectLinkText" : "Full direct link to product (copy/paste website URL)*",
+      "priceMatchCostText" : "Cost of product*",
+      "priceMatchDeliveryCostText": "Delivery Cost*",
+      "priceMatchTotalCostText": "Total cost",
+      "priceMatchUserName" : "Name*",
+      "priceMatchUserEmail" : "Email*",
+      "priceMatchUserTelephone" : "Telephone*",
+
       "freeDeliveryText": "Free Delivery",
       "daysEasyReturn": "Days Easy Return",
       "daysEasyExchange": "Days Easy Exchange",
@@ -929,6 +940,7 @@
       "maleText": "Male"
     },
     "message": {
+      "requiredTextMsg" : "Required",
       "invalidAccountMsg": "No account has been found with this email/password",
       "alreadyLoggedInMsg": "You're already logged in",
       "loginSuccessMsg": "login successfully",
@@ -982,6 +994,7 @@
       "tokenInvalidErrorMsg": "Woops! Token is invalid",
       "tokenExpiredErrorMsg": "Woops! Token is expired or invalid",
       "companyNotFoundErrorMsg": "Company not found.",
+      "cartItemMaxAddedErrorMsg" : "Cart item limit reached. Please remove some items and try again.",
       "address": {
         "postCodeNotServicableMsg": "Postcode non-serviceable",
         "postCodeNumMsg": "Postcode should contain only digits",
@@ -1026,7 +1039,8 @@
         "codErrorMsg": "Error applying COD additional charges. Please try again after sometime.",
         "upiNotSupportedErrorMsg": "UPI payment is unsupported.",
         "paymentAlreadyCompletedErrorMsg": "Payment for your basket is already completed.",
-        "notEnoughCreditErrorMsg": "Not enough credit available."
+        "notEnoughCreditErrorMsg": "Not enough credit available.",
+        "paymentMethodNotSupportedErrorMsg" : "Payment method is not supported."
       },
       "password": {
         "passwordValidationMsg": "Password should have a minimum of 8 characters and at least 1 uppercase letter.",
@@ -1051,7 +1065,10 @@
       "noEmailMsg": "Please enter correct email",
       "returnSuccessMsg": "Return success",
       "exchangeSuccessMsg": "Exchange successful",
-      "resetPasswordSuccessMsg": "Success! You will be redirected to login page"
+      "resetPasswordSuccessMsg": "Success! You will be redirected to login page",
+      "enterCorrectUrlMsg" : "Enter correct url!",
+      "enterProductLinkMsg" : "Please enter a product link",
+      "enterWebsiteLinkMsg" : "Please enter a website link"
     },
     "numberText": {
       "one": "1"

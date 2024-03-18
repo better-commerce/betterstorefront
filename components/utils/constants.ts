@@ -399,46 +399,41 @@ export module Messages {
     RESET_PASSWORD_SUCCESS: 'Success! You will be redirected to login page',
   }
 
-  export const Warnings: any = {}
+  // export const Warnings: any = {}
 
-  export const Errors: any = {
-    INVALID_REQUEST:
-      'The information provided is incomplete. Please try again.',
-    ERR_BAD_REQUEST:
-      'The information provided is incomplete. Please try again.',
-    CARD_NOT_SUPPORTED: 'Card type is not supported. Please try again.',
-    INVALID_OTP_SUPPLIED: 'OTP is not valid. Please try again.',
-    ERROR_UPDATE_ADDITIONAL_CHARGES:
-      'Error applying COD additional charges. Please try again after sometime.',
-    UNSUPPORTED_UPI_APP: 'UPI payment is unsupported.',
-    NOT_FOUND:
-      'Your request could not be processed. Please try again after sometime.',
-    USERNAME_ALREADY_EXISTS: 'User already exists',
-    CUSTOMER_NOT_FOUND: 'Customer not found.',
-    GENERIC_ERROR: 'Your request could not be processed. Please try again after sometime.',
-    DUPLICATE_ADDRESS : 'Address already exists',
-    CART_EMPTY: 'Your cart is empty',
-    CART_ITEM_QTY_LIMIT_EXCEEDED:
-      'Max allowed quantity is {maxBasketItemsCount}.',
-    BASKET_VALIDATION_FAILED: 'Basket validation failed',
-    'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
-    TOKEN_INVALID: 'Woops! Token is invalid',
-    TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
-    COMPANY_NOT_FOUND: 'Company not found.',
-    COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
-    ADDRESS_NOT_FOUND: 'No address found for the given postcode'
-  }
+  // export const Errors: any = {
+  //   INVALID_REQUEST: 'The information provided is incomplete. Please try again.',
+  //   ERR_BAD_REQUEST: 'The information provided is incomplete. Please try again.',
+  //   CARD_NOT_SUPPORTED: 'Card type is not supported. Please try again.',
+  //   INVALID_OTP_SUPPLIED: 'OTP is not valid. Please try again.',
+  //   ERROR_UPDATE_ADDITIONAL_CHARGES: 'Error applying COD additional charges. Please try again after sometime.',
+  //   UNSUPPORTED_UPI_APP: 'UPI payment is unsupported.',
+  //   NOT_FOUND:'Your request could not be processed. Please try again after sometime.',
+  //   USERNAME_ALREADY_EXISTS: 'User already exists',
+  //   CUSTOMER_NOT_FOUND: 'Customer not found.',
+  //   GENERIC_ERROR: 'Your request could not be processed. Please try again after sometime.',
+  //   DUPLICATE_ADDRESS : 'Address already exists',
+  //   CART_EMPTY: 'Your cart is empty',
+  //   CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity is {maxBasketItemsCount}.',
+  //   BASKET_VALIDATION_FAILED: 'Basket validation failed',
+  //   'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
+  //   TOKEN_INVALID: 'Woops! Token is invalid',
+  //   TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
+  //   COMPANY_NOT_FOUND: 'Company not found.',
+  //   COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
+  //   ADDRESS_NOT_FOUND: 'No address found for the given postcode'
+  // }
 
-  export const ContactUs: any = {
-    FIRST_NAME_REQUIRED: 'First Name is a required field',
-    FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
-    FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
-    EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
-    EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
-    FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
-    TITLE_REQUIRED: 'Title is a require field',
-    MESSAGE_REQUIRED: 'Message is a require field',
-  }
+//   export const ContactUs: any = {
+//     FIRST_NAME_REQUIRED: 'First Name is a required field',
+//     FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
+//     FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+//     EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
+//     EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
+//     FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
+//     TITLE_REQUIRED: 'Title is a require field',
+//     MESSAGE_REQUIRED: 'Message is a require field',
+//   }
 }
 export const EmptyObject: any = {}
 export module PageActions {
