@@ -38,6 +38,7 @@ import {
   deliveryDateFormat,
   matchStrings,
   priceFormat,
+  stringFormat,
 } from '@framework/utils/parse-util'
 import { Switch } from '@headlessui/react'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -140,7 +141,7 @@ const CustomResultView = (
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
           return false
         }

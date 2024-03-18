@@ -17,7 +17,7 @@ import {
   NEXT_GET_COUNTRIES,
   Messages,
 } from '@components/utils/constants'
-import { shippingFormConfig, shippingSchema } from './config'
+import { shippingFormConfig, useShippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
@@ -96,6 +96,7 @@ export default function CheckoutForm({
   splitDeliveryItems,
   onShippingPlansUpdated,
 }: any) {
+  const shippingSchema = useShippingSchema();
   const translate = useTranslation()
   const {
     setCartItems,
@@ -418,7 +419,7 @@ export default function CheckoutForm({
             toggleShippingBool(true)
           }
           else{ 
-            setAlert({ type: AlertType.ERROR, msg: Messages.Errors['DUPLICATE_ADDRESS'] }) 
+            setAlert({ type: AlertType.ERROR, msg: translate('common.message.addressAlreadyExistsErrorMsg') }) 
           }
           closeNewAddressModal()
             

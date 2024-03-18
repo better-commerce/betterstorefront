@@ -81,7 +81,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -235,10 +235,10 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                   if (paymentResult?.error?.data?.error_codes?.length && paymentResult?.error?.data?.error_codes.includes('payment_method_not_supported')) {
                     dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['PAYMENT_METHOD_NOT_SUPPORTED'], })
                   } else {
-                    dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
                   }
                 } else {
-                  dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+                  dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
                 }
               }
             }).catch((error: any) => {
@@ -246,11 +246,11 @@ export class CheckoutPaymentButton extends BasePaymentButton {
             })
           } else {
             uiContext?.hideOverlayLoaderState()
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+            dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
           }
         }).catch((error: any) => {
           uiContext?.hideOverlayLoaderState()
-          dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+          dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
         })
     }
   }

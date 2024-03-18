@@ -18,6 +18,7 @@ import {
   GENERAL_ADDRESS_FINDER,
 } from '@components/utils/textVariables'
 import { Messages } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export const PANELS = [
   {
@@ -117,38 +118,42 @@ export const shippingFormConfig = [
   },
 ]
 
-export const shippingSchema = Yup.object({
+export const useShippingSchema = () => {
+  const translate = useTranslation();
+  const shippingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   phoneNo: Yup.string()
     .max(10)
-    .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
+    .required(translate('common.message.mobileNumRequiredMsg'))
     .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+      message: translate('common.message.mobileNumInputMsg'),
     }),
   country: Yup.string().required(),
   postCode: Yup.string()
-    .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
+    .required(translate('common.message.postCodeRequiredMsg'))
     .min(3),
   // .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-  //   message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
+  //   message: translate('common.message.address.postCodeNumMsg'),
   // }),
   address1: Yup.string()
     .min(3)
-    .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
+    .required(translate('common.message.address.address1RequiredMsg'))
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
+      message: translate('common.message.address.address1InputMsg'),
     }),
   title: Yup.string().nullable(),
   city: Yup.string()
-    .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
+    .required(translate('common.message.address.cityRequiredMsg'))
     .min(3),
   isDefault: Yup.boolean(),
   isDefaultDelivery: Yup.boolean(),
   isDefaultBilling: Yup.boolean(),
   isDefaultSubscription: Yup.boolean(),
   label: Yup.string().nullable(),
-})
+  })
+  return shippingSchema;
+}
 
 export const billingFormConfig = [
   {
@@ -233,35 +238,39 @@ export const billingFormConfig = [
   },
 ]
 
-export const billingSchema = Yup.object({
+export const useBillingSchema = ()  => {
+  const translate = useTranslation();
+  const billingSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   phoneNo: Yup.string()
     .max(10)
-    .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
+    .required(translate('common.message.mobileNumRequiredMsg'))
     .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
+      message: translate('common.message.mobileNumInputMsg'),
     }),
   country: Yup.string().required(),
   postCode: Yup.string()
-    .required(Messages.Validations.AddNewAddress['PIN_CODE_REQUIRED'])
+    .required(translate('common.message.postCodeRequiredMsg'))
     .min(3)
     .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-      message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
+      message: translate('common.message.address.postCodeNumMsg'),
     }),
   address1: Yup.string()
     .min(3)
-    .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
+    .required(translate('common.message.address.address1RequiredMsg'))
     .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
+      message: translate('common.message.address.address1InputMsg'),
     }),
   title: Yup.string().nullable(),
   city: Yup.string()
-    .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
+    .required(translate('common.message.address.cityRequiredMsg'))
     .min(3),
   isDefault: Yup.boolean(),
   isDefaultDelivery: Yup.boolean(),
   isDefaultBilling: Yup.boolean(),
   isDefaultSubscription: Yup.boolean(),
   label: Yup.string().nullable(),
-})
+  })
+  return billingSchema;
+}

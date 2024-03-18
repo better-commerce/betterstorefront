@@ -72,7 +72,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
     return false
@@ -304,7 +304,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
       }
     }).catch((error: any) => {
       uiContext?.hideOverlayLoaderState()
-      dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+      dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
 
       if (errorCallback) {
         errorCallback()
@@ -393,7 +393,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
                 callback(false)
               }
               uiContext?.hideOverlayLoaderState()
-              dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+              dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
             }
           })
         } else {
@@ -401,14 +401,14 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
             callback(false)
           }
           uiContext?.hideOverlayLoaderState()
-          dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+          dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
         }
       }).catch((error: any) => {
         if (callback) {
           callback(false)
         }
         uiContext?.hideOverlayLoaderState()
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       })
     } else {
       const logData = {

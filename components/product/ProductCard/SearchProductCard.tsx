@@ -14,7 +14,7 @@ import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
 import ProductTag from '../ProductTag'
@@ -257,7 +257,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
         }
         return isValid

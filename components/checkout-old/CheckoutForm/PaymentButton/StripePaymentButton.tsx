@@ -100,7 +100,7 @@ export class StripePaymentButton extends BasePaymentButton {
       } else {
         dispatchState({
           type: 'SET_ERROR',
-          payload: Messages.Errors['GENERIC_ERROR'],
+          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
     }
@@ -156,7 +156,7 @@ export class StripePaymentButton extends BasePaymentButton {
         uiContext?.hideOverlayLoaderState()
         dispatchState({
           type: 'SET_ERROR',
-          payload: Messages.Errors['GENERIC_ERROR'],
+          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
     }

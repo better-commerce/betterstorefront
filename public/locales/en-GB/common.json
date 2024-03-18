@@ -32,6 +32,12 @@
       "townCityText": "Town / city",
       "selectCountryText": "Select a Country"
     },
+    "b2b": {
+      "requestTradingAccountText": "Request trading account",
+      "companyNameText": "Company Name",
+      "registeredNumberText": "Registered Number",
+      "phoneNumberText": "Phone Number"
+    },
     "basket": {
       "addToBasketText": "Add to basket",
       "addTocartText": "Add to cart",
@@ -63,6 +69,7 @@
       "checkoutBtnText": "Checkout",
       "multipleCodesApplyText": "You may apply mutliple codes",
       "getItByText": "Get it by",
+      "typeAddOnText": "ADDON",
       "addOnText": "Add on's for this product",
       "discountText": "discount",
       "itemsYourCartText": "Items in your cart",
@@ -256,11 +263,32 @@
       "filterText": "Filter",
       "highestRatingText": "Highest rating",
       "lowestRatingText": "Lowest rating",
-      "newestRatingsText": "Newest rating"
+      "newestRatingsText": "Newest rating",
+      "newInText": "New in"
     },
     "footer": {
       "footerText": "Footer",
-      "companyRightsText": "BetterCommerce, Inc. All rights reserved."
+      "companyRightsText": "BetterCommerce, Inc. All rights reserved.",
+      "navigation": {
+        "bagsText": "Bags",
+        "teesText": "Tees",
+        "objectsText": "Objects",
+        "homeGoodsText": "Home Goods",
+        "accessoriesText": "Accessories",
+        "whoWeAreText": "Who we are",
+        "sustainabilityText": "Sustainability",
+        "pressText": "Press",
+        "careersText": "Careers",
+        "termsAndConditionsText": "Terms & Conditions",
+        "privacyText": "Privacy",
+        "contactText": "Contact",
+        "returnsText": "Returns",
+        "shippingText": "Shipping",
+        "warrantyText": "Warranty",
+        "securePaymentText": "Secure Payments",
+        "faqText": "FAQ",
+        "findAStoreText": "Find a store"
+      }
     },
     "help": {
       "getHelpOnItemText": "Get Help with this item",
@@ -336,7 +364,8 @@
       "selectQuantityText": "Select Quantity",
       "myReturnText": "My Return",
       "noLookbookAvaiableText": "No Lookbook Available",
-      "shopTheLookText": "Shop the look"
+      "shopTheLookText": "Shop the look",
+      "confirmPasswordText": "Confirm Password"
     },
     "navBar": {
       "currencyText": "Currency",
@@ -886,7 +915,18 @@
       "authorizingPaymentText": "Authorizing payment...",
       "initiatingPaymentText": "initiating payment...",
       "capturingPaymentText": "capturing payment...",
-      "PageEndText": "You have seen it all"
+      "pageEndText": "You have seen it all",
+      "workText": "Work",
+      "strongPasswordText": "Strong password",
+      "titleText": "Title",
+      "missText": "Miss",
+      "mrText": "Mr",
+      "mrsText": "Mrs",
+      "isDefaultDeliveryAddressText": "Is Default Delivery Address",
+      "isDefaultBillingAddressText": "Is Default Billing Address",
+      "genderText": "Gender",
+      "femaleText": "Female",
+      "maleText": "Male"
     },
     "message": {
       "invalidAccountMsg": "No account has been found with this email/password",
@@ -917,7 +957,101 @@
       "loaderLoadingText": "Loading...",
       "itemCancelledSuccessfullyText": "Item Cancelled Successfully",
       "proceedToCancelText": "Proceed to Cancel",
-      "logoutSuccessfulText": "Logout Successful"
+      "logoutSuccessfulText": "Logout Successful",
+      "mobileNumRequiredMsg": "Mobile number is a required field",
+      "mobileNumInputMsg": "Mobile number should only contain numbers",
+      "mobileNumMaxLengthMsg": "Mobile number should be at most 12 characters",
+      "mobileNumMinLengthMsg": "Mobile number should be atleast 7 characters",
+      "phoneNumInputMsg": "Phone Number is not valid",
+      "postCodeRequiredMsg": "Postcode is a required field",
+      "firstNameRequiredMsg": "First Name is a required field",
+      "lastNameRequiredMsg": "Last Name is a required field",
+      "nameMinLengthMsg": "Name must be at least 3 characters",
+      "nameInputMsg": "Name should only contain alpha-numerics",
+      "postCodeMaxLenMsg": "Postcode must be at most 10 digits",
+      "emailAddressRequiredMsg": "Email Address is a required field",
+      "emailAddressInvalidMsg": "Email Address is not valid",
+      "formSubmitSuccessMsg": "Form Submit successfully",
+      "titleRequiredMsg": "Title is a required field",
+      "messageRequiredMsg": "Message is a required field",
+      "invalidRequestErrorMsg": "The information provided is incomplete. Please try again.",
+      "requestCouldNotProcessErrorMsg": "Your request could not be processed. Please try again after sometime.",
+      "noAddressFoundErrorMsg": "No address found for the given postcode",
+      "addressAlreadyExistsErrorMsg": "Address already exists",
+      "userAlreadyExistsErrorMsg": "User already exists",
+      "tokenInvalidErrorMsg": "Woops! Token is invalid",
+      "tokenExpiredErrorMsg": "Woops! Token is expired or invalid",
+      "companyNotFoundErrorMsg": "Company not found.",
+      "address": {
+        "postCodeNotServicableMsg": "Postcode non-serviceable",
+        "postCodeNumMsg": "Postcode should contain only digits",
+        "cityRequiredMsg": "City is a required field",
+        "cityMinLengthMsg": "City field should contain atleast 3 characters",
+        "stateRequiredMsg": "State is a required field",
+        "countryRequiredMsg": "Country is a required field",
+        "address1RequiredMsg": "Address 1 is a required field",
+        "address1InputMsg": "Address 1 should only contain alpha-numerics",
+        "address2InputMsg": "Address 2 should only contain alpha-numerics",
+        "address3InputMsg": "Address 3 should only contain alpha-numerics",
+        "addressRequiredMsg": "Address is a required field",
+        "addressMinLengthMsg": "Address Field should be more than 3 characters",
+        "addressInputMsg": "Address should only contain alpha-numerics"
+      },
+      "basket": {
+        "emptyCartErrorMsg": "Your cart is empty",
+        "maxBasketItemsCountErrorMsg": "Max allowed quantity is {maxBasketItemsCount}.",
+        "basketValidationErrorMsg": "Basket validation failed"
+      },
+      "checkout": {
+        "cardNumRequiredMsg": "Card number is a required field",
+        "cardNumMinLengthMsg": "Card Number must be at least 14 characters",
+        "cardNumInputMsg": "Card number should contain only digits",
+        "expiryRequiredMsg": "Expiry is a required field",
+        "expiryInputMsg": "Expiry should be in MM/YY format",
+        "cvvRequiredMsg": "CVV is a required field",
+        "cvvInputMsg": "CVV should only contain alpha-numerics",
+        "nameRequiredMsg": "Name is a required field",
+        "nameMinlengthMsg": "Name must be at least 3 characters",
+        "nameInputMsg": "Name should only contain alpha-numerics",
+        "vpaRequiredMsg": "VPA / UPI ID is a required field",
+        "chequeNumMsg": "Cheque number is a required",
+        "chequeNumInputMsg": "Cheque Number should only contain digits",
+        "paymentLinkExpireMsg": "Payment link is expired",
+        "billingAddressNotFoundMsg": "Billing address not found",
+        "shippingAddressNotFoundMsg": "Shipping address not found",
+        "b2bGuestCheckoutNotAllowedMsg": "Guest checkout not allowed with the provided e-mail address",
+        "cardTypeNotSupportedErrorMsg": "Card type is not supported. Please try again.",
+        "customerNotFoundErrorMsg": "Customer not found.",
+        "otpNotValidErrorMsg": "OTP is not valid. Please try again.",
+        "codErrorMsg": "Error applying COD additional charges. Please try again after sometime.",
+        "upiNotSupportedErrorMsg": "UPI payment is unsupported.",
+        "paymentAlreadyCompletedErrorMsg": "Payment for your basket is already completed.",
+        "notEnoughCreditErrorMsg": "Not enough credit available."
+      },
+      "password": {
+        "passwordValidationMsg": "Password should have a minimum of 8 characters and at least 1 uppercase letter.",
+        "passwordRequiredMsg": "Password is required.",
+        "confirmRequiredMsg": "Confirm password is required.",
+        "matchingPasswordMsg": "Passwords must match.",
+        "invalidEmailErrorMsg": "We couldn't find an account with this email",
+        "validEmailMsg": "Success! Check your email for the link to change your password"
+      },
+      "profile": {
+        "fullNameRequiredMsg": "Full name is a required field",
+        "fullNameMinLengthMsg": "Full name must be at least 3 characters",
+        "fullNameInputMsg": "Full name should only contain alpha-numerics",
+        "changedMobileNumInputMsg": "New mobile number entered is currently in use",
+        "emailRequiredMsg": "Email is a required field",
+        "emailInputMsg": "Email is not valid",
+        "phoneNumRequiredMsg": "Phone Number is a required field",
+        "phoneNumMaxLengthMsg": "Phone Number must be at most 12 digits",
+        "phoneNumMinLengthMsg": "Phone Number must be at least 7 digits",
+        "companyNameRequiredMsg": "Company name is required"
+      },
+      "noEmailMsg": "Please enter correct email",
+      "returnSuccessMsg": "Return success",
+      "exchangeSuccessMsg": "Exchange successful",
+      "resetPasswordSuccessMsg": "Success! You will be redirected to login page"
     },
     "numberText": {
       "one": "1"
