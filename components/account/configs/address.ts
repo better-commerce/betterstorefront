@@ -1,127 +1,115 @@
 import * as Yup from 'yup'
 import countryList from '@components/utils/countryList'
-import {
-  GENERAL_TITLE,
-  GENERAL_MISS,
-  GENERAL_MR,
-  GENERAL_MRS,
-  GENERAL_FIRST_NAME,
-  GENERAL_LAST_NAME,
-  GENERAL_ADDRESS_LINE1,
-  GENERAL_ADDRESS_LINE2,
-  GENERAL_CITY,
-  GENERAL_POSTCODE,
-  GENERAL_COUNTRY,
-  GENERAL_PHONE,
-  GENERAL_IS_DEFAULT_DELIVERY_ADDRESS,
-  GENERAL_IS_DEFAULT_BILLING_ADDRESS,
-} from '@components/utils/textVariables'
 import { Messages } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
-export const formConfig = [
-  {
-    as: 'select',
-    name: 'title',
-    options: [
-      {
-        title: GENERAL_TITLE,
-        value: GENERAL_TITLE,
-      },
-      {
-        title: GENERAL_MISS,
-        value: GENERAL_MISS,
-      },
-      {
-        title: GENERAL_MR,
-        value: GENERAL_MR,
-      },
-      {
-        title: GENERAL_MRS,
-        value: GENERAL_MRS,
-      },
-    ],
-    label: GENERAL_TITLE,
-  },
-  {
-    type: 'text',
-    name: 'firstName',
-    placeholder: GENERAL_FIRST_NAME,
-    label: GENERAL_FIRST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'lastName',
-    placeholder: GENERAL_LAST_NAME,
-    label: GENERAL_LAST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'address1',
-    placeholder: GENERAL_ADDRESS_LINE1,
-    label: GENERAL_ADDRESS_LINE1,
-  },
-  {
-    type: 'text',
-    name: 'address2',
-    placeholder: GENERAL_ADDRESS_LINE2,
-    label: GENERAL_ADDRESS_LINE2,
-  },
-  {
-    type: 'text',
-    name: 'city',
-    placeholder: GENERAL_CITY,
-    label: GENERAL_CITY,
-  },
-  {
-    type: 'text',
-    name: 'postCode',
-    placeholder: GENERAL_POSTCODE,
-    label: GENERAL_POSTCODE,
-  },
-  {
-    as: 'select',
-    name: 'country',
-    options: countryList,
-    label: GENERAL_COUNTRY,
-  },
-  {
-    type: 'phone',
-    name: 'phoneNo',
-    placeholder: GENERAL_PHONE,
-    label: GENERAL_PHONE,
-  },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'isDefaultDelivery',
-    label: GENERAL_IS_DEFAULT_DELIVERY_ADDRESS,
-    className: 'flex-inline',
-  },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'isDefaultBilling',
-    label: GENERAL_IS_DEFAULT_BILLING_ADDRESS,
-    className: 'flex-inline',
-  },
-  {
-    as: 'select',
-    name: 'label',
-    options: [
-      {
-        title: 'Home',
-        value: 'Home',
-      },
-      {
-        title: 'Work',
-        value: 'Work',
-      },
-      {
-        title: 'Other',
-        value: 'Other',
-      },
-    ],
-    label: 'Save As',
-  },
-]
+export const useAddressFormConfig = () => {
+  const translate = useTranslation();
+  return [
+    {
+      as: 'select',
+      name: 'title',
+      options: [
+        {
+          title: translate('common.label.titleText'),
+          value: translate('common.label.titleText'),
+        },
+        {
+          title: translate('common.label.missText'),
+          value: translate('common.label.missText'),
+        },
+        {
+          title: translate('common.label.mrText'),
+          value: translate('common.label.mrText'),
+        },
+        {
+          title: translate('common.label.mrsText'),
+          value: translate('common.label.mrsText'),
+        },
+      ],
+      label: translate('common.label.titleText'),
+    },
+    {
+      type: 'text',
+      name: 'firstName',
+      placeholder: translate('label.addressBook.firstNameText'),
+      label: translate('label.addressBook.firstNameText'),
+    },
+    {
+      type: 'text',
+      name: 'lastName',
+      placeholder: translate('label.addressBook.lastNameText'),
+      label: translate('label.addressBook.lastNameText'),
+    },
+    {
+      type: 'text',
+      name: 'address1',
+      placeholder: translate('common.label.addressLine1Text'),
+      label: translate('common.label.addressLine1Text'),
+    },
+    {
+      type: 'text',
+      name: 'address2',
+      placeholder: translate('common.label.addressLine2Text'),
+      label: translate('common.label.addressLine2Text'),
+    },
+    {
+      type: 'text',
+      name: 'city',
+      placeholder: translate('label.addressBook.townCityText'),
+      label: translate('label.addressBook.townCityText'),
+    },
+    {
+      type: 'text',
+      name: 'postCode',
+      placeholder: translate('common.label.postcodeText'),
+      label: translate('common.label.postcodeText'),
+    },
+    {
+      as: 'select',
+      name: 'country',
+      options: countryList,
+      label: translate('label.checkout.countryText'),
+    },
+    {
+      type: 'phone',
+      name: 'phoneNo',
+      placeholder: translate('label.b2b.phoneNumberText'),
+      label: translate('label.b2b.phoneNumberText'),
+    },
+    {
+      customComponent: 'CustomCheckbox',
+      name: 'isDefaultDelivery',
+      label: translate('common.label.isDefaultDeliveryAddressText'),
+      className: 'flex-inline',
+    },
+    {
+      customComponent: 'CustomCheckbox',
+      name: 'isDefaultBilling',
+      label: translate('common.label.isDefaultBillingAddressText'),
+      className: 'flex-inline',
+    },
+    {
+      as: 'select',
+      name: 'label',
+      options: [
+        {
+          title: translate('common.label.homeText'),
+          value: translate('common.label.homeText'),
+        },
+        {
+          title: translate('common.label.workText'),
+          value: translate('common.label.workText'),
+        },
+        {
+          title: translate('common.label.otherText'),
+          value: translate('common.label.otherText'),
+        },
+      ],
+      label: translate('common.label.saveAsText'),
+    },
+  ]
+}
 
 export const schema = Yup.object({
   firstName: Yup.string().required(),
