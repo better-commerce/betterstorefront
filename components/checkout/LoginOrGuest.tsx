@@ -1,36 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useFormik } from 'formik'
-import { RadioGroup } from '@headlessui/react'
 import * as yup from 'yup'
-import {
-  EmptyString,
-  Messages,
-} from '@components/utils/constants'
+import { EmptyString, Messages, } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
-import { GUEST_LOGIN_CHECKOUT2_SCHEMA } from './config'
+import { guestLoginCheckout2Schema } from './config'
 import ShippingAddressForm from './ShippingAddressForm'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
 import { useTranslation } from '@commerce/utils/use-translation'
-
-const loginCheckoutFormSchema = yup.object({
-  email: yup
-    .string()
-    .trim()
-    .required(
-      Messages.Validations.CheckoutSection.ContactDetails.EMAIL_ADDRESS_REQUIRED
-    )
-    .email(
-      Messages.Validations.CheckoutSection.ContactDetails.EMAIL_ADDRESS_INPUT
-    ),
-  password: yup
-    .string()
-    .min(8, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
-    .max(24, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
-    .required(Messages.Validations.ResetPassword['PASSWORD_REQUIRED_MESSAGE'])
-    .matches(Messages.Validations.RegularExpressions.PASSWORD_VALIDATION, {
-      message: Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE,
-    }),
-})
 
 const LoginOrGuest: React.FC<any> = ({
   basket,
@@ -43,6 +19,7 @@ const LoginOrGuest: React.FC<any> = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod
 }) => {
+  const GUEST_LOGIN_CHECKOUT2_SCHEMA = guestLoginCheckout2Schema();
   const translate = useTranslation()
   const [isLogin, setIsLogin] = useState<boolean>(false)
   const { user } = useUI()
@@ -60,6 +37,21 @@ const LoginOrGuest: React.FC<any> = ({
       onGuestCheckout(payload, () => setSubmitting(false));
       handleCollect()
     },
+  })
+  const loginCheckoutFormSchema = yup.object({
+    email: yup
+      .string()
+      .trim()
+      .required(translate('common.message.profile.emailRequiredMsg'))
+      .email(translate('common.message.profile.emailInputMsg')),
+    password: yup
+      .string()
+      .min(8, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
+      .max(24, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
+      .required(Messages.Validations.ResetPassword['PASSWORD_REQUIRED_MESSAGE'])
+      .matches(Messages.Validations.RegularExpressions.PASSWORD_VALIDATION, {
+        message: Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE,
+      }),
   })
   const loginCheckoutFormik = useFormik({
     initialValues: {

@@ -256,7 +256,8 @@
       "filterText": "Filter",
       "highestRatingText": "Highest rating",
       "lowestRatingText": "Lowest rating",
-      "newestRatingsText": "Newest rating"
+      "newestRatingsText": "Newest rating",
+      "newInText": "New in"
     },
     "footer": {
       "footerText": "Footer",
@@ -937,7 +938,76 @@
       "loaderLoadingText": "Loading...",
       "itemCancelledSuccessfullyText": "Item Cancelled Successfully",
       "proceedToCancelText": "Proceed to Cancel",
-      "logoutSuccessfulText": "Logout Successful"
+      "logoutSuccessfulText": "Logout Successful",
+      "mobileNumRequiredMsg": "Mobile number is a required field",
+      "mobileNumInputMsg": "Mobile number should only contain numbers",
+      "mobileNumMaxLengthMsg": "Mobile number should be at most 12 characters",
+      "mobileNumMinLengthMsg": "Mobile number should be atleast 7 characters",
+      "phoneNumInputMsg": "Phone Number is not valid",
+      "postCodeRequiredMsg": "Postcode is a required field",
+      "firstNameRequiredMsg": "First Name is a required field",
+      "lastNameRequiredMsg": "Last Name is a required field",
+      "nameMinLengthMsg": "Name must be at least 3 characters",
+      "nameInputMsg": "Name should only contain alpha-numerics",
+      "postCodeMaxLenMsg": "Postcode must be at most 10 digits",
+      "profile": {
+        "fullNameRequiredMsg": "Full name is a required field",
+        "fullNameMinLengthMsg": "Full name must be at least 3 characters",
+        "fullNameInputMsg": "Full name should only contain alpha-numerics",
+        "changedMobileNumInputMsg": "New mobile number entered is currently in use",
+        "emailRequiredMsg": "Email is a required field",
+        "emailInputMsg": "Email is not valid",
+        "phoneNumRequiredMsg": "Phone Number is a required field",
+        "phoneNumMaxLengthMsg": "Phone Number must be at most 12 digits",
+        "phoneNumMinLengthMsg": "Phone Number must be at least 7 digits",
+        "companyNameRequiredMsg": "Company name is required"
+      },
+      "address": {
+        "postCodeNotServicableMsg": "Postcode non-serviceable",
+        "postCodeNumMsg": "Postcode should contain only digits",
+        "cityRequiredMsg": "City is a required field",
+        "cityMinLengthMsg": "City field should contain atleast 3 characters",
+        "stateRequiredMsg": "State is a required field",
+        "countryRequiredMsg": "Country is a required field",
+        "address1RequiredMsg": "Address 1 is a required field",
+        "address1InputMsg": "Address 1 should only contain alpha-numerics",
+        "address2InputMsg": "Address 2 should only contain alpha-numerics",
+        "address3InputMsg": "Address 3 should only contain alpha-numerics",
+        "addressRequiredMsg": "Address is a required field",
+        "addressMinLengthMsg": "Address Field should be more than 3 characters",
+        "addressInputMsg": "Address should only contain alpha-numerics"
+      },
+      "checkout": {
+        "cardNumRequiredMsg": "Card number is a required field",
+        "cardNumMinLengthMsg": "Card Number must be at least 14 characters",
+        "cardNumInputMsg": "Card number should contain only digits",
+        "expiryRequiredMsg": "Expiry is a required field",
+        "expiryInputMsg": "Expiry should be in MM/YY format",
+        "cvvRequiredMsg": "CVV is a required field",
+        "cvvInputMsg": "CVV should only contain alpha-numerics",
+        "nameRequiredMsg": "Name is a required field",
+        "nameMinlengthMsg": "Name must be at least 3 characters",
+        "nameInputMsg": "Name should only contain alpha-numerics",
+        "vpaRequiredMsg": "VPA / UPI ID is a required field",
+        "chequeNumMsg": "Cheque number is a required",
+        "chequeNumInputMsg": "Cheque Number should only contain digits",
+        "paymentLinkExpireMsg": "Payment link is expired",
+        "billingAddressNotFoundMsg": "Billing address not found",
+        "shippingAddressNotFoundMsg": "Shipping address not found",
+        "b2bGuestCheckoutNotAllowedMsg": "Guest checkout not allowed with the provided e-mail address"
+      },
+      "password": {
+        "passwordValidationMsg": "Password should have a minimum of 8 characters and at least 1 uppercase letter.",
+        "passwordRequiredMsg": "Password is required.",
+        "confirmRequiredMsg": "Confirm password is required.",
+        "matchingPasswordMsg": "Passwords must match.",
+        "invalidEmailErrorMsg": "We couldn't find an account with this email",
+        "validEmailMsg": "Success! Check your email for the link to change your password"
+      },
+      "noEmailMsg": "Please enter correct email",
+      "returnSuccessMsg": "Return success",
+      "exchangeSuccessMsg": "Exchange successful",
+      "resetPasswordSuccessMsg": "Success! You will be redirected to login page"
     },
     "numberText": {
       "one": "1"
