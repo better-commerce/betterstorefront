@@ -938,7 +938,31 @@
       "loaderLoadingText": "Loading...",
       "itemCancelledSuccessfullyText": "Item Cancelled Successfully",
       "proceedToCancelText": "Proceed to Cancel",
-      "logoutSuccessfulText": "Logout Successful"
+      "logoutSuccessfulText": "Logout Successful",
+
+      "invalidRequestErrorMsg": "The information provided is incomplete. Please try again.",
+      "requestCouldNotProcessErrorMsg": "Your request could not be processed. Please try again after sometime.",
+      "noAddressFoundErrorMsg": "No address found for the given postcode",
+      "addressAlreadyExistsErrorMsg" : "Address already exists",
+      "userAlreadyExistsErrorMsg": "User already exists",
+      "tokenInvalidErrorMsg": "Woops! Token is invalid",
+      "tokenExpiredErrorMsg": "Woops! Token is expired or invalid",
+      "companyNotFoundErrorMsg": "Company not found.",
+
+      "checkout" :{
+        "cardTypeNotSupportedErrorMsg": "Card type is not supported. Please try again.",
+        "customerNotFoundErrorMsg": "Customer not found.",
+        "otpNotValidErrorMsg": "OTP is not valid. Please try again.",
+        "codErrorMsg": "Error applying COD additional charges. Please try again after sometime.",
+        "upiNotSupportedErrorMsg": "UPI payment is unsupported.",
+        "paymentAlreadyCompletedErrorMsg": "Payment for your basket is already completed.",
+        "notEnoughCreditErrorMsg": "Not enough credit available."
+      },
+      "basket":{
+        "emptyCartErrorMsg": "Your cart is empty",
+        "maxBasketItemsCountErrorMsg": "Max allowed quantity is {maxBasketItemsCount}.",
+        "basketValidationErrorMsg": "Basket validation failed"
+      }
     },
     "numberText": {
       "one": "1"

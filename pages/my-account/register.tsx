@@ -176,7 +176,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
 
     // Trigger error message for failed registration.
     if (!userCreated) {
-      setError(Messages.Errors['GENERIC_ERROR'])
+      setError(translate('common.message.requestCouldNotProcessErrorMsg'))
     }
 
     // If registration is SUCCESS

@@ -355,11 +355,11 @@ export default function AddressBook({ deviceInfo }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
               closeNewAddressModal()
             })
         } else {
-          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['DUPLICATE_ADDRESS'] })
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.addressAlreadyExistsErrorMsg') })
           closeNewAddressModal()
         }
       })
@@ -376,12 +376,12 @@ export default function AddressBook({ deviceInfo }: any) {
           fetchAddress()
 
           if (callback) { callback()}
-          else{ setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})}
+          else{ setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})}
           closeNewAddressModal()
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
           closeNewAddressModal()
         })
     }

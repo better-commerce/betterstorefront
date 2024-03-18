@@ -272,7 +272,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), {
               maxBasketItemsCount,
             }),
           })
@@ -387,7 +387,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               setAlert({
                 type: 'error',
                 msg: stringFormat(
-                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                  stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
                   { maxBasketItemsCount }
                 ),
               })

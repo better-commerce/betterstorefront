@@ -251,7 +251,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
         }
         return isValid

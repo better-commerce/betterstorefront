@@ -119,7 +119,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         }
         const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount, quantity > 1 && quantity)
         if (!isValid) {
-          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], })
+          setAlert({ type: 'error', msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), })
         }
         return isValid
       },
