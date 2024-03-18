@@ -573,7 +573,7 @@ a {
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
+  background: transparent;
 
   /* Center slide text vertically */
   display: -webkit-box;
@@ -3635,6 +3635,7 @@ select {
 }
 .inset-0 {
   inset: 0px;
+  z-index: 9999 !important;
 }
 .inset-0\.5 {
   inset: 0.125rem;
