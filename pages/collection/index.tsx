@@ -45,7 +45,7 @@ export default function CollectionList(props: any) {
                   <span key={collection.id} className="group">
                     <div className="relative w-full pb-0 overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 sm:aspect-w-2 sm:aspect-h-3">
                       <div className="relative image-container">
-                        <img src={ generateUri(collection.mainImage, 'h=200&fm=webp') || IMG_PLACEHOLDER } alt={collection.name || 'image'} className="object-cover object-center w-full h-full group-hover:opacity-75 image" />
+                        <img src={IMG_PLACEHOLDER} alt={collection.name || 'image'} className="object-cover object-center w-full h-full group-hover:opacity-75 image" />
                       </div>
                     </div>
                     <div className="flex-1">
