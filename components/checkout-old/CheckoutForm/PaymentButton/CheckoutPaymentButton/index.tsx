@@ -233,12 +233,12 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                 uiContext?.hideOverlayLoaderState()
                 if (paymentResult?.hasError) {
                   if (paymentResult?.error?.data?.error_codes?.length && paymentResult?.error?.data?.error_codes.includes('payment_method_not_supported')) {
-                    dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['PAYMENT_METHOD_NOT_SUPPORTED'], })
+                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentMethodNotSupportedErrorMsg')})
                   } else {
-                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
+                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg')})
                   }
                 } else {
-                  dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
+                  dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg')})
                 }
               }
             }).catch((error: any) => {
