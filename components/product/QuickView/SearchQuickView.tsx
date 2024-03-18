@@ -18,7 +18,7 @@ import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import ImageGallery from 'react-image-gallery'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -129,7 +129,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
           return false
         }
@@ -241,7 +241,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
               })
               return false
             }

@@ -1,6 +1,5 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
-import { GENERAL_RETURNS } from '@components/utils/textVariables'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 

@@ -13,7 +13,7 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
-import { deliveryDateFormat, matchStrings, tryParseJson} from '@framework/utils/parse-util'
+import { deliveryDateFormat, matchStrings, stringFormat, tryParseJson} from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
@@ -179,7 +179,7 @@ export default function CartProduct({
         setValidQty(false)
         setAlert({
           type: 'error',
-          msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+          msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
         })
       }
     }

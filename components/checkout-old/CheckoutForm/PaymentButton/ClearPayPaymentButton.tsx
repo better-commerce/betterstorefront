@@ -73,7 +73,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -123,7 +123,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
                   })
                   .catch((error: any) => {
                     uiContext?.hideOverlayLoaderState()
-                    dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
                   })
               } else {
                 // The consumer cancelled the payment or close the popup window.
@@ -135,7 +135,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
             AfterPay.close()
             dispatchState({
               type: 'SET_ERROR',
-              payload: Messages.Errors['GENERIC_ERROR'],
+              payload: translate('common.message.requestCouldNotProcessErrorMsg'),
             })
           }
           uiContext?.hideOverlayLoaderState()
