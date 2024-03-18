@@ -14,7 +14,6 @@ import {
 } from "@heroicons/react/24/outline";
 import IconDiscount from "@components/new-components/IconDiscount";
 import Prices from "@components/new-components/Prices";
-import toast from "react-hot-toast";
 import detail1JPG from "images/products/detail1.jpg";
 import detail2JPG from "images/products/detail2.jpg";
 import detail3JPG from "images/products/detail3.jpg";
@@ -23,7 +22,7 @@ import AccordionInfo from "@components/new-components/AccordionInfo";
 import Image from "next/image";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import AttributesHandler from "@components/product/ProductView/AttributesHandler";
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
@@ -35,6 +34,7 @@ import { matchStrings, stringFormat } from "@framework/utils/parse-util";
 import cartHandler from "@components/services/cart";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import wishlistHandler from "@components/services/wishlist";
+import { useTranslation } from '@commerce/utils/use-translation'
 import dynamic from "next/dynamic";
 
 export interface ProductQuickViewProps {
@@ -45,6 +45,7 @@ export interface ProductQuickViewProps {
 }
 
 const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView }) => {
+  const translate = useTranslation()
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
   const { openNotifyUser, basketId, cartItems, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
@@ -129,7 +130,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBasketText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, selectedAttrData?.recordId, true) || matchStrings(o.productId, selectedAttrData?.productId, true)) {
@@ -182,7 +183,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
               cart_quantity: 1,
               total_value: product?.price?.raw?.withTax,
               current_page: 'PLP ',
-              section_title: 'Quick View',
+              section_title: translate('label.product.quickViewText'),
             },
           })
 
@@ -212,7 +213,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.ui.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
     } else if (
@@ -224,7 +225,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.basket.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -232,7 +233,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBasketText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
@@ -294,7 +295,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   cart_quantity: 1,
                   total_value: product?.price?.raw?.withTax,
                   current_page: 'PLP ',
-                  section_title: 'Quick View',
+                  section_title: translate('label.product.quickViewText'),
                 },
               })
 
@@ -330,7 +331,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.ui.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -344,7 +345,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     onCloseModalQuickView()
   }
   const isEngravingAvailable = !!product?.relatedProducts?.filter(
-    (item: any) => item?.stockCode === ITEM_TYPE_ADDON
+    (item: any) => item?.stockCode === "ADDON"
   ).length
   const buttonConfig = buttonTitle()
 
@@ -371,7 +372,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       recordGA4Event(window, 'wishlist', {
         ecommerce: {
           header: 'PLP',
-          current_page: 'Quick view ',
+          current_page: translate('label.product.quickViewText'),
         },
       })
       recordGA4Event(window, 'add_to_wishlist', {
@@ -390,8 +391,8 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             },
           ],
           item_var_id: product?.stockCode,
-          header: 'Quick View',
-          current_page: 'Quick View',
+          header: translate('label.product.quickViewText'),
+          current_page: translate('label.product.quickViewText'),
           availability: productAvailability,
         },
       })
@@ -401,7 +402,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       if (typeof window !== 'undefined') {
         recordGA4Event(window, 'wishlist', {
           ecommerce: {
-            header: 'Quick View',
+            header: translate('label.product.quickViewText'),
             current_page: currentPage,
           },
         })
@@ -495,7 +496,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                <span className="sr-only"> {"Add to favorites"} </span>
               </button>
             </div>
           )}
@@ -508,7 +509,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
               <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                 <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                 <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                  <span className="font-bold"> {GENERAL_ENGRAVING} </span>
+                  <span className="font-bold"> {"Engraving"} </span>
                 </button>
                 <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
@@ -516,7 +517,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                  <span className="sr-only"> {"Add to favorites"} </span>
                 </button>
               </div>
             </>
