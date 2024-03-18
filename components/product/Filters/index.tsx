@@ -128,30 +128,18 @@ export default function Filters({
         </Dialog>
       </Transition.Root>
 
-      <section
-        aria-labelledby="filter-heading-filter"
-        className="flex items-center justify-between w-screen px-0 py-0 text-center border-t border-gray-200 mob-w-screen sm:px-4 lg:max-w-7xl lg:px-8"
-      >
+      <section aria-labelledby="filter-heading-filter" className="flex items-center justify-start w-screen gap-2 px-0 py-0 text-center sm:justify-between mob-w-screen sm:px-4 lg:max-w-7xl lg:px-8" >
         <h2 id="filter-heading-filter" className="sr-only">
           {translate('label.filters.filtersText')}
         </h2>
-        <div className="relative col-start-1 row-start-1 py-3">
-          <div className="flex px-2 pr-2 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
-            <button
-              onClick={() => setOpen(true)}
-              title="Product Filter"
-              className="flex items-center px-4 py-2 font-medium text-gray-700 bg-gray-200 group"
-            >
+        <div className="relative col-start-1 row-start-1 py-2 sm:py-3">
+          <div className="flex mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
+            <button onClick={() => setOpen(true)} title="Product Filter" className="flex items-center px-4 py-2 font-medium text-gray-700 bg-white border border-slate-300 rounded-3xl group" >
               <AdjustmentsHorizontalIcon className='w-5 h-5 text-black' />
-              {/* {appliedFilters?.length > 0 && routerFilters.length} */}
             </button>
           </div>
         </div>
-        <ProductSort
-          routerSortOption={routerSortOption}
-          products={products}
-          action={handleSortBy}
-        />
+        <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} />
       </section>
       {appliedFilters?.length > 0 && (
         <>
@@ -160,11 +148,7 @@ export default function Filters({
               {translate('label.filters.appliedFiltersText')} 
             </h4>
             <div className="pl-6">
-              <button
-                onClick={clearAll}
-                type="button"
-                className="text-gray-500"
-              >
+              <button onClick={clearAll} type="button" className="text-gray-500" >
                 {translate('label.filters.clearAllText')}
               </button>
             </div>
@@ -172,15 +156,10 @@ export default function Filters({
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
-                <div
-                  key={`applied-filter-${idx}`}
-                  className="flex w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl"
-                >
+                <div key={`applied-filter-${idx}`} className="flex w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl" >
                   {appliedFilter?.name && (
                     <div className="flex">
-                      <span className="font-medium">
-                        {appliedFilter?.name}:{' '}
-                      </span>
+                      <span className="font-medium"> {appliedFilter?.name}:{' '} </span>
                       <span>{appliedFilter?.Value}</span>
                       <XMarkIcon onClick={ () => removeFilter(appliedFilter)} className='flex w-4 h-4 my-auto ml-1 cursor-pointer md:h-3 md:w-3 2xl:h-4 2xl:w-4'/>
                     </div>
