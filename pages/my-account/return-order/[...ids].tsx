@@ -137,7 +137,7 @@ export default function ReturnOrder({
           Router.push('/my-account/orders')
         }, 200)
       } else {
-        setAlert({ type: 'error', msg: Messages.Errors['GENERIC_ERROR'] })
+        setAlert({ type: 'error', msg: translate('common.message.requestCouldNotProcessErrorMsg') })
         setItemReturnLoading(false)
       }
     }

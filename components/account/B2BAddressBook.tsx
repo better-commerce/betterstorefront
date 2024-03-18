@@ -355,7 +355,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
               closeNewAddressModal()
             })
         } else {
@@ -381,7 +381,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
           closeNewAddressModal()
         })
     }

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
-import {
-  ADDRESS_FINDER_SCHEMA,
-  BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA,
-} from './config'
+import { addressFinderSchema, billingAddressWithPhoneCheckout2Schema } from './config'
 import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
   EmptyString,
@@ -26,6 +23,8 @@ const BillingAddressForm: React.FC<any> = ({
   shouldDisplayEmail = true,
 }) => {
   const translate = useTranslation()
+  const BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA = billingAddressWithPhoneCheckout2Schema();
+  const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const { isGuestUser, user } = useUI()
   const [searchedAddresses, setSearchedAddresses] = useState([])
 

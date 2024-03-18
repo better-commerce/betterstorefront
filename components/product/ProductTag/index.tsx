@@ -67,11 +67,11 @@ export default function ProductTag({ product }: Props) {
     )
   }
   if (tagValues?.newLaunch) {
-    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1"> New in</div></div>
+    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.newInText')}</div></div>
   }
 
   if (tagValues?.onSale) {
-    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">On Sale</div></div>
+    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.onSaleText')}</div></div>
   }
 
   if (tagValues?.bestSeller) {

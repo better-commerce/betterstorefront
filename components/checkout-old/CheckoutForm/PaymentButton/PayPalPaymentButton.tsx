@@ -73,7 +73,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -245,7 +245,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
                 actions: CreateOrderActions
               ) => that.onCreateOrder(data, actions)}
               onError={(error: any) => {
-                dispatchState({ type: 'SET_ERROR', payload: isProduction ? Messages.Errors['GENERIC_ERROR'] : JSON.stringify({ message: error?.message, stack: error?.stack }) })
+                dispatchState({ type: 'SET_ERROR', payload: isProduction ? translate('common.message.requestCouldNotProcessErrorMsg') : JSON.stringify({ message: error?.message, stack: error?.stack }) })
               }}
               onApprove={(data: OnApproveData, actions: OnApproveActions) =>
                 that.onApprove(data, actions)
