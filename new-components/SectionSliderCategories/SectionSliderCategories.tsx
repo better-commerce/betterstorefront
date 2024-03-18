@@ -133,7 +133,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
                   <div className="absolute flex flex-col justify-center inset-y-6 inset-x-10 sm:items-center">
                     <div className="relative flex text-slate-900">
                       <span className="text-lg font-semibold ">
-                        {translate('label.section.moreCollectionText')}
+                        {translate('label.section.moreCollectionsText')}
                       </span>
                       <svg
                         className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110"
