@@ -235,10 +235,8 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: stringFormat(
-                  stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
-                  { maxBasketItemsCount }
-                ),
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
+
               })
             }
             return isValid

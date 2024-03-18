@@ -940,6 +940,15 @@
       "proceedToCancelText": "Proceed to Cancel",
       "logoutSuccessfulText": "Logout Successful",
 
+      "firstNameRequiredMsg":"First Name is a required field",
+      "firstNameInputMsg": "First Name must be at least 3 characters",
+      "firstNameAlphaNumericMsg": "First Name should only contain alpha-numerics",
+      "emailAddressRequiredMsg": "Email Address is a required field",
+      "emailAddressInvalidMsg": "Email Address is not valid",
+      "formSubmitSuccessMsg": "Form Submit successfully",
+      "titleRequiredMsg": "Title is a required field",
+      "messageRequiredMsg": "Message is a required field",
+
       "invalidRequestErrorMsg": "The information provided is incomplete. Please try again.",
       "requestCouldNotProcessErrorMsg": "Your request could not be processed. Please try again after sometime.",
       "noAddressFoundErrorMsg": "No address found for the given postcode",
