@@ -357,7 +357,8 @@
       "selectQuantityText": "Select Quantity",
       "myReturnText": "My Return",
       "noLookbookAvaiableText": "No Lookbook Available",
-      "shopTheLookText": "Shop the look"
+      "shopTheLookText": "Shop the look",
+      "confirmPasswordText": "Confirm Password"
     },
     "navBar": {
       "currencyText": "Currency",
@@ -694,6 +695,12 @@
       "myWishlistText": "My Wishlist",
       "moveToWishlistText": "Move to Wishlist",
       "addedToWishlistText": "Added to Wishlist"
+    },
+    "b2b": {
+      "requestTradingAccountText": "Request trading account",
+      "companyNameText": "Company Name",
+      "registeredNumberText": "Registered Number",
+      "phoneNumberText": "Phone Number"
     }
   },
   "common": {
@@ -907,7 +914,18 @@
       "authorizingPaymentText": "Authorizing payment...",
       "initiatingPaymentText": "initiating payment...",
       "capturingPaymentText": "capturing payment...",
-      "PageEndText": "You have seen it all"
+      "PageEndText": "You have seen it all",
+      "workText": "Work",
+      "strongPasswordText": "Strong password",
+      "titleText": "Title",
+      "missText": "Miss",
+      "mrText": "Mr",
+      "mrsText": "Mrs",
+      "isDefaultDeliveryAddressText": "Is Default Delivery Address",
+      "isDefaultBillingAddressText": "Is Default Billing Address",
+      "genderText": "Gender",
+      "femaleText": "Female",
+      "maleText": "Male"
     },
     "message": {
       "invalidAccountMsg": "No account has been found with this email/password",
