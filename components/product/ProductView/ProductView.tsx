@@ -754,14 +754,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <div className="mt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
             {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
-              <ReviewItem
-                data={{
-                  comment: review?.comment,
-                  date: review?.postedOn,
-                  name: review?.title,
-                  starPoint: review?.rating,
-                }}
-              />
+              <div key={`review-${reviewIdx}`}>
+                <ReviewItem
+                  data={{
+                    comment: review?.comment,
+                    date: review?.postedOn,
+                    name: review?.title,
+                    starPoint: review?.rating,
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>
