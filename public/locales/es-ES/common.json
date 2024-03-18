@@ -260,7 +260,27 @@
     },
     "footer": {
       "footerText": "Pie de página",
-      "companyRightsText": "BetterCommerce, Inc. Todos los derechos reservados."
+      "companyRightsText": "BetterCommerce, Inc. Todos los derechos reservados.",
+      "navigation": {
+        "bagsText": "Bolsos",
+        "teesText": "Camisetas",
+        "objectsText": "Objetos",
+        "homeGoodsText": "Artículos para el hogar",
+        "accessoriesText": "Accesorios",
+        "whoWeAreText": "Quiénes somos",
+        "sustainabilityText": "Sostenibilidad",
+        "pressText": "Prensa",
+        "careersText": "Carreras",
+        "termsAndConditionsText": "Términos y condiciones",
+        "privacyText": "Privacidad",
+        "contactText": "Contacto",
+        "returnsText": "Devoluciones",
+        "shippingText": "Envío",
+        "warrantyText": "Garantía",
+        "securePaymentText": "Pagos seguros",
+        "faqText": "Preguntas frecuentes",
+        "findAStoreText": "Encuentra una tienda"
+        }
     },
     "help": {
       "getHelpOnItemText": "Obtener ayuda con este artículo",
