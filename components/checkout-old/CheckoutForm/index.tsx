@@ -419,7 +419,7 @@ export default function CheckoutForm({
             toggleShippingBool(true)
           }
           else{ 
-            setAlert({ type: AlertType.ERROR, msg: Messages.Errors['DUPLICATE_ADDRESS'] }) 
+            setAlert({ type: AlertType.ERROR, msg: translate('common.message.addressAlreadyExistsErrorMsg') }) 
           }
           closeNewAddressModal()
             

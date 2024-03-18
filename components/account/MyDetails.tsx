@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
-import { formConfig, useSchema } from './configs/details'
+import { useDetailsFormConfig, useSchema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { handleSubmit } from './common'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -16,6 +16,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 export default function MyDetails({ handleToggleShowState }: any) {
   const translate = useTranslation();
   const schema = useSchema(); 
+  const formConfig = useDetailsFormConfig();
   const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
@@ -124,7 +125,7 @@ export default function MyDetails({ handleToggleShowState }: any) {
               return (
                 <div className="flex-col w-full py-5 flex items-flex-start lg:mx-12 xs:ml-6 max-w-4xl justify-center">
                   <Form className="font-normal w-full sm:w-1/2">
-                    {formConfig.map((formItem: any, idx: number) => {
+                    {formConfig?.map((formItem: any, idx: number) => {
                       return (
                         formItem.type !== 'singleSelectButtonGroup' && (
                           <div key={`${formItem.label}_${idx}`}>
