@@ -7,13 +7,6 @@ import SidebarLayout from '@components/common/SidebarLayout'
 import useAddAddress from '@framework/customer/address/use-add-item'
 
 import s from './ShippingView.module.css'
-import { 
-  GENERAL_CITY, 
-  GENERAL_COUNTRY, 
-  GENERAL_FIRST_NAME, 
-  GENERAL_LAST_NAME, 
-  GENERAL_POSTCODE, 
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Form extends HTMLFormElement {
@@ -74,11 +67,11 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
             <hr className="border-accent-2 my-6" />
             <div className="grid gap-3 grid-flow-row grid-cols-12">
               <div className={cn(s.fieldset, 'col-span-6')}>
-                <label className={s.label}>{GENERAL_FIRST_NAME}</label>
+                <label className={s.label}>{translate('label.addressBook.firstNameText')}</label>
                 <input name="firstName" className={s.input} />
               </div>
               <div className={cn(s.fieldset, 'col-span-6')}>
-                <label className={s.label}>{GENERAL_LAST_NAME}</label>
+                <label className={s.label}>{translate('label.addressBook.lastNameText')}</label>
                 <input name="lastName" className={s.input} />
               </div>
             </div>
@@ -98,16 +91,16 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
             </div>
             <div className="grid gap-3 grid-flow-row grid-cols-12">
               <div className={cn(s.fieldset, 'col-span-6')}>
-                <label className={s.label}>{GENERAL_POSTCODE}</label>
+                <label className={s.label}>{translate('common.label.postcodeText')}</label>
                 <input name="zipCode" className={s.input} />
               </div>
               <div className={cn(s.fieldset, 'col-span-6')}>
-                <label className={s.label}>{GENERAL_CITY}</label>
+                <label className={s.label}>{translate('label.addressBook.townCityText')}</label>
                 <input name="city" className={s.input} />
               </div>
             </div>
             <div className={s.fieldset}>
-              <label className={s.label}>{GENERAL_COUNTRY}</label>
+              <label className={s.label}>{translate('label.checkout.countryText')}</label>
               <select name="country" className={s.select}>
                 <option>{translate('label.checkout.deafultCountryDropdownText')}</option>
               </select>

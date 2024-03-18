@@ -7,7 +7,7 @@ import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
 import { getCurrentPage } from "@framework/utils/app-util";
 import { useUI } from "@components/ui";
-import { GENERAL_LOGIN, GENERAL_MY_ORDERS, GENERAL_REGISTER, SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE, WISHLIST_TITLE } from "@components/utils/textVariables";
+import { GENERAL_LOGIN, GENERAL_REGISTER, SOCIAL_REGISTER_APPLE, SOCIAL_REGISTER_FACEBOOK, SOCIAL_REGISTER_GOOGLE, WISHLIST_TITLE } from "@components/utils/textVariables";
 import { Guid } from "@commerce/types";
 import { Router } from "next/router";
 import { signOut } from "next-auth/react";
@@ -95,7 +95,7 @@ export default function AvatarDropdown() {
     },
     {
       href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders',
-      title: GENERAL_MY_ORDERS,
+      title: translate('label.order.myOrdersText'),
       className: 'text-left p-2 cursor-pointer',
       head: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" >
