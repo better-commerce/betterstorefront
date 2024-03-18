@@ -24,10 +24,7 @@ export default function CategoryList(props: any) {
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('label.category.categoryText')}</title>
         <meta name="title" content={translate('label.category.categoryText')} />
@@ -38,59 +35,33 @@ export default function CategoryList(props: any) {
         <meta property="og:title" content={translate('label.category.categoryText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.category.categoryText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta
-          property="og:url"
-          content={absPath || SITE_ORIGIN_URL + router.asPath}
-          key="ogurl"
-        />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="w-full px-4 mx-auto sm:px-6 container lg:px-6 2xl:px-0">
+      <main className="container w-full mx-auto">
         <section aria-labelledby="products-heading ">
-          <h1 className="mt-4 tracking-tight pt-5 dark:text-gray-700">
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {translate('label.category.shopByCategoryText')}
           </h1>
           {props?.data.length > 0 && (
             <div className="flow-root mt-1 sm:mt-0 ">
               <div className="my-0">
                 <div className="box-content relative px-0 mt-2">
-                  <div className="grid grid-cols-2 my-2 mb-6 gap-x-3 gap-y-3 md:grid-cols-4 lg:grid-cols-4 sm:my-4">
+                  <div className="grid grid-cols-2 my-2 mb-6 gap-x-3 gap-y-3 md:grid-cols-5 lg:grid-cols-4 sm:my-4">
                     {props?.data?.map((category: any, key: number) => (
-                      <div
-                        key={key}
-                        className="bg-gray-100 border border-gray-300 hover:border-gray-400 "
-                      >
+                      <div key={key} className="border bg-slate-100 rounded-2xl border-slate-100 hover:border-slate-300 " >
                         <div className="relative group">
                           <Link key={key} href={`/${category.link}`}>
                             {category?.image ? (
-                              <div className="relative overflow-hidden bg-gray-100 aspect-w-1 aspect-h-1 group-hover:bg-gray-200">
-                                <img
-                                  src={
-                                    `${category?.image}?fm=webp&h=800&w=400` ||
-                                    IMG_PLACEHOLDER
-                                  }
-                                  alt={category.name|| 'category'}
-                                  className="object-cover object-center w-full h-auto sm:h-full aspect-[4/3]"
-                                  // layout="responsive"
-                                  height={900}
-                                />
+                              <div className="relative overflow-hidden aspect-w-1 aspect-h-1">
+                                <img src={ `${category?.image}?fm=webp&h=800&w=400` || IMG_PLACEHOLDER } alt={category.name|| 'category'} className="object-cover object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
                               </div>
                             ) : (
-                              <div className="relative overflow-hidden bg-gray-100 aspect-[4/3] group-hover:bg-gray-200">
-                                <img
-                                  src={IMG_PLACEHOLDER}
-                                  alt={category.name || 'category'}
-                                  className="object-cover object-center w-full h-auto sm:h-full"
-                                  // layout="responsive"
-                                  width={600}
-                                  height={900}
-                                />
+                              <div className="relative overflow-hidden aspect-[4/3]">
+                                <img src={IMG_PLACEHOLDER} alt={category.name || 'category'} className="object-cover object-center w-full h-auto sm:h-full" width={600} height={900} />
                               </div>
                             )}
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-x-0 bottom-4 h-1/3 opacity-40"
-                            />
-                            <h2 className="relative flex items-center justify-center w-full py-3 text-sm tracking-wide text-center text-gray-700 capitalize bg-white lg:mt-auto sm:text-lg bg-opacity-70 bg-nav dark:text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-x-0 bottom-4 h-1/3 opacity-40" />
+                            <h2 className="relative flex items-center justify-center w-full py-3 text-sm tracking-wide text-center text-gray-700 capitalize bg-white rounded-b-2xl lg:mt-auto sm:text-lg bg-opacity-70 bg-nav dark:text-gray-700">
                               {category.name}
                             </h2>
                           </Link>
