@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik'
-import { formConfig, schema } from '../configs/address'
+import { useAddressFormConfig, schema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
 import LoadingDots from '@components/ui/LoadingDots'
@@ -11,6 +11,7 @@ const COMPONENTS_MAP: any = {
 
 export default function AddressForm({ initialValues = {}, onSubmit = () => {}, closeEditMode }: any) {
   const translate = useTranslation();
+  const formConfig = useAddressFormConfig();
   return (
     <Formik
       validationSchema={schema}
@@ -28,7 +29,7 @@ export default function AddressForm({ initialValues = {}, onSubmit = () => {}, c
         return (
           <div className="flex-col w-full py-5 flex items-flex-start mx-auto max-w-4xl justify-center">
             <Form className="font-semibold w-full sm:w-1/2">
-              {formConfig.map((formItem: any, idx: number) => {
+              {formConfig?.map((formItem: any, idx: number) => {
                 return (
                   <div key={`${formItem.label}_${idx}`}>
                     <label className="text-gray-700 text-sm">
