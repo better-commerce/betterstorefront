@@ -12,7 +12,7 @@ import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@component
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
-import { matchStrings } from "@framework/utils/parse-util";
+import { matchStrings, stringFormat } from "@framework/utils/parse-util";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 const ProductTag = dynamic(() => import('@components/product/ProductTag'))

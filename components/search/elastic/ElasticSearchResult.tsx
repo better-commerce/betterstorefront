@@ -38,6 +38,7 @@ import {
   deliveryDateFormat,
   matchStrings,
   priceFormat,
+  stringFormat,
 } from '@framework/utils/parse-util'
 import { Switch } from '@headlessui/react'
 import { useTranslation } from '@commerce/utils/use-translation'
