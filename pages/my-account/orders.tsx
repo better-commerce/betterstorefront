@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { config } from '@components/utils/myAccount'
+import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -42,7 +42,7 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
   const [active, setActive] = useState(false)
   const [pageNumber, setPageNumber] = useState<number>(1)
-  const currentOption = 'My Orders'
+  const currentOption = translate('label.order.myOrdersText')
 
   useEffect(() => {
     if (allOrdersFetched) {
@@ -322,6 +322,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const config = useConfig();
   const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: {

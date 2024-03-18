@@ -8,7 +8,6 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import useWishlist from '@components/services/wishlist'
 import {
-  WISHLIST_TITLE,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -161,7 +160,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                   <div className="flex-1 px-4 py-6 overflow-y-auto sm:px-6">
                     <div className="flex items-start justify-between">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        {WISHLIST_TITLE}
+                        {translate('label.wishlist.wishlistText')}
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
                         <button
