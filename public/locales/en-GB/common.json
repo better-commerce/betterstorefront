@@ -30,7 +30,9 @@
       "lastNameText": "Last name",
       "emailText": "Email",
       "townCityText": "Town / city",
-      "selectCountryText": "Select a Country"
+      "selectCountryText": "Select a Country",
+      "enterPostcodeText": "Enter postcode",
+      "addressFinderText": "Address Finder"
     },
     "basket": {
       "addToBasketText": "Add to basket",
@@ -607,7 +609,6 @@
         "leftText": "LEFT",
         "preOrderText": "PRE-ORDER"
       },
-
       "priceMatchWebsiteNameText" : "Name of website you have found cheaper to*",
       "priceMatchDirectLinkText" : "Full direct link to product (copy/paste website URL)*",
       "priceMatchCostText" : "Cost of product*",
@@ -616,7 +617,6 @@
       "priceMatchUserName" : "Name*",
       "priceMatchUserEmail" : "Email*",
       "priceMatchUserTelephone" : "Telephone*",
-
       "freeDeliveryText": "Free Delivery",
       "daysEasyReturn": "Days Easy Return",
       "daysEasyExchange": "Days Easy Exchange",
@@ -676,7 +676,8 @@
       "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
     },
     "section": {
-      "findTheBestText": "In this season, find the best 🔥"
+      "findTheBestText": "In this season, find the best 🔥",
+      "moreCollectionsText":"More collections"
     },
     "social": {
       "generalText": "Join the community",
@@ -729,6 +730,7 @@
     },
     "label": {
       "homeText": "Home",
+      "postText": "Post",
       "reviews": "reviews",
       "backToHomepageText": "Back to Homepage",
       "closePanelText": "Close panel",
@@ -937,7 +939,8 @@
       "isDefaultBillingAddressText": "Is Default Billing Address",
       "genderText": "Gender",
       "femaleText": "Female",
-      "maleText": "Male"
+      "maleText": "Male",
+      "smsText": "SMS"
     },
     "message": {
       "requiredTextMsg" : "Required",

@@ -2,9 +2,9 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import cn from 'classnames'
 import {
-  registrationConfig,
-  loginConfig,
-  b2bRegistrationConfig,
+  useRegistrationConfig,
+  useLoginConfig,
+  useB2bRegistrationConfig,
 } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
 import Button from '@components/ui/Button'
@@ -87,7 +87,6 @@ const loginInitialValues = {
 }
 
 
-
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
@@ -110,6 +109,10 @@ export default function CustomerForm({
       .required(),
   })
 
+  const registrationConfig = useRegistrationConfig();
+  const loginConfig = useLoginConfig();
+  const b2bRegistrationConfig = useB2bRegistrationConfig();
+  
   const VALUES_MAP: any = {
     register: {
       schema: registerSchema,
@@ -123,11 +126,11 @@ export default function CustomerForm({
     },
   }
   const { config, initialValues, schema } = VALUES_MAP[type]
-
+  
   // Read b2b enabled value from settings
   const b2bEnabled = b2bSettings?.length
-    ? stringToBoolean(
-      b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+  ? stringToBoolean(
+    b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
     )
     : false
 

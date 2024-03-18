@@ -32,6 +32,12 @@
       "townCityText": "Ciudad",
       "selectCountryText": "Selecciona un país"
     },
+    "b2b": {
+      "requestTradingAccountText": "Solicitar cuenta de trading",
+      "companyNameText": "Nombre de la empresa",
+      "registeredNumberText": "Número registrado",
+      "phoneNumberText": "Número de teléfono"
+    },
     "basket": {
       "addToBasketText": "Agregar al carrito",
       "addTocartText": "Agregar al carrito",
@@ -62,6 +68,7 @@
       "totalAmountText": "Total",
       "checkoutBtnText": "Pagar",
       "multipleCodesApplyText": "Puedes aplicar múltiples códigos",
+      "typeAddOnText": "ADICIONAL",
       "getItByText": "Recíbelo para",
       "addOnText": "Complementos para este producto",
       "discountText": "descuento",
@@ -256,7 +263,8 @@
       "filterText": "Filtro",
       "highestRatingText": "Calificación más alta",
       "lowestRatingText": "Calificación más baja",
-      "newestRatingsText": "Calificaciones más recientes"
+      "newestRatingsText": "Calificaciones más recientes",
+      "newInText": "Nuevo en"
     },
     "footer": {
       "footerText": "Pie de página",
@@ -280,7 +288,7 @@
         "securePaymentText": "Pagos seguros",
         "faqText": "Preguntas frecuentes",
         "findAStoreText": "Encuentra una tienda"
-        }
+      }
     },
     "help": {
       "getHelpOnItemText": "Obtener ayuda con este artículo",
@@ -356,7 +364,8 @@
       "selectQuantityText": "Seleccionar cantidad",
       "myReturnText": "Mi devolución",
       "noLookbookAvaiableText": "No hay catálogo disponible",
-      "shopTheLookText": "Compra el aspecto"
+      "shopTheLookText": "Compra el aspecto",
+      "confirmPasswordText": "Confirmar contraseña"
     },
     "navBar": {
       "currencyText": "Moneda",
@@ -906,7 +915,18 @@
       "authorizingPaymentText": "Autorizando el pago...",
       "initiatingPaymentText": "iniciando el pago...",
       "capturingPaymentText": "capturando el pago...",
-      "PageEndText": "Has visto todo"
+      "pageEndText": "Has visto todo",
+      "workText": "Trabajo",
+      "strongPasswordText": "Contraseña segura",
+      "titleText": "Título",
+      "missText": "Señorita",
+      "mrText": "Señor",
+      "mrsText": "Señora",
+      "isDefaultDeliveryAddressText": "Es la Dirección de Entrega Predeterminada",
+      "isDefaultBillingAddressText": "Es la Dirección de Facturación Predeterminada",
+      "genderText": "Género",
+      "femaleText": "Femenino",
+      "maleText": "Masculino"
     },
     "message": {
       "invalidAccountMsg": "No se encontró ninguna cuenta con este correo electrónico/contraseña",
@@ -937,7 +957,101 @@
       "loaderLoadingText": "Cargando...",
       "itemCancelledSuccessfullyText": "Artículo cancelado exitosamente",
       "proceedToCancelText": "Continuar para cancelar",
-      "logoutSuccessfulText": "Cierre de sesión exitoso"
+      "logoutSuccessfulText": "Cierre de sesión exitoso",
+      "mobileNumRequiredMsg": "El número de móvil es un campo obligatorio",
+      "mobileNumInputMsg": "El número de móvil solo debe contener números",
+      "mobileNumMaxLengthMsg": "El número de móvil debe tener como máximo 12 caracteres",
+      "mobileNumMinLengthMsg": "El número de móvil debe tener al menos 7 caracteres",
+      "phoneNumInputMsg": "El número de teléfono no es válido",
+      "postCodeRequiredMsg": "El código postal es un campo obligatorio",
+      "firstNameRequiredMsg": "El nombre es un campo obligatorio",
+      "lastNameRequiredMsg": "El apellido es un campo obligatorio",
+      "nameMinLengthMsg": "El nombre debe tener al menos 3 caracteres",
+      "nameInputMsg": "El nombre solo debe contener caracteres alfanuméricos",
+      "postCodeMaxLenMsg": "El código postal debe tener como máximo 10 dígitos",
+      "emailAddressRequiredMsg": "La dirección de correo electrónico es un campo obligatorio",
+      "emailAddressInvalidMsg": "La dirección de correo electrónico no es válida",
+      "formSubmitSuccessMsg": "El formulario se ha enviado correctamente",
+      "titleRequiredMsg": "El título es un campo obligatorio",
+      "messageRequiredMsg": "El mensaje es un campo obligatorio",
+      "invalidRequestErrorMsg": "La información proporcionada está incompleta. Por favor, inténtelo de nuevo.",
+      "requestCouldNotProcessErrorMsg": "Su solicitud no pudo ser procesada. Por favor, inténtelo de nuevo más tarde.",
+      "noAddressFoundErrorMsg": "No se encontró ninguna dirección para el código postal proporcionado",
+      "addressAlreadyExistsErrorMsg": "La dirección ya existe",
+      "userAlreadyExistsErrorMsg": "El usuario ya existe",
+      "tokenInvalidErrorMsg": "¡Vaya! El token no es válido",
+      "tokenExpiredErrorMsg": "¡Vaya! El token ha caducado o no es válido",
+      "companyNotFoundErrorMsg": "Empresa no encontrada.",
+      "address": {
+        "postCodeNotServicableMsg": "Código postal no servible",
+        "postCodeNumMsg": "El código postal solo debe contener dígitos",
+        "cityRequiredMsg": "La ciudad es un campo obligatorio",
+        "cityMinLengthMsg": "El campo de ciudad debe contener al menos 3 caracteres",
+        "stateRequiredMsg": "El estado es un campo obligatorio",
+        "countryRequiredMsg": "El país es un campo obligatorio",
+        "address1RequiredMsg": "La dirección 1 es un campo obligatorio",
+        "address1InputMsg": "La dirección 1 solo debe contener caracteres alfanuméricos",
+        "address2InputMsg": "La dirección 2 solo debe contener caracteres alfanuméricos",
+        "address3InputMsg": "La dirección 3 solo debe contener caracteres alfanuméricos",
+        "addressRequiredMsg": "La dirección es un campo obligatorio",
+        "addressMinLengthMsg": "El campo de dirección debe tener más de 3 caracteres",
+        "addressInputMsg": "La dirección solo debe contener caracteres alfanuméricos"
+      },
+      "basket": {
+        "emptyCartErrorMsg": "Tu carrito está vacío",
+        "maxBasketItemsCountErrorMsg": "La cantidad máxima permitida es {maxBasketItemsCount}.",
+        "basketValidationErrorMsg": "Error de validación del carrito"
+      },
+      "checkout": {
+        "cardNumRequiredMsg": "El número de tarjeta es un campo obligatorio",
+        "cardNumMinLengthMsg": "El número de tarjeta debe tener al menos 14 caracteres",
+        "cardNumInputMsg": "El número de tarjeta solo debe contener dígitos",
+        "expiryRequiredMsg": "La fecha de vencimiento es un campo obligatorio",
+        "expiryInputMsg": "La fecha de vencimiento debe estar en formato MM/AA",
+        "cvvRequiredMsg": "El CVV es un campo obligatorio",
+        "cvvInputMsg": "El CVV solo debe contener caracteres alfanuméricos",
+        "nameRequiredMsg": "El nombre es un campo obligatorio",
+        "nameMinlengthMsg": "El nombre debe tener al menos 3 caracteres",
+        "nameInputMsg": "El nombre solo debe contener caracteres alfanuméricos",
+        "vpaRequiredMsg": "VPA / ID UPI es un campo obligatorio",
+        "chequeNumMsg": "El número de cheque es un campo obligatorio",
+        "chequeNumInputMsg": "El número de cheque solo debe contener dígitos",
+        "paymentLinkExpireMsg": "El enlace de pago ha caducado",
+        "billingAddressNotFoundMsg": "No se encontró la dirección de facturación",
+        "shippingAddressNotFoundMsg": "No se encontró la dirección de envío",
+        "b2bGuestCheckoutNotAllowedMsg": "La compra como invitado no está permitida con la dirección de correo electrónico proporcionada",
+        "cardTypeNotSupportedErrorMsg": "El tipo de tarjeta no es compatible. Por favor, inténtelo de nuevo.",
+        "customerNotFoundErrorMsg": "Cliente no encontrado.",
+        "otpNotValidErrorMsg": "El OTP no es válido. Por favor, inténtelo de nuevo.",
+        "codErrorMsg": "Error al aplicar cargos adicionales de COD. Por favor, inténtelo de nuevo más tarde.",
+        "upiNotSupportedErrorMsg": "El pago UPI no es compatible.",
+        "paymentAlreadyCompletedErrorMsg": "El pago de tu carrito ya se ha completado.",
+        "notEnoughCreditErrorMsg": "No hay suficiente crédito disponible."
+      },
+      "password": {
+        "passwordValidationMsg": "La contraseña debe tener un mínimo de 8 caracteres y al menos 1 letra mayúscula.",
+        "passwordRequiredMsg": "La contraseña es obligatoria.",
+        "confirmRequiredMsg": "Confirmar contraseña es obligatorio.",
+        "matchingPasswordMsg": "Las contraseñas deben coincidir.",
+        "invalidEmailErrorMsg": "No pudimos encontrar una cuenta con este correo electrónico",
+        "validEmailMsg": "¡Éxito! Revise su correo electrónico para obtener el enlace para cambiar su contraseña"
+      },
+      "profile": {
+        "fullNameRequiredMsg": "El nombre completo es un campo obligatorio",
+        "fullNameMinLengthMsg": "El nombre completo debe tener al menos 3 caracteres",
+        "fullNameInputMsg": "El nombre completo solo debe contener caracteres alfanuméricos",
+        "changedMobileNumInputMsg": "El nuevo número de móvil ingresado está actualmente en uso",
+        "emailRequiredMsg": "El correo electrónico es un campo obligatorio",
+        "emailInputMsg": "El correo electrónico no es válido",
+        "phoneNumRequiredMsg": "El número de teléfono es un campo obligatorio",
+        "phoneNumMaxLengthMsg": "El número de teléfono debe tener como máximo 12 dígitos",
+        "phoneNumMinLengthMsg": "El número de teléfono debe tener al menos 7 dígitos",
+        "companyNameRequiredMsg": "El nombre de la empresa es obligatorio"
+      },
+      "noEmailMsg": "Por favor, ingrese un correo electrónico correcto",
+      "returnSuccessMsg": "Éxito en la devolución",
+      "exchangeSuccessMsg": "Intercambio exitoso",
+      "resetPasswordSuccessMsg": "¡Éxito! Serás redirigido a la página de inicio de sesión"
     },
     "numberText": {
       "one": "1"
