@@ -745,7 +745,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const renderReviews = () => {
     return (
-      <div className="">
+      <div className="" id='productReview'>
         <h2 className="flex items-center text-2xl font-semibold">
           <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
           <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
@@ -781,7 +781,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
             <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
             <div className="flex items-center">
-              <Link href={`/${product?.slug}`} className="flex items-center text-sm font-medium" >
+              <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                 <div className="ms-1.5 flex">
                   <span>{reviews?.review?.ratingAverage}</span>
