@@ -15,6 +15,7 @@ import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { isMobile } from "react-device-detect";
 const ProductTag = dynamic(() => import('@components/product/ProductTag'))
 const LikeButton = dynamic(() => import('@new-components/LikeButton'))
 const Prices = dynamic(() => import('@new-components/Prices'))
@@ -153,19 +154,35 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
   const renderGroupButtons = () => {
     return (
-      <div className="absolute bottom-0 grid justify-center invisible grid-cols-2 transition-all opacity-0 sm:px-4 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
-        <Button size="small" className="hidden sm:block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-        <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
-          <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
-          <span className="ms-1">{translate('common.label.quickViewText')}</span>
-        </ButtonSecondary>
-      </div>
+      <>
+        {isMobile ? (
+          <>
+            <div className="absolute grid justify-center visible grid-cols-2 px-4 transition-all bottom-4 sm:px-4 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
+              <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+                <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+                <span className="ms-1">{translate('common.label.quickViewText')}</span>
+              </ButtonSecondary>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="absolute grid justify-center invisible grid-cols-2 px-4 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-4 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
+              <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+                <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+                <span className="ms-1">{translate('common.label.quickViewText')}</span>
+              </ButtonSecondary>
+            </div>
+          </>
+        )}
+      </>
     );
   };
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6 ${className}`} >
+      <div className={`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6 ${className}`} >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link href={`/${data?.slug}`} className="block">
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
