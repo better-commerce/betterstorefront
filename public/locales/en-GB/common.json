@@ -65,7 +65,6 @@
       "checkoutBtnText": "Checkout",
       "multipleCodesApplyText": "You may apply mutliple codes",
       "getItByText": "Get it by",
-      "typeAddOnText" : "ADDON",
       "addOnText": "Add on's for this product",
       "discountText": "discount",
       "itemsYourCartText": "Items in your cart",
@@ -502,7 +501,6 @@
       "selectTocompareText1": "Select other",
       "selectToCompareText2": "items to compare products",
       "comparingItemsText1": "Comparing",
-      "ItemTypeAddOn10":10,
       "specifications": {
         "fabricText": "Fabric",
         "occasionText": "Occasion",
