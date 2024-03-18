@@ -1,13 +1,16 @@
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { NEXT_REFERRAL_INFO } from '@components/utils/constants'
-import { config } from '@components/utils/myAccount'
+import { useConfig } from '@components/utils/myAccount'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import axios from 'axios'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 function SideMenu({ handleClick, setShow, currentOption }: any) {
+  const config = useConfig();
+  const translate = useTranslation()
   const { user, referralProgramActive } = useUI()
   let isB2B = user?.companyId !== Guid.empty
   let newConfig: any = []
@@ -25,8 +28,8 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
         if (!hasReferral){
           newConfig.push( {
             type: 'tab',
-            text: 'Refer a Friend',
-            mtext: 'Refer a Friend',
+            text: translate('label.myAccount.referAFriendText'),
+            mtext: translate('label.myAccount.referAFriendText'),
             props: 'refer-a-friend',
             href:"/my-account/refer-a-friend"
           })
@@ -47,8 +50,8 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
           newConfig = [...config]
           newConfig.push( {
             type: 'tab',
-            text: 'Refer a Friend',
-            mtext: 'Refer a Friend',
+            text: translate('label.myAccount.referAFriendText'),
+            mtext: translate('label.myAccount.referAFriendText'),
             props: 'refer-a-friend',
             href:"/my-account/refer-a-friend"
           })
@@ -59,8 +62,8 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
     } else if (!hasMyCompany) {
       newConfig.push({
         type: 'tab',
-        text: 'My Company',
-        mtext: 'My Company',
+        text: translate('label.myAccount.myCompanyText'),
+        mtext: translate('label.myAccount.myCompanyText'),
         props: 'my-company',
         href: '/my-account/my-company',
       })

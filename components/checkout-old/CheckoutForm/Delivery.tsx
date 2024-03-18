@@ -11,7 +11,6 @@ import Button from '@components/ui/IndigoButton'
 import ConfirmedGeneralComponent from './ConfirmedGeneralComponent'
 import axios from 'axios'
 import CncList from './CncList'
-import { GENERAL_DELIVERY_METHOD } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
 import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
@@ -205,7 +204,7 @@ export default function Delivery({
           <h4 className="font-bold text-black uppercase">
             {isSplitDelivery
               ? translate('label.checkout.combinedDeliveryHeadingText')
-              : GENERAL_DELIVERY_METHOD}
+              : translate('label.checkout.deliveryMethodHeadingText')}
           </h4>
           <ConfirmedGeneralComponent
             onStateChange={toggleDelivery}
@@ -286,7 +285,7 @@ export default function Delivery({
             <RadioGroup.Label className="text-lg font-semibold text-gray-900">
               {isSplitDelivery
                 ? translate('label.checkout.combinedDeliveryHeadingText')
-                : GENERAL_DELIVERY_METHOD}
+                : translate('label.checkout.deliveryMethodHeadingText')}
             </RadioGroup.Label>
 
             <div className="grid grid-cols-1 mt-4 gap-y-6 sm:grid-cols-2 sm:gap-x-4">

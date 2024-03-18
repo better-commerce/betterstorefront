@@ -8,7 +8,7 @@ import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST,
 import { StarIcon } from '@heroicons/react/24/outline'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { IMG_PLACEHOLDER, WISHLIST_TITLE } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
@@ -482,7 +482,7 @@ const SearchProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   onClick={handleWishList}
                   disabled={product.hasWishlisted}
                 >
-                  {product.hasWishlisted ? translate('label.product.wishlistedText') : WISHLIST_TITLE}
+                  {product.hasWishlisted ? translate('label.product.wishlistedText') : translate('label.wishlist.wishlistText')}
                 </SimpleButton>
               )}
               <button type="button" onClick={() => handleQuickViewData(product)} className="w-full text-primary bg-orange-600 text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none">

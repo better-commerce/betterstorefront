@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { config } from '@components/utils/myAccount'
+import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -18,6 +18,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function MyAccount({ defaultView, isLoggedIn }: any) {
   const [isShow, setShow] = useState(true)
   const [view, setView] = useState(defaultView)
+  const config = useConfig();
   const { user, deleteUser, isGuestUser, referralProgramActive } = useUI()
   const router = useRouter()
   const translate = useTranslation()
@@ -238,6 +239,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const config = useConfig();
   const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: {

@@ -476,7 +476,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         stockCode: selectedAttrData?.stockCode,
       },
     }
-    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.itemType === translate('label.product.ItemTypeAddOn10'))
+    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.itemType === 10)
     const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
       item.parentProductId = updatedProduct?.recordId
       return item
