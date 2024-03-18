@@ -5,9 +5,8 @@ import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
 import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
-import { EmptyString, Messages } from '@components/utils/constants'
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
-import { matchStrings } from '@framework/utils/parse-util'
+import { EmptyString } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export class ChequePaymentButton extends BasePaymentButton {
   /**
@@ -46,6 +45,7 @@ export class ChequePaymentButton extends BasePaymentButton {
     dispatchState: Function,
     chequeNumber: string
   ) {
+    const translate = useTranslation()
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: 'Please wait...',
@@ -86,7 +86,7 @@ export class ChequePaymentButton extends BasePaymentButton {
       } else {
         dispatchState({
           type: 'SET_ERROR',
-          payload: Messages.Errors['GENERIC_ERROR'],
+          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
     }
