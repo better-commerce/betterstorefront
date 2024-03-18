@@ -18,7 +18,7 @@ import { useCart as getCart } from '@framework/cart'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
@@ -32,6 +32,8 @@ import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import Prices from '@new-components/Prices'
+import NcInputNumber from '@new-components/NcInputNumber'
 const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'))
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -467,6 +469,39 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const renderStatusSoldOut = (soldOutMessage: any) => {
+    return (
+      <div className="">
+        {reValidateData?.message != null && soldOutMessage != '' && (matchStrings(soldOutMessage, "sold out", true) ? (
+          <div className="rounded-full flex items-center justify-center px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+            <div className="flex text-xs font-semibold text-left text-red-500">
+              <span className="relative mr-1">
+                <img alt="Sold Out" src="/assets/images/not-shipped-edd.svg" width={20} height={20} className="relative inline-block mr-1 top-2" />
+              </span>
+              <span className="mt-2">{soldOutMessage}</span>
+            </div>
+          </div>
+        ) : matchStrings(soldOutMessage, "price changed", true) && (
+          <div className="items-center w-full col-span-12">
+            <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
+              {soldOutMessage}
+            </div>
+          </div>
+        )
+        )}
+      </div>
+    );
+  };
+
+  const renderStatusInStock = (product: any) => {
+    return (
+      product?.currentStock > 0 &&
+      <div className="rounded-full flex items-center justify-center px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+        <CheckIcon className="w-3.5 h-3.5" />
+        <span className="ml-1 leading-none">In Stock</span>
+      </div>
+    );
+  };
   return (
     <>
       <NextHead>
@@ -492,229 +527,154 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           key="ogurl"
         />
       </NextHead>
-      <div className="container w-full py-16 lg:pb-28 lg:pt-20 bg-white">
-        <h1 className="block text-2xl sm:text-3xl lg:text-4xl font-semibold mb-12 sm:mb-16">
+      <div className="container w-full py-16 bg-white lg:pb-28 lg:pt-20">
+        <h1 className="block mb-12 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16">
           {translate('label.basket.shoppingCartText')}{' '}
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
-        <hr className='border-slate-200 dark:border-slate-700 my-10 xl:my-12' />
+        <hr className='my-10 border-slate-200 dark:border-slate-700 xl:my-12' />
         {!isEmpty && !isSplitDelivery && (
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
               <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                <div className='divide-y divide-slate-200 dark:divide-slate-700 w-full'>
+                <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
                   {userCart.lineItems?.map((product: any, productIdx: number) => {
                     const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
                     return (
-                      <div key={productIdx} className="relative flex py-8 sm:py-10 xl:py-12 first:pt-0 last:pb-0" >
-                        <div className='relative h-36 w-24 sm:w-32 flex-shrink-0 overflow-hidden rounded-xl'>
-                          <img
-                            style={css}
-                            width={140}
-                            height={180}
-                            src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER}
-                            alt={product.name || 'cart-item'}
-                            className="object-cover object-center w-16 rounded-lg sm:w-28 image"
-                          />
+                      <div key={`cart-${productIdx}`} className={`relative flex py-6 sm:py-10 xl:py-12 last:pb-0 ${product?.price?.raw?.withTax > 0 ? '' : 'bg-green-100 mb-2 p-2'}`} >
+                        <div className="relative flex-shrink-0 w-24 overflow-hidden h-36 sm:w-32 rounded-xl bg-slate-100">
+                          <Image fill src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product?.name} sizes="300px" className="object-contain object-center w-full h-full" />
+                          <Link href={`/${product?.slug}`} className="absolute inset-0"></Link>
                         </div>
-                        <div className="ml-3 sm:ml-6 flex flex-1 flex-col">
-                          <div className=''>
-                            <div className='flex justify-between mob-flex-cart-pro'>
-                              <div className='flex=[1.5] box-border sm:max-w-64  sm:min-w-64 pr-2 sm:pr-6'>
-                                <h3 className="text-sm text-slate-600 dark:text-slate-300">
-                                  {product.brand}
-                                </h3>
-                                <h3 className="my-2 text-sm sm:text-sm sm:my-1">
-                                  <Link href={`/${product.slug}`}>
-                                    <span className="text-base font-semibold">
-                                      {product.name}
-                                    </span>
-                                  </Link>
+
+                        <div className="flex flex-col flex-1 ml-3 sm:ml-6">
+                          <div>
+                            <div className="flex justify-between ">
+                              <div className="flex-[1.5] ">
+                                <h3 className="text-base font-semibold">
+                                  <Link href={`/${product?.slug}`}>{product?.name}</Link>
                                 </h3>
                                 <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
-                                  {product?.variantProducts?.length > 0 ? (
-                                    <div
-                                      role="button"
-                                      onClick={handleToggleOpenSizeChangeModal.bind(
-                                        null,
-                                        product
-                                      )}
-                                    >
-                                      <div className="border w-[fit-content] flex items-center  py-2 px-2">
-                                        <div className="mr-1 text-sm text-gray-700">
-                                          Size:{' '}
-                                          <span className="font-semibold text-black uppercase">
-                                            {getLineItemSizeWithoutSlug(product)}
+                                  {product?.colorName != "" &&
+                                    <div className="flex items-center space-x-1.5">
+                                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                        <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                      </svg>
+                                      <span>{product?.colorName}</span>
+                                    </div>
+                                  }
+                                  {product?.size != "" &&
+                                    <>
+                                      <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
+                                      <div className="flex items-center space-x-1.5">
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                          <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                          <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                          <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                          <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        <span className='uppercase'>{product?.size}</span>
+                                      </div>
+                                    </>
+                                  }
+                                </div>
+                                <div className="relative flex items-center justify-between w-full mt-3 sm:hidden">
+                                  {product?.price?.raw?.withTax > 0 ?
+                                    <div className='relative block text-left'>
+                                      <div className='inline-block'>
+                                        <div className="flex items-center justify-around text-gray-900">
+                                          <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
+                                            <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer " />
+                                          </div>
+                                          <span className="px-4 py-2 text-md sm:py-2">
+                                            {product.qty}
                                           </span>
+                                          <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
+                                            <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                          </div>
                                         </div>
-                                        <ChevronDownIcon className="w-4 h-4 text-black" />
                                       </div>
                                     </div>
-                                  ) : (
-                                    <div></div>
-                                  )}
-                                  <div className="flex-shrink-0">
-                                    <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                                      {reValidateData?.message != null && soldOutMessage != '' && (
-                                        matchStrings(soldOutMessage, "sold out", true) ? (
-                                          <div className="flex flex-col col-span-12">
-                                            <div className="flex text-xs font-semibold text-left text-red-500">
-                                              <span className="relative mr-1">
-                                                <img
-                                                  alt="Sold Out"
-                                                  src="/assets/images/not-shipped-edd.svg"
-                                                  width={20}
-                                                  height={20}
-                                                  className="relative inline-block mr-1 top-2"
-                                                />
-                                              </span>
-                                              <span className="mt-2">{soldOutMessage}</span>
-                                            </div>
-                                          </div>
-                                        ) : matchStrings(soldOutMessage, "price changed", true) && (
-                                          <div className="items-center w-full col-span-12">
-                                            <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
-                                              {soldOutMessage}
-                                            </div>
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
+                                    : <div></div>}
+                                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} />
                                 </div>
                               </div>
-                              <div className='block text-left sm:text-center relative'>
-                                <div className='inline-block'>
-                                  <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    <MinusSmallIcon
-                                      onClick={() => handleItem(product, 'decrease')}
-                                      className="w-4 cursor-pointer"
-                                    />
-                                    <span className="px-4 py-2 text-md sm:py-2">
-                                      {product.qty}
-                                    </span>
-                                    <PlusSmallIcon
-                                      className="w-4 cursor-pointer"
-                                      onClick={() => handleItem(product, 'increase')}
-                                    />
-                                  </div>
-                                </div>
+
+                              <div className="relative hidden text-center sm:block">
+                                <NcInputNumber className="relative z-10" />
                               </div>
-                              <div className='flex-1 sm:flex justify-end font-semibold text-green'>
-                                {product?.price?.raw?.withTax > 0 ? (
-                                  isIncludeVAT
-                                    ? product.price?.formatted?.withTax
-                                    : product.price?.formatted?.withoutTax)
-                                  : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>
-                                }
-                                {product?.price?.raw?.withTax > 0 &&
-                                  product.listPrice?.raw.withTax > 0 &&
-                                  product.listPrice?.raw.withTax !=
-                                  product.price?.raw?.withTax && (
-                                    <span className="px-2 text-sm text-red-400 line-through">
-                                      {translate('label.basket.priceLabelText')}{' '}
-                                      {isIncludeVAT
-                                        ? product.listPrice.formatted?.withTax
-                                        : product.listPrice.formatted?.withoutTax}
-                                    </span>
-                                  )}
+
+                              <div className="justify-end flex-1 hidden sm:flex">
+                                <Prices price={product?.price} listPrice={product?.listPrice} className="mt-0.5" />
                               </div>
                             </div>
                           </div>
-                          {product.children?.map((child: any, idx: number) => (
-                            <div className="flex mt-10" key={'child' + idx}>
-                              <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                                <Image src={child.image} alt={child.name || 'cart-image'} className="object-cover object-center w-full h-full" />
+
+                          <div className="flex items-center justify-between pt-4 mt-auto text-sm">
+                            {Math.random() > 0.6 ? renderStatusSoldOut(soldOutMessage) : renderStatusInStock(product)}
+                            {product?.price?.raw?.withTax != 0 &&
+                              <div className="flex items-end justify-end text-sm">
+                                <button type="button" onClick={() => { openModal(); setItemClicked(product); }} className="relative flex items-center text-sm font-medium text-primary-6000 hover:text-primary-500 " >
+                                  <span>{translate('common.label.removeText')}</span>
+                                </button>
                               </div>
-                              <div className="flex justify-between ml-5 font-medium text-gray-900">
-                                <Link href={`/${child.slug}`}>{child.name}</Link>
-                                <p className="ml-4">
-                                  {child.price?.formatted?.withTax > 0
-                                    ? isIncludeVAT
-                                      ? child.price?.formatted?.withTax
-                                      : child.price?.formatted?.withoutTax
-                                    : ''}
-                                </p>
-                              </div>
-                              {!child.parentProductId ? (
-                                <div className="flex items-center justify-end flex-1 text-sm">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleItem(child, 'delete')}
-                                    className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500"
-                                  >
-                                    <span className="sr-only"> {translate('common.label.removeText')} </span>
-                                    <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                                  </button>
-                                </div>
-                              ) : (
-                                <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
-                                  {child.qty}
-                                </div>
-                              )}
+                            }
+                          </div>
+                        </div>
+                        {product.children?.map((child: any, idx: number) => (
+                          <div className="flex mt-10" key={'child' + idx}>
+                            <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
+                              <Image src={child.image} alt={child.name || 'cart-image'} className="object-cover object-center w-full h-full" />
                             </div>
-                          ))}
-                          <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                            {product.shippingPlan?.shippingSpeed}
+                            <div className="flex justify-between ml-5 font-medium text-gray-900">
+                              <Link href={`/${child.slug}`}>{child.name}</Link>
+                              <p className="ml-4">
+                                {child.price?.formatted?.withTax > 0 ? isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax : ''}
+                              </p>
+                            </div>
+                            {!child.parentProductId ? (
+                              <div className="flex items-center justify-end flex-1 text-sm">
+                                <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
+                                  <span className="sr-only"> {translate('common.label.removeText')} </span>
+                                  <TrashIcon className="w-5 h-5" aria-hidden="true" />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
+                                {child.qty}
+                              </div>
+                            )}
                           </div>
-                          <div className="flex mt-auto pt-4 items-end justify-end text-sm">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                openModal()
-                                setItemClicked(product)
-                              }}
-                              className="relative z-10 flex items-center mt-3 font-medium text-primary-6000 hover:text-primary-500 text-sm "
-                            >
-                              <span>{translate('common.label.removeText')}</span>
-                              {/* <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" /> */}
-                            </button>
-                          </div>
+                        ))}
+                        <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
+                          {product.shippingPlan?.shippingSpeed}
                         </div>
                       </div>
                     )
                   })}
                 </div>
               </section>
-              {/* <section>
-                  {splitDeliveryItems && (
-                    <SplitDelivery
-                      splitDeliveryItems={splitDeliveryItems}
-                      showDeliveryOptions={false}
-                    />
-                  )}
-                </section> */}
-              <section
-                aria-labelledby="summary-heading"
-                className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5"
-              >
-                <h4
-                  id="summary-heading"
-                  className="text-lg font-semibold "
-                >
+              <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-24 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5" >
+                <h4 id="summary-heading" className="text-lg font-semibold " >
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
                 <div className="">
-                  <PromotionInput
-                    basketPromos={basketPromos}
-                    items={cartItems}
-                    getBasketPromoses={getBasketPromos}
-                  />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
                 </div>
-                <dl className="mt-7 text-sm text-slate-500 dark:text-slate-400 divide-y divide-slate-200/70 dark:divide-slate-700/80">
+                <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                   <div className="flex items-center justify-between py-4">
                     <dt className="text-sm text-gray-600">
-                      {isIncludeVAT
-                        ? translate('label.orderSummary.subTotalTaxIncText')
-                        : translate('label.orderSummary.subTotalTaxExcText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
-                      {isIncludeVAT
-                        ? cartItems.subTotal?.formatted?.withTax
-                        : cartItems.subTotal?.formatted?.withoutTax}
+                      {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between py-4">
@@ -722,9 +682,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       <span>{translate('label.orderSummary.shippingText')}</span>
                     </dt>
                     <dd className="font-semibold text-black text-md">
-                      {isIncludeVAT
-                        ? cartItems.shippingCharge?.formatted?.withTax
-                        : cartItems.shippingCharge?.formatted?.withoutTax}
+                      {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}
                     </dd>
                   </div>
                   {userCart.promotionsApplied?.length > 0 && (
@@ -733,12 +691,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                         <span>{translate('label.orderSummary.discountText')}</span>
                       </dt>
                       <dd className="font-semibold text-red-500 text-md">
-                        <p>
-                          {'-'}
-                          {isIncludeVAT
-                            ? cartItems.discount?.formatted?.withTax
-                            : cartItems.discount?.formatted?.withoutTax}
-                        </p>
+                        <p> {'-'} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax} </p>
                       </dd>
                     </div>
                   )}
@@ -754,20 +707,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     <dt className="text-lg font-semibold text-black">
                       {translate('label.orderSummary.totalText')}
                     </dt>
-                    <dd className="text-xl font-semibold text-black">
-                      {isIncludeVAT
-                        ? cartItems.grandTotal?.formatted?.withTax
-                        : cartItems.grandTotal?.formatted?.withTax}
-                    </dd>
+                    <dd className="text-xl font-semibold text-black"> {isIncludeVAT ? cartItems.grandTotal?.formatted?.withTax : cartItems.grandTotal?.formatted?.withTax} </dd>
                   </div>
                 </dl>
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button
-                      type="submit"
-                      className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 "
-                    >
+                    <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 " >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
@@ -795,7 +741,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
               <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                <div className='divide-y divide-slate-200 dark:divide-slate-700 w-full'>
+                <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
                   {Object.keys(splitBasketProducts)?.map(
                     (deliveryDate: any, Idx: any) => (
                       <>
@@ -809,10 +755,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                         )}
                         {splitBasketProducts[deliveryDate]?.map(
                           (product: any, productIdx: number) => (
-                            <div
-                              key={productIdx}
-                              className="relative flex py-8 sm:py-10 xl:py-12 first:pt-0 last:pb-0"
-                            >
+                            <div key={productIdx} className="relative flex py-2 sm:py-2 xl:py-2 first:pt-0 last:pb-0" >
                               <div className="flex-shrink-0">
                                 <img
                                   style={css}
@@ -1165,10 +1108,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           </button>
                         </div>
                       </div>
-                      <div className="sm:px-0 flex flex-row">
+                      <div className="flex flex-row sm:px-0">
                         {/*Referal Program Info view 
                         {referralAvailable && !referralInfo &&(
-                          <div className="my-10 flex w-full flex-col justify-center items-center max-w-lg px-9">
+                          <div className="flex flex-col items-center justify-center w-full max-w-lg my-10 px-9">
                             <h2 className="mx-2 text-[30px] text-center">Search your Friend by their name</h2>
                             <p className="px-8 text-[18px] text-center">
                               If you think they have signed up, please check and confirm their details below
@@ -1210,15 +1153,15 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             >
                             {!copied ? 
                             (
-                              <ClipboardIcon className='flex justify-center items-center'/>
+                              <ClipboardIcon className='flex items-center justify-center'/>
                               ):(
-                                <ClipboardFill className='flex justify-center items-center'/>
+                                <ClipboardFill className='flex items-center justify-center'/>
                                 )
                             }
                             {/* {copied ? 'COPIED' : 'COPY CODE'} 
                             </div>
                             </div>
-                            <p className='px-5 text-center font-bold'>
+                            <p className='px-5 font-bold text-center'>
                               Offer: {referralInfo?.promoName}
                             </p>
                             <p className='font-bold'>

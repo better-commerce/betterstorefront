@@ -20,12 +20,12 @@ const MenuBar: React.FC<MenuBarProps> = ({ navItems }) => {
           <div className="fixed top-0 bottom-0 left-0 w-full max-w-md outline-none md:w-auto z-max focus:outline-none">
             <React.Fragment>
               <Transition.Child as={Fragment} enter="transition duration-100 transform" enterFrom="opacity-0 -translate-x-14" enterTo="opacity-100 translate-x-0" leave="transition duration-150 transform" leaveFrom="opacity-100 translate-x-0" leaveTo="opacity-0 -translate-x-14" >
-                <div className="relative z-20">
+                <div className="relative">
                   <NavMobile onClickClose={handleCloseMenu} navItems={navItems} />
                 </div>
               </Transition.Child>
               <Transition.Child as={Fragment} enter=" duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave=" duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                <Dialog.Overlay className="fixed inset-0 bg-neutral-900/60" />
+                <Dialog.Overlay className="fixed bg-neutral-900/60" />
               </Transition.Child>
             </React.Fragment>
           </div>

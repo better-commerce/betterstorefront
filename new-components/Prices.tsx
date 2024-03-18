@@ -14,18 +14,20 @@ const Prices: FC<PricesProps> = ({ className = "", price, listPrice, contentClas
   const translate = useTranslation()
   return (
     <div className={`${className}`}>
-      <div className="font-semibold text-green">
-        {isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax}
-        {isIncludeVAT ? (listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
-          <span className="px-1 font-normal text-gray-400 line-through">{listPrice?.formatted?.withTax}</span>
-        )
-        ) : (
-          listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
-            <span className="px-1 font-normal text-gray-400 line-through">{listPrice?.formatted?.withoutTax}</span>
+      {price?.raw?.withTax != 0 ? (<>
+        <div className="font-semibold text-green">
+          {isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax}
+          {isIncludeVAT ? (listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
+            <span className="px-1 font-normal text-gray-400 line-through">{listPrice?.formatted?.withTax}</span>
           )
-        )}
-        <span className="pl-1 text-xs font-light text-right text-gray-400">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
-      </div>
+          ) : (
+            listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
+              <span className="px-1 font-normal text-gray-400 line-through">{listPrice?.formatted?.withoutTax}</span>
+            )
+          )}
+          <span className="pl-1 text-xs font-light text-right text-gray-400">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
+        </div>
+      </>) : (<><div className="font-semibold text-green">FREE</div></>)}
     </div>
   );
 };
