@@ -60,9 +60,9 @@ export default function ProductSort({
     );
   };
   return (
-    <div className="flex items-center">
+    <div className="flex items-center space-x-2">
       <div>
-        <div className="container flex items-center justify-end w-full px-4 pt-1 mx-auto">
+        <div className="flex items-center justify-end w-full px-0 pt-0 mx-auto sm:pt-1 sm:px-4">
           <div className="flex flex-col py-0 pr-1 text-xs font-normal text-black font-14 whitespace-nowrap dark:text-white">
           {translate('label.product.compareItemsText')}
           </div>
