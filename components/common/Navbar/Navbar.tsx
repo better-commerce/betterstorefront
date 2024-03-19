@@ -24,9 +24,6 @@ const CurrencySwitcher = dynamic(() => import('./CurrencySwitcher'))
 const LanguageSwitcher = dynamic(() => import('./LanguageSwitcher'))
 const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
 import {
-  GENERAL_MY_ORDERS,
-} from '@components/utils/textVariables'
-import {
   getCurrentPage,
   getEnabledSocialLogins,
   removePrecedingSlash,
@@ -149,7 +146,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
 
   const accountDropDownConfigAuthorized: any = [
     { href: '/my-account', title: translate('common.label.myAccountText'), className: 'text-left p-2 cursor-pointer', },
-    { href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders', title: GENERAL_MY_ORDERS, className: 'text-left p-2 cursor-pointer', },
+    { href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders', title: translate('label.order.myOrdersText'), className: 'text-left p-2 cursor-pointer', },
     {
       href: '/',
       onClick: async () => {

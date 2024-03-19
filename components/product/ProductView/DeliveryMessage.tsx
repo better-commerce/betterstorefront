@@ -3,7 +3,6 @@ import React from 'react'
 
 // Other Imports
 import { stringFormat } from '@framework/utils/parse-util'
-import { PRODUCT_DELIVERY_MESSAGE } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 function DeliveryMessage({
@@ -17,7 +16,7 @@ function DeliveryMessage({
       <h2 className="mb-2 font-bold text-primary font-18">{translate('label.product.freeDeliveryText')}</h2>
       {freeShippingOverXValue && (
         <p className="font-normal text-14 text-brown-light">
-          {stringFormat(PRODUCT_DELIVERY_MESSAGE, {
+          {stringFormat(translate('common.message.orderDeliveryMsg'), {
             currencySymbol: currencySymbol,
             freeShippingOverXValue: freeShippingOverXValue,
           })}

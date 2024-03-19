@@ -17,6 +17,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -73,6 +74,7 @@ export default abstract class BasePaymentButton
     isCOD: boolean = false,
     paymentInfo?: IPaymentInfo
   ): Promise<{ status: boolean; state: any; result?: any }> {
+    const translate = useTranslation()
     try {
       let convertOrderInput: any = !isCOD
         ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)
@@ -95,7 +97,7 @@ export default abstract class BasePaymentButton
               status: false,
               state: {
                 type: 'SET_ERROR',
-                payload: Messages.Errors[orderResult?.message],
+                payload: translate('common.message.checkout.paymentAlreadyCompletedErrorMsg'),
               },
               result: null,
             }

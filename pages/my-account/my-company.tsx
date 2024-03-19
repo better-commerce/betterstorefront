@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
-import { config } from '@components/utils/myAccount'
+import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -50,7 +50,7 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const [isAdmin, setIsAdmin] = useState(false)
-  const currentOption = 'My Company'
+  const currentOption = translate('label.myAccount.myCompanyText')
 
   const optionsConfig = [
     {
@@ -399,6 +399,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const config = useConfig();
   const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: { 
