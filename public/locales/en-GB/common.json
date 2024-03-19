@@ -34,6 +34,12 @@
       "enterPostcodeText": "Enter postcode",
       "addressFinderText": "Address Finder"
     },
+    "b2b": {
+      "requestTradingAccountText": "Request trading account",
+      "companyNameText": "Company Name",
+      "registeredNumberText": "Registered Number",
+      "phoneNumberText": "Phone Number"
+    },
     "basket": {
       "addToBasketText": "Add to basket",
       "addTocartText": "Add to cart",
@@ -706,12 +712,6 @@
       "myWishlistText": "My Wishlist",
       "moveToWishlistText": "Move to Wishlist",
       "addedToWishlistText": "Added to Wishlist"
-    },
-    "b2b": {
-      "requestTradingAccountText": "Request trading account",
-      "companyNameText": "Company Name",
-      "registeredNumberText": "Registered Number",
-      "phoneNumberText": "Phone Number"
     }
   },
   "common": {
@@ -926,7 +926,7 @@
       "authorizingPaymentText": "Authorizing payment...",
       "initiatingPaymentText": "initiating payment...",
       "capturingPaymentText": "capturing payment...",
-      "PageEndText": "You have seen it all",
+      "pageEndText": "You have seen it all",
       "workText": "Work",
       "strongPasswordText": "Strong password",
       "titleText": "Title",
