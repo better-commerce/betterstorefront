@@ -4,8 +4,8 @@ import { CurrencyDollarIcon, CurrencyBangladeshiIcon, CurrencyEuroIcon, Currency
 import { Fragment } from "react";
 import locales from "@framework/locales.json"
 import { useTranslation } from '@commerce/utils/use-translation'
-export const headerCurrency = (currencyCode: string, isActive: boolean) => {
-  let icon: any
+export const headerCurrency = (currencyCode: string) => {
+  let icon = CurrencyPoundIcon
   if (currencyCode) {
     switch (currencyCode?.toUpperCase()) {
       case "EUR":
@@ -34,7 +34,6 @@ export const headerCurrency = (currencyCode: string, isActive: boolean) => {
     name: currencyCode?.toUpperCase(),
     href: "##",
     icon: icon,
-    active: isActive,
   }
 }
 
@@ -71,13 +70,13 @@ export default function CurrencyDropdown() {
                 <div className="overflow-hidden shadow-lg rounded-2xl ring-1 ring-black ring-opacity-5">
                   <div className="relative grid bg-white gap-7 dark:bg-neutral-800 p-7">
                     {locales?.localizations?.map((localization, index) => {
-                      const item = headerCurrency(localization?.currencyCode, localization?.isActive)
+                      const item = headerCurrency(localization?.currencyCode)
                       return (
                         <a
                           key={index}
                           href={item.href}
                           onClick={() => close()}
-                          className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${item.active
+                          className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${true
                             ? "bg-gray-100 dark:bg-neutral-700"
                             : "opacity-80"
                             }`}
