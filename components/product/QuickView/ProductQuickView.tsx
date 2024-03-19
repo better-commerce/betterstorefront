@@ -111,7 +111,7 @@ export default function ProductQuickView({
         if (selectedAttrData?.currentStock === cartLineItem?.qty) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -235,7 +235,7 @@ export default function ProductQuickView({
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }

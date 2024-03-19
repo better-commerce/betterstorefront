@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { config } from '@components/utils/myAccount'
+import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -22,7 +22,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, deleteUser, isGuestUser } = useUI()
-  const currentOption = 'Contact Preferences'
+  const currentOption = translate('common.label.contactPrefText')
 
   useEffect(() => {
     if (isGuestUser) {
@@ -193,6 +193,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const config = useConfig();
   const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: { 

@@ -30,7 +30,9 @@
       "lastNameText": "Apellido",
       "emailText": "Correo electrónico",
       "townCityText": "Ciudad",
-      "selectCountryText": "Selecciona un país"
+      "selectCountryText": "Selecciona un país",
+      "enterPostcodeText": "Ingrese el código postal",
+      "addressFinderText": "Buscador de direcciones"
     },
     "b2b": {
       "requestTradingAccountText": "Solicitar cuenta de trading",
@@ -70,7 +72,6 @@
       "multipleCodesApplyText": "Puedes aplicar múltiples códigos",
       "typeAddOnText": "ADICIONAL",
       "getItByText": "Recíbelo para",
-      "addOnText": "Complementos para este producto",
       "discountText": "descuento",
       "itemsYourCartText": "Productos en tu carrito",
       "youMayAlsoNeedText": "También podrías necesitar",
@@ -612,6 +613,14 @@
         "leftText": "RESTANTE",
         "preOrderText": "PRE-PEDIDO"
       },
+      "priceMatchWebsiteNameText": "Nombre del sitio web donde encontró un precio más bajo*",
+      "priceMatchDirectLinkText": "Enlace directo completo al producto (copiar/pegar URL del sitio web)",
+      "priceMatchCostText": "Costo del producto",
+      "priceMatchDeliveryCostText": "Costo de envío*",
+      "priceMatchTotalCostText": "Costo total",
+      "priceMatchUserName": "Nombre*",
+      "priceMatchUserEmail": "Correo electrónico*",
+      "priceMatchUserTelephone": "Teléfono*",
       "freeDeliveryText": "Entrega Gratis",
       "daysEasyReturn": "Días de Devolución Fácil",
       "daysEasyExchange": "Días de Cambio Fácil",
@@ -671,7 +680,8 @@
       "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario."
     },
     "section": {
-      "findTheBestText": "¡En esta temporada, encuentra lo mejor! 🔥"
+      "findTheBestText": "¡En esta temporada, encuentra lo mejor! 🔥",
+      "moreCollectionsText": "Más colecciones"
     },
     "social": {
       "generalText": "Únete a la comunidad",
@@ -718,6 +728,7 @@
     },
     "label": {
       "homeText": "Inicio",
+      "postText": "Publicar",
       "reviews": "reseñas",
       "backToHomepageText": "Volver a la página de inicio",
       "closePanelText": "Cerrar panel",
@@ -926,9 +937,11 @@
       "isDefaultBillingAddressText": "Es la Dirección de Facturación Predeterminada",
       "genderText": "Género",
       "femaleText": "Femenino",
-      "maleText": "Masculino"
+      "maleText": "Masculino",
+      "smsText": "SMS"
     },
     "message": {
+      "requiredTextMsg": "Requerido",
       "invalidAccountMsg": "No se encontró ninguna cuenta con este correo electrónico/contraseña",
       "alreadyLoggedInMsg": "Ya has iniciado sesión",
       "loginSuccessMsg": "inicio de sesión exitoso",
@@ -982,6 +995,7 @@
       "tokenInvalidErrorMsg": "¡Vaya! El token no es válido",
       "tokenExpiredErrorMsg": "¡Vaya! El token ha caducado o no es válido",
       "companyNotFoundErrorMsg": "Empresa no encontrada.",
+      "cartItemMaxAddedErrorMsg": "Se ha alcanzado el límite de artículos en el carrito. Por favor, elimine algunos artículos e inténtelo de nuevo.",
       "address": {
         "postCodeNotServicableMsg": "Código postal no servible",
         "postCodeNumMsg": "El código postal solo debe contener dígitos",
@@ -1026,7 +1040,8 @@
         "codErrorMsg": "Error al aplicar cargos adicionales de COD. Por favor, inténtelo de nuevo más tarde.",
         "upiNotSupportedErrorMsg": "El pago UPI no es compatible.",
         "paymentAlreadyCompletedErrorMsg": "El pago de tu carrito ya se ha completado.",
-        "notEnoughCreditErrorMsg": "No hay suficiente crédito disponible."
+        "notEnoughCreditErrorMsg": "No hay suficiente crédito disponible.",
+        "paymentMethodNotSupportedErrorMsg": "Método de pago no compatible."
       },
       "password": {
         "passwordValidationMsg": "La contraseña debe tener un mínimo de 8 caracteres y al menos 1 letra mayúscula.",
@@ -1051,7 +1066,10 @@
       "noEmailMsg": "Por favor, ingrese un correo electrónico correcto",
       "returnSuccessMsg": "Éxito en la devolución",
       "exchangeSuccessMsg": "Intercambio exitoso",
-      "resetPasswordSuccessMsg": "¡Éxito! Serás redirigido a la página de inicio de sesión"
+      "resetPasswordSuccessMsg": "¡Éxito! Serás redirigido a la página de inicio de sesión",
+      "enterCorrectUrlMsg": "¡Ingrese una URL correcta!",
+      "enterProductLinkMsg": "Por favor, ingrese un enlace de producto",
+      "enterWebsiteLinkMsg": "Por favor, ingrese un enlace de sitio web"
     },
     "numberText": {
       "one": "1"

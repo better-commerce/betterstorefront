@@ -260,7 +260,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -374,7 +374,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }

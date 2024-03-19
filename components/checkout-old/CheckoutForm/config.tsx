@@ -1,122 +1,110 @@
 import * as Yup from 'yup'
-
-import {
-  GENERAL_DELIVERY_METHOD,
-  GENERAL_TITLE,
-  GENERAL_MISS,
-  GENERAL_MR,
-  GENERAL_MRS,
-  GENERAL_FIRST_NAME,
-  GENERAL_LAST_NAME,
-  GENERAL_ADDRESS_LINE1,
-  GENERAL_ADDRESS_LINE2,
-  GENERAL_CITY,
-  GENERAL_POSTCODE,
-  GENERAL_COUNTRY,
-  GENERAL_PHONE,
-  GENERAL_ENTER_POSTCODE,
-  GENERAL_ADDRESS_FINDER,
-} from '@components/utils/textVariables'
+import { useTranslation } from "@commerce/utils/use-translation"
 import { Messages } from '@components/utils/constants'
-import { useTranslation } from '@commerce/utils/use-translation'
 
-export const PANELS = [
-  {
-    title: GENERAL_DELIVERY_METHOD,
-    key: 'deliveryMethod',
-  },
-  {
-    title: "Delivery Address",
-    key: 'deliveryAddress',
-  },
-  {
-    title: "Payment Method",
-    key: 'paymentMethod',
-  },
-]
+// export const PANELS = () => {
+//   const translate = useTranslation()
+//   return [
+//    {
+//      title: translate('label.checkout.deliveryMethodHeadingText'),
+//      key: 'deliveryMethod',
+//    },
+//    {
+//      title: translate('label.orderDetails.deliveryAddressHeadingText'),
+//      key: 'deliveryAddress',
+//    },
+//    {
+//      title: translate('label.checkout.paymentMethodText'),
+//      key: 'paymentMethod',
+//    },
+//  ]
+// } 
 
-export const shippingFormConfig = [
-  {
-    as: 'select',
-    name: 'title',
-    options: [
-      {
-        title: GENERAL_TITLE,
-        value: GENERAL_TITLE,
-      },
-      {
-        title: GENERAL_MISS,
-        value: GENERAL_MISS,
-      },
-      {
-        title: GENERAL_MR,
-        value: GENERAL_MR,
-      },
-      {
-        title: GENERAL_MRS,
-        value: GENERAL_MRS,
-      },
-    ],
-    label: GENERAL_TITLE,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'firstName',
-    placeholder: GENERAL_FIRST_NAME,
-    label: GENERAL_FIRST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'lastName',
-    placeholder: GENERAL_LAST_NAME,
-    label: GENERAL_LAST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'addressFinder',
-    placeholder: GENERAL_ENTER_POSTCODE,
-    label: GENERAL_ADDRESS_FINDER,
-    isFullWidth: true,
-    addressFinder: true,
-  },
-  {
-    type: 'text',
-    name: 'address1',
-    placeholder: GENERAL_ADDRESS_LINE1,
-    label: GENERAL_ADDRESS_LINE1,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'address2',
-    placeholder: GENERAL_ADDRESS_LINE2,
-    label: GENERAL_ADDRESS_LINE2,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'city',
-    placeholder: GENERAL_CITY,
-    label: GENERAL_CITY,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'postCode',
-    placeholder: GENERAL_POSTCODE,
-    label: GENERAL_POSTCODE,
-    isFullWidth: true,
-  },
-
-  {
-    type: 'phone',
-    name: 'phoneNo',
-    placeholder: GENERAL_PHONE,
-    label: GENERAL_PHONE,
-    isFullWidth: true,
-  },
-]
+export const useShippingFormConfig = () => {
+  const translate = useTranslation()
+  return [
+    {
+      as: 'select',
+      name: 'title',
+      options: [
+        {
+          title: translate('common.label.titleText'),
+          value: translate('common.label.titleText'),
+        },
+        {
+          title: translate('common.label.missText'),
+          value: translate('common.label.missText'),
+        },
+        {
+          title: translate('common.label.mrText'),
+          value: translate('common.label.mrText'),
+        },
+        {
+          title: translate('common.label.mrsText'),
+          value: translate('common.label.mrsText'),
+        },
+      ],
+      label: translate('common.label.titleText'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'firstName',
+      placeholder: translate('label.addressBook.firstNameText'),
+      label: translate('label.addressBook.firstNameText'),
+    },
+    {
+      type: 'text',
+      name: 'lastName',
+      placeholder: translate('label.addressBook.lastNameText'),
+      label: translate('label.addressBook.lastNameText'),
+    },
+    {
+      type: 'text',
+      name: 'addressFinder',
+      placeholder: translate('label.addressBook.enterPostcodeText'),
+      label:  translate('label.addressBook.addressFinderText'),
+      isFullWidth: true,
+      addressFinder: true,
+    },
+    {
+      type: 'text',
+      name: 'address1',
+      placeholder: translate('common.label.addressLine1Text'),
+      label: translate('common.label.addressLine1Text'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'address2',
+      placeholder: translate('common.label.addressLine2Text'),
+      label: translate('common.label.addressLine2Text'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'city',
+      placeholder: translate('label.addressBook.townCityText'),
+      label: translate('label.addressBook.townCityText'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'postCode',
+      placeholder: translate('common.label.postcodeText'),
+      label: translate('common.label.postcodeText'),
+      isFullWidth: true,
+    },
+  
+    {
+      type: 'phone',
+      name: 'phoneNo',
+      placeholder: translate('label.b2b.phoneNumberText'),
+      label: translate('label.b2b.phoneNumberText'),
+      isFullWidth: true,
+    },
+  ]
+}
 
 export const useShippingSchema = () => {
   const translate = useTranslation();
@@ -155,88 +143,91 @@ export const useShippingSchema = () => {
   return shippingSchema;
 }
 
-export const billingFormConfig = [
-  {
-    as: 'select',
-    name: 'title',
-    options: [
-      {
-        title: GENERAL_TITLE,
-        value: GENERAL_TITLE,
-      },
-      {
-        title: GENERAL_MISS,
-        value: GENERAL_MISS,
-      },
-      {
-        title: GENERAL_MR,
-        value: GENERAL_MR,
-      },
-      {
-        title: GENERAL_MRS,
-        value: GENERAL_MRS,
-      },
-    ],
-    label: 'Title',
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'firstName',
-    placeholder: GENERAL_FIRST_NAME,
-    label: GENERAL_FIRST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'lastName',
-    placeholder: GENERAL_LAST_NAME,
-    label: GENERAL_LAST_NAME,
-  },
-  {
-    type: 'text',
-    name: 'addressFinder',
-    placeholder: GENERAL_ENTER_POSTCODE,
-    label: GENERAL_ADDRESS_FINDER,
-    addressFinder: true,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'address1',
-    placeholder: GENERAL_ADDRESS_LINE1,
-    label: GENERAL_ADDRESS_LINE1,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'address2',
-    placeholder: GENERAL_ADDRESS_LINE2,
-    label: GENERAL_ADDRESS_LINE2,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'city',
-    placeholder: GENERAL_CITY,
-    label: GENERAL_CITY,
-    isFullWidth: true,
-  },
-  {
-    type: 'text',
-    name: 'postCode',
-    placeholder: GENERAL_POSTCODE,
-    label: GENERAL_POSTCODE,
-    isFullWidth: true,
-  },
-
-  {
-    type: 'phone',
-    name: 'phoneNo',
-    placeholder: GENERAL_PHONE,
-    label: GENERAL_PHONE,
-    isFullWidth: true,
-  },
-]
+export const useBillingFormConfig = () => {
+  const translate = useTranslation()
+  return [
+    {
+      as: 'select',
+      name: 'title',
+      options: [
+        {
+          title: translate('common.label.titleText'),
+          value: translate('common.label.titleText'),
+        },
+        {
+          title: translate('common.label.missText'),
+          value: translate('common.label.missText'),
+        },
+        {
+          title: translate('common.label.mrText'),
+          value: translate('common.label.mrText'),
+        },
+        {
+          title: translate('common.label.mrsText'),
+          value: translate('common.label.mrsText'),
+        },
+      ],
+      label: translate('common.label.titleText'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'firstName',
+      placeholder: translate('label.addressBook.firstNameText'),
+      label: translate('label.addressBook.firstNameText'),
+    },
+    {
+      type: 'text',
+      name: 'lastName',
+      placeholder: translate('label.addressBook.lastNameText'),
+      label: translate('label.addressBook.lastNameText'),
+    },
+    {
+      type: 'text',
+      name: 'addressFinder',
+      placeholder: translate('label.addressBook.enterPostcodeText'),
+      label:  translate('label.addressBook.addressFinderText'),
+      addressFinder: true,
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'address1',
+      placeholder: translate('common.label.addressLine1Text'),
+      label: translate('common.label.addressLine1Text'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'address2',
+      placeholder: translate('common.label.addressLine2Text'),
+      label: translate('common.label.addressLine2Text'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'city',
+      placeholder: translate('label.addressBook.townCityText'),
+      label: translate('label.addressBook.townCityText'),
+      isFullWidth: true,
+    },
+    {
+      type: 'text',
+      name: 'postCode',
+      placeholder: translate('common.label.postcodeText'),
+      label: translate('common.label.postcodeText'),
+      isFullWidth: true,
+    },
+  
+    {
+      type: 'phone',
+      name: 'phoneNo',
+      placeholder: translate('label.b2b.phoneNumberText'),
+      label: translate('label.b2b.phoneNumberText'),
+      isFullWidth: true,
+    },
+  ]
+}
 
 export const useBillingSchema = ()  => {
   const translate = useTranslation();
