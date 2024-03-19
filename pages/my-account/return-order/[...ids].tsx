@@ -266,7 +266,7 @@ export default function ReturnOrder({
                                 value={value}
                                 onChange={handleChange}
                               >
-                                <option value="0">Select</option>
+                                <option value="0">{translate('label.myAccount.selectText')}</option>
                                 {Array.from(Array(itemData?.qty).keys())
                                   ?.map((x: number) => x + 1)
                                   ?.map((qty: any, idx: number) => (

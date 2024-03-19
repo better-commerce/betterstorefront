@@ -165,6 +165,7 @@
       "checkoutWithoutLoginText": "¿Quieres pagar sin iniciar sesión?",
       "guestCheckoutText": "Pago como invitado",
       "loginText": "Iniciar sesión",
+      "loginRegistrationText": "Iniciar sesión | Registro",
       "haveAnAccountText": "¿Tienes una cuenta?",
       "paymentMethodsText": "Métodos de pago",
       "creditText": "Crédito",
@@ -225,7 +226,8 @@
     "common": {
       "orderNumberText": "Número de orden",
       "datePlacedText": "Fecha de colocación",
-      "sportsEquipmentCollectionText": "Colección de equipo deportivo."
+      "sportsEquipmentCollectionText": "Colección de equipo deportivo.",
+      "myAccountText": "Mi cuenta"
     },
     "contactPreferences": {
       "contactPreferencesHeadingText": "Contacto",
@@ -281,6 +283,7 @@
         "pressText": "Prensa",
         "careersText": "Carreras",
         "termsAndConditionsText": "Términos y condiciones",
+        "byAcceptingOfferAgreText": "Al aceptar esta oferta, aceptas los",
         "privacyText": "Privacidad",
         "contactText": "Contacto",
         "returnsText": "Devoluciones",
@@ -353,6 +356,10 @@
       "validTillText": "Válido hasta",
       "valifFromText": "Válido desde",
       "VoucherText": "Código de vale",
+      "orText": "O",
+      "alreadyAccountText": "¿Ya tienes una cuenta?",
+      "SignInText": "Iniciar sesión",
+      "selectText": "Seleccionar",
       "orderStatusText": "Estado del pedido",
       "referralText": "Recomendación",
       "shareReferralByEmail": "Compartir recomendación por correo electrónico",
@@ -699,6 +706,7 @@
       "yourOfferIsValidText": "Tu oferta es válida por {days} días",
       "congratilationDiscountText": "¡Felicidades! Puedes obtener un descuento en tu próximo pedido usando el código",
       "deliverdText": "Entregado por",
+      "referralServiceEmailsText": "Nuestro programa de referidos procesará tus datos y te enviará correos electrónicos de servicio de referidos.",
       "sizeText": "Talla",
       "willBeWithYouSoonText": "estará contigo pronto.",
       "itsOnTheWayText": "¡Está en camino!",
@@ -712,6 +720,15 @@
       "myWishlistText": "Mi lista de deseos",
       "moveToWishlistText": "Mover a lista de deseos",
       "addedToWishlistText": "Agregado a la lista de deseos"
+    },
+    "modalEdit": {
+      "ethText":"ETH",
+      "btcText":"BTC",
+      "bthText":"BTH"
+    },
+    "sectionHero":{
+      "exploreText":"Explorar",
+      "createText":"Crear"
     }
   },
   "common": {
@@ -938,7 +955,12 @@
       "genderText": "Género",
       "femaleText": "Femenino",
       "maleText": "Masculino",
-      "smsText": "SMS"
+      "smsText": "SMS",
+      "hiText": "Hola",
+      "logOutText": "Cerrar sesión",
+      "recentlyViewedText": "Visto recientemente",
+      "remainingTimeText": "Tiempo restante",
+      "colorText": "Color"
     },
     "message": {
       "requiredTextMsg": "Requerido",
