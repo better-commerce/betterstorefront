@@ -8,7 +8,6 @@ import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import {
-  MY_ORDERS_TEXT,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import ReturnModal from '@components/returns/Modal'
@@ -121,7 +120,7 @@ export default function MyOrders({ deviceInfo }: any) {
             <h1 className="font-extrabold tracking-tight text-gray-900">
             {translate('label.order.orderHistory')}
             </h1>
-            <p className="mt-2 text-sm text-gray-500">{MY_ORDERS_TEXT}</p>
+            <p className="mt-2 text-sm text-gray-500">{translate('label.orderDetails.myOrderHeadingText')}</p>
           </div>
           <ReturnModal
             handlePostReturn={handlePostReturn}

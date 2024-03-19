@@ -1,91 +1,52 @@
-import {
-  GENERAL_MY_ORDERS,
-  GENERAL_MY_RETURNS,
-  WISHLIST_TITLE,
-  GENERAL_MY_DETAILS,
-  GENERAL_CONTACT_PREFERENCES
-} from '@components/utils/textVariables'
+import { useTranslation } from "@commerce/utils/use-translation"
 
-export const config: any = [
-  {
-    type: 'tab',
-    text: GENERAL_MY_ORDERS,
-    mtext: GENERAL_MY_ORDERS,
-    props: 'orders',
-    href:"/my-account/orders"
-  },
-  {
-    type: 'tab',
-    text: GENERAL_MY_RETURNS,
-    mtext: GENERAL_MY_RETURNS,
-    props: 'returns',
-   href:"/my-account/MyReturns"
-  },
-  {
-    type: 'tab',
-    text: WISHLIST_TITLE,
-    mtext: WISHLIST_TITLE,
-    props: 'wishlist',
-    href:"/my-account/wishlist"
-  },
-  {
-    type: 'tab',
-    text: GENERAL_MY_DETAILS,
-    mtext: GENERAL_MY_DETAILS,
-    props: 'details',
-    href:"/my-account"
-  },
-  {
-    type: 'tab',
-    text: 'My Saved Address',
-    mtext: 'My Saved Address',
-    props: 'address-book',
-    href:"/my-account/address-book"
-  },
-
-  {
-    type: 'tab',
-    text: GENERAL_CONTACT_PREFERENCES,
-    mtext:GENERAL_CONTACT_PREFERENCES,
-    props: 'contact',
-   href:"/my-account/contact"
-  },
- 
-]
-
-
-
-// export const config: any = [
-//   {
+export const useConfig: any = () => {
+  const translate = useTranslation()
+  return [
+    {
+      type: 'tab',
+      text: translate('label.order.myOrdersText'),
+      mtext: translate('label.order.myOrdersText'),
+      props: 'orders',
+      href:"/my-account/orders"
+    },
+    {
+      type: 'tab',
+      text: translate('common.label.myReturnsText'),
+      mtext: translate('common.label.myReturnsText'),
+      props: 'returns',
+     href:"/my-account/MyReturns"
+    },
+    {
+      type: 'tab',
+      text: translate('label.wishlist.wishlistText'),
+      mtext: translate('label.wishlist.wishlistText'),
+      props: 'wishlist',
+      href:"/my-account/wishlist"
+    },
+    {
+      type: 'tab',
+      text: translate('label.myAccount.myDetailsHeadingText'),
+      mtext: translate('label.myAccount.myDetailsHeadingText'),
+      props: 'details',
+      href:"/my-account"
+    },
+    {
+      type: 'tab',
+      text: translate('label.myAccount.mySavedAddressText'),
+      mtext: translate('label.myAccount.mySavedAddressText'),
+      props: 'address-book',
+      href:"/my-account/address-book"
+    },
+  
+    {
+      type: 'tab',
+      text: translate('common.label.contactPrefText'),
+      mtext: translate('common.label.contactPrefText'),
+      props: 'contact',
+     href:"/my-account/contact"
+    },
    
-//   {
-    
-//   },
-//   // {
-//   //   type: 'tab',
-//   //   text: GENERAL_MY_RETURNS,
-//   //   props: 'returns',
-//   // },
-//   {
-    
-//   },
-//   {
-//     type: 'tab',
-//     text: 'My Saved Address',
-//     mtext: 'My Saved Address',
-//     props: 'address-book',
-//     href:"/my-account/address-book"
-//   },
-//   {
-//     type: 'tab',
-//     text: WISHLIST_TITLE,
-//     mtext: WISHLIST_TITLE,
-//     props: 'wishlist',
-//     href:"/my-account/wishlist"
-//   },
-//   // {
-//   //   type: 'tab',
-//   //   text: GENERAL_CONTACT_PREFERENCES,
-//   //   props: 'contact',
-//   // },
-// ]
+  ]
+}
+

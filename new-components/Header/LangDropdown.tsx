@@ -28,7 +28,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
     const { i18n } = useTranslation()
     return (
       <div className="grid gap-8 lg:grid-cols-2">
-        {locales?.localizations?.map((item, index) => (
+        {locales?.localizations?.filter((x: any) => x?.isActive)?.map((item, index) => (
           <Link legacyBehavior href={item?.isActive ? (item?.currencyCode === BETTERCOMMERCE_DEFAULT_CURRENCY) ? "/" : item?.culture : "#"} locale={item?.isActive ? item?.culture : EmptyString}>
             <a
               key={index}
@@ -59,7 +59,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ panelClassName = "" }) => {
   const renderCurr = (close: () => void) => {
     return (
       <div className="grid gap-7 lg:grid-cols-2">
-        {locales?.localizations?.map((localization, index) => {
+        {locales?.localizations?.filter((x: any) => x?.isActive)?.map((localization, index) => {
           const item = headerCurrency(localization?.currencyCode, localization?.isActive)
           return (
             <Link legacyBehavior href={localization?.isActive ? (localization?.currencyCode === BETTERCOMMERCE_DEFAULT_CURRENCY) ? "/" : localization?.culture : "#"} locale={localization?.isActive ? localization?.culture : EmptyString}>

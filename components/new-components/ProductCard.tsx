@@ -114,7 +114,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           }
         })
         if (data?.currentStock === cartLineItem?.qty && !data?.fulfilFromSupplier && !data?.flags?.sellWithoutInventory) {
-          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
           return false
         }
         const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount, quantity > 1 && quantity)

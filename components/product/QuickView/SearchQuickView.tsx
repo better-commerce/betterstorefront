@@ -121,7 +121,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         if (quickViewData?.currentStock === cartLineItem?.qty && !quickViewData?.fulfilFromSupplier && !quickViewData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -233,7 +233,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
             if (quickViewData?.currentStock === cartLineItem?.qty && !quickViewData?.fulfilFromSupplier && !quickViewData?.flags?.sellWithoutInventory) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }

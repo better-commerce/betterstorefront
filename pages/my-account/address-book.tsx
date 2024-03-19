@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import NextHead from 'next/head'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { config } from '@components/utils/myAccount'
+import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -23,7 +23,7 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
   const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  const currentOption = 'My Saved Address'
+  const currentOption = translate('label.myAccount.mySavedAddressText')
 
   useEffect(() => {
     if (isGuestUser) {
@@ -213,6 +213,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const config = useConfig();
   const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: { 

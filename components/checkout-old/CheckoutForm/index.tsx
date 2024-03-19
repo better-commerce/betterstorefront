@@ -17,7 +17,7 @@ import {
   NEXT_GET_COUNTRIES,
   Messages,
 } from '@components/utils/constants'
-import { shippingFormConfig, useShippingSchema } from './config'
+import { useShippingFormConfig, useShippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
@@ -97,6 +97,7 @@ export default function CheckoutForm({
   onShippingPlansUpdated,
 }: any) {
   const shippingSchema = useShippingSchema();
+  const shippingFormConfig = useShippingFormConfig();
   const translate = useTranslation()
   const {
     setCartItems,
