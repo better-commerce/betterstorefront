@@ -163,7 +163,7 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={`text-base sm:pt-24 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
           {displayAlert && <AlertRibbon />}
           {children}
           <FooterClean navItems={navTree?.footer} />
