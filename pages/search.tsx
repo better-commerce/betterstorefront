@@ -339,7 +339,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         <title>{translate('label.basket.catalogText')}</title>
         <meta name="title" content={translate('label.basket.catalogText')} />
         <meta name="description" content={translate('label.basket.catalogText')} />
-        <meta name="keywords" content="Search" />
+        <meta name="keywords" content={translate('label.search.searchText')} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />

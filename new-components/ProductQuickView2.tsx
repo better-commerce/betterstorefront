@@ -59,7 +59,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
       <div>
         <label htmlFor="">
           <span className="text-sm font-medium">
-            Color:
+            {translate('common.label.colorText')}:
             <span className="ml-1 font-semibold">
               {variants[variantActive].name}
             </span>
@@ -106,7 +106,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
         <div className="flex justify-between text-sm font-medium">
           <label htmlFor="">
             <span className="">
-              Size:
+            {translate('label.thankyou.sizeText')}:
               <span className="ml-1 font-semibold">{sizeSelected}</span>
             </span>
           </label>
