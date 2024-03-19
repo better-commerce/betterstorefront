@@ -1,35 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { config } from './configs/contact'
-import { Formik, Form, Field } from 'formik'
+import { useContactPrefConfig } from './configs/contact'
+import { Formik} from 'formik'
 import { useUI } from '@components/ui/context'
 import { handleSubmit, URLS } from './common'
 import Button from '@components/ui/Button'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  GENERAL_WANT_RECEIVE_OFFERS,
-  GENERAL_NOT_WANT_RECEIVE_OFFERS,
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const radioBtnsConfig = [
-  {
-    type: 'radio',
-    title: GENERAL_WANT_RECEIVE_OFFERS,
-    items: config,
-    id: 1,
-  },
-  {
-    type: 'radio',
-    id: 2,
-    title: GENERAL_NOT_WANT_RECEIVE_OFFERS,
-    items: [],
-    default: true,
-    unsubscribe: true,
-  },
-]
 
 export default function ContactPreferences() {
+  const translate = useTranslation();
   const [title, setTitle] = useState('Contact')
   const [items, setItems] = useState([])
   const [activeItem, setActiveItem] = useState({
@@ -39,8 +20,24 @@ export default function ContactPreferences() {
   })
   const [data, setData] = useState({})
   const [defaultData, setDefaultData] = useState({})
+  const config = useContactPrefConfig();
+  const radioBtnsConfig = [
+    {
+      type: 'radio',
+      title: translate('common.label.receiveOfferText'),
+      items: config,
+      id: 1,
+    },
+    {
+      type: 'radio',
+      id: 2,
+      title: translate('dontWantReceiveOfferText'),
+      items: [],
+      default: true,
+      unsubscribe: true,
+    },
+  ]
   const { user, setUser } = useUI()
-  const translate = useTranslation()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const initialValues = {

@@ -188,7 +188,7 @@ export default function CartProduct({
       setValidQty(false)
       setAlert({
         type: 'error',
-        msg: Messages.Errors['CART_QUANTITY'],
+        msg: translate('common.message.requestCouldNotProcessErrorMsg'),
       })
     }
   }

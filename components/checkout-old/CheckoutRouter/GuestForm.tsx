@@ -1,11 +1,6 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import Checkbox from '@components/account/Address/Checkbox'
-import {
-  GENERAL_EMAIL,
-  GENERAL_POST,
-  GENERAL_SMS,
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const COMPONENTS_MAP: any = {
@@ -26,38 +21,43 @@ const initialValues = {
   notifyByPost: false,
 }
 
-export const config = [
-  {
-    key: 'email',
-    label: GENERAL_EMAIL,
-    type: 'email',
-    placeholder: 'john@doe.com',
-  },
-]
 
-const checkboxConfig = [
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'notifyByEmail',
-    label: GENERAL_EMAIL,
-    className: ' ',
-  },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'notifyBySms',
-    label: GENERAL_SMS,
-    className: ' ',
-  },
-  {
-    customComponent: 'CustomCheckbox',
-    name: 'notifyByPost',
-    label: GENERAL_POST,
-    className: ' ',
-  },
-]
+export const useCheckboxConfig = () => {
+  const translate = useTranslation()
+  return [
+    {
+      customComponent: 'CustomCheckbox',
+      name: 'notifyByEmail',
+      label: translate('label.addressBook.emailText'),
+      className: ' ',
+    },
+    {
+      customComponent: 'CustomCheckbox',
+      name: 'notifyBySms',
+      label: translate('common.label.smsText'),
+      className: ' ',
+    },
+    {
+      customComponent: 'CustomCheckbox',
+      name: 'notifyByPost',
+      label: translate('common.label.postText'),
+      className: ' ',
+    }
+  ]
+}
+
 
 export default function GuestForm({ onSubmit = () => {} }: any) {
   const translate = useTranslation()
+  const checkboxConfig = useCheckboxConfig();
+  const config = [
+    {
+      key: 'email',
+      label: translate('label.addressBook.emailText'),
+      type: 'email',
+      placeholder: translate('common.label.dummyEmailText'),
+    },
+  ]
   return (
     <Formik
       validationSchema={schema}
@@ -97,7 +97,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                 )
               })}
               <div className="flex">
-                {checkboxConfig.map((box: any, idx: number) => {
+                {checkboxConfig?.map((box: any, idx: number) => {
                   return COMPONENTS_MAP[box.customComponent]({
                     formItem: box,
                     values,
