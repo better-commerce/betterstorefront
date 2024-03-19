@@ -498,7 +498,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       product?.currentStock > 0 &&
       <div className="rounded-full flex items-center justify-center px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
         <CheckIcon className="w-3.5 h-3.5" />
-        <span className="ml-1 leading-none">In Stock</span>
+        <span className="ml-1 leading-none">{translate('label.product.inStockText')}</span>
       </div>
     );
   };
@@ -514,12 +514,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
           href={SITE_ORIGIN_URL + router.asPath}
         />
         <title>{translate('label.basket.basketText')}</title>
-        <meta name="title" content="Basket" />
-        <meta name="description" content="Basket" />
-        <meta name="keywords" content="Basket" />
+        <meta name="title" content={translate('label.basket.basketText')} />
+        <meta name="description" content={translate('label.basket.basketText')} />
+        <meta name="keywords" content={translate('label.basket.basketText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="Basket" key="ogtitle" />
-        <meta property="og:description" content="Basket" key="ogdesc" />
+        <meta property="og:title" content={translate('label.basket.basketText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.basket.basketText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta
           property="og:url"
@@ -750,7 +750,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                           <LoadingDots />
                         ) : (
                           <h2 className="text-sm font-bold">
-                            {`Delivery ${Idx + 1}`}
+                            {translate('label.checkout.deliveryText') `${Idx + 1}`}
                           </h2>
                         )}
                         {splitBasketProducts[deliveryDate]?.map(
@@ -810,7 +810,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                     >
                                       <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
                                         <div className="mr-1 text-sm text-gray-700">
-                                          Size:{' '}
+                                        {translate('common.label.sizeText')}{' '}
                                           <span className="font-semibold text-black uppercase">
                                             {getLineItemSizeWithoutSlug(product)}
                                           </span>

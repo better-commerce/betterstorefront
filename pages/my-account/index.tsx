@@ -127,12 +127,12 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('common.label.myAccountText')}</title>
-        <meta name="title" content="My Account" />
-        <meta name="description" content="My Account" />
-        <meta name="keywords" content="My Account" />
+        <meta name="title" content={translate('common.label.myAccountText')} />
+        <meta name="description" content={translate('common.label.myAccountText')} />
+        <meta name="keywords" content={translate('common.label.myAccountText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="My Account" key="ogtitle" />
-        <meta property="og:description" content="My Account" key="ogdesc" />
+        <meta property="og:title" content={translate('common.label.myAccountText')} key="ogtitle" />
+        <meta property="og:description" content={translate('common.label.myAccountText')} key="ogdesc" />
       </NextHead>
       <section className="relative pb-10 text-gray-900">
         <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
