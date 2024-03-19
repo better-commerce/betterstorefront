@@ -27,7 +27,7 @@ const Prices: FC<PricesProps> = ({ className = "", price, listPrice, contentClas
           )}
           <span className="pl-1 text-xs font-light text-right text-gray-400">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
         </div>
-      </>) : (<><div className="font-semibold text-green">FREE</div></>)}
+      </>) : (<><div className="font-semibold text-green">{translate('label.orderSummary.freeText')}</div></>)}
     </div>
   );
 };
