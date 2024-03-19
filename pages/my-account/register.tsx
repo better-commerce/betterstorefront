@@ -55,7 +55,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       </div>
       <div className="relative text-center">
         <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-          OR
+          {translate('label.myAccount.orText')}
         </span>
         <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
       </div>
@@ -243,9 +243,9 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
             )}
 
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
-              Already have an account? {` `}
+              {translate('label.myAccount.alreadyAccountText')} {` `}
               <Link className="text-green-600" href="/my-account/login">
-                Sign in
+                {translate('label.myAccount.SignInText')}
               </Link>
             </span>
           </div>
