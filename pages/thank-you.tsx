@@ -177,20 +177,6 @@ export default function OrderConfirmation({ config }: any) {
   }
   const isIncludeVAT = vatIncluded()
   const router = useRouter()
-  const referralDescription = (
-    <>
-      Our refer-a-friend programme will process your data and send you referral
-      service emails.
-    </>
-  )
-  const referralTermsAndConditions = (
-    <>
-      By accepting this offer you agree to the{' '}
-      <a href="#">
-        <b>Terms and Conditions</b>
-      </a>
-    </>
-  )
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -749,7 +735,7 @@ export default function OrderConfirmation({ config }: any) {
                               {referralOffers?.refereePromo}
                             </h2>
                             <p className="px-5 text-center">
-                              {referralDescription}
+                              {translate('label.thankyou.referralServiceEmailsText')}
                             </p>
                             <Button
                               className="my-3"
@@ -760,7 +746,10 @@ export default function OrderConfirmation({ config }: any) {
                               {referralOffers?.referrerPromo}
                             </Button>
                             <p className="px-5 text-center">
-                              {referralTermsAndConditions}
+                              {translate('label.footer.navigation.byAcceptingOfferAgreText')}{' '}
+                              <a href="#">
+                                <span className='font-bold'>{translate('label.footer.navigation.termsAndConditionsText')}</span>
+                              </a>
                             </p>
                           </div>
                         )}

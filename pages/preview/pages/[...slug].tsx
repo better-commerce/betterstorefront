@@ -14,6 +14,7 @@ const PromotionBanner = dynamic(
 )
 import BestSellerProduct from '@components/product/BestSellerProduct'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
@@ -23,6 +24,7 @@ const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 const PAGE_TYPE = PAGE_TYPES.Home
 function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, deviceInfo, config }: any) {
   const router = useRouter()
+  const translate = useTranslation()
   const pageSlugClass = pageContents?.slug === "cookies" ? "companyCke-text" : "";
   return (
     <>
@@ -39,8 +41,8 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
               id="canonical"
               href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
             />
-            <title>{pageContents?.metatitle || 'Home'}</title>
-            <meta name="title" content={pageContents?.metatitle || 'Home'} />
+            <title>{pageContents?.metatitle || translate('common.label.homeText')}</title>
+            <meta name="title" content={pageContents?.metatitle || translate('common.label.homeText')} />
             {pageContents?.metadescription && (
               <meta name="description" content={pageContents?.metadescription} />
             )}
