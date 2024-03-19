@@ -23,9 +23,11 @@ interface Props {
   languages: []
   configSettings: any
   keywords?: any
+  defaultLanguage: string
+  defaultCountry: string
 }
 
-const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, }) => {
+const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const { setShowSearchBar, openBulkAdd } = useUI()
@@ -64,7 +66,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
           </div>
 
           <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
-            <LangDropdown />
+            <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
             <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
               {renderMagnifyingGlassIcon()}
             </button>
