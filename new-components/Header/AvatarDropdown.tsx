@@ -118,7 +118,7 @@ export default function AvatarDropdown() {
     }
   ]
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = !isGuestUser ? user.userId ? `Hi, ${user.firstName}` : 'My account' : ''
+  let title = !isGuestUser ? user?.userId ? (translate('common.label.hiText') + `, ${user?.firstName}`): translate('label.common.myAccountText') : ''
   if (!isGuestUser && user.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
@@ -173,7 +173,7 @@ export default function AvatarDropdown() {
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium ">{"Log out"}</p>
+                        <p className="text-sm font-medium ">{translate('common.label.logOutText')}</p>
                       </div>
                     </Link>
                   </div>

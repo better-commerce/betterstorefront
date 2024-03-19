@@ -25,8 +25,10 @@ import {
   NEXT_REFERRAL_INFO,
 } from '@components/utils/constants'
 const ProductCard = dynamic(() => import('@new-components/ProductCard'))
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
+  const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
   const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
@@ -148,7 +150,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
               <div>
                 <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
                   <h2 className="font-semibold text-gray-900 uppercase font-18 mb-5">
-                    Recently Viewed
+                    {translate('common.label.recentlyViewedText')}
                   </h2>
                 </div>
                 <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">

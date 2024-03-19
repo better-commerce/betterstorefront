@@ -492,7 +492,7 @@ function CategoryLandingPage({
             <div className="py-4">
               {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
                 <div className="container mx-auto mb-4">
-                  <h2 className="block text-xl font-medium sm:text-2xl lg:text-2xl">Popular Categories </h2>
+                  <h2 className="block text-xl font-medium sm:text-2xl lg:text-2xl">{translate('label.category.popularCategoriesText')} </h2>
                 </div>
               )}
               <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >

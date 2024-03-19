@@ -459,7 +459,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   <span>{product?.rating}</span>
                   <span className="block mx-2">·</span>
                   <span className="underline text-slate-600 dark:text-slate-400">
-                    {product?.reviewCount} reviews
+                    {product?.reviewCount} {translate('common.label.reviews')}
                   </span>
                 </div>
               </Link>
