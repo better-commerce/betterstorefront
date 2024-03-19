@@ -1,3 +1,4 @@
+import { useTranslation } from "@commerce/utils/use-translation";
 import React, { FC } from "react";
 
 interface Props {
@@ -9,6 +10,7 @@ const RemainingTimeNftCard: FC<Props> = ({
   className = "absolute top-[-1px] right-[-1px] flex items-center",
   contentClassName = "right-5 top-1/2 -translate-y-1/2",
 }) => {
+  const translate = useTranslation()
   return (
     <div className={className}>
       <svg
@@ -25,7 +27,7 @@ const RemainingTimeNftCard: FC<Props> = ({
 
       <div className={`absolute ${contentClassName}`}>
         <span className="block text-xs text-neutral-500 dark:text-neutral-400 tracking-wide">
-          Remaining time
+          {translate('common.label.remainingTimeText')}
         </span>
         <span className="block md:text-lg font-semibold">3h : 15m : 20s</span>
       </div>

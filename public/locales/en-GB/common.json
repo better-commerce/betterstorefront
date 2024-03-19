@@ -225,7 +225,8 @@
     "common": {
       "orderNumberText": "Order number",
       "datePlacedText": "Date placed",
-      "sportsEquipmentCollectionText": "Sports equipment collection."
+      "sportsEquipmentCollectionText": "Sports equipment collection.",
+      "myAccountText": "My account"
     },
     "contactPreferences": {
       "contactPreferencesHeadingText": "Contact",
@@ -712,6 +713,15 @@
       "myWishlistText": "My Wishlist",
       "moveToWishlistText": "Move to Wishlist",
       "addedToWishlistText": "Added to Wishlist"
+    },
+    "modalEdit": {
+      "ethText":"ETH",
+      "btcText":"BTC",
+      "bthText":"BTH"
+    },
+    "sectionHero":{
+      "exploreText":"Explore",
+      "createText":"Create"
     }
   },
   "common": {
@@ -938,7 +948,12 @@
       "genderText": "Gender",
       "femaleText": "Female",
       "maleText": "Male",
-      "smsText": "SMS"
+      "smsText": "SMS",
+      "hiText": "Hi",
+      "logOutText": "Log out",
+      "recentlyViewedText": "Recently Viewed",
+      "remainingTimeText": "Remaining time",
+      "colorText": "Color"
     },
     "message": {
       "requiredTextMsg" : "Required",
