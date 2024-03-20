@@ -3,7 +3,13 @@ import cn from 'classnames'
 import { useState, useEffect } from 'react'
 import { PDP_SIZE_OPTIONS_COUNT } from '@components/utils/constants'
 
-function renderRadioOptions( items: any, itemsCount: any, selectedValue: any, sizeInit: any, setSizeInit: any ) {
+function renderRadioOptions(
+  items: any,
+  itemsCount: any,
+  selectedValue: any,
+  sizeInit: any,
+  setSizeInit: any
+) {
   let defaultItems = items && items.length > 0 ? items.slice(0, itemsCount) : []
   let remainingItems = items && items.length > 0 ? items.slice(itemsCount, items.length) : []
 
@@ -23,7 +29,7 @@ function renderRadioOptions( items: any, itemsCount: any, selectedValue: any, si
           className={cn(
             'relative rounded-2xl border flex items-center justify-center text-sm uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 hover:bg-primary-700 hover:text-black dark:hover:bg-neutral-700 pdp-color-swatch-item z-1 h-10 outline-none ring-gray-600 ring-inset-1 hover:ring-1',
             {
-              'ring-2 z-1': selectedValue === item.fieldValue,
+              'ring-1 z-1': selectedValue === item.fieldValue,
             }
           )}
         />
@@ -32,19 +38,8 @@ function renderRadioOptions( items: any, itemsCount: any, selectedValue: any, si
   )
 }
 
-export default function InlineList({
-  items = [],
-  onChange = () => { },
-  label = "Color",
-  fieldCode = 'global.colour',
-  currentAttribute = 'black',
-  generateLink = () => { },
-  handleSetProductVariantInfo = () => { },
-  sizeInit,
-  setSizeInit,
-  product,
-}: any) {
-  const [color, setColor] = useState(null) // to display color in the Page
+export default function InlineList({ items = [], onChange = () => { }, label = "Color", fieldCode = 'global.colour', currentAttribute = 'black', generateLink = () => { }, handleSetProductVariantInfo = () => { }, sizeInit, setSizeInit, product, }: any) {
+  const [color, setColor] = useState(null)
   const [colorName, setColorName] = useState<any>('')
   const [validation, setValidation] = useState<any>(false)
   const handleChange = (value: any) => {
@@ -56,8 +51,6 @@ export default function InlineList({
   useEffect(() => {
     const fieldSet = items?.find((o: any) => o.fieldValue === currentAttribute)
     handleSetProductVariantInfo({ colour: currentAttribute, fieldSet })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   useEffect(() => {
@@ -67,8 +60,6 @@ export default function InlineList({
         setColorName(val.value)
       }
     })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   return (
@@ -76,7 +67,7 @@ export default function InlineList({
       <div className="flex flex-col justify-start gap-1 mt-2">
         <h4 className="text-gray-700 font-14">{label} :
           {validation ? (
-            <span className='relative inline-block w-5 h-5 ml-1 rounded-full top-1' style={{ background: currentAttribute }}></span>
+            <span className='relative inline-block w-5 h-5 ml-1 rounded-full top-1' style={{ background: colorName }}></span>
           ) : (
             <></>
           )}
