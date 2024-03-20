@@ -27,7 +27,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     () => {
       handleAutoNext();
     },
-    isRunning ? 6000 : null
+    isRunning ? 600000 : null
   );
   //
 
@@ -67,7 +67,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     }
     TIME_OUT = setTimeout(() => {
       toggleIsRunning(true);
-    }, 1000);
+    }, 100000);
   };
   // =================
 
@@ -80,7 +80,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     return (
       <>
         <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative overflow-hidden ${className}`} key={index} >
-          <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[99999]">
+          <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[1]">
             {data?.map((_:any, index:number) => {
               const isActive = indexActive === index;
               return (
@@ -104,7 +104,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           </div>
 
           <div className="container relative pb-0 pt-14 sm:pt-20 lg:py-44">
-            <div className={`relative z-[99999] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left`} >
+            <div className={`relative z-[1] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left`} >
               <div className="space-y-5 sm:space-y-6">
                 <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
                   {item?.subTitle}
@@ -124,7 +124,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
                 </span>
               </ButtonPrimary>
             </div>
-            <div className="top-0 bottom-0 w-full z-[99999] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl">
+            <div className="top-0 bottom-0 w-full z-[1] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl">
               <img
                 className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image"
                 src={item?.url}
