@@ -1,12 +1,9 @@
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
-import { NEXT_REFERRAL_INFO } from '@components/utils/constants'
 import { useConfig } from '@components/utils/myAccount'
-import { stringToBoolean } from '@framework/utils/parse-util'
-import axios from 'axios'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 function SideMenu({ handleClick, setShow, currentOption }: any) {
   const config = useConfig();

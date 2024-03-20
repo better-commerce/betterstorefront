@@ -296,8 +296,8 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         order_lines: [
           {
             type: 'physical',
-            reference: `Order ${orderId} for basket ${orderResult?.basketId
-              } OrderPaymentId ${getOrderId(orderInfo?.order)}`,
+            reference: `${translate('label.checkoutForm.orderText')} ${orderId} ${translate('label.checkoutForm.forBasketText')} ${orderResult?.basketId
+              } ${translate('label.checkoutForm.orderPaymentIdText')} ${getOrderId(orderInfo?.order)}`,
             name: orderResult?.items
               ?.map((x: any) => `${x?.stockCode}(${x?.qty})`)
               ?.join(', '),
@@ -342,7 +342,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
         {!this.state.confirmed ? (
           <div>
             <p className="text-muted pb-10">
-              Click Pay Later With Klarna to check if you are eligible
+             {translate('label.checkout.payLaterWithKlarnaText')}
             </p>
             {this.baseRender({
               ...this?.props,

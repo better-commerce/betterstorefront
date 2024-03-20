@@ -33,12 +33,11 @@ import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
+function MyCompany({ deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
@@ -196,9 +195,6 @@ function MyCompany({ defaultView, isLoggedIn, deviceInfo }: any) {
   }, [selectedOption])
 
   useEffect(() => {
-    if (router.query.view && view !== router.query.view) {
-      setView(router.query.view)
-    }
     if (router.query.tab) {
       let Index = optionsConfig.findIndex(
         (x: any) => x.value.toLowerCase() === router.query.tab
@@ -399,12 +395,9 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const config = useConfig();
-  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: { 
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultView: defaultIndex,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!))
     }, // will be passed to the page component as props
   }
 }

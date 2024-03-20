@@ -231,6 +231,9 @@
     },
     "contactPreferences": {
       "contactPreferencesHeadingText": "Contacto",
+      "contactPreferencesText": "Preferencias de contacto",
+      "receiveOfferText": "Quiero recibir ofertas",
+      "dontWantReceiveOfferText": "No quiero recibir ofertas",
       "contactPrefDescTitle": "Por favor, ten en cuenta que cuando actualices tus preferencias se guardarán pero no se reflejarán de inmediato.",
       "contactPrefDescText": "Recibe correos electrónicos y mensajes de texto que contienen consejos, orientación, ofertas y noticias sobre nuevos productos y servicios."
     },
@@ -371,6 +374,7 @@
       "proceedToReturnText": "Proceder a la devolución",
       "selectQuantityText": "Seleccionar cantidad",
       "myReturnText": "Mi devolución",
+      "myReturnsText": "Mis Devoluciones",
       "noLookbookAvaiableText": "No hay catálogo disponible",
       "shopTheLookText": "Compra el aspecto",
       "confirmPasswordText": "Confirmar contraseña"
