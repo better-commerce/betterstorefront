@@ -38,19 +38,8 @@ function renderRadioOptions(
   )
 }
 
-export default function InlineList({
-  items = [],
-  onChange = () => { },
-  label = "Color",
-  fieldCode = 'global.colour',
-  currentAttribute = 'black',
-  generateLink = () => { },
-  handleSetProductVariantInfo = () => { },
-  sizeInit,
-  setSizeInit,
-  product,
-}: any) {
-  const [color, setColor] = useState(null) // to display color in the Page
+export default function InlineList({ items = [], onChange = () => { }, label = "Color", fieldCode = 'global.colour', currentAttribute = 'black', generateLink = () => { }, handleSetProductVariantInfo = () => { }, sizeInit, setSizeInit, product, }: any) {
+  const [color, setColor] = useState(null)
   const [colorName, setColorName] = useState<any>('')
   const [validation, setValidation] = useState<any>(false)
   const handleChange = (value: any) => {
@@ -62,8 +51,6 @@ export default function InlineList({
   useEffect(() => {
     const fieldSet = items?.find((o: any) => o.fieldValue === currentAttribute)
     handleSetProductVariantInfo({ colour: currentAttribute, fieldSet })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   useEffect(() => {
@@ -73,8 +60,6 @@ export default function InlineList({
         setColorName(val.value)
       }
     })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAttribute])
 
   return (

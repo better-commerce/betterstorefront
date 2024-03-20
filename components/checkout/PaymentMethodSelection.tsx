@@ -362,7 +362,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                                 }
                               />
                               <div
-                                className={`items-center justify-center w-24 h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}
+                                className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}
                               >
                                 <div className="flex items-center justify-center text-span">
                                   <i
