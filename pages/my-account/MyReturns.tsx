@@ -21,7 +21,7 @@ function MyAccount() {
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, deleteUser, isGuestUser } = useUI()
   const translate = useTranslation()
-  const currentOption = translate('label.myAccount.myReturnText')
+  const currentOption = translate('label.myAccount.myReturnsText')
 
   useEffect(() => {
     if (isGuestUser) {
