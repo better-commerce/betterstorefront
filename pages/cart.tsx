@@ -547,6 +547,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                 <h3 className="text-base font-semibold">
                                   <Link href={`/${product?.slug}`}>{product?.name}</Link>
                                 </h3>
+
                                 <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
                                   {product?.colorName != "" &&
                                     <div className="flex items-center space-x-1.5">
@@ -596,7 +597,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} />
                                 </div>
                               </div>
-
+                              <div className="relative justify-center hidden text-center sm:flex">
+                                <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
+                                <span className="px-4 py-2 text-md sm:py-2">
+                                  {product.qty}
+                                </span>
+                                <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
+                              </div>
                               <div className="justify-end flex-1 hidden sm:flex">
                                 <Prices price={product?.price} listPrice={product?.listPrice} className="mt-0.5" />
                               </div>
