@@ -650,7 +650,7 @@ p {
   text-align: center !important;
   padding: 0.70rem 12px !important;
   cursor: pointer !important;
-  font-weight: bold !important;
+  font-weight: 600 !important;
   text-transform: uppercase !important;
 }
 
