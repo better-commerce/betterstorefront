@@ -231,6 +231,9 @@
     },
     "contactPreferences": {
       "contactPreferencesHeadingText": "Contact",
+      "contactPreferencesText": "Contact Preferences",
+      "receiveOfferText": "I want to receive offers",
+      "dontWantReceiveOfferText": "I don’t want to receive offers",
       "contactPrefDescTitle": "Please note, when you update your preferences they will be saved but they won’t be reflected right away.",
       "contactPrefDescText": "Receive emails and texts containing tips, guidance, offers and news on new products and services."
     },

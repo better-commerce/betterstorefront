@@ -14,15 +14,14 @@ import SideMenu from '@components/account/MyAccountMenu'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
-function MyAccount({ defaultView, isLoggedIn }: any) {
+function MyAccount() {
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
   const router = useRouter()
   const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, deleteUser, isGuestUser } = useUI()
-  const currentOption = translate('common.label.contactPrefText')
+  const currentOption = translate('label.contactPreferences.contactPreferencesText')
 
   useEffect(() => {
     if (isGuestUser) {
@@ -193,12 +192,9 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const config = useConfig();
-  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: { 
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultView: defaultIndex, 
     }, // will be passed to the page component as props
   }
 }
