@@ -12,8 +12,8 @@ export const useConfig: any = () => {
     },
     {
       type: 'tab',
-      text: translate('label.myAccount.myReturnText'),
-      mtext: translate('label.myAccount.myReturnText'),
+      text: translate('label.myAccount.myReturnsText'),
+      mtext: translate('label.myAccount.myReturnsText'),
       props: 'returns',
       href:"/my-account/MyReturns"
     },
