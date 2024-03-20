@@ -25,6 +25,7 @@ import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
 import wishlistHandler from '@components/services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { ArrowRight } from '@components/icons'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -590,6 +591,36 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                             }
                                           </p>
                                         </div>
+                                        <div className='flex flex-col'>
+                                          <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
+                                            {product?.colorName != "" &&
+                                              <div className="flex items-center space-x-1.5">
+                                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                                  <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                                <span>{product?.colorName}</span>
+                                              </div>
+                                            }
+                                            {product?.size != "" &&
+                                              <>
+                                                <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
+                                                <div className="flex items-center space-x-1.5">
+                                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                  </svg>
+                                                  <span className='uppercase'>{product?.size}</span>
+                                                </div>
+                                              </>
+                                            }
+                                          </div>
+                                        </div>
                                         <div className="">
                                           {product.children?.map((child: any, idx: number) => {
                                             return (
@@ -676,7 +707,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                               }
                                             </button>
                                             <button type="button" className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group " onClick={() => { openModal(); setItemClicked(product) }} >
-                                              {/* <TrashIcon className="w-4 h-4 text-red-400 group-hover:text-red-700" /> */}
                                               <span className="relative z-10 flex items-center mt-0 text-sm font-medium text-primary-6000 hover:text-primary-500 ">{translate('common.label.removeText')}</span>
                                             </button>
                                           </div>
@@ -713,10 +743,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           )}
                           {isEmpty && (
                             <div className="cart-recently-viewed">
-                              <RecentlyViewedProduct
-                                deviceInfo={deviceInfo}
-                                config={config}
-                              />
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} />
                             </div>
                           )}
                           {!isEmpty && relatedProductData && (
@@ -738,28 +765,28 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     }
                     {!isEmpty && (
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
-                        <div className="flex justify-between py-4 text-sm text-gray-900">
+                        <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}{' '} </p>
                           <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
-                        <div className="flex justify-between py-4 text-sm text-gray-900">
+                        <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'>{translate('label.orderSummary.shippingText')}</p>
                           <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}{' '} </p>
                         </div>
 
                         {cartItems.promotionsApplied?.length > 0 && (
-                          <div className="flex justify-between py-4 text-sm text-gray-900">
+                          <div className="flex justify-between py-2 text-sm text-gray-900">
                             <p className='text-sm'>{translate('label.orderSummary.discountText')}</p>
                             <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
-                        <div className="flex justify-between py-4 text-sm text-gray-900">
+                        <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
                           <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
                         </div>
-                        <div className="flex justify-between py-4 text-sm font-bold text-gray-900">
-                          <p className="text-sm link-button">{translate('label.orderSummary.totalText')}</p>
-                          <p className="text-sm link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
+                        <div className="flex justify-between py-4 font-bold text-gray-900 font-20">
+                          <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
+                          <p className="font-20 link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
                         </div>
                       </div>
                     )}
@@ -768,9 +795,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
                     <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                      <Link href="/cart" onClick={() => { handleClose(); beginCheckout(cartItems) }} className="flex items-center justify-center w-full font-semibold transition rounded-full btn btn-primary">
-                        {translate('label.checkout.checkoutTitleText')}
-                      </Link>
+                       <Link href="/cart" onClick={() => {
+                          handleClose()
+                          beginCheckout(cartItems)
+                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
+                          <span className='flex flex-col justify-start pl-5 text-left'>
+                            <span>{cartItems?.totalWithoutShipping?.formatted?.withTax}</span>
+                            <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
+                          </span>
+                          <span className='flex items-center gap-2 pr-5'>
+                            <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRight className="w-4 h-4 text-white" />
+                          </span>
+                        </Link>
                     </div>
                   </div>
                 </div>
