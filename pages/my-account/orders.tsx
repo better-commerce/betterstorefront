@@ -25,12 +25,11 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const PAGE_SIZE = 10
 
-function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
+function MyAccount({ deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
@@ -121,14 +120,6 @@ function MyAccount({ defaultView, isLoggedIn, deviceInfo }: any) {
     //alert(pageNumber)
     setPageNumber(pageNumber + 1)
   }
-
-  useEffect(() => {
-    if (router.query.view && view !== router.query.view) {
-      setView(router.query.view)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath])
 
   let loggedInEventData: any = {
     eventType: CustomerProfileViewed,
@@ -322,12 +313,9 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const config = useConfig();
-  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultView: defaultIndex,
     }, // will be passed to the page component as props
   }
 }

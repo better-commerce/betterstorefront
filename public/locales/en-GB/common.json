@@ -231,6 +231,9 @@
     },
     "contactPreferences": {
       "contactPreferencesHeadingText": "Contact",
+      "contactPreferencesText": "Contact Preferences",
+      "receiveOfferText": "I want to receive offers",
+      "dontWantReceiveOfferText": "I don’t want to receive offers",
       "contactPrefDescTitle": "Please note, when you update your preferences they will be saved but they won’t be reflected right away.",
       "contactPrefDescText": "Receive emails and texts containing tips, guidance, offers and news on new products and services."
     },
@@ -371,6 +374,7 @@
       "proceedToReturnText": "Proceed to Return",
       "selectQuantityText": "Select Quantity",
       "myReturnText": "My Return",
+      "myReturnsText": "My Returns",
       "noLookbookAvaiableText": "No Lookbook Available",
       "shopTheLookText": "Shop the look",
       "confirmPasswordText": "Confirm Password"
@@ -729,6 +733,15 @@
     "sectionHero":{
       "exploreText":"Explore",
       "createText":"Create"
+    },
+    "checkoutForm":{
+      "itemsForOrderText":"Items for order",
+      "chequeNoText": "Cheque Number",
+      "pleaseWaitText" :"Please wait...",
+      "validatingAccountText" : "Validating account...",
+      "orderText" : "Order",
+      "forBasketText" : "For basket",
+      "orderPaymentIdText" : "OrderPaymentId"
     }
   },
   "common": {

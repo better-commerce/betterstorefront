@@ -24,14 +24,14 @@ export default function ContactPreferences() {
   const radioBtnsConfig = [
     {
       type: 'radio',
-      title: translate('common.label.receiveOfferText'),
+      title: translate('label.contactPreferences.receiveOfferText'),
       items: config,
       id: 1,
     },
     {
       type: 'radio',
       id: 2,
-      title: translate('dontWantReceiveOfferText'),
+      title: translate('label.contactPreferences.dontWantReceiveOfferText'),
       items: [],
       default: true,
       unsubscribe: true,
