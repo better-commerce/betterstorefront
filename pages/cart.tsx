@@ -534,9 +534,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   {userCart.lineItems?.map((product: any, productIdx: number) => {
                     const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
                     return (
-                      <div key={`cart-${productIdx}`} className={`relative flex py-6 sm:py-10 xl:py-12 last:pb-0 ${product?.price?.raw?.withTax > 0 ? '' : 'bg-green-100 mb-2 p-2'}`} >
-                        <div className="relative flex-shrink-0 w-24 overflow-hidden h-36 sm:w-32 rounded-xl bg-slate-100">
-                          <img src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product?.name} className="object-contain object-center w-full h-full" />
+                      <div key={`cart-${productIdx}`} className={`relative flex last:pb-0 ${product?.price?.raw?.withTax > 0 ? 'py-4 sm:py-6 xl:py-8' : 'bg-green-100 items-center mb-2 py-2 sm:py-2 xl:py-2 px-4'}`} >
+                        <div className={`${product?.price?.raw?.withTax > 0 ? 'w-24 overflow-hidden h-36 sm:w-32' : 'w-16 overflow-hidden h-20 sm:w-16'} relative flex-shrink-0 rounded-xl bg-slate-100`}>
+                          <img src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product?.name} className="object-contain object-center w-full h-full p-2" />
                           <Link href={`/${product?.slug}`} className="absolute inset-0"></Link>
                         </div>
 
