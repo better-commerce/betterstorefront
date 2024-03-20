@@ -733,6 +733,15 @@
     "sectionHero":{
       "exploreText":"Explore",
       "createText":"Create"
+    },
+    "checkoutForm":{
+      "itemsForOrderText":"Items for order",
+      "chequeNoText": "Cheque Number",
+      "pleaseWaitText" :"Please wait...",
+      "validatingAccountText" : "Validating account...",
+      "orderText" : "Order",
+      "forBasketText" : "For basket",
+      "orderPaymentIdText" : "OrderPaymentId"
     }
   },
   "common": {
