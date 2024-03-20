@@ -159,7 +159,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               currency: orderResult?.currencyCode,
               payment_type: CheckoutPaymentType.Regular,
               reference: getOrderId(orderInfo?.order),
-              description: `Items for Order: ${orderId}; Basket: ${orderResult?.basketId}`,
+              description: `${translate('label.checkoutForm.itemsForOrderText')}: ${orderId}; ${translate('label.basket.basketText')}: ${orderResult?.basketId}`,
               capture: true,
               capture_on: new Date().toISOString(),
 

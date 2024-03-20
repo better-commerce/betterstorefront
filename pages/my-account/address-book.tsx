@@ -15,9 +15,8 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/ut
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-function MyAccount({ defaultView, isLoggedIn }: any) {
+function MyAccount() {
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
   const { user, deleteUser, isGuestUser } = useUI()
   const router = useRouter()
   const translate = useTranslation()
@@ -213,12 +212,9 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const config = useConfig();
-  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: { 
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultView: defaultIndex, 
     }, // will be passed to the page component as props
   }
 }

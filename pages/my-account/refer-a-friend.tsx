@@ -30,11 +30,10 @@ import NextHead from 'next/head'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
+function ReferralPage() {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
   const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
@@ -125,14 +124,6 @@ function ReferralPage({ defaultView, isLoggedIn, deviceInfo }: any) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    if (router.query.view && view !== router.query.view) {
-      setView(router.query.view)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath])
 
   let loggedInEventData: any = {
     eventType: CustomerProfileViewed,
@@ -414,12 +405,9 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const config = useConfig();
-  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultView: defaultIndex,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!))
     },
   }
 }
