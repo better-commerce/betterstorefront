@@ -1,7 +1,7 @@
-import { useTranslation } from "@commerce/utils/use-translation"
-
+// import { useTranslation } from "@commerce/utils/use-translation"
+import { t as translate } from "i18next" ;
 export const useConfig: any = () => {
-  const translate = useTranslation()
+  // const translate = useTranslation()
   return [
     {
       type: 'tab',
