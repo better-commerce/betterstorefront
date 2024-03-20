@@ -27,7 +27,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     () => {
       handleAutoNext();
     },
-    isRunning ? 600000 : null
+    isRunning ? 6000 : null
   );
   //
 
@@ -67,7 +67,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     }
     TIME_OUT = setTimeout(() => {
       toggleIsRunning(true);
-    }, 100000);
+    }, 1000);
   };
   // =================
 
