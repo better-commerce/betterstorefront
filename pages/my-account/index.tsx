@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useConfig } from '@components/utils/myAccount'
@@ -15,30 +15,25 @@ import NextHead from 'next/head'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-function MyAccount({ defaultView, isLoggedIn }: any) {
+function MyAccount() {
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
   const config = useConfig();
   const { user, deleteUser, isGuestUser, referralProgramActive } = useUI()
   const router = useRouter()
   const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  let newConfig: any = []
-  if (config && typeof window !== 'undefined') {
+  const newConfig: any = useMemo(() => {
+    let output: any = []
     let isB2B = user?.companyId !== Guid.empty
-    const hasMyCompany = config.some(
-      (item: any) => item?.props === 'my-company'
-    )
-    const hasReferral = config.some(
-      (item: any) => item?.props === 'refer-a-friend'
-    )
-    newConfig = [...config]
+    const hasMyCompany = config?.some((item: any) => item?.props === 'my-company')
+    const hasReferral = config?.some((item: any) => item?.props === 'refer-a-friend')
+    output = [...config]
     if (isB2B) {
-      let i = newConfig.length
+      let i = output.length
       if (referralProgramActive) {
         if (!hasReferral) {
-          newConfig.push({
+          output.push({
             type: 'tab',
             text: 'Refer a Friend',
             mtext: 'Refer a Friend',
@@ -48,19 +43,16 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         }
       }
       while (i--) {
-        if (
-          newConfig[i]?.props === 'address-book' ||
-          newConfig[i]?.props === 'orders'
-        ) {
-          newConfig.splice(i, 1)
+        if (output[i]?.props === 'address-book' || output[i]?.props === 'orders') {
+          output.splice(i, 1)
         }
       }
     }
     if (!isB2B) {
       if (referralProgramActive) {
         if (!hasReferral) {
-          newConfig = [...config]
-          newConfig.push({
+          output = [...config]
+          output.push({
             type: 'tab',
             text: 'Refer a Friend',
             mtext: 'Refer a Friend',
@@ -69,10 +61,10 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
           })
         }
       } else {
-        newConfig = [...config]
+        output = [...config]
       }
     } else if (!hasMyCompany) {
-      newConfig.push({
+      output.push({
         type: 'tab',
         text: 'My Company',
         mtext: 'My Company',
@@ -80,7 +72,8 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
         href: '/my-account/my-company',
       })
     }
-  }
+    return output
+  }, [config])
 
   useEffect(() => {
     if (isGuestUser) {
@@ -239,12 +232,9 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const config = useConfig();
-  const defaultIndex = config.findIndex((element: any) => element.props === context.query.view) || 0
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultView: defaultIndex,
     }, // will be passed to the page component as props
   }
 }

@@ -1,7 +1,7 @@
-import { useTranslation } from "@commerce/utils/use-translation"
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export const useConfig: any = () => {
-  const translate = useTranslation()
+  const translate = useTranslation();
   return [
     {
       type: 'tab',
@@ -12,10 +12,10 @@ export const useConfig: any = () => {
     },
     {
       type: 'tab',
-      text: translate('common.label.myReturnsText'),
-      mtext: translate('common.label.myReturnsText'),
+      text: translate('label.myAccount.myReturnText'),
+      mtext: translate('label.myAccount.myReturnText'),
       props: 'returns',
-     href:"/my-account/MyReturns"
+      href:"/my-account/MyReturns"
     },
     {
       type: 'tab',
@@ -38,13 +38,12 @@ export const useConfig: any = () => {
       props: 'address-book',
       href:"/my-account/address-book"
     },
-  
     {
       type: 'tab',
-      text: translate('common.label.contactPrefText'),
-      mtext: translate('common.label.contactPrefText'),
+      text: translate('label.contactPreferences.contactPreferencesText'),
+      mtext: translate('label.contactPreferences.contactPreferencesText'),
       props: 'contact',
-     href:"/my-account/contact"
+      href:"/my-account/contact"
     },
    
   ]
