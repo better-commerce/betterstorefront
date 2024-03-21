@@ -14,7 +14,7 @@ function renderRadioOptions(items: any, itemsCount: any, selectedValue: any, siz
       {remainingItems.map((item: any, idx: any) => (
         <RadioGroup.Option
           key={idx} value={item.fieldValue} title={item.fieldLabel} style={{ backgroundColor: item.fieldValue }}
-          className={cn('relative rounded-2xl border flex items-center justify-center text-sm uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 hover:bg-primary-700 hover:text-black dark:hover:bg-neutral-700 pdp-color-swatch-item z-1 h-10 rounded-xl outline-none ring-gray-600 ring-inset-1 hover:ring-1', { 'ring-1 z-1': selectedValue === item.fieldValue, })}
+          className={cn('relative rounded-2xl border flex items-center justify-center text-sm uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 hover:bg-primary-700 hover:text-black dark:hover:bg-neutral-700 pdp-color-swatch-item z-1 h-10 outline-none ring-gray-600 ring-inset-1 hover:ring-1', { 'ring-1 z-1': selectedValue === item.fieldValue, })}
         />
       ))}
     </div>
