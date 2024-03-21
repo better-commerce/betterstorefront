@@ -148,10 +148,9 @@ export default function AddressItem({
                 </div>
                 <div>
                   {item?.isDefault && (
-                    <div className="p-1 px-2 bg-black border rounded-md">
-                      <span className="font-medium text-white font-12">
-                        {translate('common.label.defaultText')} </span>
-                    </div>
+                    <span className="px-2 py-1 font-semibold text-white uppercase bg-indigo-700 rounded-xl font-12">
+                      {translate('common.label.defaultText')}
+                    </span>
                   )}
                 </div>
               </div>
@@ -200,10 +199,9 @@ export default function AddressItem({
                 </div>
                 <div>
                   {item?.isDefault && (
-                    <div className="p-1 px-2 bg-black border rounded-md">
-                      <span className="font-medium text-white font-12">
-                        {translate('common.label.defaultText')} </span>
-                    </div>
+                    <span className="px-2 py-1 font-semibold text-white uppercase bg-indigo-700 rounded-xl font-12">
+                      {translate('common.label.defaultText')}
+                    </span>
                   )}
                 </div>
               </div>
