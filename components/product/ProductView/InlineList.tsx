@@ -9,7 +9,7 @@ function renderRadioOptions(items: any, itemsCount: any, selectedValue: any, siz
     <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-2.5">
       {defaultItems.map((item: any, idx: any) => (
         <RadioGroup.Option key={idx} value={item.fieldValue} title={item.fieldLabel} onClick={() => { setSizeInit('false') }} style={{ backgroundColor: item.fieldValue }}
-          className={cn(' pdp-color-swatch-item relative z-1 rounded-sm border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-inset-1 hover:ring-1', { 'ring-1 z-1': selectedValue === item.fieldValue, })} />
+          className={cn(' pdp-color-swatch-item relative z-1 rounded-xl h-10 border border-gray-200 items-center justify-center cursor-pointer outline-none ring-gray-600 ring-inset-1 hover:ring-1', { 'ring-1 z-1': selectedValue === item.fieldValue, })} />
       ))}
       {remainingItems.map((item: any, idx: any) => (
         <RadioGroup.Option

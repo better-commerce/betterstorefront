@@ -204,8 +204,8 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           <div className="flex items-end justify-between ">
             <Prices price={data?.price} listPrice={data?.listPrice} />
             <div className="flex items-center mb-0.5">
-              <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
-              <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+              <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
+              <span className="text-xs ms-1 text-slate-500 dark:text-slate-400">
                 {data?.rating || ""} ({data?.reviewCount || 0} {translate('common.label.reviews')})
               </span>
             </div>
