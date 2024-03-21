@@ -433,8 +433,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     if (!status) {
       return null;
     }
-    const CLASSES =
-      "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
+    const CLASSES = "absolute top-3 start-3";
     return (
       <div className={CLASSES}>
         <ProductTag product={product} />
