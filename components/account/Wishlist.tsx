@@ -121,7 +121,7 @@ export default function Wishlist({ deviceInfo }: any) {
             {isLoading && <LoadingDots />}
             <div className="space-y-16 sm:space-y-24">
               <div className="flow-root px-0 mt-2 sm:mt-4 sm:px-0">
-                <div className="grid grid-cols-1 -mx-px sm:gap-y-4 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-3">
+                <div className="grid grid-cols-1 sm:gap-5 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-3">
                   {data.map((product: any, wid: number) => {
                     return (
                       <ProductCard
