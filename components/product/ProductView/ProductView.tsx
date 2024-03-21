@@ -730,7 +730,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderDetailSection = () => {
     return (
       <div className="flex flex-col">
-        <h2 className="text-2xl font-semibold">Product Details</h2>
+        <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}</h2>
         <div dangerouslySetInnerHTML={{ __html: product.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
       </div>
     );

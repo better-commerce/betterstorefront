@@ -69,7 +69,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
       </div>
       <div className="flex flex-col px-0 py-2 pr-0 mt-2 sm:pr-4 gap-x-4 sm:px-0 offeres m-hide-navigation">
         <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-black">
-          More Offers
+          {translate('label.basket.moreOffersText')} 
         </h2>
         <Swiper
           className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0 h-60"
