@@ -129,9 +129,9 @@ export default function ContactPreferences() {
   }
 
   return (
-    <main className="lg:px-8 px-4">
+    <main className="">
       <div className="max-w-4xl">
-        <div className="lg:px-4 sm:px-0 pt-5">
+        <div className="">
           {/* <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1> */}
@@ -141,7 +141,7 @@ export default function ContactPreferences() {
           </p>
         </div>
       </div>
-      <div className="max-w-4xl lg:mx-12 flex flex-col mt-10">
+      <div className="max-w-4xl flex flex-col mt-10">
         <div className="lg:w-1/2 lg:flex justify-between lg:align-center">
           {items.map((btn: any, idx: number) => {
             return (
@@ -224,7 +224,7 @@ export default function ContactPreferences() {
                 <Button
                   type="submit"
                   onClick={handleSubmit}
-                  className="btn btn-c btn-primary"
+                  className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >

@@ -43,7 +43,7 @@ import Glide from '@glidejs/glide'
 const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
 const ProductSort = dynamic(() => import('@components/product/ProductSort'))
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
+const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 const Slider = dynamic(() => import('@components/brand/Slider'))
 const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
 

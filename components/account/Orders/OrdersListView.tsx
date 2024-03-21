@@ -39,7 +39,7 @@ function OrdersListView({
       ) : (
         <>
           <div className="bg-white">
-            <main className="lg:px-8">
+            <main className="">
               <div className="max-w-4xl">
                 {!ordersList ? (
                   <Spinner />
@@ -136,7 +136,7 @@ function OrdersListView({
                       </>
                     ) : (
                       <>
-                        <div className="flex flex-col lg:mx-8 w-full px-4 py-12 max-acc-container sm:px-0">
+                        <div className="flex flex-col  w-full px-4 py-12 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
                             {translate('label.orderDetails.noOrderFoundHeadingText')} </h1>
                           <div className="flex w-60 mt-5 sm:flex-col">
