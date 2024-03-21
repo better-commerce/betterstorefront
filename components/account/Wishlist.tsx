@@ -1,34 +1,20 @@
 import { useEffect, useState } from 'react'
-import Button from '@components/ui/Button'
+import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import axios from 'axios'
-import {
-  NEXT_GET_WISHLIST,
-  NEXT_REMOVE_WISHLIST,
-} from '@components/utils/constants'
+import Button from '@components/ui/Button'
+import { NEXT_GET_WISHLIST } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import Link from 'next/link'
-import cartHandler from '@components/services/cart'
 import { LoadingDots } from '@components/ui'
-import { round } from 'lodash'
-import { matchStrings, priceFormat } from '@framework/utils/parse-util'
-import Image from 'next/legacy/image'
-import {
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
-import dynamic from 'next/dynamic'
-import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
-import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 const ProductCard = dynamic(() => import('@new-components/ProductCard'))
 export default function Wishlist({ deviceInfo }: any) {
   const translate = useTranslation()
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const { user, basketId, setCartItems, openCart, setWishlist, cartItems } =
-    useUI()
+  const { user, setWishlist } = useUI()
 
-  const isIncludeVAT = vatIncluded()
   const fetchItems = async () => {
     !isLoading && setIsLoading(true)
     try {
@@ -47,48 +33,7 @@ export default function Wishlist({ deviceInfo }: any) {
 
   useEffect(() => {
     fetchItems()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const handleAddToCart = (product: any) => {
-    cartHandler()
-      .addToCart(
-        {
-          basketId,
-          productId: product.recordId,
-          qty: 1,
-          manualUnitPrice: product.price.raw.withTax,
-          stockCode: product.stockCode,
-          userId: user.userId,
-          isAssociated: isCartAssociated(cartItems),
-        },
-        'ADD',
-        { product }
-      )
-      .then((response: any) => {
-        setCartItems(response)
-        handleRemoveFromWishlist(product)
-        openCart()
-      })
-      .catch((err: any) => console.log('error', err))
-  }
-
-  const handleRemoveFromWishlist = (product: any) => {
-    const handleAsync = async () => {
-      try {
-        await axios.post(NEXT_REMOVE_WISHLIST, {
-          id: user.userId,
-          productId: product.recordId,
-          flag: true,
-        })
-        fetchItems()
-      } catch (error) {
-        console.log(error, 'err')
-      }
-    }
-    handleAsync()
-  }
 
   return (
     <section aria-labelledby="recent-heading" className="max-w-4xl">
