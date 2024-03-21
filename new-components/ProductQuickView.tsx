@@ -108,7 +108,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     fetchIsQuickView()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  })
+  }, [])
   const handleNotification = () => {
     openNotifyUser(product.recordId)
   }
@@ -422,7 +422,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             handleFetchProductQuickView={handleFetchProductQuickView}
             isQuickView={true}
             sizeInit={sizeInit}
-            setSizeInit={setSizeInit} />          
+            setSizeInit={setSizeInit} />
         }
       </div>
     );
