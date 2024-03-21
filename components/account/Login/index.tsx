@@ -105,7 +105,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
+      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20 px-10">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
             {translate('label.login.loginBtnText')}
@@ -134,9 +134,9 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
             </Link>
           </div>
           <span className="block text-center text-neutral-700 dark:text-neutral-300">
-            New user? {` `}
+            {translate('label.login.newUserText')}{` `}
             <Link className="text-green-600" href="/my-account/register">
-              Create an account
+              {translate('label.login.createAccountText')}
             </Link>
           </span>
         </div>

@@ -120,7 +120,13 @@
       "travelBagsText": "Travel Bags",
       "laptopSleevesText": "Laptop Sleeves",
       "organizationText": "Organization",
-      "accessoriesText": "Accessories"
+      "accessoriesText": "Accessories",
+      "dummyDesc1Text": "Shop the Latest from Top Brands",
+      "dummyDesc2Text": "Give the Gift of Choice",
+      "dummyDesc3Text": "Up to 80% Off Retail",
+      "dummyName1Text": "Explore New Arrivals here",
+      "dummyName2Text": "Digital Gift Cards",
+      "dummyName3Text": "Sale Collection"
     },
     "checkout": {
       "availableCreditText": "Available Credit",
@@ -332,7 +338,9 @@
       "verificationCodeText": "Verification Code",
       "resendCodeText": "Resend Code",
       "requestOTPText": "Request OTP",
-      "verifyOTPText": "Verify OTP"
+      "verifyOTPText": "Verify OTP",
+      "newUserText": "New user?",
+      "createAccountText": "Create an account"
     },
     "myAccount": {
       "emailAddressText": "Email Address",
@@ -640,7 +648,8 @@
       "bestPriceText": "BEST PRICE:",
       "applyOnCheckoutText": "(Apply on checkout)",
       "recommendedProductText": "Recommended products",
-      "productSpecificationText": "Product specification"
+      "productSpecificationText": "Product specification",
+      "productDetailsText": "Product Details"
     },
     "promotion": {
       "applyPromotionText": "Apply promotion"
