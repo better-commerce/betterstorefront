@@ -138,7 +138,7 @@ export default function AvatarDropdown() {
                 <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
                   <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-neutral-800 py-7">
                     <div className="flex items-center space-x-3">
-                      <Avatar imgUrl={avatarImgs[10]} sizeClass="w-12 h-12" />
+                      <img className="w-10 h-10 text-lg rounded-full"  alt={title} src={`/assets/user-avatar.png`} />
                       <div className="flex-grow">
                         <h4 className="font-semibold">{title}</h4>
                       </div>
