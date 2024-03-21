@@ -4,11 +4,11 @@ import Avatar from "./shared/Avatar/Avatar";
 import classNames from "classnames";
 
 interface ReviewItemDataType {
-  name: string;
-  avatar?: string;
-  date: string;
-  comment: string;
-  starPoint: number;
+  name: any;
+  avatar?: any;
+  date: any;
+  comment: any;
+  starPoint: any;
 }
 
 export interface ReviewItemProps {
@@ -16,30 +16,19 @@ export interface ReviewItemProps {
   data?: ReviewItemDataType;
 }
 
-const DEMO_DATA: ReviewItemDataType = {
-  name: "Cody Fisher",
-  date: "May 20, 2021",
-  comment:
-    "Very nice feeling sweater. I like it better than a regular hoody because it is tailored to be a slimmer fit. Perfect for going out when you want to stay comfy. The head opening is a little tight which makes it a little.",
-  starPoint: 5,
-};
-
-const ReviewItem: FC<ReviewItemProps> = ({
-  className = "",
-  data = DEMO_DATA,
-}) => {
+const ReviewItem: FC<ReviewItemProps> = ({ className = "", data, }) => {
   return (
     <div className={`nc-ReviewItem flex flex-col ${className}`} data-nc-id="ReviewItem" >
       <div className="flex space-x-4 ">
         <div className="flex-shrink-0 pt-0.5">
-          <Avatar sizeClass="h-10 w-10 text-lg" radius="rounded-full" userName={data?.name} imgUrl={data?.avatar} />
+          <img className="w-10 h-10 text-lg rounded-full"  alt={data?.name} src={`/assets/user-avatar.png`} />
         </div>
 
         <div className="flex justify-between flex-1">
           <div className="text-sm sm:text-base">
             <span className="block font-semibold">{data?.name}</span>
             <span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">
-              {data.date}
+              {data?.date}
             </span>
           </div>
 
