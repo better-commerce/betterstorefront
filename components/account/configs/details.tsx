@@ -66,9 +66,9 @@ export const useDetailsFormConfig = () => {
 export const useSchema = () => {
   const translate = useTranslation();
   const schema = Yup.object({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    email: Yup.string().email().required(),
+    firstName: Yup.string().required(translate('common.message.firstNameRequiredMsg')),
+    lastName: Yup.string().required(translate('common.message.lastNameRequiredMsg')),
+    email: Yup.string().email().required(translate('common.message.emailAddressRequiredMsg')),
     mobile: Yup.string()
       .max(10)
       .min(10)

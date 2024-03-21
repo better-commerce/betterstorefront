@@ -195,7 +195,7 @@ const Coupon = (props: IPromotionInputProps) => {
                             />
                           </button>
                           <h3 className="font-display text-md sm:text-lg">
-                            {translate('label.cart.applyCouponsText')}
+                            {translate('label.basket.applyCouponsText')}
                           </h3>
                         </div>
 
