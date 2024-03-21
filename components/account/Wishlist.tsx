@@ -124,11 +124,9 @@ export default function Wishlist({ deviceInfo }: any) {
                 <div className="grid grid-cols-1 sm:gap-5 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-3">
                   {data.map((product: any, wid: number) => {
                     return (
-                      <ProductCard
-                        data={product}
-                        deviceInfo={deviceInfo}
-                        maxBasketItemsCount={maxBasketItemsCount}
-                      />
+                      <div key={`wishlist-${wid}`}>
+                        <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                      </div>
                     )
                   })}
                 </div>
