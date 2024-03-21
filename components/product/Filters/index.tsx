@@ -134,7 +134,7 @@ export default function Filters({
         </h2>
         <div className="relative col-start-1 row-start-1 py-2 sm:py-3">
           <div className="flex mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
-            <button onClick={() => setOpen(true)} title="Product Filter" className="flex items-center sm:px-4 px-0 sm:py-2 py-0 font-medium text-gray-700 bg-white sm:border sm:border-slate-300 rounded-3xl group" >
+            <button onClick={() => setOpen(true)} title="Product Filter" className="flex items-center px-0 py-0 font-medium text-gray-700 bg-white sm:px-4 sm:py-2 sm:border sm:border-slate-300 rounded-3xl group" >
               <AdjustmentsHorizontalIcon className='w-5 h-5 text-black' />
             </button>
           </div>
