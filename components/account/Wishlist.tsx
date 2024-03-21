@@ -18,10 +18,7 @@ export default function Wishlist({ deviceInfo }: any) {
   const fetchItems = async () => {
     !isLoading && setIsLoading(true)
     try {
-      const response: any = await axios.post(NEXT_GET_WISHLIST, {
-        id: user.userId,
-        flag: true,
-      })
+      const response: any = await axios.post(NEXT_GET_WISHLIST, { id: user.userId, flag: true, })
       setIsLoading(false)
       setData(response.data)
       setWishlist(response.data)
