@@ -34,6 +34,9 @@ export const TEST_PAYMENT_AMOUNT = process.env.TEST_PAYMENT_AMOUNT
 export const BETTERCMS_API_VERSION = process.env.BETTERCMS_API_VERSION
 export const BETTERCMS_API_URL = process.env.BETTERCMS_API_URL
 export const HOME_PAGE_DEFAULT_SLUG = 'home'
+export const TERMS_PAGE_DEFAULT_SLUG = 'terms-and-condition'
+export const PRIVACY_PAGE_DEFAULT_SLUG = 'privacy-policy'
+export const COOKIES_PAGE_DEFAULT_SLUG = 'cookies'
 export const HOME_PAGE_NEW_SLUG = 'new-home-bc'
 export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
 
