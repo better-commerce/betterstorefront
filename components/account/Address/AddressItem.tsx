@@ -136,24 +136,21 @@ export default function AddressItem({
           {isB2B ? (
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
-                <div>
-                  <span className="text-xl font-bold">
+                <div className='flex items-center justify-between w-full'>
+                  <span className="font-semibold uppercase font-20">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
-                    <span className="flex items-start mt-1">
-                      <span className="px-0 font-bold text-black uppercase font-12">
-                        {label}
-                      </span>
+                    <span className="px-2 font-semibold text-black uppercase rounded-xl bg-slate-200 font-12">
+                      {label}
                     </span>
                   )}
                 </div>
                 <div>
                   {item?.isDefault && (
-                    <div className="p-1 px-2 bg-black border rounded-md">
-                      <span className="font-medium text-white font-12">
-                        {translate('common.label.defaultText')} </span>
-                    </div>
+                    <span className="px-2 py-1 font-semibold text-white uppercase bg-indigo-700 rounded-xl font-12">
+                      {translate('common.label.defaultText')}
+                    </span>
                   )}
                 </div>
               </div>
@@ -190,24 +187,21 @@ export default function AddressItem({
           ) : (
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
-                <div>
-                  <span className="text-xl font-bold">
+                <div className='flex items-center justify-between w-full'>
+                  <span className="font-semibold uppercase font-20">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
-                    <span className="flex items-start mt-1">
-                      <span className="px-0 font-bold text-black uppercase font-12">
-                        {label}
-                      </span>
+                    <span className="px-2 font-semibold text-black uppercase rounded-xl bg-slate-200 font-12">
+                      {label}
                     </span>
                   )}
                 </div>
                 <div>
                   {item?.isDefault && (
-                    <div className="p-1 px-2 bg-black border rounded-md">
-                      <span className="font-medium text-white font-12">
-                        {translate('common.label.defaultText')} </span>
-                    </div>
+                    <span className="px-2 py-1 font-semibold text-white uppercase bg-indigo-700 rounded-xl font-12">
+                      {translate('common.label.defaultText')}
+                    </span>
                   )}
                 </div>
               </div>
@@ -217,8 +211,8 @@ export default function AddressItem({
                   <span>{item?.address2}</span>
                   <span>{item?.address3}</span>
                   <span>{item?.country}</span>
-                  <span> {item?.city} - {item?.postCode} 
-                  </span> <span>{item?.phoneNo}</span> 
+                  <span> {item?.city} - {item?.postCode}
+                  </span> <span>{item?.phoneNo}</span>
                 </div>
                 <div className='w-full'>
                   <div className="justify-end w-full mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
