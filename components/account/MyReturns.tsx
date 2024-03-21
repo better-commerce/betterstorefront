@@ -81,17 +81,8 @@ export default function MyReturns() {
     <div className="bg-white">
       {/* Mobile menu */}
 
-      <main className="lg:px-8">
-        <div className="max-w-4xl lg:mx-12">
-          <div className="lg:px-0 sm:px-5 px-5 pt-5">
-            <h1 className="font-extrabold text-lg tracking-tight text-gray-900">
-              {translate('label.returnReason.returnHistoryText')}
-            </h1>
-            <p className="mt-2 text-sm font-normal text-black">
-              {translate('label.returnReason.returnOrderMsgText')}
-            </p>
-          </div>
-
+      <main className="">
+        <div className="max-w-4xl">
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
               {translate('label.orderDetails.recentOrdersText')}

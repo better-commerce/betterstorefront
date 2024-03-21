@@ -19,7 +19,7 @@ const OrderStatusMapping = ({ orderStatusDisplay, orderStatusRag }: any) => {
     //console.log("ORDER-STATUS",orderStatus);
     return (
         <>
-            <label className={`px-4 py-3 text-sm font-bold leading-none truncate ${cssClass}`}>
+            <label className={`px-4 py-3 text-sm font-semibold leading-none truncate rounded-lg ${cssClass}`}>
                 {orderStatusDisplay}
             </label>
         </>

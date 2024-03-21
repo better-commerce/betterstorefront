@@ -39,7 +39,7 @@ export const useDetailsFormConfig = () => {
       name: 'gender',
       placeholder: '',
       label: translate('common.label.genderText'),
-      labelClassName: 'text-black font-medium text-sm mb-4',
+      labelClassName: 'nc-Label text-base font-medium text-neutral-900 dark:text-neutral-200 mb-1.5',
       options: [
         {
           label: translate('common.label.femaleText'),
