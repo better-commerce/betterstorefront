@@ -103,7 +103,7 @@ export interface IExtraProps {
   pluginConfig?: any
 }
 
-const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav }) => {
+const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = []  }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
@@ -162,12 +162,12 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} />
           {displayAlert && <AlertRibbon />}
           {children}
           <FooterClean navItems={navTree?.footer} />
           <ModalUI />
-          <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
+          <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
           <div className="cookie-bannner">
             <CookieBanner enableManagement managementButtonText="Manage Cookies" headingColor="white" managementContent={<Content />} cookieCategories={['analytics', 'advertisement']} infoContent={<Content />} primaryButtonStyle={primaryButtonStyle} secondaryButtonStyle={secondaryButtonStyle} />
           </div>
