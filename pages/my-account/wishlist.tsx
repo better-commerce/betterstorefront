@@ -16,7 +16,9 @@ import SideMenu from '@components/account/MyAccountMenu'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-function MyAccount() {
+function MyAccount({
+  deviceInfo,
+}: any) {
   const [isShow, setShow] = useState(true)
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
@@ -100,7 +102,7 @@ function MyAccount() {
           <div className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
             <h2 className='text-2xl sm:text-3xl font-semibold'>Wishlist</h2>
             <div className={'orders bg-white my-2 sm:my-6'}>
-              <Wishlist />
+              <Wishlist deviceInfo={deviceInfo} />
             </div>
           </div>
         </div>
