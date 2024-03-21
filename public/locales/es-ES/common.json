@@ -120,7 +120,13 @@
       "travelBagsText": "Bolsos de viaje",
       "laptopSleevesText": "Funda para laptop",
       "organizationText": "Organización",
-      "accessoriesText": "Accesorios"
+      "accessoriesText": "Accesorios",
+      "dummyDesc1Text": "Compra lo último de las principales marcas",
+      "dummyDesc2Text": "Regala la opción de elección",
+      "dummyDesc3Text": "Hasta un 80% de descuento en el precio minorista",
+      "dummyName1Text": "Explora las nuevas llegadas aquí",
+      "dummyName2Text": "Tarjetas de regalo digitales",
+      "dummyName3Text": "Colección en oferta"
     },
     "checkout": {
       "availableCreditText": "Crédito disponible",
@@ -331,7 +337,9 @@
       "verificationCodeText": "Código de verificación",
       "resendCodeText": "Reenviar código",
       "requestOTPText": "Solicitar OTP",
-      "verifyOTPText": "Verificar OTP"
+      "verifyOTPText": "Verificar OTP",
+      "newUserText": "¿Nuevo usuario?",
+      "createAccountText": "Crear una cuenta"
     },
     "myAccount": {
       "emailAddressText": "Dirección de correo electrónico",
@@ -639,7 +647,8 @@
       "bestPriceText": "MEJOR PRECIO:",
       "applyOnCheckoutText": "(Aplicar en el checkout)",
       "recommendedProductText": "Productos Recomendados",
-      "productSpecificationText": "Especificación del Producto"
+      "productSpecificationText": "Especificación del Producto",
+      "productDetailsText": "Detalles del Producto"
     },
     "promotion": {
       "applyPromotionText": "Aplicar promoción"
