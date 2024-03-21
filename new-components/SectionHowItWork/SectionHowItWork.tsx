@@ -32,7 +32,7 @@ const SectionHowItWork: FC<SectionHowItWorkProps> = ({
           >
             <img
               className="rounded-3xl mb-4 sm:mb-10 max-w-[140px] mx-auto"
-              src={item.features_image}
+              src={item?.features_image}
               sizes="150px"
               alt={item?.features_title}
             />

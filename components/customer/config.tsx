@@ -87,7 +87,7 @@ export const useB2bRegistrationConfig = () => {
       name: 'email',
       label: translate('label.addressBook.emailText'),
       type: 'email',
-      placeholder: translate('label.common.emailPlaceholderText'),
+      placeholder: translate('common.message.enterYourEmailText'),
       show: showTradingField, // Toggle field rendering based on dynamic value of "Request trading account" checkbox.
     },
     {
@@ -163,7 +163,7 @@ export const useLoginConfig = () => {
       key: 'email',
       label: translate('label.addressBook.emailText'),
       type: 'email',
-      placeholder: translate('label.common.emailPlaceholderText'),
+      placeholder: translate('common.message.enterYourEmailText'),
     },
     {
       key: 'password',
