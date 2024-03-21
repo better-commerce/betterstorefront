@@ -260,7 +260,7 @@ function MyCompany({ deviceInfo }: any) {
       ) : (
        <section className="relative pb-10 text-gray-900">
           <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
-            {!isShowDetailedOrder && (
+            {/* {!isShowDetailedOrder && (
               <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
                 <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
                   <Link
@@ -282,7 +282,7 @@ function MyCompany({ deviceInfo }: any) {
                   <span className="leading-none">{translate('label.myAccount.myCompanyText')}</span>
                 </h3>
               </div>
-            )}
+            )} */}
             <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
               <SideMenu
                 handleClick={handleClick}

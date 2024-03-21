@@ -5,6 +5,13 @@ export const useConfig: any = () => {
   return [
     {
       type: 'tab',
+      text: translate('label.myAccount.myDetailsHeadingText'),
+      mtext: translate('label.myAccount.myDetailsHeadingText'),
+      props: 'details',
+      href:"/my-account"
+    },
+    {
+      type: 'tab',
       text: translate('label.order.myOrdersText'),
       mtext: translate('label.order.myOrdersText'),
       props: 'orders',
@@ -23,13 +30,6 @@ export const useConfig: any = () => {
       mtext: translate('label.wishlist.wishlistText'),
       props: 'wishlist',
       href:"/my-account/wishlist"
-    },
-    {
-      type: 'tab',
-      text: translate('label.myAccount.myDetailsHeadingText'),
-      mtext: translate('label.myAccount.myDetailsHeadingText'),
-      props: 'details',
-      href:"/my-account"
     },
     {
       type: 'tab',

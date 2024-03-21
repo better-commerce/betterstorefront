@@ -15,7 +15,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyDetails({ handleToggleShowState }: any) {
   const translate = useTranslation();
-  const schema = useSchema(); 
+  const schema = useSchema();
   const formConfig = useDetailsFormConfig();
   const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
   const { user, setUser } = useUI()
@@ -28,9 +28,9 @@ export default function MyDetails({ handleToggleShowState }: any) {
       //Regex to check if the value consists of an alphabet or a character
       e.target.value = e.target.value
         ? e.target.value.replace(
-            Messages.Validations.RegularExpressions.CHARACTERS_AND_ALPHABETS,
-            ''
-          )
+          Messages.Validations.RegularExpressions.CHARACTERS_AND_ALPHABETS,
+          ''
+        )
         : ''
       if (e.target.value.length <= ContactNumberLenCheck) {
         handleFunction(e)
@@ -48,8 +48,8 @@ export default function MyDetails({ handleToggleShowState }: any) {
     gender: user?.gender
       ? user?.gender
       : findByFieldName(formConfig, 'gender')?.options?.length
-      ? ''
-      : '',
+        ? ''
+        : '',
   }
 
   const handleDataSubmit = async (values: any) => {
@@ -70,8 +70,16 @@ export default function MyDetails({ handleToggleShowState }: any) {
   }
 
   return (
-    <main className="sm:px-6 lg:px-8">
-      <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
+    <main className="space-y-10 sm:space-y-12">
+      <div className=''>
+        <h2 className="text-2xl sm:text-3xl font-semibold">
+          Account infomation
+        </h2>
+        <p className="mt-2 text-sm text-black font-normal">
+          {translate('label.myAccount.editYourDetailsText')}
+        </p>
+      </div>
+      {/* <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
         <h3 className="max-w-4xl mt-0 mx-auto text-xl font-semibold text-black flex gap-1">
           <Link
             onClick={() => {
@@ -94,71 +102,101 @@ export default function MyDetails({ handleToggleShowState }: any) {
           </Link>
           <span className="leading-none">{translate('label.myAccount.myDetailsHeadingText')}</span>
         </h3>
-      </div>
+      </div> */}
       <div className="mx-2">
         <div className="max-w-4xl lg:mx-12 xs:ml-6">
           <div className="lg:px-0 sm:px-0 pt-5">
             {/* <h1 className="font-extrabold tracking-tight text-gray-900 pt-2">
             {title}
           </h1> */}
-            <p className="mt-2 text-sm text-black font-normal">
-              {translate('label.myAccount.editYourDetailsText')}
-            </p>
           </div>
         </div>
-        <div>
-          <Formik
-            enableReinitialize={true}
-            validationSchema={schema}
-            initialValues={initialValues}
-            onSubmit={handleDataSubmit}
-          >
-            {(context) => {
-              const {
-                errors,
-                touched,
-                handleSubmit,
-                values,
-                handleChange,
-                isSubmitting,
-              }: any = context
-              return (
-                <div className="flex-col w-full py-5 flex items-flex-start lg:mx-12 xs:ml-6 max-w-4xl justify-center">
-                  <Form className="font-normal w-full sm:w-1/2">
+        <div className='flex flex-col md:flex-row'>
+          <div className="flex-shrink-0 flex items-start">
+            {/* AVATAR */}
+            <div className="relative rounded-full overflow-hidden flex">
+              <img
+                src=""
+                alt="avatar"
+                width={128}
+                height={128}
+                className="w-32 h-32 rounded-full object-cover z-0"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-neutral-50 cursor-pointer">
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 30 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M17.5 5H7.5C6.83696 5 6.20107 5.26339 5.73223 5.73223C5.26339 6.20107 5 6.83696 5 7.5V20M5 20V22.5C5 23.163 5.26339 23.7989 5.73223 24.2678C6.20107 24.7366 6.83696 25 7.5 25H22.5C23.163 25 23.7989 24.7366 24.2678 24.2678C24.7366 23.7989 25 23.163 25 22.5V17.5M5 20L10.7325 14.2675C11.2013 13.7988 11.8371 13.5355 12.5 13.5355C13.1629 13.5355 13.7987 13.7988 14.2675 14.2675L17.5 17.5M25 12.5V17.5M25 17.5L23.0175 15.5175C22.5487 15.0488 21.9129 14.7855 21.25 14.7855C20.5871 14.7855 19.9513 15.0488 19.4825 15.5175L17.5 17.5M17.5 17.5L20 20M22.5 5H27.5M25 2.5V7.5M17.5 10H17.5125"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className='flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6'>
+            <Formik
+              enableReinitialize={true}
+              validationSchema={schema}
+              initialValues={initialValues}
+              onSubmit={handleDataSubmit}
+            >
+              {(context) => {
+                const {
+                  errors,
+                  touched,
+                  handleSubmit,
+                  values,
+                  handleChange,
+                  isSubmitting,
+                }: any = context
+                return (
+                  <Form className="font-normal w-full flex-grow mt-10 md:mt-0 max-w-3xl space-y-6">
                     {formConfig?.map((formItem: any, idx: number) => {
                       return (
                         formItem.type !== 'singleSelectButtonGroup' && (
                           <div key={`${formItem.label}_${idx}`}>
-                            <label className="text-black font-medium text-sm">
+                            <label className="nc-Label text-base font-medium text-neutral-900 dark:text-neutral-200 ">
                               {formItem.label}
                             </label>
+                            <div className="mt-1.5 flex icon-input-form">
+                              <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                <i className={`${formItem.placeholder} text-2xl las`}></i>
+                              </span>
+                              <Field
+                                key={idx}
+                                name={formItem.name}
+                                placeholder={formItem.placeholder}
+                                onChange={(e: any) =>
+                                  formikHandleChange(e, handleChange)
+                                }
+                                value={values[formItem.name]}
+                                type={formItem.type}
+                                maxLength={formItem.maxLength}
+                                className="block !rounded-l-none mt-0 w-full border outline-none border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 bg-white dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl text-sm font-normal h-11 px-4 py-3"
+                              />
 
-                            <Field
-                              key={idx}
-                              name={formItem.name}
-                              placeholder={formItem.placeholder}
-                              onChange={(e: any) =>
-                                formikHandleChange(e, handleChange)
-                              }
-                              value={values[formItem.name]}
-                              type={formItem.type}
-                              maxLength={formItem.maxLength}
-                              className="mb-2 mt-2 font-normal appearance-none min-w-0 w-full xs:w-32 bg-white border border-gray-300 rounded-md shadow-sm py-2 !px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
-                            />
-
-                            {errors[formItem.name] && touched[formItem.name] && (
-                              <div className="text-red-400 text-xs mb-2">
-                                {errors[formItem.name]}
-                              </div>
-                            )}
+                              {errors[formItem.name] && touched[formItem.name] && (
+                                <div className="text-red-400 text-xs mb-2">
+                                  {errors[formItem.name]}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )
                       )
                     })}
                     {(formConfig?.length
                       ? Array.from<any>([]).concat([
-                          findByFieldName(formConfig, 'gender'),
-                        ])
+                        findByFieldName(formConfig, 'gender'),
+                      ])
                       : []
                     )?.map((item: any, idx: number) => (
                       <div
@@ -172,7 +210,7 @@ export default function MyDetails({ handleToggleShowState }: any) {
                       <Button
                         type="submit"
                         onClick={handleSubmit}
-                        className="link-button btn btn-c btn-primary"
+                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                         loading={isSubmitting}
                         disabled={isSubmitting}
                       >
@@ -180,11 +218,12 @@ export default function MyDetails({ handleToggleShowState }: any) {
                       </Button>
                     </div>
                   </Form>
-                </div>
-              )
-            }}
-          </Formik>
+                )
+              }}
+            </Formik>
+          </div>
         </div>
+
       </div>
     </main>
   )

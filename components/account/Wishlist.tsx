@@ -92,14 +92,10 @@ export default function Wishlist() {
     <div className="bg-white">
       {/* Mobile menu */}
 
-      <main className="lg:px-8">
-        <div className="max-w-4xl lg:mx-12 sm:px-6">
-          <div className="pt-5 lg:px-0 sm:px-0">
-            <h1 className="font-extrabold tracking-tight text-gray-900">
-              {/* {translate('label.wishlist.wishlistText')} */}
-            </h1>
+      <main className="">
+        <div className="max-w-4xl">
+          <div className="">
           </div>
-
           <section aria-labelledby="recent-heading" className="mt-1">
             {!data.length && !isLoading && (
               <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
@@ -116,7 +112,7 @@ export default function Wishlist() {
                     href="/search"
                     className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary"
                   >
-                    <Button className="w-52">{translate('label.orderDetails.startShoppingBtnText')}</Button>
+                    <Button className="w-52 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">{translate('label.orderDetails.startShoppingBtnText')}</Button>
                   </Link>
                 </div>
               </div>

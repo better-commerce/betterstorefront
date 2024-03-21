@@ -435,7 +435,7 @@ export default function AddressBook({ deviceInfo }: any) {
   }
   return (
     <>
-      <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
+      {/* <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
         <h3 className="max-w-4xl mx-auto text-xl font-semibold text-black">
           <Link href="/my-account">
             <span className="mr-2 leading-none">
@@ -443,18 +443,8 @@ export default function AddressBook({ deviceInfo }: any) {
             </span>
           </Link>
           {translate('label.checkout.addressesText')} </h3>
-      </div>
-      <main className="px-4 mt-4 lg:px-8">
-        {!isB2B && (
-          <div className="mx-auto lg:px-0 lg:mb-14">
-            <div className="px-0 pt-10 sm:px-0">
-              <h1 className="mb-3 font-bold tracking-tight text-primary sm:mb-5 dark:text-black">
-                <span className="hidden text-xl sm:inline-block">{title}</span>
-                <span className="inline-block sm:hidden">{translate('label.addressBook.savedAddressesText')}</span>
-              </h1>
-            </div>
-          </div>
-        )}
+      </div> */}
+      <main className="mt-4">
         <div className="max-w-4xl mx-auto">
           {!data.length && !isLoading && (
             <div className="py-4 sm:py-10 lg:mx-0">{translate('label.addressBook.emptyAddressBookText')}</div>
@@ -522,7 +512,7 @@ export default function AddressBook({ deviceInfo }: any) {
                 <button
                   type="submit"
                   onClick={(ev: any) => handleOpenNewAddressModal()}
-                  className="btn-primary btn"
+                  className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                 >
                   {translate('label.addressBook.addNewAddress')}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
