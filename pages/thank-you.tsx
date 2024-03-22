@@ -9,7 +9,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { } from '@components/utils/constants'
@@ -23,6 +23,7 @@ import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/p
 import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -782,4 +783,13 @@ export default function OrderConfirmation({ config }: any) {
       )}
     </>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  const { locale } = context
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
+  }
 }
