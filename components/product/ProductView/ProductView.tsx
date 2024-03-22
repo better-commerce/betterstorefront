@@ -859,10 +859,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="w-full lg:w-[55%]">
             <div className="relative">
               <div className="relative aspect-w-16 aspect-h-16">
-                <img src={product?.image} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                <img src={product?.image} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
               </div>
               {renderStatus()}
-              <LikeButton className="absolute right-3 top-3" />
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
               {product?.images?.map((item: any, index: number) => (
