@@ -42,13 +42,13 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const cachedData = await getDataByUID([
-    Redis.Key.HomepageWeb,
-    Redis.Key.HomepageMobileWeb,
+    Redis.Key.CookiepageWeb,
+    Redis.Key.CookiepageMobileWeb,
   ])
   const pageContentWebUIDData: Array<any> =
-    parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
+    parseDataValue(cachedData, Redis.Key.CookiepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> =
-    parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
+    parseDataValue(cachedData, Redis.Key.CookiepageMobileWeb) || []
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
@@ -92,10 +92,10 @@ export async function getStaticProps({
         })
     }
   }
-  fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web')
+  fetchData(pageContentWebUIDData, Redis.Key.CookiepageWeb, 'Web')
   fetchData(
     pageContentMobileWebUIDData,
-    Redis.Key.HomepageMobileWeb,
+    Redis.Key.CookiepageMobileWeb,
     'MobileWeb'
   )
 
@@ -118,7 +118,7 @@ export async function getStaticProps({
   }
 }
 
-const PAGE_TYPE = PAGE_TYPES.Home
+const PAGE_TYPE = PAGE_TYPES.Cookie
 
 function Cookie({
   setEntities,
@@ -134,11 +134,11 @@ function Cookie({
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
-  const homePageContents = isMobile
+  const CookiePageContents = isMobile
     ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
       []
     : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
-  const [pageContents, setPageContents] = useState<any>(homePageContents)
+  const [pageContents, setPageContents] = useState<any>(CookiePageContents)
 
   useEffect(() => {
     const currentCurrency = getCurrentCurrency()
