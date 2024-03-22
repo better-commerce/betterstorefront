@@ -10,7 +10,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="m-0 section-devider"></div>
+      <hr className="my-6 border-slate-200 dark:border-slate-700"></hr>
       </div>
       <div className="w-full py-6">
         <div className="w-full">
