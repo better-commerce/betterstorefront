@@ -10,6 +10,12 @@ export module Redis {
   export module Key {
     export const NavTree = 'NavTree'
     export const HomepageWeb = 'HomepageWeb'
+    export const CookiepageWeb = 'CookiepageWeb'
+    export const CookiepageMobileWeb = 'CookiepageMobileWeb'
+    export const PrivacypageWeb = 'PrivacypageWeb'
+    export const PrivacypageMobileWeb = 'PrivacypageMobileWeb'
+    export const TermspageWeb = 'TermspageWeb'
+    export const TermspageMobileWeb = 'TermspageMobileWeb'
     export const HomepageMobileWeb = 'HomepageMobileWeb'
     export const Collection = 'Collection'
     export const INFRA_CONFIG = 'InfraConfig'
