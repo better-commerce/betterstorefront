@@ -415,7 +415,7 @@ export const getMinMax = (list: Array<any>, dependantProp: string) => {
 }
 
 export const vatIncluded = () => {
-  return stringToBoolean((getItem('includeVAT') as string) || 'false')
+  return stringToBoolean((getItem('includeVAT') as string) || 'true')
 }
 const kitCartItems: any = (cartItems: any) => {
   const cartItemsExcludingKitItem = cartItems?.lineItems?.filter(

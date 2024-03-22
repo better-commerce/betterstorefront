@@ -147,7 +147,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
       snippets: productSlugUIDData?.snippets ?? [],
       relatedProducts: relatedProductUIDData,
       availabelPromotions: availablePromoUIDData,
-      allProductsByCategory: productCategoryUIDData,
+      allProductsByCategory: productCategoryUIDData ?? [],
       reviews: productReviewUIDData,
       pdpCachedImages: pdpCacheImageUIDData?.images
         ? JSON.parse(pdpCacheImageUIDData?.images)
