@@ -31,7 +31,7 @@ const OrderDeliveryPlanItems = ({
   return (
     <>
       {items?.map((deliveryPlan: any, idx: number) => (
-        <div key={idx} className="w-full !pl-0 sm:!pl-8">
+        <div key={idx} className="w-full">
           <div className="flex items-center justify-between w-full pb-4 border-b border-gray-300 border-dashed">
             <div className="">
               <h4 className="mb-2 text-xs text-black opacity-60">
