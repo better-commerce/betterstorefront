@@ -115,7 +115,7 @@ const initialState = {
     isIPadorTablet: false,
     deviceType: DeviceType.UNKNOWN,
   },
-  includeVAT: getItem('includeVAT') || 'false',
+  includeVAT: getItem('includeVAT') || 'true',
   isCompared: getItem('isCompared') || 'false',
   compareProductList: getItem('compareProductList') || {},
   isPaymentLink: getItem('isPaymentLink') || false,
