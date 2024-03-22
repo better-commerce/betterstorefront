@@ -173,38 +173,15 @@ function MyAccount({ deviceInfo }: any) {
         <div className="mt-14 sm:mt-20">
           <div className='max-w-4xl mx-auto'>
             <div className="max-w-2xl">
-              <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
-              <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
-                <span className="text-slate-900 dark:text-slate-200 font-semibold">
+              <h2 className="text-3xl font-semibold xl:text-4xl">Account</h2>
+              <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
+                <span className="font-semibold text-slate-900 dark:text-slate-200">
                   {user?.firstName},
                 </span>{" "}
                 {user.email}
               </span>
             </div>
-            <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-            {/* {!isShowDetailedOrder && (
-              <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-                <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
-                  <Link
-                    className="mx-2 leading-none mt-1 align-middle"
-                    href="/my-account"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-arrow-left"
-                      viewBox="0 0 16 16"
-                    >
-                      {' '}
-                      <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-                    </svg>
-                  </Link>
-                  <span className="leading-none">{translate('label.order.myOrdersText')}</span>
-                </h3>
-              </div>
-            )} */}
+            <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>            
             <SideMenu
               handleClick={handleClick}
               setShow={setShow}
@@ -212,8 +189,8 @@ function MyAccount({ deviceInfo }: any) {
             />
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>
-          <div className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
-            <h2 className='text-2xl sm:text-3xl font-semibold'>Order History</h2>
+          <div className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
+            <h2 className='text-2xl font-semibold sm:text-3xl'>Order History</h2>
             <div className={'orders bg-white my-2 sm:my-6'}>
               <MyOrders
                 allOrders={allOrders}
