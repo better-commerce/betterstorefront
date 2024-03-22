@@ -130,7 +130,7 @@ function Checkout({ cart, config, location }: any) {
     let userId =
       customerId ||
       (cartItems?.userId === Guid.empty ? user?.userId : cartItems?.userId)
-    if (!userId || (userId && userId === Guid.empty)) return
+    if (guestUser || !userId || (userId && userId === Guid.empty)) return
     try {
       const response: any = await getAddress(userId)
       setUserAddresses(response || [])
