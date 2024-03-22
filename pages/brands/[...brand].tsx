@@ -517,7 +517,7 @@ useEffect(() => {
             <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
             <div className="mt-10">
               <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRefNew} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                <div ref={sliderRefNew} className={`flow-root`}>
                   <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
                     {translate('label.product.saleProductText')}
                   </Heading>
