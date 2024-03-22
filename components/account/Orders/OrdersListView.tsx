@@ -49,13 +49,8 @@ function OrdersListView({
                   <>
                     {ordersList?.length > 0 ? (
                       <>
-                        <section
-                          aria-labelledby="recent-heading"
-                          className="mt-2 pt-5"
-                        >
-                          <h2 id="recent-heading" className="sr-only">
-                            {translate('label.orderDetails.recentOrdersText')}
-                          </h2>
+                        <section aria-labelledby="recent-heading" className="pt-5 mt-2" >
+                          <h2 id="recent-heading" className="sr-only"> {translate('label.orderDetails.recentOrdersText')} </h2>
                           <div className="w-full mx-auto overflow-hidden sm:px-4 lg:px-0 paged-orders">
                             <InfiniteScroll
                               fetchData={handleInfiniteScroll}
@@ -83,7 +78,7 @@ function OrdersListView({
                                                   router.push(`/my-account/orders/${order?.id}`)
                                                   // await onOrderDetail(order.id)
                                                 }}
-                                                className="inline-block w-full mb-6 border cursor-pointer"
+                                                className="inline-block w-full mb-6 border cursor-pointer rounded-2xl"
                                                 key={idx}
                                               >
                                                 <DeliveryOrderLines
@@ -106,7 +101,7 @@ function OrdersListView({
                                             await onOrderDetail(order.id)
                                             // setIsShowDetailedOrder(true)
                                           }}
-                                          className="inline-block w-full mb-6 border cursor-pointer"
+                                          className="inline-block w-full mb-6 border cursor-pointer rounded-2xl"
                                           key={order.orderNo}
                                         >
                                           <OrderLines
@@ -139,10 +134,10 @@ function OrdersListView({
                       </>
                     ) : (
                       <>
-                        <div className="flex flex-col  w-full px-4 py-12 max-acc-container sm:px-0">
+                        <div className="flex flex-col w-full px-4 py-12 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
                             {translate('label.orderDetails.noOrderFoundHeadingText')} </h1>
-                          <div className="flex w-60 mt-5 sm:flex-col">
+                          <div className="flex mt-5 w-60 sm:flex-col">
                             <Link legacyBehavior passHref href="/">
                               <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">
                                 {translate('label.orderDetails.startShoppingBtnText')} </a>
@@ -204,7 +199,7 @@ function OrdersListView({
                       <>
                         <section
                           aria-labelledby="recent-heading"
-                          className="mt-2 pt-5"
+                          className="pt-5 mt-2"
                         >
                           <h2 id="recent-heading" className="sr-only">
                             {translate('label.orderDetails.recentOrdersText')}
@@ -291,11 +286,11 @@ function OrdersListView({
                       </>
                     ) : (
                       <>
-                        <div className="flex flex-col lg:mx-8 w-full px-4 py-12 max-acc-container sm:px-0">
+                        <div className="flex flex-col w-full px-4 py-12 lg:mx-8 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
                             No Order Available
                           </h1>
-                          <div className="flex w-60 mt-5 sm:flex-col">
+                          <div className="flex mt-5 w-60 sm:flex-col">
                             <Link legacyBehavior passHref href="/">
                               <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">
                                 Start Shopping
