@@ -126,7 +126,9 @@ function BrandDetailPage({
   let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
   let productCollectionRes: any = collections.productCollection
+  let saleProductCollectionRes: any = collections.saleProductCollection
   const sliderRef = useRef(null);
+  const sliderRefNew = useRef(null);
   const [isShow, setIsShow] = useState(false);
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
@@ -140,6 +142,19 @@ function BrandDetailPage({
       slider.destroy();
     };
   }, [sliderRef]);
+
+useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+    };
+    if (!sliderRefNew.current) return;
+    let slider = new Glide(sliderRefNew.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRefNew]);
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -500,6 +515,24 @@ function BrandDetailPage({
               </div>
             )}
             <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
+            <div className="mt-10">
+              <div className={`nc-SectionSliderProductCard`}>
+                <div ref={sliderRefNew} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
+                    {translate('label.product.saleProductText')}
+                  </Heading>
+                  <div className="glide__track" data-glide-el="track">
+                    <ul className="glide__slides">
+                      {saleProductCollectionRes?.map((item: any, index: number) => (
+                        <li key={index} className={`glide__slide`}>
+                          <ProductCard data={item} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="my-10">
               <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
               {faq?.results?.map((val: any, Idx: number) => {
@@ -655,6 +688,19 @@ export async function getStaticProps({
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.productCollection = res.products.results
+              } catch (error: any) { }
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ProductCollection' &&
+          widget.code == 'SaleProductCollection'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const res = await getCollectionById(widget.recordId)
+                collections.saleProductCollection = res.products.results
               } catch (error: any) { }
               resolve()
             })
