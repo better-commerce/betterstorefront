@@ -1,9 +1,8 @@
+import { useTranslation } from '@commerce/utils/use-translation'
 import { DATE_FORMAT } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import { priceFormat } from '@framework/utils/parse-util'
-import moment from 'moment'
 import React from 'react'
-import { useTranslation } from '@commerce/utils/use-translation'
 
 const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
   const translate = useTranslation()
@@ -14,11 +13,11 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
         <div className="m-0 section-devider"></div>
       </div>
       <div className="w-full py-6">
-        <div className="o-detail-continer">
+        <div className="w-full">
           {/* Item Total INFO Start */}
           <div className="flex flex-col">
             <div className="flex flex-col mb-4">
-              <h3 className="text-xl font-bold text-black">{translate('label.orderSummary.paymentDetailsBtnText')}</h3>
+              <h3 className="text-xl font-semibold text-black">{translate('label.orderSummary.paymentDetailsBtnText')}</h3>
               <p className="text-[12px] font-light text-black">
                 {translate('label.orderSummary.priceTaxInclusiveText')} </p>
             </div>
@@ -28,18 +27,18 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
               <p className="font-medium text-12 text-secondary-full-opacity">
                 {isIncludeVAT
                   ? priceFormat(
-                      details?.order.subTotal?.raw?.withTax,
+                      details?.subTotal?.raw?.withTax,
                       undefined,
-                      details?.order.subTotal?.currencySymbol
+                      details?.subTotal?.currencySymbol
                     )
                   : priceFormat(
-                      details?.order.subTotal?.raw?.withoutTax,
+                      details?.subTotal?.raw?.withoutTax,
                       undefined,
-                      details?.order.subTotal?.currencySymbol
+                      details?.subTotal?.currencySymbol
                     )}
               </p>
             </div>
-            {details?.order.discount?.raw?.withTax > 0 && (
+            {details?.discount?.raw?.withTax > 0 && (
               <>
                 <div className="flex justify-between py-1 mb-2 text-black font-small">
                   <p className="font-medium text-12 text-secondary-full-opacity">
@@ -47,14 +46,14 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                   <p className="font-medium text-12 text-green">
                     {isIncludeVAT
                       ? priceFormat(
-                          details?.order.discount?.raw?.withTax,
+                          details?.discount?.raw?.withTax,
                           undefined,
-                          details?.order.discount?.currencySymbol
+                          details?.discount?.currencySymbol
                         )
                       : priceFormat(
-                          details?.order.discount?.raw?.withoutTax,
+                          details?.discount?.raw?.withoutTax,
                           undefined,
-                          details?.order.discount?.currencySymbol
+                          details?.discount?.currencySymbol
                         )}
                   </p>
                 </div>
@@ -67,7 +66,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 {priceFormat(
                   subTotalAmount,
                   undefined,
-                  details?.order.subTotal?.currencySymbol
+                  details?.subTotal?.currencySymbol
                 )}
               </p>
             </div>
@@ -75,19 +74,19 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
               <p className="font-medium text-12 text-secondary-full-opacity">
                 {translate('label.orderSummary.shippingChargesText')} {/* <span className="inline-block ml-1 leading-none align-middle"><i className="sprite-icon sprite-info"></i></span> */}
               </p>
-              {details?.order.shippingCharge?.raw?.withTax > 0 ? (
+              {details?.shippingCharge?.raw?.withTax > 0 ? (
                 <>
                   <p className="font-medium text-12 text-secondary-full-opacity">
                     {isIncludeVAT
                       ? priceFormat(
-                          details?.order.shippingCharge?.raw?.withTax,
+                          details?.shippingCharge?.raw?.withTax,
                           undefined,
-                          details?.order.shippingCharge?.currencySymbol
+                          details?.shippingCharge?.currencySymbol
                         )
                       : priceFormat(
-                          details?.order.shippingCharge?.raw?.withoutTax,
+                          details?.shippingCharge?.raw?.withoutTax,
                           undefined,
-                          details?.order.shippingCharge?.currencySymbol
+                          details?.shippingCharge?.currencySymbol
                         )}
                   </p>
                 </>
@@ -97,15 +96,15 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 </>
               )}
             </div>
-            {details?.order.paymentServiceCharge?.raw?.withTax > 0 && (
+            {details?.paymentServiceCharge?.raw?.withTax > 0 && (
               <div className="flex justify-between py-1 mb-2 text-black font-small">
                 <p className="font-normal text-12 text-secondary-full-opacity">
                   {translate('label.orderSummary.additionalChargesText')} </p>
                 <p className="font-medium text-12 text-secondary-full-opacity">
                   {priceFormat(
-                    details?.order.paymentServiceCharge?.raw?.withTax,
+                    details?.paymentServiceCharge?.raw?.withTax,
                     undefined,
-                    details?.order.paymentServiceCharge?.currencySymbol
+                    details?.paymentServiceCharge?.currencySymbol
                   )}
                 </p>
               </div>
@@ -115,9 +114,9 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 {translate('label.orderSummary.taxText')} </p>
               <p className="font-medium text-12 text-secondary-full-opacity">
                 {priceFormat(
-                  details?.order.grandTotal?.raw?.tax,
+                  details?.grandTotal?.raw?.tax,
                   undefined,
-                  details?.order.grandTotal?.currencySymbol
+                  details?.grandTotal?.currencySymbol
                 )}
               </p>
             </div>
@@ -126,9 +125,9 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 {translate('label.orderSummary.youPayText')} </p>
               <p className="font-semibold text-16 text-secondary-full-opacity">
                 {priceFormat(
-                  details?.order.grandTotal?.raw?.withTax,
+                  details?.grandTotal?.raw?.withTax,
                   undefined,
-                  details?.order.grandTotal?.currencySymbol
+                  details?.grandTotal?.currencySymbol
                 )}
               </p>
             </div>
@@ -137,8 +136,8 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
           <div className="w-full my-3">
             <button
               type="button"
-              onClick={() => openOrderHelpModal(details?.order)}
-              className="block w-full mb-3 btn-basic-property btn btn-primary"
+              onClick={() => openOrderHelpModal(details)}
+              className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
             >
               {translate('label.orderDetails.needHelpWithOrderBtnText')} </button>
           </div>
