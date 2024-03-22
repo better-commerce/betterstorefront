@@ -18,13 +18,13 @@ const COMPONENTS_MAP: any = {
 }
 
 function BrandPage({ slug, brandDetails, deviceInfo, config }: any) {
-  const widgetsConfig = JSON.parse(brandDetails.result.widgetsConfig).sort(
-    (a: any, b: any) => a.displayOrder - b.displayOrder
+  const widgetsConfig = JSON.parse(brandDetails?.result?.widgetsConfig).sort(
+    (a: any, b: any) => a?.displayOrder - b?.displayOrder
   )
 
   return (
     <>
-      {widgetsConfig.map((widget: any, idx: number) => {
+      {widgetsConfig?.map((widget: any, idx: number) => {
         const enhancedProps = {
           ...widget,
           brandDetails: brandDetails.result,

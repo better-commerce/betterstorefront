@@ -222,7 +222,7 @@ const ReturnReason = ({
                       <div className="w-full sm:z-10 sm:left-1 sm:top-1">
                         <div className="flex justify-between px-4 py-3 border-b">
                           <div>
-                            <h3 className="text-base font-bold text-black dark:text-black">
+                            <h3 className="text-base font-semibold text-black dark:text-black">
                             {translate('label.help.returnItemText')} {' '}
                             </h3>
                           </div>

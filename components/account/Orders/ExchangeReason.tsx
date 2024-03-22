@@ -55,7 +55,7 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
             {/* Reason Section UI Start*/}
             <div className='w-full' style={{ display: showExchangeSelection ? "none" : "block" }}>
                 <div className='mx-auto cancel-continer'>
-                    <h4 className='mb-2 text-xl font-bold text-black'>{translate('label.exchangeReason.exchangeReasonHeadingText')}</h4>
+                    <h4 className='mb-2 text-xl font-semibold text-black'>{translate('label.exchangeReason.exchangeReasonHeadingText')}</h4>
                     <div className='w-full py-4'>
                         <h4 className='text-base font-bold text-primary'>{translate('label.exchangeReason.exchangeReasonTitle')}</h4>
                         <p className='text-xs text-brown-light'>{translate('common.label.serviceText')}</p>

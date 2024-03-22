@@ -13,6 +13,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
+
 const OrderItems = ({
   items,
   details,
@@ -20,8 +21,8 @@ const OrderItems = ({
   openHelpModal,
   setReview,
 }: any) => {
-  const translate = useTranslation()
-  const isIncludeVAT = vatIncluded()
+  const translate = useTranslation();
+  const isIncludeVAT = vatIncluded();
   return (
     <>
       <ul role="list" className="-my-6 divide-y divide-gray-200">
@@ -148,7 +149,7 @@ const OrderItems = ({
                   </div>
                 </div>
                 {matchStrings(
-                  details?.order.orderStatus,
+                  details?.orderStatus,
                   OrderStatus.DELIVERED,
                   true
                 ) && (
@@ -176,8 +177,8 @@ const OrderItems = ({
           )
         })}
       </ul>
-      {details?.order.allowedToTrack && (
-        <TrackingDetail deliveryPlan={details?.order?.deliveryPlans} />
+      {details?.allowedToTrack && (
+        <TrackingDetail deliveryPlan={details?.deliveryPlans} />
       )}
     </>
   )

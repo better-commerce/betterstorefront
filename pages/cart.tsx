@@ -888,7 +888,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     <dt className="text-lg font-bold text-black">
                       {translate('label.orderSummary.totalText')}
                     </dt>
-                    <dd className="text-xl font-bold text-black">
+                    <dd className="text-xl font-semibold text-black">
                       {isIncludeVAT ? cartItems.grandTotal?.formatted?.withTax : cartItems.grandTotal?.formatted?.withTax}
                     </dd>
                   </div>

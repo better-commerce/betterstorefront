@@ -25,8 +25,8 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
 
    let retunEligible = true;
    let replacementEligible = true;
-   const returnDate = new Date(new Date(details?.order?.orderDate).getTime() + (returnWindow * 24 * 60 * 60 * 1000));
-   const replacementDate = new Date(new Date(details?.order?.orderDate).getTime() + (replacementWindow * 24 * 60 * 60 * 1000));
+   const returnDate = new Date(new Date(details?.orderDate).getTime() + (returnWindow * 24 * 60 * 60 * 1000));
+   const replacementDate = new Date(new Date(details?.orderDate).getTime() + (replacementWindow * 24 * 60 * 60 * 1000));
    const currentDate = new Date();
 
    const shouldDisplayReturnItemCTA =
@@ -59,7 +59,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                  <div className="w-full pt-4 sm:z-10 sm:px-0 sm:pb-2 sm:left-1 ">
                                     <div className='flex justify-between px-4 pb-4 mb-3 border-b sm:px-6'>
                                        <div>
-                                          <h3 className="text-base font-bold text-black dark:text-black">{translate('label.help.getHelpOnItemText')} </h3>
+                                          <h3 className="text-base font-semibold text-black dark:text-black">{translate('label.help.getHelpOnItemText')} </h3>
                                           <p className='text-black font-10 font-normal'>{isHelpStatus?.name}</p>
                                        </div>
                                        <button
@@ -74,7 +74,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                     <div className="w-full px-4 pt-2 overflow-y-auto sm:px-6 innerscroll">
                                        <div className='w-full'>
                                           <p className='mb-4 text-black font-medium text-14'>{translate('common.label.helpAssistanceText')} </p>
-                                          {details?.order?.allowedToReturn && !isHelpStatus?.allowedToExchange && !isHelpStatus?.allowedToReturn &&
+                                          {details?.allowedToReturn && !isHelpStatus?.allowedToExchange && !isHelpStatus?.allowedToReturn &&
                                              <p className='text-black text-medium text-14'>{translate('label.help.returnWindowClosedText1')} {returnWindow} {translate('label.help.returnWindowClosedText1')}</p>
                                           }
                                        </div>
@@ -83,7 +83,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              onClick={() => chooseHelpMode("Chat")}
                                              target="_blank"
                                              rel="noopener noreferrer"
-                                             href={`https://api.whatsapp.com/send?phone=917829966655&text=Hi, I need help with my order id ${details?.order?.orderNo}`}
+                                             href={`https://api.whatsapp.com/send?phone=917829966655&text=Hi, I need help with my order id ${details?.orderNo}`}
                                              className='block w-full hover:bg-accent-1 dark:hover:bg-accent-8 px-4 py-2 mb-2 text-center text-black border btn-basic-property font-bold uppercase'>
                                              {translate('common.label.chatWithUsText')}
                                           </a>
@@ -95,7 +95,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                                 {translate('label.help.returnItemText')} </a>
                                           )}
                                           {
-                                             details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
+                                             details?.allowedToCancel && details?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
                                                    {translate('common.label.cancelText')}{translate('common.label.itemSingularText')}
@@ -134,7 +134,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                  <div className="w-full p-0 pt-4 sm:z-10 sm:px-0 sm:pb-2 sm:left-1 sm:top-1">
                                     <div className='flex justify-between px-4 pb-4 mb-3 border-b sm:px-6'>
                                        <div>
-                                          <h3 className="text-base font-bold text-black dark:text-black">{translate('label.orderSummary.getHelpText')}</h3>
+                                          <h3 className="text-base font-semibold text-black dark:text-black">{translate('label.orderSummary.getHelpText')}</h3>
                                           <p className='text-black truncate font-10 font-medium max-w-mob'>{isHelpStatus?.name}</p>
                                        </div>
                                        <button
@@ -161,7 +161,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              className='w-full dark:hover:bg-accent-8 mb-2 border btn-basic-property btn'>
                                              {translate('common.label.chatWithUsText')}
                                           </a>
-                                          {details?.order?.allowedToCancel && details?.order?.paymentStatus != 0 &&
+                                          {details?.allowedToCancel && details?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='w-full dark:hover:bg-accent-8 mb-2 border btn-primary btn'
                                                    onClick={() => onCancelOrder("Cancel")}>
                                                    {translate('label.order.cancelOrderText')}

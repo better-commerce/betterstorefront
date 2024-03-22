@@ -484,7 +484,8 @@
       "loseFreeDeliveryConfirmText": "Removing this item means you'll lose Free Delivery on this order. Are you sure you want to remove this item from your basket?",
       "incVATText": "inc. VAT",
       "excVATText": "ex. VAT",
-      "getHelpText": "Get help with this order"
+      "getHelpText": "Get help with this order",
+      "generalETAText": "ETA:"
     },
     "password": {
       "enterPasswordText": "Enter password",
