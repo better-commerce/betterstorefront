@@ -133,7 +133,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                     <div className="w-full sm:left-1 sm:top-1">
                       <div className='flex justify-between px-4 py-3 border-b'>
                         <div>
-                          <h3 className="text-base font-bold text-black dark:text-black">{translate('common.label.cancelText')} {cancelTitle} </h3>
+                          <h3 className="text-base font-semibold text-black dark:text-black">{translate('common.label.cancelText')} {cancelTitle} </h3>
                         </div>
                         <button
                           type="button"

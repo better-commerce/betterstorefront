@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import { isMobile } from 'react-device-detect'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
+import { useRouter } from 'next/router'
 import DeliveryOrderLines from './DeliveryOrderLines'
 import OrderDetail from './OrderDetail'
 import OrderLines from './OrderLines'
@@ -25,6 +26,7 @@ function OrdersListView({
   orderDetails,
 }: any) {
   const translate = useTranslation()
+  const router = useRouter();
   return (
     <>
       {isShowDetailedOrder ? (
@@ -78,8 +80,8 @@ function OrdersListView({
                                             <>
                                               <a
                                                 onClick={async () => {
-                                                  await onOrderDetail(order.id)
-                                                  setIsShowDetailedOrder(true)
+                                                  router.push(`/my-account/orders/${order?.id}`)
+                                                  // await onOrderDetail(order.id)
                                                 }}
                                                 className="inline-block w-full mb-6 border cursor-pointer"
                                                 key={idx}
@@ -100,8 +102,9 @@ function OrdersListView({
                                       <>
                                         <a
                                           onClick={async () => {
+                                            router.push(`/my-account/orders/${order?.id}`)
                                             await onOrderDetail(order.id)
-                                            setIsShowDetailedOrder(true)
+                                            // setIsShowDetailedOrder(true)
                                           }}
                                           className="inline-block w-full mb-6 border cursor-pointer"
                                           key={order.orderNo}

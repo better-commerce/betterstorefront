@@ -31,16 +31,16 @@ const OrderDeliveryPlanItems = ({
   return (
     <>
       {items?.map((deliveryPlan: any, idx: number) => (
-        <div key={idx} className="o-detail-continer !pl-0 sm:!pl-8">
+        <div key={idx} className="w-full !pl-0 sm:!pl-8">
           <div className="flex items-center justify-between w-full pb-4 border-b border-gray-300 border-dashed">
             <div className="">
               <h4 className="mb-2 text-xs text-black opacity-60">
                 {deliveryPlan?.items?.length} {translate('common.label.itemPluralText')}
               </h4>
-              <span className="text-base font-bold text-black">
+              <span className="text-base font-semibold text-black">
                 {translate('label.orderDetails.packageText')} {idx + 1}
                 {' of '}
-                {details?.order?.deliveryPlans?.length}
+                {details?.deliveryPlans?.length}
               </span>
             </div>
 
@@ -49,8 +49,8 @@ const OrderDeliveryPlanItems = ({
                 orderStatusDisplay={deliveryPlan?.orderStatusDisplay}
                 orderStatusRag={deliveryPlan?.orderStatusRag}
                 orderStatus={deliveryPlan.statusType}
-                orderId={details?.order?.orderId}
-                orderLog={details?.order?.orderLog}
+                orderId={details?.orderId}
+                orderLog={details?.orderLog}
               />
             </div>
           </div>
@@ -83,7 +83,7 @@ const OrderDeliveryPlanItems = ({
                     <div className="order-track">
                       <OrderLog
                         orderLog={deliveryPlan?.orderLog}
-                        orderStatus={details?.order?.orderStatus}
+                        orderStatus={details?.orderStatus}
                         orderJourney={deliveryPlan?.orderJourney}
                         deliveryPlanId={deliveryPlan?.recordId}
                       />
@@ -93,12 +93,12 @@ const OrderDeliveryPlanItems = ({
               )}
             </Disclosure>
           </div>
-          {details?.order?.allowedToTrack && (
+          {details?.allowedToTrack && (
             <>
               <div className="w-full px-4 py-4 mb-4 border-b border-gray-300 border-dashed sm:px-16 sm:pl-0 sm:pt-0">
                 <div className="flex flex-col w-full">
                   <a
-                    onClick={() => trackPackage(details?.order)}
+                    onClick={() => trackPackage(details)}
                     className="font-semibold text-[#32CD32] cursor-pointer text-14"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -115,7 +115,7 @@ const OrderDeliveryPlanItems = ({
               <div className="flow-root">
                 <ul role="list" className="-my-6 divide-y divide-gray-200">
                   {deliveryPlan?.items?.map((item: any, idx: number) =>
-                    details?.order?.items
+                    details?.items
                       ?.filter((x: any) =>
                         matchStrings(x?.productId, item?.productId, true)
                       )
@@ -205,10 +205,10 @@ const OrderDeliveryPlanItems = ({
                                             onClick={() =>
                                               openHelpModal(
                                                 item,
-                                                details?.order
+                                                details
                                               )
                                             }
-                                            className="text-sm font-bold underline cursor-pointer text-orange"
+                                            className="text-sm font-semibold underline cursor-pointer text-orange"
                                           >
                                             Help?
                                           </a>
@@ -303,7 +303,7 @@ const OrderDeliveryPlanItems = ({
                                   </a>
                                 </div>
                               )}
-                              {details?.order.allowedToReview && (
+                              {details?.allowedToReview && (
                                 <>
                                   <div className="flex w-full py-4">
                                     <p
@@ -336,7 +336,7 @@ const OrderDeliveryPlanItems = ({
               </div>
             </div>
           </div>
-          {details?.order.allowedToTrack && (
+          {details?.allowedToTrack && (
             <TrackingDetail deliveryPlan={deliveryPlan} />
           )}
           {deliveryPlan?.invoiceURL && (
