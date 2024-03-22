@@ -2,6 +2,8 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import React, { FC } from "react";
 import Avatar from "./shared/Avatar/Avatar";
 import classNames from "classnames";
+import moment from "moment";
+import { DATE_FORMAT } from "@components/utils/constants";
 
 interface ReviewItemDataType {
   name: any;
@@ -28,7 +30,7 @@ const ReviewItem: FC<ReviewItemProps> = ({ className = "", data, }) => {
           <div className="text-sm sm:text-base">
             <span className="block font-semibold">{data?.name}</span>
             <span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">
-              {data?.date}
+              {moment(new Date(data?.date)).format(DATE_FORMAT)}
             </span>
           </div>
 
