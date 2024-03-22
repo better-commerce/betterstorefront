@@ -49,7 +49,7 @@ const Sidebar: FC<React.PropsWithChildren<SidebarProps & IExtraProps>> = ({
       onKeyDown={onKeyDownSidebar}
       tabIndex={1}
     >
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden z-99">
         <div className={s.backdrop} onClick={onClose} />
         <section className="fixed inset-y-0 right-0 z-20 flex max-w-full pl-10 outline-none">
           <div className="w-full h-full md:w-screen md:max-w-md">
