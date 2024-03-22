@@ -25,7 +25,7 @@ const OrderLog = ({ orderLog, orderJourney, deliveryPlanId }: any) => {
                <span className="order-track-status-line"></span>
             </div>
             <div className="order-track-text">
-               <p className="order-track-text-stat text-black font-bold">
+               <p className="order-track-text-stat text-black font-semibold">
                   <label>{label}</label>
                </p>
                <p className="text-black order-track-text-stat font-normal">

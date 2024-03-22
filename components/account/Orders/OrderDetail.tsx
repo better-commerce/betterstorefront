@@ -260,7 +260,7 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
           {details?.order?.deliveryPlans?.length > 0 ? (
             <OrderDeliveryPlanItems
               items={details?.order?.deliveryPlans}
-              details={details}
+              details={details?.order}
               trackPackage={trackPackage}
               ifCancelled={ifCancelled}
               openHelpModal={openHelpModal}
@@ -320,7 +320,7 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
               )}
               <OrderItems
                 items={details?.order?.items}
-                details={details}
+                details={details?.order}
                 ifCancelled={ifCancelled}
                 openHelpModal={openHelpModal}
                 setReview={setReview}
@@ -329,14 +329,14 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
           )}
         </div>
         <OrderSummary
-          details={details}
+          details={details?.order}
           subTotalAmount={subTotalAmount}
           openOrderHelpModal={openOrderHelpModal}
         />
       </div>
 
       <HelpModal
-        details={details}
+        details={details?.order}
         isHelpOpen={isHelpOpen}
         closeHelpModal={closeHelpModal}
         isHelpStatus={isHelpStatus}
