@@ -12,6 +12,9 @@ export const PAGE_TYPES = {
   Page: 'Page',
   Product: 'Product',
   Search: 'Search',
+  Cookie: 'Cookie',
+  Privacy: 'Privacy',
+  Terms: 'Terms',
   Survey: 'Survey',
 }
 export default function withDataLayer(
