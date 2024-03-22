@@ -41,7 +41,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const renderContent = () => {
     const translate = useTranslation()
     return (
-      <div className="fixed inset-x-0 top-0 w-full py-2 z-99 sm:py-0 bg-white/80 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/80">
+      <div className="fixed inset-x-0 top-0 w-full py-2 z-99 sm:py-0 bg-white/90 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/90">
         {!isMobile &&
           <div className="container justify-between hidden mx-auto sm:flex">
             <div className="promotion-banner mob-marquee"></div>
