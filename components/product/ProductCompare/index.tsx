@@ -67,11 +67,7 @@ export default function ProductCompare({
                         {translate('label.product.comparingItemsText1')} {products?.length} {translate('common.label.itemSingularText')}
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
-                        <button
-                          type="button"
-                          className="p-2 -m-2 text-gray-600 hover:text-gray-500"
-                          onClick={() => closeCompareProducts()}
-                        >
+                        <button type="button" className="p-2 -m-2 text-gray-600 hover:text-gray-500" onClick={() => closeCompareProducts()} >
                           <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                         </button>
@@ -84,16 +80,13 @@ export default function ProductCompare({
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
                           <div className="sticky w-full top-0 z-10 flex flex-col bg-white sm:h-[220px] md:h-[430px] h-[520px] lg:h-[516px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
-                            {translate('common.label.ratingText')}
+                            {translate('common.label.ratingsText')}
                           </span>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
                           {translate('common.label.brandText')}
                           </span>
                           {attributeNames?.map((attribName: any) => (
-                            <span
-                              key={attribName}
-                              className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg"
-                            >
+                            <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg" >
                               {attribName}
                             </span>
                           ))}
