@@ -262,8 +262,8 @@ function Contact({
           </div>
         ))}
         <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12 lg:mt-32 mb-0">
-          {pageContents?.contactbanner?.map((contact: any, Idx: any) => (
-            <div className="bg-gray-200 rounded-md flex items-center flex-col p-10 cursor-pointer">
+          {pageContents?.contactbanner?.map((contact: any, idx: any) => (
+            <div key={idx} className="bg-gray-200 rounded-md flex items-center flex-col p-10 cursor-pointer">
               <img src={contact?.contactbanner_heroimage} alt="Bannphoneer" />
               <p className="text-2xl leading-9 font-semibold mt-5 mb-5">
                 {contact?.contactbanner_herotitle}

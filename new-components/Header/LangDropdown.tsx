@@ -3,7 +3,7 @@
 import { Popover, Tab, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useMemo } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
 import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
 import Link from "next/link";
@@ -23,30 +23,38 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
+const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) => {
+  const router = useRouter()
+  const getLocaleUrl = useMemo(() => {
+    return (language: any) => {
+      const defaultCulture = `${defaultLanguage}-${defaultCountry}`
+      const url = (language?.languageCulture === defaultCulture) ? `${router.asPath}` : `/${language?.languageCulture}${router.asPath}`
+      return url
+    }
+  }, [defaultLanguage, defaultCountry, router.asPath])
+  const isActiveLocale = useMemo(() => (language: any) => language?.languageCulture === router?.locale, [router?.locale])
+  return (
+    <div className="grid gap-8 lg:grid-cols-2">
+      {languages?.map((language: any, index: number) => (
+        <Link legacyBehavior href={getLocaleUrl(language)} locale={language?.languageCulture}>
+          <a key={index} href={getLocaleUrl(language)} onClick={() => {
+            Cookies.set(Cookie.Key.LANGUAGE, language?.languageCode)
+            close();
+          }} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${isActiveLocale(language) ? "bg-gray-200 dark:bg-gray-700" : "bg-white"}`}
+          >
+            <div className="">
+              <p className="text-sm font-medium text-black dark:text-gray-400">{language?.name}</p>
+            </div>
+          </a>
+        </Link>
+      ))}
+    </div>
+  );
+};
+
 const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], panelClassName = "", defaultLanguage = "", defaultCountry = "" }) => {
   const router = useRouter()
   const translateText = useTranslationText()
-
-  const Languages = ({ close }: any) => {
-    const defaultCulture = `${defaultLanguage}-${defaultCountry}`
-    return (
-      <div className="grid gap-8 lg:grid-cols-2">
-        {languages?.map((language, index) => (
-          <Link legacyBehavior href={(language?.languageCulture === defaultCulture) ? "/" : language?.languageCulture} locale={language?.languageCulture}>
-            <a key={index} href="#" onClick={() => {
-              Cookies.set(Cookie.Key.LANGUAGE, language?.languageCode)
-              close();
-            }} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${language?.languageCulture === defaultCulture ? "bg-gray-200 dark:bg-gray-700" : "bg-white"}`}
-            >
-              <div className="">
-                <p className="text-sm font-medium text-black dark:text-gray-400">{language?.name}</p>
-              </div>
-            </a>
-          </Link>
-        ))}
-      </div>
-    );
-  };
 
   const Currencies = ({ close }: any) => {
     return (
@@ -96,7 +104,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
                     </Tab.List>
                     <Tab.Panels className="mt-5">
                       <Tab.Panel className={classNames("rounded-xl p-3", "focus:outline-none focus:ring-0")} >
-                        <Languages close={close} />
+                        <Languages close={close} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} languages={languages} />
                       </Tab.Panel>
                       <Tab.Panel className={classNames("rounded-xl p-3", "focus:outline-none focus:ring-0")} >
                         <Currencies close={close} />
