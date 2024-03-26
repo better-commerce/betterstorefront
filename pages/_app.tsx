@@ -515,9 +515,9 @@ MyApp.getInitialProps = async (
     const languageCookie = req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
     const currencyCookie = req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
     const countryCookie = req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
-    defaultCurrency = currencyCookie || appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCurrencyCode')?.value || BETTERCOMMERCE_DEFAULT_CURRENCY
-    defaultCountry = countryCookie || appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCountry')?.value || BETTERCOMMERCE_DEFAULT_COUNTRY
-    defaultLanguage = languageCookie || appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultLanguageCode')?.value || BETTERCOMMERCE_DEFAULT_LANGUAGE
+    defaultCurrency = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCurrencyCode')?.value || currencyCookie || BETTERCOMMERCE_DEFAULT_CURRENCY
+    defaultCountry = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCountry')?.value || countryCookie || BETTERCOMMERCE_DEFAULT_COUNTRY
+    defaultLanguage = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultLanguageCode')?.value || languageCookie || BETTERCOMMERCE_DEFAULT_LANGUAGE
   } catch (error: any) { }
 
   let appConfig = null
