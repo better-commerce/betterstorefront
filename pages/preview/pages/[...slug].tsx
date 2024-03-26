@@ -1,22 +1,20 @@
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import Image from 'next/image'
-import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { EmptyObject, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL, } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import os from 'os'
 import commerce from '@lib/api/commerce'
 import { Hero } from '@components/ui'
 const PromotionBanner = dynamic(
   () => import('@components/home/PromotionBanner')
 )
 import BestSellerProduct from '@components/product/BestSellerProduct'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
@@ -26,6 +24,7 @@ const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 const PAGE_TYPE = PAGE_TYPES.Home
 function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, deviceInfo, config }: any) {
   const router = useRouter()
+  const translate = useTranslation()
   const pageSlugClass = pageContents?.slug === "cookies" ? "companyCke-text" : "";
   return (
     <>
@@ -42,8 +41,8 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
               id="canonical"
               href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
             />
-            <title>{pageContents?.metatitle || 'Home'}</title>
-            <meta name="title" content={pageContents?.metatitle || 'Home'} />
+            <title>{pageContents?.metatitle || translate('common.label.homeText')}</title>
+            <meta name="title" content={pageContents?.metatitle || translate('common.label.homeText')} />
             {pageContents?.metadescription && (
               <meta name="description" content={pageContents?.metadescription} />
             )}
@@ -93,6 +92,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
   )
 }
 export async function getServerSideProps(context: any) {
+  const { locale } = context
   const slug = context.query.slug
   const { result: pageContents }: any = await fetcher({
     url: `${PAGE_PREVIEW_CONTENT_ENDPOINT}`,
@@ -114,6 +114,7 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       slug: slug,
       pageContents: pageContents || {},
       dealOfTheWeekProductPromoDetails,

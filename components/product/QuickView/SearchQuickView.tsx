@@ -1,5 +1,5 @@
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Tab } from '@headlessui/react'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -18,9 +18,10 @@ import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import ImageGallery from 'react-image-gallery'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -65,6 +66,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 export default function SearchQuickView({ isQuickview, setQuickview, productData, isQuickviewOpen, setQuickviewOpen, maxBasketItemsCount }: any) {
+  const translate = useTranslation()
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, setAlert } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
@@ -109,7 +111,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, quickViewData?.recordId, true) || matchStrings(o.productId, quickViewData?.productId, true)) {
@@ -119,7 +121,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         if (quickViewData?.currentStock === cartLineItem?.qty && !quickViewData?.fulfilFromSupplier && !quickViewData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -127,7 +129,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
           return false
         }
@@ -213,7 +215,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.product.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -221,7 +223,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
               if (matchStrings(o.productId, quickViewData?.recordId, true) || matchStrings(o.productId, quickViewData?.productId, true)) {
@@ -231,7 +233,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
             if (quickViewData?.currentStock === cartLineItem?.qty && !quickViewData?.fulfilFromSupplier && !quickViewData?.flags?.sellWithoutInventory) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }
@@ -239,7 +241,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
               })
               return false
             }
@@ -318,7 +320,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -636,12 +638,12 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                           className="absolute top-0 right-0 lg:-top-12 lg:-right-10 p-0.5 z-10 rounded-full dark:text-black"
                           onClick={() => setModelClose()}
                         >
-                          <span className="sr-only">{CLOSE_PANEL}</span>
+                          <span className="sr-only">{translate('common.label.closePanelText')}</span>
                           <XMarkIcon className="w-8 h-8" aria-hidden="true" />
                         </button>
                         <div className="grid grid-cols-1 sm:gap-4 sm:grid-cols-12">
                           {isMobile ? <div className='flex flex-col justify-center w-full pb-10 text-center ipad-display-none'>
-                            <h4 className='font-bold text-black font-24'>Quick Shop</h4>
+                            <h4 className='font-bold text-black font-24'>{translate('label.product.quickShopText')}</h4>
                           </div> :
                             <div className="sm:col-span-6 md:col-span-6 lg:col-span-6">
                               <div className="flex flex-col px-0 sm:px-0 sm:pb-0">
@@ -740,7 +742,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                       legacyBehavior
                                     >
                                       <a className="text-sm font-semibold text-black underline">
-                                        View Product
+                                       {translate('label.product.viewProductText')}
                                       </a>
                                     </Link> :
                                     <>
@@ -756,7 +758,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                         legacyBehavior
                                       >
                                         <a className="text-sm font-semibold text-black underline">
-                                          View more
+                                        {translate('label.product.viewMoreText')}
                                         </a>
                                       </Link>
                                     </>
@@ -846,7 +848,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                     onClick={() => showEngravingModal(true)}
                                   >
                                     <span className="font-bold">
-                                      {GENERAL_ENGRAVING}
+                                    {translate('label.product.engravingText')}
                                     </span>
                                   </button>
                                   <button
@@ -864,7 +866,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                       <HeartIcon className="flex-shrink-0 w-5 h-5" />
                                     )}
                                     <span className="sr-only">
-                                      {BTN_ADD_TO_FAVORITES}
+                                      {translate('label.product.addTofavouriteText')}
                                     </span>
                                   </button>
                                 </div>

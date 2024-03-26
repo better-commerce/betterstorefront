@@ -5,9 +5,8 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
-import { EmptyString, Messages } from '@components/utils/constants'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
-import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
+import { t as translate } from "i18next";
+import { EmptyString } from '@components/utils/constants'
 
 export class CODPaymentButton extends BasePaymentButton {
   /**
@@ -63,7 +62,7 @@ export class CODPaymentButton extends BasePaymentButton {
       } else {
         dispatchState({
           type: 'SET_ERROR',
-          payload: Messages.Errors['GENERIC_ERROR'],
+          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
     }

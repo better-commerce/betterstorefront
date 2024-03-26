@@ -1,6 +1,6 @@
+import { useTranslation } from '@commerce/utils/use-translation'
 import ProductSort from '@components/product/ProductSort'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { BTN_CLEAR_ALL } from '@components/utils/textVariables'
 interface Props {
   products: any
   handleSortBy: any
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function FiltersRightOpen({ products = { filters: [] }, handleSortBy, routerFilters, clearAll, routerSortOption, removeFilter }: Props) {
+  const translate =  useTranslation()
   const appliedFilters = products?.filters?.reduce(
     (acc: any, obj: any) => {
       acc.forEach((item: any) => {
@@ -30,7 +31,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
       {appliedFilters?.length > 0 ? (
         <div className="relative col-start-1 row-start-1 py-2 pl-4">
           <div className="flex px-0 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-0 lg:px-0">
-            <button onClick={clearAll} type="button" className="text-gray-500"> {BTN_CLEAR_ALL} </button>
+            <button onClick={clearAll} type="button" className="text-gray-500"> {translate('label.filters.clearAllText')} </button>
             <div className="flex flex-wrap">
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
                 <div key={`applied-filter-top-bar-${idx}`} className="flex justify-center m-1 text-gray-600" >

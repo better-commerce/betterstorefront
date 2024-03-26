@@ -9,7 +9,7 @@ import { Disclosure } from '@headlessui/react'
 
 // Component Imports
 import OrderStatusMapping from './OrderStatusMapping'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 // Other Imports
 import {
   matchStrings,
@@ -40,6 +40,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
 
 export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
+  const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isHelpOrderOpen, setIsHelpOrderOpen] = useState(false)
@@ -259,7 +260,7 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
           {details?.order?.deliveryPlans?.length > 0 ? (
             <OrderDeliveryPlanItems
               items={details?.order?.deliveryPlans}
-              details={details}
+              details={details?.order}
               trackPackage={trackPackage}
               ifCancelled={ifCancelled}
               openHelpModal={openHelpModal}
@@ -313,14 +314,13 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
                       onClick={() => trackPackage(details?.order)}
                       className="font-semibold text-orange-500 cursor-pointer text-14"
                     >
-                      Tracking Details →
-                    </span>
+                      {translate('label.orderDetails.trackingDetailsBtnText')} </span>
                   </div>
                 </div>
               )}
               <OrderItems
                 items={details?.order?.items}
-                details={details}
+                details={details?.order}
                 ifCancelled={ifCancelled}
                 openHelpModal={openHelpModal}
                 setReview={setReview}
@@ -329,14 +329,14 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
           )}
         </div>
         <OrderSummary
-          details={details}
+          details={details?.order}
           subTotalAmount={subTotalAmount}
           openOrderHelpModal={openOrderHelpModal}
         />
       </div>
 
       <HelpModal
-        details={details}
+        details={details?.order}
         isHelpOpen={isHelpOpen}
         closeHelpModal={closeHelpModal}
         isHelpStatus={isHelpStatus}

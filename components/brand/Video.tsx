@@ -2,10 +2,10 @@ import { YOUTUBE_VIDEO_EMBED_PREFIX_URL } from '@components/utils/constants'
 
 export default function Video({ heading, name }: any) {
   return (
-    <div className="w-full flex flex-col justify-center items-center max-h-44 md:max-h-full h-[60vh]  /py-y gap-x-2">
-      <h1 className="text-gray-900 text-center font-bold text-4xl py-5 ">
+    <div className="w-full flex flex-col items-start max-h-44 md:max-h-full h-[60vh] /py-y gap-x-2">
+      <h2 className="py-5 mb-5 text-4xl font-semibold text-left text-gray-900 ">
         {heading}
-      </h1>
+      </h2>
       <iframe
         width="560"
         height="315"

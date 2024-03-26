@@ -7,18 +7,19 @@ import axios from 'axios'
 import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
 import { StarIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { matchStrings, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
 import { ArrowRight } from '@components/icons'
 import ProductTag from '../ProductTag'
 import ButtonNotifyMe from '../ButtonNotifyMe'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView')
@@ -88,6 +89,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     setCompareProducts,
     removeFromWishlist,
   } = useUI()
+  const translate = useTranslation();
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -283,7 +285,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
@@ -291,7 +293,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           }
         })
         if (product?.currentStock === cartLineItem?.qty && !product?.fulfilFromSupplier && !product?.flags?.sellWithoutInventory) {
-          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
           return false
         }
         const isValid = cartItemsValidateAddToCart(
@@ -303,7 +305,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
         }
         return isValid
@@ -327,7 +329,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage
@@ -584,7 +586,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   variant="slim"
                   className="!p-1 flex-1 !bg-white !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300"
                   onClick={() => handleQuickViewData(product)}>
-                  <span className="uppercase">{QUICK_VIEW}</span>
+                  <span className="uppercase">{translate('label.product.quickViewText')}</span>
                 </SimpleButton>
                 {product?.currentStock < 1 && !product?.preOrder?.isEnabled ? (
                   <ButtonNotifyMe product={product} />
@@ -657,7 +659,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                   onClick={() => handleQuickViewData(product)}
                   className="w-full text-primary btn-secondary text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
                 >
-                  {QUICK_VIEW}
+                  {translate('label.product.quickViewText')}
                 </button>
               </div>
             </div>

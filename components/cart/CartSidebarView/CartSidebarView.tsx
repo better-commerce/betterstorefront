@@ -12,7 +12,7 @@ import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
-import useTranslation, { CLOSE_PANEL, GENERAL_SHOPPING_CART, GENERAL_TOTAL_SAVINGS, WISHLIST_SIDEBAR_MESSAGE, GENERAL_CATALOG, GENERAL_REMOVE, GENERAL_DELETE, SUBTOTAL_INCLUDING_TAX, GENERAL_SHIPPING, GENERAL_DISCOUNT, GENERAL_TOTAL, GENERAL_CHECKOUT, GENERAL_CONTINUE_SHOPPING, GENERAL_OR_TEXT, IMG_PLACEHOLDER, BTN_MOVE_TO_WISHLIST, ADDED_TO_WISH, GENERAL_PERSONALISATION, PERSONALISATION, BTN_ADD_TO_WISHLIST, WISHLIST_SUCCESS_MESSAGE, GENERAL_TAX, SUBTOTAL_EXCLUDING_TAX, ITEM_WISHLISTED} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
@@ -24,10 +24,12 @@ import { Guid } from '@commerce/types'
 import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@components/product/RelatedProducts/RecentlyViewedProducts'
 import wishlistHandler from '@components/services/wishlist'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { ArrowRight } from '@components/icons'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
-  const {isInWishList} = wishlistHandler()
+  const { isInWishList } = wishlistHandler()
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
@@ -51,13 +53,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
   const [sizeDialogState, setSizeDialogState] = useState<any>({ type: '', })
-  const content = useTranslation()
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false)
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] = useState(null)
   const isIncludeVAT = vatIncluded()
+  const translate = useTranslation()
   const handleToggleOpenSizeChangeModal = async (product?: any) => {
     setOpenSizeChangeModal(!openSizeChangeModal)
     if (product) {
@@ -189,21 +191,21 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBasketFetched ,basketId, cartItems])
+  }, [isBasketFetched, basketId, cartItems])
 
   useEffect(() => {
     const loadRelatedProducts = async () => {
-        await new Promise<any>(async (resolve: any, reject: any) => {
-          if (cartItems?.lineItems?.length) {
-            const lastItemProductId =
-              cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId
-            await fetchRelatedProducts(lastItemProductId)
-          }
-          resolve()
-        })
+      await new Promise<any>(async (resolve: any, reject: any) => {
+        if (cartItems?.lineItems?.length) {
+          const lastItemProductId =
+            cartItems?.lineItems[cartItems?.lineItems?.length - 1]?.productId
+          await fetchRelatedProducts(lastItemProductId)
+        }
+        resolve()
+      })
     }
     loadRelatedProducts()
-  },[cartItems?.lineItems?.length])
+  }, [cartItems?.lineItems?.length])
 
   useEffect(() => {
     // const handleCartitems = async () => {
@@ -287,18 +289,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   const insertToLocalWishlist = (product: any) => {
 
     const userId = getUserId()
-    if (isGuestUser ||  (userId && matchStrings(userId, Guid.empty, true))) { 
-      openLoginSideBar() 
-      return 
+    if (isGuestUser || (userId && matchStrings(userId, Guid.empty, true))) {
+      openLoginSideBar()
+      return
     }
     const createWishlist = async () => {
       try {
-          await axios.post(NEXT_CREATE_WISHLIST, {
-            id: user?.userId,
-            productId: (product?.productId).toLowerCase(),
-            flag: true,
-          })
-     
+        await axios.post(NEXT_CREATE_WISHLIST, {
+          id: user?.userId,
+          productId: (product?.productId).toLowerCase(),
+          flag: true,
+        })
+
       } catch (error) {
         console.log(error, 'error')
       }
@@ -400,7 +402,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         } else {
           setAlert({
             type: 'error',
-            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), {
               maxBasketItemsCount,
             }),
           })
@@ -533,25 +535,25 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         <Dialog as="div" className="fixed inset-0 overflow-hidden z-99" onClose={handleClose} >
           <div className="absolute inset-0 overflow-hidden z-99">
             <Transition.Child as={Fragment} enter="ease-in-out duration-500" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in-out duration-500" leaveFrom="opacity-100" leaveTo="opacity-0" >
-              <Dialog.Overlay className="w-full h-screen" onClick={handleClose} />
+              <Dialog.Overlay className="w-full h-screen bg-black/60 z-999" onClick={handleClose} />
             </Transition.Child>
             <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-500 sm:duration-700" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leaveFrom="translate-x-0" leaveTo="translate-x-full" >
                 <div className="w-screen max-w-md">
                   <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
                     <div className="flex-1">
-                      <div className="sticky top-0 z-10 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow sm:px-6">
+                      <div className="sticky top-0 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow z-99 sm:px-6">
                         <Dialog.Title className="text-lg font-medium text-gray-900 ">
-                          {GENERAL_SHOPPING_CART}
+                          {translate('label.basket.shoppingCartText')}
                           {itemsInBag() > 0 ? (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? ' items' : ' item'}{' '} </span>
                           ) : (
-                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} Empty{' '} </span>
+                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '}{translate('common.label.emptyText')}{' '} </span>
                           )}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={handleClose} >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -559,35 +561,65 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
                           <h4 className="font-semibold text-green-dark">
-                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {GENERAL_TOTAL_SAVINGS}
+                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {translate('label.basket.totalSavingsText')}
                           </h4>
                         </div>
                       )}
                       <div className="mt-2">
                         <div className="flow-root">
-                          <ul role="list" className="px-4 -my-6 divide-y divide-gray-200 sm:px-6" >
+                          <ul role="list" className="px-4">
                             {cartItems.lineItems?.sort((lineItem1: any, lineItem2: any) => { return (lineItem1?.displayOrder - lineItem2?.displayOrder) })?.map((product: any) => {
                               const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
                               return (
-                                <li key={product.id} className="">
-                                  <div className="grid items-start grid-cols-12 gap-1 py-4">
-                                    <div className="flex-shrink-0 col-span-3 overflow-hidden border border-gray-200 rounded-md">
+                                <li key={product.id} className="mb-2">
+                                  <div className={`grid items-start grid-cols-12 gap-1 py-4 ${product?.price?.raw?.withTax == 0 ? 'bg-green-100 border border-emerald-300 rounded-lg p-2' : 'bg-white border-b border-slate-200 p-2'}`}>
+                                    <div className="flex-shrink-0 col-span-3 overflow-hidden rounded-md">
                                       <Link href={`/${product.slug}`}>
-                                        <img width={100} height={100} style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'cart-image'} className="object-cover object-center w-full h-full" onClick={handleRedirectToPDP} />
+                                        <img width={100} height={100} style={css} src={generateUri(product.image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'cart-image'} className="object-cover object-center w-full h-full" onClick={handleRedirectToPDP} />
                                       </Link>
                                     </div>
                                     <div className="flex flex-col flex-1 col-span-9 ml-4">
                                       <div className="flex flex-col flex-1">
                                         <div className="flex justify-between font-normal text-gray-900 font-sm">
-                                          <h5 onClick={handleClose}>
+                                          <h5 onClick={handleClose} className='text-base font-medium'>
                                             <Link href={`/${product.slug}`}> {' '} {product.name}{' '}</Link>
                                           </h5>
-                                          <p className="mt-0 ml-4 font-bold text-black">
-                                          { product?.price?.raw?.withTax > 0 ? 
-                                            (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax )
-                                            :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                          <p className="mt-0 ml-4 font-semibold text-green">
+                                            {product?.price?.raw?.withTax > 0 ?
+                                              (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax)
+                                              : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
                                             }
                                           </p>
+                                        </div>
+                                        <div className='flex flex-col'>
+                                          <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
+                                            {product?.colorName != "" &&
+                                              <div className="flex items-center space-x-1.5">
+                                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                                  <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                  <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                                <span>{product?.colorName}</span>
+                                              </div>
+                                            }
+                                            {product?.size != "" &&
+                                              <>
+                                                <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
+                                                <div className="flex items-center space-x-1.5">
+                                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                  </svg>
+                                                  <span className='uppercase'>{product?.size}</span>
+                                                </div>
+                                              </>
+                                            }
+                                          </div>
                                         </div>
                                         <div className="">
                                           {product.children?.map((child: any, idx: number) => {
@@ -596,18 +628,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                                 <div className="flex flex-col mt-2 mb-6">
                                                   <div className="flex justify-between font-medium text-gray-900">
                                                     <div className="image-container">
-                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title="View Personalisation" >
+                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
                                                         <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
                                                       </span>
                                                     </div>
                                                     <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
                                                     <h3>
-                                                      <span className="text-xs uppercase cursor-default">{`${PERSONALISATION}`}</span>
+                                                      <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
                                                       <span className="mt-0 ml-4 text-xs"> {' '} {isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax}{' '} </span>
                                                     </h3>
                                                   </div>
-                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, GENERAL_DELETE)} >
-                                                    {GENERAL_REMOVE}
+                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, translate('common.label.deleteText'))} >
+                                                    {translate('common.label.removeText')}
                                                   </button>
                                                 </div>
                                               </div>
@@ -615,9 +647,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                           })}
                                         </div>
                                         <div className="flex items-end justify-between text-sm">
-                                          <div className="flex items-center justify-between w-full mt-2">
+                                          <div className="flex justify-between w-full mt-2">
                                             {product?.variantProducts?.length > 0 ? (
-                                              <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} >
+                                              <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} className='w-full'>
                                                 <div className="border w-[fit-content] flex flex-row justify-between items-center py-2 px-2">
                                                   <p className="m-auto mr-1 text-sm text-gray-700">
                                                     Size:{' '}
@@ -627,16 +659,17 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                                 </div>
                                               </div>
                                             ) : (
-                                              <div></div>
+                                              <div className='w-full'></div>
                                             )}
-                                            <div className="flex flex-row px-4 text-gray-900 border">
-                                              <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
-                                              <span className="px-2 py-2 text-md"> {product.qty} </span>
-                                              <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
-                                            </div>
-
+                                            {product?.price?.raw?.withTax > 0 &&
+                                              <div className="flex flex-row px-4 text-gray-900 border">
+                                                <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
+                                                <span className="px-2 py-2 text-md"> {product.qty} </span>
+                                                <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                              </div>
+                                            }
                                             <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                                              { reValidateData?.message != null && soldOutMessage != '' && (
+                                              {reValidateData?.message != null && soldOutMessage != '' && (
                                                 matchStrings(soldOutMessage, "sold out", true) ? (
                                                   <div className="flex flex-col col-span-12">
                                                     <div className="flex text-xs font-semibold text-left text-red-500">
@@ -663,21 +696,21 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                             </div>
                                           </div>
                                         </div>
-                                        <div className="flex flex-row justify-between mt-3 \text-left">
-                                          <button type="button" className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group " onClick={() => { openModal(); setItemClicked(product) }} >
-                                            <TrashIcon className="w-4 h-4 text-red-400 group-hover:text-red-700" />
-                                            <span className="group-hover:text-red-700"> {' '} {GENERAL_REMOVE} </span>
-                                          </button>
-
-                                          <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
-                                          { isInWishList(product?.productId) ? ( 
-                                              <><HeartIcon className="w-4 h-4 text-red-500 hover:text-red-700" />{' '}{ITEM_WISHLISTED}</>
-                                            ) : ( 
-                                              <> <HeartIcon className="w-4 h-4 text-gray-700 hover:text-gray-900" />{' '}{BTN_MOVE_TO_WISHLIST} </> 
-                                            )
-                                         }
-                                          </button>
-                                        </div>
+                                        {product?.price?.raw?.withTax > 0 &&
+                                          <div className="flex flex-row justify-between mt-3 \text-left">
+                                            <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                                              {isInWishList(product?.productId) ? (
+                                                <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                                              ) : (
+                                                <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                              )
+                                              }
+                                            </button>
+                                            <button type="button" className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group " onClick={() => { openModal(); setItemClicked(product) }} >
+                                              <span className="relative z-10 flex items-center mt-0 text-sm font-medium text-primary-6000 hover:text-primary-500 ">{translate('common.label.removeText')}</span>
+                                            </button>
+                                          </div>
+                                        }
                                       </div>
                                     </div>
                                   </div>
@@ -687,17 +720,17 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             {isWishlistClicked && (
                               <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
                                 <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
-                                <p className="mt-5 text-center"> {' '} {ADDED_TO_WISH}{' '} </p>
+                                <p className="mt-5 text-center"> {' '} {translate('label.wishlist.addedToWishlistText')}{' '} </p>
                               </div>
                             )}
                           </ul>
                           {isEmpty && (
                             <div className="flex flex-col items-center justify-between w-full h-full py-9">
                               <img height="100" width="100" src="/assets/images/cart.jpg" alt="cart" className="text-center" />
-                              <p className="mt-5 text-gray-700"> {WISHLIST_SIDEBAR_MESSAGE} </p>
+                              <p className="mt-5 text-gray-700">{translate('common.label.noItemsPresentText')}</p>
                               <Link href="/search">
                                 <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={handleClose} >
-                                  {GENERAL_CATALOG}
+                                  {translate('label.basket.catalogText')}
                                   <span aria-hidden="true"> &rarr;</span>
                                 </button>
                               </Link>
@@ -708,65 +741,52 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                               )}
                             </div>
                           )}
-                         {isEmpty && (
+                          {isEmpty && (
                             <div className="cart-recently-viewed">
-                              <RecentlyViewedProduct
-                                deviceInfo={deviceInfo}
-                                config={config}
-                              />
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} />
                             </div>
                           )}
                           {!isEmpty && relatedProductData && (
                             <>
-                              <div className="flex flex-col">
-                                <div className="section-devider-sm"></div>
-                              </div>
                               <div className="flex flex-col px-4 mt-0 cart-related-prod sm:px-6">
-                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title="Frequently Bought Together" handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
-                              </div>
-                              <div className="flex flex-col">
-                                <div className="section-devider-sm"></div>
+                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title={translate('common.label.frequentlyBoughtTogetherText')} handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
                               </div>
                             </>
                           )}
                         </div>
                       </div>
                     </div>
-                    {!relatedProductData && (
-                      <div className="flex flex-col">
-                        <div className="section-devider-sm"></div>
-                      </div>
-                    )}
+
                     <CartItemRemoveModal product={itemClicked} isOpen={isOpen} closeModal={closeModal} loadingAction={loadingAction} handleItem={handleItem} itemClicked={itemClicked} handleWishList={handleWishList} setLoadingAction={setLoadingAction} config={config} />
                     {!isEmpty &&
-                    <div className="px-4 sm:px-4">
-                      <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
-                    </div>
+                      <div className="px-4 sm:px-4">
+                        <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
+                      </div>
                     }
                     {!isEmpty && (
-                      <div className="pt-4 pb-3 pl-5 pr-5 mt-2 bg-white">
-                        <div className="flex justify-between text-sm text-gray-900">
-                          <p> {' '} {isIncludeVAT ? SUBTOTAL_INCLUDING_TAX : SUBTOTAL_EXCLUDING_TAX}{' '} </p>
-                          <p> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
+                      <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
+                        <div className="flex justify-between py-2 text-sm text-gray-900">
+                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
-                        <div className="flex justify-between text-sm text-gray-900">
-                          <p>{GENERAL_SHIPPING}</p>
-                          <p> {' '} {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}{' '} </p>
+                        <div className="flex justify-between py-2 text-sm text-gray-900">
+                          <p className='text-sm'>{translate('label.orderSummary.shippingText')}</p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}{' '} </p>
                         </div>
 
                         {cartItems.promotionsApplied?.length > 0 && (
-                          <div className="flex justify-between text-sm text-gray-900">
-                            <p>{GENERAL_DISCOUNT}</p>
-                            <p className="text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
+                          <div className="flex justify-between py-2 text-sm text-gray-900">
+                            <p className='text-sm'>{translate('label.orderSummary.discountText')}</p>
+                            <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
-                        <div className="flex justify-between text-sm text-gray-900">
-                          <p>{GENERAL_TAX}</p>
-                          <p>{cartItems.grandTotal?.formatted?.tax}</p>
+                        <div className="flex justify-between py-2 text-sm text-gray-900">
+                          <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
+                          <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
                         </div>
-                        <div className="flex justify-between text-sm font-bold text-gray-900">
-                          <p className="link-button">{GENERAL_TOTAL}</p>
-                          <p className=" link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
+                        <div className="flex justify-between py-4 font-bold text-gray-900 font-20">
+                          <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
+                          <p className="font-20 link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
                         </div>
                       </div>
                     )}
@@ -775,9 +795,18 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
                     <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                      <Link href="/cart" onClick={() => { handleClose(); beginCheckout(cartItems) }} className="flex items-center justify-center w-full transition btn btn-primary">
-                        {content.GENERAL_CHECKOUT}
-                      </Link>
+                       <Link href="/cart" onClick={() => {
+                          handleClose()
+                          beginCheckout(cartItems)
+                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
+                          <span className='flex flex-col justify-start pl-5 text-left'>
+                            <span>{cartItems?.totalWithoutShipping?.formatted?.withTax}</span>
+                            <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
+                          </span>
+                          <span className='flex items-center gap-2 pr-5'>
+                            <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRight className="w-4 h-4 text-white" />
+                          </span>
+                        </Link>
                     </div>
                   </div>
                 </div>

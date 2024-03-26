@@ -13,9 +13,11 @@ import ExchangeSelection from '../../../components/account/Orders/ExchangeSelect
 // import { PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED, PRODUCTS_SLUG_PREFIX } from '@components/utils/constants';
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables';
 import { generateUri } from '@commerce/utils/uri-util';
+import { useTranslation } from '@commerce/utils/use-translation'
 
 
 const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, submitState, submitDispatch, deviceInfo }: any) => {
+    const translate = useTranslation()
     const [reason, setReason] = useState("")
     const [isDisabled, setIsDisabled] = useState(true);
     const [selectedImages, setSelectedImages] = useState<Array<any>>();
@@ -53,10 +55,10 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
             {/* Reason Section UI Start*/}
             <div className='w-full' style={{ display: showExchangeSelection ? "none" : "block" }}>
                 <div className='mx-auto cancel-continer'>
-                    <h4 className='mb-2 text-xl font-bold text-black'>Reason for Exchange</h4>
+                    <h4 className='mb-2 text-xl font-semibold text-black'>{translate('label.exchangeReason.exchangeReasonHeadingText')}</h4>
                     <div className='w-full py-4'>
-                        <h4 className='text-base font-bold text-primary'>Why are you exchanging this item?</h4>
-                        <p className='text-xs text-brown-light'>This Information will help us to improve our service</p>
+                        <h4 className='text-base font-bold text-primary'>{translate('label.exchangeReason.exchangeReasonTitle')}</h4>
+                        <p className='text-xs text-brown-light'>{translate('common.label.serviceText')}</p>
                         <div className='w-full py-4'>
                             {ExchangesReasons?.map((exchangeReason: any, idx: number) => (
                                 <div key={idx}
@@ -86,11 +88,11 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
                             ))}
                         </div>
                         <div className='w-full'>
-                            <h4 className='text-base font-bold text-primary'>Add upto 5 pictures </h4>
+                            <h4 className='text-base font-bold text-primary'>{translate('label.exchangeReason.picturesUploadLimitText')} </h4>
                             {/* <p>(Images exceeding {formatBytes(PDP_REVIEW_IMAGE_SIZE_IN_BYTES)} will be ignored)</p> */}
-                            <p className='text-sm mb-1 text-brown-light'>This will help us to identify your problem better</p>
-                            <p className='text-xs text-brown-light'>Files must be less than 5MB</p>
-                            <p className='text-xs text-brown-light'>Allowed file types: .jpeg, .jpg, .png</p>
+                            <p className='text-sm mb-1 text-brown-light'>{translate('label.exchangeReason.identifyProblemText')}</p>
+                            <p className='text-xs text-brown-light'>{translate('label.exchangeReason.uploadFileSizeLimitText')}</p>
+                            <p className='text-xs text-brown-light'>{translate('label.exchangeReason.allowedFileExtensionsText')}</p>
                             <div className='my-3'>
                                 <input
                                     type="file"
@@ -128,7 +130,7 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
                                     // await onItemExchange(reason)
                                     hideExchangeReasons();
                                 }}
-                            >Choose New Item</button>
+                            >{translate('label.exchangeReason.chooseNewItemText')}</button>
                         </div>
                     </div>
                 </div>

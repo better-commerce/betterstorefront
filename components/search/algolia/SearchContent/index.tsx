@@ -6,16 +6,18 @@ import { Hits, useInstantSearch } from 'react-instantsearch'
 
 // Component Imports
 import Hit from '../Hit'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 // Other Imports
 
 
 const SearchContent = ({ maxBasketItemsCount, handleClearSearch }: any) => {
+    const translate = useTranslation()
     const { results } = useInstantSearch()
     if (!results.__isArtificial && results.nbHits === 0) {
         return (
             <div className="m-2 ml-4">
-                No results found for <strong>{results.query}</strong>.
+                {translate('label.search.noResultFoundForText')} <strong>{results.query}</strong>.
             </div>
         )
     }

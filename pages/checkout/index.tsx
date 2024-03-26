@@ -14,6 +14,7 @@ import cookie from 'cookie'
 import { loqateAddress } from '@components/checkout-old/CheckoutForm'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   CURRENT_THEME,
   EmptyGuid,
   EmptyObject,
@@ -32,10 +33,6 @@ import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import CheckoutLayoutV2 from '@components/common/Layout/CheckoutLayoutV2'
-import {
-  INVALID_ACCOUNT,
-  LOGIN_SUCCESSFUL,
-} from '@components/utils/textVariables'
 import { saveUserToken } from '@framework/utils/app-util'
 import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
 import cartHandler from '@components/services/cart'
@@ -50,7 +47,8 @@ import { Guid } from '@commerce/types'
 import { Logo } from '@components/ui'
 import { compact } from 'lodash'
 import { GetServerSideProps } from 'next'
-
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 export enum BasketStage {
   CREATED = 0,
   ANONYMOUS = 1,
@@ -87,6 +85,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const [basket, setBasket] = useState<any>(undefined)
   const [appConfigData, setAppConfigData] = useState<any>()
   const { isMobile, isIPadorTablet } = deviceInfo
+  const translate = useTranslation()
   const { getAddress, createAddress, updateAddress } = addressHandler()
   const { getCart } = cartHandler()
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
@@ -226,9 +225,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       const userRes: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       cb()
       if (!userRes?.data) {
-        return setAlert({ type: AlertType.ERROR, msg: INVALID_ACCOUNT })
+        return setAlert({ type: AlertType.ERROR, msg: translate('common.message.invalidAccountMsg') })
       }
-      setAlert({ type: AlertType.SUCCESS, msg: LOGIN_SUCCESSFUL })
+      setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.loginSuccessMsg') })
       const { userToken, ...rest } = userRes?.data
       saveUserToken(userToken)
       let userObj = { ...rest }
@@ -281,7 +280,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       }
     } catch (error) {
       cb()
-      setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       setIsLoggedIn(false)
     }
   }
@@ -361,7 +360,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
         hideOverlayLoaderState()
         return setAlert({
           type: AlertType.ERROR,
-          msg: Messages.Errors['GENERIC_ERROR'],
+          msg: translate('common.message.requestCouldNotProcessErrorMsg'),
         })
       }
       cb()
@@ -370,7 +369,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     } catch (error) {
       cb()
       hideOverlayLoaderState()
-      setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
     }
   }
 
@@ -389,12 +388,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       if (postCodeAddressRes?.length < 1) {
         return setAlert({
           type: AlertType.ERROR,
-          msg: Messages.Errors['ADDRESS_NOT_FOUND'],
+          msg: translate('common.message.checkout.noAddressFoundErrorMsg'),
         })
       }
       return postCodeAddressRes
     } catch (error) {
-      setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR'] })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       return null
     }
   }
@@ -901,7 +900,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="canonical" id="canonical" href="https://demostore.bettercommerce.io/checkout" />
-        <title>BetterStore | Checkout</title>
+        <title>{translate('label.checkout.betterStoreCheckoutText')}</title>
         <meta name="title" content="BetterStore Checkout" />
         <meta name="description" content="BetterStore Checkout" />
         <meta name="keywords" content="BetterStore Checkout" />
@@ -926,7 +925,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
             <Logo />
           </Link>
           <h2 className="flex items-center justify-center text-2xl font-semibold mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
-            secure checkout{' '}
+            {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
               <i className="ml-4 sprite-icons sprite-secure"></i>
             </span>
@@ -950,7 +949,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
                   href={`/cart`}
                   className={`bg-white text-black font-normal z-2 cursor-pointer px-0 relative flex items-center gap-2 font-12`}
                 >
-                  <span>Basket</span>
+                  <span>{translate('label.basket.basketText')}</span>
                   <span className={`flex items-center font-16`}>
                     <ChevronRightIcon
                       className={`inline-block w-3 h-3 mx-auto text-gray-800`}
@@ -977,10 +976,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   )
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
   return {
-    props: { basketId }
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      basketId, 
+    }
   }
 }
 const PAGE_TYPE = PAGE_TYPES['Checkout']

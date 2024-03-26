@@ -7,18 +7,19 @@ import axios from 'axios'
 import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
 import { HeartIcon, StarIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { BTN_PRE_ORDER, GENERAL_ADD_TO_BAG, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import cartHandler from '@components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
-import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
 import ProductTag from '../ProductTag'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import wishlistHandler from '@components/services/wishlist'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
@@ -49,7 +50,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
   const [productPromotion, setProductPromo] = useState(null)
   const [isInWishList, setIsInWishList] = useState(false)
   const {deleteWishlistItem} = wishlistHandler()
-
+  const translate = useTranslation();
   useEffect(() => {
     if (wishListItems?.some((x: any) => x?.stockCode === product?.stockCode)) {
       setIsInWishList(true)
@@ -230,7 +231,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
@@ -238,7 +239,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
           }
         })
         if (product?.currentStock === cartLineItem?.qty && !product?.fulfilFromSupplier && !product?.flags?.sellWithoutInventory) {
-          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
           return false
         }
         const isValid = cartItemsValidateAddToCart(
@@ -250,7 +251,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
         }
         return isValid
@@ -274,7 +275,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage
@@ -393,8 +394,8 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
           </ButtonLink>
           {isMobile ? null : (
             <div className={cn( 'absolute flex-wrap z-10 hidden w-full gap-1 px-1 py-4 transition-transform duration-500 bg-white sm:translate-y-60 sm:flex group-hover:translate-y-20', { 'group-hover:opacity-0 group-hover:hidden': isComparedEnabled } )}>
-              <Button title={GENERAL_ADD_TO_BAG} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={() => handleQuickViewData(product)} > {QUICK_VIEW} </SimpleButton>
+              <Button title={translate('label.basket.addToBagText')} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              <SimpleButton variant="slim" className="!p-1 flex-1 !bg-transparent !text-gray-900 hover:!bg-gray-200 border-none hover:border-none disabled:!bg-gray-300" onClick={() => handleQuickViewData(product)} > {translate('label.product.quickViewText')} </SimpleButton>
             </div>
           )}
         </div>
@@ -472,7 +473,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
                 <ButtonNotifyMe product={product} />
               ) : (<Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" buttonType={buttonConfig.buttonType || 'cart'} />)}
               <button type="button" onClick={() => handleQuickViewData(product)} className="w-full outline-none btn btn-default dark:text-primary">
-                {QUICK_VIEW}
+                {translate('label.product.quickViewText')}
               </button>
             </div>
           </>

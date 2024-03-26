@@ -21,15 +21,17 @@ interface BannerProps {
 import SwiperCore, { Navigation } from 'swiper'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 // install Swiper modules
 SwiperCore.use([Navigation])
 const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
   const { isOnlyMobile } = deviceInfo
   const css = { maxWidth: '100%', height: 'auto' }
+  const translate = useTranslation()
   return (
     <>
-      <h1 className="sr-only">Home Page</h1>
+      <h1 className="sr-only">{translate('label.home.HomePageText')}</h1>
       <Swiper
         navigation={true}
         loop={true}

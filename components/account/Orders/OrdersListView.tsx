@@ -1,13 +1,14 @@
 import Spinner from '@components/ui/Spinner'
-import { GENERAL_RECENT_ORDERS } from '@components/utils/textVariables'
 import { groupBy } from 'lodash'
 import Link from 'next/link'
 import React from 'react'
 import { isMobile } from 'react-device-detect'
 import InfiniteScroll from '@components/ui/InfiniteScroll'
+import { useRouter } from 'next/router'
 import DeliveryOrderLines from './DeliveryOrderLines'
 import OrderDetail from './OrderDetail'
 import OrderLines from './OrderLines'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function OrdersListView({
   isShowDetailedOrder,
@@ -24,6 +25,8 @@ function OrdersListView({
   deviceInfo,
   orderDetails,
 }: any) {
+  const translate = useTranslation()
+  const router = useRouter();
   return (
     <>
       {isShowDetailedOrder ? (
@@ -38,7 +41,7 @@ function OrdersListView({
       ) : (
         <>
           <div className="bg-white">
-            <main className="lg:px-8">
+            <main className="">
               <div className="max-w-4xl">
                 {!ordersList ? (
                   <Spinner />
@@ -46,13 +49,8 @@ function OrdersListView({
                   <>
                     {ordersList?.length > 0 ? (
                       <>
-                        <section
-                          aria-labelledby="recent-heading"
-                          className="mt-2 pt-5"
-                        >
-                          <h2 id="recent-heading" className="sr-only">
-                            {GENERAL_RECENT_ORDERS}
-                          </h2>
+                        <section aria-labelledby="recent-heading" className="pt-5 mt-2" >
+                          <h2 id="recent-heading" className="sr-only"> {translate('label.orderDetails.recentOrdersText')} </h2>
                           <div className="w-full mx-auto overflow-hidden sm:px-4 lg:px-0 paged-orders">
                             <InfiniteScroll
                               fetchData={handleInfiniteScroll}
@@ -77,10 +75,10 @@ function OrdersListView({
                                             <>
                                               <a
                                                 onClick={async () => {
-                                                  await onOrderDetail(order.id)
-                                                  setIsShowDetailedOrder(true)
+                                                  router.push(`/my-account/orders/${order?.id}`)
+                                                  // await onOrderDetail(order.id)
                                                 }}
-                                                className="inline-block w-full mb-6 border cursor-pointer"
+                                                className="inline-block w-full mb-6 border cursor-pointer rounded-2xl"
                                                 key={idx}
                                               >
                                                 <DeliveryOrderLines
@@ -99,10 +97,11 @@ function OrdersListView({
                                       <>
                                         <a
                                           onClick={async () => {
+                                            router.push(`/my-account/orders/${order?.id}`)
                                             await onOrderDetail(order.id)
-                                            setIsShowDetailedOrder(true)
+                                            // setIsShowDetailedOrder(true)
                                           }}
-                                          className="inline-block w-full mb-6 border cursor-pointer"
+                                          className="inline-block w-full mb-6 border cursor-pointer rounded-2xl"
                                           key={order.orderNo}
                                         >
                                           <OrderLines
@@ -127,8 +126,7 @@ function OrdersListView({
                                     className="px-6 py-2 font-semibold text-center text-gray-700 bg-gray-100 border border-gray-200 text-14 hover:bg-gray-800 hover:text-white"
                                     onClick={handleInfiniteScroll}
                                   >
-                                    Load More
-                                  </button>
+                                    {translate('common.label.loadMoreBtnText')} </button>
                                 </div>
                               )}
                           </div>
@@ -136,15 +134,13 @@ function OrdersListView({
                       </>
                     ) : (
                       <>
-                        <div className="flex flex-col lg:mx-8 w-full px-4 py-12 max-acc-container sm:px-0">
+                        <div className="flex flex-col w-full px-4 py-12 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
-                            No Order Available
-                          </h1>
-                          <div className="flex w-60 mt-5 sm:flex-col">
+                            {translate('label.orderDetails.noOrderFoundHeadingText')} </h1>
+                          <div className="flex mt-5 w-60 sm:flex-col">
                             <Link legacyBehavior passHref href="/">
                               <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">
-                                Start Shopping
-                              </a>
+                                {translate('label.orderDetails.startShoppingBtnText')} </a>
                             </Link>
                           </div>
                         </div>
@@ -203,10 +199,10 @@ function OrdersListView({
                       <>
                         <section
                           aria-labelledby="recent-heading"
-                          className="mt-2 pt-5"
+                          className="pt-5 mt-2"
                         >
                           <h2 id="recent-heading" className="sr-only">
-                            {GENERAL_RECENT_ORDERS}
+                            {translate('label.orderDetails.recentOrdersText')}
                           </h2>
                           <div className="w-full mx-auto overflow-hidden sm:px-4 lg:px-0 paged-orders">
                             <InfiniteScroll
@@ -290,11 +286,11 @@ function OrdersListView({
                       </>
                     ) : (
                       <>
-                        <div className="flex flex-col lg:mx-8 w-full px-4 py-12 max-acc-container sm:px-0">
+                        <div className="flex flex-col w-full px-4 py-12 lg:mx-8 max-acc-container sm:px-0">
                           <h1 className="my-2 text-2xl font-semibold text-black">
                             No Order Available
                           </h1>
-                          <div className="flex w-60 mt-5 sm:flex-col">
+                          <div className="flex mt-5 w-60 sm:flex-col">
                             <Link legacyBehavior passHref href="/">
                               <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">
                                 Start Shopping

@@ -16,36 +16,14 @@
   ```
 */
 import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import {
   CheckIcon,
-  // MenuIcon,
-  // SearchIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline'
-import classNames from '@components/utils/classNames'
 import {
-  GENERAL_RECENT_ORDERS,
-  RETURN_ORDER_TITLE,
-  RETURN_ORDER_TEXT,
-  GENERAL_ORDER_NUMBER,
-  GENERAL_ORDER_PLACED_ON,
-  GENERAL_DATE_PLACED,
-  GENERAL_TOTAL_AMOUNT,
-  GENERAL_VIEW_ORDER,
-  GENERAL_VIEW_PRODUCT,
-  GENERAL_VIEW_INVOICE,
-  RETURN_FOR_ORDER,
-  GENERAL_BUY_AGAIN,
-  GENERAL_DELIVERED,
-  GENERAL_ON_TEXT,
-  ORDER_STATUS_OUT_FOR_DELIVERY,
-  ORDER_STATUS_CANCELLED,
   IMG_PLACEHOLDER
 } from '@components/utils/textVariables'
-import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 
 const navigation = {
@@ -235,7 +213,7 @@ const footerNavigation = {
 
 export default function MyReturns() {
   const [open, setOpen] = useState(false)
-
+  const translate = useTranslation()
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -244,23 +222,23 @@ export default function MyReturns() {
         <div className="max-w-4xl mx-auto">
           <div className="px-4 sm:px-0">
             <h1 className="text-2xl font-medium tracking-tight text-gray-900 sm:text-3xl">
-              {RETURN_ORDER_TITLE}
+              {translate('label.returnReason.returnHistoryText')}
             </h1>
             <p className="mt-2 text-sm text-gray-500">
-              {RETURN_ORDER_TEXT}
+              {translate('label.returnReason.returnOrderMsgText')}
             </p>
           </div>
 
           <section aria-labelledby="recent-heading" className="mt-16">
             <h2 id="recent-heading" className="sr-only">
-              {GENERAL_RECENT_ORDERS}
+              {translate('label.orderDetails.recentOrdersText')}
             </h2>
 
             <div className="space-y-16 sm:space-y-24">
               {orders.map((order) => (
                 <div key={order.number}>
                   <h3 className="sr-only">
-                    {GENERAL_ORDER_PLACED_ON}{' '}
+                    {translate('common.label.orderPlacedText')}{' '}
                     <time dateTime={order.datetime}>{order.date}</time>
                   </h3>
 
@@ -268,20 +246,20 @@ export default function MyReturns() {
                     <dl className="divide-y divide-gray-200 space-y-4 text-sm text-gray-600 flex-auto md:divide-y-0 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 lg:w-1/2 lg:flex-none lg:gap-x-8">
                       <div className="flex justify-between md:block">
                         <dt className="font-medium text-gray-900">
-                          {GENERAL_ORDER_NUMBER}
+                          {translate('label.common.orderNumberText')}
                         </dt>
                         <dd className="md:mt-1">{order.number}</dd>
                       </div>
                       <div className="flex justify-between pt-4 md:block md:pt-0">
                         <dt className="font-medium text-gray-900">
-                          {GENERAL_DATE_PLACED}
+                          {translate('label.common.datePlacedText')}
                         </dt>
                         <dd className="md:mt-1">
                           <time dateTime={order.datetime}>{order.date}</time>
                         </dd>
                       </div>
                       <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                        <dt>{GENERAL_TOTAL_AMOUNT}</dt>
+                        <dt>{translate('label.basket.totalAmountText')}</dt>
                         <dd className="md:mt-1">{order.total}</dd>
                       </div>
                     </dl>
@@ -290,16 +268,16 @@ export default function MyReturns() {
                         href={order.href}
                         className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                       >
-                        {GENERAL_VIEW_ORDER}
+                        {translate('label.order.viewOrderBtnText')}
                         <span className="sr-only">{order.number}</span>
                       </a>
                       <a
                         href={order.invoiceHref}
                         className="w-full flex items-center justify-center bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                       >
-                        {GENERAL_VIEW_INVOICE}
+                        {translate('label.order.viewInvoiceBtnText')}
                         <span className="sr-only">
-                          {RETURN_FOR_ORDER} {order.number}
+                        {translate('label.order.forOrderText')}{' '}{order.number}
                         </span>
                       </a>
                     </div>
@@ -329,30 +307,30 @@ export default function MyReturns() {
                                   href={product.href}
                                   className="text-indigo-600 hover:text-indigo-500"
                                 >
-                                  {GENERAL_VIEW_PRODUCT}
+                                  {translate('label.product.viewProductText')}
                                 </a>
                                 <div className="border-l border-gray-200 ml-4 pl-4 sm:ml-6 sm:pl-6">
                                   <a
                                     href="#"
                                     className="text-indigo-600 hover:text-indigo-500"
                                   >
-                                    {GENERAL_BUY_AGAIN}
+                                    {translate('label.order.buyAgainBtnText')}
                                   </a>
                                 </div>
                               </div>
                             </div>
                             <div className="mt-6 font-medium">
-                              {product.status === GENERAL_DELIVERED ? (
+                              {product.status === 'Delivered' ? (
                                 <div className="flex space-x-2">
                                   <CheckIcon
                                     className="flex-none w-6 h-6 text-green-500"
                                     aria-hidden="true"
                                   />
                                   <p>
-                                    {GENERAL_DELIVERED}
+                                  {translate('label.order.deliveredText')}
                                     <span className="hidden sm:inline">
                                       {' '}
-                                      {GENERAL_ON_TEXT}{' '}
+                                      {translate('common.label.onText')}{' '}
                                       <time dateTime={product.datetime}>
                                         {product.date}
                                       </time>
@@ -360,9 +338,9 @@ export default function MyReturns() {
                                   </p>
                                 </div>
                               ) : product.status === 'out-for-delivery' ? (
-                                <p>{ORDER_STATUS_OUT_FOR_DELIVERY}</p>
+                                <p>{translate('label.order.outForDeliveryText')}</p>
                               ) : product.status === 'cancelled' && (
-                                <p className="text-gray-500">{ORDER_STATUS_CANCELLED}</p>
+                                <p className="text-gray-500">{translate('label.order.cancelledText')}</p>
                               )}
                             </div>
                           </div>

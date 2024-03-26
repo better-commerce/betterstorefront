@@ -26,7 +26,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 // Other Imports
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, GENERAL_REFERENCE, GENERAL_RETURNS, GENERAL_SHIPPING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, PRICEMATCH_ADDITIONAL_DETAILS, PRODUCT_AVAILABILITY, PRODUCT_INFORMATION, PRODUCT_IN_STOCK, PRODUCT_OUT_OF_STOCK, PRODUCT_PERSONALIZATION_TITLE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
@@ -48,6 +48,7 @@ import Prices from '@new-components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@new-components/ReviewItem'
 import ButtonSecondary from '@new-components/shared/Button/ButtonSecondary'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -77,6 +78,7 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
+  const translate = useTranslation()
   const { isMobile } = deviceInfo
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
@@ -252,13 +254,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
         if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -270,7 +272,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), {
               maxBasketItemsCount,
             }),
           })
@@ -346,7 +348,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
     } else if (
@@ -358,7 +360,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         (!product?.flags?.sellWithoutInventory ||
           selectedAttrData?.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.product.preOrderText')
         buttonConfig.shortMessage = product?.preOrder?.shortMessage
         return buttonConfig
       } else if (
@@ -366,13 +368,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         selectedAttrData?.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }
@@ -384,10 +386,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: stringFormat(
-                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
-                  { maxBasketItemsCount }
-                ),
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
+
               })
             }
             return isValid
@@ -457,7 +457,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -730,57 +730,39 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderDetailSection = () => {
     return (
       <div className="flex flex-col">
-        <h2 className="text-2xl font-semibold">Product Details</h2>
+        <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}</h2>
         <div dangerouslySetInnerHTML={{ __html: product.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
       </div>
     );
   };
   const detailsConfig = [
-    { name: "Description", content: product?.shortDescription || 'No Data' },
-    { name: GENERAL_SHIPPING, content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
-    { name: GENERAL_RETURNS, content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
+    { name: translate('label.product.bundles.descriptionText'), content: product?.shortDescription || 'No Data' },
+    { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
+    { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
   ]
 
   const renderReviews = () => {
     return (
-      <div className="">
-        {/* HEADING */}
+      <div className="" id='productReview'>
         <h2 className="flex items-center text-2xl font-semibold">
-          <StarIcon className="w-7 h-7 mb-0.5" />
-          <span className="ml-1.5"> 4,87 · 142 Reviews</span>
+          <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
+          <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
         </h2>
 
-        {/* comment */}
         <div className="mt-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
-            <ReviewItem />
-            <ReviewItem
-              data={{
-                comment: `I love the charcoal heavyweight hoodie. Still looks new after plenty of washes. 
-                  If you’re unsure which hoodie to pick.`,
-                date: "December 22, 2021",
-                name: "Stiven Hokinhs",
-                starPoint: 5,
-              }}
-            />
-            <ReviewItem
-              data={{
-                comment: `The quality and sizing mentioned were accurate and really happy with the purchase. Such a cozy and comfortable hoodie. 
-                Now that it’s colder, my husband wears his all the time. I wear hoodies all the time. `,
-                date: "August 15, 2022",
-                name: "Gropishta keo",
-                starPoint: 5,
-              }}
-            />
-            <ReviewItem
-              data={{
-                comment: `Before buying this, I didn't really know how I would tell a "high quality" sweatshirt, but after opening, I was very impressed. 
-                The material is super soft and comfortable and the sweatshirt also has a good weight to it.`,
-                date: "December 12, 2022",
-                name: "Dahon Stiven",
-                starPoint: 5,
-              }}
-            />
+            {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
+              <div key={`review-${reviewIdx}`}>
+                <ReviewItem
+                  data={{
+                    comment: review?.comment,
+                    date: review?.postedOn,
+                    name: review?.title,
+                    starPoint: review?.rating,
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -791,19 +773,19 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       <div className="space-y-8">
         <div>
           <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000">
-            <Link href={`/${product?.slug}`}>{product?.name}</Link>
+            {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
             <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
             <div className="flex items-center">
-              <Link href={`/${product?.slug}`} className="flex items-center text-sm font-medium" >
+              <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
                 <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                 <div className="ms-1.5 flex">
                   <span>{reviews?.review?.ratingAverage}</span>
                   <span className="block mx-2">·</span>
                   <span className="underline text-slate-600 dark:text-slate-400">
-                    {product?.reviewCount} reviews
+                    {reviews?.review?.totalRecord} {translate('common.label.reviews')}
                   </span>
                 </div>
               </Link>
@@ -829,7 +811,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
               </button>
             </div>
           )}
@@ -842,7 +824,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                 <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                 <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                  <span className="font-bold"> {GENERAL_ENGRAVING} </span>
+                  <span className="font-bold"> {translate('label.product.engravingText')} </span>
                 </button>
                 <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
@@ -850,7 +832,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
                 </button>
               </div>
             </>
@@ -877,10 +859,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="w-full lg:w-[55%]">
             <div className="relative">
               <div className="relative aspect-w-16 aspect-h-16">
-                <img src={product?.image} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                <img src={product?.image} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
               </div>
               {renderStatus()}
-              <LikeButton className="absolute right-3 top-3" />
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
               {product?.images?.map((item: any, index: number) => (
@@ -902,7 +883,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
           </div>
-          {renderReviews()}
+          {reviews?.review?.productReviews?.length > 0 &&
+            renderReviews()
+          }
         </div>
         <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
@@ -922,18 +905,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <>
               <div className="flex flex-col section-devider"></div>
               <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
-                <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> You May Also Like </h3>
+                <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>
           )}
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
-          {reviews?.review?.productReviews?.length > 0 && (
-            <>
-              <div className="flex flex-col section-devider" aria-hidden="true" ></div>
-              <Reviews className="mx-auto md:w-4/5" data={reviews?.review} />
-            </>
-          )}
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
           )}

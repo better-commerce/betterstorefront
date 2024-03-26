@@ -8,8 +8,8 @@ import { LoadingDots, useUI } from '@components/ui'
 // Other Imports
 import { isEligibleForFreeShipping } from '@framework/utils/app-util'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { FREE_SHIPPING_CART_ITEM_REMOVE_TILE, GENERAL_REMOVE, GENERAL_REMOVE_ITEM } from '@components/utils/textVariables'
 import { LoadingActionType } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const CartItemRemoveModal = ({
     isOpen,
@@ -21,6 +21,7 @@ const CartItemRemoveModal = ({
     setLoadingAction,
     config
 }: any) => {
+    const translate = useTranslation()
     const { cartItems } = useUI()
     let EligibleForFreeShipping = isEligibleForFreeShipping(config, cartItems?.grandTotal?.raw?.withTax)
     return (
@@ -59,7 +60,7 @@ const CartItemRemoveModal = ({
                                     as="div"
                                     className="flex justify-between w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
                                 >
-                                    {EligibleForFreeShipping ? FREE_SHIPPING_CART_ITEM_REMOVE_TILE : GENERAL_REMOVE_ITEM}
+                                    {EligibleForFreeShipping ? translate('label.orderSummary.loseDeliveryText') : translate('common.label.removeItemConfirmText')}
                                     {loadingAction === LoadingActionType.NONE && (
                                         <XMarkIcon
                                             className="w-5 h-5 text-gray-500 hover:text-gray-400"
@@ -69,8 +70,7 @@ const CartItemRemoveModal = ({
                                 </Dialog.Title>
                                 {/* <hr className="w-full my-2 shadow-md "></hr> */}
                                 <p className="p-6 text-sm font-normal text-black">
-                                    Are you sure you don't want this product? You
-                                    may move it to Wishlist and buy later.
+                                    {translate('label.basket.cartItemRemoveText')} 
                                 </p>
                                 <div className="flex items-center justify-around w-full px-6 mt-2">
                                     <button
@@ -83,7 +83,7 @@ const CartItemRemoveModal = ({
                                         {loadingAction === LoadingActionType.REMOVE_ITEM ? (
                                             <LoadingDots />
                                         ) : (
-                                            <>{GENERAL_REMOVE}</>
+                                            <>{translate('common.label.removeText')}</>
                                         )}
                                     </button>
                                     {/* <button

@@ -10,26 +10,20 @@ import axios from 'axios'
 import Form from '@components/customer'
 import GuestForm from './GuestForm'
 import Link from 'next/link'
-import {
-  BTN_CHECKOUT_SECURELY,
-  CUSTOMER_ERROR_MESSAGE,
-  GUEST_CHECKOUT,
-  LOG_IN,
-  NEW_CUSTOMER,
-} from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 const config = [
   {
-    title: LOG_IN,
+    title: "Log in",
     key: 'logIn',
   },
   {
-    title: GUEST_CHECKOUT,
+    title: "Guest Checkout",
     key: 'guestCheckout',
   },
 ]
 
 const DEFAULT_TAB = {
-  title: LOG_IN,
+  title: "Log in",
   key: 'logIn',
 }
 
@@ -38,6 +32,7 @@ export default function CheckoutRouter({
   setIsLoggedIn,
   fetchAddress,
 }: any) {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
   const { setUser, setIsGuestUser, wishlistItems, basketId, setCartItems } =
@@ -91,7 +86,7 @@ export default function CheckoutRouter({
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="sm:text-6xl text-3xl uppercase font-bold text-center tracking-tight text-gray-900">
-            {BTN_CHECKOUT_SECURELY}
+            {translate('label.checkout.checkoutSecurelyText')}
           </h1>
         </div>
         <div className="flex justify-center items-center pt-10">
@@ -113,11 +108,11 @@ export default function CheckoutRouter({
         </div>
         {activeTab.key === 'logIn' && (
           <div className="flex justify-center items-center flex-col sm:pl-10 sm:pr-10">
-            <Form btnText="Login" type="login" onSubmit={handleUserLogin} />
+            <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} />
             <div>
               <Link href="/my-account/register">
                 <span className="text-gray-600 underline cursor-pointer">
-                  {NEW_CUSTOMER}
+                  {translate('label.checkout.newCustomerText')}
                 </span>
               </Link>
             </div>
@@ -129,7 +124,7 @@ export default function CheckoutRouter({
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && activeTab.key === 'logIn' && (
             <span className="text-red-700 text-lg">
-              {CUSTOMER_ERROR_MESSAGE}
+              {translate('common.message.invalidAccountMsg')}
             </span>
           )}
         </div>

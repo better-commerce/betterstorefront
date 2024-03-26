@@ -1,18 +1,17 @@
-import {
-  GENERAL_ADD_TO_BASKET,
-  VALIDATION_PLEASE_COMPLETE_THIS_FIELD,
-} from '@components/utils/textVariables'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { config } from './config'
+import { useTranslation } from '@commerce/utils/use-translation'
 
-const schema = Yup.object().shape({
-  line1: Yup.string().required(VALIDATION_PLEASE_COMPLETE_THIS_FIELD),
-  line2: Yup.string(),
-  line3: Yup.string(),
-})
 
 export default function EngravingForm({ submitForm }: any) {
+
+  const translate = useTranslation()
+  const schema = Yup.object().shape({
+    line1: Yup.string().required(translate('common.message.completeThisFieldMsg')),
+    line2: Yup.string(),
+    line3: Yup.string(),
+  })
   return (
     <Formik
       initialValues={{ line1: '', line2: '', line3: '' }}
@@ -52,7 +51,7 @@ export default function EngravingForm({ submitForm }: any) {
                 onClick={handleSubmit}
                 className="w-full max-w-xs flex-1 uppercase bg-black border border-transparent rounded-sm py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
               >
-                {GENERAL_ADD_TO_BASKET}
+                {translate('label.basket.addToBagText')}
               </button>
             </div>
           </Form>

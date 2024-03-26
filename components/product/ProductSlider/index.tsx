@@ -4,7 +4,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import CompareProductCard from '@components/product/ProductCard/CompareProductCard'
-import { PDP_BRAND_COMPARE } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 SwiperCore.use([Navigation])
 
@@ -26,11 +26,12 @@ interface Props {
 }
 
 const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceInfo, maxBasketItemsCount, activeProduct, attributeNames, products, compareProductsAttributes}) => {
+  const translate = useTranslation()
   const swiperRef: any = useRef(null)
   return (
     <>
       <div className="flex justify-between gap-1 mb-2 lg:gap-3 sm:mb-0">
-        <h2 className="flex-1 pb-0 pr-4 mb-2 font-semibold sm:pb-4 font-18 text-dark-brown dark:text-black">{PDP_BRAND_COMPARE}</h2>
+        <h2 className="flex-1 pb-0 pr-4 mb-2 font-semibold sm:pb-4 font-18 text-dark-brown dark:text-black">{translate('label.product.compareSameRangeText')}</h2>
         <div className="flex gap-4">
           <button aria-label="Arrow Left" onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center rounded arrow-container hover:border-2">
             <i className="sprite-icons sprite-left-arrow"></i>

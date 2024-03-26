@@ -1481,3 +1481,9 @@ object {
   background: var(--btn-bg-hover-secondary) !important;
   color: var(--btn-hover-text-color-secondary) !important;
 }
+@media screen and  (max-width: 767px) {
+  .mob-flex-cart-pro{
+    flex-direction: column;
+    gap: 10px;
+  }
+}

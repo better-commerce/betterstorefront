@@ -5,56 +5,10 @@ import Slider from "rc-slider";
 import MySwitch from "@new-components/MySwitch";
 import Checkbox from "./shared/Checkbox/Checkbox";
 import Radio from "./shared/Radio/Radio";
+import { useTranslation } from "@commerce/utils/use-translation";
 
-// DEMO DATA
-const DATA_categories = [
-  {
-    name: "Backpacks",
-  },
-  {
-    name: "Travel Bags",
-  },
-  {
-    name: "Laptop Sleeves",
-  },
-  {
-    name: "Organization",
-  },
-  {
-    name: "Accessories",
-  },
-];
-
-const DATA_colors = [
-  { name: "White" },
-  { name: "Beige" },
-  { name: "Blue" },
-  { name: "Black" },
-  { name: "Brown" },
-  { name: "Green" },
-  { name: "Navy" },
-];
-
-const DATA_sizes = [
-  { name: "XS" },
-  { name: "S" },
-  { name: "M" },
-  { name: "L" },
-  { name: "XL" },
-  { name: "2XL" },
-];
-
-const DATA_sortOrderRadios = [
-  { name: "Most Popular", id: "Most-Popular" },
-  { name: "Best Rating", id: "Best-Rating" },
-  { name: "Newest", id: "Newest" },
-  { name: "Price Low - Hight", id: "Price-low-hight" },
-  { name: "Price Hight - Low", id: "Price-hight-low" },
-];
-
-const PRICE_RANGE = [1, 500];
-//
 const SidebarFilters = () => {
+  const translate = useTranslation()
   //
   const [isOnSale, setIsIsOnSale] = useState(true);
   const [rangePrices, setRangePrices] = useState([100, 500]);
@@ -62,6 +16,60 @@ const SidebarFilters = () => {
   const [colorsState, setColorsState] = useState<string[]>([]);
   const [sizesState, setSizesState] = useState<string[]>([]);
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
+  // DEMO DATA
+  const DATA_categories = [
+    {
+      name: translate('label.category.newArrivalsText'),
+    },
+    {
+      name: translate('label.category.saleText'),
+    },
+    {
+      name: translate('label.category.backpacksText'),
+    },
+    {
+      name: translate('label.category.travelBagsText'),
+    },
+    {
+      name: translate('label.category.laptopSleevesText'),
+    },
+    {
+      name: translate('label.category.organizationText'),
+    },
+    {
+      name: translate('label.category.accessoriesText'),
+    },
+  ];
+  
+  const DATA_colors = [
+    { name: translate('common.color.whiteText') },
+    { name: translate('common.color.beigeText') },
+    { name: translate('common.color.blueText') },
+    { name: translate('common.color.blackText') },
+    { name: translate('common.color.brownText') },
+    { name: translate('common.color.greenText') },
+    { name: translate('common.color.navyText') },
+  ];
+  
+  const DATA_sizes = [
+    { name: "XXS" },
+    { name: "XS" },
+    { name: "S" },
+    { name: "M" },
+    { name: "L" },
+    { name: "XL" },
+    { name: "2XL" },
+  ];
+  
+  const DATA_sortOrderRadios = [
+    { name: translate('common.sortOrder.mostPopularText'), id: "Most-Popular" },
+    { name: translate('common.sortOrder.bestRatingText'), id: "Best-Rating" },
+    { name: translate('common.sortOrder.newestText'), id: "Newest" },
+    { name: translate('common.sortOrder.priceLowToHighText'), id: "Price-low-hight" },
+    { name: translate('common.sortOrder.priceHightToLowText'), id: "Price-hight-low" },
+  ];
+
+  const PRICE_RANGE = [1, 500];
 
   //
   const handleChangeCategories = (checked: boolean, name: string) => {
@@ -88,7 +96,7 @@ const SidebarFilters = () => {
   const renderTabsCategories = () => {
     return (
       <div className="relative flex flex-col pb-8 space-y-4">
-        <h3 className="font-semibold mb-2.5">Categories</h3>
+        <h3 className="font-semibold mb-2.5">{translate('label.category.catogoriesText')}</h3>
         {DATA_categories.map((item) => (
           <div key={item.name} className="">
             <Checkbox
@@ -109,7 +117,7 @@ const SidebarFilters = () => {
   const renderTabsColor = () => {
     return (
       <div className="relative flex flex-col py-8 space-y-4">
-        <h3 className="font-semibold mb-2.5">Colors</h3>
+        <h3 className="font-semibold mb-2.5">{translate('common.label.colorsText')}</h3>
         {DATA_colors.map((item) => (
           <div key={item.name} className="">
             <Checkbox
@@ -130,7 +138,7 @@ const SidebarFilters = () => {
   const renderTabsSize = () => {
     return (
       <div className="relative flex flex-col py-8 space-y-4">
-        <h3 className="font-semibold mb-2.5">Sizes</h3>
+        <h3 className="font-semibold mb-2.5">{translate('common.label.sizesText')}</h3>
         {DATA_sizes.map((item) => (
           <div key={item.name} className="">
             <Checkbox
@@ -152,7 +160,7 @@ const SidebarFilters = () => {
     return (
       <div className="relative flex flex-col py-8 pr-3 space-y-5">
         <div className="space-y-5">
-          <span className="font-semibold">Price range</span>
+          <span className="font-semibold">{translate('label.price.priceRangeText')}</span>
           <Slider
             range
             min={PRICE_RANGE[0]}
@@ -172,7 +180,7 @@ const SidebarFilters = () => {
               htmlFor="minPrice"
               className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
             >
-              Min price
+              {translate('label.price.minPriceText')} 
             </label>
             <div className="relative mt-1 rounded-md">
               <span className="absolute inset-y-0 flex items-center pointer-events-none right-4 text-neutral-500 sm:text-sm">
@@ -193,7 +201,7 @@ const SidebarFilters = () => {
               htmlFor="maxPrice"
               className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
             >
-              Max price
+              {translate('label.price.maxPricetext')} 
             </label>
             <div className="relative mt-1 rounded-md">
               <span className="absolute inset-y-0 flex items-center pointer-events-none right-4 text-neutral-500 sm:text-sm">
@@ -218,7 +226,7 @@ const SidebarFilters = () => {
   const renderTabsSortOrder = () => {
     return (
       <div className="relative flex flex-col py-8 space-y-4">
-        <h3 className="font-semibold mb-2.5">Sort order</h3>
+        <h3 className="font-semibold mb-2.5">{translate('label.filters.sortOrderText')}</h3>
         {DATA_sortOrderRadios.map((item) => (
           <Radio
             id={item.id}
@@ -243,8 +251,8 @@ const SidebarFilters = () => {
       {renderTabsPriceRage()}
       <div className="py-8 pr-2">
         <MySwitch
-          label="On sale!"
-          desc="Products currently on sale"
+          label={translate('label.filters.onSaleWithMarkText')}
+          desc={translate('common.label.productCurrentlyOnSaleText')}
           enabled={isOnSale}
           onChange={setIsIsOnSale}
         />

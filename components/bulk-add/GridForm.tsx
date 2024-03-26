@@ -6,8 +6,8 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
 
 // Other Imports
 import { VALUES_MAP } from '.'
-import { GENERAL_SHOW_MORE_ENTRY_FIELDS } from '@components/utils/textVariables'
 import { Messages } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface IGridFormProps {
   readonly onGridSubmit: any
@@ -21,7 +21,7 @@ export const GridForm: FC<IGridFormProps> = ({
   type = 'bulkAddViaGrid',
 }: IGridFormProps) => {
   const { headerValues, schema, initialValues, config } = VALUES_MAP[type]
-
+  const translate = useTranslation();
   const onAddMoreOrderPads = (
     e: any,
     field: any,
@@ -74,7 +74,7 @@ export const GridForm: FC<IGridFormProps> = ({
                         )
                       }
                     >
-                      {GENERAL_SHOW_MORE_ENTRY_FIELDS}
+                      {translate('label.bulkAdd.showMoreEntryFieldsBtnText')}
                     </button>
                   </div>
                 </div>

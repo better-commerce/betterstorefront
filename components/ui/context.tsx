@@ -11,7 +11,6 @@ import { DeviceType } from '@commerce/utils/use-device'
 import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { LOGOUT } from '@components/utils/textVariables'
 import { Cookie } from '@framework/utils/constants'
 
 declare const window: any
@@ -116,7 +115,7 @@ const initialState = {
     isIPadorTablet: false,
     deviceType: DeviceType.UNKNOWN,
   },
-  includeVAT: getItem('includeVAT') || 'false',
+  includeVAT: getItem('includeVAT') || 'true',
   isCompared: getItem('isCompared') || 'false',
   compareProductList: getItem('compareProductList') || {},
   isPaymentLink: getItem('isPaymentLink') || false,
@@ -865,7 +864,7 @@ export const UIProvider: React.FC<any> = (props) => {
         Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
 
         if (!isSilentLogout) {
-          setAlert({ type: 'success', msg: LOGOUT })
+          setAlert({ type: 'success', msg: 'Logout Successful' })
         }
       }
 

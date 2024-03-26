@@ -5,6 +5,7 @@ import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
 import { useRouter } from 'next/router'
 import { getProductFromAttributes } from '@components/utils/attributesGenerator'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Dropdown({
   items = [],
@@ -20,6 +21,7 @@ export default function Dropdown({
   product,
   variant,
 }: any) {
+  const translate = useTranslation()
   const { openNotifyUser, closeNotifyUser } = useUI()
   const router = useRouter()
   const slug = `products/${router.query.slug}`
@@ -55,12 +57,12 @@ export default function Dropdown({
 
   const generateItemOption = (value: any, stock: number) => {
     if (stock <= 0 && !isPreOrderEnabled)
-      return `${value.toUpperCase()} - NOTIFY ME`
+      return `${value.toUpperCase()} ${translate('label.product.generateOptions.notifymeText')}`
     if (stock <= 0 && isPreOrderEnabled) {
-      return `${value.toUpperCase()} - PRE-ORDER`
+      return `${value.toUpperCase()} - ${translate('label.product.generateOptions.preOrderText')}`
     }
     if ((stock < 5 && stock > 0) || isPreOrderEnabled)
-      return `${value.toUpperCase()} - ONLY ${stock} LEFT`
+      return `${value.toUpperCase()} - ${translate('label.product.generateOptions.onlyText')} ${stock} ${translate('label.product.generateOptions.leftText')}`
     return value.toUpperCase()
   }
 

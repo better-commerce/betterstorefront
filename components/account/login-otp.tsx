@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import Router from 'next/router'
 
 import { useUI } from '@components/ui/context'
-import { Layout } from '@components/common'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import {
   NEXT_AUTHENTICATE,
   OTP_LOGIN_ENABLED,
@@ -13,14 +11,11 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  GENERAL_LOGIN,
-  VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP,
-  VALIDATION_YOU_ARE_ALREADY_LOGGED_IN,
-} from '@components/utils/textVariables'
 import LoginOTPForm from '@components/customer/login-otp-form'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 function LoginOTPComp() {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -57,7 +52,7 @@ function LoginOTPComp() {
   if (!isGuestUser && user.userId) {
     return (
       <div className="font-extrabold text-center w-full h-full text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -130,14 +125,14 @@ function LoginOTPComp() {
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
         <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
           <h1 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
-            {GENERAL_LOGIN} via OTP
+            {translate('label.login.loginBtnText')} via OTP
           </h1>
         </div>
         <LoginOTPForm handleUserLogin={handleUserLogin} />
         <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
             <span className="text-red-700 text-lg">
-              {VALIDATION_NO_ACCOUNT_FOUND_VIA_OTP}
+              {translate('label.login.noMobileAccountFoundText')}
             </span>
           )}
         </div>

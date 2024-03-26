@@ -12,8 +12,6 @@ import {
 } from '@components/utils/constants'
 import { round } from 'lodash'
 import {
-  BTN_PRE_ORDER,
-  GENERAL_ADD_TO_BASKET,
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -25,6 +23,8 @@ import { matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 import ButtonNotifyMe from '../ButtonNotifyMe'
+import { useTranslation } from '@commerce/utils/use-translation'
+import Prices from '@new-components/Prices'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView')
@@ -56,7 +56,6 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   maxBasketItemsCount,
   attributesCount = 0,
 }) => {
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
     link: productData.slug,
@@ -73,6 +72,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     setAlert,
     //includeVAT,
   } = useUI()
+  const translate = useTranslation();
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
@@ -219,7 +219,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
@@ -227,7 +227,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           }
         })
         if (product?.currentStock === cartLineItem?.qty && !product?.fulfilFromSupplier && !product?.flags?.sellWithoutInventory) {
-          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
           return false
         }
         const isValid = validateAddToCart(
@@ -238,7 +238,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), {
               maxBasketItemsCount,
             }),
           })
@@ -264,7 +264,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
       shortMessage: '',
     }
     if (!product?.currentStock && product?.preOrder?.isEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = product?.preOrder?.shortMessage
@@ -328,108 +328,37 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   return (
     <>
       <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14 min-height-com"
+        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14"
         key={product.id}
       >
-        <div className="relative mb-4 overflow-hidden bg-gray-200 border aspect-w-1 aspect-h-1 mobile-card-panel white-card-sm">
-          <Link
-            passHref
-            href={`/${currentProductData.link}`}
-            onMouseEnter={(ev: any) => handleHover(ev, 'enter')}
-            onMouseLeave={(ev: any) => handleHover(ev, 'leave')}
-            title={`${product.name} \t ${itemPrice}`}
-          >
-            <img
-              id={`${product?.productId ?? product?.recordId}-1`}
-              src={
-                generateUri(currentProductData.image, 'h=250&fm=webp') ||
-                IMG_PLACEHOLDER
-              }
-              alt={product.name || 'product'}
-              className="object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
-              style={css}
-              width={400}
-              height={500}
-            />
-            {product?.images?.length > 1 && (
-              <img
-                id={`${product?.productId ?? product?.recordId}-2`}
-                src={
-                  generateUri(product?.images[1]?.image, 'h=500&fm=webp') ||
-                  IMG_PLACEHOLDER
-                }
-                alt={product.name || 'product'}
-                className="hidden object-cover object-center w-full h-full mx-auto sm:h-full min-h-image height-img-auto-sm"
-                style={css}
-                width={400}
-                height={500}
-              />
-            )}
+        <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
+          <Link passHref href={`/${currentProductData.link}`} onMouseEnter={(ev: any) => handleHover(ev, 'enter')} onMouseLeave={(ev: any) => handleHover(ev, 'leave')} title={`${product.name} \t ${itemPrice}`} >
+            <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
+              <img src={generateUri(product?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
+            </div>
           </Link>
         </div>
 
-        <Link
-          passHref
-          href={`/${currentProductData.link}`}
-          title={`${product.name} \t ${itemPrice}`}
-        >
+        <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`} >
           <div className="px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-xs">
-            {isIncludeVAT
-              ? product?.price?.formatted?.withTax
-              : product?.price?.formatted?.withoutTax}
-            {product?.listPrice?.raw?.withTax > 0 &&
-              product?.listPrice?.raw?.withTax !=
-                product?.price?.raw?.withTax && (
-                <>
-                  <span className="px-1 text-xs font-medium text-black line-through">
-                    {isIncludeVAT
-                      ? product?.listPrice?.formatted?.withTax
-                      : product?.listPrice?.formatted?.withoutTax}
-                  </span>
-                  <span className="text-xs font-semibold text-red-600">
-                    {discount > 0 && (
-                      <span className="text-xs font-semibold text-red-600">
-                        ({discount}% Off)
-                      </span>
-                    )}
-                  </span>
-                </>
-              )}
-          </div>
-          <div className="flex justify-between w-full px-0 mt-3 mb-1 font-semibold text-left text-black capitalize product-name hover:text-gray-950 light-font-weight prod-name-block">
+            <Prices price={product?.price} listPrice={product?.listPrice} />
+          </div>  
+          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] nc-ProductCard__title text-left  ">
             {product?.name?.toLowerCase()}
           </div>
         </Link>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col p-2">
           {isOutOfStock(product) ? (
-            <ButtonNotifyMe
-              product={product}
-              className="mt-2 text-sm font-medium rounded-md"
-            />
+            <ButtonNotifyMe product={product} className="mt-2 text-sm font-medium rounded-md" />
           ) : (
-            <Button
-              className="mt-2 text-sm font-medium rounded-md"
-              title={buttonConfig.title}
-              action={buttonConfig.action}
-              type="button"
-              buttonType={buttonConfig.buttonType || 'cart'}
-            />
+            <Button className="mt-2 text-sm font-medium rounded-md" title={buttonConfig.title} action={buttonConfig.action} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
           )}
         </div>
       </div>
       <div className="mt-5 bg-white border-t border-gray-200 lg:mt-10">
         <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
           {[0, 1, 2, 3, 4].map((rating) => (
-            <StarIcon
-              key={rating}
-              aria-hidden="true"
-              className={classNames(
-                product?.rating > rating
-                  ? 'text-yellow-400 h-3 w-3'
-                  : 'text-gray-300 h-4 w-4',
-                'flex-shrink-0'
-              )}
-            />
+            <StarIcon key={rating} aria-hidden="true" className={classNames(product?.rating > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
           ))}
           <label className="pl-1 text-xs font-semibold text-black">
             {product?.rating}
@@ -439,10 +368,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           <span className="font-semibold text-black">{product?.brand}</span>
         </div>
         {attribs?.map((attrib: any, idx: number) => (
-          <div
-            key={idx}
-            className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14"
-          >
+          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14" >
             <span>{getAttribValue(attrib.value)}</span>
           </div>
         ))}

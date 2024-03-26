@@ -1,4 +1,4 @@
-import { PRODUCT_SPECIFICATION, PERFECT_FOR, FABRIC_CARE, COLLAR, WASH_CARE, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { groupBy } from 'lodash'
 import { useState } from 'react'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function ProductSpecifications({
   attrGroup,
   product,
@@ -15,13 +16,14 @@ export default function ProductSpecifications({
   const imageTagGroup = groupBy(product?.images, 'tag')
   const [paddingTop, setPaddingTop] = useState('0')
   const { isOnlyMobile } = deviceInfo
+  const translate = useTranslation()
   return (
     <>
       <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
             <h2 className="flex items-center text-2xl font-semibold">
-              {PRODUCT_SPECIFICATION}
+              {translate('label.product.productSpecificationText')}
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
               <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
@@ -46,7 +48,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        {COLLAR}
+                        {translate('label.product.specifications.collarText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -67,7 +69,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        Fabric
+                        {translate('label.product.specifications.fabricText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -113,7 +115,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        Fabric Type
+                        {translate('label.product.specifications.fabricTypeText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -134,7 +136,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        Fit
+                        {translate('label.product.specifications.fitText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -155,7 +157,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        Dress Style
+                        {translate('label.product.specifications.dressStyleText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -176,7 +178,7 @@ export default function ProductSpecifications({
                   <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                        Clothing
+                        {translate('label.product.specifications.clothingText')}
                       </h4>
                     </div>
                     <div className="flex flex-wrap">
@@ -200,7 +202,7 @@ export default function ProductSpecifications({
               <>
                 <div className="flex flex-col mt-3 sm:mt-3">
                   <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
-                    {PERFECT_FOR}
+                    {translate('label.product.specifications.perfectForText')}
                   </h4>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pr-4 mt-0 sm:grid-cols-4">
@@ -229,7 +231,7 @@ export default function ProductSpecifications({
               <>
                 <div className="flex flex-col mt-6">
                   <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                    {FABRIC_CARE}
+                    {translate('label.product.specifications.fabricCareText')}
                   </h4>
                 </div>
                 <div className="grid">
@@ -253,7 +255,7 @@ export default function ProductSpecifications({
               <>
                 <div className="flex flex-col mt-6">
                   <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                    {WASH_CARE}
+                    {translate('label.product.specifications.washCareText')}
                   </h4>
                 </div>
                 <div className="grid">
@@ -278,7 +280,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Product Group
+                      {translate('label.product.specifications.productGroupText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -302,7 +304,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Type
+                     {translate('label.product.specifications.typeText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -326,7 +328,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Dust Class
+                      {translate('label.product.specifications.dustClassText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -350,7 +352,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Power
+                      {translate('label.product.specifications.PowerText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -374,7 +376,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Voltage
+                      {translate('label.product.specifications.VoltageText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -398,7 +400,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Hazardous
+                      {translate('label.product.specifications.hazardousText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -422,7 +424,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Battery Included
+                      {translate('label.product.specifications.batteryIncludedText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -446,7 +448,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Battery Capacity
+                      {translate('label.product.specifications.batteryCapacityText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -470,7 +472,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Tool Type
+                      {translate('label.product.specifications.toolTypeText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -495,7 +497,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Sub Type
+                      {translate('label.product.specifications.subTypeText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -519,7 +521,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Hardware Type
+                      {translate('label.product.specifications.hardwareTypeText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -543,7 +545,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Hardware Product Group
+                      {translate('label.product.specifications.harwareProductGroupText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -567,7 +569,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                      Power Source
+                    {translate('label.product.specifications.powerSourceText')}
                     </h4>
                   </div>
                   <div className="grid">

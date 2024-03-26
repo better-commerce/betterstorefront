@@ -1,6 +1,6 @@
 // Base Imports
 import { useEffect, useState, useRef } from 'react'
-
+import dynamic from 'next/dynamic'
 // Package Imports
 import axios from 'axios'
 import Link from 'next/link'
@@ -24,9 +24,11 @@ import {
   NEXT_REFERRAL_BY_EMAIL,
   NEXT_REFERRAL_INFO,
 } from '@components/utils/constants'
-import ProductCard from '@components/product/ProductCard/ProductCard'
+const ProductCard = dynamic(() => import('@new-components/ProductCard'))
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
+  const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
   const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
@@ -148,29 +150,8 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
               <div>
                 <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
                   <h2 className="font-semibold text-gray-900 uppercase font-18 mb-5">
-                    Recently Viewed
+                    {translate('common.label.recentlyViewedText')}
                   </h2>
-                  {/* <div className="flex flex-row gap-4">
-                    <Link
-                      className="flex items-center font-semibold font-18 dark:text-black hover:underline"
-                      href="/recently-viewed"
-                    >
-                      See All
-                    </Link>
-
-                    <button
-                      onClick={() => swiperRefBasket.current.swiper.slidePrev()}
-                      className="flex items-center justify-center rounded arrow-container hover:border-2"
-                    >
-                      <i className="sprite-icons sprite-left-arrow"></i>
-                    </button>
-                    <button
-                      onClick={() => swiperRefBasket.current.swiper.slideNext()}
-                      className="flex items-center justify-center rounded arrow-container hover:border-2"
-                    >
-                      <i className="sprite-icons sprite-right-arrow"></i>
-                    </button>
-                  </div> */}
                 </div>
                 <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
                   {isLoading ? (
@@ -185,7 +166,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
                       breakpoints={{
                         640: { slidesPerView: 1.3, spaceBetween: 4 },
                         768: { slidesPerView: 1.3, spaceBetween: 10 },
-                        1024: { slidesPerView: 2.2, spaceBetween: 10 },
+                        1024: { slidesPerView:1.3, spaceBetween: 10 },
                       }}
                       className="mySwiper"
                     >
@@ -193,8 +174,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
                         return (
                           <SwiperSlide key={pid} className="height-equal">
                              <ProductCard
-                              product={product}
-                              hideWishlistCTA={true}
+                              data={product}
                               deviceInfo={deviceInfo}
                               maxBasketItemsCount={maxBasketItemsCount(config)}
                             />

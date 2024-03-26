@@ -21,27 +21,13 @@ import {
   NEXT_REFERRAL_BY_SLUG,
 } from '@components/utils/constants'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
-import {
-  GENERAL_DISCOUNT,
-  GENERAL_ORDER_SUMMARY,
-  GENERAL_PRICE_LABEL_RRP,
-  GENERAL_SHIPPING,
-  GENERAL_TAX,
-  GENERAL_TOTAL,
-  IMG_PLACEHOLDER,
-  ITEMS_IN_YOUR_CART,
-  SUBTOTAL_EXCLUDING_TAX,
-  SUBTOTAL_INCLUDING_TAX,
-  FIND_THEM,
-  BEEN_REFERRED_BY_A_FRIEND,
-  CLOSE_PANEL,
-  USER_NOT_FOUND,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { useState } from 'react'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 let PERSONALISED_TEXT = ''
 let PERSONALIZATION = ''
 
@@ -55,6 +41,7 @@ export default function Summary({
   isShippingDisabled,
   isPaymentLink = false,
 }: any) {
+  const translate = useTranslation()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -114,7 +101,7 @@ export default function Summary({
       setReferralInfo(voucherInfo?.referralDetails)
     } else {
       setIsLoading(false)
-      setError('Referral Vouchers not available for this user!')
+      setError(translate('label.checkout.referralNotAvailableUserText'))
     }
   }
 
@@ -130,11 +117,11 @@ export default function Summary({
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(USER_NOT_FOUND)
+          setError(translate('common.message.userWithNameNotFoundErrorMsg'))
         }
       }
     } else {
-      setError('Please enter appropriate Referral Code')
+      setError(translate('label.checkout.EnterReferralCodeText'))
     }
   }
 
@@ -184,7 +171,7 @@ export default function Summary({
                         ></img> */}
                         <ShoppingCartIcon className="w-4 h-4" />
                         <span className="ml-3 link-button !text-base">
-                          {GENERAL_ORDER_SUMMARY}
+                          {translate('label.orderSummary.orderSummaryText')}
                         </span>
                       </h2>
                     </div>
@@ -203,8 +190,8 @@ export default function Summary({
                 </Disclosure.Button>
                 <Disclosure.Panel className="w-full p-6 pb-2 mb-3 text-sm text-gray-500 bg-white border border-gray-200 shadow desk-disclouser-view-hide">
                   <div className="mt-0 bg-white">
-                    {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{GENERAL_ORDER_SUMMARY}</h2> */}
-                    <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
+                    {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{translate('label.orderSummary.orderSummaryText')}</h2> */}
+                    <h3 className="sr-only">{translate('label.basket.itemsYourCartText')}</h3>
                     <ul role="list" className="divide-y divide-gray-200">
                       {cart.lineItems?.map((product: any) => {
                         let personalization = ''
@@ -249,7 +236,6 @@ export default function Summary({
                                         product.listPrice?.raw.withTax !=
                                         product.price?.raw?.withTax && (
                                         <span className="px-2 text-sm text-red-400 line-through">
-                                          {GENERAL_PRICE_LABEL_RRP}{' '}
                                           {isIncludeVAT
                                             ? product.listPrice.formatted
                                               ?.withTax
@@ -307,7 +293,7 @@ export default function Summary({
                                           </div>
                                           <div className="text-gray-700 text-ms">
                                             <span
-                                              title="Message"
+                                              title={translate('label.product.messageText')}
                                               className={classNames({
                                                 'font-rubikBubblesMerged':
                                                   customFont ===
@@ -332,7 +318,7 @@ export default function Summary({
                                                   product
                                                 )
                                               }
-                                              title="View Personalisation"
+                                              title={translate('common.label.viewPersonalisationText')}
                                             >
                                               <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
                                             </span>
@@ -372,7 +358,7 @@ export default function Summary({
                             {({ open }) => (
                               <>
                                 <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
-                                  <span>Apply Promo?</span>
+                                  <span>{translate('common.label.applyPromoText')}?</span>
                                 </Disclosure.Button>
                                 <Transition
                                   enter="transition duration-100 ease-out"
@@ -401,8 +387,8 @@ export default function Summary({
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-gray-900">
                           {isIncludeVAT
-                            ? SUBTOTAL_INCLUDING_TAX
-                            : SUBTOTAL_EXCLUDING_TAX}
+                            ? translate('label.orderSummary.subTotalTaxIncText')
+                            : translate('label.orderSummary.subTotalTaxExcText')}
                         </dt>
                         <dd className="text-gray-900 text-md">
                           {isIncludeVAT
@@ -413,7 +399,7 @@ export default function Summary({
                       {isShippingDisabled ? null : (
                         <div className="flex items-center justify-between">
                           <dt className="text-sm text-gray-900">
-                            {GENERAL_SHIPPING}
+                            {translate('label.orderSummary.shippingText')}
                           </dt>
                           <dd className="text-gray-900 text-md">
                             {isIncludeVAT
@@ -425,7 +411,7 @@ export default function Summary({
                       {cart.promotionsApplied?.length > 0 && (
                         <div className="flex items-center justify-between pt-2">
                           <dt className="text-sm text-gray-900">
-                            <span>{GENERAL_DISCOUNT}</span>
+                            <span>{translate('label.orderSummary.discountText')}</span>
                           </dt>
                           <dd className="text-red-500 text-md">
                             <p>
@@ -438,14 +424,14 @@ export default function Summary({
                         </div>
                       )}
                       <div className="flex items-center justify-between">
-                        <dt className="text-sm text-gray-900">{GENERAL_TAX}</dt>
+                        <dt className="text-sm text-gray-900">{translate('label.orderSummary.taxText')}</dt>
                         <dd className="text-gray-900 text-md">
                           {cart.grandTotal?.formatted?.tax}
                         </dd>
                       </div>
                       <div className="flex items-center justify-between pt-3 border-t">
                         <dt className="text-xl font-semibold text-gray-900 link-button">
-                          {GENERAL_TOTAL}
+                          {translate('label.orderSummary.totalText')}
                         </dt>
                         <dd className="text-xl font-semibold text-gray-900">
                           {isIncludeVAT
@@ -461,7 +447,7 @@ export default function Summary({
             onClick={confirmOrder}
             className="w-full px-4 py-3 font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
           >
-            {GENERAL_CONFIRM_ORDER}
+            {translate('label.checkout.confirmOrderText')}
           </button>
         </div> */}
 
@@ -483,12 +469,12 @@ export default function Summary({
           {/* /////////hide data */}
           <div className="mt-0 bg-white border border-gray-200 shadow-sm deskdataonmobile hideipad">
             <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav !mt-0">
-              {GENERAL_ORDER_SUMMARY}
+              {translate('label.orderSummary.orderSummaryText')}
             </h4>
 
             <div className="mt-0 bg-white shadow-sm deskdataonmobile">
-              {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{GENERAL_ORDER_SUMMARY}</h2> */}
-              <h3 className="sr-only">{ITEMS_IN_YOUR_CART}</h3>
+              {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{translate('label.orderSummary.orderSummaryText')}</h2> */}
+              <h3 className="sr-only">{translate('label.basket.itemsYourCartText')}</h3>
               <ul role="list" className="divide-y divide-gray-200">
                 {cart.lineItems?.map((product: any) => {
                   let personalization = ''
@@ -542,7 +528,6 @@ export default function Summary({
                                   product.listPrice?.raw.withTax !=
                                   product.price?.raw?.withTax ? (
                                   <span className="px-2 text-sm text-red-400 line-through">
-                                    {GENERAL_PRICE_LABEL_RRP}{' '}
                                     {isIncludeVAT
                                       ? product.listPrice?.formatted?.withTax
                                       : product.listPrice?.formatted
@@ -594,7 +579,7 @@ export default function Summary({
                                     {customInfo1FormattedData && (
                                       <div className="text-gray-700 text-ms">
                                         <span
-                                          title="Message"
+                                          title={translate('label.product.messageText')}
                                           className={personalizationFont}
                                         >
                                           {customInfo1FormattedData?.Message}
@@ -605,7 +590,7 @@ export default function Summary({
                                           onClick={() =>
                                             handleToggleEngravingModal(product)
                                           }
-                                          title="View Personalisation"
+                                          title={translate('common.label.viewPersonalisationText')}
                                         >
                                           <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
                                         </span>
@@ -628,7 +613,7 @@ export default function Summary({
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg opacity-75 text-green focus-visible:ring- link-button">
-                        <span>Apply Promo?</span>
+                        <span>{translate('common.label.applyPromoText')}?</span>
                       </Disclosure.Button>
                       <Transition
                         enter="transition duration-100 ease-out"
@@ -656,7 +641,7 @@ export default function Summary({
                       setReferralModalShow(true)
                     }}
                   >
-                    {BEEN_REFERRED_BY_A_FRIEND}
+                    {translate('label.myAccount.beenReferredByFriendHeadingText')}
                   </h3>
                 )}
               </div>
@@ -664,8 +649,8 @@ export default function Summary({
                 <div className="flex items-center justify-between font-semibold text-black text-md">
                   <dt>
                     {isIncludeVAT
-                      ? SUBTOTAL_INCLUDING_TAX
-                      : SUBTOTAL_EXCLUDING_TAX}
+                      ? translate('label.orderSummary.subTotalTaxIncText')
+                      : translate('label.orderSummary.subTotalTaxExcText')}
                   </dt>
                   <dd>
                     {isIncludeVAT
@@ -675,7 +660,7 @@ export default function Summary({
                 </div>
                 {isShippingDisabled ? null : (
                   <div className="flex items-center justify-between text-sm text-gray-900">
-                    <dt>{GENERAL_SHIPPING}</dt>
+                    <dt>{translate('label.orderSummary.shippingText')}</dt>
                     <dd>
                       {isIncludeVAT
                         ? cart.shippingCharge?.formatted?.withTax
@@ -686,7 +671,7 @@ export default function Summary({
                 {cart.promotionsApplied?.length > 0 && (
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-900">
-                      <span>{GENERAL_DISCOUNT}</span>
+                      <span>{translate('label.orderSummary.discountText')}</span>
                     </dt>
                     <dd className="text-red-500 text-md">
                       <p>
@@ -699,14 +684,14 @@ export default function Summary({
                   </div>
                 )}
                 <div className="flex items-center justify-between">
-                  <dt className="text-sm text-gray-900">{GENERAL_TAX}</dt>
+                  <dt className="text-sm text-gray-900">{translate('label.orderSummary.taxText')}</dt>
                   <dd className="text-sm font-medium text-gray-900">
                     {cart.grandTotal?.formatted?.tax}
                   </dd>
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-lg font-bold text-gray-900 uppercase">
-                    {GENERAL_TOTAL}
+                    {translate('label.orderSummary.totalText')}
                   </dt>
                   <dd className="text-lg font-medium text-gray-900">
                     {isIncludeVAT
@@ -766,7 +751,7 @@ export default function Summary({
                             <div className="flex-1 px-0 overflow-y-auto">
                               <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                                 <Dialog.Title className="text-lg font-medium text-gray-900">
-                                  {BEEN_REFERRED_BY_A_FRIEND}
+                                  {translate('label.myAccount.beenReferredByFriendHeadingText')}
                                 </Dialog.Title>
                                 <div className="flex items-center ml-3 h-7">
                                   <button
@@ -777,7 +762,7 @@ export default function Summary({
                                     }}
                                   >
                                     <span className="sr-only">
-                                      {CLOSE_PANEL}
+                                      {translate('common.label.closePanelText')}
                                     </span>
                                     <XMarkIcon
                                       className="w-6 h-6"
@@ -791,15 +776,14 @@ export default function Summary({
                                 {referralAvailable && !referralInfo && (
                                   <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                                     <h2 className="mx-2 text-[30px] text-center">
-                                      Search your Friend by their Referral Code
+                                      {translate('label.checkout.searchFriendByReferralCodeText')}
                                     </h2>
                                     <p className="px-8 text-[18px] text-center">
-                                      If you think they have signed up, please
-                                      check and confirm their details below
+                                      {translate('label.checkout.friendSignupConfirmationText')}
                                     </p>
                                     <input
                                       type="text"
-                                      placeholder="Enter your friend's Referral Code.."
+                                      placeholder={translate('label.checkout.enterReferralCodeText')}
                                       className="px-5 w-full my-2 py-3 border-[1px] border-gray-500"
                                       onChange={handleInputChange}
                                     />
@@ -817,7 +801,7 @@ export default function Summary({
                                       {isLoading ? (
                                         <LoadingDots />
                                       ) : (
-                                        FIND_THEM
+                                        translate('label.myAccount.findReferralBtnText')
                                       )}
                                     </Button>
                                   </div>
@@ -829,11 +813,11 @@ export default function Summary({
                                     )}
                                   >
                                     <h2 className="px-5 text-center">
-                                      Congratulations, We found your friend!
+                                      {translate('label.checkout.friendFoundConfirmationText')}
                                     </h2>
                                     <div className="py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600">
                                       <p className="px-3 !mt-0 text-center font-bold ">
-                                        Voucher-code:{' '}
+                                        {translate('label.checkout.voucherCodeText')}:{' '}
                                         {referralInfo?.voucherCode}
                                       </p>
                                       <div
@@ -849,16 +833,14 @@ export default function Summary({
                                       </div>
                                     </div>
                                     <p className="px-5 font-bold text-center">
-                                      Offer: {referralInfo?.promoName}
+                                      {translate('label.checkout.offerText')}: {referralInfo?.promoName}
                                     </p>
                                     <p className="font-bold">
-                                      Validity:{' '}
-                                      {`This offer is valid for ${referralInfo?.validityDays} Days`}
+                                      {translate('label.checkout.validityText')}:{' '}
+                                      {translate('label.checkout.offerValidForText')}{' '}{referralInfo?.validityDays}{' '}{translate('common.label.daysText')}
                                     </p>
                                     <p className="px-12 text-center">
-                                      Use this voucher code in the Apply
-                                      promotion section to avail this offer
-                                    </p>
+                                      {translate('common.label.availGiftText')} </p>
                                   </div>
                                 )}
                                 <div className="flex w-full xl:h-[439px] 2xl:h-auto 2xl:object-none xl:object-cover">

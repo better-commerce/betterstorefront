@@ -7,15 +7,13 @@ import axios from 'axios'
 import { Transition, Dialog } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
-import { CLOSE_PANEL, SHARE_IN_PERSON } from '@components/utils/textVariables'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { } from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
-import { BTN_BACK_TO_HOME, GENERAL_ADDRESSES, GENERAL_DELIVERED_BY, GENERAL_DELIVERY_ADDRESS, GENERAL_ITEMS, GENERAL_NEXT_ORDER_PROMO, GENERAL_ON_THE_WAY, GENERAL_ORDER_WILL_BE_WITH_YOU_SOON, GENERAL_PAYMENT, GENERAL_PAYMENT_METHOD, GENERAL_PRICE, GENERAL_QUANTITY, GENERAL_SHIPPING, GENERAL_SHIPPING_METHOD, GENERAL_SUMMARY, GENERAL_TAX, GENERAL_THANK_YOU, GENERAL_TOTAL, GENERAL_YOUR_ORDER, IMG_PLACEHOLDER, LOADING_YOUR_ORDERS, NO_ORDER_PROVIDED, SUBTOTAL_EXCLUDING_TAX, SUBTOTAL_INCLUDING_TAX, YOUR_INFORMATION, OFFER_VALIDITY } from '@components/utils/textVariables'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
@@ -23,6 +21,9 @@ import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
 import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -31,6 +32,7 @@ export default function OrderConfirmation({ config }: any) {
   const [isLoading, setIsLoading] = useState(true)
   const [isReferModalOpen, setIsReferModalOpen] = useState(false)
   const [shareReferralView, setShareReferralView] = useState(false)
+  const translate = useTranslation()
   const [referralObj, setReferralObj] = useState({
     id: '',
     userId: '',
@@ -176,20 +178,6 @@ export default function OrderConfirmation({ config }: any) {
   }
   const isIncludeVAT = vatIncluded()
   const router = useRouter()
-  const referralDescription = (
-    <>
-      Our refer-a-friend programme will process your data and send you referral
-      service emails.
-    </>
-  )
-  const referralTermsAndConditions = (
-    <>
-      By accepting this offer you agree to the{' '}
-      <a href="#">
-        <b>Terms and Conditions</b>
-      </a>
-    </>
-  )
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -344,7 +332,7 @@ export default function OrderConfirmation({ config }: any) {
     return (
       <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
         <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
-          {LOADING_YOUR_ORDERS}
+          {translate('label.checkout.loadingYourOrderText')}
         </h2>
         <div className="flex items-center justify-center w-full mt-10 text-gray-900">
           <LoadingDots />
@@ -375,16 +363,16 @@ export default function OrderConfirmation({ config }: any) {
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
             <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
-              {order?.orderNo ? GENERAL_THANK_YOU : null}
+              {order?.orderNo ? translate('label.thankyou.thankyouText') : null}
             </p>
             <h1 className="mt-2 font-bold tracking-tight text-black uppercase">
-              {order?.orderNo ? GENERAL_ON_THE_WAY : NO_ORDER_PROVIDED}
+              {order?.orderNo ? translate('label.thankyou.itsOnTheWayText') : translate('label.thankyou.noOrderProvidedText')}
             </h1>
             {order?.orderNo ? (
               <p className="mt-2 text-black">
-                {GENERAL_YOUR_ORDER}{' '}
+                  {translate('label.checkout.yourOrderText')}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
-                {GENERAL_ORDER_WILL_BE_WITH_YOU_SOON}
+                  {translate('label.thankyou.willBeWithYouSoonText')}
               </p>
             ) : null}
           </div>
@@ -394,10 +382,10 @@ export default function OrderConfirmation({ config }: any) {
               className="mt-10 border-t border-gray-200"
             >
               <h2 id="order-heading" className="sr-only">
-                {GENERAL_YOUR_ORDER}
+                {translate('label.checkout.yourOrderText')}
               </h2>
 
-              <h3 className="sr-only">{GENERAL_ITEMS}</h3>
+              <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
               {order?.items?.map((product: any) => (
                 <>
                   <div
@@ -423,7 +411,7 @@ export default function OrderConfirmation({ config }: any) {
                           <Link href={`/${product.slug}`}>{product.name}</Link>
                         </h4>
                         <p className="mr-1 text-sm font-medium text-gray-700">
-                          Size:{' '}
+                          {translate('label.thankyou.sizeText')}:{' '}
                           <span className="uppercase">{product.size}</span>
                         </p>
                       </div>
@@ -431,7 +419,7 @@ export default function OrderConfirmation({ config }: any) {
                         <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
                           <div className="flex">
                             <dt className="font-medium text-gray-900">
-                              {GENERAL_QUANTITY}
+                              {translate('common.label.quantityText')}
                             </dt>
                             <dd className="ml-2 text-gray-700">
                               {product.qty}
@@ -439,10 +427,10 @@ export default function OrderConfirmation({ config }: any) {
                           </div>
                           <div className="flex pl-4 sm:pl-6">
                             <dt className="font-medium text-gray-900">
-                              {GENERAL_PRICE}
+                              {translate('common.label.priceText')}
                             </dt>
                             <dd className="ml-2 text-gray-700">
-                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
+                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
                             </dd>
                           </div>
                         </dl>
@@ -453,14 +441,14 @@ export default function OrderConfirmation({ config }: any) {
               ))}
 
               <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
-                <h3 className="sr-only">{YOUR_INFORMATION}</h3>
+                <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
 
-                <h4 className="sr-only">{GENERAL_ADDRESSES}</h4>
+                <h4 className="sr-only">{translate('label.checkout.addressesText')}</h4>
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-bold text-gray-900">
                       {/* {GENERAL_SHIPPING_ADDRESS} */}
-                      {GENERAL_DELIVERY_ADDRESS}
+                      {translate('label.orderDetails.deliveryAddressHeadingText')}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
@@ -488,12 +476,12 @@ export default function OrderConfirmation({ config }: any) {
                   </div> */}
                 </dl>
 
-                <h4 className="sr-only">{GENERAL_PAYMENT}</h4>
+                <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
                 <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
                   {order?.payments && (
                     <div>
                       <dt className="font-bold text-gray-900">
-                        {GENERAL_PAYMENT_METHOD}
+                        {translate('label.checkout.paymentMethodText')}
                       </dt>
                       <dd className="mt-2 text-gray-700">
                         <p>{getPaymentMethodName(order?.payments)}</p>
@@ -502,12 +490,12 @@ export default function OrderConfirmation({ config }: any) {
                   )}
                   <div>
                     <dt className="font-bold text-gray-900">
-                      {GENERAL_SHIPPING_METHOD}
+                      {translate('label.checkout.shippingMethodText')}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <p>{order?.shipping?.displayName}</p>
                       <p>
-                        {GENERAL_DELIVERED_BY}:{' '}
+                        {translate('label.thankyou.deliverdText')}:{' '}
                         {order?.deliveryPlans?.length >= 1 ? (
                           <p className="font-semibold uppercase font-24 dark:text-black">
                             {eddDateFormat(
@@ -530,13 +518,13 @@ export default function OrderConfirmation({ config }: any) {
                   !isFirstOrderValid && (
                     <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
-                        {GENERAL_NEXT_ORDER_PROMO}{' '}
+                      {translate('label.thankyou.congratilationDiscountText')}{' '}
                         <span className="font-bold text-indigo-600">
                           {nextOrderPromo?.nextOrderPromoName}
                         </span>
                       </p>
                       <p>
-                        {stringFormat(OFFER_VALIDITY, {
+                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
                           days: nextOrderPromo?.nextOrderPromoValidity,
                         })}
                       </p>
@@ -547,25 +535,25 @@ export default function OrderConfirmation({ config }: any) {
                   !isFirstOrderValid && (
                     <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
-                        {GENERAL_NEXT_ORDER_PROMO}{' '}
+                      {translate('label.thankyou.congratilationDiscountText')}{' '}
                         <span className="font-bold text-indigo-600">
                           {nextOrderPromo?.nextOrderPromoName}
                         </span>
                       </p>
                       <p>
-                        {stringFormat(OFFER_VALIDITY, {
+                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
                           days: nextOrderPromo?.nextOrderPromoValidity,
                         })}
                       </p>
                     </div>
                   )}
-                <h3 className="sr-only">{GENERAL_SUMMARY}</h3>
+                <h3 className="sr-only">{translate('label.thankyou.summaryText')}</h3>
                 <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
                       {isIncludeVAT
-                        ? SUBTOTAL_INCLUDING_TAX
-                        : SUBTOTAL_EXCLUDING_TAX}
+                        ? translate('label.orderSummary.subTotalTaxIncText')
+                        : translate('label.orderSummary.subTotalTaxExcText')}
                     </dt>
                     <dd className="text-gray-700">
                       {isIncludeVAT
@@ -575,7 +563,7 @@ export default function OrderConfirmation({ config }: any) {
                   </div>
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
-                      {GENERAL_SHIPPING}
+                      {translate('label.orderSummary.shippingText')}
                     </dt>
                     <dd className="text-gray-700">
                       {isIncludeVAT
@@ -584,14 +572,14 @@ export default function OrderConfirmation({ config }: any) {
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">{GENERAL_TAX}</dt>
+                    <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
                     <dd className="text-gray-700">
                       {order?.grandTotal.formatted?.tax}
                     </dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-lg font-bold text-gray-900">
-                      {GENERAL_TOTAL}
+                      {translate('label.orderSummary.totalText')}
                     </dt>
                     <dd className="text-lg font-bold text-gray-900">
                       {isIncludeVAT
@@ -606,7 +594,7 @@ export default function OrderConfirmation({ config }: any) {
           <div className="max-w-xl mt-5 text-center">
             <Link href={`/`} passHref>
               <span className="btn-primary btn">
-                {BTN_BACK_TO_HOME}
+                {translate('common.label.backToHomeText')}
               </span>
             </Link>
           </div>
@@ -654,7 +642,7 @@ export default function OrderConfirmation({ config }: any) {
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          Refer a Friend
+                          {translate('label.myAccount.referAFriendText')}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button
@@ -662,7 +650,7 @@ export default function OrderConfirmation({ config }: any) {
                             className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                             onClick={() => setModelClose()}
                           >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -672,7 +660,7 @@ export default function OrderConfirmation({ config }: any) {
                         {shareReferralView ? (
                           <div className="flex flex-col items-center justify-center w-full my-20">
                             <h3 className="px-5 text-center">
-                              {user.firstName} {'Invite now using:'}
+                              {user.firstName} {translate('label.referral.inviteNowUsingText')}
                             </h3>
                             <div className="flex flex-row items-center justify-center gap-x-5">
                               {shareOptionsConfig?.map(
@@ -704,14 +692,13 @@ export default function OrderConfirmation({ config }: any) {
                               </span> */}
                             </div>
                             <p className="px-5 text-center">
-                              Tell your friends to enter your Referral Code like
-                              this at Checkout
+                              {translate('label.checkout.enterReferalfriendText')}
                             </p>
                             <h2 className="mx-2 text-lg ">
                               {referralObj?.slug}
                             </h2>
                             <Button className="my-3" onClick={() => { }}>
-                              {SHARE_IN_PERSON}
+                              {translate('label.myAccount.shareInPersonBtnText')}
                             </Button>
 
                             {referralObj?.slug && (
@@ -721,7 +708,7 @@ export default function OrderConfirmation({ config }: any) {
                                 ) : (
                                   <div className="\w-full w-[450px] flex flex-col border-[1px] items-center justify-center border-black px-2 py-2">
                                     <p className="w-full text-left">
-                                      or share a link:
+                                      {translate('label.referral.shareLinkText')}
                                     </p>
                                     <div className="flex items-center justify-between w-full">
                                       <p className="mx-1 truncate">
@@ -731,7 +718,7 @@ export default function OrderConfirmation({ config }: any) {
                                         className="h-4 !text-[10px]"
                                         onClick={handleCopyClick}
                                       >
-                                        {copied ? 'COPIED!' : 'COPY'}
+                                        {copied ? translate('label.product.copiedText') : translate('label.product.copyText')}
                                       </Button>
                                     </div>
                                   </div>
@@ -749,7 +736,7 @@ export default function OrderConfirmation({ config }: any) {
                               {referralOffers?.refereePromo}
                             </h2>
                             <p className="px-5 text-center">
-                              {referralDescription}
+                              {translate('label.thankyou.referralServiceEmailsText')}
                             </p>
                             <Button
                               className="my-3"
@@ -760,7 +747,10 @@ export default function OrderConfirmation({ config }: any) {
                               {referralOffers?.referrerPromo}
                             </Button>
                             <p className="px-5 text-center">
-                              {referralTermsAndConditions}
+                              {translate('label.footer.navigation.byAcceptingOfferAgreText')}{' '}
+                              <a href="#">
+                                <span className='font-bold'>{translate('label.footer.navigation.termsAndConditionsText')}</span>
+                              </a>
                             </p>
                           </div>
                         )}
@@ -793,4 +783,13 @@ export default function OrderConfirmation({ config }: any) {
       )}
     </>
   )
+}
+
+export async function getServerSideProps(context: any) {
+  const { locale } = context
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
+  }
 }

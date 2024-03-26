@@ -8,7 +8,7 @@ import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
 import { postData } from '@components/utils/clientFetcher'
-import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -17,7 +17,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { logError, maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
-import { NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
@@ -27,7 +27,9 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
@@ -38,6 +40,7 @@ const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 
 export async function getStaticProps(context: any) {
+  const { locale, locales } = context
   const slugName = Object.keys(context.params)[0]
   const slug = slugName + '/' + context.params[slugName]
 
@@ -93,6 +96,7 @@ export async function getStaticProps(context: any) {
       return {
 
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -104,6 +108,7 @@ export async function getStaticProps(context: any) {
     } else {
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -116,6 +121,7 @@ export async function getStaticProps(context: any) {
   } else {
     return {
       props: {
+        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         category: categorySlugUIDData,
         slug,
         products: null,
@@ -229,6 +235,7 @@ function CategoryLandingPage({
 }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -414,9 +421,9 @@ function CategoryLandingPage({
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          {BAD_URL_TEXT}
+          {translate('common.label.badUrlText')}
           <Link href="/category">
-            <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
+            <span className="px-3 text-indigo-500">{translate('label.category.allCategoriesText')}</span>
           </Link>
         </h1>
       </div>
@@ -449,8 +456,8 @@ function CategoryLandingPage({
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{category?.name || 'Category'}</title>
-        <meta name="title" content={category?.name || 'Category'} />
+        <title>{category?.name || translate('label.category.categoryText')}</title>
+        <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
@@ -485,7 +492,7 @@ function CategoryLandingPage({
             <div className="py-4">
               {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
                 <div className="container mx-auto mb-4">
-                  <h2 className="block text-xl font-medium sm:text-2xl lg:text-2xl">Popular Categories </h2>
+                  <h2 className="block text-xl font-medium sm:text-2xl lg:text-2xl">{translate('label.category.popularCategoriesText')} </h2>
                 </div>
               )}
               <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
@@ -570,7 +577,7 @@ function CategoryLandingPage({
               <div className="py-6">
                 <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
                   <h2 className="mb-2 font-bold uppercase font-18">
-                    Related categories
+                    {translate('label.category.relatedCategoriesText')}
                   </h2>
                   <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 5, }, }} className="mySwier" >
                     {minimalProd?.map((product: any, cdx: number) => (
@@ -591,7 +598,7 @@ function CategoryLandingPage({
             {/* related category  */}
             <div className="py-6">
               <div className="px-4 mx-auto mb-4 2xl:w-4/5 sm:px-4 lg:px-6 2xl:px-0">
-                <h2 className="mb-2 font-bold uppercase font-18"> related categories </h2>
+                <h2 className="mb-2 font-bold uppercase font-18"> {translate('label.category.relatedCategoriesText')} </h2>
                 <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 5, }, }} className="mySwier" >
                   {category?.linkGroups?.length > 0 && category?.linkGroups[0]?.items?.map((related: any, cdx: number) => (
                     <SwiperSlide key={cdx}>
@@ -640,7 +647,7 @@ function CategoryLandingPage({
               {/* category banner info End */}
               <div className="container py-6">
                 {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
-                  <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> Popular categories </h2>
+                  <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2>
                 )}
                 <Swiper spaceBetween={4} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
                   {category?.subCategories?.map((featured: any, featuredIdx: number) => (
@@ -695,7 +702,7 @@ function CategoryLandingPage({
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
                   <h4 className="text-3xl font-bold text-gray-300">
-                    No Products available in {category?.name}
+                    {translate('common.label.noProductAvailableText')} {category?.name}
                   </h4>
                 </div>
               )}

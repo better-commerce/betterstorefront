@@ -1,87 +1,79 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Tab } from '@headlessui/react'
-import { config } from '@components/utils/myAccount'
-import COMPONENTS_MAP from '@components/account'
+import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-import Router from 'next/router'
 import React from 'react'
-import { stringToBoolean } from '@framework/utils/parse-util'
 import MyDetails from '@components/account/MyDetails'
 import { Guid } from '@commerce/types'
 import NextHead from 'next/head'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
-function MyAccount({ defaultView, isLoggedIn }: any) {
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+function MyAccount() {
   const [isShow, setShow] = useState(true)
-  const [view, setView] = useState(defaultView)
-  const { user, deleteUser, isGuestUser,referralProgramActive } = useUI()
+  const config = useConfig();
+  const { user, deleteUser, isGuestUser, referralProgramActive } = useUI()
   const router = useRouter()
+  const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
-  let newConfig: any = []
-  if (config && typeof window !== 'undefined') {
+  const newConfig: any = useMemo(() => {
+    let output: any = []
     let isB2B = user?.companyId !== Guid.empty
-    const hasMyCompany = config.some(
-      (item: any) => item?.props === 'my-company'
-    )
-    const hasReferral = config.some(
-      (item:any)=> item?.props ==='refer-a-friend'
-    )
-    newConfig = [...config]
+    const hasMyCompany = config?.some((item: any) => item?.props === 'my-company')
+    const hasReferral = config?.some((item: any) => item?.props === 'refer-a-friend')
+    output = [...config]
     if (isB2B) {
-      let i = newConfig.length
-      if(referralProgramActive){
-        if (!hasReferral){
-          newConfig.push( {
+      let i = output.length
+      if (referralProgramActive) {
+        if (!hasReferral) {
+          output.push({
             type: 'tab',
             text: 'Refer a Friend',
             mtext: 'Refer a Friend',
             props: 'refer-a-friend',
-            href:"/my-account/refer-a-friend"
+            href: "/my-account/refer-a-friend"
           })
         }
       }
       while (i--) {
-        if (
-          newConfig[i]?.props === 'address-book' ||
-          newConfig[i]?.props === 'orders'
-        ) {
-          newConfig.splice(i, 1)
+        if (output[i]?.props === 'address-book' || output[i]?.props === 'orders') {
+          output.splice(i, 1)
         }
       }
     }
     if (!isB2B) {
-      if(referralProgramActive){
-        if (!hasReferral){
-          newConfig = [...config]
-          newConfig.push( {
+      if (referralProgramActive) {
+        if (!hasReferral) {
+          output = [...config]
+          output.push({
             type: 'tab',
             text: 'Refer a Friend',
             mtext: 'Refer a Friend',
             props: 'refer-a-friend',
-            href:"/my-account/refer-a-friend"
+            href: "/my-account/refer-a-friend"
           })
         }
       } else {
-        newConfig = [...config]
+        output = [...config]
       }
     } else if (!hasMyCompany) {
-      newConfig.push({
+      output.push({
         type: 'tab',
         text: 'My Company',
         mtext: 'My Company',
         props: 'my-company',
         href: '/my-account/my-company',
       })
-    } 
-  }
+    }
+    return output
+  }, [config])
 
   useEffect(() => {
     if (isGuestUser) {
@@ -126,108 +118,83 @@ function MyAccount({ defaultView, isLoggedIn }: any) {
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
-        <title>My Account</title>
-        <meta name="title" content="My Account" />
-        <meta name="description" content="My Account" />
-        <meta name="keywords" content="My Account" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('common.label.myAccountText')}</title>
+        <meta name="title" content={translate('common.label.myAccountText')} />
+        <meta name="description" content={translate('common.label.myAccountText')} />
+        <meta name="keywords" content={translate('common.label.myAccountText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="My Account" key="ogtitle" />
-        <meta property="og:description" content="My Account" key="ogdesc" />
+        <meta property="og:title" content={translate('common.label.myAccountText')} key="ogtitle" />
+        <meta property="og:description" content={translate('common.label.myAccountText')} key="ogdesc" />
       </NextHead>
       <section className="relative pb-10 text-gray-900">
-        <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
-          <div className="grid w-full grid-cols-12 sm:px-2 sm:pr-0 main-account-grid">
-            <div
-              className={`col-span-3 md:pl-2 sm:pl-2 border-r border-gray-200 tab-list-sm sm:pt-10 mob-tab-full ${
-                isShow ? `` : 'mob-hidden'
-              }`}
-            >
-              <div className="sticky left-0 z-10 flex flex-col top-36">
+        <div className="container w-full">
+          <div className="mt-14 sm:mt-20">
+            <div className="max-w-4xl mx-auto">
+              <div className="max-w-2xl">
+                <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
+                <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
+                  <span className="text-slate-900 dark:text-slate-200 font-semibold">
+                    {user?.firstName},
+                  </span>{" "}
+                  {user.email}
+                </span>
+              </div>
+              <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
+              <div className="flex space-x-8 md:space-x-13 overflow-x-auto hiddenScrollbar">
                 {newConfig?.map((item: any, idx: number) => (
                   <>
-                    <div
-                      key={`my-acc-${idx}`}
-                      className={`pl-2 text-md leading-3 font-medium text-red-900 rounded-md focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"}`}
-                    >
-                      {/* <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                        <i
-                          className={
-                            item.text.toLowerCase() + ' ' + 'sprite-icon'
-                          }
-                        ></i>
-                      </span> */}
-
-                      {item.text == 'My Details' ? (
-                        <div
+                    {item.text == 'My Details' ? (
+                      <>
+                        <Link
                           key={`my-acc-${idx}`}
-                          className={`relative ring-opacity-60 border-b border-slate-300 sm:border-0 cursor-pointer ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2  w-full text-14  leading-5 text-left pl-2 ${
-                            item.text == 'My Details'
-                              ? 'bg-gray-200 text-black font-semibold border-l-4 sm:border-b-0 sm:border-l-4 sm:border-black opacity-full'
-                              : 'font-medium'
-                          }`}
+                          shallow={true}
+                          href={item.href}
+                          passHref
+                          onClick={() => {
+                            handleClick()
+                            handleToggleShowState()
+                          }}
+                          className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Details'
+                            ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
+                            : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                            }`}
                         >
-                          {/* <span className="pr-2 leading-none align-middle acc-mob-icon-i sm:absolute top-2/4 -translate-y-2/4">
-                            <i
-                              className={
-                                item.text.toLowerCase() + ' ' + 'sprite-icon'
-                              }
-                            ></i>
-                          </span> */}
-                          <Link
-                            shallow={true}
-                            href={item.href}
-                            passHref
-                            onClick={() => {
-                              handleClick()
-                              handleToggleShowState()
-                            }}
-                            className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
-                          >
-                            <span className="inline-block text-black sm:hidden dark:text-black">
-                              {item.mtext}
-                            </span>
-                            <span
-                              className={`hidden sm:inline-block text-black dark:text-black ${
-                                item.text == 'My Details' && 'font-display'
-                              }`}
-                            >
-                              {item.text}
-                            </span>
-                          </Link>
-                        </div>
-                      ) : (
-                        <>
-                          <Link
-                            shallow={true}
-                            href={item.href}
-                            passHref
-                            onClick={() => {
-                              handleClick()
-                            }}
-                            className="inline-block w-full h-full py-4 pl-2 text-sm transition text-primary hover:bg-gray-100"
-                          >
-                            <span className="inline-block text-black sm:hidden dark:text-black">
-                              {item.mtext}
-                            </span>
-                            <span className="hidden text-black sm:inline-block dark:text-black">
-                              {item.text}
-                            </span>
-                          </Link>
-                        </>
-                      )}
-                    </div>
+                          {item.text}
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          shallow={true}
+                          href={item.href}
+                          passHref
+                          onClick={() => {
+                            handleClick()
+                          }}
+                          className="block py-5 md:py-8  flex-shrink-0 text-sm sm:text-base"
+                        >
+                          <span className="inline-block text-black sm:hidden dark:text-black">
+                            {item.mtext}
+                          </span>
+                          <span className="hidden text-black sm:inline-block dark:text-black">
+                            {item.text}
+                          </span>
+                        </Link>
+                      </>
+                    )}
+
                   </>
                 ))}
               </div>
+              <hr className="border-slate-200 dark:border-slate-700"></hr>
             </div>
-
+          </div>
+          <div className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
             <div
-              className={`relative col-span-9 border-l tabpanel-sm mob-tab-full ${
-                isShow ? `mob-hidden` : ''
-              }`}
+              className="relative col-span-12  mob-tab-full"
             >
-              <div className={'orders bg-white my-2 sm:my-6 px-4'}>
+              <div className={'orders bg-white'}>
                 <MyDetails handleToggleShowState={handleToggleShowState} />
               </div>
             </div>
@@ -243,11 +210,11 @@ MyAccount.Layout = Layout
 const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
-  const defaultIndex =
-    config.findIndex((element: any) => element.props === context.query.view) ||
-    0
+  const { locale } = context
   return {
-    props: { defaultView: defaultIndex }, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
   }
 }
 

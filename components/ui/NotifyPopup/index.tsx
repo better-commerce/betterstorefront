@@ -5,8 +5,10 @@ import axios from 'axios'
 import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'
 import { validate } from 'email-validator'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function NotifyUserPopup() {
+  const translate = useTranslation();
   const [email, setEmailAddress] = useState('')
   const [isPostedMessage, setIsPosted] = useState('')
 
@@ -22,12 +24,12 @@ export default function NotifyUserPopup() {
         `${NEXT_API_NOTIFY_ME_ENDPOINT}?email=${email}&productId=${productId}`
       )
       if (result.data) {
-        setIsPosted('Success')
+        setIsPosted(translate('common.label.successText'))
         setTimeout(() => {
           closeNotifyUser()
         }, 1500)
       } else {
-        setIsPosted('Woops! Something went wrong')
+        setIsPosted(translate('common.message.somethingWentWrongMsg'))
         setTimeout(() => {
           closeNotifyUser()
         }, 1500)
@@ -96,12 +98,11 @@ export default function NotifyUserPopup() {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Notify me
+                      {translate('label.product.notifyMeText')}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Be the ﬁrst to know when your size is back in stock
-                      </p>
+                        {translate('label.product.notifyDescText')} </p>
                       {isPostedMessage ? (
                         <div className="font-semibold text-indigo-600">
                           {isPostedMessage}
@@ -109,7 +110,7 @@ export default function NotifyUserPopup() {
                       ) : (
                         <form className="flex py-5 mt-2 sm:max-w-md">
                           <label htmlFor="email-address" className="sr-only">
-                            Email address
+                            {translate('label.newsLetter.emailLabelText')}
                           </label>
                           <input
                             id="email-address"
@@ -118,7 +119,7 @@ export default function NotifyUserPopup() {
                             onChange={(e) =>
                               setEmailAddress(e.currentTarget.value)
                             }
-                            placeholder="Email Address"
+                            placeholder={translate('label.myAccount.emailAddressText')}
                             required
                             className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                           />
@@ -129,7 +130,7 @@ export default function NotifyUserPopup() {
                 </div>
               </div>
               {isPostedMessage ? null : (
-                <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
+                <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
                   <button
                     type="button"
                     disabled={!isValidEmail}
@@ -138,18 +139,17 @@ export default function NotifyUserPopup() {
                         ? { opacity: '75%', pointerEvents: 'none' }
                         : {}
                     }
-                    className="inline-flex justify-center w-full px-4 py-2 font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                     onClick={() => handleModal()}
                   >
-                    Notify me
-                  </button>
+                    {translate('label.product.notifyMeText')}</button>
                   <button
                     type="button"
-                    className="inline-flex justify-center w-full px-4 py-2 mt-3 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm font-medium py-2.5 px-4 sm:px-6  ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800  border border-slate-300 dark:border-slate-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                     onClick={closeNotifyUser}
                     ref={cancelButtonRef}
                   >
-                    Cancel
+                    {translate('common.label.cancelText')}
                   </button>
                 </div>
               )}

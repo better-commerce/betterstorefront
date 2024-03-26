@@ -8,6 +8,7 @@ import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayN
 import { EmptyString, Messages } from '@components/utils/constants'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { matchStrings } from '@framework/utils/parse-util'
+import { t as translate } from "i18next";
 
 export class AccountPaymentButton extends BasePaymentButton {
   /**
@@ -42,7 +43,7 @@ export class AccountPaymentButton extends BasePaymentButton {
       const userId = uiContext?.user?.userId
       uiContext?.setOverlayLoaderState({
         visible: true,
-        message: 'Validating account...',
+        message: translate('label.checkoutForm.validatingAccount'),
       })
       const {
         errors = [],
@@ -76,7 +77,7 @@ export class AccountPaymentButton extends BasePaymentButton {
           if (creditAvailable?.raw?.withTax <= creditLimit?.raw?.withTax) {
             uiContext?.setOverlayLoaderState({
               visible: true,
-              message: 'Please wait...',
+              message: translate('label.checkoutForm.pleaseWaitText'),
             })
             const { state, result: orderResult } = await super.confirmOrder(
               paymentMethod,
@@ -102,7 +103,7 @@ export class AccountPaymentButton extends BasePaymentButton {
               } else {
                 dispatchState({
                   type: 'SET_ERROR',
-                  payload: Messages.Errors['GENERIC_ERROR'],
+                  payload: translate('common.message.requestCouldNotProcessErrorMsg'),
                 })
               }
             }
@@ -110,14 +111,14 @@ export class AccountPaymentButton extends BasePaymentButton {
             uiContext?.hideOverlayLoaderState()
             dispatchState({
               type: 'SET_ERROR',
-              payload: Messages.Errors['COMPANY_CREDIT_LIMIT_EXCEEDED'],
+              payload: translate('common.message.checkout.notEnoughCreditErrorMsg'),
             })
           }
         } else {
           uiContext?.hideOverlayLoaderState()
           dispatchState({
             type: 'SET_ERROR',
-            payload: Messages.Errors['COMPANY_NOT_FOUND'],
+            payload: translate('common.message.companyNotFoundErrorMsg'),
           })
         }
       }
@@ -155,7 +156,7 @@ export class AccountPaymentButton extends BasePaymentButton {
         <div className="w-full">
           <dl className="w-2/5 px-2 py-3 mt-2 space-y-2 sm:space-y-2">
             <div className="flex items-center justify-between">
-              <dt className="text-sm text-gray-600">Available Credit</dt>
+              <dt className="text-sm text-gray-600">{translate('label.checkout.availableCreditText')}</dt>
               <dd className="font-semibold text-black text-md">
                 {uiContext?.cartItems?.currencySymbol || EmptyString}
                 {this.state?.paymentMethod?.settings?.find((x: any) =>
@@ -165,7 +166,7 @@ export class AccountPaymentButton extends BasePaymentButton {
             </div>
             <div className="flex items-center justify-between pt-2 sm:pt-1">
               <dt className="flex items-center text-sm text-gray-600">
-                <span>Credit Limit</span>
+                <span>{translate('label.checkout.acreditLimitText')}</span>
               </dt>
               <dd className="font-semibold text-black text-md">
                 {uiContext?.cartItems?.currencySymbol || EmptyString}

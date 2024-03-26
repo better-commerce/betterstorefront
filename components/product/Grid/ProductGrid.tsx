@@ -58,9 +58,7 @@ export default function CategoryGrid({
                 </div>
               ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <div key={`products-${productIdx}`}>
-                  <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
-                </div>
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
               ))}
             </div>
           }
@@ -79,9 +77,7 @@ export default function CategoryGrid({
               </div>
             ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <div key={`products-${productIdx}`}>
-                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
-              </div>
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} />
             ))}
           </div>
 

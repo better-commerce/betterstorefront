@@ -1,3 +1,4 @@
+import { useTranslation } from "@commerce/utils/use-translation";
 import React from "react";
 import { ReactNode } from "react";
 
@@ -12,6 +13,7 @@ const Heading2: React.FC<Heading2Props> = ({
   heading = "Stays in Tokyo",
   subHeading,
 }) => {
+  const translate = useTranslation()
   return (
     <div className={`mb-12 lg:mb-16 ${className}`}>
       <h2 className="text-4xl font-semibold">{heading}</h2>
@@ -19,10 +21,9 @@ const Heading2: React.FC<Heading2Props> = ({
         subHeading
       ) : (
         <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
-          233 stays
-          <span className="mx-2">·</span>
-          Aug 12 - 18
-          <span className="mx-2">·</span>2 Guests
+          {translate('label.header.233StaysText')} <span className="mx-2">·</span>
+          {translate('label.header.aug12To18Text')}
+          <span className="mx-2">·</span>{translate('label.header.2GuestsText')}
         </span>
       )}
     </div>

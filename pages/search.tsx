@@ -15,13 +15,14 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { GENERAL_CATALOG } from '@components/utils/textVariables'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
 import commerce from '@lib/api/commerce'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -90,6 +91,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const adaptedQuery = { ...query }
+  const translate = useTranslation()
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
 
@@ -334,27 +336,27 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{GENERAL_CATALOG}</title>
-        <meta name="title" content={GENERAL_CATALOG} />
-        <meta name="description" content={GENERAL_CATALOG} />
-        <meta name="keywords" content="Search" />
+        <title>{translate('label.basket.catalogText')}</title>
+        <meta name="title" content={translate('label.basket.catalogText')} />
+        <meta name="description" content={translate('label.basket.catalogText')} />
+        <meta name="keywords" content={translate('label.search.searchText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
-        <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
+        <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
       <div className="container pt-6 pb-24 mx-auto">
         <div className="max-w-screen-sm">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
-            {GENERAL_CATALOG}
+            {translate('label.basket.catalogText')}
           </h1>
           <div className='flex justify-between w-full align-bottom'>
             <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
-              Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look.
+              {translate('label.search.stepIntoWorldText')}
             </span>
           </div>
         </div>
-        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> Showing <span className='font-semibold text-black'>{data.products.total}</span> Results </span>
+        <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-4 sm:mb-4 align-center'>
+          <span className="inline-block text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} <span className='font-semibold text-black'>{data.products.total}</span> {translate('common.label.resultsText')} </span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
@@ -371,7 +373,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>
-          <CompareSelectionBar name={GENERAL_CATALOG} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+          <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
         </div>
       </div>
       <Script
@@ -399,9 +401,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const allProducts = await commerce.getAllProducts({ ...DEFAULT_STATE })
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
       snippets: allProducts?.snippets ?? [],
     }, // will be passed to the page component as props

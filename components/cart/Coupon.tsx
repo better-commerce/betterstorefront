@@ -15,6 +15,7 @@ import { useUI } from '@components/ui/context'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { NEXT_APPLY_PROMOTION } from '@components/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -56,6 +57,7 @@ const Coupon = (props: IPromotionInputProps) => {
     setError
   } = props
   const { basketId, setCartItems, cartItems } = useUI()
+  const translate = useTranslation()
   const handleSubmit = async (
     method: string = 'apply',
     promoCode: string = value
@@ -112,11 +114,11 @@ const Coupon = (props: IPromotionInputProps) => {
       promo?.promoType == 4 ||
       promo?.promoType == 9
     ) {
-      promoDiscount = 'FREE GIFT ITEM'
+      promoDiscount = translate('label.basket.freeGiftItemText')
     }
 
     if (promo?.promoType == 16) {
-      promoDiscount = '50% OFF on 3rd Item'
+      promoDiscount = translate('label.basket.offer50PercOffOnThirdItemText')
     }
   }
 
@@ -186,14 +188,14 @@ const Coupon = (props: IPromotionInputProps) => {
                             className="mr-2 text-black rounded-md outline-none hover:text-gray-500"
                             onClick={() => setShowCoupon(false)}
                           >
-                            <span className="sr-only">Close panel</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <ArrowLeftIcon
                               className="relative top-0 w-5 h-5"
                               aria-hidden="true"
                             />
                           </button>
                           <h3 className="font-display text-md sm:text-lg">
-                            Apply Coupons
+                            {translate('label.basket.applyCouponsText')}
                           </h3>
                         </div>
 
@@ -228,7 +230,7 @@ const Coupon = (props: IPromotionInputProps) => {
                                           </>
                                         ) : (
                                           <>
-                                            <span>Free Gift Added</span>
+                                            <span>{translate('label.basket.freeGiftAddedText')}</span>
                                           </>
                                         )}
                                         {!promo?.autoApply && (
@@ -261,7 +263,7 @@ const Coupon = (props: IPromotionInputProps) => {
                                 <div className="grid grid-cols-1">
                                   <div>
                                     <h4 className="text-lg font-semibold text-dark-brown">
-                                      Select and apply multiple coupons
+                                      {translate('label.basket.multiplePromoSelectionText')}
                                     </h4>
                                   </div>
                                   {multiSelectPromo?.map(
@@ -324,7 +326,7 @@ const Coupon = (props: IPromotionInputProps) => {
                               <div className="flex flex-col">
                                 <div className="grid grid-cols-1">
                                   <div>
-                                    <h4 className="text-lg">More Offers</h4>
+                                    <h4 className="text-lg">{translate('label.basket.moreOffersText')}</h4>
                                   </div>
                                   {singleSelectPromo?.map(
                                     (promo: any, idx: number) => {
@@ -365,7 +367,7 @@ const Coupon = (props: IPromotionInputProps) => {
                                                           type="button"
                                                           className="text-md font-display text-emerald-500"
                                                         >
-                                                          Applied
+                                                          {translate('label.basket.appliedText')}
                                                         </button>
                                                       </>
                                                     ) : (
@@ -380,7 +382,7 @@ const Coupon = (props: IPromotionInputProps) => {
                                                             )
                                                           }
                                                         >
-                                                          Apply
+                                                          {translate('label.basket.appliedText')}
                                                         </button>
                                                       </>
                                                     )}
@@ -415,9 +417,9 @@ const Coupon = (props: IPromotionInputProps) => {
                             onClick={() => applyMultiPromo()}
                             type="button"
                             className="w-full btn btn-primary"
-                          >{`Apply ${multiPromo?.length} ${
-                            multiPromo?.length > 1 ? 'Coupons' : 'Coupon'
-                          }`}</button>
+                          >{translate('label.basket.appliedText')}{' '}{multiPromo?.length} {
+                            multiPromo?.length > 1 ? translate('label.basket.couponsText') : translate('label.basket.couponText')
+                          }</button>
                         </div>
                       )}
                     </div>
@@ -450,14 +452,14 @@ const Coupon = (props: IPromotionInputProps) => {
                         <div className="sticky top-0 z-10 px-4 py-4 border-b border-gray-200 sm:px-6 left-1">
                           <div className="flex justify-between">
                             <h3 className="text-xl font-bold text-black dark:text-black">
-                              Coupon Applied
+                              {translate('label.basket.couponAppliedText')}
                             </h3>
                             <button
                               type="button"
                               className="mr-2 text-black rounded-md outline-none hover:text-gray-500"
                               onClick={() => setCouponApplied(false)}
                             >
-                              <span className="sr-only">Close panel</span>
+                              <span className="sr-only">{translate('common.label.closePanelText')}</span>
                               <XMarkIcon
                                 className="relative top-0 w-6 h-6"
                                 aria-hidden="true"
@@ -470,7 +472,7 @@ const Coupon = (props: IPromotionInputProps) => {
                             <div className="grid grid-cols-12">
                               <div className="relative col-span-1 text-white coupon-code-panel coupon-cross-success">
                                 <h3 className="text-sm font-semibold text-white uppercase coupon-text-rotate">
-                                  Applied
+                                  {translate('label.basket.appliedText')}
                                 </h3>
                               </div>
                               {cartItems?.promotionsApplied?.filter(
@@ -487,12 +489,12 @@ const Coupon = (props: IPromotionInputProps) => {
                                   <div className="col-span-11 p-4 coupon-code-data">
                                     <div className="flex justify-between">
                                       <h3 className="text-sm font-semibold text-black uppercase">
-                                        FREE GIFT
+                                        {translate('label.basket.freeGiftText')}
                                       </h3>
                                     </div>
                                     <div className="flex flex-col mt-2">
                                       <p className="text-xs font-normal text-emerald-500">
-                                        You've got free gift in your basket.
+                                        {translate('label.basket.freeGiftMsg')}
                                       </p>
                                     </div>
                                   </div>
@@ -507,12 +509,12 @@ const Coupon = (props: IPromotionInputProps) => {
                                     </div>
                                     <div className="flex flex-col mt-2">
                                       <p className="text-xs font-normal text-emerald-500">
-                                        You've got{' '}
+                                        {translate('label.basket.youHaveGotText')}{' '}
                                         {
                                           cartItems?.discount?.formatted
                                             ?.withTax
                                         }{' '}
-                                        discount
+                                        {translate('label.orderSummary.discountText')}
                                       </p>
                                     </div>
                                   </div>
@@ -527,7 +529,7 @@ const Coupon = (props: IPromotionInputProps) => {
                             className="w-full text-white bg-black border border-black btn-basic-property hover:text-white hover:bg-gray-800"
                             onClick={() => setCouponApplied(false)}
                           >
-                            Awesome!
+                            {translate('label.basket.awesomeText')}
                           </button>
                         </div>
                       </div>

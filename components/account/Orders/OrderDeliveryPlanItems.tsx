@@ -18,7 +18,7 @@ import OrderStatusMapping from './OrderStatusMapping'
 import TrackingDetail from './TrackingDetail'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 const OrderDeliveryPlanItems = ({
   items,
   details,
@@ -27,19 +27,20 @@ const OrderDeliveryPlanItems = ({
   openHelpModal,
   setReview,
 }: any) => {
+  const translate = useTranslation()
   return (
     <>
       {items?.map((deliveryPlan: any, idx: number) => (
-        <div key={idx} className="o-detail-continer !pl-0 sm:!pl-8">
+        <div key={idx} className="w-full">
           <div className="flex items-center justify-between w-full pb-4 border-b border-gray-300 border-dashed">
             <div className="">
               <h4 className="mb-2 text-xs text-black opacity-60">
-                {deliveryPlan?.items?.length} Items
+                {deliveryPlan?.items?.length} {translate('common.label.itemPluralText')}
               </h4>
-              <span className="text-base font-bold text-black">
-                Package {idx + 1}
+              <span className="text-base font-semibold text-black">
+                {translate('label.orderDetails.packageText')} {idx + 1}
                 {' of '}
-                {details?.order?.deliveryPlans?.length}
+                {details?.deliveryPlans?.length}
               </span>
             </div>
 
@@ -48,8 +49,8 @@ const OrderDeliveryPlanItems = ({
                 orderStatusDisplay={deliveryPlan?.orderStatusDisplay}
                 orderStatusRag={deliveryPlan?.orderStatusRag}
                 orderStatus={deliveryPlan.statusType}
-                orderId={details?.order?.orderId}
-                orderLog={details?.order?.orderLog}
+                orderId={details?.orderId}
+                orderLog={details?.orderLog}
               />
             </div>
           </div>
@@ -63,7 +64,7 @@ const OrderDeliveryPlanItems = ({
                     <Disclosure.Button className="flex items-center justify-between w-full py-3">
                       <p className="text-sm font-light text-black">
                         <span>
-                          ETA:{' '}
+                          ETA: {' '}
                           {moment(
                             new Date(deliveryPlan?.deliveryDateTarget)
                           ).format(DATE_FORMAT)}
@@ -82,7 +83,7 @@ const OrderDeliveryPlanItems = ({
                     <div className="order-track">
                       <OrderLog
                         orderLog={deliveryPlan?.orderLog}
-                        orderStatus={details?.order?.orderStatus}
+                        orderStatus={details?.orderStatus}
                         orderJourney={deliveryPlan?.orderJourney}
                         deliveryPlanId={deliveryPlan?.recordId}
                       />
@@ -92,19 +93,18 @@ const OrderDeliveryPlanItems = ({
               )}
             </Disclosure>
           </div>
-          {details?.order?.allowedToTrack && (
+          {details?.allowedToTrack && (
             <>
               <div className="w-full px-4 py-4 mb-4 border-b border-gray-300 border-dashed sm:px-16 sm:pl-0 sm:pt-0">
                 <div className="flex flex-col w-full">
                   <a
-                    onClick={() => trackPackage(details?.order)}
+                    onClick={() => trackPackage(details)}
                     className="font-semibold text-[#32CD32] cursor-pointer text-14"
                     target="_blank"
                     rel="noopener noreferrer"
                     href={deliveryPlan?.trackingLink}
                   >
-                    Tracking Details →
-                  </a>
+                    {translate('label.orderDetails.trackingDetailsBtnText')} </a>
                 </div>
               </div>
             </>
@@ -115,7 +115,7 @@ const OrderDeliveryPlanItems = ({
               <div className="flow-root">
                 <ul role="list" className="-my-6 divide-y divide-gray-200">
                   {deliveryPlan?.items?.map((item: any, idx: number) =>
-                    details?.order?.items
+                    details?.items
                       ?.filter((x: any) =>
                         matchStrings(x?.productId, item?.productId, true)
                       )
@@ -205,10 +205,10 @@ const OrderDeliveryPlanItems = ({
                                             onClick={() =>
                                               openHelpModal(
                                                 item,
-                                                details?.order
+                                                details
                                               )
                                             }
-                                            className="text-sm font-bold underline cursor-pointer text-orange"
+                                            className="text-sm font-semibold underline cursor-pointer text-orange"
                                           >
                                             Help?
                                           </a>
@@ -249,7 +249,7 @@ const OrderDeliveryPlanItems = ({
                                             </span>
                                             {productItem?.price?.raw?.withTax > 0 &&
                                               (<span className="text-sm font-normal text-green sm:text-md">
-                                                {discount}% off
+                                                {discount}{translate('common.label.discountText')}
                                               </span>)
                                             }
                                           </>
@@ -260,7 +260,7 @@ const OrderDeliveryPlanItems = ({
                                   <div className="flex mt-3">
                                     <div className="w-full">
                                       <label className="font-medium capitalize text-12 text-primary dark:text-black">
-                                        Size:{' '}
+                                        {translate('common.label.sizeText')}{' '}
                                         <span className="uppercase">
                                           {productItem?.size}
                                         </span>
@@ -268,7 +268,7 @@ const OrderDeliveryPlanItems = ({
                                     </div>
                                     <div className="w-full">
                                       <label className="font-medium text-12 text-primary dark:text-black">
-                                        Qty: {productItem?.qty}
+                                      {translate('label.product.qtyText')} {productItem?.qty}
                                       </label>
                                     </div>
                                   </div>
@@ -292,8 +292,7 @@ const OrderDeliveryPlanItems = ({
                               {rmaTrackingNo && (
                                 <div className="w-full py-4">
                                   <h3 className="mb-1 text-black opacity-60 font-10">
-                                    Return Tracking Detail
-                                  </h3>
+                                    {translate('label.orderDetails.returnTrackingDetailHeadingText')} </h3>
                                   <a
                                     className="text-orange-500 opacity-80"
                                     target="_blank"
@@ -304,14 +303,14 @@ const OrderDeliveryPlanItems = ({
                                   </a>
                                 </div>
                               )}
-                              {details?.order.allowedToReview && (
+                              {details?.allowedToReview && (
                                 <>
                                   <div className="flex w-full py-4">
                                     <p
                                       className="w-16 mt-2 text-xs text-black opacity-60"
                                       onClick={() => setReview(item)}
                                     >
-                                      Rate Item:{' '}
+                                      {translate('label.orderDetails.rateItemText')}:{' '}
                                     </p>
                                     <div className="flex gap-1 sm:gap-2 flex-center">
                                       {Array.from(Array(5).keys()).map(
@@ -337,7 +336,7 @@ const OrderDeliveryPlanItems = ({
               </div>
             </div>
           </div>
-          {details?.order.allowedToTrack && (
+          {details?.allowedToTrack && (
             <TrackingDetail deliveryPlan={deliveryPlan} />
           )}
           {deliveryPlan?.invoiceURL && (
@@ -346,8 +345,7 @@ const OrderDeliveryPlanItems = ({
                 href={deliveryPlan?.invoiceURL}
                 className="block w-full px-4 font-bold text-center text-black border btn-basic-property rounde-sm"
               >
-                Download Invoice
-              </a>
+                {translate('label.orderDetails.downloadInvoiceBtnText')} </a>
             </div>
           )}
         </div>

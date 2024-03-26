@@ -4,6 +4,7 @@ import React, { FC, Fragment } from "react";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
 import SortOrderFilter from "./SectionGridMoreExplore/SortOrderFilter";
 import ReviewItem from "./ReviewItem";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ModalViewAllReviewsProps {
   show: boolean;
@@ -14,6 +15,7 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
   show,
   onCloseModalViewAllReviews,
 }) => {
+  const translate = useTranslation();
   return (
     <Transition appear show={show} as={Fragment}>
       <Dialog
@@ -57,7 +59,7 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
                     className="text-lg font-medium leading-6 text-gray-900"
                     id="headlessui-dialog-title-70"
                   >
-                    View all reviews
+                    {translate('common.label.viewAllReviewsText')}
                   </h3>
                   <span className="absolute left-3 top-3">
                     <ButtonClose onClick={onCloseModalViewAllReviews} />
@@ -66,15 +68,15 @@ const ModalViewAllReviews: FC<ModalViewAllReviewsProps> = ({
                 <div className="flex flex-wrap justify-between px-8 my-5">
                   <h2 className="flex items-center text-xl font-semibold sm:text-2xl">
                     <StarIcon className="w-7 h-7 mb-0.5" />
-                    <span className="ml-1.5"> 4,87 · 142 Reviews</span>
+                    <span className="ml-1.5">{translate('common.label.dummyReviewsText')}</span>
                   </h2>
                   <SortOrderFilter
                     className="my-2"
                     data={[
-                      { name: "Sort order" },
-                      { name: "Newest rating" },
-                      { name: "Highest rating" },
-                      { name: "Lowest rating" },
+                      { name: translate('label.filters.sortOrderText') },
+                      { name: translate('label.filters.newestRatingsText') },
+                      { name: translate('label.filters.highestRatingText') },
+                      { name: translate('label.filters.lowestRatingText') },
                     ]}
                   />
                 </div>

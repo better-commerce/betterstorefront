@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import ButtonPrimary, { ButtonPrimaryProps } from "./shared/Button/ButtonPrimary";
 import ButtonSecondary from "./shared/Button/ButtonSecondary";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 
 export interface FollowButtonProps extends ButtonPrimaryProps {
@@ -14,6 +15,7 @@ const FollowButton: FC<FollowButtonProps> = ({
   isFollowing = Math.random() > 0.5,
 }) => {
   const [following, setFollowing] = React.useState(isFollowing);
+  const translate = useTranslation();
 
   return !following ? (
     <ButtonPrimary
@@ -22,7 +24,7 @@ const FollowButton: FC<FollowButtonProps> = ({
       fontSize={fontSize}
       onClick={() => setFollowing(true)}
     >
-      Follow
+      {translate('common.label.followText')}
     </ButtonPrimary>
   ) : (
     <ButtonSecondary
@@ -31,7 +33,7 @@ const FollowButton: FC<FollowButtonProps> = ({
       fontSize={fontSize}
       onClick={() => setFollowing(false)}
     >
-      <span className="text-sm ">Following</span>
+      <span className="text-sm ">{translate('common.label.followingText')}</span>
     </ButtonSecondary>
   );
 };

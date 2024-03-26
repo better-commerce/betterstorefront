@@ -90,6 +90,7 @@ const getMicrosites = () => {
         ? [...new Set(data?.result?.map((i) => i.defaultLangCulture))]
         : [defaultLocale],
       defaultLocale: defaultLocale,
+      localizations: data?.result?.length ? data?.result?.map(x => ({ culture: x?.defaultLangCulture, countryName: x?.name, countryCode: x?.countryCode, languageCode: x?.defaultLangCode, languageName: x?.defaultLangCode, currencyCode: x?.defaultCurrencyCode, isActive: x?.isActive, })) : []
     }
     // fs.writeFileSync(__dirname.join('/'))
     fs.writeFileSync(
