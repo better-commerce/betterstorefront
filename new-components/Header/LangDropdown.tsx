@@ -28,7 +28,7 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
   const getLocaleUrl = useMemo(() => {
     return (language: any) => {
       const defaultCulture = `${defaultLanguage}-${defaultCountry}`
-      const url = (language?.languageCulture === defaultCulture) ? `${router.asPath}` : `/${language?.languageCulture}${router.asPath}`
+      const url = (language?.languageCulture === defaultCulture) ? router.asPath : `/${language?.languageCulture}${router.asPath}`
       return url
     }
   }, [defaultLanguage, defaultCountry, router.asPath])
