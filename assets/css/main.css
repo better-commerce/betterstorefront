@@ -17267,3 +17267,16 @@ input[type=time]::-webkit-calendar-picker-indicator {
   color: white;
   font-weight: 600;
 }
+.contact-text li {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+.contact-text h4 {
+  font-size: 22px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+.container-demostore{
+  margin-left: 30px;
+  margin-right: 30px;
+}
