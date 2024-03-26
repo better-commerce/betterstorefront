@@ -1,5 +1,5 @@
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import Link from 'next/link'
 import type { GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'

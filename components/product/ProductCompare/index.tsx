@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { Dialog, Transition } from '@headlessui/react'
 import { ArrowLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import Products from './Products'
 import { useTranslation } from '@commerce/utils/use-translation'
 

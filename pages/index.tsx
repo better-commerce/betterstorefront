@@ -6,7 +6,6 @@ import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
@@ -18,6 +17,7 @@ import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import Layout from '@new-components/Layout/Layout'
 const SectionHero2 = dynamic(() => import('@new-components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@new-components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@new-components/SectionSliderProductCard'))

@@ -1,7 +1,7 @@
 import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import { Heart } from '@components/icons'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import { Text, Container, Skeleton } from '@new-components/ui'
 import { useCustomer } from '@framework/customer'
 import { WishlistCard } from '@components/wishlist'

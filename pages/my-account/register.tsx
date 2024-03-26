@@ -1,4 +1,4 @@
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'

@@ -12,7 +12,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 // Component Imports
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { useCart as getCart } from '@framework/cart'
 import { basketId as basketIdGenerator } from '@new-components/ui/context'

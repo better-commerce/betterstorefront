@@ -15,7 +15,7 @@ import 'swiper/css/navigation'
 
 // Component Imports
 import getCollections from '@framework/api/content/getCollections'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import os from 'os'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import { postData } from '@new-components/utils/clientFetcher'

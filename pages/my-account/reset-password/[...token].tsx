@@ -1,4 +1,4 @@
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import { useEffect, useState } from 'react'
 import {
     EmptyString,

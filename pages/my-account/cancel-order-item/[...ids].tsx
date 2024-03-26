@@ -1,6 +1,6 @@
 // Base Imports
 import { useEffect, useState } from 'react'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 
 // Package Imports
 import axios from 'axios'

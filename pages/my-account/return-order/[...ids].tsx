@@ -10,7 +10,7 @@ import Link from 'next/link'
 // Component Imports
 import { useUI } from '@new-components/ui/context'
 import ReturnReason from '../../../components/account/Orders/ReturnReason'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'

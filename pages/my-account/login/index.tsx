@@ -1,7 +1,7 @@
 import Router from 'next/router'
 import { GetServerSideProps } from 'next'
 import NextHead from 'next/head'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { useUI } from '@new-components/ui/context'
 import Login from '@components/account/Login'
