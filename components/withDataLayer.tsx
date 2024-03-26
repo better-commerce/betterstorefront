@@ -13,6 +13,7 @@ export const PAGE_TYPES = {
   Product: 'Product',
   Search: 'Search',
   Cookie: 'Cookie',
+  Contact: 'Contact',
   Privacy: 'Privacy',
   Terms: 'Terms',
   Survey: 'Survey',
