@@ -157,7 +157,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       <>
         {isMobile ? (
           <>
-            <div className="absolute grid justify-center visible grid-cols-2 px-4 transition-all bottom-4 sm:px-4 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
+            <div className="absolute grid justify-center visible grid-cols-2 px-2 transition-all bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
               <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
@@ -167,7 +167,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </>
         ) : (
           <>
-            <div className="absolute grid justify-center invisible grid-cols-2 px-4 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-4 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
+            <div className="absolute grid justify-center invisible grid-cols-2 px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
               <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
