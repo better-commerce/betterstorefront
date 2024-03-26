@@ -12,6 +12,8 @@ export module Redis {
     export const HomepageWeb = 'HomepageWeb'
     export const CookiepageWeb = 'CookiepageWeb'
     export const CookiepageMobileWeb = 'CookiepageMobileWeb'
+    export const ContactpageWeb = 'ContactpageWeb'
+    export const ContactpageMobileWeb = 'ContactpageMobileWeb'
     export const PrivacypageWeb = 'PrivacypageWeb'
     export const PrivacypageMobileWeb = 'PrivacypageMobileWeb'
     export const TermspageWeb = 'TermspageWeb'
