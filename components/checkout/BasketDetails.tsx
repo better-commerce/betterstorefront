@@ -3,7 +3,7 @@ import {
   NEXT_REFERRAL_ADD_USER_REFEREE,
   NEXT_REFERRAL_BY_SLUG,
   NEXT_REFERRAL_INFO,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import {
@@ -14,7 +14,7 @@ import {
 } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, LoadingDots, useUI } from '@components/ui'
+import { Button, LoadingDots, useUI } from '@new-components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/checkout/Summary'

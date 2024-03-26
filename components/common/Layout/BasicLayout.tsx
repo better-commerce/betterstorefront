@@ -5,10 +5,10 @@ import React, { FC, useEffect, useState } from 'react'
 import Router from 'next/router'
 
 // Component Imports
-import AlertRibbon from '@components/ui/AlertRibbon'
+import AlertRibbon from '@new-components/ui/AlertRibbon'
 
 // Other Imports
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 
 const BasicLayout: FC<any> = ({ children }) => {
   const { displayAlert } = useUI()

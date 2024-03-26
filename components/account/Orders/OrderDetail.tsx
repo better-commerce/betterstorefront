@@ -16,17 +16,17 @@ import {
   priceFormat,
   stringToNumber,
 } from '@framework/utils/parse-util'
-import { PaymentStatus } from '@components/utils/payment-constants'
+import { PaymentStatus } from '@new-components/utils/payment-constants'
 import ReviewInput from '@components/product/Reviews/ReviewInput'
 import { ArrowLeft } from '@components/icons'
 import { StarIcon } from '@heroicons/react/24/solid'
-import { DATE_FORMAT, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { DATE_FORMAT, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 // import getCustomerOrderDetail from '@framework/checkout/customer-order-details'
 import { round } from 'lodash'
 import Link from 'next/link'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 
-// import { recordGA4Event } from '@components/services/analytics/ga4';
+// import { recordGA4Event } from '@new-components/services/analytics/ga4';
 import OrderLog from './OrderLog'
 // import CartFreeGift from '@components/cart/CartSidebarView/FreeGift';
 import OrderDetailHeader from './OrderDetailHeader'
@@ -36,7 +36,7 @@ import OrderSummary from './OrderSummary'
 import HelpModal from './HelpModal'
 import OrderReviewModal from './OrderReviewModal'
 import OrderDeliveryPlanItems from './OrderDeliveryPlanItems'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
 
 export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {

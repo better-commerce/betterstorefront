@@ -8,9 +8,9 @@ import Router from 'next/router'
 import { setNativeValue, triggerKeyPress } from '@framework/utils/ui-util'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { canGoBack, ensureNavigationStack, getNavigationStackSearchTerm, popNavigationStack, pushNavigationStack, resetAlgoliaSearch } from '@framework/utils/app-util'
-import { EmptyString } from '@components/utils/constants'
-import { setItem } from '@components/utils/localStorage'
-import { LocalStorage } from '@components/utils/payment-constants'
+import { EmptyString } from '@new-components/utils/constants'
+import { setItem } from '@new-components/utils/localStorage'
+import { LocalStorage } from '@new-components/utils/payment-constants'
 
 const BrowserNavigation = memo(({ deviceInfo }: any) => {
     const onKeyDown = (ev: any) => {

@@ -10,7 +10,7 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 
 // Other Imports
 import { roundToDecimalPlaces, stringToBoolean } from '@framework/utils/parse-util'
-import { Payments } from '@components/utils/payment-constants'
+import { Payments } from '@new-components/utils/payment-constants'
 import { initPayment, requestPayment } from '@framework/utils/payment-util'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import {
@@ -20,10 +20,10 @@ import {
   BETTERCOMMERCE_LANGUAGE,
   EmptyString,
   Messages,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import Router from 'next/router'
 import { Cookie } from '@framework/utils/constants'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { GTMUniqueEventID } from '@new-components/services/analytics/ga4'
 
 declare const AfterPay: any
 

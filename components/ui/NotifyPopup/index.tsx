@@ -1,10 +1,10 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import axios from 'axios'
-import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'
+import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@new-components/utils/constants'
 import { validate } from 'email-validator'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function NotifyUserPopup() {

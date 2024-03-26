@@ -1,5 +1,5 @@
 import { useTranslation } from "@commerce/utils/use-translation";
-import { QuantityBreakRule } from "@components/utils/constants";
+import { QuantityBreakRule } from "@new-components/utils/constants";
 import { isIncludeVATInPriceDisplay, vatIncluded } from "@framework/utils/app-util";
 import { roundToDecimalPlaces } from "@framework/utils/parse-util";
 

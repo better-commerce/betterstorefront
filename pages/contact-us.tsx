@@ -11,10 +11,10 @@ import commerce from '@lib/api/commerce'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   SITE_ORIGIN_URL,
-} from '@components/utils/constants'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
+} from '@new-components/utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
+import { EVENTS_MAP } from '@new-components/services/analytics/constants'
+import useAnalytics from '@new-components/services/analytics/useAnalytics'
 import {
   CONTACT_PAGE_DEFAULT_SLUG,
   STATIC_PAGE_CACHE_INVALIDATION_IN_MINS,
@@ -37,7 +37,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import ContactForm from '@components/common/Footer/ContactForm'
 // import ContactUsForm from '@components/contact/ContactUsForm'
-const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+const Loader = dynamic(() => import('@new-components/ui/LoadingDots'))
 
 export async function getStaticProps({
   preview,

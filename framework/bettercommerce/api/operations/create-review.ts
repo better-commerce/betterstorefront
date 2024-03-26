@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { PRODUCT_API_ENDPOINT } from '@components/utils/constants'
+import { PRODUCT_API_ENDPOINT } from '@new-components/utils/constants'
 export default function createREview() {
   async function createReviewAsync(query: any, cookies?: any) {
     const { title, rating, comment, userId, userEmail, productId, nickname } =

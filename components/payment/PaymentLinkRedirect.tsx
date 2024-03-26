@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Other Imports
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 
 const PAYMENT_LINK_ALLOWED_URLS = [
   '/checkout',

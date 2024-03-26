@@ -1,4 +1,4 @@
-import classNames from '@components/utils/classNames'
+import classNames from '@new-components/utils/classNames'
 import { useRouter } from 'next/router'
 
 const MAX_CHARS = 19

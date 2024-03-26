@@ -6,8 +6,8 @@ import cn from 'classnames';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/24/solid'
-import { Button, LoadingDots } from '@components/ui';
-import Spinner from '@components/ui/Spinner';
+import { Button, LoadingDots } from '@new-components/ui';
+import Spinner from '@new-components/ui/Spinner';
 import { useTranslation } from '@commerce/utils/use-translation'
 
 

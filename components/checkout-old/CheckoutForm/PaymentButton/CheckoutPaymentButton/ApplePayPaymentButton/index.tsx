@@ -16,13 +16,13 @@ import BasePaymentButton, { IApplePaymentProps, IDispatchState, IPaymentButtonPr
 import { Guid } from '@commerce/types'
 import { encrypt } from '@framework/utils/cipher'
 import { Cookie } from '@framework/utils/constants'
-import { getItem, setItem } from '@components/utils/localStorage'
+import { getItem, setItem } from '@new-components/utils/localStorage'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
-import { LocalStorage, Payments } from '@components/utils/payment-constants'
-import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, Messages, NEXT_LOG_ACTIVITY, } from '@components/utils/constants'
+import { LocalStorage, Payments } from '@new-components/utils/payment-constants'
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, Messages, NEXT_LOG_ACTIVITY, } from '@new-components/utils/constants'
 import { requestPayment, requestToken, validatePaymentSession } from '@framework/utils/payment-util'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { GTMUniqueEventID } from '@new-components/services/analytics/ga4'
 
 declare const ApplePaySession: any
 

@@ -1,4 +1,4 @@
-import { BASKET_VALIDATE_ENDPOINT } from '@components/utils/constants';
+import { BASKET_VALIDATE_ENDPOINT } from '@new-components/utils/constants';
 import fetcher from '../fetcher'
 
 interface Props {

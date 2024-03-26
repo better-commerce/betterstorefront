@@ -1,7 +1,7 @@
-import { useUI, basketId as generateBasketId } from '@components/ui/context'
+import { useUI, basketId as generateBasketId } from '@new-components/ui/context'
 import Cookies from 'js-cookie'
 import { useReducer, useEffect, useState } from 'react'
-import cartHandler from '@components/services/cart'
+import cartHandler from '@new-components/services/cart'
 import Delivery from './Delivery'
 import Summary from './Summary'
 import Form from './Form'
@@ -16,14 +16,14 @@ import {
   AddressPageAction,
   NEXT_GET_COUNTRIES,
   Messages,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { useShippingFormConfig, useShippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import setSessionIdCookie from '@components/utils/setSessionId'
+import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@new-components/services/analytics/constants'
+import setSessionIdCookie from '@new-components/utils/setSessionId'
 import PaymentWidget from '@components/checkout-old/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
 import {

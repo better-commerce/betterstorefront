@@ -1,4 +1,4 @@
-import { ENABLE_SECURED_PAYMENT_PAYLOAD } from '@components/utils/constants'
+import { ENABLE_SECURED_PAYMENT_PAYLOAD } from '@new-components/utils/constants'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 import { decipherPayload } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'

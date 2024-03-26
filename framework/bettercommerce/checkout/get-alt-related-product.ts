@@ -1,7 +1,7 @@
 import {
   COLLECTIONS_ENDPOINT,
   PRODUCT_API_ENDPOINT,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {

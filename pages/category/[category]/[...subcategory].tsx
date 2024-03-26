@@ -6,19 +6,19 @@ import dynamic from 'next/dynamic'
 import useSwr from 'swr'
 
 // Component Imports
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { postData } from '@components/utils/clientFetcher'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { postData } from '@new-components/utils/clientFetcher'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { useUI } from '@new-components/ui'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
@@ -34,7 +34,7 @@ const ProductMobileFilters = dynamic(() => import('@components/product/Filters')
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
 const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 

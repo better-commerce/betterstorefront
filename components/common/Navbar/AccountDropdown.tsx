@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Account({ config, title, deviceInfo }: any) {

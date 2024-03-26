@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import axios from 'axios'
 import {
   IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+} from '@new-components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { NEXT_GET_RETURNS } from '@components/utils/constants'
-import { useUI } from '@components/ui'
+import { NEXT_GET_RETURNS } from '@new-components/utils/constants'
+import { useUI } from '@new-components/ui'
 import Link from 'next/link'
-import cartHandler from '@components/services/cart'
+import cartHandler from '@new-components/services/cart'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
 

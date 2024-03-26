@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 
 // Component Imports
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 
 // Other Imports
 import { AlertType, CheckoutStep } from '@framework/utils/enums'

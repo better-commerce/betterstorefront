@@ -1,4 +1,4 @@
-import { INFRA_ENDPOINT } from '@components/utils/constants'
+import { INFRA_ENDPOINT } from '@new-components/utils/constants'
 import { cachedGetData } from '../utils/cached-fetch';
 
 export default function getInfraOperation() {

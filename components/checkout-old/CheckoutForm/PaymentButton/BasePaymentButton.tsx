@@ -5,18 +5,18 @@ import React from 'react'
 import { Stripe, StripeElements } from '@stripe/stripe-js'
 
 // Component Imports
-import DefaultButton from '@components/ui/IndigoButton'
+import DefaultButton from '@new-components/ui/IndigoButton'
 
 // Other Imports
 import { convertOrder } from '@framework/utils/payment-util'
 import {
   LocalStorage,
-} from '@components/utils/payment-constants'
+} from '@new-components/utils/payment-constants'
 import { getOrderId, getOrderInfo, parsePaymentMethods } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
-import { EmptyString, Messages } from '@components/utils/constants'
+import { EmptyString, Messages } from '@new-components/utils/constants'
 import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { GTMUniqueEventID } from '@new-components/services/analytics/ga4'
 import { t as translate } from "i18next";
 
 export interface IPaymentButtonProps {

@@ -1,4 +1,4 @@
-import { YOUTUBE_VIDEO_EMBED_PREFIX_URL } from '@components/utils/constants'
+import { YOUTUBE_VIDEO_EMBED_PREFIX_URL } from '@new-components/utils/constants'
 
 export default function Video({ heading, name }: any) {
   return (

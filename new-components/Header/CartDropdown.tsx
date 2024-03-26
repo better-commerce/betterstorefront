@@ -4,8 +4,8 @@ import { Popover } from "@headlessui/react";
 import { useState } from "react";
 import Link from "next/link";
 import { getCurrentPage } from "@framework/utils/app-util";
-import { recordGA4Event } from "@components/services/analytics/ga4";
-import { useUI } from "@components/ui";
+import { recordGA4Event } from "@new-components/services/analytics/ga4";
+import { useUI } from "@new-components/ui";
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CartDropdown() {

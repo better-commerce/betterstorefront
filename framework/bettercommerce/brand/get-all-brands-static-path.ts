@@ -1,6 +1,6 @@
 import { STATIC_BRANDS_PATH_ENABLED } from '@framework/utils/constants'
 import fetcher from '../fetcher'
-import { STATIC_BRAND_PATHS } from '@components/utils/constants'
+import { STATIC_BRAND_PATHS } from '@new-components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 
 export default async function getAllBrandsStaticPath() {

@@ -5,7 +5,7 @@ import React, { Fragment, useRef } from 'react'
 import { Formik, Form } from 'formik'
 
 // Component Imports
-import FloatingLabelFormField from '@components/utils/FloatingLabelFormField'
+import FloatingLabelFormField from '@new-components/utils/FloatingLabelFormField'
 
 // Other Imports
 import { IFormProps } from 'framework/contracts/IFormProps'

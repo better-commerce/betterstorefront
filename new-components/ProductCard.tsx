@@ -6,11 +6,11 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
-import { useUI } from "@components/ui";
-import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
-import cartHandler from "@components/services/cart";
-import wishlistHandler from "@components/services/wishlist";
+import { useUI } from "@new-components/ui";
+import { IMG_PLACEHOLDER } from "@new-components/utils/textVariables";
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@new-components/utils/constants";
+import cartHandler from "@new-components/services/cart";
+import wishlistHandler from "@new-components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/parse-util";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
@@ -23,7 +23,7 @@ const Prices = dynamic(() => import('@new-components/Prices'))
 const ModalQuickView = dynamic(() => import('@new-components/ModalQuickView'))
 const NcImage = dynamic(() => import('@new-components/shared/NcImage/NcImage'))
 const ButtonSecondary = dynamic(() => import('@new-components/shared/Button/ButtonSecondary'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 export interface ProductCardProps {
   className?: string;
   data?: any;
@@ -253,12 +253,12 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
             <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
           </div>
-          <div className="flex items-end justify-between ">
+          <div className="flex items-center justify-between ">
             <Prices price={data?.price} listPrice={data?.listPrice} />
             <div className="flex items-center mb-0.5">
               <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
-              <span className="text-xs ms-1 text-slate-500 dark:text-slate-400">
-                {data?.rating || ""} ({data?.reviewCount || 0} {translate('common.label.reviews')})
+              <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
+                {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
               </span>
             </div>
           </div>

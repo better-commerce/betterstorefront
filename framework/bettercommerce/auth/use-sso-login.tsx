@@ -1,4 +1,4 @@
-import { SOCIAL_AUTHENTICATE_CUSTOMER } from '@components/utils/constants'
+import { SOCIAL_AUTHENTICATE_CUSTOMER } from '@new-components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {

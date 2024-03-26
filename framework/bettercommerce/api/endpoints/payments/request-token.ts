@@ -3,13 +3,13 @@ import { v4 as uuid } from 'uuid'
 
 // Other Imports
 import { logError, logPaymentRequest } from '@framework/utils/app-util'
-import { LOG_REQUEST_OPTIONS } from '@components/utils/payment-constants'
+import { LOG_REQUEST_OPTIONS } from '@new-components/utils/payment-constants'
 import {
     BCEnvironment,
     PaymentOperation,
 } from '@better-commerce/bc-payments-sdk'
 import { AUTH_URL, BASE_URL, CLIENT_ID, SHARED_SECRET, } from '@framework/utils/constants'
-import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@new-components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 
 const logId = 'Payments | RequestToken'

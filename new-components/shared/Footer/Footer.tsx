@@ -1,5 +1,5 @@
 import { CustomLink } from "@components/data/types";
-import { Logo } from "@components/ui";
+import { Logo } from "@new-components/ui";
 import React from "react";
 import SocialsList1 from "../SocialsList1/SocialsList1";
 

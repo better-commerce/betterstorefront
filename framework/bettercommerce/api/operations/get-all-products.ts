@@ -2,7 +2,7 @@ import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import fetcher from '../../fetcher'
 import qs from 'qs'
-import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
+import { SEARCH_MINIMAL_ENDPOINT } from '@new-components/utils/constants'
 
 export default function getAllProductsOperation({}: OperationContext<any>) {
   async function getAllProducts<T extends GetAllProductsOperation>({

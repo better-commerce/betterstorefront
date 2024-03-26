@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { COLLECTIONS_ENDPOINT } from '@components/utils/constants'
+import { COLLECTIONS_ENDPOINT } from '@new-components/utils/constants'
 export default function getCollectionBySlug(slug: string, cookies?: any) {
   async function getCollectionBySlugAsync() {
     try {

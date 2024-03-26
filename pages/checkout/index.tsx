@@ -8,7 +8,7 @@ import DeliveryMethodSelection from '@components/checkout/DeliveryMethodSelectio
 import ReviewOrder from '@components/checkout/ReviewOrder'
 import BasketDetails from '@components/checkout/BasketDetails'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useUI, basketId as generateBasketId } from '@components/ui/context'
+import { useUI, basketId as generateBasketId } from '@new-components/ui/context'
 import NextHead from 'next/head'
 import cookie from 'cookie'
 import { loqateAddress } from '@components/checkout-old/CheckoutForm'
@@ -27,15 +27,15 @@ import {
   NEXT_UPDATE_CHECKOUT2_ADDRESS,
   NEXT_UPDATE_DELIVERY_INFO,
   NEXT_UPDATE_SHIPPING,
-} from '@components/utils/constants'
-import Spinner from '@components/ui/Spinner'
+} from '@new-components/utils/constants'
+import Spinner from '@new-components/ui/Spinner'
 import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import CheckoutLayoutV2 from '@components/common/Layout/CheckoutLayoutV2'
 import { saveUserToken } from '@framework/utils/app-util'
 import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
-import cartHandler from '@components/services/cart'
+import cartHandler from '@new-components/services/cart'
 import {
   matchStrings,
   stringToBoolean,
@@ -44,7 +44,7 @@ import {
 import Link from 'next/link'
 import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
-import { Logo } from '@components/ui'
+import { Logo } from '@new-components/ui'
 import { compact } from 'lodash'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'

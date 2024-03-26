@@ -14,7 +14,7 @@ import 'swiper/css/scrollbar'
 import SwiperCore, { Navigation } from 'swiper'
 import {
   IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+} from '@new-components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

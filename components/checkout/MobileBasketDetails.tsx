@@ -5,8 +5,8 @@ import {
   NEXT_REFERRAL_ADD_USER_REFEREE,
   NEXT_REFERRAL_BY_SLUG,
   NEXT_REFERRAL_INFO,
-} from '@components/utils/constants'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+} from '@new-components/utils/constants'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { formatFromToDates, tryParseJson } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
@@ -18,7 +18,7 @@ import {
 } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import React, { Fragment, useEffect, useState } from 'react'
-import { Button, LoadingDots, useUI } from '@components/ui'
+import { Button, LoadingDots, useUI } from '@new-components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/cart/PromotionInput'

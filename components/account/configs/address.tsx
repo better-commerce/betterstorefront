@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
-import countryList from '@components/utils/countryList'
-import { Messages } from '@components/utils/constants'
+import countryList from '@new-components/utils/countryList'
+import { Messages } from '@new-components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 

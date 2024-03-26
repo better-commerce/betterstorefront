@@ -6,7 +6,7 @@ import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayN
 
 // Other Imports
 import { t as translate } from "i18next";
-import { EmptyString } from '@components/utils/constants'
+import { EmptyString } from '@new-components/utils/constants'
 
 export class CODPaymentButton extends BasePaymentButton {
   /**

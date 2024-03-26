@@ -1,4 +1,4 @@
-import { KEYWORDS_ENDPOINT } from '@components/utils/constants'
+import { KEYWORDS_ENDPOINT } from '@new-components/utils/constants'
 import { cachedGetData } from '../utils/cached-fetch';
 
 export default async function useKeywords(cookies?: any) {

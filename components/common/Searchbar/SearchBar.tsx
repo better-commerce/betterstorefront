@@ -2,7 +2,7 @@ import { FC, memo } from 'react'
 import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 //import ElasticSearchBar from '@components/search/ElasticSearchBar'
-import { SEARCH_PROVIDER } from '@components/utils/constants'
+import { SEARCH_PROVIDER } from '@new-components/utils/constants'
 import dynamic from 'next/dynamic'
 import ElasticSearchBar from '@components/search/elastic/ElasticSearchBar'
 import { SearchProvider } from '@elastic/react-search-ui'
@@ -13,8 +13,8 @@ import {
   buildFacetConfigFromConfig,
   buildSearchOptionsFromConfig,
   getConfig,
-} from '@components/config/config-helper'
-import { useUI } from '@components/ui'
+} from '@new-components/config/config-helper'
+import { useUI } from '@new-components/ui'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider as Provider } from '@framework/utils/enums'
 import InstantSearchBar from '@components/search/algolia/InstantSearchBar'

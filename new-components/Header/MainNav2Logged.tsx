@@ -4,7 +4,7 @@ import React, { FC, } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { IExtraProps } from "@components/common/Layout/Layout";
-import { Logo, useUI } from "@components/ui";
+import { Logo, useUI } from "@new-components/ui";
 import { Searchbar } from "@components/common";
 import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";

@@ -2,10 +2,10 @@ import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
 import { Bag } from '@components/icons'
 import { Layout } from '@components/common'
-import { Container, Text } from '@components/ui'
+import { Container, Text } from '@new-components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
 
 export async function getStaticProps({
   preview,

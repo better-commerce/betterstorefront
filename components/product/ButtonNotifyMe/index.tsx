@@ -1,6 +1,6 @@
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import dynamic from 'next/dynamic'
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 interface Props {
   product: any
   className?: any

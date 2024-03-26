@@ -14,7 +14,7 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
 
 export async function getStaticProps({
   preview,

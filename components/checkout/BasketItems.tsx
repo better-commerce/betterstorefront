@@ -1,5 +1,5 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 

@@ -2,7 +2,7 @@ import cn from 'classnames'
 import React from 'react'
 import s from './Swatch.module.css'
 import { Check } from '@components/icons'
-import Button, { ButtonProps } from '@components/ui/Button'
+import Button, { ButtonProps } from '@new-components/ui/Button'
 import { isDark } from '@lib/colors'
 interface SwatchProps {
   active?: boolean

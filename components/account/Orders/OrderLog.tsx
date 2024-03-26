@@ -1,4 +1,4 @@
-import { /**OrderLogStatus, */ DATE_TIME_FORMAT } from "@components/utils/constants";
+import { /**OrderLogStatus, */ DATE_TIME_FORMAT } from "@new-components/utils/constants";
 import { /**utcDateConvert, stringToNumber, localDateToConvert, */ utcToLocalDate } from "@framework/utils/parse-util";
 import { CheckIcon, ClockIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import moment from "moment";

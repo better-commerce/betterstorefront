@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i

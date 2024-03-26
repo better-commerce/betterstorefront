@@ -22,7 +22,7 @@ import {
   BETTERCOMMERCE_CURRENCY,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_CURRENCY,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 
 const PaymentsApiMiddleware = async function useBCPayments({

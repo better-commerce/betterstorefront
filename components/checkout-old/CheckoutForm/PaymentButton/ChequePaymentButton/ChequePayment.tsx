@@ -8,7 +8,7 @@ import * as Yup from 'yup'
 import ChequePaymentForm from './ChequePaymentForm'
 import { t as translate } from "i18next";
 // Other Imports
-import { EmptyString, Messages } from '@components/utils/constants'
+import { EmptyString, Messages } from '@new-components/utils/constants'
 import { IChequePaymentProps } from 'framework/contracts/payment/IChequePaymentProps'
 
 export const CHEQUE_PAYMENT_FORM_ID = 'chequePaymentForm'

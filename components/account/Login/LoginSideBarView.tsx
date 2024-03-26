@@ -1,4 +1,4 @@
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import { FC, useEffect, useState } from 'react'
 
 import { XMarkIcon } from '@heroicons/react/24/outline'

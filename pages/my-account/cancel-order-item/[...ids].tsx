@@ -14,16 +14,16 @@ import CancelReason from '../../../components/account/Orders/CancelReason'
 import ConfirmDialog from '@components/common/ConfirmModal/ConfirmDialog'
 
 // Other Imports
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import { matchStrings } from '@framework/utils/parse-util'
 import {
   NEXT_CANCEL_REASON,
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
-} from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
-import Spinner from '@components/ui/Spinner'
+} from '@new-components/utils/constants'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
+import Spinner from '@new-components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'

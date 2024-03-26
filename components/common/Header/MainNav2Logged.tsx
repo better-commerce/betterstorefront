@@ -6,7 +6,7 @@ import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import Navigation from "../Navigation/Navigation";
-import { Logo } from "@components/ui";
+import { Logo } from "@new-components/ui";
 import Link from "next/link";
 
 export interface MainNav2LoggedProps { }

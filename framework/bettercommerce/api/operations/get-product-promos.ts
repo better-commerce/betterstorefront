@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { PRODUCT_PROMOTION_API_ENDPOINT } from '@components/utils/constants'
+import { PRODUCT_PROMOTION_API_ENDPOINT } from '@new-components/utils/constants'
 export default function useGetProductPromos() {
   async function useGetProductPromosAsync({ query, cookies }: any) {
     try {

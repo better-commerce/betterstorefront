@@ -2,20 +2,20 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import axios from 'axios'
 import {
   CLOTH_COLOUR_ATTRIB_NAME,
   CLOTH_SIZE_ATTRIB_NAME,
   NEXT_CREATE_WISHLIST,
   Messages,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { round } from 'lodash'
 import {
   IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+} from '@new-components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import cartHandler from '@components/services/cart'
+import cartHandler from '@new-components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
@@ -25,8 +25,8 @@ import classNames from 'classnames'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@new-components/Prices'
-const SimpleButton = dynamic(() => import('@components/ui/Button'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const SimpleButton = dynamic(() => import('@new-components/ui/Button'))
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView')
 )
 
@@ -340,22 +340,22 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`} >
-          <div className="px-0 text-xs font-bold text-left text-black sm:mt-1 sm:text-xs">
-            <Prices price={product?.price} listPrice={product?.listPrice} />
-          </div>  
           <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] nc-ProductCard__title text-left  ">
-            {product?.name?.toLowerCase()}
+            {product?.name}
+          </div>
+          <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
+            <Prices price={product?.price} listPrice={product?.listPrice} />
           </div>
         </Link>
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col p-2">
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col">
           {isOutOfStock(product) ? (
-            <ButtonNotifyMe product={product} className="mt-2 text-sm font-medium rounded-md" />
+            <ButtonNotifyMe product={product} className="text-sm font-medium rounded-md" />
           ) : (
-            <Button className="mt-2 text-sm font-medium rounded-md" title={buttonConfig.title} action={buttonConfig.action} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
+            <Button className="text-sm font-medium rounded-md" title={buttonConfig.title} action={buttonConfig.action} type="button" buttonType={buttonConfig.buttonType || 'cart'} />
           )}
         </div>
       </div>
-      <div className="mt-5 bg-white border-t border-gray-200 lg:mt-10">
+      <div className="mt-2 bg-white border-t border-gray-200 lg:mt-4">
         <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon key={rating} aria-hidden="true" className={classNames(product?.rating > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
@@ -365,7 +365,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           </label>
         </div>
         <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
-          <span className="font-semibold text-black">{product?.brand}</span>
+          <span className="font-normal text-black font-14">{product?.brand}</span>
         </div>
         {attribs?.map((attrib: any, idx: number) => (
           <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14" >

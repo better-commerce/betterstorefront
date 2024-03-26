@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 
 // Other Imports
-import { IDeviceInfo, useUI } from "@components/ui/context";
+import { IDeviceInfo, useUI } from "@new-components/ui/context";
 import { tryParseJson } from "@framework/utils/parse-util";
 
 const InitDeviceInfo = ({ setDeviceInfo }: any) => {

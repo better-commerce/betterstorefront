@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { NEXT_UPDATE_DETAILS, NEXT_SUBSCRIBE, } from '@components/utils/constants'
+import { NEXT_UPDATE_DETAILS, NEXT_SUBSCRIBE, } from '@new-components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 
 const handleError = (setTitle: any) => {
   const translate = useTranslation()
