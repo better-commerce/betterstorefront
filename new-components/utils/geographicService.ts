@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { NEXT_GEO_ENDPOINT } from '@components/utils/constants'
+import { NEXT_GEO_ENDPOINT } from '@new-components/utils/constants'
 
 export default async function geoData() {
   try {
