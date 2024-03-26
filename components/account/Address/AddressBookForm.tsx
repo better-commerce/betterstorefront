@@ -1,14 +1,18 @@
 import { Formik, Form, Field } from 'formik'
-import { formConfig, schema } from '../configs/address'
+import { useAddressFormConfig, useSchema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
 import LoadingDots from '@components/ui/LoadingDots'
-import { GENERAL_CANCEL } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
+
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
 
 export default function AddressForm({ initialValues = {}, onSubmit = () => {}, closeEditMode }: any) {
+  const translate = useTranslation();
+  const schema = useSchema();
+  const formConfig = useAddressFormConfig();
   return (
     <Formik
       validationSchema={schema}
@@ -26,7 +30,7 @@ export default function AddressForm({ initialValues = {}, onSubmit = () => {}, c
         return (
           <div className="flex-col w-full py-5 flex items-flex-start mx-auto max-w-4xl justify-center">
             <Form className="font-semibold w-full sm:w-1/2">
-              {formConfig.map((formItem: any, idx: number) => {
+              {formConfig?.map((formItem: any, idx: number) => {
                 return (
                   <div key={`${formItem.label}_${idx}`}>
                     <label className="text-gray-700 text-sm">
@@ -76,7 +80,7 @@ export default function AddressForm({ initialValues = {}, onSubmit = () => {}, c
                 onClick={handleSubmit}
                 className="max-w-xs flex-1 border border-transparent py-3 px-8 flex items-center justify-center font-medium btn-primary sm:w-full"
               >
-                {isSubmitting ? <LoadingDots /> : 'Save changes'}
+                {isSubmitting ? <LoadingDots /> : translate('common.label.saveChangesText')}
               </button>
               {!!closeEditMode && (
                 <button
@@ -84,7 +88,7 @@ export default function AddressForm({ initialValues = {}, onSubmit = () => {}, c
                   onClick={closeEditMode}
                   className="max-w-xs flex-1  border border-transparent py-3 ml-5 px-8 flex items-center justify-center font-medium btn-primary opacity-80 sm:w-full"
                 >
-                  {GENERAL_CANCEL}
+                  {translate('common.label.cancelText')}
                 </button>
               )}
             </div>

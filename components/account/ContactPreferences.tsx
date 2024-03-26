@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { config } from './configs/contact'
-import { Formik, Form, Field } from 'formik'
+import { useContactPrefConfig } from './configs/contact'
+import { Formik} from 'formik'
 import { useUI } from '@components/ui/context'
-import { handleSubmit, URLS } from './common'
+import { useHandleSubmit, URLS } from './common'
 import Button from '@components/ui/Button'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import {
-  GENERAL_WANT_RECEIVE_OFFERS,
-  GENERAL_NOT_WANT_RECEIVE_OFFERS,
-  CONTACT_PREFERENCES_TITLE,
-  CONTACT_PREFERENCES_SUBTITLE,
-  GENERAL_SAVE_CHANGES,
-} from '@components/utils/textVariables'
-const radioBtnsConfig = [
-  {
-    type: 'radio',
-    title: GENERAL_WANT_RECEIVE_OFFERS,
-    items: config,
-    id: 1,
-  },
-  {
-    type: 'radio',
-    id: 2,
-    title: GENERAL_NOT_WANT_RECEIVE_OFFERS,
-    items: [],
-    default: true,
-    unsubscribe: true,
-  },
-]
+import { useTranslation } from '@commerce/utils/use-translation'
+
 
 export default function ContactPreferences() {
+  const handleSubmit = useHandleSubmit();
+  const translate = useTranslation();
   const [title, setTitle] = useState('Contact')
   const [items, setItems] = useState([])
   const [activeItem, setActiveItem] = useState({
@@ -40,6 +21,23 @@ export default function ContactPreferences() {
   })
   const [data, setData] = useState({})
   const [defaultData, setDefaultData] = useState({})
+  const config = useContactPrefConfig();
+  const radioBtnsConfig = [
+    {
+      type: 'radio',
+      title: translate('label.contactPreferences.receiveOfferText'),
+      items: config,
+      id: 1,
+    },
+    {
+      type: 'radio',
+      id: 2,
+      title: translate('label.contactPreferences.dontWantReceiveOfferText'),
+      items: [],
+      default: true,
+      unsubscribe: true,
+    },
+  ]
   const { user, setUser } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
@@ -132,19 +130,19 @@ export default function ContactPreferences() {
   }
 
   return (
-    <main className="lg:px-8 px-4">
+    <main className="">
       <div className="max-w-4xl">
-        <div className="lg:px-4 sm:px-0 pt-5">
+        <div className="">
           {/* <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1> */}
           <p className="mt-2 text-sm flex flex-col text-black">
-            <span className="font-medium"> {CONTACT_PREFERENCES_TITLE}</span>
-            <span className="font-medium"> {CONTACT_PREFERENCES_SUBTITLE}</span>
+            <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescTitle')}</span>
+            <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescText')}</span>
           </p>
         </div>
       </div>
-      <div className="max-w-4xl lg:mx-12 flex flex-col mt-10">
+      <div className="max-w-4xl flex flex-col mt-10">
         <div className="lg:w-1/2 lg:flex justify-between lg:align-center">
           {items.map((btn: any, idx: number) => {
             return (
@@ -227,11 +225,11 @@ export default function ContactPreferences() {
                 <Button
                   type="submit"
                   onClick={handleSubmit}
-                  className="btn btn-c btn-primary"
+                  className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting && GENERAL_SAVE_CHANGES}
+                  {!isSubmitting && translate('common.label.saveChangesText')}
                 </Button>
               </div>
             )

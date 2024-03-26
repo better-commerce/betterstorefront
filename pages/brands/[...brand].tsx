@@ -7,8 +7,8 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { postData } from '@components/utils/clientFetcher'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { BTN_RECOMMENDED_PROD, BTN_SEE_ALL, FEATURES_HEADING, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -34,6 +34,11 @@ import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import ProductCard from '@new-components/ProductCard'
+import Heading from '@new-components/Heading/Heading'
+import Glide from '@glidejs/glide'
 
 const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
 const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
@@ -112,16 +117,44 @@ function BrandDetailPage({
   config,
   collections, // ...for Attribute Collection api response
 }: any) {
+  const translate = useTranslation()
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
-  let imageBannerCollectionResponse: any =
-    collections.imageBannerCollectionResponse
-  let imageCategoryCollectionResponse: any =
-    collections.imageCategoryCollection
+  let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
+  let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
   let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
   let productCollectionRes: any = collections.productCollection
+  let saleProductCollectionRes: any = collections.saleProductCollection
+  const sliderRef = useRef(null);
+  const sliderRefNew = useRef(null);
+  const [isShow, setIsShow] = useState(false);
+  useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+    };
+    if (!sliderRef.current) return;
+    let slider = new Glide(sliderRef.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRef]);
+
+useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+    };
+    if (!sliderRefNew.current) return;
+    let slider = new Glide(sliderRefNew.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRefNew]);
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -406,9 +439,9 @@ function BrandDetailPage({
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          This is a bad url. please go back to
+          {translate('common.label.badUrlText')}
           <Link href="/brands">
-            <span className="px-3 text-indigo-500">All brands</span>
+            <span className="px-3 text-indigo-500">{translate('common.label.allBrandsText')}</span>
           </Link>
         </h1>
       </div>
@@ -428,7 +461,7 @@ function BrandDetailPage({
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
-        <meta name="title" content={brandDetails?.name || 'Brands'} />
+        <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
@@ -439,45 +472,39 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="container w-full pb-0 mx-auto bg-white md:pb-20">
-            <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
-              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+          <div className="container w-full pb-0 mx-auto bg-white md:pb-10">
+            <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2">
+              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#1f2261] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
-                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5" />
-                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {SHOP_NOW} </button>
+                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
+                <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
               <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
+            </div>
+            <div className="mt-10">
+              <div className={`nc-SectionSliderProductCard`}>
+                <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
+                    {translate('label.product.recommendedProductText')}
+                  </Heading>
+                  <div className="glide__track" data-glide-el="track">
+                    <ul className="glide__slides">
+                      {productCollectionRes?.map((item: any, index: number) => (
+                        <li key={index} className={`glide__slide`}>
+                          <ProductCard data={item} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="mt-0 md:mt-10">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
-            <div className="mt-10">
-              <Slider images={imageCategoryCollectionResponse || []} isBanner={true} />
-            </div>
-            <div className="mt-10">
-              <div className="flex flex-col gap-4 sm:px-4">
-                <div className="flex flex-row justify-between">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {BTN_RECOMMENDED_PROD} </p>
-                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
-                </div>
-                <RecommendedProductCollection recommendedProducts={productCollectionRes} deviceInfo={deviceInfo} config={config} />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
-              {offerBannerResult?.map((val: any, Idx: number) => (
-                <OfferCard key={Idx} index={Idx} title={val.title} description={val.description} src={val.url} link={val.link} buttonText={val.buttonText} />
-              ))}
-            </div>
           </div>
 
-          <div className="container w-full pb-20 mx-auto">
-            <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {FEATURES_HEADING} {` `} {brandDetails.name} </p>
-              {!isOnlyMobile && (
-                <button className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
-              )}
-            </div>
+          <div className="container w-full mx-auto">
             {isOnlyMobile ? (
               <div className="mb-10 max-h-[30vh]">
                 <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
@@ -488,8 +515,26 @@ function BrandDetailPage({
               </div>
             )}
             <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
-            <div className="mb-20">
-              <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg"> {faq.title} </p>
+            <div className="mt-10">
+              <div className={`nc-SectionSliderProductCard`}>
+                <div ref={sliderRefNew} className={`flow-root`}>
+                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
+                    {translate('label.product.saleProductText')}
+                  </Heading>
+                  <div className="glide__track" data-glide-el="track">
+                    <ul className="glide__slides">
+                      {saleProductCollectionRes?.map((item: any, index: number) => (
+                        <li key={index} className={`glide__slide`}>
+                          <ProductCard data={item} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="my-10">
+              <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
               {faq?.results?.map((val: any, Idx: number) => {
                 return (
                   <Disclosure key={Idx} heading={val.faq} details={val.ans} />
@@ -502,7 +547,7 @@ function BrandDetailPage({
         <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
           <div className="max-w-screen-sm">
             <Link href="/brands" passHref>
-              <span className="flex items-end upper case font-12">Brands</span>
+              <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
             </Link>
             <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
               {brandDetails?.name}
@@ -514,7 +559,7 @@ function BrandDetailPage({
             }
           </div>
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> Showing {data?.products?.total} {RESULTS}</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -582,7 +627,7 @@ export async function getStaticProps({
       widgets?.forEach(async (widget: any) => {
         if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'ImageBanner'
+          widget.code == 'HeroBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
@@ -596,7 +641,7 @@ export async function getStaticProps({
           )
         } else if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'MultipleImagesBanner'
+          widget.code == 'MultipleImageBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
@@ -609,7 +654,7 @@ export async function getStaticProps({
           )
         } else if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'FeaturedDewaltImageList'
+          widget.code == 'HeroBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
@@ -623,7 +668,7 @@ export async function getStaticProps({
           )
         } else if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'FFXOffers'
+          widget.code == 'HeroBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
@@ -636,13 +681,26 @@ export async function getStaticProps({
           )
         } else if (
           widget.manufacturerSettingType == 'ProductCollection' &&
-          widget.code == 'FeaturedDewaltSaws'
+          widget.code == 'RecommendedProductCollection'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.productCollection = res.products.results
+              } catch (error: any) { }
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ProductCollection' &&
+          widget.code == 'SaleProductCollection'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const res = await getCollectionById(widget.recordId)
+                collections.saleProductCollection = res.products.results
               } catch (error: any) { }
               resolve()
             })
@@ -660,6 +718,7 @@ export async function getStaticProps({
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
       slug: slug,

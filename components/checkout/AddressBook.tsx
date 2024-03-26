@@ -6,7 +6,7 @@ import BillingAddressForm from './BillingAddressForm'
 import { isMobile } from 'react-device-detect'
 import { EmptyObject } from '@components/utils/constants'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
-import { ADD_ADDRESS, GENERAL_EDIT } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface AddressBookProps {
   editAddressValues: any
@@ -43,6 +43,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
   setDeliveryTypeMethod,
   handleCollect
 }) => {
+  const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
   const {
     shippingAddress: selectedShippingAddress,
@@ -75,7 +76,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
     } else {
       setAlert({
         type: AlertType.ERROR,
-        msg: 'Please choose shipping / billing address to continue.',
+        msg: translate('common.message.chooseShippingBillingAddressMsg'),
       })
     }
   }
@@ -104,19 +105,18 @@ const AddressBook: React.FC<AddressBookProps> = ({
           <div className="flex flex-col gap-0 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
             <div className="flex items-center justify-between w-full">
               <h5 className="px-0 font-semibold uppercase sm:px-2 font-18 dark:text-black">
-                Address Book
+                {translate('label.addressBook.addressBookTitleText')}
               </h5>
               <button
                 className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
                 onClick={onAddNewAddress}
               >
-                {ADD_ADDRESS}
+                {translate('label.addressBook.addNewAddress')}
               </button>
             </div>
             {noAddressesFound && (
               <p className=" dark:text-black">
-                No addresses were found. Please create a new address to
-                continue.
+                {translate('label.checkout.noAddressFoundText')}
               </p>
             )}
             <div
@@ -177,7 +177,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                                     onEditAddressToggleView(address)
                                   }}
                                 >
-                                  {GENERAL_EDIT}
+                                  {translate('common.label.editText')}
                                 </button>
                               </div>
                             )}
@@ -191,7 +191,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                                 onEditAddressToggleView(address)
                               }}
                             >
-                              {GENERAL_EDIT}
+                              {translate('common.label.editText')}
                             </button>
                           </div>
                         )}
@@ -223,7 +223,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                   htmlFor="useSameForBilling"
                   className="pl-1 font-semibold text-black font-14"
                 >
-                  Use same address for Billing
+                  {translate('label.checkout.useSameAddressForBillingText')}
                 </label>
               </div>
             )}
@@ -247,7 +247,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 className="mb-4 border border-black btn-primary lg:py-2 py-3 sm:px-4 px-1"
                 onClick={handleContinue}
               >
-                Continue to Delivery
+                {translate('label.checkout.continueToDeliveryText')}
               </button>
             </div>
           )}
@@ -259,7 +259,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                 onClick={handleCollect}
               >
-                Continue to Collect
+                {translate('label.checkout.continueToCollectText')}
               </button>
           </div>
         </>

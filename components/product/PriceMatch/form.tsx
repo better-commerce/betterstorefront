@@ -1,35 +1,34 @@
-import { 
-  BTN_SUBMIT, 
-  VALIDATION_ENTER_CORRECT_URL, 
-  VALIDATION_ENTER_PRODUCT_LINK, 
-  VALIDATION_ENTER_WEBSITE_LINK
-} from '@components/utils/textVariables'
-
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { config } from './config'
-const schema = Yup.object().shape({
-  websiteName: Yup.string()
-    .matches(
-      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-      VALIDATION_ENTER_CORRECT_URL
-    )
-    .required(VALIDATION_ENTER_WEBSITE_LINK),
-  websiteLink: Yup.string()
-    .matches(
-      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-      VALIDATION_ENTER_CORRECT_URL
-    )
-    .required(VALIDATION_ENTER_PRODUCT_LINK),
-  costOfProduct: Yup.number().required('Required'),
-  deliveryCost: Yup.number().required('Required'),
-  totalCost: Yup.number(),
-  name: Yup.string().required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
-  phone: Yup.string().required('Required'),
-})
+import { useConfig } from './config'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function PriceMatchForm({ submitContactForm }: any) {
+
+  const  config = useConfig()
+  const translate = useTranslation()
+
+  const schema = Yup.object().shape({
+    websiteName: Yup.string()
+      .matches(
+        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+        translate('common.message.enterCorrectUrlMsg')
+      )
+      .required(translate('common.message.enterWebsiteLinkMsg')),
+    websiteLink: Yup.string()
+      .matches(
+        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+        translate('common.message.enterCorrectUrlMsg')
+      )
+      .required(translate('common.message.enterProductLinkMsg')),
+    costOfProduct: Yup.number().required(translate('common.message.requiredTextMsg')),
+    deliveryCost: Yup.number().required(translate('common.message.requiredTextMsg')),
+    totalCost: Yup.number(),
+    name: Yup.string().required(translate('common.message.requiredTextMsg')),
+    email: Yup.string().email(translate('common.message.mailAddressInvalidMsg')).required(translate('common.message.emailAddressRequiredMsg')),
+    phone: Yup.string().required('common.message.profile.phoneNumRequiredMsg'),
+  })
+
   return (
     <Formik
       initialValues={{
@@ -77,7 +76,7 @@ export default function PriceMatchForm({ submitContactForm }: any) {
               onClick={handleSubmit}
               className="w-full max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
             >
-              {BTN_SUBMIT}
+              {translate('common.label.submitText')}
             </button>
           </div>
         </Form>

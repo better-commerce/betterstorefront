@@ -1,5 +1,5 @@
 import { NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, Messages } from '@components/utils/constants'
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, CLOSE_PANEL, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, PlayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -19,6 +19,7 @@ import { useUI } from '@components/ui'
 import cartHandler from '@components/services/cart'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -70,6 +71,7 @@ export default function ProductQuickView({
   setQuickviewOpen,
   maxBasketItemsCount,
 }: any) {
+  const translate = useTranslation()
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [close, setClose] = useState(isQuickviewOpen)
   const [updatedProduct, setUpdatedProduct] = useState<any>(null)
@@ -101,7 +103,7 @@ export default function ProductQuickView({
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find(
           (o: any) => o.productId === selectedAttrData?.productId.toUpperCase()
@@ -109,7 +111,7 @@ export default function ProductQuickView({
         if (selectedAttrData?.currentStock === cartLineItem?.qty) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -121,7 +123,7 @@ export default function ProductQuickView({
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], {
+            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), {
               maxBasketItemsCount,
             }),
           })
@@ -203,7 +205,7 @@ export default function ProductQuickView({
         !product.flags.sellWithoutInventory ||
         !selectedAttrData.sellWithoutInventory
       ) {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
       }
@@ -216,7 +218,7 @@ export default function ProductQuickView({
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.product.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -224,7 +226,7 @@ export default function ProductQuickView({
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find(
               (o: any) =>
@@ -233,7 +235,7 @@ export default function ProductQuickView({
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }
@@ -245,10 +247,8 @@ export default function ProductQuickView({
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: stringFormat(
-                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
-                  { maxBasketItemsCount }
-                ),
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
+
               })
             }
             return isValid
@@ -326,7 +326,7 @@ export default function ProductQuickView({
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -619,7 +619,7 @@ export default function ProductQuickView({
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          Quick View
+                          {translate('label.product.quickViewText')}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button
@@ -627,7 +627,7 @@ export default function ProductQuickView({
                             className="p-2 -m-2 text-gray-400 hover:text-gray-500"
                             onClick={() => setModelClose()}
                           >
-                            <span className="sr-only">{CLOSE_PANEL}</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -786,7 +786,7 @@ export default function ProductQuickView({
                                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
                                         )}
                                         <span className="sr-only">
-                                          {BTN_ADD_TO_FAVORITES}
+                                          {translate('label.product.addTofavouriteText')}
                                         </span>
                                       </button>
                                     </div>
@@ -820,7 +820,7 @@ export default function ProductQuickView({
                                           }
                                         >
                                           <span className="font-bold">
-                                            {GENERAL_ENGRAVING}
+                                          {translate('label.product.engravingText')}
                                           </span>
                                         </button>
                                         <button
@@ -838,7 +838,7 @@ export default function ProductQuickView({
                                             <HeartIcon className="flex-shrink-0 w-6 h-6" />
                                           )}
                                           <span className="sr-only">
-                                            {BTN_ADD_TO_FAVORITES}
+                                            {translate('label.product.addTofavouriteText')}
                                           </span>
                                         </button>
                                       </div>

@@ -13,12 +13,11 @@ import { useUI } from '@components/ui/context'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { NEXT_APPLY_PROMOTION, SHOW_APPLY_COUPON_SECTION } from '@components/utils/constants'
-import { PROMO_ERROR } from '@components/utils/textVariables'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { APPLY_PROMOTION,GENERAL_APPLY_TEXT } from '@components/utils/textVariables'
 import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'
 import BasketPromo from './BasketPromo'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -32,6 +31,7 @@ interface IPromotionInputProps {
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {
+  const translate = useTranslation()
   const { isMobile, isIPadorTablet } = useDevice()
   const {
     basketPromos,
@@ -189,12 +189,12 @@ const PromotionInput = (props: IPromotionInputProps) => {
         )}
       </div>
 
-      <div className="flex flex-col justify-start my-0 sm:my-0">
+      <div className="mt-7 text-sm text-slate-500 dark:text-slate-400 divide-y divide-slate-200/70 dark:divide-slate-700/80">
         {cartItems.promotionsApplied?.length
           ? cartItems.promotionsApplied.map((promo: any, key: number) => {
               return (
                 <div
-                  className="pt-2 mt-2 border-t border-gray-200"
+                  className="pt-2 mt-2"
                   key={`promo-${key}`}
                 >
                   <div
@@ -202,13 +202,13 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     key={key}
                   >
                     <div className="flex">
-                      <h5 className="font-medium uppercase text-primary dark:text-black text-14 xs-text-14">
+                      <h5 className="text-sm text-gray-600">
                         {' '}
                         {promo.promoCode}
                       </h5>
                     </div>
                     <div className="flex justify-end">
-                      <h5 className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                      <h5 className="font-semibold text-black text-md">
                         {promo?.discountAmt?.raw?.withTax > 0 ? (
                           <div className="flex">
                             <span>
@@ -225,7 +225,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                             />
                           </div>
                         ) : (
-                          <span>Free Gift Added</span>
+                          <span className='text-emerald-600'>{translate('label.basket.freeGiftAddedText')}</span>
                         )}
                         {!promo?.autoApply && (
                           <a href="javascript: void(0);">
@@ -309,10 +309,10 @@ const PromotionInput = (props: IPromotionInputProps) => {
               <div className="flex items-center justify-between gap-2 mb-2 -mt-1 text">
                 <input
                   name={'promotion-code'}
-                  placeholder={APPLY_PROMOTION}
+                  placeholder={translate('label.promotion.applyPromotionText')}
                   onChange={handleChange}
                   value={value}
-                  className="w-full min-w-0 placeholder-gray-500 border border-gray-300 appearance-none placeholder:text-sm focus:outline-none focus:border-gray-700 btn"
+                  className="w-full min-w-0 placeholder-gray-500 border border-gray-300 appearance-none placeholder:text-sm focus:outline-none focus:border-gray-700 btn !font-semibold"
                   required
                 />
 
@@ -321,16 +321,16 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     await applyCouponInput('applyInput', value)
                   }
                   type="submit"
-                  title={GENERAL_APPLY_TEXT}
-                  className={`flex items-center justify-center btn btn-secondary w-full`}
+                  title={translate('common.label.applyText')}
+                  className={`flex items-center justify-center btn btn-secondary w-full !font-medium`}
                 >
-                  {GENERAL_APPLY_TEXT}
+                  {translate('common.label.applyText')}
                 </button>
               </div>
             </div>
             {error && (
               <div className="mb-2 text-xs text-red-400 capitalize">
-                {PROMO_ERROR}
+                {translate('common.message.promoCodeInvalidErrorMsg')}
               </div>
             )}
           </div>

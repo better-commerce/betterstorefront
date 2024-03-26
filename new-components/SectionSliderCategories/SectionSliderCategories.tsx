@@ -11,6 +11,7 @@ import department3Png from "images/collections/department3.png";
 import department4Png from "images/collections/department4.png";
 import { StaticImageData } from "next/image";
 import Link from "next/link";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface CardCategoryData {
   name: string;
@@ -59,6 +60,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
   itemClassName = "",
   data,
 }) => {
+  const translate = useTranslation()
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
 
@@ -124,48 +126,27 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
               </li>
             ))}
             <li className={`glide__slide ${itemClassName}`}>
-              <div
-                className={`flex-1 relative w-full h-0 rounded-2xl overflow-hidden group aspect-w-1 aspect-h-1 bg-slate-100`}
-              >
+              <div className={`flex-1 relative w-full h-0 rounded-2xl overflow-hidden group aspect-w-1 aspect-h-1 bg-slate-100`} >
                 <div>
                   <div className="absolute flex flex-col justify-center inset-y-6 inset-x-10 sm:items-center">
                     <div className="relative flex text-slate-900">
                       <span className="text-lg font-semibold ">
-                        More collections
+                        {translate('label.section.moreCollectionsText')}
                       </span>
-                      <svg
-                        className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M18.0701 9.57L12.0001 3.5L5.93005 9.57"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></path>
-                        <path
-                          d="M12 20.4999V3.66992"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></path>
+                      <svg className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                        <path d="M18.0701 9.57L12.0001 3.5L5.93005 9.57" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" ></path>
+                        <path d="M12 20.4999V3.66992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" ></path>
                       </svg>
                     </div>
                     <span className="mt-1 text-sm text-slate-800">
-                      Show me more
+                      {translate('common.label.showMeMoreText')}
                     </span>
                   </div>
                 </div>
                 <Link
                   href={"/collection"}
                   className="absolute inset-0 transition-opacity bg-black opacity-0 group-hover:opacity-100 bg-opacity-10"
-                ></Link>
+                >{translate('common.label.showMeMoreText')}</Link>
               </div>
             </li>
           </ul>

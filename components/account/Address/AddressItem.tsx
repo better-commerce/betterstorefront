@@ -2,12 +2,11 @@ import { useState } from 'react'
 import Form from './AddressBookForm'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { GENERAL_EDIT, GENERAL_DELETE, GENERAL_DEFAULT_DELIVERY_ADDRESS, GENERAL_DEFAULT_BILLING_ADDRESS, } from '@components/utils/textVariables'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function AddressItem({
   item,
   updateAddress,
@@ -17,6 +16,7 @@ export default function AddressItem({
   deleteAddress,
   onEditAddress = (id: number) => { },
 }: any) {
+  const translate = useTranslation();
   const [isEditMode, setEditMode] = useState(false)
   const {
     title,
@@ -136,25 +136,21 @@ export default function AddressItem({
           {isB2B ? (
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
-                <div>
-                  <span className="text-xl font-bold">
+                <div className='flex items-center justify-between w-full'>
+                  <span className="font-semibold uppercase font-20">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
-                    <span className="flex items-start mt-1">
-                      <span className="px-0 font-bold text-black uppercase font-12">
-                        {label}
-                      </span>
+                    <span className="px-2 font-semibold text-black uppercase rounded-xl bg-slate-200 font-12">
+                      {label}
                     </span>
                   )}
                 </div>
                 <div>
                   {item?.isDefault && (
-                    <div className="p-1 px-2 bg-black border rounded-md">
-                      <span className="font-medium text-white font-12">
-                        Default
-                      </span>
-                    </div>
+                    <span className="px-2 py-1 font-semibold text-white uppercase bg-indigo-700 rounded-xl font-12">
+                      {translate('common.label.defaultText')}
+                    </span>
                   )}
                 </div>
               </div>
@@ -175,13 +171,13 @@ export default function AddressItem({
                       }}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_EDIT}
+                      {translate('common.label.editText')}
                     </button>
                     <button
                       onClick={deleteOpenModal}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_DELETE}
+                      {translate('common.label.deleteText')}
                     </button>
                   </div>}
 
@@ -191,25 +187,21 @@ export default function AddressItem({
           ) : (
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
-                <div>
-                  <span className="text-xl font-bold">
+                <div className='flex items-center justify-between w-full'>
+                  <span className="font-semibold uppercase font-20">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
-                    <span className="flex items-start mt-1">
-                      <span className="px-0 font-bold text-black uppercase font-12">
-                        {label}
-                      </span>
+                    <span className="px-2 font-semibold text-black uppercase rounded-xl bg-slate-200 font-12">
+                      {label}
                     </span>
                   )}
                 </div>
                 <div>
                   {item?.isDefault && (
-                    <div className="p-1 px-2 bg-black border rounded-md">
-                      <span className="font-medium text-white font-12">
-                        Default
-                      </span>
-                    </div>
+                    <span className="px-2 py-1 font-semibold text-white uppercase bg-indigo-700 rounded-xl font-12">
+                      {translate('common.label.defaultText')}
+                    </span>
                   )}
                 </div>
               </div>
@@ -219,8 +211,8 @@ export default function AddressItem({
                   <span>{item?.address2}</span>
                   <span>{item?.address3}</span>
                   <span>{item?.country}</span>
-                  <span> {item?.city} - {item?.postCode} 
-                  </span> <span>{item?.phoneNo}</span> 
+                  <span> {item?.city} - {item?.postCode}
+                  </span> <span>{item?.phoneNo}</span>
                 </div>
                 <div className='w-full'>
                   <div className="justify-end w-full mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
@@ -230,13 +222,13 @@ export default function AddressItem({
                       }}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_EDIT}
+                      {translate('common.label.editText')}
                     </button>
                     <button
                       onClick={deleteOpenModal}
                       className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
                     >
-                      {GENERAL_DELETE}
+                      {translate('common.label.deleteText')}
                     </button>
                   </div>
 

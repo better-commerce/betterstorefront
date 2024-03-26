@@ -6,7 +6,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import useCart from '@components/services/cart'
 import PLPSort from './PLPSort'
-import { FILTER_TITLE } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 type PLPFilterSidebarProps = {
   handleSortBy: Function
@@ -16,6 +16,7 @@ type PLPFilterSidebarProps = {
 }
 
 const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar, handleTogglePLPSidebar, plpFilterState }) => {
+  const translate = useTranslation()
   const { closeSidebar, setWishlist, user, wishlistItems, basketId, setCartItems, removeFromWishlist } = useUI()
   const { getWishlist, deleteWishlistItem } = useWishlist()
   const { addToCart } = useCart()
@@ -140,7 +141,7 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar
                     <div className="sticky top-0 p-3 bg-white border-b border-gray-200">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          {FILTER_TITLE}
+                          {translate('label.filters.filterAndSortingText')}
                         </Dialog.Title>
                         <div className="flex items-center">
                           <button

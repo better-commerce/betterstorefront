@@ -17,6 +17,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { t as translate } from "i18next";
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -95,7 +96,7 @@ export default abstract class BasePaymentButton
               status: false,
               state: {
                 type: 'SET_ERROR',
-                payload: Messages.Errors[orderResult?.message],
+                payload: translate('common.message.checkout.paymentAlreadyCompletedErrorMsg'),
               },
               result: null,
             }

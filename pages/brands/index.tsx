@@ -1,21 +1,22 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
-import { GetServerSideProps } from 'next'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Layout } from '@components/common'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useState } from 'react'
+import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -45,6 +46,7 @@ const dataNormalizr = (data: any = []) => {
 function BrandsPage({ brands }: any) {
   const router = useRouter()
   const data = dataNormalizr(brands.results)
+  const translate = useTranslation()
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
     const filteredData = data.filter((item: any) => {
@@ -66,7 +68,7 @@ function BrandsPage({ brands }: any) {
     eventType: BrandViewed,
     pageTitle: 'Brands',
   })
-  useEffect(() => {}, [])
+  useEffect(() => { }, [])
 
   function handleScrollView(letter: any) {
     window.location.href = `#${letter.target.text?.toUpperCase()}`
@@ -85,58 +87,36 @@ function BrandsPage({ brands }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" href={SITE_ORIGIN_URL+ router.asPath} />
-        <title>Brands</title>
-        <meta name="title" content="Brands" />
-        <meta name="description" content="Brands" />
-        <meta name="keywords" content="Brands" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('common.label.brandsText')}</title>
+        <meta name="title" content={translate('common.label.brandsText')} />
+        <meta name="description" content={translate('common.label.brandsText')} />
+        <meta name="keywords" content={translate('common.label.brandsText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="Brands" key="ogtitle" />
-        <meta property="og:description" content="Brands" key="ogdesc" />
+        <meta property="og:title" content={translate('common.label.brandsText')} key="ogtitle" />
+        <meta property="og:description" content={translate('common.label.brandsText')} key="ogdesc" />
       </NextHead>
       <div className="bg-white">
         {/* Mobile menu */}
         <main className="container pb-24 mx-auto overflow-hidden">
           <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-6">
-            <h1 className="font-extrabold tracking-tight text-gray-900">
-              Brands
+            <h1 className="text-2xl font-semibold text-gray-900 sm:text-5xl">
+              {translate('common.label.brandsText')}
             </h1>
-            <h2 className="mt-2 font-medium tracking-tight text-gray-500 sm:text-xl">
-              {totalResults} results
-            </h2>
-            <div className="flex flex-wrap items-center justify-center w-full py-5">
+            <div className="flex flex-wrap items-center justify-center w-full py-5 mx-auto sm:w-4/5">
               {ALPHABET.split('').map((letter: any, key: number) => {
-                const brandExists = !!normalizedBrands.find(
-                  (brand: any) =>
-                    brand.title.toUpperCase() === letter.toUpperCase()
-                )
+                const brandExists = !!normalizedBrands.find((brand: any) => brand.title.toUpperCase() === letter.toUpperCase())
                 if (brandExists) {
                   return (
                     <div className="flex" key={`brand-letter-${key}`}>
-                      {/* <Link
-                        legacyBehavior
-                        passHref
-                        // href={`#${letter.toUpperCase()}`}
-                        // href={ {pathname: `#${letter.toUpperCase()}`, query: { scrollOffset: 100 }} }
-                        onClick={handleScrollView}
-                      > */}
-                      <a
-                        onClick={(letter: any) => {
-                          handleScrollView(letter)
-                        }}
-                        className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border hover:bg-indigo-600 hover:text-white sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg"
-                      >
+                      <a onClick={(letter: any) => { handleScrollView(letter) }} className="grid items-center justify-center w-8 h-8 mt-1 mr-1 text-sm font-semibold text-gray-900 border cursor-pointer sm:w-12 sm:h-12 hover:bg-slate-600 rounded-xl bg-slate-50 border-slate-400 hover:text-white sm:mr-3 sm:mt-5 sm:text-lg" >
                         {letter.toUpperCase()}
                       </a>
-                      {/* </Link> */}
                     </div>
                   )
                 }
                 return (
-                  <span
-                    key={key}
-                    className="px-2 py-1 mt-2 mr-1 text-sm font-extrabold text-gray-900 border pointer-events-none sm:mr-3 sm:mt-5 sm:py-2 sm:px-4 sm:text-lg opacity-40"
-                  >
+                  <span key={key} className="grid items-center justify-center w-8 h-8 mt-1 mr-1 text-sm font-semibold border cursor-not-allowed sm:w-12 sm:h-12 text-slate-300 hover:bg-slate-100 rounded-xl bg-slate-100 border-slate-200 sm:mr-3 sm:mt-5 sm:text-lg" >
                     {letter.toUpperCase()}
                   </span>
                 )
@@ -145,48 +125,35 @@ function BrandsPage({ brands }: any) {
             <div className="flex items-center justify-center w-full py-5">
               <div className="flex flex-row w-1/3 px-4 py-2 border border-gray-300 rounded-md shadow-sm min-w-searchbar ">
                 <label className="hidden" htmlFor={'search-bar'}>
-                  Search
+                  {translate('label.search.searchText')}
                 </label>
-                <input
-                  id={'search-bar'}
-                  className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                  placeholder="Search..."
-                  onChange={(e: any) => handleSearch(e.target.value)}
-                />
-                <div className="text-gray-400">
+                <input id={'search-bar'} className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white border-0 appearance-none" placeholder="Search..." onChange={(e: any) => handleSearch(e.target.value)} />
+                <div className="relative text-gray-400 top-2">
                   <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
                 </div>
               </div>
             </div>
           </div>
-          {normalizedBrands.map((brand: any, idx: number) => (
-            <div
-              key={`brands-${idx}`}
-              className="flex flex-col px-0 py-4 border-t sm:px-4 md:px-6 lg:px-6 2xl:px-2 sm:py-10"
-            >
-              <h2
-                id={brand.title.toUpperCase()}
-                className="text-2xl font-extrabold text-gray-900 sm:text-4xl"
-              >
-                {brand.title.toUpperCase()}
-              </h2>
-              <div className="flex flex-wrap items-center justify-between py-0 mt-6 gap-y-4 sm:py-2">
-                {brand.results.map((brands: any, brandIdx: number) => (
-                  <div
-                    key={`brand-list-${brandIdx}`}
-                    style={{ flex: '0 0 33.333333%' }}
-                    className="flex text-gray-900 sm:inline-flex"
-                  >
-                    <Link passHref href={brands.link}>
-                      <span className="py-2 text-sm cursor-pointer sm:text-lg sm:py-5 hover:text-orange-500 hover:underline hover:font-medium">
-                        {brands?.manufacturerName}
-                      </span>
-                    </Link>
-                  </div>
-                ))}
+          <div className='grid grid-cols-1 gap-10 mx-auto sm:grid-cols-3 sm:w-4/5'>
+            {normalizedBrands.map((brand: any, idx: number) => (
+              <div key={`brands-${idx}`} className="flex flex-col mb-6 sm:mb-6">
+                <h2 id={brand.title.toUpperCase()} className="pb-3 mb-3 text-2xl font-semibold text-gray-900 border-b-2 sm:text-5xl border-sky-700">
+                  {brand.title.toUpperCase()}
+                </h2>
+                <div className="flex flex-col gap-2">
+                  {brand.results.map((brands: any, brandIdx: number) => (
+                    <div key={`brand-list-${brandIdx}`} className="flex text-gray-900 sm:inline-flex" >
+                      <Link passHref href={brands.link}>
+                        <span className="py-2 text-sm capitalize cursor-pointer sm:text-lg sm:py-5 hover:text-sky-700 hover:underline hover:font-medium">
+                          {brands?.manufacturerName.toLowerCase()}
+                        </span>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </main>
       </div>
     </>
@@ -206,13 +173,14 @@ export async function getStaticProps({
     cachedDataUID.brandsUID,
   ])
   let brandsUIDData: any = parseDataValue(cachedData, cachedDataUID.brandsUID)
-  if(!brandsUIDData){
+  if (!brandsUIDData) {
     brandsUIDData = await getBrands({})
     await setData([{ key: cachedDataUID.brandsUID, value: brandsUIDData }])
   }
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       brands: brandsUIDData?.result,
       snippets: brandsUIDData?.snippets ?? [],
     },

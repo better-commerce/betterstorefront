@@ -1,4 +1,5 @@
 // Base Imports
+import { useTranslation } from '@commerce/utils/use-translation'
 import React from 'react'
 
 // Package Imports
@@ -9,6 +10,7 @@ type PanelProps = React.PropsWithChildren<{
 }>
 
 const SearchPanel = ({ header, children }: PanelProps) => {
+    const translate = useTranslation();
     const { results } = useInstantSearch()
 
     return (
@@ -19,7 +21,7 @@ const SearchPanel = ({ header, children }: PanelProps) => {
             {
                 (!results.__isArtificial && results.nbHits === 0) ? (
                     <div className="ml-4 m-2">
-                        No results found for <strong>{results.query}</strong>.
+                        {translate('label.search.noResultFoundForText')} <strong>{results.query}</strong>.
                     </div>
                 ) : (
                     <div className="ais-Panel-body">{children}</div>

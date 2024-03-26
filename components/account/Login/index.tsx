@@ -10,11 +10,10 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { GENERAL_LOGIN, INVALID_ACCOUNT, LOGIN_SUCCESSFUL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -22,6 +21,7 @@ interface LoginProps {
 }
 
 export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], }: LoginProps) {
+  const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
     isGuestUser,
@@ -56,10 +56,10 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
         setNoAccount(true)
-        setAlert({ type: 'error', msg: INVALID_ACCOUNT })
+        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
       } else if (result.data) {
         setNoAccount(false)
-        setAlert({ type: 'success', msg: LOGIN_SUCCESSFUL })
+        setAlert({ type: 'success', msg: translate('common.message.loginSuccessMsg') })
         let userObj = { ...result.data }
         // get user updated details
         const updatedUserObj = await axios.post(
@@ -94,7 +94,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
   if (!isGuestUser && user.userId) {
     return (
       <div className="w-full h-full font-extrabold text-center text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -105,10 +105,10 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
+      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20 px-10">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-            {GENERAL_LOGIN}
+            {translate('label.login.loginBtnText')}
           </h1>
         </div>
         <div className="max-w-md mx-auto space-y-6">
@@ -125,18 +125,18 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
             </span>
             <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
           </div>
-          <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? INVALID_ACCOUNT : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
+          <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
           <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
             <Link href="/my-account/forgot-password" passHref>
               <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
-                Forgot password?
+                {translate('label.login.forgotPasswordBtnText')}
               </span>
             </Link>
           </div>
           <span className="block text-center text-neutral-700 dark:text-neutral-300">
-            New user? {` `}
+            {translate('label.login.newUserText')}{` `}
             <Link className="text-green-600" href="/my-account/register">
-              Create an account
+              {translate('label.login.createAccountText')}
             </Link>
           </span>
         </div>

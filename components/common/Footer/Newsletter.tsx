@@ -1,15 +1,10 @@
-import {
-  GENERAL_EMAIL_ADDRESS,
-  BTN_SIGN_UP,
-  SIGN_UP_FOR_NEWSLETTER,
-  SIGN_UP_TEXT,
-} from '@components/utils/textVariables'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
 import { useUI } from '@components/ui'
+import { useTranslation } from '@commerce/utils/use-translation'
 export default function Newsletter() {
+  const translate = useTranslation()
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
   const { setAlert } = useUI()
@@ -26,9 +21,9 @@ export default function Newsletter() {
       setValue('')
       setAlert({
         type: 'success',
-        msg: 'Email Registered Successfully for Newsletter',
+        msg: translate('label.newsLetter.successText'),
       })
-    } else setErr('Enter a valid email')
+    } else setErr(translate('common.message.validEmailErrorMsg'))
   }
 
   useEffect(() => {
@@ -39,10 +34,10 @@ export default function Newsletter() {
     <>
       {/* footer newsletter start */}
       <h4 className="my-4 font-bold text-black uppercase sm:my-0 text-footer-clr ">
-        {SIGN_UP_FOR_NEWSLETTER}
+        {translate('label.newsLetter.signupText')}
       </h4>
       <p className="mt-1 text-gray-900 text-md text-footer-clr ">
-        {SIGN_UP_TEXT}
+        {translate('label.newsLetter.signupTitle')}
       </p>
       <form
         className="flex mt-6 sm:max-w-md"
@@ -52,13 +47,13 @@ export default function Newsletter() {
         }}
       >
         <label htmlFor="email-address" className="sr-only">
-          {GENERAL_EMAIL_ADDRESS}
+          {translate('label.newsLetter.emailLabelText')}
         </label>
         <input
           id="email-address"
           type="text"
           name={'email-address'}
-          placeholder="Enter Email ID"
+          placeholder={translate('common.message.enterEmailText')}
           value={value}
           onChange={handleChange}
           className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
@@ -68,7 +63,7 @@ export default function Newsletter() {
             type="submit"
             className="flex items-center justify-center w-full h-full btn btn-secondary border-footer-btn"
           >
-            {BTN_SIGN_UP}
+            {translate('label.newsLetter.signupBtnTitle')}
           </button>
         </div>
       </form>

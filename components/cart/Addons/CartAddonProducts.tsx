@@ -4,7 +4,6 @@ import { useRef, useState } from 'react'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import cartHandler from '@components/services/cart'
-import { RELATED_PRODUCT_WITHGROUP_TEXT } from '@components/utils/textVariables'
 import AddonCard from './AddonCard'
 const QuickViewModal = dynamic(() => import('@components/product/QuickView/ProductQuickView'))
 
@@ -89,7 +88,6 @@ export default function CartAddonProducts({ products, deviceInfo, maxBasketItems
               color: product?.variantGroupCode,
               category: product?.classification?.mainCategoryName,
               current_page: currentPage,
-              header: RELATED_PRODUCT_WITHGROUP_TEXT,
             },
           },
         })

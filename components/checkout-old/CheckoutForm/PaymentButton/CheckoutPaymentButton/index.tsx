@@ -9,6 +9,7 @@ import {
   PaymentMethodType,
 } from '@better-commerce/bc-payments-sdk'
 import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
+import { t as translate } from "i18next";
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
@@ -19,7 +20,6 @@ import { requestPayment } from '@framework/utils/payment-util'
 import { LocalStorage, Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages, } from '@components/utils/constants'
-import { GENERAL_PAY } from '@components/utils/textVariables'
 import { getItem, setItem } from '@components/utils/localStorage'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
@@ -60,7 +60,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Initiating order...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,
@@ -81,7 +81,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -104,7 +104,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
 
   private onCardSubmitted(): void {
     const { uiContext }: any = this.props
-    uiContext?.setOverlayLoaderState({ visible: true, message: 'Please wait...', })
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
   }
 
   private onCardTokenized(ev: any): void { }
@@ -159,7 +159,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               currency: orderResult?.currencyCode,
               payment_type: CheckoutPaymentType.Regular,
               reference: getOrderId(orderInfo?.order),
-              description: `Items for Order: ${orderId}; Basket: ${orderResult?.basketId}`,
+              description: `${translate('label.checkoutForm.itemsForOrderText')}: ${orderId}; ${translate('label.basket.basketText')}: ${orderResult?.basketId}`,
               capture: true,
               capture_on: new Date().toISOString(),
 
@@ -233,12 +233,12 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                 uiContext?.hideOverlayLoaderState()
                 if (paymentResult?.hasError) {
                   if (paymentResult?.error?.data?.error_codes?.length && paymentResult?.error?.data?.error_codes.includes('payment_method_not_supported')) {
-                    dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['PAYMENT_METHOD_NOT_SUPPORTED'], })
+                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentMethodNotSupportedErrorMsg')})
                   } else {
-                    dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+                    dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg')})
                   }
                 } else {
-                  dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+                  dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg')})
                 }
               }
             }).catch((error: any) => {
@@ -246,11 +246,11 @@ export class CheckoutPaymentButton extends BasePaymentButton {
             })
           } else {
             uiContext?.hideOverlayLoaderState()
-            dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+            dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
           }
         }).catch((error: any) => {
           uiContext?.hideOverlayLoaderState()
-          dispatchState({ type: 'SET_ERROR', payload: Messages.Errors['GENERIC_ERROR'], })
+          dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
         })
     }
   }
@@ -307,7 +307,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               ) => {
                 uiContext?.setOverlayLoaderState({
                   visible: true,
-                  message: 'loading...',
+                  message: translate('common.message.loaderLoadingText'),
                 })
                 that.setState({ confirmed: true })
               },
@@ -470,7 +470,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                           uiContext,
                           dispatchState
                         ),
-                      btnTitle: GENERAL_PAY,
+                      btnTitle: translate('label.checkout.payText'),
                     },
                   })}
               </div>

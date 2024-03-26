@@ -2,13 +2,13 @@ import withAuth from '@components/utils/withAuth'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from '@components/utils/classNames'
 import { useState } from 'react'
-import { BTN_SUBMIT, ERROR_WOOPS_SOMETHING_WENT_WRONG, GENERAL_REVIEW_OUT_OF_FIVE, MESSAGE_CHARACTERS_LEFT, POST_YOUR_REVIEW, REVIEW_COMMENT, REVIEW_TITLE } from '@components/utils/textVariables'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
 import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const MIN_LENGTH = 5
 const MAX_LENGTH = 240
@@ -20,6 +20,7 @@ interface ReviewInputProps {
 }
 
 const ReviewInput = ({ productId }: ReviewInputProps) => {
+  const translate = useTranslation()
   const [rating, setRating] = useState(5)
   const [asyncMessage, setAsyncMessage] = useState('')
 
@@ -60,7 +61,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
         if (cb) cb()
         setAsyncMessage('Review submitted successfully.')
       } catch (error) {
-        setAsyncMessage(ERROR_WOOPS_SOMETHING_WENT_WRONG)
+        setAsyncMessage(translate('common.message.somethingWentWrongMsg'))
         if (cb) cb()
       }
     }
@@ -70,7 +71,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
   return (
     <>
       <h2 className="font-18 mb-6 font-semibold text-black">
-        {POST_YOUR_REVIEW}
+        {translate('label.product.postYourReviewText')}
       </h2>
       {asyncMessage ? (
         <span className="text-2xl text-gray-900">{asyncMessage}</span>
@@ -78,7 +79,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
         <form onSubmit={formik.handleSubmit}>
           <input
             name="title"
-            placeholder={REVIEW_TITLE}
+            placeholder={translate('label.product.reviewTitleText')}
             value={formik.values.title}
             onChange={formik.handleChange}
             className="w-full min-w-0 px-4 py-2 mt-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none sm:mb-5 sm:w-1/3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
@@ -93,7 +94,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             value={formik.values.comment}
             onChange={formik.handleChange}
             className="w-full h-20 mt-2 px-3 py-2 font-medium leading-normal text-gray-900 placeholder-gray-700 border border-gray-400 rounded-sm bg-gray-50 focus:outline-none focus:bg-white"
-            placeholder={REVIEW_COMMENT}
+            placeholder={translate('label.product.typeYourTitleText')}
           />
           {formik.touched.comment && formik.errors.comment && (
             <span className="text-sm text-red-400">
@@ -101,7 +102,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             </span>
           )}
           <span className="float-right text-sm text-gray-900">
-            {MESSAGE_CHARACTERS_LEFT}:{' '}
+            {translate('label.product.charactersLeftText')}:{' '}
             {MAX_LENGTH - formik.values.comment.length}
           </span>
           <div className="flex mt-5 flex-row items-center">
@@ -118,7 +119,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             ))}
             <p className="ml-3 mt-1 text-sm sm:text-[16px]  text-gray-700">
               {rating}
-              <span className="sr-only"> {GENERAL_REVIEW_OUT_OF_FIVE}</span>
+              <span className="sr-only"> {translate('label.product.outOf5starsText')}</span>
             </p>
           </div>
           <button
@@ -126,7 +127,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
             className="flex items-center justify-center flex-1 float-right max-w-xs btn btn-primary sm:w-full disabled:!bg-gray-100 !text-gray-300 disabled:cursor-not-allowed disabled:select-none"
             disabled={formik.isSubmitting}
           >
-            {BTN_SUBMIT}
+            {translate('common.label.submitText')}
           </button>
         </form>
       )}

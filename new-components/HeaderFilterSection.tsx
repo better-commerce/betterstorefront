@@ -8,6 +8,7 @@ import { Transition } from "@headlessui/react";
 import Nav from "./shared/Nav/Nav";
 import NavItem from "./shared/NavItem/NavItem";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface HeaderFilterSectionProps {
   className?: string;
@@ -16,18 +17,19 @@ export interface HeaderFilterSectionProps {
 const HeaderFilterSection: FC<HeaderFilterSectionProps> = ({
   className = "mb-12",
 }) => {
+  const translate = useTranslation();
   const [isOpen, setIsOpen] = useState(true);
-  const [tabActive, setTabActive] = useState("All items");
+  const [tabActive, setTabActive] = useState(translate('common.label.allItemsText'));
 
   return (
     <div className={`flex flex-col relative ${className}`}>
-      <Heading>{`What's trending now`}</Heading>
+      <Heading>{translate('common.label.whatsTrendingText')}</Heading>
       <div className="flex flex-col justify-between space-y-6 lg:flex-row lg:items-center lg:space-y-0 lg:space-x-2 ">
         <Nav
           className="sm:space-x-2"
           containerClassName="relative flex w-full overflow-x-auto text-sm md:text-base hiddenScrollbar"
         >
-          {["All items", "Women", "Mans", "Kids", "jewels"].map(
+          {[translate('common.label.allItemsText'), translate('common.label.womenKeyword'), translate('common.label.menKeyword'), translate('common.label.kidsText'), translate('common.label.jewelsText') ].map(
             (item, index) => (
               <NavItem
                 key={index}
@@ -72,7 +74,7 @@ const HeaderFilterSection: FC<HeaderFilterSectionProps> = ({
               />
             </svg>
 
-            <span className="block truncate ml-2.5">Filter</span>
+            <span className="block truncate ml-2.5">{translate('label.filters.filterText')}</span>
             <span className="absolute -translate-y-1/2 top-1/2 right-5">
               <ChevronDownIcon
                 className={`w-5 h-5 ${isOpen ? "rotate-180" : ""}`}

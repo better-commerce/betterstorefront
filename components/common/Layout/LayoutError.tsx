@@ -9,11 +9,11 @@ import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
 import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
-import { GENERAL_COOKIE_TEXT } from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { WishlistSidebarView } from '@components/wishlist'
 import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import LoginSideBarView from '@components/account/Login/LoginSideBarView'
+import { useTranslation } from '@commerce/utils/use-translation'
 const BulkAddSidebarView = dynamic(() => import('@components/bulk-add/BulkAddSidebarView'))
 const LoginSidebarView = dynamic(() => import('@components/account/Login/LoginSideBarView'))
 const MainNav2Logged = dynamic(() => import('@new-components/Header/MainNav2Logged'))
@@ -32,12 +32,15 @@ const Loading = () => (
 )
 const primaryButtonStyle = { backgroundColor: 'black' }
 const secondaryButtonStyle = { backgroundColor: 'gray' }
-const Content = () => (
-  <>
-    <h3></h3>
-    <p>{GENERAL_COOKIE_TEXT}</p>
-  </>
-)
+const Content = () => {
+  const translate = useTranslation()
+  return (
+    <>
+      <h3></h3>
+      <p>{translate('label.message.cookiesText')}</p>
+    </>
+  )
+}
 interface Props {
   children: any
   pageProps: {
@@ -105,6 +108,7 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
   const [isLoading, setIsLoading] = useState(false)
   const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
+  const translate = useTranslation()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
 
@@ -159,7 +163,7 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={`text-base sm:pt-24 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} />
           {displayAlert && <AlertRibbon />}
           {children}
           <FooterClean navItems={navTree?.footer} />

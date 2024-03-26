@@ -2,7 +2,7 @@ import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_ASSOCIATE_CART, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
@@ -12,19 +12,18 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BTN_REGISTER_FOR_FREE, GENERAL_EMAIL, VALIDATION_EMAIL_ALREADY_IN_USE, VALIDATION_ENTER_A_VALID_EMAIL, VALIDATION_YOU_ARE_ALREADY_LOGGED_IN } from '@components/utils/textVariables'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
-import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
-import commerce from '@lib/api/commerce'
-import { decrypt, encrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
 import Link from 'next/link'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
-
+  const translate = useTranslation()
   useEffect(() => {
     setError(apiError)
   }, [apiError])
@@ -35,7 +34,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       error ? setError('') : false
       await submit(value)
     } else {
-      setError(VALIDATION_ENTER_A_VALID_EMAIL)
+      setError(translate('common.message.pleaseEnterAValidEmailText'))
     }
   }
 
@@ -56,13 +55,13 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       </div>
       <div className="relative text-center">
         <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-          OR
+          {translate('label.myAccount.orText')}
         </span>
         <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
       </div>
       <div className="flex flex-col items-center justify-center w-full">
         <div className="w-full px-5 font-semibold sm:px-0">
-          <label className="text-neutral-800 dark:text-neutral-200">{GENERAL_EMAIL}</label>
+          <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
           <input
             className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
             value={value}
@@ -90,6 +89,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
+  const translate = useTranslation()
   const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
@@ -117,7 +117,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   if (!isGuestUser && user.userId) {
     return (
       <div className="w-full h-full font-extrabold text-center text-gray-900">
-        {VALIDATION_YOU_ARE_ALREADY_LOGGED_IN}
+        {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
   }
@@ -176,7 +176,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
 
     // Trigger error message for failed registration.
     if (!userCreated) {
-      setError(Messages.Errors['GENERIC_ERROR'])
+      setError(translate('common.message.requestCouldNotProcessErrorMsg'))
     }
 
     // If registration is SUCCESS
@@ -204,7 +204,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
       if (!data.length) {
         setHasPassedEmailValidation(true)
       } else {
-        setError(VALIDATION_EMAIL_ALREADY_IN_USE)
+        setError(translate('common.message.emailAlreadyInUseText'))
       }
     } catch (error) {
       console.log(error)
@@ -216,7 +216,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
             <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
-              Signup
+              {translate('label.register.freeRegisterText')}
             </h1>
           </div>
           <div className="max-w-md mx-auto space-y-6">
@@ -243,9 +243,9 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
             )}
 
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
-              Already have an account? {` `}
+              {translate('label.myAccount.alreadyAccountText')} {` `}
               <Link className="text-green-600" href="/my-account/login">
-                Sign in
+                {translate('label.myAccount.SignInText')}
               </Link>
             </span>
           </div>
@@ -262,7 +262,10 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export default withDataLayer(RegisterPage, PAGE_TYPE)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   return {
-    props: {}, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
   }
 }

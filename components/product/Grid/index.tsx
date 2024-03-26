@@ -59,9 +59,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
                   </div>
                 ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <div key={`products-${productIdx}`}>
-                  <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
-                </div>
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
               ))}
             </div>
           }
@@ -87,9 +85,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
                 </div>
               ))}
             {products.results.map((product: any, productIdx: number) => (
-              <div key={`products-${productIdx}`}>
-                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
-              </div>
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
             ))}
           </div>
           {products.pages > 1 && (

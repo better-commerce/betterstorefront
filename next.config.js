@@ -18,7 +18,6 @@ module.exports = withCommerceConfig({
   },
   //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',  
   commerce,
-  i18n: { locales: ['es'], defaultLocale: 'en-US' },
   rewrites() {
     return [
       { source: '/robots.txt', destination: '/api/robots' },

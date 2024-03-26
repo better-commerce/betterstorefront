@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 // Package Imports
 import axios from 'axios'
-import moment from 'moment'
 import Link from 'next/link'
-import Router from 'next/router'
 import { Highlight, Snippet } from 'react-instantsearch'
 import classNames from 'classnames'
 import dynamic from 'next/dynamic'
@@ -16,13 +14,14 @@ import SearchQuickView from '@components/product/QuickView/SearchQuickView'
 // Other Import
 import { useUI } from '@components/ui'
 //import type { Hit } from 'instantsearch.js'
-import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, QUICK_VIEW } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import cartHandler from '@components/services/cart'
 import { cartItemsValidateAddToCart, getAlgoliaSearchCurrencyLabel, getAlgoliaSearchListPriceColumn, getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@components/utils/constants'
-import { deliveryDateFormat, matchStrings, roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { deliveryDateFormat, matchStrings, roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
 import ProductTag from '@components/product/ProductTag'
 import { isMobile } from 'react-device-detect'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -34,6 +33,7 @@ type HitProps = {
 }
 
 const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
+  const translate = useTranslation()
   const { user, basketId, cartItems, setCartItems, setAlert, openNotifyUser, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const isIncludeVAT = vatIncluded()
   const [quantity, setQuantity] = useState(1)
@@ -44,7 +44,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, hit?.objectID, true)) {
@@ -54,7 +54,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
         if (hit?.webstock === cartLineItem?.qty && !hit?.fulfilFromSupplier) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
           })
           return false
         }
@@ -62,7 +62,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
         if (!isValid) {
           setAlert({
             type: 'error',
-            msg: Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
+            msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
           })
           return false
         }
@@ -94,12 +94,12 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
       shortMessage: '',
     }
     if (hit?.webstock <= 0 && hit?.itemvisibleonwebsite) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.isNotifyMeEnabled = true
       buttonConfig.action = async () => handleNotification()
       buttonConfig.buttonType = 'button'
     } else if (!hit?.webstock && hit?.preorder) {
-      buttonConfig.title = BTN_PRE_ORDER
+      buttonConfig.title = translate('label.product.preOrderText')
       buttonConfig.isPreOrderEnabled = true
       buttonConfig.buttonType = 'button'
       buttonConfig.shortMessage = hit?.preordershortmessage
@@ -154,7 +154,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
         {isMobile ? null : (
           hit?.webstock < 11 && hit?.webstock > 0 &&
           <div className={`${hit?.webstock > 0 ? 'bg-yellow-300 text-black' : 'bg-red-500 text-white'} absolute right-0 px-2 py-1 text-xs font-semibold  rounded-md top-2`}>
-            Only {hit?.webstock} left!
+            {translate('label.product.generateOptions.onlyText')} {hit?.webstock} {translate('label.product.generateOptions.leftText')} 
           </div>
         )}
       </div>
@@ -172,7 +172,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
           <span className="px-1 font-normal text-gray-400 line-through">{hit[currencyLabel]}{roundToDecimalPlaces(hit[listPriceColumn])}</span>
         )}
 
-        <span className="pl-1 text-sm font-light text-right text-gray-400">{isIncludeVAT ? "inc. VAT" : "ex. VAT"}</span>
+        <span className="pl-1 text-sm font-light text-right text-gray-400">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
       </div>
       <div className="py-2 hit-content">
         <div className='flex flex-col'>
@@ -217,7 +217,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
               <div className="flex items-center justify-between w-full px-0 py-3 my-2 text-sm font-semibold text-left text-black border-t border-gray-200 h-9 product-name hover:text-gray-950">
                 <span>
                   <>
-                    Get it by{' '}
+                    {translate('label.basket.getIt')} {' '}
                     {deliveryDateFormat(etaDate)}
                   </>
                 </span>
@@ -238,7 +238,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
                 className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
                 onClick={async () => await handleQuickViewData(hit)}
               >
-                <span className="uppercase">{QUICK_VIEW}</span>
+                <span className="uppercase">{translate('label.product.quickViewText')}</span>
               </SimpleButton>
             </div>
           )}
@@ -252,7 +252,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
               className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
               onClick={async () => await handleQuickViewData(hit)}
             >
-              <span className="uppercase">{QUICK_VIEW}</span>
+              <span className="uppercase">{translate('label.product.quickViewText')}</span>
             </SimpleButton>
             <div className="grid items-center w-full grid-cols-12 gap-1 justify-stretch">
               <div className="col-span-3">

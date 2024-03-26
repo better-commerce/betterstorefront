@@ -1,34 +1,22 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import LikeButton from "@new-components/LikeButton";
 import { StarIcon } from "@heroicons/react/24/solid";
-import BagIcon from "@new-components/BagIcon";
-import NcInputNumber from "@new-components/NcInputNumber";
 import { PRODUCTS } from "@components/data/data";
-import {
-  NoSymbolIcon,
-  ClockIcon,
-  SparklesIcon,
-  HeartIcon,
-} from "@heroicons/react/24/outline";
-import IconDiscount from "@new-components/IconDiscount";
+import { HeartIcon } from "@heroicons/react/24/outline";
 import Prices from "@new-components/Prices";
-import toast from "react-hot-toast";
 import detail1JPG from "images/products/detail1.jpg";
 import detail2JPG from "images/products/detail2.jpg";
 import detail3JPG from "images/products/detail3.jpg";
-import NotifyAddTocart from "./NotifyAddTocart";
 import AccordionInfo from "@new-components/AccordionInfo";
-import Image from "next/image";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
-import { BTN_ADD_TO_FAVORITES, BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, GENERAL_ENGRAVING, IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
 import AttributesHandler from "@components/product/ProductView/AttributesHandler";
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
 import ProductTag from "@components/product/ProductTag";
-import { LoadingDots, useUI } from "@components/ui";
+import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
@@ -36,6 +24,7 @@ import cartHandler from "@components/services/cart";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import wishlistHandler from "@components/services/wishlist";
 import dynamic from "next/dynamic";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ProductQuickViewProps {
   className?: string;
@@ -49,9 +38,6 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
   const { openNotifyUser, basketId, cartItems, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
-  const [variantActive, setVariantActive] = useState(0);
-  const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
-  const [qualitySelected, setQualitySelected] = useState(1);
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
@@ -59,7 +45,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [sizeInit, setSizeInit] = useState('')
   let currentPage = getCurrentPage()
-
+  const translate = useTranslation();
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
     if (colour) {
       setVariantInfo((v: any) => ({
@@ -122,14 +108,14 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     fetchIsQuickView()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  })
+  }, [])
   const handleNotification = () => {
     openNotifyUser(product.recordId)
   }
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: GENERAL_ADD_TO_BASKET,
+      title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o.productId, selectedAttrData?.recordId, true) || matchStrings(o.productId, selectedAttrData?.productId, true)) {
@@ -137,13 +123,13 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           }
         })
         if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
-          setAlert({ type: 'error', msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'], })
+          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
           return false
         }
         const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount,)
         if (!isValid) {
           setAlert({
-            type: 'error', msg: stringFormat(Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'], { maxBasketItemsCount, }),
+            type: 'error', msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), { maxBasketItemsCount, }),
           })
         }
         return isValid
@@ -212,7 +198,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
-      buttonConfig.title = BTN_NOTIFY_ME
+      buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
     } else if (
@@ -224,7 +210,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         (!product.flags.sellWithoutInventory ||
           selectedAttrData.sellWithoutInventory)
       ) {
-        buttonConfig.title = BTN_PRE_ORDER
+        buttonConfig.title = translate('label.product.preOrderText')
         buttonConfig.shortMessage = product.preOrder.shortMessage
         return buttonConfig
       } else if (
@@ -232,13 +218,13 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         selectedAttrData.sellWithoutInventory
       ) {
         buttonConfig = {
-          title: GENERAL_ADD_TO_BASKET,
+          title: translate('label.basket.addToBagText'),
           validateAction: async () => {
             const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty && !selectedAttrData?.fulfilFromSupplier && !selectedAttrData?.flags?.sellWithoutInventory) {
               setAlert({
                 type: 'error',
-                msg: Messages.Errors['CART_ITEM_QTY_MAX_ADDED'],
+                msg: translate('common.message.cartItemMaxAddedErrorMsg'),
               })
               return false
             }
@@ -249,10 +235,8 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             if (!isValid) {
               setAlert({
                 type: 'error',
-                msg: stringFormat(
-                  Messages.Errors['CART_ITEM_QTY_LIMIT_EXCEEDED'],
-                  { maxBasketItemsCount }
-                ),
+                msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
+
               })
             }
             return isValid
@@ -330,7 +314,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           shortMessage: '',
         }
       } else {
-        buttonConfig.title = BTN_NOTIFY_ME
+        buttonConfig.title = translate('label.product.notifyMeText')
         buttonConfig.action = async () => handleNotification()
         buttonConfig.type = 'button'
         return buttonConfig
@@ -438,7 +422,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             handleFetchProductQuickView={handleFetchProductQuickView}
             isQuickView={true}
             sizeInit={sizeInit}
-            setSizeInit={setSizeInit} />          
+            setSizeInit={setSizeInit} />
         }
       </div>
     );
@@ -449,8 +433,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     if (!status) {
       return null;
     }
-    const CLASSES =
-      "absolute top-3 start-3 px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-700 text-slate-900 dark:text-slate-300";
+    const CLASSES = "absolute top-3 start-3";
     return (
       <div className={CLASSES}>
         <ProductTag product={product} />
@@ -475,7 +458,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   <span>{product?.rating}</span>
                   <span className="block mx-2">·</span>
                   <span className="underline text-slate-600 dark:text-slate-400">
-                    {product?.reviewCount} reviews
+                    {product?.reviewCount} {translate('common.label.reviews')}
                   </span>
                 </div>
               </Link>
@@ -495,7 +478,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
               </button>
             </div>
           )}
@@ -508,7 +491,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
               <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                 <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                 <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                  <span className="font-bold"> {GENERAL_ENGRAVING} </span>
+                  <span className="font-bold"> {translate('label.product.engravingText')} </span>
                 </button>
                 <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
@@ -516,14 +499,14 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {BTN_ADD_TO_FAVORITES} </span>
+                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
                 </button>
               </div>
             </>
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {quickViewData && <AccordionInfo data={[{ name: "Description", content: quickViewData?.description }]} />}
+        {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: quickViewData?.description }]} />}
       </div>
     );
   };

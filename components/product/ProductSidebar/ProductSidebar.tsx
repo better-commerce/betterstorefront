@@ -9,7 +9,7 @@ import {
   selectDefaultOptionFromProduct,
   SelectedOptions,
 } from '../helpers'
-import { GENERAL_ADD_TO_BASKET, GENERAL_CARE_TEXT, GENERAL_DETAILS, GENERAL_DETAILS_TEXT, GENERAL_NOT_AVAILABLE } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ProductSidebarProps {
   product: Product
@@ -17,6 +17,7 @@ interface ProductSidebarProps {
 }
 
 const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ product, className }) => {
+  const translate = useTranslation()
   const addItem = useAddItem()
   const { openSidebar } = useUI()
   const [loading, setLoading] = useState(false)
@@ -42,12 +43,12 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
       />
       <div className="flex flex-row justify-between items-center">
         <Rating value={4} />
-        <div className="text-accent-6 pr-1 font-medium text-sm">36 reviews</div>
+        <div className="text-accent-6 pr-1 font-medium text-sm">{translate('label.product.productSidebar.36reviewsText')}</div>
       </div>
       <div>
         {process.env.COMMERCE_CART_ENABLED && (
           <Button
-            aria-label={GENERAL_ADD_TO_BASKET}
+            aria-label={translate('label.basket.addToBagText')}
             type="button"
             className={s.button}
             onClick={addToCart}
@@ -55,17 +56,17 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
             disabled={variant?.availableForSale === false}
           >
             {variant?.availableForSale === false
-              ? GENERAL_NOT_AVAILABLE
-              : GENERAL_ADD_TO_BASKET}
+              ? translate('common.label.notAvailableText')
+              : translate('label.basket.addToBagText')}
           </Button>
         )}
       </div>
       <div className="mt-6">
-        <Collapse title={GENERAL_CARE_TEXT}>
-          {GENERAL_CARE_TEXT}
+        <Collapse title={translate('label.product.productSidebar.careText')}>
+          {translate('label.product.productSidebar.careText')}
         </Collapse>
-        <Collapse title={GENERAL_DETAILS}>
-          {GENERAL_DETAILS_TEXT}
+        <Collapse title={translate('common.label.detailsText')}>
+          {translate('label.product.productSidebar.detailsDescriptionText')}
         </Collapse>
       </div>
     </div>

@@ -8,6 +8,7 @@ import NavItem2 from "@new-components/NavItem2";
 import CardCategory6 from "@new-components/CardCategories/CardCategory6";
 import { DEMO_MORE_EXPLORE_DATA, ExploreType } from "./data";
 import Nav from "../shared/Nav/Nav";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionGridMoreExploreProps {
   className?: string;
@@ -22,7 +23,8 @@ const SectionGridMoreExplore: FC<SectionGridMoreExploreProps> = ({
   gridClassName = "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
   data = DEMO_MORE_EXPLORE_DATA.filter((_, i) => i < 6),
 }) => {
-  const [tabActive, setTabActive] = useState("Man");
+  const translate = useTranslation()
+  const [tabActive, setTabActive] = useState(translate('common.label.manKeywordText'));
 
   const renderCard = (item: ExploreType) => {
     switch (boxCard) {
@@ -74,7 +76,7 @@ const SectionGridMoreExplore: FC<SectionGridMoreExploreProps> = ({
           isCenter
           desc=""
         >
-          Start exploring.
+          {translate('common.label.startExploringText')}
         </Heading>
         {/* <Nav
           className="p-1 overflow-x-auto bg-white rounded-full shadow-lg dark:bg-neutral-800 hiddenScrollbar"

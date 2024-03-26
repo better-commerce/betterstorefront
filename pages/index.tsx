@@ -5,9 +5,10 @@ import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Layout } from '@components/common'
 import commerce from '@lib/api/commerce'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -16,6 +17,7 @@ import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency 
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 const SectionHero2 = dynamic(() => import('@new-components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@new-components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@new-components/SectionSliderProductCard'))
@@ -76,6 +78,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const hostName = os.hostname()
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       globalSnippets: infra?.snippets ?? [],
       snippets: slugs?.snippets ?? [],
       pageContentsWeb: pageContentWebUIDData,
@@ -93,6 +96,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
+  const translate = useTranslation()
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
 
@@ -144,8 +148,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         <NextHead>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
-          <title>{pageContents?.metatitle || 'Home'}</title>
-          <meta name="title" content={pageContents?.metatitle || 'Home'} />
+          <title>{pageContents?.metatitle || translate('common.label.homeText')}</title>
+          <meta name="title" content={pageContents?.metatitle || translate('common.label.homeText')} />
           {pageContents?.metadescription && (<meta name="description" content={pageContents?.metadescription} />)}
           {pageContents?.metakeywords && (<meta name="keywords" content={pageContents?.metakeywords} />)}
           <meta property="og:image" content={pageContents?.image} />

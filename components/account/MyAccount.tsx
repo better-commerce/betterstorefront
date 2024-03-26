@@ -1,7 +1,8 @@
+import { useTranslation } from '@commerce/utils/use-translation'
 import { useEffect } from 'react'
-import { MY_ACCOUNT_TITLE } from '@components/utils/textVariables'
 
 export default function MyAccount() {
+  const translate = useTranslation()
   useEffect(() => {}, [])
-  return <div className="text-gray-900">{MY_ACCOUNT_TITLE}</div>
+  return <div className="text-gray-900">{translate('common.label.myAccountText')}</div>
 }

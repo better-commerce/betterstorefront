@@ -14,7 +14,7 @@ import { useUI } from '@components/ui'
 import { findByFieldName } from '@framework/utils/app-util'
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'
 import { Messages } from '@components/utils/constants'
-import { matchStrings } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export const NEW_ADDRESS_FORM_ID = 'newAddressForm'
 export const NEW_ADDRESS_FORM_FIELDS = [
@@ -187,69 +187,7 @@ export const NEW_ADDRESS_FORM_FIELDS = [
     htmlFor: 'whtsappUpdated',
   },
 ]
-export const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
-  id: Yup.number().notRequired(),
-  postCode: Yup.string()
-    .required(Messages.Validations.AddNewAddress['POST_CODE_REQUIRED'])
-    .min(3),
-  // .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
-  //   message: Messages.Validations.AddNewAddress['PIN_CODE_NUM'],
-  // }),
-  city: Yup.string()
-    .required(Messages.Validations.AddNewAddress['CITY_REQUIRED'])
-    .min(3),
-  state: Yup.string().min(3)
-  .required(Messages.Validations.AddNewAddress['STATE_REQUIRED']),
-  address1: Yup.string()
-    .min(15)
-    .required(Messages.Validations.AddNewAddress['ADDRESS_1_REQUIRED'])
-    .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress['ADDRESS_1_INPUT'],
-    }),
-  address2: Yup.string().nullable()
-    .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress['ADDRESS_2_INPUT'],
-    }),
-  address3: Yup.string().nullable()
-    .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
-      message: Messages.Validations.AddNewAddress['ADDRESS_3_INPUT'],
-  }),
-  country: Yup.string().required(Messages.Validations.AddNewAddress['COUNTRY_REQUIRED']),
-  useAsDefault: Yup.boolean(),
-  firstName: Yup.string()
-    .min(3)
-    .required(Messages.Validations.AddNewAddress['FIRST_NAME_REQUIRED'])
-    .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
-      message: Messages.Validations.AddNewAddress['FIRST_NAME_INPUT'],
-  }),
-  lastName: Yup.string()
-    .min(3)
-    .required(Messages.Validations.AddNewAddress['LAST_NAME_REQUIRED'])
-    .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
-      message: Messages.Validations.AddNewAddress['LAST_NAME_INPUT'],
-  }),
-  mobileNumber: Yup.string()
-    .max(10)
-    .required(Messages.Validations.AddNewAddress['MOBILE_NUMBER_REQUIRED'])
-    .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
-      message: Messages.Validations.AddNewAddress['MOBILE_NUMBER_INPUT'],
-    }),
-  label: Yup.string().nullable(),
-  otherAddressType: Yup.string().nullable(),
-  whtsappUpdated: Yup.boolean(),
-  // .when(["categoryName"], {
-  //     is: (label: string) => {
-  //         return matchStrings(categoryName, "Other", true);
-  //     },
-  //     then: Yup.string().min(3, Messages.Validations.AddNewAddress["ADDRESS_TYPE_MIN_LENGTH"])
-  //         .required(Messages.Validations.AddNewAddress["ADDRESS_TYPE_REQUIRED"])
-  //         .matches(
-  //             Messages.Validations.RegularExpressions.ADDRESS_LABEL, {
-  //             message: Messages.Validations.AddNewAddress["ADDRESS_TYPE_INPUT"],
-  //         }).nullable(),
-  //     otherwise: Yup.string().nullable(),
-  // }),
-})
+
 export const DEFAULT_ADDRESS_VALUES = {
   id: 0,
   postCode: '',
@@ -263,41 +201,104 @@ export const DEFAULT_ADDRESS_VALUES = {
   lastName: '',
   mobileNumber: '',
   categoryName: findByFieldName(NEW_ADDRESS_FORM_FIELDS, 'categoryName')
-    ?.options?.length
-    ? findByFieldName(NEW_ADDRESS_FORM_FIELDS, 'categoryName')?.options[0]
+  ?.options?.length
+  ? findByFieldName(NEW_ADDRESS_FORM_FIELDS, 'categoryName')?.options[0]
         ?.value
-    : '',
-  otherAddressType: '',
-  whtsappUpdated: true,
-}
+        : '',
+        otherAddressType: '',
+        whtsappUpdated: true,
+      }
 
-interface INewAddressModalProps {
-  readonly selectedAddress: any | undefined
-  readonly submitState: ISubmitStateInterface
-  readonly countries: any
-  readonly isOpen: boolean
-  readonly btnTitle: string
-  readonly isRegisterAsGuestUser: boolean
-  onSubmit: any
-  onCloseModal: any
-}
-
-const NewAddressModal = (props: INewAddressModalProps) => {
-  const {
-    selectedAddress = undefined,
-    submitState,
-    isOpen,
-    onSubmit,
-    countries,
-    onCloseModal = () => {},
-    btnTitle,
-    isRegisterAsGuestUser,
-  } = props
-
-  const { user, selectedAddressId } = useUI()
-
-  return (
-    <>
+      interface INewAddressModalProps {
+        readonly selectedAddress: any | undefined
+        readonly submitState: ISubmitStateInterface
+        readonly countries: any
+        readonly isOpen: boolean
+        readonly btnTitle: string
+        readonly isRegisterAsGuestUser: boolean
+        onSubmit: any
+        onCloseModal: any
+      }
+      
+      const NewAddressModal = (props: INewAddressModalProps) => {
+        const {
+          selectedAddress = undefined,
+          submitState,
+          isOpen,
+          onSubmit,
+          countries,
+          onCloseModal = () => {},
+          btnTitle,
+          isRegisterAsGuestUser,
+        } = props
+        const translate = useTranslation()
+        const NEW_ADDRESS_FORM_SCHEMA = Yup.object().shape({
+          id: Yup.number().notRequired(),
+          postCode: Yup.string()
+            .required(translate('common.message.postCodeRequiredMsg'))
+            .min(3),
+          // .matches(/^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$/, {
+          //   message: translate('common.message.address.postCodeNumMsg'),
+          // }),
+          city: Yup.string()
+            .required(translate('common.message.address.cityRequiredMsg'))
+            .min(3),
+          state: Yup.string().min(3)
+          .required(translate('common.message.address.stateRequiredMsg')),
+          address1: Yup.string()
+            .min(15)
+            .required(translate('common.message.address.address1RequiredMsg'))
+            .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
+              message: translate('common.message.address.address1InputMsg'),
+            }),
+          address2: Yup.string().nullable()
+            .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
+              message: translate('common.message.address.address2InputMsg'),
+            }),
+          address3: Yup.string().nullable()
+            .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
+              message: translate('common.message.address.address3InputMsg'),
+          }),
+          country: Yup.string().required(translate('common.message.address.countryRequiredMsg')),
+          useAsDefault: Yup.boolean(),
+          firstName: Yup.string()
+            .min(3)
+            .required(translate('common.message.firstNameRequiredMsg'))
+            .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
+              message: translate('common.message.nameInputMsg'),
+          }),
+          lastName: Yup.string()
+            .min(3)
+            .required(translate('common.message.lastNameRequiredMsg'))
+            .matches(Messages.Validations.RegularExpressions.FULL_NAME, {
+              message: translate('common.message.nameInputMsg'),
+          }),
+          mobileNumber: Yup.string()
+            .max(10)
+            .required(translate('common.message.mobileNumRequiredMsg'))
+            .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
+              message: translate('common.message.mobileNumInputMsg'),
+            }),
+          label: Yup.string().nullable(),
+          otherAddressType: Yup.string().nullable(),
+          whtsappUpdated: Yup.boolean(),
+          // .when(["categoryName"], {
+          //     is: (label: string) => {
+          //         return matchStrings(categoryName, "Other", true);
+          //     },
+          //     then: Yup.string().min(3, Messages.Validations.AddNewAddress["ADDRESS_TYPE_MIN_LENGTH"])
+          //         .required(Messages.Validations.AddNewAddress["ADDRESS_TYPE_REQUIRED"])
+          //         .matches(
+          //             Messages.Validations.RegularExpressions.ADDRESS_LABEL, {
+          //             message: Messages.Validations.AddNewAddress["ADDRESS_TYPE_INPUT"],
+          //         }).nullable(),
+          //     otherwise: Yup.string().nullable(),
+          // }),
+        })
+        const { user, selectedAddressId } = useUI()
+        
+        return (
+          <>
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-999999" onClose={onCloseModal}>
           <div className="fixed inset-0 left-0 bg-gray-900/20" />
@@ -325,9 +326,9 @@ const NewAddressModal = (props: INewAddressModalProps) => {
                               <i className="mr-2 sprite-icon sprite-left-arrow"></i>
                             </a>
                             {selectedAddressId ? (
-                              <>Edit Address</>
+                              <>{translate('common.label.editAddressText')}</>
                             ) : (
-                              <>Add Address</>
+                              <>{translate('common.label.addAddressText')}</>
                             )}
                           </h3>
                           <button
@@ -335,7 +336,7 @@ const NewAddressModal = (props: INewAddressModalProps) => {
                             className="hidden text-black rounded-md outline-none hover:text-gray-500 sm:inline-block"
                             onClick={onCloseModal}
                           >
-                            <span className="sr-only">Close panel</span>
+                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"

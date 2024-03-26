@@ -573,7 +573,7 @@ a {
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #fff;
+  background: transparent;
 
   /* Center slide text vertically */
   display: -webkit-box;
@@ -1355,7 +1355,7 @@ body {
 }
 
 .main-custom-check {
-  display: none;
+  display: none !important;
 }
 
 .main-custom-check:checked + .main-custom-check-label {
@@ -3635,6 +3635,7 @@ select {
 }
 .inset-0 {
   inset: 0px;
+  /* z-index: 9999 !important; */
 }
 .inset-0\.5 {
   inset: 0.125rem;
@@ -17223,4 +17224,59 @@ input[type=time]::-webkit-calendar-picker-indicator {
   width: 100% !important;
   height: 100vh !important;
   z-index: 99999 !important;
+}
+@media screen and  (max-width: 767px) {
+  .mob-flex-cart-pro{
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+.icon-input-form .las.name:before {
+  content: "\f007";
+}
+.icon-input-form .las.Email:before{
+  content: "\f0e0";
+}
+.icon-input-form .las.Number:before{
+  content: "\f2a0";
+}
+.terms-text p {
+  margin-top: 14px !important;
+  margin-bottom: 10px !important;
+}
+
+.terms-text p > a,
+.terms-text li > a {
+  color: blue;
+}
+.terms-text td, th {
+  border: 1px solid;
+  padding: 5px;
+}
+.terms-text table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.terms-text th,
+.terms-text td {
+  width: 33.33%;
+}
+.terms-text th {
+  background-color: blue;
+  color: white;
+  font-weight: 600;
+}
+.contact-text li {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+.contact-text h4 {
+  font-size: 22px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+.container-demostore{
+  margin-left: 30px;
+  margin-right: 30px;
 }

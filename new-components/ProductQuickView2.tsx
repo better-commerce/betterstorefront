@@ -20,12 +20,14 @@ import detail3JPG from "images/products/detail3.jpg";
 import NotifyAddTocart from "./NotifyAddTocart";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ProductQuickView2Props {
   className?: string;
 }
 
 const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
+  const translate = useTranslation()
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
 
@@ -57,7 +59,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
       <div>
         <label htmlFor="">
           <span className="text-sm font-medium">
-            Color:
+            {translate('common.label.colorText')}:
             <span className="ml-1 font-semibold">
               {variants[variantActive].name}
             </span>
@@ -104,7 +106,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
         <div className="flex justify-between text-sm font-medium">
           <label htmlFor="">
             <span className="">
-              Size:
+            {translate('label.thankyou.sizeText')}:
               <span className="ml-1 font-semibold">{sizeSelected}</span>
             </span>
           </label>
@@ -114,7 +116,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
             href="##"
             className="text-primary-6000 hover:text-primary-500"
           >
-            See sizing chart
+            {translate('common.label.seeSizingChartText')} 
           </a>
         </div>
         <div className="grid grid-cols-5 gap-2 mt-3 sm:grid-cols-7">
@@ -197,7 +199,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
         {/* ---------- 1 HEADING ----------  */}
         <div>
           <h2 className="text-2xl font-semibold 2xl:text-3xl">
-            <Link href="/product-detail">Heavy Weight Shoes</Link>
+            <Link href="/product-detail">{translate('common.label.heavyWeightShoesText')}</Link>
           </h2>
 
           <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
@@ -220,7 +222,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
                   <span>4.9</span>
                   <span className="block mx-2">·</span>
                   <span className="underline text-slate-600 dark:text-slate-400">
-                    142 reviews
+                    {translate('common.label.142-reviewsText')} 
                   </span>
                 </div>
               </a>
@@ -250,7 +252,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
             onClick={notifyAddTocart}
           >
             <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" />
-            <span className="ml-3">Add to cart</span>
+            <span className="ml-3">{translate('label.basket.addTocartText')}</span>
           </ButtonPrimary>
         </div>
 
@@ -263,7 +265,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
             className="font-medium text-primary-6000 hover:text-primary-500"
             href="/product-detail"
           >
-            View full details
+            {translate('common.label.viewFullDetailsText')} 
           </Link>
         </div>
       </div>

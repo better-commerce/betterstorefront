@@ -19,7 +19,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import OverlayLoader from '@components/common/OverlayLoader'
 import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
-import { ContentSnippet } from '@components/common/Content'
+import { appWithTranslation } from 'next-i18next'
 import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
@@ -504,88 +504,36 @@ MyApp.getInitialProps = async (
     clientIPAddress = forwardedFor.split(',').at(0) ?? ''
   }
 
-  let appConfigResult,
-    navTreeResult = {
-      nav: new Array(),
-      footer: new Array(),
-    }
+  let appConfigResult, navTreeResult = { nav: new Array(), footer: new Array(), }
   let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
   let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
   let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
 
-  const headers = {
-    DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-  }
+  const headers = { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, }
   try {
     appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
-    const languageCookie =
-      req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
-
-    const currencyCookie =
-      req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
-
-    const countryCookie =
-      req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
-
-    defaultCurrency =
-      currencyCookie ||
-      appConfigResult?.result?.configSettings
-        .find((setting: any) => setting.configType === 'RegionalSettings')
-        .configKeys.find(
-          (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
-        ).value ||
-      BETTERCOMMERCE_DEFAULT_CURRENCY
-
-    defaultCountry =
-      countryCookie ||
-      appConfigResult?.result?.configSettings
-        .find((setting: any) => setting.configType === 'RegionalSettings')
-        .configKeys.find(
-          (item: any) => item.key === 'RegionalSettings.DefaultCountry'
-        ).value ||
-      BETTERCOMMERCE_DEFAULT_COUNTRY
-
-    defaultLanguage =
-      languageCookie ||
-      appConfigResult?.result?.configSettings
-        .find((setting: any) => setting.configType === 'RegionalSettings')
-        .configKeys.find(
-          (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
-        ).value ||
-      BETTERCOMMERCE_DEFAULT_LANGUAGE
-
+    const languageCookie = req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
+    const currencyCookie = req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
+    const countryCookie = req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
+    defaultCurrency = currencyCookie || appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCurrencyCode')?.value || BETTERCOMMERCE_DEFAULT_CURRENCY
+    defaultCountry = countryCookie || appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCountry')?.value || BETTERCOMMERCE_DEFAULT_COUNTRY
+    defaultLanguage = languageCookie || appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultLanguageCode')?.value || BETTERCOMMERCE_DEFAULT_LANGUAGE
   } catch (error: any) { }
 
   let appConfig = null
   if (appConfigResult) {
     const { result: appConfigData } = appConfigResult
-    const {
-      configSettings,
-      shippingCountries,
-      billingCountries,
-      currencies,
-      languages,
-      snippets,
-    } = appConfigData
+    const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
-        configSettings:
-          configSettings?.filter((x: any) =>
-            ['B2BSettings', 'BasketSettings', 'ShippingSettings'].includes(
-              x?.configType
-            )
-          ) || [],
+        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings'].includes(x?.configType)) || [],
         shippingCountries,
         billingCountries,
         currencies,
         languages,
         snippets,
       },
-      ...{
-        defaultCurrency,
-        defaultLanguage,
-        defaultCountry,
-      },
+      ...{ defaultCurrency, defaultLanguage, defaultCountry, },
     }
     appConfig = encrypt(JSON.stringify(appConfigObj))
   }
@@ -625,4 +573,4 @@ MyApp.getInitialProps = async (
   }
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

@@ -4,7 +4,6 @@ import { Layout } from '@components/common'
 
 // Package Imports
 import axios from 'axios'
-import Image from 'next/image'
 import Router from 'next/router'
 import Link from 'next/link'
 
@@ -18,19 +17,15 @@ import {
   NEXT_CANCEL_REASON,
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
 } from '@components/utils/constants'
-import {
-  CANCEL_ORDER,
-  IMG_PLACEHOLDER,
-  ORDER_CANCELLED,
-  PROCEED_TO_CANCEL,
-  REASON_CANCEL_HEADING,
-} from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
@@ -40,6 +35,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
   const [itemData, setItemData] = useState<any>(undefined)
   const [showCancellationReasons, setShowCancellationReasons] = useState(false)
   const [cancellationReasons, setCancellationReasons] = useState<any>(undefined)
+  const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const handleFetchOrderDetails = async (id: any) => {
     const { data: orderDetails }: any = await axios.post(
@@ -93,7 +89,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
       const response = await cancelOrder({ id: orderDetails?.order?.id })
       if (response) {
         setCancelLoading(false)
-        setAlert({ type: 'cancel', msg: ORDER_CANCELLED })
+        setAlert({ type: 'cancel', msg: translate('label.order.orderCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
       }
     } catch (error) {
@@ -146,7 +142,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               <Link href="/my-account/orders">
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {CANCEL_ORDER}
+                  {translate('label.order.cancelOrderText')}
                 </h3>
               </Link>
             </div>
@@ -155,7 +151,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {CANCEL_ORDER}
+                  {translate('label.order.cancelOrderText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -200,12 +196,12 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                                     <div className="flex mt-3 text-sm">
                                       <div className="w-24">
                                         <label className="font-medium dark:text-gray-900">
-                                          Size: {item?.size}
+                                          {translate('common.label.sizeText')} {item?.size}
                                         </label>
                                       </div>
                                       <div className="w-full">
                                         <label className="font-medium dark:text-gray-900">
-                                          Qty: {item?.qty}
+                                          {translate('common.label.qtyText')} {item?.qty}
                                         </label>
                                       </div>
                                     </div>
@@ -227,7 +223,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                         type="button"
                       >
                         <span className="block py-1 font-bold">
-                          {PROCEED_TO_CANCEL}
+                          {translate('common.message.proceedToCancelText')}
                         </span>
                       </Button>
                     </div>
@@ -252,7 +248,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
               >
                 <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
-                  {REASON_CANCEL_HEADING}
+                  {translate('label.cancelReason.cancelReasonHeadingText')}
                 </h3>
               </a>
             </div>
@@ -274,9 +270,11 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
 }
 
 export async function getServerSideProps(context: any) {
+  const { locale } = context
   const ids = context?.query?.ids
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props

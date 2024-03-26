@@ -5,7 +5,6 @@ import axios from 'axios'
 import AddressItem from '@components/account/Address/AddressItem'
 import Form from '@components/account/Address/AddressBookForm'
 import { LoadingDots } from '@components/ui'
-import { DETAILS_SUCCESS, DETAILS_ERROR, ADDRESS_BOOK_TITLE, DETAILS_SUBTITLE, EMPTY_ADDRESS, ADD_ADDRESS, } from '@components/utils/textVariables'
 import { CustomerAddressModel } from 'models/customer'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
@@ -16,6 +15,7 @@ import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
 import { AlertType } from '@framework/utils/enums'
+import { useTranslation } from '@commerce/utils/use-translation'
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -52,9 +52,10 @@ export function asyncHandler() {
 }
 
 export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
+  const translate = useTranslation();
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
-  const [title, setTitle] = useState(ADDRESS_BOOK_TITLE)
+  const [title, setTitle] = useState(translate('label.addressBook.addressBookTitleText'))
   const [isLoading, setIsLoading] = useState(true)
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
@@ -225,12 +226,12 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
 
   const success = () => {
     fetchAddress()
-    setTitle(DETAILS_SUCCESS)
+    setTitle(translate('label.addressBook.detailsUPdatedText'))
     window.scrollTo(0, 0)
   }
 
   const failCb = () => {
-    setTitle(DETAILS_ERROR)
+    setTitle(translate('label.addressBook.updateFailedText'))
     window.scrollTo(0, 0)
   }
 
@@ -354,7 +355,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
               closeNewAddressModal()
             })
         } else {
@@ -380,7 +381,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          setAlert({ type: AlertType.ERROR, msg: Messages.Errors['GENERIC_ERROR']})
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
           closeNewAddressModal()
         })
     }
@@ -442,7 +443,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
         <main className="lg:px-8 px-4 mt-4">
           <div className="max-w-4xl mx-auto">
             {!data.length && !isLoading && (
-              <div className="py-4 sm:py-10 lg:mx-0">{EMPTY_ADDRESS}</div>
+              <div className="py-4 sm:py-10 lg:mx-0">{translate('label.addressBook.emptyAddressBookText')}</div>
             )}
             {isLoading && <LoadingDots />}
           </div>
@@ -454,7 +455,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                   onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="p-4 font-semibold text-center cursor-pointer text-orange button uppercase"
                 >
-                  {ADD_ADDRESS}{' '}
+                  {translate('label.addressBook.addNewAddress')}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
                     <i className="sprite-icon icon-location-orange"></i>
                   </span>
@@ -507,10 +508,10 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                       className="w-full p-4 font-semibold text-center text-black border border-gray-200 cursor-pointer"
                     >
                       <span className="hidden sm:inline-block">
-                        {ADD_ADDRESS}{' '}
+                        {translate('label.addressBook.addNewAddress')}{' '}
                       </span>
                       <span className="inline-block text-sm sm:hidden">
-                        Add New Address{' '}
+                        {translate('label.addressBook.addNewAddress')} {' '}
                       </span>
                       <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                         <i className="sprite-icon icon-location-orange"></i>

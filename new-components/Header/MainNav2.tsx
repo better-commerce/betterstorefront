@@ -10,12 +10,15 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import MenuBar from "../shared/MenuBar/MenuBar";
 import { Logo } from "@components/ui";
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface MainNav2Props {
   className?: string;
+  currencies?: Array<any>;
+  languages?: Array<any>;
 }
 
-const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
+const MainNav2: FC<MainNav2Props> = ({ className = "", currencies = [], languages = [] }) => {
   const [showSearchForm, setShowSearchForm] = useState(false);
   const router = useRouter();
 
@@ -47,6 +50,7 @@ const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
   };
 
   const renderSearchForm = () => {
+    const translate = useTranslation()
     return (
       <form
         className="flex-1 py-2 text-slate-900 dark:text-slate-100"
@@ -59,7 +63,7 @@ const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
           {renderMagnifyingGlassIcon()}
           <input
             type="text"
-            placeholder="Type and press enter"
+            placeholder={translate('common.label.typeAndPressEnterText')}
             className="w-full text-base bg-transparent border-none focus:outline-none focus:ring-0"
             autoFocus
           />
@@ -100,7 +104,7 @@ const MainNav2: FC<MainNav2Props> = ({ className = "" }) => {
 
           <div className="flex items-center justify-end flex-1 ">
             {!showSearchForm && <TemplatesDropdown />}
-            {!showSearchForm && <LangDropdown />}
+            {!showSearchForm && <LangDropdown currencies={currencies} languages={languages} />}
             {!showSearchForm && (
               <button
                 className="items-center justify-center hidden w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
