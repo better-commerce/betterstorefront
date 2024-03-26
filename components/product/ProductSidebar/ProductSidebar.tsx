@@ -3,7 +3,7 @@ import { useAddItem } from '@framework/cart'
 import { FC, useEffect, useState } from 'react'
 import { ProductOptions } from '@components/product'
 import type { Product } from '@commerce/types/product'
-import { Button, Text, Rating, Collapse, useUI } from '@components/ui'
+import { Button, Text, Rating, Collapse, useUI } from '@new-components/ui'
 import {
   getProductVariant,
   selectDefaultOptionFromProduct,

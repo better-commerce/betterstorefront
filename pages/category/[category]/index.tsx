@@ -3,12 +3,12 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import { useReducer, useState, useEffect } from 'react'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
-import { postData } from '@components/utils/clientFetcher'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { postData } from '@new-components/utils/clientFetcher'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -17,9 +17,9 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { logError, maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { ProductCard } from '@components/product'
 import axios from 'axios'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
@@ -35,7 +35,7 @@ const ProductMobileFilters = dynamic(() => import('@components/product/Filters')
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
 const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 

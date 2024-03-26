@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { MASTER_DATA_ENDPOINT } from '@components/utils/constants'
+import { MASTER_DATA_ENDPOINT } from '@new-components/utils/constants'
 
 export default function getCountries() {
   return async function handler(query: any) {

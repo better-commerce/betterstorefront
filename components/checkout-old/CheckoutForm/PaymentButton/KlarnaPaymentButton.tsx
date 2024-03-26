@@ -12,14 +12,14 @@ import { IPaymentButtonProps } from './BasePaymentButton'
 // Other Imports
 import { Cookie } from '@framework/utils/constants'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
-import { Payments } from '@components/utils/payment-constants'
+import { Payments } from '@new-components/utils/payment-constants'
 import { getOrderId, getOrderInfo, sanitizeAmount, } from '@framework/utils/app-util'
 import { createOneTimePaymentOrder, initPayment, } from '@framework/utils/payment-util'
 import {
   BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { GTMUniqueEventID } from '@new-components/services/analytics/ga4'
 
 declare const Klarna: any
 

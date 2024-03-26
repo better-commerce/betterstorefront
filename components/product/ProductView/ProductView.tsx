@@ -17,29 +17,29 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Script from 'next/script';
 
 // Component Imports
-import classNames from '@components/utils/classNames'
-import { useUI } from '@components/ui/context'
-import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
-import cartHandler from '@components/services/cart'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@components/utils/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import classNames from '@new-components/utils/classNames'
+import { useUI } from '@new-components/ui/context'
+import { KEYS_MAP, EVENTS } from '@new-components/utils/dataLayer'
+import cartHandler from '@new-components/services/cart'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
+import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@new-components/services/analytics/constants'
 
 // Other Imports
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@new-components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '../ProductDetails/specifications'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import PDPCompare from '../PDPCompare'
-import { LocalStorage } from '@components/utils/payment-constants'
-import wishlistHandler from '@components/services/wishlist'
+import { LocalStorage } from '@new-components/utils/payment-constants'
+import wishlistHandler from '@new-components/services/wishlist'
 import LikeButton from '@new-components/LikeButton'
 import ProductTag from '../ProductTag'
 import { PRODUCTS } from '@components/data/data'
@@ -51,13 +51,13 @@ import ButtonSecondary from '@new-components/shared/Button/ButtonSecondary'
 import { useTranslation } from '@commerce/utils/use-translation'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
 const Reviews = dynamic(() => import('@components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
 const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
 const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))

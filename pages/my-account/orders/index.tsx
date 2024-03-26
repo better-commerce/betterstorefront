@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Layout } from '@components/common'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useConfig } from '@components/utils/myAccount'
-import withAuth from '@components/utils/withAuth'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
+import { useConfig } from '@new-components/utils/myAccount'
+import withAuth from '@new-components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-import { useUI } from '@components/ui/context'
+import { EVENTS_MAP } from '@new-components/services/analytics/constants'
+import useAnalytics from '@new-components/services/analytics/useAnalytics'
+import { useUI } from '@new-components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
 // import MyOrders from '@components/account/MyOrders'
@@ -19,7 +19,7 @@ import {
   NEXT_GET_ORDERS,
   NEXT_GET_ORDER_DETAILS,
   SITE_ORIGIN_URL,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import SideMenu from '@components/account/MyAccountMenu'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'

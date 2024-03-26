@@ -1,5 +1,5 @@
 import { useTranslation } from '@commerce/utils/use-translation';
-import countryList from '@components/utils/countryList'
+import countryList from '@new-components/utils/countryList'
 
 /**
  * This method is responsible for toggling field based on dynamic change of "Request trading account" checkbox.

@@ -2,12 +2,12 @@ import { ChangeEvent, FocusEventHandler, useEffect, useState } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
 import s from './CartItem.module.css'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import useUpdateItem from '@framework/cart/use-update-item'
 import useRemoveItem from '@framework/cart/use-remove-item'
-import Quantity from '@components/ui/Quantity'
+import Quantity from '@new-components/ui/Quantity'
 import { generateUri } from '@commerce/utils/uri-util'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 
 type ItemOption = {
   name: string

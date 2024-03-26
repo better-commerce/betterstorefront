@@ -5,7 +5,7 @@
 // Other Imports
 //import { Cookie } from '@framework/utils/constants'
 //import { decrypt } from '@framework/utils/cipher'
-import { EmptyString, SITE_HOST } from '@components/utils/constants'
+import { EmptyString, SITE_HOST } from '@new-components/utils/constants'
 
 export default function apiRouteGuard(handler: any) {
   return async (req: any, res: any) => {

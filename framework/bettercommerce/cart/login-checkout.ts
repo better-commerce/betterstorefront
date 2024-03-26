@@ -1,4 +1,4 @@
-import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
+import { CHECKOUT_ENDPOINT } from '@new-components/utils/constants'
 import fetcher from '../fetcher'
 interface Props {
   basketId: string

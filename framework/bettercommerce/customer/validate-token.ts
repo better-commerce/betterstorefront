@@ -1,5 +1,5 @@
 import fetcher from '../fetcher'
-import { CUSTOMER_BASE_API } from '@components/utils/constants'
+import { CUSTOMER_BASE_API } from '@new-components/utils/constants'
 export default async function validateToken(token: string, cookies?: any) {
   try {
     const endpoint = `${CUSTOMER_BASE_API}/validate-password-token?token=${token}`

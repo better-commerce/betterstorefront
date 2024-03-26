@@ -1,5 +1,5 @@
 import fetcher from '../fetcher'
-import { CUSTOMER_BASE_API } from '@components/utils/constants'
+import { CUSTOMER_BASE_API } from '@new-components/utils/constants'
 import validateToken from './validate-token'
 
 export default async function forgotPassword(email: string, cookies: any) {

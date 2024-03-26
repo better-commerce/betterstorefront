@@ -4,9 +4,9 @@ import { addressFinderSchema, billingAddressWithPhoneCheckout2Schema } from './c
 import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
   EmptyString,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { retrieveAddress } from '@components/checkout-old/CheckoutForm'
-import { LoadingDots, useUI } from '@components/ui'
+import { LoadingDots, useUI } from '@new-components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
 

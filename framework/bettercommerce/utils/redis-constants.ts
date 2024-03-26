@@ -3,7 +3,7 @@ import { toNumber } from 'lodash'
 //
 import { decrypt } from './cipher'
 import { stringToBoolean } from './parse-util'
-import { EmptyString } from '@components/utils/constants'
+import { EmptyString } from '@new-components/utils/constants'
 
 export module Redis {
   // Redis data keys

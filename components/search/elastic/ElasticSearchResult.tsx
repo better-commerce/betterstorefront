@@ -20,7 +20,7 @@ import {
   buildSortOptionsFromConfig,
   getConfig,
   getFacetFields,
-} from '@components/config/config-helper'
+} from '@new-components/config/config-helper'
 import {
   cartItemsValidateAddToCart,
   getElasticSearchPriceColumn,
@@ -29,10 +29,10 @@ import {
 import ElasticSearchSuggestions from './ElasticSearchSuggestions'
 import Link from 'next/link'
 import cn from 'classnames'
-import { MAX_ADD_TO_CART_LIMIT, Messages } from '@components/utils/constants'
+import { MAX_ADD_TO_CART_LIMIT, Messages } from '@new-components/utils/constants'
 import dynamic from 'next/dynamic'
-import cartHandler from '@components/services/cart'
-import { useUI } from '@components/ui'
+import cartHandler from '@new-components/services/cart'
+import { useUI } from '@new-components/ui'
 import SearchQuickView from '@components/product/QuickView/SearchQuickView'
 import {
   deliveryDateFormat,
@@ -42,8 +42,8 @@ import {
 } from '@framework/utils/parse-util'
 import { Switch } from '@headlessui/react'
 import { useTranslation } from '@commerce/utils/use-translation'
-const SimpleButton = dynamic(() => import('@components/ui/Button'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const SimpleButton = dynamic(() => import('@new-components/ui/Button'))
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {

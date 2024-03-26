@@ -1,5 +1,5 @@
 // Package Imports
-import { Messages } from '@components/utils/constants'
+import { Messages } from '@new-components/utils/constants'
 import * as Yup from 'yup'
 
 // Other Imports

@@ -5,7 +5,7 @@ import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
 import PaymentGatewayNotification from '@components/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
-import { EmptyString } from '@components/utils/constants'
+import { EmptyString } from '@new-components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export class ChequePaymentButton extends BasePaymentButton {

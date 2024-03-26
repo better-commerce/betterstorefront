@@ -7,11 +7,11 @@ import Head from 'next/head'
 import { CommerceProvider } from '@framework'
 import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
-import { IDeviceInfo, useUI } from '@components/ui/context'
-import { CURRENT_THEME } from '@components/utils/constants'
+import { IDeviceInfo, useUI } from '@new-components/ui/context'
+import { CURRENT_THEME } from '@new-components/utils/constants'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { WishlistSidebarView } from '@components/wishlist'
-import { Sidebar, Modal, LoadingDots } from '@components/ui'
+import { Sidebar, Modal, LoadingDots } from '@new-components/ui'
 import LoginSideBarView from '@components/account/Login/LoginSideBarView'
 import { useTranslation } from '@commerce/utils/use-translation'
 const BulkAddSidebarView = dynamic(() => import('@components/bulk-add/BulkAddSidebarView'))
@@ -21,10 +21,10 @@ const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView
 const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
 const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
 const CheckoutSidebarView = dynamic(() => import('@components/checkout-old/CheckoutSidebarView'))
-const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
+const NotifyUserPopup = dynamic(() => import('@new-components/ui/NotifyPopup'))
+const ProgressBar = dynamic(() => import('@new-components/ui/ProgressBar'))
 const FooterClean = dynamic(() => import('@components/common/Footer/FooterClean'))
-const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
+const AlertRibbon = dynamic(() => import('@new-components/ui/AlertRibbon'))
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />

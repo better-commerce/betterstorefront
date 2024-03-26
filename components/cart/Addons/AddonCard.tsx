@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import axios from 'axios'
 import {
   CLOTH_COLOUR_ATTRIB_NAME,
@@ -11,11 +11,11 @@ import {
   NEXT_CREATE_WISHLIST,
   Messages,
   NEXT_REMOVE_WISHLIST,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import _, { round } from 'lodash'
-import { IMG_PLACEHOLDER, } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, } from '@new-components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import cartHandler from '@components/services/cart'
+import cartHandler from '@new-components/services/cart'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, validateAddToCart, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
@@ -23,8 +23,8 @@ import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/pa
 import cn from 'classnames'
 import ButtonNotifyMe from '@components/product/ButtonNotifyMe'
 import { useTranslation } from '@commerce/utils/use-translation'
-const SimpleButton = dynamic(() => import('@components/ui/Button'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const SimpleButton = dynamic(() => import('@new-components/ui/Button'))
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
 
 interface Props {

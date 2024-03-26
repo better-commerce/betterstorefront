@@ -6,8 +6,8 @@ import * as _ from 'lodash'
 import { Formik, Form } from 'formik'
 
 // Component Imports
-import FormField from '@components/utils/FormField'
-import AddressFormField from '@components/utils/AddressFormField'
+import FormField from '@new-components/utils/FormField'
+import AddressFormField from '@new-components/utils/AddressFormField'
 
 // Other Imports
 import {
@@ -15,7 +15,7 @@ import {
   pincodeLookup,
   submittingClassName,
 } from '@framework/utils/app-util'
-import { AddressPageAction } from '@components/utils/constants'
+import { AddressPageAction } from '@new-components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
 import SubmitButton from '@components/common/SubmitButton'

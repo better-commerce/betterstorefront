@@ -7,11 +7,11 @@ import Engraving from '@components/product/Engraving'
 import classNames from 'classnames'
 import { Disclosure, Transition, Dialog } from '@headlessui/react'
 import axios from 'axios'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import { ClipboardIcon } from '@heroicons/react/24/outline'
-import { LoadingDots } from '@components/ui'
-import { Button } from '@components/ui'
+import { LoadingDots } from '@new-components/ui'
+import { Button } from '@new-components/ui'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment, useEffect } from 'react'
 import {
@@ -19,9 +19,9 @@ import {
   NEXT_REFERRAL_SEARCH,
   NEXT_REFERRAL_ADD_USER_REFEREE,
   NEXT_REFERRAL_BY_SLUG,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { useState } from 'react'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { ShoppingCartIcon } from '@heroicons/react/24/outline'

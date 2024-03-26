@@ -57,7 +57,7 @@ export default function ProductCompare({
             >
               <div className="w-full mx-auto">
                 <div className="flex flex-col h-full overflow-y-auto bg-white">
-                  <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-7 bg-tan">
+                  <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 border py-7 bg-sky-100">
                     <div className="container flex items-center justify-between mx-auto">
                       <Dialog.Title className="flex items-center gap-5 text-lg font-medium uppercase">
                         <ArrowLeftIcon
@@ -78,15 +78,15 @@ export default function ProductCompare({
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-12 md:grid-cols-12 sm:grid-cols-3">
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
-                          <div className="sticky w-full top-0 z-10 flex flex-col bg-white sm:h-[220px] md:h-[430px] h-[520px] lg:h-[516px]"></div>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
+                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent min-h-[370px]"></div>
+                          <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
                             {translate('common.label.ratingsText')}
                           </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg">
+                          <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
                           {translate('common.label.brandText')}
                           </span>
                           {attributeNames?.map((attribName: any) => (
-                            <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-semibold text-left text-black uppercase font-lg" >
+                            <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14" >
                               {attribName}
                             </span>
                           ))}

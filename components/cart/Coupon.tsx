@@ -8,13 +8,13 @@ import { ArrowLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 // Component Imports
 import SwiperCore, { Navigation } from 'swiper'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 
 //
 // Other Imports
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { NEXT_APPLY_PROMOTION } from '@components/utils/constants'
+import { NEXT_APPLY_PROMOTION } from '@new-components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any

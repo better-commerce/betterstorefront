@@ -1,7 +1,7 @@
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { useUI } from '@components/ui'
-import { useConfig } from '@components/utils/myAccount'
+import { useUI } from '@new-components/ui'
+import { useConfig } from '@new-components/utils/myAccount'
 import Link from 'next/link'
 import React from 'react'
 

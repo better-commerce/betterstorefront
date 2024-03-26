@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { BASKET_ENDPOINT } from '@components/utils/constants'
+import { BASKET_ENDPOINT } from '@new-components/utils/constants'
 export default function applyPromo() {
   async function applyPromoAsync(query: any) {
     const { basketId, promoCode, method = 'apply', cookies } = query

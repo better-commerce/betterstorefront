@@ -2,7 +2,7 @@
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
 import axios from 'axios'
 
-import { NEXT_POST_LOGGER } from '@components/utils/constants'
+import { NEXT_POST_LOGGER } from '@new-components/utils/constants'
 
 function ErrorBoundary({ children }: any) {
   const logError = async (error: Error) => {

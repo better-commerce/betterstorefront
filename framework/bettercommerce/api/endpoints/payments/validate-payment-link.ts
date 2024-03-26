@@ -1,6 +1,6 @@
 // Other Imports
 import fetcher from '@framework/fetcher'
-import { BASKET_ENDPOINT } from '@components/utils/constants'
+import { BASKET_ENDPOINT } from '@new-components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 
 export default async function useValidatePaymentLink({ link, cookies }: any) {

@@ -2,7 +2,7 @@ import { Layout } from '@components/common'
 import type { GetStaticPropsContext } from 'next'
 import getStores from '@framework/storeLocator/getStores'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
 
 interface Props {
   data: any

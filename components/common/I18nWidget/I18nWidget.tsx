@@ -7,7 +7,7 @@ import { Cross, ChevronUp } from '@components/icons'
 import ClickOutside from '@lib/click-outside'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 interface LOCALE_DATA {
   name: string
   img: {

@@ -1,7 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import Link from 'next/link'
 import axios from 'axios'
 import { Transition, Dialog } from '@headlessui/react'
@@ -10,19 +10,19 @@ import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
   TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
-} from '@components/utils/constants'
-import { Button, LoadingDots } from '@components/ui'
-import { } from '@components/utils/constants'
-import { removeItem } from '@components/utils/localStorage'
+} from '@new-components/utils/constants'
+import { Button, LoadingDots } from '@new-components/ui'
+import { } from '@new-components/utils/constants'
+import { removeItem } from '@new-components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
-import { LocalStorage } from '@components/utils/payment-constants'
+import { LocalStorage } from '@new-components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
 import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function OrderConfirmation({ config }: any) {

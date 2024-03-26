@@ -1,5 +1,5 @@
 import { generateUri } from '@commerce/utils/uri-util'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import Link from 'next/link'
 import { useTranslation } from '@commerce/utils/use-translation'
 

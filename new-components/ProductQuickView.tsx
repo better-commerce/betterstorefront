@@ -11,18 +11,18 @@ import detail3JPG from "images/products/detail3.jpg";
 import AccordionInfo from "@new-components/AccordionInfo";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@new-components/utils/textVariables";
 import AttributesHandler from "@components/product/ProductView/AttributesHandler";
 import axios from "axios";
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@new-components/utils/constants";
 import ProductTag from "@components/product/ProductTag";
-import { useUI } from "@components/ui";
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+import { useUI } from "@new-components/ui";
+const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
-import cartHandler from "@components/services/cart";
-import { recordGA4Event } from "@components/services/analytics/ga4";
-import wishlistHandler from "@components/services/wishlist";
+import cartHandler from "@new-components/services/cart";
+import { recordGA4Event } from "@new-components/services/analytics/ga4";
+import wishlistHandler from "@new-components/services/wishlist";
 import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
 

@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { ORDERS_ENDPOINT } from '@components/utils/constants'
+import { ORDERS_ENDPOINT } from '@new-components/utils/constants'
 interface Props {
   id?: string
 }

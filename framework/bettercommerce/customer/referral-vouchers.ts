@@ -1,4 +1,4 @@
-import { REFERRAL_VOUCHERS } from "@components/utils/constants";
+import { REFERRAL_VOUCHERS } from "@new-components/utils/constants";
 import fetcher from "@framework/fetcher";
 
 interface props{

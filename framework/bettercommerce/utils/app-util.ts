@@ -8,7 +8,7 @@ import fetcher from '@framework/fetcher'
 import setSessionIdCookie, {
   getExpiry,
   getMinutesInDays,
-} from '@components/utils/setSessionId'
+} from '@new-components/utils/setSessionId'
 import {
   EmptyString,
   INFRA_LOG_ENDPOINT,
@@ -17,11 +17,11 @@ import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   BETTERCOMMERCE_CURRENCY,
   EmptyObject,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-payment'
-import { LocalStorage } from '@components/utils/payment-constants'
-import { setItem, getItem, removeItem } from '@components/utils/localStorage'
+import { LocalStorage } from '@new-components/utils/payment-constants'
+import { setItem, getItem, removeItem } from '@new-components/utils/localStorage'
 import { DataSubmit } from '@commerce/utils/use-data-submit'
 import axios from 'axios'
 import { Guid } from '@commerce/types'

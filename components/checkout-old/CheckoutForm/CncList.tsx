@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import Button from '@components/ui/IndigoButton'
+import Button from '@new-components/ui/IndigoButton'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const hardcodedOpeningHours = [

@@ -3,13 +3,13 @@ import cn from 'classnames'
 import Link from 'next/link'
 import s from './WishlistCard.module.css'
 import { Trash } from '@components/icons'
-import { Button, Text } from '@components/ui'
+import { Button, Text } from '@new-components/ui'
 import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
 import {
   IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
+} from '@new-components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

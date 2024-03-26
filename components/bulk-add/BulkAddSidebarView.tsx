@@ -12,14 +12,14 @@ import { IBulkAddData } from '.'
 import { CSVForm } from './CSVForm'
 import { GridForm } from './GridForm'
 import { AddToBasketButton } from './AddToBasketButon'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 
 // Other Imports
 import { Guid } from '@commerce/types'
-import cartHandler from '@components/services/cart'
+import cartHandler from '@new-components/services/cart'
 import { stringToNumber } from '@framework/utils/parse-util'
-import { Messages, PageActions } from '@components/utils/constants'
+import { Messages, PageActions } from '@new-components/utils/constants'
 import { resetSubmitData, submitData } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

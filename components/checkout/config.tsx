@@ -6,7 +6,7 @@ import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
   EmptyString,
   Messages,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { setNativeValue } from '@framework/utils/ui-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

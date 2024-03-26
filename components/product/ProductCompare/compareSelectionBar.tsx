@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import ProductCompare from '@components/product/ProductCompare'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CompareSelectionBar({ name, showCompareProducts, isCompare, maxBasketItemsCount, deviceInfo, closeCompareProducts }: any) {

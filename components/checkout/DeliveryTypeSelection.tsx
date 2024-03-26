@@ -1,12 +1,12 @@
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   NEXT_SHIPPING_ENDPOINT,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import { RadioGroup } from '@headlessui/react'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { postData } from '@components/utils/clientFetcher'
-import { useUI } from '@components/ui'
+import { postData } from '@new-components/utils/clientFetcher'
+import { useUI } from '@new-components/ui'
 import { groupBy } from 'lodash'
 import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from '@commerce/utils/use-translation'

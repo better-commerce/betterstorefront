@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { SITEVIEW_ENDPOINT } from '@components/utils/constants'
+import { SITEVIEW_ENDPOINT } from '@new-components/utils/constants'
 
 export default function getSlugsOperation() {
   async function getSlugs({ slug = '/' }: any) {

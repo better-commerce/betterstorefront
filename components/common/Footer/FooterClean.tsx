@@ -1,5 +1,5 @@
 import React from "react";
-import { Logo } from "@components/ui";
+import { Logo } from "@new-components/ui";
 import SocialsList1 from "../SocialsList/SocialsList";
 import Link from "next/link";
 import { sanitizeHtmlContent } from "framework/utils/app-util";

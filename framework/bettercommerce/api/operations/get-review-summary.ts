@@ -1,6 +1,6 @@
 import { logError } from '@framework/utils/app-util'
 import fetcher from '../../fetcher'
-import { EmptyObject, REVIEW_SERVICE_BASE_API } from '@components/utils/constants'
+import { EmptyObject, REVIEW_SERVICE_BASE_API } from '@new-components/utils/constants'
 import { REVIEW_BASE_URL } from '@framework/utils/constants'
 
 export default function useGetReviewSummary() {

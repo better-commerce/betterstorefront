@@ -1,11 +1,11 @@
 import { useReducer, useEffect } from 'react'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@new-components/services/analytics/constants'
 
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
-import { PaymentStatus } from '@components/utils/payment-constants'
+import { PaymentStatus } from '@new-components/utils/payment-constants'
 
 /* ---------------- HOW TO ADD A NEW PAYMENT METHOD
 

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { SearchBox, withSearch } from '@elastic/react-search-ui'
 import '@elastic/react-search-ui-views/lib/styles/styles.css'
 import { useRouter } from 'next/router'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const CustomView = (props: any) => {

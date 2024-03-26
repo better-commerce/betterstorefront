@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic'
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import { useRef, useState } from 'react'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
-import cartHandler from '@components/services/cart'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
+import cartHandler from '@new-components/services/cart'
 import AddonCard from './AddonCard'
 const QuickViewModal = dynamic(() => import('@components/product/QuickView/ProductQuickView'))
 

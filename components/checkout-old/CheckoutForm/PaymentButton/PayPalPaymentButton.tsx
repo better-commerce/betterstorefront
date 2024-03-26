@@ -12,12 +12,12 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
-import { BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString, Messages, } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString, Messages, } from '@new-components/utils/constants'
 import { PayPalOrderIntent } from '@framework/api/endpoints/payments/constants'
 import { getCurrency, getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { GTMUniqueEventID } from '@new-components/services/analytics/ga4'
 
 const BUTTONS_DEFAULT_LAYOUT: any = {
   layout: 'vertical',

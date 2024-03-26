@@ -12,9 +12,9 @@ import PagerContainer from './PagerContainer'
 import QuerySuggestions from './QuerySuggestions'
 
 // Other Imports
-import { useUI } from '@components/ui'
+import { useUI } from '@new-components/ui'
 import { getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
-import { EmptyString } from '@components/utils/constants';
+import { EmptyString } from '@new-components/utils/constants';
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
 

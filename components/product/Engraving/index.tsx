@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
 import { ProductPersonaliser } from '../ProductPersonaliser'
-import LoadingDots from '@components/ui/LoadingDots'
+import LoadingDots from '@new-components/ui/LoadingDots'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from '@commerce/utils/use-translation'
 export default function Engraving({ engravingPrice = '5.99', show = false, handleToggleDialog, submitForm, product, isPersonalizeLoading, readOnly = false }: any) {

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import getFeed from '@framework/api/content/getFeed'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
 
 export default function FeedComposer({ feed }: any) {
   return (

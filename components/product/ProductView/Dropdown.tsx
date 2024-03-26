@@ -1,10 +1,10 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/solid'
-import classNames from '@components/utils/classNames'
-import { useUI } from '@components/ui/context'
+import classNames from '@new-components/utils/classNames'
+import { useUI } from '@new-components/ui/context'
 import { useRouter } from 'next/router'
-import { getProductFromAttributes } from '@components/utils/attributesGenerator'
+import { getProductFromAttributes } from '@new-components/utils/attributesGenerator'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function Dropdown({

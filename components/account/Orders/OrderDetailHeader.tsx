@@ -1,4 +1,4 @@
-import { DATE_FORMAT } from '@components/utils/constants'
+import { DATE_FORMAT } from '@new-components/utils/constants'
 import { priceFormat } from '@framework/utils/parse-util'
 import moment from 'moment'
 import React from 'react'

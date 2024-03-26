@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useUI } from '@components/ui/context'
+import { useUI } from '@new-components/ui/context'
 import Router from 'next/router'
-import useWishlist from '@components/services/wishlist'
+import useWishlist from '@new-components/services/wishlist'
 import {
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_LOGIN_CHECKOUT,
-} from '@components/utils/constants'
+} from '@new-components/utils/constants'
 import axios from 'axios'
 import Form from '@components/customer'
 import GuestForm from './GuestForm'

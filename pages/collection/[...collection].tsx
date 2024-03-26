@@ -18,15 +18,15 @@ import getCollections from '@framework/api/content/getCollections'
 import { Layout } from '@components/common'
 import os from 'os'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-import { postData } from '@components/utils/clientFetcher'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { postData } from '@new-components/utils/clientFetcher'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@new-components/utils/constants'
+import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
-import { LoadingDots } from '@components/ui'
-import { IPLPFilterState, useUI } from '@components/ui/context'
+import { LoadingDots } from '@new-components/ui'
+import { IPLPFilterState, useUI } from '@new-components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
@@ -41,7 +41,7 @@ const ProductMobileFilters = dynamic(() => import('@components/product/Filters')
 const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
 const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
 const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
 const PLPFilterSidebar = dynamic(() => import('@components/product/Filters/PLPFilterSidebarView'))
 declare const window: any
 export const ACTION_TYPES = {
