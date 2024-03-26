@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout } from '@components/common';
+import Layout from '@new-components/Layout/Layout';
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, INFRA_ENDPOINT, KEYWORDS_ENDPOINT, NAV_ENDPOINT, NEXT_PUBLIC_API_CACHING_LOG_ENABLED } from '@new-components/utils/constants';
 import { GetServerSideProps } from 'next';
 import commerce from '@lib/api/commerce';

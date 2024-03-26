@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from 'react'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { Tab } from '@headlessui/react'
 import { useConfig } from '@new-components/utils/myAccount'

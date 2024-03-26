@@ -1,7 +1,7 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import { ProductView } from '@components/product'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { maxBasketItemsCount } from '@framework/utils/app-util'

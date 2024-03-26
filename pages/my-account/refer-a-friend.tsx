@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from 'react'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { useConfig } from '@new-components/utils/myAccount'
 import withAuth from '@new-components/utils/withAuth'

@@ -1,4 +1,4 @@
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import { Button } from '@new-components/ui'

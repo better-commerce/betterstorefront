@@ -6,7 +6,7 @@ import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import commerce from '@lib/api/commerce'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,

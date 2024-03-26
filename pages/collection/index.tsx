@@ -1,6 +1,6 @@
 import type { GetStaticPropsContext } from 'next'
 import getCollections from '@framework/api/content/getCollections'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'

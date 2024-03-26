@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import { NEXT_STORE_LOCATOR } from '@new-components/utils/constants'
 import Link from 'next/link'
 

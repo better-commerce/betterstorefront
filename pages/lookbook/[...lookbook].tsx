@@ -4,7 +4,7 @@ import getLookbooks from '@framework/api/content/lookbook'
 import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
 import { useUI } from '@new-components/ui/context'
 import axios from 'axios'

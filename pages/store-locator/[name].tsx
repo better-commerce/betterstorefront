@@ -1,4 +1,4 @@
-import { Layout } from '@components/common'
+import Layout from '@new-components/Layout/Layout'
 import type { GetStaticPropsContext } from 'next'
 import getStores from '@framework/storeLocator/getStores'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
