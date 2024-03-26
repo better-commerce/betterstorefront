@@ -191,30 +191,12 @@ function Contact({
   }
   return (
     <>
-      {(pageContents?.metatitle ||
-        pageContents?.metadescription ||
-        pageContents?.metakeywords) && (
+      {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=5"
-          />
-          <link
-            rel="canonical"
-            id="canonical"
-            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
-          />
-          <title>
-            {pageContents?.metatitle ||
-              translate('common.message.ContactUsText')}
-          </title>
-          <meta
-            name="title"
-            content={
-              pageContents?.metatitle ||
-              translate('common.message.ContactUsText')
-            }
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
+          <title> {pageContents?.metatitle || translate('common.message.ContactUsText')} </title>
+          <meta name="title" content={ pageContents?.metatitle || translate('common.message.ContactUsText') } />
           {pageContents?.metadescription && (
             <meta name="description" content={pageContents?.metadescription} />
           )}
@@ -223,18 +205,10 @@ function Contact({
           )}
           <meta property="og:image" content={pageContents?.image} />
           {pageContents?.metatitle && (
-            <meta
-              property="og:title"
-              content={pageContents?.metatitle}
-              key="ogtitle"
-            />
+            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
           )}
           {pageContents?.metadescription && (
-            <meta
-              property="og:description"
-              content={pageContents?.metadescription}
-              key="ogdesc"
-            />
+            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
           )}
         </NextHead>
       )}
@@ -243,17 +217,13 @@ function Contact({
         {pageContents?.heading?.map((head: any, Idx: any) => (
           <div key={Idx}>
             <Link href="/">
-              <div className="relative flex justify-center items-center">
-                <img
-                  className="object-cover min-h-[225px]"
-                  src={head?.heading_heroimage}
-                  alt="Banner"
-                />
+              <div className="relative flex items-center justify-center">
+                <img className="object-cover min-h-[225px]" src={head?.heading_heroimage} alt={head?.heading_herotitle} />
                 <div className="absolute text-center text-white">
-                  <p className="text-6xl hover:text-blue transition-colors duration-300">
+                  <p className="text-6xl transition-colors duration-300 hover:text-blue">
                     {head?.heading_herotitle}
                   </p>
-                  <p className="text-2xl hover:text-blue transition-colors duration-300">
+                  <p className="text-2xl transition-colors duration-300 hover:text-blue">
                     Home / Contact Us
                   </p>
                 </div>
@@ -261,19 +231,14 @@ function Contact({
             </Link>
           </div>
         ))}
-        <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12 lg:mt-32 mb-0">
-          {pageContents?.contactbanner?.map((contact: any, idx: any) => (
-            <div key={idx} className="bg-gray-200 rounded-md flex items-center flex-col p-10 cursor-pointer">
-              <img src={contact?.contactbanner_heroimage} alt="Bannphoneer" />
-              <p className="text-2xl leading-9 font-semibold mt-5 mb-5">
+        <div className="container grid grid-cols-1 gap-5 mt-12 mb-0 md:grid-cols-2 lg:grid-cols-3 lg:mt-32">
+          {pageContents?.contactbanner?.map((contact: any, Idx: any) => (
+            <div className="flex flex-col items-center p-10 bg-gray-200 rounded-md cursor-pointer" key={Idx}>
+              <img src={contact?.contactbanner_heroimage} alt={contact?.contactbanner_herotitle} />
+              <p className="mt-5 mb-5 text-2xl font-semibold leading-9">
                 {contact?.contactbanner_herotitle}
               </p>
-              <div
-                className="mt-1 text-center"
-                dangerouslySetInnerHTML={{
-                  __html: contact?.contactbanner_herodescription,
-                }}
-              />
+              <div className="mt-1 text-center" dangerouslySetInnerHTML={{ __html: contact?.contactbanner_herodescription, }} />
             </div>
           ))}
         </div>
