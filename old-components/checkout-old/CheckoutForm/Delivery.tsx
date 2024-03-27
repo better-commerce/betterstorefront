@@ -13,7 +13,7 @@ import axios from 'axios'
 import CncList from './CncList'
 import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
-import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
+import { DEFAULT_COUNTRY } from '@new-components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY } from '@new-components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 

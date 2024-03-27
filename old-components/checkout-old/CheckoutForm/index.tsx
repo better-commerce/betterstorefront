@@ -20,11 +20,11 @@ import {
 import { useShippingFormConfig, useShippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
-import { asyncHandler } from '@components/account/Address/AddressBook'
+import { asyncHandler } from '@new-components/account/Address/AddressBook'
 import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
 import setSessionIdCookie from '@new-components/utils/setSessionId'
-import PaymentWidget from '@components/checkout-old/PaymentWidget'
+import PaymentWidget from '@new-components/SectionCheckoutJourney/checkout-old/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
 import {
   parseFullName,
@@ -36,7 +36,7 @@ import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
 import { Guid } from '@commerce/types'
 import { Cookie } from '@framework/utils/constants'
-import { DEFAULT_COUNTRY } from '@components/checkout/BillingAddressForm'
+import { DEFAULT_COUNTRY } from '@new-components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const Spinner = () => {
