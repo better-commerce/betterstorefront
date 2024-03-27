@@ -22,19 +22,19 @@ import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, P
 import { LoadingDots } from '@new-components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
-import SizeChangeModal from '@components/cart/SizeChange'
+import SizeChangeModal from '@new-components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@new-components/utils/constants'
-import RelatedProductWithGroup from '@components/product/RelatedProducts/RelatedProductWithGroup'
+import RelatedProductWithGroup from '@new-components/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
+import CartItemRemoveModal from '@new-components/CartItemRemoveModal'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Prices from '@new-components/Prices'
 import NcInputNumber from '@new-components/NcInputNumber'
-const PromotionInput = dynamic(() => import('../components/cart/PromotionInput'))
+const PromotionInput = dynamic(() => import('../new-components/SectionCheckoutJourney/cart/PromotionInput'))
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings

@@ -11,7 +11,7 @@ import { useUI } from '@new-components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
 // import MyOrders from '@components/account/MyOrders'
-import MyOrders from '@components/account/Orders/MyOrders'
+import MyOrders from '@new-components/account/Orders/MyOrders'
 import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
 import {
