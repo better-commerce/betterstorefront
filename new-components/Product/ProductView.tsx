@@ -29,7 +29,7 @@ import Link from 'next/link'
 import ReviewItem from '@new-components/ReviewItem'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductTag from '@new-components/Product/ProductTag'
-import ProductSpecifications from '@new-components/Product/specifications'
+import ProductSpecifications from '@new-components/Product/Specifications'
 import PDPCompare from '@new-components/Product/PDPCompare'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@new-components/Product/AttributesHandler'))
