@@ -3,59 +3,44 @@ import NextHead from 'next/head'
 import Link from 'next/link'
 import useSwr from 'swr'
 import commerce from '@lib/api/commerce'
+import SwiperCore, { Navigation } from 'swiper'
+import Glide from '@glidejs/glide'
+import 'swiper/swiper.min.css'
+import 'swiper/css'
+
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { postData } from '@new-components/utils/clientFetcher'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
+import { tryParseJson } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from '@commerce/utils/use-translation'
+import getCollectionById from '@framework/api/content/getCollectionById'
+import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
+import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
+import { EVENTS_MAP } from '@new-components/services/analytics/constants'
+import { postData } from '@new-components/utils/clientFetcher'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@new-components/utils/dataLayer'
-import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-import { tryParseJson } from '@framework/utils/parse-util'
-import { PlainText, Video } from '@components/brand'
-import getCollectionById from '@framework/api/content/getCollectionById'
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import useAnalytics from '@new-components/services/analytics/useAnalytics'
-import ImageCollection from '@components/brand/ImageCollection'
-// const MultiBrandVideo = dynamic(
-//   () => import('@components/brand/MultiBrandVideo')
-// )
-import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
-import faq from '@components/brand/faqData.json'
-import SwiperCore, { Navigation } from 'swiper'
-import 'swiper/swiper.min.css'
-import 'swiper/css'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
 import { useUI } from '@new-components/ui'
-import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
-import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import ProductCard from '@new-components/ProductCard'
-import Heading from '@new-components/Heading/Heading'
-import Glide from '@glidejs/glide'
-
-const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
-const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
-const ProductSort = dynamic(() => import('@components/product/ProductSort'))
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+import { ImageCollection, PlainText, Video } from '@new-components/SectionBrands'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
+const Heading = dynamic(() => import('@new-components/Heading/Heading'))
+const OutOfStockFilter = dynamic(() => import('@new-components/Product/Filters/OutOfStockFilter'))
+const CompareSelectionBar = dynamic(() => import('@new-components/Product/ProductCompare/compareSelectionBar'))
+const ProductCard = dynamic(() => import('@new-components/ProductCard'))
+const ProductSort = dynamic(() => import('@new-components/Product/ProductSort'))
+const ProductGrid = dynamic(() => import('@new-components/Product/Grid/ProductGrid'))
 const Slider = dynamic(() => import('@components/brand/Slider'))
 const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
-
-export const ACTION_TYPES = {
-  SORT_BY: 'SORT_BY',
-  PAGE: 'PAGE',
-  SORT_ORDER: 'SORT_ORDER',
-  CLEAR: 'CLEAR',
-  HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
-  ADD_FILTERS: 'ADD_FILTERS',
-  REMOVE_FILTERS: 'REMOVE_FILTERS',
-}
+import faq from '@new-components/SectionBrands/faqData.json'
+import useAnalytics from '@new-components/services/analytics/useAnalytics'
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
   type?: string
@@ -69,17 +54,9 @@ interface stateInterface {
   filters: any
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
-
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-}
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
@@ -107,16 +84,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({
-  query,
-  setEntities,
-  recordEvent,
-  brandDetails,
-  slug,
-  deviceInfo,
-  config,
-  collections, // ...for Attribute Collection api response
-}: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, }: any) {
   const translate = useTranslation()
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -143,7 +111,7 @@ function BrandDetailPage({
     };
   }, [sliderRef]);
 
-useEffect(() => {
+  useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
       perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
     };
