@@ -37,7 +37,7 @@ const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 
 export async function getStaticProps(context: any) {
-  const { locale, locales} = context
+  const { locale, locales } = context
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
   const slug =
@@ -419,10 +419,23 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         <div className="container mx-auto my-6 mt-4 bg-transparent">
-          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
-            {category?.name.toLowerCase()}
-          </h1>
-          <div className="font-18 dark:text-black" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></div>
+          <div className='flex flex-col'>
+            <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+              {category?.name.toLowerCase()}
+            </h1>
+            {category?.description &&
+              <div className='flex justify-between w-full align-bottom'>
+                <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+              </div>
+            }
+          </div>
+          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {products?.total} results</span>
+            <div className="flex justify-end align-bottom">
+              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+            </div>
+          </div>
+          <hr className='border-slate-200 dark:border-slate-700' />
         </div>
 
 
@@ -451,7 +464,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
             </>
           ) : null}
         </div>
-        <div className="container py-6 mx-auto">
+        <div className={`container mx-auto ${products?.total > 0 ? ' py-0' : 'py-6'}`}>
           {products?.total > 0 ? (
             <div className="grid w-full grid-cols-1 sm:grid-cols-12">
               {!!products && (products?.filters?.length > 0 ? (
@@ -460,9 +473,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
                   ) : (
                     <>
-                      <div className="flex float-right w-1/5 py-2 mt-1 -top-16">
-                        <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                      </div>
                       <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                     </>
                   )}
@@ -475,9 +485,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                 </>
               ) : (
                 <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                  <div className="flex justify-end w-full col-span-12">
-                    <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                  </div>
                   <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
                   <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                 </div>
