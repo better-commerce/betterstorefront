@@ -22,7 +22,7 @@
       "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
       "@assets/css/*": ["assets/css/*"],
-      "@components/*": ["components/*"],
+      "@components/*": ["old-components/*"],
       "@new-components/*": ["new-components/*"],
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
