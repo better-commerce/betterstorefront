@@ -1,8 +1,7 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import ProductLayout from '@components/common/Layout/ProductLayout'
-import { ProductView } from '@components/product'
+import ProductLayout from '@new-components/Layout/ProductLayout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { logError, notFoundRedirect } from '@framework/utils/app-util'
@@ -12,6 +11,7 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
+import ProductView from '@new-components/Product/ProductView'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]

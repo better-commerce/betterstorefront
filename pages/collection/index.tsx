@@ -3,7 +3,6 @@ import getCollections from '@framework/api/content/getCollections'
 import Layout from '@new-components/Layout/Layout'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
-import { generateUri } from '@commerce/utils/uri-util'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
@@ -16,7 +15,6 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 export default function CollectionList(props: any) {
   const router =useRouter();
-  const css = { maxWidth: '100%', height: 'auto' }
   const translate = useTranslation()
   return (
     <>
