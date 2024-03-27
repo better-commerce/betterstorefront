@@ -12,7 +12,7 @@ import {
   BETTERCOMMERCE_LANGUAGE,
   EmptyString,
   NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import { Guid } from '@commerce/types'
 import { IFetcherProps } from 'framework/contracts/api/IFetcherProps'
 

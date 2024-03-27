@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { CANCEL_REASON } from '@new-components/utils/constants'
+import { CANCEL_REASON } from '@components//utils/constants'
 export default function getCancelReason() {
   return async function handler(query: any) {
     const { cookies } = query

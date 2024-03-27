@@ -152,10 +152,10 @@
       "@config/*": [
         "config/*"
       ],
-      "@components/*": [
+      "@old-components/*": [
         "old-components/*"
       ],
-      "@new-components/*": [
+      "@components/*": [
         "new-components/*"
       ],
       "@utils/*": [

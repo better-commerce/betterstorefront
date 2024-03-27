@@ -3,24 +3,24 @@ import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import Layout from '@new-components/Layout/Layout'
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
-import { useUI } from '@new-components/ui/context'
+import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
+import Layout from '@components//Layout/Layout'
+const ProductGrid = dynamic(() => import('@old-components/product/Grid/ProductGrid'))
+import { useUI } from '@components//ui/context'
 import axios from 'axios'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import { useEffect, useState } from 'react'
-import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-import useAnalytics from '@new-components/services/analytics/useAnalytics'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
+import { EVENTS_MAP } from '@components//services/analytics/constants'
+import useAnalytics from '@components//services/analytics/useAnalytics'
+import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import CompareSelectionBar from '@old-components/product/ProductCompare/compareSelectionBar'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'

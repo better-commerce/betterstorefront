@@ -1,11 +1,11 @@
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
-import { postData } from '@new-components/utils/clientFetcher'
-import ProductGrid from '@components/product/Grid'
-import ProductSort from '@components/product/ProductSort'
-import { useUI } from '@new-components/ui'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import { postData } from '@components//utils/clientFetcher'
+import ProductGrid from '@old-components/product/Grid'
+import ProductSort from '@old-components/product/ProductSort'
+import { useUI } from '@components//ui'
+import CompareSelectionBar from '@old-components/product/ProductCompare/compareSelectionBar'
 
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',

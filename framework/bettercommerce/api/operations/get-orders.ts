@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { CUSTOMER_BASE_API } from '@new-components/utils/constants'
+import { CUSTOMER_BASE_API } from '@components//utils/constants'
 export default function getOrders() {
   async function getOrdersAsync({ query, cookies }: any) {
     try {

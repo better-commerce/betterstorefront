@@ -1,14 +1,14 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import Layout from '@new-components/Layout/Layout'
-import { ProductView } from '@components/product'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
+import Layout from '@components//Layout/Layout'
+import { ProductView } from '@old-components/product'
+import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components//utils/constants'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string }>) {
   let pdpCachedImages = null

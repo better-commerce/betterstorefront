@@ -1,5 +1,5 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-import ProductSort from '@components/product/ProductSort'
+import ProductSort from '@old-components/product/ProductSort'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 interface Props {
   products: any

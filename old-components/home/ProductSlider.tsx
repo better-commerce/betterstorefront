@@ -3,8 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
-import ProductCard from '@components/product/ProductCard/ProductCard'
-import { ArrowLeft, ArrowRight } from '@components/icons'
+import ProductCard from '@old-components/product/ProductCard/ProductCard'
+import { ArrowLeft, ArrowRight } from '@old-components/icons'
 
 SwiperCore.use([Navigation])
 

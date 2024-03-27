@@ -1,10 +1,10 @@
 import { FC, memo } from 'react'
 import { useRouter } from 'next/router'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-//import ElasticSearchBar from '@components/search/ElasticSearchBar'
-import { SEARCH_PROVIDER } from '@new-components/utils/constants'
+//import ElasticSearchBar from '@old-components/search/ElasticSearchBar'
+import { SEARCH_PROVIDER } from '@components//utils/constants'
 import dynamic from 'next/dynamic'
-import ElasticSearchBar from '@components/search/elastic/ElasticSearchBar'
+import ElasticSearchBar from '@old-components/search/elastic/ElasticSearchBar'
 import { SearchProvider } from '@elastic/react-search-ui'
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
 
@@ -13,13 +13,13 @@ import {
   buildFacetConfigFromConfig,
   buildSearchOptionsFromConfig,
   getConfig,
-} from '@new-components/config/config-helper'
-import { useUI } from '@new-components/ui'
+} from '@components//config/config-helper'
+import { useUI } from '@components//ui'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider as Provider } from '@framework/utils/enums'
-import InstantSearchBar from '@components/search/algolia/InstantSearchBar'
+import InstantSearchBar from '@old-components/search/algolia/InstantSearchBar'
 
-const SearchWrapper = dynamic(() => import('@components/search'))
+const SearchWrapper = dynamic(() => import('@old-components/search'))
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()

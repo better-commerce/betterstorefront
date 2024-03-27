@@ -2,27 +2,27 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
-import { useUI } from '@new-components/ui/context'
+import { useUI } from '@components//ui/context'
 import axios from 'axios'
-import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@new-components/utils/constants'
+import { CLOTH_COLOUR_ATTRIB_NAME, CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, NEXT_GET_PROOMO_DETAILS, NEXT_REMOVE_WISHLIST } from '@components//utils/constants'
 import { StarIcon } from '@heroicons/react/24/outline'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import _, { round } from 'lodash'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import cartHandler from '@new-components/services/cart'
-import { IExtraProps } from '@new-components/Layout/Layout'
+import cartHandler from '@components//services/cart'
+import { IExtraProps } from '@components//Layout/Layout'
 import { vatIncluded, cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
 import classNames from 'classnames'
 import ProductTag from '../ProductTag'
-import wishlistHandler from '@new-components/services/wishlist'
+import wishlistHandler from '@components//services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
-const SimpleButton = dynamic(() => import('@new-components/ui/Button'))
-const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
-const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
+const SimpleButton = dynamic(() => import('@components//ui/Button'))
+const Button = dynamic(() => import('@components//ui/IndigoButton'))
+const PLPQuickView = dynamic(() => import('@old-components/product/QuickView/PLPQuickView'))
 
 interface Props {
   product: any

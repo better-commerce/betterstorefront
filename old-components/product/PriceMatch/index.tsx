@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Form from './form'
 import axios from 'axios'
-import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@new-components/utils/constants'
+import { NEXT_API_PRICE_MATCH_ENDPOINT } from '@components//utils/constants'
 import Image from 'next/image'
 import { useTranslation } from '@commerce/utils/use-translation'
 

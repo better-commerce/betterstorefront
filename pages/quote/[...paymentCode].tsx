@@ -8,19 +8,19 @@ import { GetServerSideProps } from 'next'
 import { signOut } from 'next-auth/react'
 
 // Component Imports
-import Spinner from '@new-components/ui/Spinner'
-import BasicLayout from '@components/common/Layout/BasicLayout'
+import Spinner from '@components//ui/Spinner'
+import BasicLayout from '@old-components/common/Layout/BasicLayout'
 
 // Other Imports
 import { Guid } from '@commerce/types'
-import { useUI } from '@new-components/ui'
+import { useUI } from '@components//ui'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   Messages,
   NEXT_GET_CART,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_VALIDATE_PAYMENT_LINK,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import { AlertType } from '@framework/utils/enums'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 

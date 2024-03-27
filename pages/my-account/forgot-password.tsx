@@ -1,17 +1,17 @@
-import Layout from '@new-components/Layout/Layout'
+import Layout from '@components//Layout/Layout'
 import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
-import { Button } from '@new-components/ui'
+import { Button } from '@components//ui'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_FORGOT_PASSWORD,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
-import { useUI } from '@new-components/ui/context'
-import { Messages, EmptyString } from '@new-components/utils/constants'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
+import { useUI } from '@components//ui/context'
+import { Messages, EmptyString } from '@components//utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 function ForgotPasswordPage() {

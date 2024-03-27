@@ -1,6 +1,6 @@
 import fetcher from '../fetcher'
 import { OMS_BASE_URL } from '@framework/utils/constants'
-import { STORE_LOCATOR_API } from '@new-components/utils/constants'
+import { STORE_LOCATOR_API } from '@components//utils/constants'
 export default async function getStores(postCode: string, cookies?: any) {
   try {
     const response: any = await fetcher({

@@ -1,6 +1,6 @@
 import SubmitButton, {
   ISubmitButtonProps,
-} from '@components/common/SubmitButton'
+} from '@old-components/common/SubmitButton'
 import React, { FC } from 'react'
 
 interface IAddToBasketButtonProps {

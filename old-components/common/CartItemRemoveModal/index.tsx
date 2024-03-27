@@ -3,12 +3,12 @@ import React, { Fragment } from 'react'
 
 // Component Imports
 import { Dialog, Transition } from '@headlessui/react'
-import { LoadingDots, useUI } from '@new-components/ui'
+import { LoadingDots, useUI } from '@components//ui'
 
 // Other Imports
 import { isEligibleForFreeShipping } from '@framework/utils/app-util'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { LoadingActionType } from '@new-components/utils/constants'
+import { LoadingActionType } from '@components//utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const CartItemRemoveModal = ({

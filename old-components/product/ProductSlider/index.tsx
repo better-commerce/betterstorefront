@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
-import CompareProductCard from '@components/product/ProductCard/CompareProductCard'
+import CompareProductCard from '@old-components/product/ProductCard/CompareProductCard'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 SwiperCore.use([Navigation])

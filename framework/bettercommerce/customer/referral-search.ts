@@ -1,4 +1,4 @@
-import { REFERRAL_SEARCH } from "@new-components/utils/constants";
+import { REFERRAL_SEARCH } from "@components//utils/constants";
 import fetcher from "@framework/fetcher";
 
 interface props{

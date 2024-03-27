@@ -1,5 +1,5 @@
 import fetcher from '../../../fetcher'
-import { CATALOG_ENDPOINT } from '@new-components/utils/constants'
+import { CATALOG_ENDPOINT } from '@components//utils/constants'
 
 export default async function getBrands(query: any) {
   try {

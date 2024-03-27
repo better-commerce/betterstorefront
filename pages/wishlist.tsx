@@ -1,14 +1,14 @@
 import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
-import { Heart } from '@new-components/shared/icons'
-import Layout from '@new-components/Layout/Layout'
-import { Text, Container, Skeleton } from '@new-components/ui'
+import { Heart } from '@components//shared/icons'
+import Layout from '@components//Layout/Layout'
+import { Text, Container, Skeleton } from '@components//ui'
 import { useCustomer } from '@framework/customer'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components//utils/constants'
 import { WishlistCard } from 'old-components/wishlist'
 
 

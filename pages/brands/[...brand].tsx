@@ -22,24 +22,24 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import getCollectionById from '@framework/api/content/getCollectionById'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
-import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-import { postData } from '@new-components/utils/clientFetcher'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@new-components/utils/constants'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
-import { EVENTS, KEYS_MAP } from '@new-components/utils/dataLayer'
-import { useUI } from '@new-components/ui'
-import { ImageCollection, PlainText, Video } from '@new-components/SectionBrands'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-const Heading = dynamic(() => import('@new-components/Heading/Heading'))
-const OutOfStockFilter = dynamic(() => import('@new-components/Product/Filters/OutOfStockFilter'))
-const CompareSelectionBar = dynamic(() => import('@new-components/Product/ProductCompare/compareSelectionBar'))
-const ProductCard = dynamic(() => import('@new-components/ProductCard'))
-const ProductSort = dynamic(() => import('@new-components/Product/ProductSort'))
-const ProductGrid = dynamic(() => import('@new-components/Product/Grid/ProductGrid'))
-import faq from '@new-components/SectionBrands/faqData.json'
-import useAnalytics from '@new-components/services/analytics/useAnalytics'
-import Slider from '@new-components/SectionBrands/Slider'
-import BrandDisclosure from '@new-components/SectionBrands/Disclosure'
+import { EVENTS_MAP } from '@components//services/analytics/constants'
+import { postData } from '@components//utils/clientFetcher'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components//utils/constants'
+import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { EVENTS, KEYS_MAP } from '@components//utils/dataLayer'
+import { useUI } from '@components//ui'
+import { ImageCollection, PlainText, Video } from '@components//SectionBrands'
+import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
+const Heading = dynamic(() => import('@components//Heading/Heading'))
+const OutOfStockFilter = dynamic(() => import('@components//Product/Filters/OutOfStockFilter'))
+const CompareSelectionBar = dynamic(() => import('@components//Product/ProductCompare/compareSelectionBar'))
+const ProductCard = dynamic(() => import('@components//ProductCard'))
+const ProductSort = dynamic(() => import('@components//Product/ProductSort'))
+const ProductGrid = dynamic(() => import('@components//Product/Grid/ProductGrid'))
+import faq from '@components//SectionBrands/faqData.json'
+import useAnalytics from '@components//services/analytics/useAnalytics'
+import Slider from '@components//SectionBrands/Slider'
+import BrandDisclosure from '@components//SectionBrands/Disclosure'
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {

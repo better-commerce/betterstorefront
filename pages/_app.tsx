@@ -30,22 +30,22 @@ import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framew
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 
-import OverlayLoader from '@new-components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@new-components/utils/constants'
-import DataLayerInstance from '@new-components/utils/dataLayer'
-import geoData from '@new-components/utils/geographicService'
-import analytics from '@new-components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@new-components/utils/setSessionId'
-import { initializeGA4 as initGA4 } from '@new-components/services/analytics/ga4'
-import { ManagedUIContext, IDeviceInfo } from '@new-components/ui/context'
-import Head from '@new-components/shared/Head/Head';
-import NonHeadContentSnippet from '@new-components/shared/Snippet/NonHeadContentSnippet';
-import { IScriptSnippet } from '@new-components/shared/Snippet/ScriptContentSnippet';
-import InitDeviceInfo from '@new-components/shared/InitDeviceInfo';
-import BrowserNavigation from '@new-components/shared/routing/BrowserNavigation';
-import ErrorBoundary from '@new-components/shared/error';
-import CustomCacheBuster from '@new-components/shared/CustomCacheBuster';
-import CustomerReferral from '@new-components/customer/Referral';
+import OverlayLoader from '@components//shared/OverlayLoader/OverlayLoader';
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@components//utils/constants'
+import DataLayerInstance from '@components//utils/dataLayer'
+import geoData from '@components//utils/geographicService'
+import analytics from '@components//services/analytics/analytics'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@components//utils/setSessionId'
+import { initializeGA4 as initGA4 } from '@components//services/analytics/ga4'
+import { ManagedUIContext, IDeviceInfo } from '@components//ui/context'
+import Head from '@components//shared/Head/Head';
+import NonHeadContentSnippet from '@components//shared/Snippet/NonHeadContentSnippet';
+import { IScriptSnippet } from '@components//shared/Snippet/ScriptContentSnippet';
+import InitDeviceInfo from '@components//shared/InitDeviceInfo';
+import BrowserNavigation from '@components//shared/routing/BrowserNavigation';
+import ErrorBoundary from '@components//shared/error';
+import CustomCacheBuster from '@components//shared/CustomCacheBuster';
+import CustomerReferral from '@components//customer/Referral';
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {

@@ -1,5 +1,5 @@
-import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from '@new-components/utils/constants'
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@new-components/utils/textVariables'
+import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from '@components//utils/constants'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components//utils/textVariables'
 import { Tab } from '@headlessui/react'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -13,16 +13,16 @@ import Link from 'next/link'
 import { round } from 'lodash'
 import AttributesHandler from '../ProductView/AttributesHandler'
 import dynamic from 'next/dynamic'
-import { useUI } from '@new-components/ui'
-import cartHandler from '@new-components/services/cart'
-import { recordGA4Event } from '@new-components/services/analytics/ga4'
+import { useUI } from '@components//ui'
+import cartHandler from '@components//services/cart'
+import { recordGA4Event } from '@components//services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import ImageGallery from 'react-image-gallery'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import ButtonNotifyMe from '../ButtonNotifyMe'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
-const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
+const Button = dynamic(() => import('@components//ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
 

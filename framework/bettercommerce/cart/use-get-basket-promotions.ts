@@ -1,4 +1,4 @@
-import { GET_BASKET_PROMOTIONS_ENDPOINT } from '@new-components/utils/constants';
+import { GET_BASKET_PROMOTIONS_ENDPOINT } from '@components//utils/constants';
 import fetcher from '../fetcher';
 
 interface Props {

@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 // Other Imports
-import { XML_FEED } from '@new-components/utils/constants'
+import { XML_FEED } from '@components//utils/constants'
 import fetcher from '@framework/fetcher'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 

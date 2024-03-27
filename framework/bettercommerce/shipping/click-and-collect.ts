@@ -1,4 +1,4 @@
-import { OMS_CLICK_AND_COLLECT } from '@new-components/utils/constants'
+import { OMS_CLICK_AND_COLLECT } from '@components//utils/constants'
 import { OMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '../fetcher'
 

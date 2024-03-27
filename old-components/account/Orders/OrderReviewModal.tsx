@@ -1,5 +1,5 @@
-import { ArrowLeft } from "@components/icons";
-import ReviewInput from "@components/product/Reviews/ReviewInput";
+import { ArrowLeft } from "@old-components/icons";
+import ReviewInput from "@old-components/product/Reviews/ReviewInput";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";

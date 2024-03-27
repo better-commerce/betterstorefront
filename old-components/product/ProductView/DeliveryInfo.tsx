@@ -10,9 +10,9 @@ import ProductWarranty from '../ProductSidebar/ProductWarranty'
 import ProductReturn from '../ProductSidebar/ProductReturn'
 
 // Other Imports
-import { recordGA4Event } from '@new-components/services/analytics/ga4'
+import { recordGA4Event } from '@components//services/analytics/ga4'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@new-components/utils/constants'
+import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components//utils/constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 

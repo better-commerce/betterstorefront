@@ -1,5 +1,5 @@
 import { StarIcon } from '@heroicons/react/24/solid'
-import classNames from '@new-components/utils/classNames'
+import classNames from '@components//utils/classNames'
 import { useTranslation } from '@commerce/utils/use-translation'
 export default function Reviews({ data }: any) {
   const translate = useTranslation()
