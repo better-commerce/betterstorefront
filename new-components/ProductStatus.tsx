@@ -3,9 +3,9 @@ import {
   ClockIcon,
   SparklesIcon,
 } from "@heroicons/react/24/outline";
-import { Product } from "@components/data/data";
 import React, { FC } from "react";
 import IconDiscount from "./IconDiscount";
+import { Product } from "./Product/data";
 
 interface Props {
   status: Product["status"];
@@ -25,7 +25,7 @@ const ProductStatus: FC<Props> = ({
       return (
         <div className={CLASSES}>
           <SparklesIcon className="w-3.5 h-3.5" />
-          <span className="ms-1 leading-none">{status}</span>
+          <span className="leading-none ms-1">{status}</span>
         </div>
       );
     }
@@ -33,7 +33,7 @@ const ProductStatus: FC<Props> = ({
       return (
         <div className={CLASSES}>
           <IconDiscount className="w-3.5 h-3.5" />
-          <span className="ms-1 leading-none">{status}</span>
+          <span className="leading-none ms-1">{status}</span>
         </div>
       );
     }
@@ -41,7 +41,7 @@ const ProductStatus: FC<Props> = ({
       return (
         <div className={CLASSES}>
           <NoSymbolIcon className="w-3.5 h-3.5" />
-          <span className="ms-1 leading-none">{status}</span>
+          <span className="leading-none ms-1">{status}</span>
         </div>
       );
     }
@@ -49,7 +49,7 @@ const ProductStatus: FC<Props> = ({
       return (
         <div className={CLASSES}>
           <ClockIcon className="w-3.5 h-3.5" />
-          <span className="ms-1 leading-none">{status}</span>
+          <span className="leading-none ms-1">{status}</span>
         </div>
       );
     }

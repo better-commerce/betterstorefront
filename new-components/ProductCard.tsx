@@ -16,7 +16,8 @@ import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/pa
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import _ from 'lodash';
-const ProductTag = dynamic(() => import('@components/product/ProductTag'))
+import { isMobile } from 'react-device-detect';
+const ProductTag = dynamic(() => import('@new-components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@new-components/LikeButton'))
 const Prices = dynamic(() => import('@new-components/Prices'))
 const ModalQuickView = dynamic(() => import('@new-components/ModalQuickView'))
@@ -33,7 +34,7 @@ export interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key }) => {
-  const { isMobile, isIPadorTablet } = deviceInfo
+
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
   const { basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, compareProductList, openLoginSideBar, isCompared, setCompareProducts } = useUI()

@@ -11,8 +11,8 @@ import useWishlist from '@new-components/services/wishlist'
 import cartHandler from '@new-components/services/cart'
 import useAnalytics from '@new-components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-import LoginOTPForm from '@components/customer/login-otp-form'
 import { useTranslation } from '@commerce/utils/use-translation'
+import LoginOTPForm from '@new-components/customer/login-otp-form'
 
 function LoginOTPComp() {
   const translate = useTranslation()
@@ -51,7 +51,7 @@ function LoginOTPComp() {
 
   if (!isGuestUser && user.userId) {
     return (
-      <div className="font-extrabold text-center w-full h-full text-gray-900">
+      <div className="w-full h-full font-extrabold text-center text-gray-900">
         {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
@@ -121,17 +121,17 @@ function LoginOTPComp() {
     return null
   }
   return (
-    <section aria-labelledby="trending-heading" className="bg-white h-full">
+    <section aria-labelledby="trending-heading" className="h-full bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h1 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
+        <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+          <h1 className="text-6xl font-extrabold tracking-tight text-center text-gray-900">
             {translate('label.login.loginBtnText')} via OTP
           </h1>
         </div>
         <LoginOTPForm handleUserLogin={handleUserLogin} />
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center w-full">
           {noAccount && (
-            <span className="text-red-700 text-lg">
+            <span className="text-lg text-red-700">
               {translate('label.login.noMobileAccountFoundText')}
             </span>
           )}

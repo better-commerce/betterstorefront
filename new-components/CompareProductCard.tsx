@@ -16,8 +16,8 @@ import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/pa
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import _ from 'lodash';
-import { ArrowRight } from '@components/icons';
-const ProductTag = dynamic(() => import('@components/product/ProductTag'))
+import { ArrowRight } from './shared/icons';
+const ProductTag = dynamic(() => import('@new-components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@new-components/LikeButton'))
 const Prices = dynamic(() => import('@new-components/Prices'))
 const ModalQuickView = dynamic(() => import('@new-components/ModalQuickView'))

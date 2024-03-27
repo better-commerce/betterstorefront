@@ -7,10 +7,10 @@ import {
   NEXT_LOGIN_CHECKOUT,
 } from '@new-components/utils/constants'
 import axios from 'axios'
-import Form from '@components/customer'
 import GuestForm from './GuestForm'
 import Link from 'next/link'
 import { useTranslation } from '@commerce/utils/use-translation'
+import Form from '@new-components/customer'
 const config = [
   {
     title: "Log in",
@@ -84,12 +84,12 @@ export default function CheckoutRouter({
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h1 className="sm:text-6xl text-3xl uppercase font-bold text-center tracking-tight text-gray-900">
+        <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+          <h1 className="text-3xl font-bold tracking-tight text-center text-gray-900 uppercase sm:text-6xl">
             {translate('label.checkout.checkoutSecurelyText')}
           </h1>
         </div>
-        <div className="flex justify-center items-center pt-10">
+        <div className="flex items-center justify-center pt-10">
           {config.map((item: any, idx: number) => {
             return (
               <div
@@ -107,7 +107,7 @@ export default function CheckoutRouter({
           })}
         </div>
         {activeTab.key === 'logIn' && (
-          <div className="flex justify-center items-center flex-col sm:pl-10 sm:pr-10">
+          <div className="flex flex-col items-center justify-center sm:pl-10 sm:pr-10">
             <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} />
             <div>
               <Link href="/my-account/register">
@@ -121,9 +121,9 @@ export default function CheckoutRouter({
         {activeTab.key === 'guestCheckout' && (
           <GuestForm onSubmit={handleGuestCheckout} />
         )}
-        <div className="w-full flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center w-full">
           {noAccount && activeTab.key === 'logIn' && (
-            <span className="text-red-700 text-lg">
+            <span className="text-lg text-red-700">
               {translate('common.message.invalidAccountMsg')}
             </span>
           )}

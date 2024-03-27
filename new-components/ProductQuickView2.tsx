@@ -5,7 +5,6 @@ import LikeButton from "@new-components/LikeButton";
 import { StarIcon } from "@heroicons/react/24/solid";
 import BagIcon from "@new-components/BagIcon";
 import NcInputNumber from "@new-components/NcInputNumber";
-import { PRODUCTS } from "@components/data/data";
 import {
   NoSymbolIcon,
   ClockIcon,
@@ -21,6 +20,7 @@ import NotifyAddTocart from "./NotifyAddTocart";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { PRODUCTS } from "./Product/data";
 
 export interface ProductQuickView2Props {
   className?: string;

@@ -33,7 +33,7 @@ import { MAX_ADD_TO_CART_LIMIT, Messages } from '@new-components/utils/constants
 import dynamic from 'next/dynamic'
 import cartHandler from '@new-components/services/cart'
 import { useUI } from '@new-components/ui'
-import SearchQuickView from '@components/product/QuickView/SearchQuickView'
+import SearchQuickView from '@new-components/Product/SearchQuickView'
 import {
   deliveryDateFormat,
   matchStrings,

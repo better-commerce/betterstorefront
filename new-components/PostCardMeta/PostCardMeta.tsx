@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { _getPersonNameRd } from "@components/common/Header/fakeData";
+import { _getPersonNameRd } from "@new-components/Header/fakeData";
 import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
 import { useTranslation } from "@commerce/utils/use-translation";

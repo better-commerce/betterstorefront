@@ -9,7 +9,7 @@ import classNames from 'classnames'
 import dynamic from 'next/dynamic'
 
 // Component Imports
-import SearchQuickView from '@components/product/QuickView/SearchQuickView'
+import SearchQuickView from '@new-components/Product/SearchQuickView'
 
 // Other Import
 import { useUI } from '@new-components/ui'
@@ -19,7 +19,7 @@ import cartHandler from '@new-components/services/cart'
 import { cartItemsValidateAddToCart, getAlgoliaSearchCurrencyLabel, getAlgoliaSearchListPriceColumn, getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
 import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@new-components/utils/constants'
 import { deliveryDateFormat, matchStrings, roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
-import ProductTag from '@components/product/ProductTag'
+import ProductTag from '@new-components/Product/ProductTag'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
 

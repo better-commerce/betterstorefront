@@ -5,16 +5,12 @@ import React from 'react'
 import Link from 'next/link'
 import NextHead from 'next/head'
 import type { GetStaticPropsContext } from 'next'
-
-// Component Imports
-import LayoutError from '../components/common/Layout/LayoutError'
-
-// Other Imports
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
+import LayoutError from '@new-components/Layout/LayoutError'
 
 export async function getStaticProps({
   preview,

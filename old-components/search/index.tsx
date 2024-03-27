@@ -19,7 +19,7 @@ import { SearchProvider } from '@framework/utils/enums'
 import InstantSearchBar from './algolia/InstantSearchBar'
 import { pushSearchToNavigationStack } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import ProductTag from '@components/product/ProductTag'
+import ProductTag from '@new-components/Product/ProductTag'
 import Prices from '@new-components/Prices'
 
 export default function Search(props: any) {

@@ -346,13 +346,15 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         </div>
         <hr className="border-slate-200 dark:border-slate-700" />
 
-        <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+        <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
           {isMobile ? (
             <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
           ) : (
-            <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+            <div className='sm:col-span-3 md:col-span-3 lg:col-span-3'>
+              <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+            </div>
           )}
-          <div className={`sm:col-span-9`}>
+          <div className={`sm:col-span-9 lg:col-span-9 md:col-span-9`}>
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>

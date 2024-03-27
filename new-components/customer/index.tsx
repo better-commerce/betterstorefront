@@ -11,7 +11,7 @@ import Button from '@new-components/ui/Button'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { mergeSchema } from '@framework/utils/schema-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { Checkbox } from '@components/account/Address'
+import { Checkbox } from '@new-components/account/Address'
 
 /**
  * This is a schema for registration to enable Trading account registration.

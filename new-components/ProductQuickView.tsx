@@ -2,7 +2,6 @@
 import React, { FC, useEffect, useState } from "react";
 import LikeButton from "@new-components/LikeButton";
 import { StarIcon } from "@heroicons/react/24/solid";
-import { PRODUCTS } from "@components/data/data";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import Prices from "@new-components/Prices";
 import detail1JPG from "images/products/detail1.jpg";
@@ -12,10 +11,10 @@ import AccordionInfo from "@new-components/AccordionInfo";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@new-components/utils/textVariables";
-import AttributesHandler from "@components/product/ProductView/AttributesHandler";
+import AttributesHandler from "@new-components/Product/AttributesHandler";
 import axios from "axios";
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@new-components/utils/constants";
-import ProductTag from "@components/product/ProductTag";
+import ProductTag from "@new-components/Product/ProductTag";
 import { useUI } from "@new-components/ui";
 const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
@@ -25,6 +24,7 @@ import { recordGA4Event } from "@new-components/services/analytics/ga4";
 import wishlistHandler from "@new-components/services/wishlist";
 import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { PRODUCTS } from "./Product/data";
 
 export interface ProductQuickViewProps {
   className?: string;

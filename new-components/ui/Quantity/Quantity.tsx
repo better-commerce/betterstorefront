@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import s from './Quantity.module.css'
-import { Cross, Plus, Minus } from '@components/icons'
+import { Cross, Plus, Minus } from '@new-components/shared/icons'
 import cn from 'classnames'
 export interface QuantityProps {
   value: number
@@ -24,7 +24,7 @@ const Quantity: FC<React.PropsWithChildren<QuantityProps>> = ({
       <button className={s.actions} onClick={handleRemove}>
         <Cross width={20} height={20} />
       </button>
-      <label className="w-full border-accent-2 border ml-2">
+      <label className="w-full ml-2 border border-accent-2">
         <input
           className={s.input}
           onChange={(e) =>

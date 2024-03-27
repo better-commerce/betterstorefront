@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import s from './ShippingWidget.module.css'
-import { ChevronRight, MapPin, Check } from '@components/icons'
+import { ChevronRight, MapPin, Check } from '@new-components/shared/icons'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ComponentProps {
@@ -15,9 +15,9 @@ const ShippingWidget: FC<React.PropsWithChildren<ComponentProps>> = ({ onClick, 
   This means that the provider does offer checkout functionality. */
   return (
     <div onClick={onClick} className={s.root}>
-      <div className="flex flex-1 items-center">
-        <MapPin className="w-5 flex" />
-        <span className="ml-5 text-sm text-center font-medium">
+      <div className="flex items-center flex-1">
+        <MapPin className="flex w-5" />
+        <span className="ml-5 text-sm font-medium text-center">
           {translate('common.label.addShippingAddressText')}
         </span>
         {/* <span>

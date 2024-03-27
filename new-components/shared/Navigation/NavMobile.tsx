@@ -5,7 +5,6 @@ import { Disclosure } from "@headlessui/react";
 import { NavItemType } from "./NavigationItem";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { NAVIGATION_DEMO_2 } from "@components/data/navigation";
 import SocialsList from "../SocialsList/SocialsList";
 import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
@@ -20,7 +19,7 @@ export interface NavMobileProps {
 }
 
 const NavMobile: React.FC<NavMobileProps> = ({
-  data = NAVIGATION_DEMO_2,
+  data,
   navItems,
   onClickClose,
 }) => {

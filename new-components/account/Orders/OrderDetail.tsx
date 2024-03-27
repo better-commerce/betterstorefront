@@ -17,8 +17,6 @@ import {
   stringToNumber,
 } from '@framework/utils/parse-util'
 import { PaymentStatus } from '@new-components/utils/payment-constants'
-import ReviewInput from '@components/product/Reviews/ReviewInput'
-import { ArrowLeft } from '@components/icons'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { DATE_FORMAT, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 // import getCustomerOrderDetail from '@framework/checkout/customer-order-details'

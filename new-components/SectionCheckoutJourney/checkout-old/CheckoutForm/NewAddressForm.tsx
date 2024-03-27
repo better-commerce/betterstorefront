@@ -18,10 +18,10 @@ import {
 import { AddressPageAction } from '@new-components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
-import SubmitButton from '@components/common/SubmitButton'
 import { IFormProps } from 'framework/contracts/IFormProps'
 import { INewAddressFormProps } from 'framework/contracts/address/INewAddressFormProps'
 import { useTranslation } from '@commerce/utils/use-translation'
+import SubmitButton from '@new-components/shared/Button/SubmitButton'
 
 const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
   const translate = useTranslation()
