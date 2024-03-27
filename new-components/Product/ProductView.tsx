@@ -28,9 +28,9 @@ import Prices from '@new-components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@new-components/ReviewItem'
 import { useTranslation } from '@commerce/utils/use-translation'
-import ProductTag from '@components/product/ProductTag'
-import ProductSpecifications from '@components/product/ProductDetails/specifications'
-import PDPCompare from '@components/product/PDPCompare'
+import ProductTag from '@new-components/Product/ProductTag'
+import ProductSpecifications from '@new-components/Product/specifications'
+import PDPCompare from '@new-components/Product/PDPCompare'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@new-components/Product/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
