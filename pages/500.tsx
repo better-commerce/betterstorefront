@@ -9,8 +9,8 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
-import LayoutError from '@new-components/Layout/LayoutError'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components//utils/constants'
+import LayoutError from '@components//Layout/LayoutError'
 
 export async function getStaticProps({
   preview,

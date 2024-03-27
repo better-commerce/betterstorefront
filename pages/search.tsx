@@ -10,19 +10,19 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { postData } from '@new-components/utils/clientFetcher'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import { EVENTS, KEYS_MAP } from '@new-components/utils/dataLayer'
-import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-import { useUI } from '@new-components/ui/context'
-import useAnalytics from '@new-components/services/analytics/useAnalytics'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@new-components/utils/constants'
-const CompareSelectionBar = dynamic(() => import('@new-components/Product/ProductCompare/compareSelectionBar'))
-const OutOfStockFilter = dynamic(() => import('@new-components/Product/Filters/OutOfStockFilter'))
-const ProductGrid = dynamic(() => import('@new-components/Product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
-const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
+import { postData } from '@components//utils/clientFetcher'
+import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
+import { EVENTS, KEYS_MAP } from '@components//utils/dataLayer'
+import { EVENTS_MAP } from '@components//services/analytics/constants'
+import { useUI } from '@components//ui/context'
+import useAnalytics from '@components//services/analytics/useAnalytics'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components//utils/constants'
+const CompareSelectionBar = dynamic(() => import('@components//Product/ProductCompare/compareSelectionBar'))
+const OutOfStockFilter = dynamic(() => import('@components//Product/Filters/OutOfStockFilter'))
+const ProductGrid = dynamic(() => import('@components//Product/Grid'))
+const ProductMobileFilters = dynamic(() => import('@components//Product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components//Product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components//Product/Filters/FilterTopBar'))
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'

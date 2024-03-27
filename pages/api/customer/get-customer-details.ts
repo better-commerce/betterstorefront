@@ -1,5 +1,5 @@
 import fetcher from '@framework/fetcher'
-import { CUSTOMER_BASE_API } from '@new-components/utils/constants'
+import { CUSTOMER_BASE_API } from '@components//utils/constants'
 import apiRouteGuard from '../base/api-route-guard'
 
 const getCustomerDetailsApiMiddleware = async (req: any, res: any) => {

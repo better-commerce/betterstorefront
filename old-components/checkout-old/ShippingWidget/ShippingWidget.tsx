@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import s from './ShippingWidget.module.css'
-import { ChevronRight, MapPin, Check } from '@components/icons'
+import { ChevronRight, MapPin, Check } from '@old-components/icons'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ComponentProps {

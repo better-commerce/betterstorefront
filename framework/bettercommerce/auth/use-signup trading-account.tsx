@@ -1,4 +1,4 @@
-import { REGISTER_CUSTOMER_TRADING_ACCOUNT } from '@new-components/utils/constants'
+import { REGISTER_CUSTOMER_TRADING_ACCOUNT } from '@components//utils/constants'
 import qs from 'qs'
 import { Guid } from '@commerce/types'
 import fetcher from '@framework/fetcher'

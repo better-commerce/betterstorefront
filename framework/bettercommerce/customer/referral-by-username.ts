@@ -1,4 +1,4 @@
-import { REFERRAL_BY_USERNAME } from "@new-components/utils/constants";
+import { REFERRAL_BY_USERNAME } from "@components//utils/constants";
 import fetcher from "@framework/fetcher";
 
 interface props{

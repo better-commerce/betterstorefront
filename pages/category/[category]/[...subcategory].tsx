@@ -20,19 +20,19 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { postData } from '@new-components/utils/clientFetcher'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
-import OutOfStockFilter from '@new-components/Product/Filters/OutOfStockFilter'
-import CompareSelectionBar from '@new-components/Product/ProductCompare/compareSelectionBar'
-import { useUI } from '@new-components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
-const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@new-components/Product/Grid'))
-const ProductGrid = dynamic(() => import('@new-components/Product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
+import { postData } from '@components//utils/clientFetcher'
+import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
+import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import OutOfStockFilter from '@components//Product/Filters/OutOfStockFilter'
+import CompareSelectionBar from '@components//Product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components//ui'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components//utils/constants'
+const ProductFilterRight = dynamic(() => import('@components//Product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components//Product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components//Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components//Product/Grid'))
+const ProductGrid = dynamic(() => import('@components//Product/Grid/ProductGrid'))
+const BreadCrumbs = dynamic(() => import('@components//ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 

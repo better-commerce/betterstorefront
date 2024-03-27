@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Cross, ChevronLeft } from '@components/icons'
+import { Cross, ChevronLeft } from '@old-components/icons'
 import cn from 'classnames'
 import s from './SidebarLayout.module.css'
 import { useTranslation } from '@commerce/utils/use-translation'

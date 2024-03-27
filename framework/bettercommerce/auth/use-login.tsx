@@ -1,4 +1,4 @@
-import { AUTHENTICATE_CUSTOMER } from '@new-components/utils/constants'
+import { AUTHENTICATE_CUSTOMER } from '@components//utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
 

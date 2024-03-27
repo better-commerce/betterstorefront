@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 import { useRef } from 'react'
 import SwiperCore, { Navigation } from 'swiper'
 import dynamic from 'next/dynamic'
-import { IDeviceInfo } from '@new-components/ui/context'
+import { IDeviceInfo } from '@components//ui/context'
 import ProductCard from '../ProductCard/ProductCard'
 import { useTranslation } from '@commerce/utils/use-translation'
 

@@ -1,4 +1,4 @@
-import { CUSTOMER_BASE_API } from '@new-components/utils/constants'
+import { CUSTOMER_BASE_API } from '@components//utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {

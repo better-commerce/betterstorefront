@@ -8,12 +8,12 @@ import { Dialog, Transition } from '@headlessui/react'
 
 // Component Imports
 import NewAddressForm from './NewAddressForm'
-import { useUI } from '@new-components/ui'
+import { useUI } from '@components//ui'
 
 // Other Imports
 import { findByFieldName } from '@framework/utils/app-util'
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'
-import { Messages } from '@new-components/utils/constants'
+import { Messages } from '@components//utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export const NEW_ADDRESS_FORM_ID = 'newAddressForm'

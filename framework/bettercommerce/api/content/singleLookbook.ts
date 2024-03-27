@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { LOOKBOOK_ENDPOINT } from '@new-components/utils/constants'
+import { LOOKBOOK_ENDPOINT } from '@components//utils/constants'
 export default function getSingleLookbook(slug: string, cookies?: any) {
   async function getSingleLookbookAsync() {
     const url = `${LOOKBOOK_ENDPOINT}/slug?slug=lookbook/${slug}`;

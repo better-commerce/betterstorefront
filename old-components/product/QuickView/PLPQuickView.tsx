@@ -1,5 +1,5 @@
-import { Messages,NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, } from '@new-components/utils/constants'
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@new-components/utils/textVariables'
+import { Messages,NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO, PRODUCTS_SLUG_PREFIX, } from '@components//utils/constants'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components//utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
@@ -14,14 +14,14 @@ import Link from 'next/link'
 import { round } from 'lodash'
 import AttributesHandler from '../ProductView/AttributesHandler'
 import dynamic from 'next/dynamic'
-import { useUI } from '@new-components/ui'
-import cartHandler from '@new-components/services/cart'
-import { recordGA4Event } from '@new-components/services/analytics/ga4'
+import { useUI } from '@components//ui'
+import cartHandler from '@components//services/cart'
+import { recordGA4Event } from '@components//services/analytics/ga4'
 import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
-import wishlistHandler from '@new-components/services/wishlist'
+import wishlistHandler from '@components//services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
-const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
+const Button = dynamic(() => import('@components//ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
 

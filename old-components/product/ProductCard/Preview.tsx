@@ -3,7 +3,7 @@ import { Transition, Dialog } from '@headlessui/react';
 import ImageZoom from 'react-image-zooom'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { FC } from 'react'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation';
 interface Props {
   previewImg: any

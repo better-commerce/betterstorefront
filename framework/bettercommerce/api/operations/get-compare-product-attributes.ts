@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { PRODUCT_CUSTOM_ATTRIBUTES } from '@new-components/utils/constants'
+import { PRODUCT_CUSTOM_ATTRIBUTES } from '@components//utils/constants'
 
 export default async function getCompareProductAttributes(
   stockCodes: any,

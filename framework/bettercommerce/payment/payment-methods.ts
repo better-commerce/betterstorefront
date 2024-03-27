@@ -3,7 +3,7 @@ import {
   SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
   PAYMENTS_ENDPOINT,
   PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import { parsePaymentMethods } from '@framework/utils/app-util'
 
 interface Props {

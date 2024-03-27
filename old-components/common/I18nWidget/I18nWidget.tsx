@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { FC, useState } from 'react'
 import { useRouter } from 'next/router'
 import s from './I18nWidget.module.css'
-import { Cross, ChevronUp } from '@components/icons'
+import { Cross, ChevronUp } from '@old-components/icons'
 import ClickOutside from '@lib/click-outside'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
 interface LOCALE_DATA {
   name: string
   img: {

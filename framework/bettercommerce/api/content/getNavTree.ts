@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { NAV_ENDPOINT } from '@new-components/utils/constants'
+import { NAV_ENDPOINT } from '@components//utils/constants'
 import { addCache, cachedGetData, lookupCache } from '../utils/cached-fetch'
 
 export default function getNavTree(cookies?: any) {

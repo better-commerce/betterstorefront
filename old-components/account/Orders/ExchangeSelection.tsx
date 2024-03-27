@@ -7,18 +7,18 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 // Component Imports
-import { LoadingDots } from '@new-components/ui'
-import AttributesHandler from '@components/product/ProductView/AttributesHandler'
+import { LoadingDots } from '@components//ui'
+import AttributesHandler from '@old-components/product/ProductView/AttributesHandler'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
 import {
   /*CancelOrderPageAction,*/ NEXT_GET_PRODUCT,
   PRODUCTS_SLUG_PREFIX,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-// import Spinner from '@new-components/ui/Spinner';
-// import SubmitButton from '@components/common/SubmitButton';
+// import Spinner from '@components//ui/Spinner';
+// import SubmitButton from '@old-components/common/SubmitButton';
 
 const ExchangeSelection = ({
   btnTitle,

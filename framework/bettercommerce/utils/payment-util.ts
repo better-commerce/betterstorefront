@@ -11,8 +11,8 @@ import {
   ENABLE_SECURED_PAYMENT_PAYLOAD,
   NEXT_CANCEL_ORDER,
   PAYMENTS_API,
-} from '@new-components/utils/constants'
-import { Payments } from '@new-components/utils/payment-constants'
+} from '@components//utils/constants'
+import { Payments } from '@components//utils/payment-constants'
 import { matchStrings, tryParseJson } from './parse-util'
 import { encrypt } from './cipher'
 import {

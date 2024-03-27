@@ -1,6 +1,6 @@
 import React from 'react'
-import { CURRENT_THEME } from '@new-components/utils/constants'
-import { recordGA4Event } from '@new-components/services/analytics/ga4'
+import { CURRENT_THEME } from '@components//utils/constants'
+import { recordGA4Event } from '@components//services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
 import Image from 'next/image'
 

@@ -1,7 +1,7 @@
 import {
   CHECKOUT_ENDPOINT,
   SHIPPING_ENDPOINT,
-} from '@new-components/utils/constants'
+} from '@components//utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {

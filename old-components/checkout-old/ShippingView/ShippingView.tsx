@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import cn from 'classnames'
 
-import Button from '@new-components/ui/Button'
-import { useUI } from '@new-components/ui/context'
-import SidebarLayout from '@components/common/SidebarLayout'
+import Button from '@components//ui/Button'
+import { useUI } from '@components//ui/context'
+import SidebarLayout from '@old-components/common/SidebarLayout'
 import useAddAddress from '@framework/customer/address/use-add-item'
 
 import s from './ShippingView.module.css'

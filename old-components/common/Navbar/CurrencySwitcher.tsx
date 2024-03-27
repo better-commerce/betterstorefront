@@ -4,7 +4,7 @@ import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
 import { getCurrency } from '@framework/utils/app-util'
-import { useUI } from '@new-components/ui'
+import { useUI } from '@components//ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CurrencySwitcher({ config = [], title, action }: any) {

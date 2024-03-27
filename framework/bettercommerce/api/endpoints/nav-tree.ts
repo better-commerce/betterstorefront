@@ -1,4 +1,4 @@
-import { NAV_ENDPOINT } from '@new-components/utils/constants'
+import { NAV_ENDPOINT } from '@components//utils/constants'
 import fetcher from '@framework/fetcher';
 
 export default async function useNavTree(cookies?: any) {

@@ -1,4 +1,4 @@
-import ProductSlider from '@components/product/ProductSlider'
+import ProductSlider from '@old-components/product/ProductSlider'
 const PDPCompare = ({ pageConfig, name, products, deviceInfo, activeProduct, attributeNames, maxBasketItemsCount, compareProductsAttributes }: any) => {
   return (
     <div className="px-4 pb-5 mx-auto container-ffx page-container sm:px-4 md:px-6 lg:px-6 2xl:px-0">

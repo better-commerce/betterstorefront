@@ -1,4 +1,4 @@
-import { BASKET_ENDPOINT } from '@new-components/utils/constants'
+import { BASKET_ENDPOINT } from '@components//utils/constants'
 import fetcher from '../fetcher'
 import { RequestMethod } from '@better-commerce/bc-payments-sdk/dist/constants'
 import { logError } from '@framework/utils/app-util'
