@@ -1,9 +1,9 @@
-import SizeInline from '@components/product/ProductView/SizeInline'
-import InlineList from '@components/product/ProductView/InlineList'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import attributesGenerator, { getAttributesFromSlug, productLookup } from '@new-components/utils/attributesGenerator'
 import { cloneDeep } from 'lodash'
+import SizeInline from './SizeInline'
+import InlineList from './InlineList'
 const ATTR_COMPONENTS: any = {
   SizeInline: (props: any) => <SizeInline {...props} />,
   HorizontalList: (props: any) => <InlineList {...props} />,

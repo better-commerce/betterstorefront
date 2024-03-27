@@ -1,31 +1,15 @@
-// Base Imports
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-// Package Imports
 import dynamic from 'next/dynamic'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import ImageGallery from 'react-image-gallery'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { Tab } from '@headlessui/react'
-import { HeartIcon } from '@heroicons/react/24/outline'
+import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
-import SwiperCore, { Navigation, Pagination, Zoom } from 'swiper'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import Script from 'next/script';
-
-// Component Imports
-import classNames from '@new-components/utils/classNames'
 import { useUI } from '@new-components/ui/context'
 import { KEYS_MAP, EVENTS } from '@new-components/utils/dataLayer'
 import cartHandler from '@new-components/services/cart'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE } from '@new-components/utils/constants'
 import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-
-// Other Imports
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@new-components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -38,25 +22,20 @@ import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import { LocalStorage } from '@new-components/utils/payment-constants'
 import wishlistHandler from '@new-components/services/wishlist'
-import LikeButton from '@new-components/LikeButton'
 import { PRODUCTS } from '@components/data/data'
 import AccordionInfo from '@new-components/AccordionInfo'
 import Prices from '@new-components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@new-components/ReviewItem'
-import ButtonSecondary from '@new-components/shared/Button/ButtonSecondary'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductTag from '@components/product/ProductTag'
 import ProductSpecifications from '@components/product/ProductDetails/specifications'
 import PDPCompare from '@components/product/PDPCompare'
 const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
-const AttributesHandler = dynamic(() => import('@components/product/ProductView/AttributesHandler'))
+const AttributesHandler = dynamic(() => import('@new-components/Product/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@components/product/Bundles'))
-const Reviews = dynamic(() => import('@components/product/Reviews'))
-const PriceMatch = dynamic(() => import('@components/product/PriceMatch'))
 const Engraving = dynamic(() => import('@components/product/Engraving'))
-const ProductDetails = dynamic(() => import('@components/product/ProductDetails'))
 const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
@@ -637,7 +616,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   }
 
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
-  SwiperCore.use([Navigation])
   const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
   const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
   const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
@@ -914,7 +892,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
           )}
-          <PriceMatch show={isPriceMatchModalShown} onClose={showPriceMatchModal} productName={product?.name} productImage={product?.images?.length && product?.images[0]?.image} productId={product?.id} stockCode={product?.stockCode} ourCost={isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax} rrp={isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax} ourDeliveryCost={product?.price?.raw?.tax} />
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6">
               <ProductDescription seoInfo={attrGroup} />
