@@ -647,36 +647,38 @@ function CategoryLandingPage({
                 ) : null}
               </div>
               {/* category banner info End */}
-              <div className="container py-6">
-                {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
-                  <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2>
-                )}
-                <Swiper spaceBetween={4} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
-                  {category?.subCategories?.map((featured: any, featuredIdx: number) => (
-                    <div key={featuredIdx}>
-                      {featured?.isFeatured == true && (
-                        <SwiperSlide key={featuredIdx}>
-                          <div className="relative border group rounded-2xl bg-slate-100 border-slate-100">
-                            <>
-                              {featured?.image != '' ? (
-                                <img src={generateUri(featured?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                              ) : (
-                                <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                              )}
-                            </>
-                            <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                              <Link href={`/${featured?.link}`} className="px-4 py-2 text-white bg-black rounded-lg font-14">
-                                <span>{featured?.name}</span>
-                              </Link>
-                            </div>
-                          </div>
-                        </SwiperSlide>
-                      )}
-                    </div>
-                  )
+              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+                <div className="container py-6">
+                  {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
+                    <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2>
                   )}
-                </Swiper>
-              </div>
+                  <Swiper spaceBetween={4} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
+                    {category?.subCategories?.map((featured: any, featuredIdx: number) => (
+                      <div key={featuredIdx}>
+                        {featured?.isFeatured == true && (
+                          <SwiperSlide key={featuredIdx}>
+                            <div className="relative border group rounded-2xl bg-slate-100 border-slate-100">
+                              <>
+                                {featured?.image != '' ? (
+                                  <img src={generateUri(featured?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
+                                ) : (
+                                  <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
+                                )}
+                              </>
+                              <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
+                                <Link href={`/${featured?.link}`} className="px-4 py-2 text-white bg-black rounded-lg font-14">
+                                  <span>{featured?.name}</span>
+                                </Link>
+                              </div>
+                            </div>
+                          </SwiperSlide>
+                        )}
+                      </div>
+                    )
+                    )}
+                  </Swiper>
+                </div>
+              }
               {products?.total > 0 ? (
                 <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
                   {!!products && (products?.filters?.length > 0 ? (
