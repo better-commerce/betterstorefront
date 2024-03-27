@@ -17,30 +17,28 @@ import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@new-components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
+import { LocalStorage } from '@new-components/utils/payment-constants'
+import wishlistHandler from '@new-components/services/wishlist'
+import AccordionInfo from '@new-components/AccordionInfo'
+import Link from 'next/link'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { PRODUCTS } from './data'
 import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
-import { LocalStorage } from '@new-components/utils/payment-constants'
-import wishlistHandler from '@new-components/services/wishlist'
-import { PRODUCTS } from '@components/data/data'
-import AccordionInfo from '@new-components/AccordionInfo'
-import Prices from '@new-components/Prices'
-import Link from 'next/link'
-import ReviewItem from '@new-components/ReviewItem'
-import { useTranslation } from '@commerce/utils/use-translation'
-import ProductTag from '@new-components/Product/ProductTag'
-import ProductSpecifications from '@new-components/Product/Specifications'
-import PDPCompare from '@new-components/Product/PDPCompare'
-const Preview = dynamic(() => import('@components/product/ProductCard/Preview'))
+const PDPCompare = dynamic(() => import('@new-components/Product/PDPCompare'))
+const ProductSpecifications = dynamic(() => import('@new-components/Product/Specifications'))
+const ProductTag = dynamic(() => import('@new-components/Product/ProductTag'))
+const ReviewItem = dynamic(() => import('@new-components/ReviewItem'))
+const Prices = dynamic(() => import('@new-components/Prices'))
 const AttributesHandler = dynamic(() => import('@new-components/Product/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
-const Bundles = dynamic(() => import('@components/product/Bundles'))
-const Engraving = dynamic(() => import('@components/product/Engraving'))
+const Bundles = dynamic(() => import('@new-components/Product/Bundles'))
+const Engraving = dynamic(() => import('@new-components/Product/Engraving'))
 const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
-const RelatedProductWithGroup = dynamic(() => import('@components/product/RelatedProducts/RelatedProductWithGroup'))
-const AvailableOffers = dynamic(() => import('@components/product/ProductView/AvailableOffers'))
-const ReviewInput = dynamic(() => import('@components/product/Reviews/ReviewInput'))
-const QuantityBreak = dynamic(() => import('@components/product/ProductView/QuantiyBreak'))
+const RelatedProductWithGroup = dynamic(() => import('@new-components/Product/RelatedProducts/RelatedProductWithGroup'))
+const AvailableOffers = dynamic(() => import('@new-components/Product/AvailableOffers'))
+const QuantityBreak = dynamic(() => import('@new-components/Product/QuantiyBreak'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -58,16 +56,12 @@ const PLACEMENTS_MAP: any = {
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, }: any) {
   const translate = useTranslation()
-  const { isMobile } = deviceInfo
-  const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
+  const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
-  const [isPriceMatchModalShown, showPriceMatchModal] = useState(false)
   const [isEngravingOpen, showEngravingModal] = useState(false)
-  const [previewImg, setPreviewImg] = useState<any>()
-  const [reviewInput, setReviewInput] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [isLoading, setIsLoading] = useState(true)
   const [sizeInit, setSizeInit] = useState('')
@@ -174,7 +168,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   useEffect(() => {
     const { entityId, entityName, entityType, entity } = KEYS_MAP
-    setReviewInput(true)
     recordEvent(EVENTS.ProductViewed)
     if (snippets) {
       snippets.forEach((snippet: any) => {
@@ -221,14 +214,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const handleTogglePersonalizationDialog = () => {
     if (!isPersonalizeLoading) showEngravingModal((v) => !v)
-  }
-
-  const handleImgLoadT = (image: any) => {
-    setPreviewImg(image)
-  }
-
-  const handlePreviewClose = () => {
-    setPreviewImg(undefined)
   }
 
   const buttonTitle = () => {
@@ -896,8 +881,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <div className="px-4 mx-auto sm:container page-container sm:px-6">
               <ProductDescription seoInfo={attrGroup} />
             </div>
-          </div>
-          {previewImg && <Preview previewImg={previewImg} handlePreviewClose={handlePreviewClose} />}
+          </div>          
         </div>
       </main>
     </>

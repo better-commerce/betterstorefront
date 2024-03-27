@@ -9,8 +9,7 @@ import cartHandler from '@new-components/services/cart'
 import { useUI } from '@new-components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { recordGA4Event } from '@new-components/services/analytics/ga4'
-const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
-const ProductCard = dynamic(() => import('@components/product/ProductCard/ProductCard'))
+import ProductCard from '@new-components/ProductCard'
 
 declare const window: any
 interface Attribute {
@@ -30,6 +29,7 @@ export default function RelatedProducts({
   handleQuickAddToBag,
   deviceInfo,
   maxBasketItemsCount,
+  config
 }: any) {
   const { basketId, setCartItems, user } = useUI()
   const [quickViewProduct, setQuickViewProduct] = useState<any>(undefined)
@@ -189,37 +189,21 @@ export default function RelatedProducts({
                         {key == 'You May Also Like'
                           ? 'Frequent Bought Together'
                           : key == 'undefined'
-                          ? 'Frequent Bought Together'
-                          : key == 'Upgrade'
-                          ? 'Quick Add'
-                          : key == 'Basket Group'
-                          ? 'Frequent Bought Together'
-                          : key}
+                            ? 'Frequent Bought Together'
+                            : key == 'Upgrade'
+                              ? 'Quick Add'
+                              : key == 'Basket Group'
+                                ? 'Frequent Bought Together'
+                                : key}
                       </h2>
                     </div>
                   </div>
                   <div className="mb-8 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-8">
-                    <Swiper
-                      slidesPerView={2.3}
-                      spaceBetween={8}
-                      navigation={true}
-                      loop={false}
-                      breakpoints={{
-                        640: { slidesPerView: 2.3, spaceBetween: 4 },
-                        768: { slidesPerView: 2.3, spaceBetween: 15 },
-                        1024: { slidesPerView: 2.3, spaceBetween: 15 },
-                      }}
-                      className="mySwiper"
-                    >
+                    <Swiper slidesPerView={2.3} spaceBetween={8} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 2.3, spaceBetween: 15 }, 1024: { slidesPerView: 2.3, spaceBetween: 15 }, }} className="mySwiper" >
                       {values?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid}>
-                            <ProductCard
-                              product={product}
-                              hideWishlistCTA={true}
-                              deviceInfo={deviceInfo}
-                              maxBasketItemsCount={maxBasketItemsCount}
-                            />
+                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
                           </SwiperSlide>
                         )
                       })}
@@ -231,14 +215,6 @@ export default function RelatedProducts({
           }
         )}
       </section>
-      <PLPQuickView
-        isQuickview={Boolean(quickViewProduct)}
-        setQuickview={() => {}}
-        productData={quickViewProduct}
-        isQuickviewOpen={Boolean(quickViewProduct)}
-        setQuickviewOpen={handleCloseQuickView}
-        maxBasketItemsCount={maxBasketItemsCount}
-      />
     </>
   )
 }
