@@ -21,7 +21,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Button, LoadingDots, useUI } from '@new-components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
-import PromotionInput from '@components/cart/PromotionInput'
+import PromotionInput from '@new-components/SectionCheckoutJourney/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
 interface BasketItem {
   id: string

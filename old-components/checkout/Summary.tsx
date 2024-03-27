@@ -1,4 +1,4 @@
-import PromotionInput from '@components/cart/PromotionInput'
+import PromotionInput from '@new-components/SectionCheckoutJourney/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@new-components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
