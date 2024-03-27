@@ -8,7 +8,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 
 // Component Imports
 import { LoadingDots } from '@new-components/ui'
-import AttributesHandler from '@components/product/ProductView/AttributesHandler'
+import AttributesHandler from '@new-components/Product/AttributesHandler'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'

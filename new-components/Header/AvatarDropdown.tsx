@@ -1,7 +1,7 @@
 "use client";
 
 import { Popover, Transition } from "@headlessui/react";
-import { avatarImgs } from "@components/common/Header/fakeData";
+import { avatarImgs } from "@new-components/Header/fakeData";
 import { Fragment } from "react";
 import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";

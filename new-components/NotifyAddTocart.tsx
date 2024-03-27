@@ -3,8 +3,8 @@ import { Transition } from "@headlessui/react";
 import Prices from "@new-components/Prices";
 
 import Image, { StaticImageData } from "next/image";
-import { PRODUCTS } from "@components/data/data";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { PRODUCTS } from "./Product/data";
 
 interface Props {
   show: boolean;

@@ -1,15 +1,15 @@
 import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
-import { Heart } from '@components/icons'
+import { Heart } from '@new-components/shared/icons'
 import Layout from '@new-components/Layout/Layout'
 import { Text, Container, Skeleton } from '@new-components/ui'
 import { useCustomer } from '@framework/customer'
-import { WishlistCard } from '@components/wishlist'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import rangeMap from '@lib/range-map'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
+import { WishlistCard } from 'old-components/wishlist'
 
 
 export async function getStaticProps({
@@ -51,7 +51,7 @@ export default function Wishlist() {
         <Text variant="pageHeading">
           {translate('label.wishlist.myWishlistText')}
         </Text>
-        <div className="group flex flex-col">
+        <div className="flex flex-col group">
           {isLoading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {rangeMap(12, (i) => (
@@ -61,14 +61,14 @@ export default function Wishlist() {
               ))}
             </div>
           ) : isEmpty ? (
-            <div className="flex-1 px-12 py-24 flex flex-col justify-center items-center ">
-              <span className="border border-dashed border-secondary flex items-center justify-center w-16 h-16 bg-primary p-12 rounded-lg text-primary">
+            <div className="flex flex-col items-center justify-center flex-1 px-12 py-24 ">
+              <span className="flex items-center justify-center w-16 h-16 p-12 border border-dashed rounded-lg border-secondary bg-primary text-primary">
                 <Heart className="absolute" />
               </span>
               <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
                 {translate('label.wishlist.emptyWishlistText')}
               </h2>
-              <p className="text-accent-6 px-10 text-center pt-2">
+              <p className="px-10 pt-2 text-center text-accent-6">
                 {translate('label.order.noOrderFoundDisplayText')}
               </p>
             </div>

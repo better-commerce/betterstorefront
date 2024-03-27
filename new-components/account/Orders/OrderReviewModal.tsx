@@ -1,5 +1,4 @@
-import { ArrowLeft } from "@components/icons";
-import ReviewInput from "@components/product/Reviews/ReviewInput";
+import { ArrowLeft, ArrowRight } from '@new-components/shared/icons';
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
@@ -59,11 +58,7 @@ const OrderReviewModal = ({ isSubmitReview, setSubmitReview, isReviewdata }: any
                                     </div>
                                  </div>
                               </div>
-                              <ReviewInput
-                                 data={isReviewdata}
-                                 productId={isReviewdata?.productId ?? isReviewdata?.recordId}
-                                 setSubmitReview={setSubmitReview}
-                              />
+                              
                            </div>
                         </div>
                      </Transition.Child>

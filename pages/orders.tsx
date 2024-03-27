@@ -1,6 +1,6 @@
 import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
-import { Bag } from '@components/icons'
+import { Bag } from '@new-components/shared/icons'
 import Layout from '@new-components/Layout/Layout'
 import { Container, Text } from '@new-components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'

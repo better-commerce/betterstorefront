@@ -6,9 +6,8 @@ import { useEffect, useState, Fragment } from 'react'
 import { matchStrings, priceFormat, stringFormat, tryParseJson, } from '@framework/utils/parse-util'
 import useCart from '@new-components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, EyeIcon, CheckCircleIcon, TrashIcon, HeartIcon, } from '@heroicons/react/24/outline'
+import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, EyeIcon, CheckCircleIcon, TrashIcon, HeartIcon, ArrowRightIcon, } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
-import RelatedProducts from '@components/product/RelatedProducts'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
 import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@new-components/utils/constants'
@@ -16,16 +15,16 @@ import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@new-components/services/analytics/ga4'
-import Engraving from '@components/product/Engraving'
 import RelatedProductWithGroup from '@new-components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@new-components/Layout/Layout'
 import { Guid } from '@commerce/types'
-import CartItemRemoveModal from '@components/common/CartItemRemoveModal'
 import RecentlyViewedProduct from '@new-components/Product/RelatedProducts/RecentlyViewedProducts'
 import wishlistHandler from '@new-components/services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { ArrowRight } from '@components/icons'
+import RelatedProducts from '@new-components/Product/RelatedProducts'
+import CartItemRemoveModal from '@new-components/CartItemRemoveModal'
+import Engraving from '@new-components/Product/Engraving'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -804,7 +803,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
                           </span>
                           <span className='flex items-center gap-2 pr-5'>
-                            <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRight className="w-4 h-4 text-white" />
+                            <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
                           </span>
                         </Link>
                     </div>

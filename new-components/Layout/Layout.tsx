@@ -11,7 +11,6 @@ import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const NotifyUserPopup = dynamic(() => import('@new-components/ui/NotifyPopup'))
-const ProgressBar = dynamic(() => import('@new-components/ui/ProgressBar'))
 const MainNav2Logged = dynamic(() => import('@new-components/Header/MainNav2Logged'))
 const AlertRibbon = dynamic(() => import('@new-components/ui/AlertRibbon'))
 const WishlistSidebarView = dynamic(() => import('@new-components/shared/Wishlist/WishlistSidebarView'))
@@ -25,6 +24,7 @@ import { Sidebar, Modal, LoadingDots } from '@new-components/ui'
 import { IDeviceInfo, useUI } from '@new-components/ui/context'
 import { CURRENT_THEME } from '@new-components/utils/constants'
 import { CartSidebarView } from '@new-components/SectionCheckoutJourney/cart'
+import ProgressBar from '@new-components/ui/ProgressBar'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">

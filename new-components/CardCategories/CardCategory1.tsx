@@ -1,4 +1,4 @@
-import { _getImgRd, _getTagNameRd } from "@components/common/Header/fakeData";
+import { _getImgRd, _getTagNameRd } from "@new-components/Header/fakeData";
 import React, { FC } from "react";
 
 import Link from "next/link";

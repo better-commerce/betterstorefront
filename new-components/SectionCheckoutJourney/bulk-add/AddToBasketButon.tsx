@@ -1,6 +1,5 @@
-import SubmitButton, {
-  ISubmitButtonProps,
-} from '@components/common/SubmitButton'
+
+import SubmitButton, { ISubmitButtonProps } from '@new-components/shared/Button/SubmitButton'
 import React, { FC } from 'react'
 
 interface IAddToBasketButtonProps {

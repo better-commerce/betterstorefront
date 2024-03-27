@@ -1,6 +1,6 @@
 import Layout from '@new-components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import Form from '@components/customer'
+import Form from '@new-components/customer'
 import axios from 'axios'
 import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@new-components/utils/constants'
 import { useUI } from '@new-components/ui/context'
@@ -12,7 +12,6 @@ import cartHandler from '@new-components/services/cart'
 import eventDispatcher from '@new-components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
 import useAnalytics from '@new-components/services/analytics/useAnalytics'
-import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { matchStrings } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
@@ -20,6 +19,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
 import Link from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import SocialSignInLinks from '@new-components/shared/Login/SocialSignInLinks'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)

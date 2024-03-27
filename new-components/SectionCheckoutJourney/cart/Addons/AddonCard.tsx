@@ -21,11 +21,11 @@ import { vatIncluded, validateAddToCart, cartItemsValidateAddToCart } from '@fra
 import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import cn from 'classnames'
-import ButtonNotifyMe from '@components/product/ButtonNotifyMe'
 import { useTranslation } from '@commerce/utils/use-translation'
+import ButtonNotifyMe from '@new-components/Product/ButtonNotifyMe'
+import PLPQuickView from '@new-components/Product/PLPQuickView'
 const SimpleButton = dynamic(() => import('@new-components/ui/Button'))
 const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
-const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView'))
 
 interface Props {
   product: any

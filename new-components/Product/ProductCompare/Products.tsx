@@ -22,13 +22,11 @@ import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
-import ButtonNotifyMe from '@components/product/ButtonNotifyMe' 
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@new-components/Prices'
+import ButtonNotifyMe from '../ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@new-components/ui/Button'))
 const Button = dynamic(() => import('@new-components/ui/IndigoButton'))
-const PLPQuickView = dynamic(() => import('@components/product/QuickView/PLPQuickView')
-)
 
 interface Props {
   product: any

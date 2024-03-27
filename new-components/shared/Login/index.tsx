@@ -3,17 +3,18 @@ import axios from 'axios'
 import Router from 'next/router'
 import Link from 'next/link'
 
-import Form from '@components/customer'
+import Form from '@new-components/customer'
 import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, OTP_LOGIN_ENABLED } from '@new-components/utils/constants'
 import { useUI } from '@new-components/ui/context'
 import useWishlist from '@new-components/services/wishlist'
 import cartHandler from '@new-components/services/cart'
 import useAnalytics from '@new-components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
-import LoginOtp from '@components/account/login-otp'
-import SocialSignInLinks from '@components/account/SocialSignInLinks'
+
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import LoginOTPComp from '@new-components/account/login-otp'
+import SocialSignInLinks from './SocialSignInLinks'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -100,12 +101,12 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
   }
 
   if (otpEnabled) {
-    return <LoginOtp />
+    return <LoginOTPComp />
   }
 
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20 px-10">
+      <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
             {translate('label.login.loginBtnText')}

@@ -1,13 +1,13 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
 import commerce from '@lib/api/commerce'
-import LayoutError from '../components/common/Layout/LayoutError'
 import Link from 'next/link'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutError from '@new-components/Layout/LayoutError'
 
 export async function getStaticProps({
   preview,

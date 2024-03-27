@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { avatarColors, avatarImgs } from "@components/common/Header/fakeData";
+import { avatarColors, avatarImgs } from "@new-components/Header/fakeData";
 import VerifyIcon from "@new-components/VerifyIcon";
 import Image, { StaticImageData } from "next/image";
 
