@@ -16,7 +16,7 @@ import 'swiper/css/navigation'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import CompareSelectionBar from '@new-components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@new-components/ui'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@new-components/utils/constants'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
@@ -25,15 +25,15 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
+import OutOfStockFilter from '@new-components/Product/Filters/OutOfStockFilter'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@new-components/Product/Grid'))
+const ProductGrid = dynamic(() => import('@new-components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
@@ -421,7 +421,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         </div>
 
         <div className="container mx-auto my-6 mt-4 bg-transparent">
-          <h1 className='dark:text-black'>{category?.name}</h1>
+          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+            {category?.name.toLowerCase()}
+          </h1>
           <div className="font-18 dark:text-black" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></div>
         </div>
 

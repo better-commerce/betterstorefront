@@ -1,15 +1,12 @@
 import Link from 'next/link'
 import { FC } from 'react'
-import CartItem from '@components/cart/CartItem'
 import { Button, Text } from '@new-components/ui'
 import { useUI } from '@new-components/ui/context'
-import SidebarLayout from '@components/common/SidebarLayout'
-import useCart from '@framework/cart/use-cart'
-import usePrice from '@framework/product/use-price'
 import useCheckout from '@framework/checkout/use-checkout'
 import ShippingWidget from '../ShippingWidget'
 import s from './CheckoutSidebarView.module.css'
 import { useTranslation } from '@commerce/utils/use-translation'
+import SidebarLayout from '@new-components/shared/SidebarLayout/SidebarLayout'
 
 const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const translate = useTranslation();

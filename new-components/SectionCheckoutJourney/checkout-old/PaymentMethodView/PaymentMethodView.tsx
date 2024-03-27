@@ -4,7 +4,7 @@ import cn from 'classnames'
 import useAddCard from '@framework/customer/card/use-add-item'
 import { Button, Text } from '@new-components/ui'
 import { useUI } from '@new-components/ui/context'
-import SidebarLayout from '@components/common/SidebarLayout'
+import SidebarLayout from '@new-components/shared/SidebarLayout/SidebarLayout'
 
 import s from './PaymentMethodView.module.css'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -50,14 +50,14 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <form className="h-full" onSubmit={handleSubmit}>
       <SidebarLayout handleBack={() => setSidebarView('CHECKOUT_VIEW')}>
-        <div className="px-4 sm:px-6 flex-1">
+        <div className="flex-1 px-4 sm:px-6">
           <Text variant="sectionHeading"> {translate('label.checkout.paymentMethodText')}</Text>
           <div>
             <div className={s.fieldset}>
               <label className={s.label}>{translate('label.checkout.cardHolderNameText')}</label>
               <input name="cardHolder" className={s.input} />
             </div>
-            <div className="grid gap-3 grid-flow-row grid-cols-12">
+            <div className="grid grid-flow-row grid-cols-12 gap-3">
               <div className={cn(s.fieldset, 'col-span-7')}>
                 <label className={s.label}>{translate('label.checkout.cardNumText')}</label>
                 <input name="cardNumber" className={s.input} />
@@ -75,8 +75,8 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
                 <input name="cardCvc" className={s.input} />
               </div>
             </div>
-            <hr className="border-accent-2 my-6" />
-            <div className="grid gap-3 grid-flow-row grid-cols-12">
+            <hr className="my-6 border-accent-2" />
+            <div className="grid grid-flow-row grid-cols-12 gap-3">
               <div className={cn(s.fieldset, 'col-span-6')}>
                 <label className={s.label}>{translate('label.addressBook.firstNameText')}</label>
                 <input name="firstName" className={s.input} />
@@ -100,7 +100,7 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
               </label>
               <input className={s.input} name="apartment" />
             </div>
-            <div className="grid gap-3 grid-flow-row grid-cols-12">
+            <div className="grid grid-flow-row grid-cols-12 gap-3">
               <div className={cn(s.fieldset, 'col-span-6')}>
                 <label className={s.label}>{translate('common.label.postalCodeTexts')}</label>
                 <input name="zipCode" className={s.input} />
@@ -118,7 +118,7 @@ const PaymentMethodView: FC<React.PropsWithChildren<unknown>> = () => {
             </div>
           </div>
         </div>
-        <div className="sticky z-20 bottom-0 w-full right-0 left-0 py-12 bg-accent-0 border-t border-accent-2 px-6">
+        <div className="sticky bottom-0 left-0 right-0 z-20 w-full px-6 py-12 border-t bg-accent-0 border-accent-2">
           <Button type="submit" width="100%" variant="ghost">
             {translate('common.label.continueBtnText')}
           </Button>

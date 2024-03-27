@@ -30,19 +30,19 @@ import { IPLPFilterState, useUI } from '@new-components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
+import OutOfStockFilter from '@new-components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-const CompareSelectionBar = dynamic(() => import('@components/product/ProductCompare/compareSelectionBar'))
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+const CompareSelectionBar = dynamic(() => import('@new-components/Product/ProductCompare/compareSelectionBar'))
+const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@new-components/Product/Grid'))
+const ProductGrid = dynamic(() => import('@new-components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@new-components/ui/BreadCrumbs'))
-const PLPFilterSidebar = dynamic(() => import('@components/product/Filters/PLPFilterSidebarView'))
+const PLPFilterSidebar = dynamic(() => import('@new-components/Product/Filters/PLPFilterSidebarView'))
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -503,8 +503,8 @@ export default function CollectionPage(props: any) {
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
         <div className="max-w-screen-sm">
-          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
-            {props?.name}
+          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+            {props?.name.toLowerCase()}
           </h1>
           {props?.description &&
             <div className='flex justify-between w-full align-bottom'>
