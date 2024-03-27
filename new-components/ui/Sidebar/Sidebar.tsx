@@ -6,7 +6,7 @@ import {
   enableBodyScroll,
   clearAllBodyScrollLocks,
 } from 'body-scroll-lock'
-import { IExtraProps } from '@components/common/Layout/Layout'
+import { IExtraProps } from '@new-components/Layout/Layout'
 
 interface SidebarProps {
   children: any

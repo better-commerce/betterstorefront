@@ -29,11 +29,11 @@ const NavMobile: React.FC<NavMobileProps> = ({
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
         {item.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={`/${i.hyperlink}`} className={`flex text-sm rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
+            <Link href={`/${i.hyperlink}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
               <span className={`py-2.5 ${!i.children ? "block w-full" : ""}`} onClick={onClickClose} >
-                {i.boxTitle}
+                {i?.boxTitle.toLowerCase()}
               </span>
-              {i.navItems?.length > 0 && (
+              {i?.navItems?.length > 0 && (
                 <span className="flex items-center flex-grow" onClick={(e) => e.preventDefault()} >
                   <Disclosure.Button as="span" className="flex justify-end flex-grow" >
                     <ChevronDownIcon className="w-4 h-4 ml-2 text-slate-500" aria-hidden="true" />
@@ -44,10 +44,10 @@ const NavMobile: React.FC<NavMobileProps> = ({
             {i.navItems && (
               <Disclosure.Panel>
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
-                  {i.navItems?.map((child: any, cIdx: number) => (
-                    <li key={cIdx} className={`${child.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={`/${child.itemLink}`} >
-                        {child.caption.toLowerCase()}
+                  {i?.navItems?.map((child: any, cIdx: number) => (
+                    <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={`/${child?.itemLink}`} >
+                        {child?.caption.toLowerCase()}
                       </Link>
                     </li>
                   ))}
@@ -65,7 +65,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
     return (
       <Disclosure key={index} as="li" className="text-slate-900 dark:text-white" >
         <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href={`/${item.hyperlink}`} >
-          <span className={!item.children ? "block w-full" : ""} onClick={onClickClose} >
+          <span className={!item?.children ? "block w-full" : ""} onClick={onClickClose} >
             {item?.caption}
           </span>
           {item?.navBlocks?.length > 0 && (
@@ -114,7 +114,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
         </span>
       </div>
       <ul className="flex flex-col px-2 py-6 space-y-1">
-        {navItems.map(_renderItem)}
+        {navItems?.map(_renderItem)}
       </ul>
     </div>
   );

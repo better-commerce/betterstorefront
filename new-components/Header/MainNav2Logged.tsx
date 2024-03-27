@@ -1,21 +1,21 @@
 "use client";
 
-import React, { FC, } from "react";
+import React, { FC } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { IExtraProps } from "@components/common/Layout/Layout";
 import { Logo, useUI } from "@new-components/ui";
-import { Searchbar } from "@components/common";
 import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { IExtraProps } from "@new-components/Layout/Layout";
+const SearchBar = dynamic(() => import('@new-components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@new-components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@new-components/Header/LangDropdown'))
 const CartDropdown = dynamic(() => import('@new-components/Header/CartDropdown'))
 const MenuBar = dynamic(() => import('@new-components/shared/MenuBar/MenuBar'))
 const Navigation = dynamic(() => import('@new-components/shared/Navigation/Navigation'))
-const ToggleSwitch = dynamic(() => import('@components/common/ToggleSwitch'))
-const BulkAddTopNav = dynamic(() => import('@components/bulk-add/TopNav'))
+const ToggleSwitch = dynamic(() => import('@new-components/shared/ToggleSwitch/ToggleSwitch'))
+const BulkAddTopNav = dynamic(() => import('@new-components/SectionCheckoutJourney/bulk-add/TopNav'))
 export interface MainNav2LoggedProps { }
 interface Props {
   config: []
@@ -34,7 +34,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const { isMobile, isIPadorTablet } = deviceInfo
   const renderMagnifyingGlassIcon = () => {
     return (
-      <Searchbar onClick={setShowSearchBar} keywords={keywords} />
+      <SearchBar onClick={setShowSearchBar} keywords={keywords} />
     );
   };
 

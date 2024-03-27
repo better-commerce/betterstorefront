@@ -23,14 +23,14 @@ function Navigation({ navItems }: any) {
                         <div className="grid flex-1 grid-cols-1 gap-6 pr-6 xl:gap-8 xl:pr-8">
                           {item.navBlocks.map((navItem: any, navIndex: number) => (
                             <div key={`child-${navIndex}`}>
-                              <p className="font-medium text-slate-900 dark:text-neutral-200">
-                                {navItem.boxTitle}
+                              <p className="font-medium capitalize text-slate-900 dark:text-neutral-200">
+                                {navItem.boxTitle.toLowerCase()}
                               </p>
                               <ul className="grid grid-cols-5 mt-4 space-4">
                                 {navItem.navItems?.map((child: any, cIdx: number) => (
-                                  <li key={cIdx} className={`${child.itemType ? "menuIsNew" : ""}`}>
-                                    <Link className="font-normal text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white " href={`/${child.itemLink}`} >
-                                      {child.caption}
+                                  <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
+                                    <Link className="font-normal capitalize text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white " href={`/${child?.itemLink}`} >
+                                      {child?.caption.toLowerCase()}
                                     </Link>
                                   </li>
                                 ))}

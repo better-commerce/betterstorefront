@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
-import { IExtraProps } from '@new-components/Layout/Layout'
 import rangeMap from '@lib/range-map'
 const ProductCard = dynamic(() => import('@new-components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@new-components/ui/InfiniteScroll'))
-const Pagination = dynamic(() => import('@components/product/Pagination'))
+import { IExtraProps } from '@new-components/Layout/Layout'
+import Pagination from '../Pagination'
+
 interface Props {
   products: any
   currentPage: number | string
@@ -14,8 +15,15 @@ interface Props {
   isCompared: any
 }
 
-export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll,
-  deviceInfo, maxBasketItemsCount, isCompared }: Props & IExtraProps) {
+export default function CategoryGrid({
+  products,
+  currentPage,
+  handlePageChange = () => { },
+  handleInfiniteScroll,
+  deviceInfo,
+  maxBasketItemsCount,
+  isCompared,
+}: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
     Router.events.on('routeChangeComplete', () => {
@@ -35,12 +43,12 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
       {IS_INFINITE_SCROLL && (
         <InfiniteScroll
           fetchData={handleInfiniteScroll}
-          className="w-full mx-auto overflow-hidden sm:pl-4"
+          className="w-full mx-auto overflow-hidden sm:px-8"
           total={products.total}
-          currentNumber={products.results.length}
+          currentNumber={products?.results?.length}
           component={
-            <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 4 ? `lg:grid-cols-3` : 'lg:grid-cols-3'}`} >
-              {!products.results.length && rangeMap(12, (i) => (
+            <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
+              {!products?.results?.length && rangeMap(12, (i) => (
                 <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                   <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
                     <div className="flex flex-col space-y-3">
@@ -58,7 +66,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? `lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3` : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'}`} >
+          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
             {!products?.results?.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -68,10 +76,11 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
                 </div>
               </div>
             ))}
-            {products.results.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+            {products?.results?.map((product: any, productIdx: number) => (
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} />
             ))}
           </div>
+
           {products.pages > 1 && (
             <Pagination
               currentPage={currentPage}
