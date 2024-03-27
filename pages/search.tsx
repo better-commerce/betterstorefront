@@ -1,40 +1,34 @@
 // Base Imports
 import { useReducer, useEffect, useState } from 'react'
-
-// Package Imports
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
-
-// Component Imports
-import { postData } from '@new-components/utils/clientFetcher'
-import { GetServerSideProps } from 'next'
 import Script from 'next/script'
+import NextHead from 'next/head'
+import { GetServerSideProps } from 'next'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
+import commerce from '@lib/api/commerce'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { postData } from '@new-components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@new-components/utils/dataLayer'
 import { EVENTS_MAP } from '@new-components/services/analytics/constants'
 import { useUI } from '@new-components/ui/context'
 import useAnalytics from '@new-components/services/analytics/useAnalytics'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@new-components/utils/constants'
-import NextHead from 'next/head'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CompareSelectionBar from '@new-components/Product/ProductCompare/compareSelectionBar'
-import OutOfStockFilter from '@new-components/Product/Filters/OutOfStockFilter'
-import commerce from '@lib/api/commerce'
-import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+const CompareSelectionBar = dynamic(() => import('@new-components/Product/ProductCompare/compareSelectionBar'))
+const OutOfStockFilter = dynamic(() => import('@new-components/Product/Filters/OutOfStockFilter'))
+const ProductGrid = dynamic(() => import('@new-components/Product/Grid'))
+const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
+const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
 declare const window: any
-export const ACTION_TYPES = {
-  SORT_BY: 'SORT_BY',
-  PAGE: 'PAGE',
-  SORT_ORDER: 'SORT_ORDER',
-  CLEAR: 'CLEAR',
-  HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
-  ADD_FILTERS: 'ADD_FILTERS',
-  REMOVE_FILTERS: 'REMOVE_FILTERS',
-  FREE_TEXT: 'FREE_TEXT',
-}
-
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const PAGE_TYPE = PAGE_TYPES['Search']
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
 interface actionInterface {
   type?: string
   payload?: object | any
@@ -47,17 +41,6 @@ interface stateInterface {
   filters: any
   freeText: string
 }
-
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const PAGE_TYPE = PAGE_TYPES['Search']
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
-const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
-const ProductGrid = dynamic(() => import('@new-components/Product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
-const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
-
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:

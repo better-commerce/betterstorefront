@@ -43,17 +43,8 @@ export default function ProductSort({
   const renderXClear = () => {
     return (
       <span className="flex items-center justify-center flex-shrink-0 w-4 h-4 ml-3 text-white rounded-full cursor-pointer bg-primary-500">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-3 h-3"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clipRule="evenodd"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" viewBox="0 0 20 20" fill="currentColor" >
+          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
         </svg>
       </span>
     );
@@ -101,16 +92,14 @@ export default function ProductSort({
               {!sortOrderStates.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
-                <span onClick={() => setSortOrderStates("")}>
-                  {renderXClear()}
-                </span>
+                <span onClick={() => setSortOrderStates("")}> {renderXClear()} </span>
               )}
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className="absolute right-0 z-40 w-screen max-w-sm px-4 mt-3 sm:px-0 lg:max-w-sm">
                 <div className="overflow-hidden bg-white border shadow-xl rounded-2xl dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-5">
-                    {products?.sortList.map((item: any, index: number) => (
+                    {products?.sortList?.map((item: any, index: number) => (
                       <Radio
                         id={item?.key}
                         key={index}
