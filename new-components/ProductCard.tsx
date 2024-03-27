@@ -180,16 +180,16 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   }
 
   const handleSetCompareProduct = () => {
-    if (data.compared) {
+    if (product.compared) {
       setCompareProducts({
-        id: data.recordId,
+        id: product.recordId,
         type: 'remove',
       })
     } else {
       setCompareProducts({
-        id: data.recordId,
+        id: product.recordId,
         data: {
-          ...data,
+          ...product,
           attributes: compareAttributes,
         },
         type: 'add',
@@ -248,30 +248,32 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           {!isComparedEnabled && renderGroupButtons()}
         </div>
 
-        <div className="space-y-4 px-2.5 pt-5 pb-2.5">
-          <div>
-            <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
-            <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
-          </div>
-          <div className="flex items-center justify-between ">
-            <Prices price={data?.price} listPrice={data?.listPrice} />
-            <div className="flex items-center mb-0.5">
-              <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
-              <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
-                {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
-              </span>
+        <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+          <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+            <div>
+              <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
+              <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
             </div>
-          </div>
-          {isComparedEnabled && product?.compared && (
-            <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
-              {product?.compared && (
-                <button className="w-full py-2 font-semibold uppercase border border-transparent rounded-b-2xl bg-slate-100 hover:bg-slate-300 font-14">
-                  Remove
-                </button>
-              )}
+            <div className="flex items-center justify-between ">
+              <Prices price={data?.price} listPrice={data?.listPrice} />
+              <div className="flex items-center mb-0.5">
+                <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
+                <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
+                  {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
+                </span>
+              </div>
             </div>
-          )}
-        </div>
+            {isComparedEnabled && product?.compared && (
+              <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
+                {product?.compared && (
+                  <button className="w-full py-2 font-semibold uppercase border border-transparent rounded-b-2xl bg-slate-100 hover:bg-slate-300 font-14">
+                    Remove
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </ButtonLink>
 
       </div>
       {/* QUICKVIEW */}
