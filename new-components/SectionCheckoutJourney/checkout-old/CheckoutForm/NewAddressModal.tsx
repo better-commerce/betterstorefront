@@ -302,7 +302,7 @@ export const DEFAULT_ADDRESS_VALUES = {
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-999999" onClose={onCloseModal}>
           <div className="fixed inset-0 left-0 bg-gray-900/20" />
-          <div className="fixed inset-0 overflow-hidden">
+          <div className="fixed inset-0 overflow-hidden z-999">
             <div className="absolute inset-0 overflow-hidden">
               <div className="fixed inset-y-0 right-0 flex max-w-full pointer-events-none">
                 <Transition.Child
