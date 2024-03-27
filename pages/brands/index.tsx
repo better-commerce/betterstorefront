@@ -20,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
-const dataNormalizr = (data: any = []) => {
+const dataNormalize = (data: any = []) => {
 
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
@@ -45,7 +45,7 @@ const dataNormalizr = (data: any = []) => {
 
 function BrandsPage({ brands }: any) {
   const router = useRouter()
-  const data = dataNormalizr(brands.results)
+  const data = dataNormalize(brands.results)
   const translate = useTranslation()
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
