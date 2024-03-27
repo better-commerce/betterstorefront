@@ -36,10 +36,10 @@ const CompareSelectionBar = dynamic(() => import('@new-components/Product/Produc
 const ProductCard = dynamic(() => import('@new-components/ProductCard'))
 const ProductSort = dynamic(() => import('@new-components/Product/ProductSort'))
 const ProductGrid = dynamic(() => import('@new-components/Product/Grid/ProductGrid'))
-const Slider = dynamic(() => import('@components/brand/Slider'))
-const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
 import faq from '@new-components/SectionBrands/faqData.json'
 import useAnalytics from '@new-components/services/analytics/useAnalytics'
+import Slider from '@new-components/SectionBrands/Slider'
+import BrandDisclosure from '@new-components/SectionBrands/Disclosure'
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
@@ -505,7 +505,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
               {faq?.results?.map((val: any, Idx: number) => {
                 return (
-                  <Disclosure key={Idx} heading={val.faq} details={val.ans} />
+                  <BrandDisclosure key={Idx} heading={val.faq} details={val.ans} />
                 )
               })}
             </div>
