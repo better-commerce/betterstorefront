@@ -5,25 +5,27 @@ import { CookieBanner } from '@schlomoh/react-cookieconsent'
 import Router from 'next/router'
 import Head from 'next/head'
 import { CommerceProvider } from '@framework'
+import { stringToBoolean } from '@framework/utils/parse-util'
 import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
-import { stringToBoolean } from '@framework/utils/parse-util'
-import { Sidebar, Modal, LoadingDots } from '@new-components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { WishlistSidebarView } from '@components/wishlist'
-const BulkAddSidebarView = dynamic(() => import('@components/bulk-add/BulkAddSidebarView'))
-const FooterClean = dynamic(() => import('@components/common/Footer/FooterClean'))
-const ShippingView = dynamic(() => import('@components/checkout-old/ShippingView'))
-const CartSidebarView = dynamic(() => import('@components/cart/CartSidebarView'))
-const PaymentMethodView = dynamic(() => import('@components/checkout-old/PaymentMethodView'))
-const LoginSideBarView = dynamic(() => import('@components/account/Login/LoginSideBarView'))
-const CheckoutSidebarView = dynamic(() => import('@components/checkout-old/CheckoutSidebarView'))
-import { IDeviceInfo, useUI } from '@new-components/ui/context'
-import { CURRENT_THEME } from '@new-components/utils/constants'
+
 const NotifyUserPopup = dynamic(() => import('@new-components/ui/NotifyPopup'))
 const ProgressBar = dynamic(() => import('@new-components/ui/ProgressBar'))
 const MainNav2Logged = dynamic(() => import('@new-components/Header/MainNav2Logged'))
 const AlertRibbon = dynamic(() => import('@new-components/ui/AlertRibbon'))
+const WishlistSidebarView = dynamic(() => import('@new-components/shared/Wishlist/WishlistSidebarView'))
+const BulkAddSidebarView = dynamic(() => import('@new-components/SectionCheckoutJourney/bulk-add/BulkAddSidebarView'))
+const CheckoutSidebarView = dynamic(() => import('@new-components/SectionCheckoutJourney/checkout-old/CheckoutSidebarView'))
+const PaymentMethodView = dynamic(() => import('@new-components/SectionCheckoutJourney/checkout-old/PaymentMethodView'))
+const ShippingView = dynamic(() => import('@new-components/SectionCheckoutJourney/checkout-old/ShippingView'))
+const LoginSideBarView = dynamic(() => import('@new-components/shared/Login/LoginSideBarView'))
+const Footer = dynamic(() => import('@new-components/shared/Footer/Footer'))
+import { Sidebar, Modal, LoadingDots } from '@new-components/ui'
+import { IDeviceInfo, useUI } from '@new-components/ui/context'
+import { CURRENT_THEME } from '@new-components/utils/constants'
+import { CartSidebarView } from '@new-components/SectionCheckoutJourney/cart'
+
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
@@ -163,7 +165,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} />
           {displayAlert && <AlertRibbon />}
           {children}
-          <FooterClean navItems={navTree?.footer} />
+          <Footer navItems={navTree?.footer} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
           <div className="cookie-bannner">

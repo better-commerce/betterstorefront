@@ -1,80 +1,38 @@
-import { CustomLink } from "@components/data/types";
 import { Logo } from "@new-components/ui";
 import React from "react";
 import SocialsList1 from "../SocialsList1/SocialsList1";
+import Link from "next/link";
+import { sanitizeHtmlContent } from "framework/utils/app-util";
 
-export interface WidgetFooterMenu {
-  id: string;
-  title: string;
-  menus: CustomLink[];
-}
 
-const widgetMenus: WidgetFooterMenu[] = [
-  {
-    id: "5",
-    title: "Getting started",
-    menus: [
-      { href: "/", label: "Release Notes" },
-      { href: "/", label: "Upgrade Guide" },
-      { href: "/", label: "Browser Support" },
-      { href: "/", label: "Dark Mode" },
-    ],
-  },
-  {
-    id: "1",
-    title: "Explore",
-    menus: [
-      { href: "/", label: "Prototyping" },
-      { href: "/", label: "Design systems" },
-      { href: "/", label: "Pricing" },
-      { href: "/", label: "Security" },
-    ],
-  },
-  {
-    id: "2",
-    title: "Resources",
-    menus: [
-      { href: "/", label: "Best practices" },
-      { href: "/", label: "Support" },
-      { href: "/", label: "Developers" },
-      { href: "/", label: "Learn design" },
-    ],
-  },
-  {
-    id: "4",
-    title: "Community",
-    menus: [
-      { href: "/", label: "Discussion Forums" },
-      { href: "/", label: "Code of Conduct" },
-      { href: "/", label: "Contributing" },
-      { href: "/", label: "API Reference" },
-    ],
-  },
-];
-
-const Footer: React.FC = () => {
-  const renderWidgetMenuItem = (menu: WidgetFooterMenu, index: number) => {
+const Footer = ({navItems}:any) => {
+  const renderWidgetMenuItem = (item: any, index: number) => {
     return (
-      <div key={index} className="text-sm">
-        <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">
-          {menu.title}
-        </h2>
-        <ul className="mt-5 space-y-4">
-          {menu.menus.map((item, index) => (
-            <li key={index}>
-              <a
-                key={index}
-                className="text-neutral-6000 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      item?.navBlocks?.map((menu: any, index: number) => (
+        <div key={index} className="text-sm">
+          <h2 className="font-semibold text-neutral-700 dark:text-neutral-200"> {menu?.boxTitle} </h2>
+          <ul role="list" className="mt-0 space-y-6">
+            <>
+              {menu?.contentBody != '' && (
+                <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
+              )}
+              {menu?.navItems != '' && (
+                <>
+                  {menu?.navItems?.map((navItem: any, navItemIdx: number) => (
+                    <li key={navItemIdx + 'navItem'} className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight" >
+                      <Link passHref href={`/men/${navItem?.itemLink}`} >
+                        <a href={`/men/${navItem?.itemLink}`} className="text-xs" >
+                          {navItem?.caption}
+                        </a>
+                      </Link>
+                    </li>
+                  ))}
+                </>
+              )}
+            </>
+          </ul>
+        </div>
+      ))
     );
   };
 
@@ -89,7 +47,7 @@ const Footer: React.FC = () => {
             <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
           </div>
         </div>
-        {widgetMenus.map(renderWidgetMenuItem)}
+        {navItems.map(renderWidgetMenuItem)}
       </div>
     </div>
   );
