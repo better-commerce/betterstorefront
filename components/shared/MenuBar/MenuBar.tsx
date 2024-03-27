@@ -3,7 +3,7 @@
 import React, { useState, Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import dynamic from "next/dynamic";
-const NavMobile = dynamic(() => import('@components//shared/Navigation/NavMobile'))
+const NavMobile = dynamic(() => import('@components/shared/Navigation/NavMobile'))
 export interface MenuBarProps {
   navItems?: any
 }

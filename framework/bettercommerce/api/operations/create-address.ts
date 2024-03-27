@@ -2,8 +2,8 @@ import fetcher from '../../fetcher'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   CREATE_ADDRESS_ENDPOINT,
-} from '@components//utils/constants'
-import countryList from '@components//utils/countryList'
+} from '@components/utils/constants'
+import countryList from '@components/utils/countryList'
 
 export default function useAddress() {
   async function getAdressAsync({ query, cookies }: any) {

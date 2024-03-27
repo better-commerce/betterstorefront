@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { ADDRESS_ENDPOINT } from '@components//utils/constants'
+import { ADDRESS_ENDPOINT } from '@components/utils/constants'
 export default function useAddress() {
   async function getAdressAsync({ query, cookies }: any) {
     try {

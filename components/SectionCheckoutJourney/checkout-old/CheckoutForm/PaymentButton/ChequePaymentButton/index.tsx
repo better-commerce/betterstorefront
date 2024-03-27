@@ -2,10 +2,10 @@
 import ChequePayment, { CHEQUE_PAYMENT_FORM_ID } from './ChequePayment'
 import { IPaymentButtonProps } from '../BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
-import PaymentGatewayNotification from '@components//SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
-import { EmptyString } from '@components//utils/constants'
+import { EmptyString } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export class ChequePaymentButton extends BasePaymentButton {

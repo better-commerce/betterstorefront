@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Slider from "rc-slider";
-import MySwitch from "@components//MySwitch";
+import MySwitch from "@components/MySwitch";
 import Checkbox from "./shared/Checkbox/Checkbox";
 import Radio from "./shared/Radio/Radio";
 import { useTranslation } from "@commerce/utils/use-translation";

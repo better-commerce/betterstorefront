@@ -2,11 +2,11 @@
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
-import PaymentGatewayNotification from '@components//SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
 import { t as translate } from "i18next";
-import { EmptyString } from '@components//utils/constants'
+import { EmptyString } from '@components/utils/constants'
 
 export class CODPaymentButton extends BasePaymentButton {
   /**

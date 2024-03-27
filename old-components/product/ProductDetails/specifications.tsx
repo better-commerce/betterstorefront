@@ -1,4 +1,4 @@
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'

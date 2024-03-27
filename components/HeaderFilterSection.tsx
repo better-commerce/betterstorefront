@@ -1,9 +1,9 @@
 "use client";
 
 import React, { FC, useState } from "react";
-import Heading from "@components//Heading/Heading";
+import Heading from "@components/Heading/Heading";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import TabFilters from "@components//TabFilters";
+import TabFilters from "@components/TabFilters";
 import { Transition } from "@headlessui/react";
 import Nav from "./shared/Nav/Nav";
 import NavItem from "./shared/NavItem/NavItem";

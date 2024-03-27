@@ -1,6 +1,6 @@
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import twFocusClass from "@components//shared/utils/twFocusClass";
+import twFocusClass from "@components/shared/utils/twFocusClass";
 import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface ButtonCloseProps {

@@ -8,9 +8,9 @@ import Router from 'next/router'
 import Link from 'next/link'
 
 // Component Imports
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import ReturnReason from '../../../components/account/Orders/ReturnReason'
-import Layout from '@components//Layout/Layout'
+import Layout from '@components/Layout/Layout'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
@@ -20,10 +20,10 @@ import {
   NEXT_RETURN_ORDER_LINE,
   Messages,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { sanitizeBase64, vatIncluded } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
-import Spinner from '@components//ui/Spinner'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'

@@ -7,12 +7,12 @@ import Router, { useRouter } from 'next/router'
 
 // Component Imports
 import SwiperCore, { Navigation } from 'swiper'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 
 // Other Imports
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { NEXT_APPLY_PROMOTION, SHOW_APPLY_COUPON_SECTION } from '@components//utils/constants'
+import { NEXT_APPLY_PROMOTION, SHOW_APPLY_COUPON_SECTION } from '@components/utils/constants'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'

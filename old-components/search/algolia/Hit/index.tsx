@@ -12,19 +12,19 @@ import dynamic from 'next/dynamic'
 import SearchQuickView from '@old-components/product/QuickView/SearchQuickView'
 
 // Other Import
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 //import type { Hit } from 'instantsearch.js'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
-import cartHandler from '@components//services/cart'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import cartHandler from '@components/services/cart'
 import { cartItemsValidateAddToCart, getAlgoliaSearchCurrencyLabel, getAlgoliaSearchListPriceColumn, getAlgoliaSearchPriceColumn, resetAlgoliaSearch, vatIncluded } from '@framework/utils/app-util'
-import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@components//utils/constants'
+import { MAX_ADD_TO_CART_LIMIT, Messages, NEXT_GET_PRODUCT_QUICK_VIEW } from '@components/utils/constants'
 import { deliveryDateFormat, matchStrings, roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
-import ProductTag from '@components//Product/ProductTag'
+import ProductTag from '@components/Product/ProductTag'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const SimpleButton = dynamic(() => import('@components//ui/Button'))
-const Button = dynamic(() => import('@components//ui/IndigoButton'))
+const SimpleButton = dynamic(() => import('@components/ui/Button'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 type HitProps = {
   hit: any /*Hit*/

@@ -6,7 +6,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 // Component Imports
-import { useUI } from "@components//ui/context";
+import { useUI } from "@components/ui/context";
 import { useTranslation } from "@commerce/utils/use-translation";
 
 

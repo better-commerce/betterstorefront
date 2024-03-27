@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { Messages } from '@components//utils/constants'
+import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 export const useDetailsFormConfig = () => {
   const translate = useTranslation()

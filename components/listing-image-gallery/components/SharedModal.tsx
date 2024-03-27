@@ -13,7 +13,7 @@ import downloadPhoto from "../utils/downloadPhoto";
 import { range } from "../utils/range";
 import type { ListingGalleryImage } from "../utils/types";
 import Twitter from "./Icons/Twitter";
-import { variants } from "@components//shared/utils/animationVariants";
+import { variants } from "@components/shared/utils/animationVariants";
 
 interface SharedModalProps {
   index: number;

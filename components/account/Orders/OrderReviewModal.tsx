@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from '@components//shared/icons';
+import { ArrowLeft, ArrowRight } from '@components/shared/icons';
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";

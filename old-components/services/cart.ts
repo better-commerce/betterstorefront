@@ -5,10 +5,10 @@ import {
   NEXT_GET_USER_CART,
   NEXT_ASSOCIATE_CART,
   NEXT_MERGE_CART,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import axios from 'axios'
-import eventDispatcher from '@components//services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
 

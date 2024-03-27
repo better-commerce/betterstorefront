@@ -6,16 +6,16 @@ import Cookies from 'js-cookie'
 import Router from 'next/router'
 
 // Component Imports
-import eventDispatcher from '@components//services/analytics/eventDispatcher'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 // Other Imports
-import cartHandler from '@components//services/cart'
+import cartHandler from '@components/services/cart'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
-import setSessionIdCookie from '@components//utils/setSessionId'
+import setSessionIdCookie from '@components/utils/setSessionId'
 import { processPaymentResponse } from '@framework/utils/payment-util'
-import { PaymentStatus } from '@components//utils/payment-constants'
-import { useUI, basketId as generateBasketId } from '@components//ui/context'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
+import { PaymentStatus } from '@components/utils/payment-constants'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 

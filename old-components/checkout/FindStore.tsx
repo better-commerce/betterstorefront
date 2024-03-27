@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { LoadingDots, useUI } from '@components//ui'
+import { LoadingDots, useUI } from '@components/ui'
 import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
-import { NEXT_STORE_LOCATOR } from '@components//utils/constants'
+import { NEXT_STORE_LOCATOR } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface FindStoreProps {

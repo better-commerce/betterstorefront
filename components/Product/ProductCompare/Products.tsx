@@ -2,31 +2,31 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { FC, useCallback, useMemo } from 'react'
 import { useState, useEffect } from 'react'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
   CLOTH_COLOUR_ATTRIB_NAME,
   CLOTH_SIZE_ATTRIB_NAME,
   NEXT_CREATE_WISHLIST,
   Messages,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { round } from 'lodash'
 import {
   IMG_PLACEHOLDER,
-} from '@components//utils/textVariables'
+} from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import cartHandler from '@components//services/cart'
-import { IExtraProps } from '@components//Layout/Layout'
+import cartHandler from '@components/services/cart'
+import { IExtraProps } from '@components/Layout/Layout'
 import { vatIncluded, validateAddToCart } from '@framework/utils/app-util'
 import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
 import { useTranslation } from '@commerce/utils/use-translation'
-import Prices from '@components//Prices'
+import Prices from '@components/Prices'
 import ButtonNotifyMe from '../ButtonNotifyMe'
-const SimpleButton = dynamic(() => import('@components//ui/Button'))
-const Button = dynamic(() => import('@components//ui/IndigoButton'))
+const SimpleButton = dynamic(() => import('@components/ui/Button'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 interface Props {
   product: any

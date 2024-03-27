@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 import { useTranslation } from "@commerce/utils/use-translation"
-import { Messages } from '@components//utils/constants'
+import { Messages } from '@components/utils/constants'
 
 // export const PANELS = () => {
 //   const translate = useTranslation()

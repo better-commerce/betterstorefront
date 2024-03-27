@@ -9,7 +9,7 @@ import type { ListingGalleryImage } from "./utils/types";
 import { useLastViewedPhoto } from "./utils/useLastViewedPhoto";
 import { ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
-import LikeSaveBtns from "@components//LikeSaveBtns";
+import LikeSaveBtns from "@components/LikeSaveBtns";
 
 export const getNewParam = ({
   paramName = "photoId",

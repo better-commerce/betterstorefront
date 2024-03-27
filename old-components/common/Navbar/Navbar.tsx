@@ -3,14 +3,14 @@ import { FC, Fragment, useState, useRef, useEffect } from 'react'
 import { classNames } from '../../utils'
 import { Popover, Transition, Dialog, Tab, Disclosure } from '@headlessui/react'
 import { Searchbar } from '@old-components/common'
-import { Logo } from '@components//ui'
+import { Logo } from '@components/ui'
 import Link from 'next/link'
 import cn from 'classnames'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 import axios from 'axios'
-import { NEXT_SET_CONFIG, SocialMediaType } from '@components//utils/constants'
+import { NEXT_SET_CONFIG, SocialMediaType } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import {
@@ -29,10 +29,10 @@ import {
   removePrecedingSlash,
   vatIncluded,
 } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
-import { getItem, setItem } from '@components//utils/localStorage'
+import { getItem, setItem } from '@components/utils/localStorage'
 import { signOut } from 'next-auth/react'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
@@ -41,7 +41,7 @@ import {
   buildFacetConfigFromConfig,
   buildSearchOptionsFromConfig,
   getConfig,
-} from '@components//config/config-helper'
+} from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 let connector: any

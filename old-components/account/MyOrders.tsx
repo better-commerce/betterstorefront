@@ -3,13 +3,13 @@ import axios from 'axios'
 import {
   NEXT_GET_ORDERS,
   NEXT_CREATE_RETURN_DATA,
-} from '@components//utils/constants'
-import { useUI } from '@components//ui/context'
+} from '@components/utils/constants'
+import { useUI } from '@components/ui/context'
 import Link from 'next/link'
-import cartHandler from '@components//services/cart'
+import cartHandler from '@components/services/cart'
 import {
   IMG_PLACEHOLDER,
-} from '@components//utils/textVariables'
+} from '@components/utils/textVariables'
 import ReturnModal from '@old-components/returns/Modal'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'

@@ -26,13 +26,13 @@ import {
   buildSortOptionsFromConfig,
   getConfig,
   getFacetFields,
-} from '@components//config/config-helper'
+} from '@components/config/config-helper'
 import {
   getElasticSearchPriceColumn,
   vatIncluded,
 } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {

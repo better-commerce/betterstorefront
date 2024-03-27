@@ -2,7 +2,7 @@
 
 import React, { FC, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import TabFilters from "@components//TabFilters";
+import TabFilters from "@components/TabFilters";
 import { Transition } from "@headlessui/react";
 import Nav from "./shared/Nav/Nav";
 import NavItem from "./shared/NavItem/NavItem";

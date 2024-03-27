@@ -8,13 +8,13 @@ import Link from 'next/link'
 import { GetServerSideProps } from 'next'
 
 // Component Imports
-import { LoadingDots } from '@components//ui'
-import { useUI } from '@components//ui/context'
+import { LoadingDots } from '@components/ui'
+import { useUI } from '@components/ui/context'
 
 // Other Imports
-import { removeItem } from '@components//utils/localStorage'
-import { NEXT_GET_ORDER } from '@components//utils/constants'
-import { LocalStorage } from '@components//utils/payment-constants'
+import { removeItem } from '@components/utils/localStorage'
+import { NEXT_GET_ORDER } from '@components/utils/constants'
+import { LocalStorage } from '@components/utils/payment-constants'
 import { obfuscateHostName, vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
 import {
@@ -22,7 +22,7 @@ import {
   ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS,
 } from '@framework/content/use-content-snippet'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 const PaymentFailedPage = ({
   //orderId: guidOrderId,

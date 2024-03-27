@@ -9,7 +9,7 @@ import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import MenuBar from "../shared/MenuBar/MenuBar";
-import { Logo } from "@components//ui";
+import { Logo } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface MainNav2Props {

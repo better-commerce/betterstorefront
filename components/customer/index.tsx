@@ -6,12 +6,12 @@ import {
   useLoginConfig,
   useB2bRegistrationConfig,
 } from './config'
-import LoadingDots from '@components//ui/LoadingDots'
-import Button from '@components//ui/Button'
+import LoadingDots from '@components/ui/LoadingDots'
+import Button from '@components/ui/Button'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { mergeSchema } from '@framework/utils/schema-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { Checkbox } from '@components//account/Address'
+import { Checkbox } from '@components/account/Address'
 
 /**
  * This is a schema for registration to enable Trading account registration.

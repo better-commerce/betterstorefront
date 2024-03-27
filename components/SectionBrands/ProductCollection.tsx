@@ -1,11 +1,11 @@
 import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
-import { postData } from '@components//utils/clientFetcher'
-import { useUI } from '@components//ui'
-import CompareSelectionBar from '@components//Product/ProductCompare/compareSelectionBar'
+import { postData } from '@components/utils/clientFetcher'
+import { useUI } from '@components/ui'
+import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import dynamic from 'next/dynamic'
-const ProductGrid = dynamic(() => import('@components//Product/Grid'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid'))
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',

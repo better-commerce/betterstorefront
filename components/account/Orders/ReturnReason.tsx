@@ -8,16 +8,16 @@ import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CheckIcon } from '@heroicons/react/24/outline'
 
 // Other Imports
-// import { CancelOrderPageAction, PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED } from '@components//utils/constants';
+// import { CancelOrderPageAction, PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED } from '@components/utils/constants';
 // import { formatBytes } from '@framework/utils/app-util';
 // import SubmitButton from '@old-components/common/SubmitButton';
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import {
   PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES,
   PDP_REVIEW_IMAGE_SIZE_IN_BYTES,
   PDP_REVIEW_NO_OF_IMAGES_ALLOWED,
-} from '@components//utils/constants'
-import { Button, LoadingDots } from '@components//ui'
+} from '@components/utils/constants'
+import { Button, LoadingDots } from '@components/ui'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { generateUri } from '@commerce/utils/uri-util'

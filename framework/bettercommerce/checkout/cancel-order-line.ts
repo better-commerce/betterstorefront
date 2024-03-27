@@ -1,4 +1,4 @@
-import { ORDERS_ENDPOINT } from '@components//utils/constants'
+import { ORDERS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 
 interface Props {

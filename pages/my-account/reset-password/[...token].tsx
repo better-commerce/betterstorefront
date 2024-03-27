@@ -1,18 +1,18 @@
-import Layout from '@components//Layout/Layout'
+import Layout from '@components/Layout/Layout'
 import { useEffect, useState } from 'react'
 import {
     EmptyString,
   NEXT_RESET_PASSWORD,
   NEXT_VALIDATE_TOKEN,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import { Button } from '@components//ui'
-import { useUI } from '@components//ui/context'
-import Spinner from '@components//ui/Spinner'
+import { Button } from '@components/ui'
+import { useUI } from '@components/ui/context'
+import Spinner from '@components/ui/Spinner'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { Messages } from '@components//utils/constants'
+import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(true)

@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { PRODUCT_API_ENDPOINT } from '@components//utils/constants'
+import { PRODUCT_API_ENDPOINT } from '@components/utils/constants'
 export default function useGetRelatedProducts() {
   async function useGetRelatedProductsAsync({ query, cookies }: any) {
     try {

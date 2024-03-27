@@ -1,6 +1,6 @@
-import { Logo } from "@components//ui";
+import { Logo } from "@components/ui";
 import React from "react";
-import SocialsList1 from "@components//shared/SocialsList1/SocialsList1";
+import SocialsList1 from "@components/shared/SocialsList1/SocialsList1";
 import Link from "next/link";
 import { sanitizeHtmlContent } from "framework/utils/app-util";
 

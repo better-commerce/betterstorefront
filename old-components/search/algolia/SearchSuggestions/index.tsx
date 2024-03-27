@@ -6,7 +6,7 @@ import { createAutocomplete } from '@algolia/autocomplete-core';
 import { getAlgoliaResults } from '@algolia/autocomplete-preset-algolia';
 
 // Other Imports
-import { EmptyObject } from '@components//utils/constants';
+import { EmptyObject } from '@components/utils/constants';
 
 const ALGOLIA_SEARCH_SUGGESTIONS_INDEX_SOURCE_ID = process.env.ALGOLIA_SEARCH_SUGGESTIONS_INDEX_SOURCE_ID!
 

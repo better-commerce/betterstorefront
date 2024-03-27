@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react"
 
 // Package Imports
 import axios from "axios"
-import { NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_CLICK_ON_INVITE, NEXT_REFERRAL_INFO } from "@components//utils/constants"
-import { useUI } from "@components//ui"
+import { NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_CLICK_ON_INVITE, NEXT_REFERRAL_INFO } from "@components/utils/constants"
+import { useUI } from "@components/ui"
 import { useTranslation } from "@commerce/utils/use-translation"
 import ReferralCard from "./ReferralCard"
 

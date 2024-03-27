@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import LoginOrGuest from '@components//SectionCheckoutJourney/checkout/LoginOrGuest'
-import ShippingAddressForm from '@components//SectionCheckoutJourney/checkout/ShippingAddressForm'
-import BillingAddressForm from '@components//SectionCheckoutJourney/checkout/BillingAddressForm'
-import AddressBook from '@components//SectionCheckoutJourney/checkout/AddressBook'
-import DeliveryMethodSelection from '@components//SectionCheckoutJourney/checkout/DeliveryMethodSelection'
-import ReviewOrder from '@components//SectionCheckoutJourney/checkout/ReviewOrder'
-import BasketDetails from '@components//SectionCheckoutJourney/checkout/BasketDetails'
+import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
+import ShippingAddressForm from '@components/SectionCheckoutJourney/checkout/ShippingAddressForm'
+import BillingAddressForm from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
+import AddressBook from '@components/SectionCheckoutJourney/checkout/AddressBook'
+import DeliveryMethodSelection from '@components/SectionCheckoutJourney/checkout/DeliveryMethodSelection'
+import ReviewOrder from '@components/SectionCheckoutJourney/checkout/ReviewOrder'
+import BasketDetails from '@components/SectionCheckoutJourney/checkout/BasketDetails'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useUI, basketId as generateBasketId } from '@components//ui/context'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import NextHead from 'next/head'
 import cookie from 'cookie'
-import { loqateAddress } from '@components//SectionCheckoutJourney/checkout-old/CheckoutForm'
+import { loqateAddress } from '@components/SectionCheckoutJourney/checkout-old/CheckoutForm'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
@@ -27,15 +27,15 @@ import {
   NEXT_UPDATE_CHECKOUT2_ADDRESS,
   NEXT_UPDATE_DELIVERY_INFO,
   NEXT_UPDATE_SHIPPING,
-} from '@components//utils/constants'
-import Spinner from '@components//ui/Spinner'
+} from '@components/utils/constants'
+import Spinner from '@components/ui/Spinner'
 import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
-import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
-import CheckoutLayoutV2 from '@components//Layout/CheckoutLayoutV2'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import CheckoutLayoutV2 from '@components/Layout/CheckoutLayoutV2'
 import { saveUserToken } from '@framework/utils/app-util'
-import { asyncHandler as addressHandler } from '@components//account/Address/AddressBook'
-import cartHandler from '@components//services/cart'
+import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
+import cartHandler from '@components/services/cart'
 import {
   matchStrings,
   stringToBoolean,
@@ -44,7 +44,7 @@ import {
 import Link from 'next/link'
 import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
-import { Logo } from '@components//ui'
+import { Logo } from '@components/ui'
 import { compact } from 'lodash'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'

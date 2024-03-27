@@ -8,9 +8,9 @@ import Cookies from 'js-cookie'
 import DeliveryMessage from './DeliveryMessage'
 
 // Other Imports
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components//utils/constants'
+import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components/utils/constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductWarranty from './ProductWarranty'

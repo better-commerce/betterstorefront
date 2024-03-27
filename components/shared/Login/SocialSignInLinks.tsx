@@ -5,7 +5,7 @@ import React from 'react'
 import Link from 'next/link'
 
 // Other Imports
-import { SocialMediaType } from '@components//utils/constants'
+import { SocialMediaType } from '@components/utils/constants'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 interface SocialSignInLinksProps {

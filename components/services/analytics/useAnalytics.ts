@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import eventDispatcher from './eventDispatcher'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 declare global {
   interface window {
     dataLayer: any

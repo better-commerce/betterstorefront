@@ -1,7 +1,7 @@
 import { RadioGroup } from '@headlessui/react'
 import cn from 'classnames'
 import { useState, useEffect } from 'react'
-import { PDP_SIZE_OPTIONS_COUNT } from '@components//utils/constants'
+import { PDP_SIZE_OPTIONS_COUNT } from '@components/utils/constants'
 function renderRadioOptions(items: any, itemsCount: any, selectedValue: any, sizeInit: any, setSizeInit: any) {
   let defaultItems = items && items.length > 0 ? items.slice(0, itemsCount) : []
   let remainingItems = items && items.length > 0 ? items.slice(itemsCount, items.length) : []

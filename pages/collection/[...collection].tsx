@@ -15,34 +15,34 @@ import 'swiper/css/navigation'
 
 // Component Imports
 import getCollections from '@framework/api/content/getCollections'
-import Layout from '@components//Layout/Layout'
+import Layout from '@components/Layout/Layout'
 import os from 'os'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
-import { postData } from '@components//utils/clientFetcher'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { postData } from '@components/utils/clientFetcher'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components//utils/constants'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
-import { LoadingDots } from '@components//ui'
-import { IPLPFilterState, useUI } from '@components//ui/context'
+import { LoadingDots } from '@components/ui'
+import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-import OutOfStockFilter from '@components//Product/Filters/OutOfStockFilter'
+import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-const CompareSelectionBar = dynamic(() => import('@components//Product/ProductCompare/compareSelectionBar'))
-const ProductFilterRight = dynamic(() => import('@components//Product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components//Product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components//Product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components//Product/Grid'))
-const ProductGrid = dynamic(() => import('@components//Product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@components//ui/BreadCrumbs'))
-const PLPFilterSidebar = dynamic(() => import('@components//Product/Filters/PLPFilterSidebarView'))
+const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
+const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'))
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const FILTER_KEYS = {

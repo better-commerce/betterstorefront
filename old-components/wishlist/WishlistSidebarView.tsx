@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FC } from 'react'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import { useEffect, Fragment, useState } from 'react'
-import useCart from '@components//services/cart'
+import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
-import useWishlist from '@components//services/wishlist'
+import useWishlist from '@components/services/wishlist'
 import {
   IMG_PLACEHOLDER,
-} from '@components//utils/textVariables'
+} from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

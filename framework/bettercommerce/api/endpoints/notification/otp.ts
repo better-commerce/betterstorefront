@@ -1,6 +1,6 @@
 // Other Imports
 import fetcher from '@framework/fetcher'
-import { NOTIFICATION_OTP_ENDPOINT } from '@components//utils/constants'
+import { NOTIFICATION_OTP_ENDPOINT } from '@components/utils/constants'
 
 export default async function useNotificationOTP({
   mobileNo,

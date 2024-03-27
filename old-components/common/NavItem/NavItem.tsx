@@ -1,4 +1,4 @@
-import twFocusClass from "@components//shared/utils/twFocusClass";
+import twFocusClass from "@components/shared/utils/twFocusClass";
 import React, { FC, ReactNode } from "react";
 
 export interface NavItemProps {

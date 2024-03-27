@@ -1,5 +1,5 @@
 "use client";
-import Heading from "@components//Heading/Heading";
+import Heading from "@components/Heading/Heading";
 import React, { FC, useState } from "react";
 import NcPlayIcon from "./shared/NcPlayIcon/NcPlayIcon";
 import NcImage from "./shared/NcImage/NcImage";

@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import axios from 'axios'
-import Button from '@components//ui/Button'
-import { NEXT_GET_WISHLIST } from '@components//utils/constants'
-import { useUI } from '@components//ui/context'
+import Button from '@components/ui/Button'
+import { NEXT_GET_WISHLIST } from '@components/utils/constants'
+import { useUI } from '@components/ui/context'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { LoadingDots } from '@components//ui'
+import { LoadingDots } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
-const ProductCard = dynamic(() => import('@components//ProductCard'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 export default function Wishlist({ deviceInfo }: any) {
   const translate = useTranslation()
   const [data, setData] = useState([])

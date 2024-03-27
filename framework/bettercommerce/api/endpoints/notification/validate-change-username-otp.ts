@@ -1,6 +1,6 @@
 // Other Imports
 import fetcher from '@framework/fetcher'
-import { VALIDATE_CHANGE_USERNAME_OTP_ENDPOINT } from '@components//utils/constants'
+import { VALIDATE_CHANGE_USERNAME_OTP_ENDPOINT } from '@components/utils/constants'
 
 export default async function useValidateChangedUsernameOTP({
   mobileNo,

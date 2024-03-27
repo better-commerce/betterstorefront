@@ -1,23 +1,23 @@
 import dynamic from 'next/dynamic'
-import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useState, useEffect } from 'react'
 import cookie from 'cookie'
-import { basketId as basketIdGenerator } from '@components//ui/context'
+import { basketId as basketIdGenerator } from '@components/ui/context'
 import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
-import { useUI } from '@components//ui/context'
-import { asyncHandler } from '@components//account/Address/AddressBook'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components//utils/constants'
+import { useUI } from '@components/ui/context'
+import { asyncHandler } from '@components/account/Address/AddressBook'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/utils/constants'
 import axios from 'axios'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
-import useAnalytics from '@components//services/analytics/useAnalytics'
-import { recordGA4Event } from '@components//services/analytics/ga4'
-import Spinner from '@components//ui/Spinner'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { recordGA4Event } from '@components/services/analytics/ga4'
+import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
-import CheckoutHeading from '@components//SectionCheckoutJourney/checkout-old/CheckoutHeading'
+import CheckoutHeading from '@components/SectionCheckoutJourney/checkout-old/CheckoutHeading'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-const CheckoutRouter = dynamic(() => import('@components//SectionCheckoutJourney/checkout-old/CheckoutRouter'))
-const CheckoutForm = dynamic(() => import('@components//SectionCheckoutJourney/checkout-old/CheckoutForm'))
+const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/CheckoutRouter'))
+const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/CheckoutForm'))
 
 export interface actionInterface {
   type?: string

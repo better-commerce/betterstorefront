@@ -1,6 +1,6 @@
-import PromotionInput from '@components//SectionCheckoutJourney/cart/PromotionInput'
+import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { EmptyString } from '@components//utils/constants'
+import { EmptyString } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 
 const Summary = ({

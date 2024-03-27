@@ -4,13 +4,13 @@ import classNames from 'classnames'
 import React, { useEffect, useState } from 'react'
 import CncInput from './CheckoutForm/CncInput'
 import CncList from './CheckoutForm/CncList'
-import { LoadingDots, useUI } from '@components//ui'
-import { postData } from '@components//utils/clientFetcher'
+import { LoadingDots, useUI } from '@components/ui'
+import { postData } from '@components/utils/clientFetcher'
 import {
   NEXT_UPDATE_SHIPPING,
   NEXT_SHIPPING_ENDPOINT,
   NEXT_CLICK_AND_COLLECT,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import axios from 'axios'
 import { useTranslation } from '@commerce/utils/use-translation'

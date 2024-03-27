@@ -5,26 +5,26 @@ import dynamic from 'next/dynamic'
 import axios from 'axios'
 import Link from 'next/link'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import cartHandler from '@components//services/cart'
+import cartHandler from '@components/services/cart'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { decrypt } from '@framework/utils/cipher'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { NEXT_GET_CATALOG_PRODUCTS } from '@components//utils/constants'
+import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
 
 // Component Imports
-import { LoadingDots } from '@components//ui'
+import { LoadingDots } from '@components/ui'
 
 // Other Imports
 
-import { useUI } from '@components//ui/context'
-import { LocalStorage } from '@components//utils/payment-constants'
+import { useUI } from '@components/ui/context'
+import { LocalStorage } from '@components/utils/payment-constants'
 import { dateFormat, tryParseJson } from '@framework/utils/parse-util'
 import {
   NEXT_REFERRAL_BY_EMAIL,
   NEXT_REFERRAL_INFO,
-} from '@components//utils/constants'
-const ProductCard = dynamic(() => import('@components//ProductCard'))
+} from '@components/utils/constants'
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function RecentlyViewedProduct({ deviceInfo, config }: any) {

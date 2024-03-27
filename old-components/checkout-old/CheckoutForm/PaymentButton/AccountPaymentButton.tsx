@@ -2,10 +2,10 @@
 import { getB2BCompanyDetails } from '@framework/utils/payment-util'
 import { IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
-import PaymentGatewayNotification from '@components//SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
 
 // Other Imports
-import { EmptyString, Messages } from '@components//utils/constants'
+import { EmptyString, Messages } from '@components/utils/constants'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { matchStrings } from '@framework/utils/parse-util'
 import { t as translate } from "i18next";

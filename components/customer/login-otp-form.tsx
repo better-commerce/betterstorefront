@@ -3,8 +3,8 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
 
-import Button from '@components//ui/Button'
-import { NEXT_OTP_REQUEST, OTP_TIMER } from '@components//utils/constants'
+import Button from '@components/ui/Button'
+import { NEXT_OTP_REQUEST, OTP_TIMER } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 

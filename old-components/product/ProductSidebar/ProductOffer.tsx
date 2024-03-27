@@ -1,6 +1,6 @@
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'

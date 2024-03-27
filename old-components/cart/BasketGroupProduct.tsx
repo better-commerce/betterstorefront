@@ -7,9 +7,9 @@ import axios from 'axios'
 
 //
 import { generateUri } from '@commerce/utils/uri-util'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
-import { NEXT_BULK_ADD_TO_CART } from '@components//utils/constants'
-import { LoadingDots, useUI } from '@components//ui'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { NEXT_BULK_ADD_TO_CART } from '@components/utils/constants'
+import { LoadingDots, useUI } from '@components/ui'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

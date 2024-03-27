@@ -2,7 +2,7 @@ import cn from 'classnames'
 import { forwardRef, ButtonHTMLAttributes, JSXElementConstructor, useRef } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 import s from './Button.module.css'
-import { LoadingDots } from '@components//ui'
+import { LoadingDots } from '@components/ui'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Button from '@components//ui/IndigoButton'
+import Button from '@components/ui/IndigoButton'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function CncInput({

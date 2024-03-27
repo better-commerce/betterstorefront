@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 // Package Imports
 import NextHead from 'next/head'
 import cache from 'memory-cache'
-import { getMinutesInDays } from '@components//utils/setSessionId'
+import { getMinutesInDays } from '@components/utils/setSessionId'
 
 // Other Imports
 

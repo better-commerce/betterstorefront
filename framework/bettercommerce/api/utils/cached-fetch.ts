@@ -7,7 +7,7 @@ import fetcher from '@framework/fetcher'
 import {
   NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
   NEXT_PUBLIC_DEFAULT_CACHE_TIME,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 
 /**
  * Returns cached data for GET endpoint with absolute expiration limits.

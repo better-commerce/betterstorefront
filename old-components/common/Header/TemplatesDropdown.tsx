@@ -3,10 +3,10 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { Fragment } from "react";
-import CardCategory3 from "@components//CardCategories/CardCategory3";
+import CardCategory3 from "@components/CardCategories/CardCategory3";
 import Link from "next/link";
 import { MEGAMENU_TEMPLATES } from "@old-components/data/navigation";
-import { NavItemType } from "@components//shared/Navigation/NavigationItem";
+import { NavItemType } from "@components/shared/Navigation/NavigationItem";
 
 export default function TemplatesDropdown() {
   const renderMegaMenuNavlink = (item: NavItemType) => {

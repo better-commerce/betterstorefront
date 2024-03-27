@@ -2,7 +2,7 @@ import { Formik, Form, Field } from 'formik'
 import { useAddressFormConfig, useSchema } from '../configs/address'
 import Checkbox from './Checkbox'
 import React from 'react'
-import LoadingDots from '@components//ui/LoadingDots'
+import LoadingDots from '@components/ui/LoadingDots'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const COMPONENTS_MAP: any = {

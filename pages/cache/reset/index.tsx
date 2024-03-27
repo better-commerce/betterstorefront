@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '@components//Layout/Layout';
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, INFRA_ENDPOINT, KEYWORDS_ENDPOINT, NAV_ENDPOINT, NEXT_PUBLIC_API_CACHING_LOG_ENABLED } from '@components//utils/constants';
+import Layout from '@components/Layout/Layout';
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, INFRA_ENDPOINT, KEYWORDS_ENDPOINT, NAV_ENDPOINT, NEXT_PUBLIC_API_CACHING_LOG_ENABLED } from '@components/utils/constants';
 import { GetServerSideProps } from 'next';
 import commerce from '@lib/api/commerce';
 import { resetRedisCache } from '@framework/utils/redis-util'

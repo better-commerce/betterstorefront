@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
-import Layout from '@components//Layout/Layout'
-import { NEXT_STORE_LOCATOR } from '@components//utils/constants'
+import Layout from '@components/Layout/Layout'
+import { NEXT_STORE_LOCATOR } from '@components/utils/constants'
 import Link from 'next/link'
 
 export default function StoreLocatorPage() {

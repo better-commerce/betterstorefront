@@ -8,14 +8,14 @@ import Router from 'next/router'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
-import { LoadingDots, useUI } from '@components//ui'
-import PaymentWidget from '@components//SectionCheckoutJourney/checkout-old/PaymentWidget'
-import PaymentButton from '@components//SectionCheckoutJourney/checkout-old/CheckoutForm/PaymentButton'
+import { LoadingDots, useUI } from '@components/ui'
+import PaymentWidget from '@components/SectionCheckoutJourney/checkout-old/PaymentWidget'
+import PaymentButton from '@components/SectionCheckoutJourney/checkout-old/CheckoutForm/PaymentButton'
 
 // Other Imports
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { isClearPayPriceThresholdInvalid } from '@framework/utils/payment-util'
-import { Payments } from '@components//utils/payment-constants'
+import { Payments } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
@@ -23,12 +23,12 @@ import {
   EmptyString,
   Messages,
   NEXT_PAYMENT_METHODS_LIST,
-} from '@components//utils/constants'
-import setSessionIdCookie from '@components//utils/setSessionId'
-import cartHandler from '@components//services/cart'
+} from '@components/utils/constants'
+import setSessionIdCookie from '@components/utils/setSessionId'
+import cartHandler from '@components/services/cart'
 import { Guid } from '@commerce/types'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface PaymentMethodSelectionProps {

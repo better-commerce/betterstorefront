@@ -9,7 +9,7 @@ import SocialsList from "../SocialsList/SocialsList";
 import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
 import ButtonPrimary from "../Button/ButtonPrimary";
-import { Logo } from "@components//ui";
+import { Logo } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface NavMobileProps {

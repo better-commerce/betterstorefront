@@ -1,6 +1,6 @@
 // Base Imports
 import { useEffect, useState } from 'react'
-import Layout from '@components//Layout/Layout'
+import Layout from '@components/Layout/Layout'
 
 // Package Imports
 import axios from 'axios'
@@ -12,15 +12,15 @@ import CancelReason from '@old-components/account/Orders/CancelReason'
 import ConfirmDialog from '@old-components/common/ConfirmModal/ConfirmDialog'
 
 // Other Imports
-import { Button, useUI } from '@components//ui'
+import { Button, useUI } from '@components/ui'
 import {
   NEXT_CANCEL_REASON,
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
-} from '@components//utils/constants'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
-import Spinner from '@components//ui/Spinner'
+} from '@components/utils/constants'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'

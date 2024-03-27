@@ -1,8 +1,8 @@
-import { DATE_FORMAT } from "@components//utils/constants";
+import { DATE_FORMAT } from "@components/utils/constants";
 import { groupBy } from "lodash";
 import moment from "moment";
 import OrderStatusMapping from "./OrderStatusMapping";
-import { IMG_PLACEHOLDER } from "@components//utils/textVariables";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => {

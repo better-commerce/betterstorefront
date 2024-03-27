@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { LOOKBOOK_ENDPOINT } from '@components//utils/constants'
+import { LOOKBOOK_ENDPOINT } from '@components/utils/constants'
 export default function useGetPdpLookbooks() {
   async function useGetPdpLookbooksAsync({ query, cookies }: any) {
     try {

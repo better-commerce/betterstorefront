@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { PAGE_PREVIEW_CONTENT_ENDPOINT } from '@components//utils/constants'
+import { PAGE_PREVIEW_CONTENT_ENDPOINT } from '@components/utils/constants'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 
 export default function getPagePreviewContentOperation() {

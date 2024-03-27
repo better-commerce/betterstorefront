@@ -1,5 +1,5 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-import { DATE_FORMAT } from '@components//utils/constants'
+import { DATE_FORMAT } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import { priceFormat } from '@framework/utils/parse-util'
 import React from 'react'

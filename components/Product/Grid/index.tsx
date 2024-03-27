@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
-import { IExtraProps } from '@components//Layout/Layout'
+import { IExtraProps } from '@components/Layout/Layout'
 import rangeMap from '@lib/range-map'
 import Pagination from '../Pagination'
-const ProductCard = dynamic(() => import('@components//ProductCard'))
-const InfiniteScroll = dynamic(() => import('@components//ui/InfiniteScroll'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
+const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 interface Props {
   products: any
   currentPage: number | string

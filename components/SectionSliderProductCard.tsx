@@ -2,10 +2,10 @@
 
 import React, { FC, useEffect, useId, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Heading from "@components//Heading/Heading";
+import Heading from "@components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-const ProductCard = dynamic(() => import('@components//ProductCard'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 export interface SectionSliderProductCardProps {
   className?: string;
   itemClassName?: string;

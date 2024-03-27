@@ -5,12 +5,12 @@ import { RadioGroup } from '@headlessui/react'
 import cn from 'classnames'
 import * as yup from 'yup'
 import axios from 'axios'
-import { Button, LoadingDots, useUI } from '@components//ui'
+import { Button, LoadingDots, useUI } from '@components/ui'
 import {
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_PRODUCT,
   PRODUCTS_SLUG_PREFIX,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'

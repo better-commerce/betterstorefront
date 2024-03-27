@@ -1,13 +1,13 @@
 import dynamic from 'next/dynamic'
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 import { useState } from 'react'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import cartHandler from '@components//services/cart'
+import cartHandler from '@components/services/cart'
 import 'swiper/css'
 import 'swiper/css/navigation'
-const ProductCard = dynamic(() => import('@components//ProductCard'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 export default function RelatedProductWithGroup({ products, productPerColumn, deviceInfo, maxBasketItemsCount }: any) {
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)

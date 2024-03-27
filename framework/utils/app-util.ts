@@ -2,7 +2,7 @@ import {
   DataSubmit,
   ISubmitStateInterface,
 } from '@commerce/utils/use-data-submit'
-import { EmptyString } from '@components//utils/constants'
+import { EmptyString } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 export const resetSubmitData = (dispatch: any) => {
   if (dispatch) {

@@ -2,9 +2,9 @@
 import React from 'react'
 
 // Other Imports
-import { EmptyString } from '@components//utils/constants'
-import { IOverlayLoaderState, useUI } from '@components//ui/context'
-import Spinner from '@components//ui/Spinner'
+import { EmptyString } from '@components/utils/constants'
+import { IOverlayLoaderState, useUI } from '@components/ui/context'
+import Spinner from '@components/ui/Spinner'
 
 const OverlayLoader = () => {
   const { overlayLoaderState }: any = useUI()

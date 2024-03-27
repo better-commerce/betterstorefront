@@ -4,12 +4,12 @@ import { SearchProvider } from '@elastic/react-search-ui'
 import AppSearchAPIConnector from '@elastic/search-ui-app-search-connector'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider as Provider } from '@framework/utils/enums'
-import { buildAutocompleteQueryConfig, buildFacetConfigFromConfig, buildSearchOptionsFromConfig, getConfig, } from '@components//config/config-helper'
-import { useUI } from '@components//ui'
-import { SEARCH_PROVIDER } from '@components//utils/constants'
-const ElasticSearchBar = dynamic(() => import('@components//shared/Search/elastic/ElasticSearchBar'))
-const InstantSearchBar = dynamic(() => import('@components//shared/Search/algolia/InstantSearchBar'))
-const SearchWrapper = dynamic(() => import('@components//shared/Search'))
+import { buildAutocompleteQueryConfig, buildFacetConfigFromConfig, buildSearchOptionsFromConfig, getConfig, } from '@components/config/config-helper'
+import { useUI } from '@components/ui'
+import { SEARCH_PROVIDER } from '@components/utils/constants'
+const ElasticSearchBar = dynamic(() => import('@components/shared/Search/elastic/ElasticSearchBar'))
+const InstantSearchBar = dynamic(() => import('@components/shared/Search/algolia/InstantSearchBar'))
+const SearchWrapper = dynamic(() => import('@components/shared/Search'))
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
