@@ -1,35 +1,35 @@
+import { useReducer, useState, useEffect } from 'react'
 import Link from 'next/link'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
-import { useReducer, useState, useEffect } from 'react'
-import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
-import { getCategoryBySlug } from '@framework/category'
-import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
-import { postData } from '@new-components/utils/clientFetcher'
-import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
+import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
-import { logError, maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { ProductCard } from '@components/product'
-import axios from 'axios'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@new-components/utils/constants'
-import CompareSelectionBar from '@new-components/Product/ProductCompare/compareSelectionBar'
-import { useUI } from '@new-components/ui'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import OutOfStockFilter from '@new-components/Product/Filters/OutOfStockFilter'
-import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { getCategoryBySlug } from '@framework/category'
+import { getCategoryProducts } from '@framework/api/operations'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
+import commerce from '@lib/api/commerce'
+import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { postData } from '@new-components/utils/clientFetcher'
+import withDataLayer, { PAGE_TYPES } from '@new-components/withDataLayer'
+import { IMG_PLACEHOLDER } from '@new-components/utils/textVariables'
+import OutOfStockFilter from '@new-components/Product/Filters/OutOfStockFilter'
+import CompareSelectionBar from '@new-components/Product/ProductCompare/compareSelectionBar'
+import { useUI } from '@new-components/ui'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@new-components/utils/constants'
+const ProductCard = dynamic(() => import('@new-components/ProductCard'))
 const ProductFilterRight = dynamic(() => import('@new-components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@new-components/Product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@new-components/Product/Filters/FilterTopBar'))
@@ -586,7 +586,7 @@ function CategoryLandingPage({
                       <SwiperSlide key={cdx}>
                         <div className="relative group">
                           <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <ProductCard product={product.results || []} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                          <ProductCard data={product.results || []} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
                         </div>
                       </SwiperSlide>
                     ))}
