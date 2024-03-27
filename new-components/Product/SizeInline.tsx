@@ -6,7 +6,6 @@ import classNames from '@new-components/utils/classNames'
 import { useUI } from '@new-components/ui/context'
 import { getProductFromAttributes } from '@new-components/utils/attributesGenerator'
 import { matchStrings } from '@framework/utils/parse-util'
-import SizeAttribute from '@components/product/ProductView/sizeAttribute.json'
 import { useTranslation } from '@commerce/utils/use-translation'
 function RenderRadioOptions({ items, itemsCount, selectedValue, selected, openRemainElems = false, handleToggleOpenRemainElems, sizeInit, setSizeInit, currentAttribute, }: any) {
    const translate = useTranslation()
@@ -99,23 +98,7 @@ export default function SizeInline({ componentIdx, items = [], onChange = () => 
    const handleToggleOpenRemainElems = () => { setOpenRemainElems(!openRemainElems) }
    return (
       <>
-         <div className="flex items-center justify-between my-2" id="productSize">
-            <h4 className="text-gray-700 font-14">
-               {label}:
-               <span className="pl-1 font-semibold text-gray-700 uppercase text-ms dark:text-gray-700">{currentAttribute}</span>
-               <span className="pl-1 text-xs font-bold text-black sm:text-sm">
-                  {product?.mappedCategories?.length > 0 && SizeAttribute?.sizes?.map((attr: any, aid: number) => (matchStrings(attr.name, product?.mappedCategories[0].categoryName, true) && (
-                     <div className="inline-block" key={aid}>
-                        {attr?.values?.map((fields: any, idx: number) => (
-                           <div key={`size-attribute-${idx}`}>
-                              {matchStrings(fields.FieldText, currentAttribute, true) && (<p>{fields.FieldText}{' ('}{fields.FieldValue}{')'}</p>)}
-                           </div>
-                        ))}
-                     </div>
-                  )))}
-               </span>
-            </h4>
-         </div>
+         
          <RadioGroup value={selected} onChange={handleOnChange} className="mt-2 dark:text-black">
             {<RenderRadioOptions items={items} itemsCount={[]} currentAttribute={currentAttribute} selected={selected} openRemainElems={openRemainElems} handleToggleOpenRemainElems={handleToggleOpenRemainElems} sizeInit={sizeInit} setSizeInit={setSizeInit} />}
          </RadioGroup>

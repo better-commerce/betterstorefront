@@ -16,6 +16,7 @@ import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/pa
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import _ from 'lodash';
+import { ArrowRight } from '@components/icons';
 const ProductTag = dynamic(() => import('@components/product/ProductTag'))
 const LikeButton = dynamic(() => import('@new-components/LikeButton'))
 const Prices = dynamic(() => import('@new-components/Prices'))
@@ -30,9 +31,13 @@ export interface ProductCardProps {
   deviceInfo?: any;
   maxBasketItemsCount?: any;
   key?: any;
+  attributeNames?: any
+  compareProductsAttributes?: any
+  active?: any
+  hideWishlistCTA?: any
 }
 
-const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key }) => {
+const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA }) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -202,6 +207,42 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const itemPrice = data?.price?.formatted?.withTax
   const buttonConfig = buttonTitle()
   const isComparedEnabled = stringToBoolean(isCompared)
+  const attributesMap = attributeNames?.map((attrib: any) => {
+    let currentProduct = compareProductsAttributes?.find((x: any) => x.stockCode == data?.stockCode)
+    if (active) {
+      return {
+        name: attrib,
+        value: data?.customAttributes?.find((x: any) => x.display === attrib)?.value,
+      }
+    } else {
+      return {
+        name: attrib,
+        value: currentProduct?.customAttributes?.find((x: any) => x.fieldName === attrib)?.fieldValue,
+      }
+    }
+  })
+  const renderCompareAttributes = () => {
+    return (
+      <>
+        {isMobile || isIPadorTablet ? null :
+          <div className="flex flex-col w-full gap-0 py-3 mt-3 border-t border-gray-200">
+            {attributesMap?.map((attrib: any, attribIdx: any) => (
+              <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
+                <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
+                {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
+                  <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                  : attrib?.value == "True" || attrib?.value == "Yes" ?
+                    <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                    : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
+                  <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
+              </span>
+            ))}
+          </div>
+        }
+      </>
+    )
+  }
+
   const renderGroupButtons = () => {
     return (
       <>
@@ -262,6 +303,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
                 </span>
               </div>
             </div>
+            {renderCompareAttributes()}
             {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
                 {product?.compared && (

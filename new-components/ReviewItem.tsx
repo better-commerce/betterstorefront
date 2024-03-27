@@ -1,6 +1,5 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import React, { FC } from "react";
-import Avatar from "./shared/Avatar/Avatar";
 import classNames from "classnames";
 import moment from "moment";
 import { DATE_FORMAT } from "@new-components/utils/constants";

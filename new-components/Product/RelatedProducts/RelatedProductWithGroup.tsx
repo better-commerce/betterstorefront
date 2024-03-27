@@ -98,24 +98,10 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
   }
   return (
     <>
-      <Swiper
-        slidesPerView={1}
-        spaceBetween={20}
-        navigation={true}
-        loop={true}
-        breakpoints={{
-          640: { slidesPerView: 1.5 },
-          768: { slidesPerView: productPerColumn },
-          1024: { slidesPerView: productPerColumn },
-        }}
-      >
+      <Swiper slidesPerView={1} spaceBetween={20} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: productPerColumn }, 1024: { slidesPerView: productPerColumn }, }} >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId} className="height-auto-slide relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto h-100">
-            <ProductCard
-              data={product}
-              deviceInfo={deviceInfo}
-              maxBasketItemsCount={maxBasketItemsCount}
-            />
+          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer height-auto-slide group lg:w-auto h-100">
+            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
           </SwiperSlide>
         ))}
       </Swiper>

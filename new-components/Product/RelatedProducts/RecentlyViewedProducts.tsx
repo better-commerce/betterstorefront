@@ -145,11 +145,11 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
       <div>
         {' '}
         {recentlyViewedState?.length > 0 && (
-          <div className="flex flex-col pt-8 mt-8 border-gray-200 sm:pt-16 mx-5">
+          <div className="flex flex-col pt-8 mx-5 mt-8 border-gray-200 sm:pt-16">
             <div className="flex flex-col w-full container-ffx">
               <div>
                 <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
-                  <h2 className="font-semibold text-gray-900 uppercase font-18 mb-5">
+                  <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18">
                     {translate('common.label.recentlyViewedText')}
                   </h2>
                 </div>
@@ -157,27 +157,11 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
                   {isLoading ? (
                     <LoadingDots />
                   ) : (
-                    <Swiper
-                      slidesPerView={1}
-                      spaceBetween={10}
-                      ref={swiperRefBasket}
-                      navigation={false}
-                      loop={true}
-                      breakpoints={{
-                        640: { slidesPerView: 1.3, spaceBetween: 4 },
-                        768: { slidesPerView: 1.3, spaceBetween: 10 },
-                        1024: { slidesPerView:1.3, spaceBetween: 10 },
-                      }}
-                      className="mySwiper"
-                    >
+                    <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: 1.3, spaceBetween: 10 }, 1024: { slidesPerView:1.3, spaceBetween: 10 }, }} className="mySwiper" >
                       {recentlyViewedState?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid} className="height-equal">
-                             <ProductCard
-                              data={product}
-                              deviceInfo={deviceInfo}
-                              maxBasketItemsCount={maxBasketItemsCount(config)}
-                            />
+                             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
                           </SwiperSlide>
                         )
                       })}
