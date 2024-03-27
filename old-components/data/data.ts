@@ -14,7 +14,7 @@ import productSport6 from "images/products/sport-6.png";
 import productSport7 from "images/products/sport-7.png";
 import productSport8 from "images/products/sport-8.png";
 import { StaticImageData } from "next/image";
-import { productImgs } from "@components//Header/fakeData";
+import { productImgs } from "@components/Header/fakeData";
 
 //
 

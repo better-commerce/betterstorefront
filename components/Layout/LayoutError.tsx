@@ -10,21 +10,21 @@ import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const NotifyUserPopup = dynamic(() => import('@components//ui/NotifyPopup'))
-const ProgressBar = dynamic(() => import('@components//ui/ProgressBar'))
-const MainNav2Logged = dynamic(() => import('@components//Header/MainNav2Logged'))
-const AlertRibbon = dynamic(() => import('@components//ui/AlertRibbon'))
-const WishlistSidebarView = dynamic(() => import('@components//shared/Wishlist/WishlistSidebarView'))
-const BulkAddSidebarView = dynamic(() => import('@components//SectionCheckoutJourney/bulk-add/BulkAddSidebarView'))
-const CheckoutSidebarView = dynamic(() => import('@components//SectionCheckoutJourney/checkout-old/CheckoutSidebarView'))
-const PaymentMethodView = dynamic(() => import('@components//SectionCheckoutJourney/checkout-old/PaymentMethodView'))
-const ShippingView = dynamic(() => import('@components//SectionCheckoutJourney/checkout-old/ShippingView'))
-const LoginSideBarView = dynamic(() => import('@components//shared/Login/LoginSideBarView'))
-const Footer = dynamic(() => import('@components//shared/Footer/Footer'))
-import { Sidebar, Modal, LoadingDots } from '@components//ui'
-import { IDeviceInfo, useUI } from '@components//ui/context'
-import { CURRENT_THEME } from '@components//utils/constants'
-import { CartSidebarView } from '@components//SectionCheckoutJourney/cart'
+const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
+const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
+const MainNav2Logged = dynamic(() => import('@components/Header/MainNav2Logged'))
+const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
+const WishlistSidebarView = dynamic(() => import('@components/shared/Wishlist/WishlistSidebarView'))
+const BulkAddSidebarView = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/BulkAddSidebarView'))
+const CheckoutSidebarView = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/CheckoutSidebarView'))
+const PaymentMethodView = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/PaymentMethodView'))
+const ShippingView = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/ShippingView'))
+const LoginSideBarView = dynamic(() => import('@components/shared/Login/LoginSideBarView'))
+const Footer = dynamic(() => import('@components/shared/Footer/Footer'))
+import { Sidebar, Modal, LoadingDots } from '@components/ui'
+import { IDeviceInfo, useUI } from '@components/ui/context'
+import { CURRENT_THEME } from '@components/utils/constants'
+import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />

@@ -2,17 +2,17 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Router from 'next/router'
 
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import {
   NEXT_AUTHENTICATE,
   OTP_LOGIN_ENABLED,
-} from '@components//utils/constants'
-import useWishlist from '@components//services/wishlist'
-import cartHandler from '@components//services/cart'
-import useAnalytics from '@components//services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
+} from '@components/utils/constants'
+import useWishlist from '@components/services/wishlist'
+import cartHandler from '@components/services/cart'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import LoginOTPForm from '@components//customer/login-otp-form'
+import LoginOTPForm from '@components/customer/login-otp-form'
 
 function LoginOTPComp() {
   const translate = useTranslation()

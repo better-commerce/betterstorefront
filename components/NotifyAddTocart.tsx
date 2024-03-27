@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Transition } from "@headlessui/react";
-import Prices from "@components//Prices";
+import Prices from "@components/Prices";
 
 import Image, { StaticImageData } from "next/image";
 import { useTranslation } from "@commerce/utils/use-translation";

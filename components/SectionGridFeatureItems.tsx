@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import HeaderFilterSection from "@components//HeaderFilterSection";
-import ProductCard from "@components//ProductCard";
+import HeaderFilterSection from "@components/HeaderFilterSection";
+import ProductCard from "@components/ProductCard";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { PRODUCTS, Product } from "./Product/data";

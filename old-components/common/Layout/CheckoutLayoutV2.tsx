@@ -5,11 +5,11 @@ import Head from 'next/head'
 import Router from 'next/router'
 
 // Component Imports
-import AlertRibbon from '@components//ui/AlertRibbon'
+import AlertRibbon from '@components/ui/AlertRibbon'
 
 // Other Imports
-import { useUI } from '@components//ui'
-import { CURRENT_THEME } from '@components//utils/constants'
+import { useUI } from '@components/ui'
+import { CURRENT_THEME } from '@components/utils/constants'
 import { ISnippet } from '@framework/content/use-content-snippet'
 import { IScriptSnippet } from '../Content/ScriptContentSnippet'
 

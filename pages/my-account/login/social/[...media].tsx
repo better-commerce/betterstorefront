@@ -8,19 +8,19 @@ import { GetServerSideProps } from 'next'
 import { useSession, signIn } from 'next-auth/react'
 
 // Component Imports
-import Spinner from '@components//ui/Spinner'
+import Spinner from '@components/ui/Spinner'
 
 // Other Imports
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 import { parseFullName } from '@framework/utils/app-util'
-import cartHandler from '@components//services/cart'
-import useWishlist from '@components//services/wishlist'
+import cartHandler from '@components/services/cart'
+import useWishlist from '@components/services/wishlist'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_SSO_AUTHENTICATE,
   SocialMediaType,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 interface ISocialLoginPageProps {

@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import Script from 'next/script'
 
 // Other Imports
-import { Payments } from '@components//utils/payment-constants'
+import { Payments } from '@components/utils/payment-constants'
 import { IApplePaymentProps } from '../../BasePaymentButton'
 
 declare const ApplePaySession: any

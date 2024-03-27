@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { LoadingDots, useUI } from '@components//ui'
+import { LoadingDots, useUI } from '@components/ui'
 import { isB2BUser } from '@framework/utils/app-util'
 import { AlertType, UserRoleType } from '@framework/utils/enums'
 import BillingAddressForm from './BillingAddressForm'
 import { isMobile } from 'react-device-detect'
-import { EmptyObject } from '@components//utils/constants'
+import { EmptyObject } from '@components/utils/constants'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
 import { useTranslation } from '@commerce/utils/use-translation'
 

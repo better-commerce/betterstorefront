@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import s from './Quantity.module.css'
-import { Cross, Plus, Minus } from '@components//shared/icons'
+import { Cross, Plus, Minus } from '@components/shared/icons'
 import cn from 'classnames'
 export interface QuantityProps {
   value: number

@@ -1,6 +1,6 @@
 // import CartFreeGift from "@old-components/cart/CartSidebarView/FreeGift";
 // import ReplacementItem from "@old-components/cart/CartSidebarView/ReplacementItem";
-import { OrderStatus } from '@components//utils/constants'
+import { OrderStatus } from '@components/utils/constants'
 import { matchStrings, priceFormat } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { round } from 'lodash'
@@ -9,7 +9,7 @@ import Image from 'next/image'
 import React from 'react'
 import TrackingDetail from './TrackingDetail'
 import { vatIncluded } from '@framework/utils/app-util'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

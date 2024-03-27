@@ -1,9 +1,9 @@
 import React from "react";
-import { DATE_FORMAT } from "@components//utils/constants";
+import { DATE_FORMAT } from "@components/utils/constants";
 import moment from "moment";
 import OrderStatusMapping from "./OrderStatusMapping";
 import { generateUri } from "@commerce/utils/uri-util";
-import { IMG_PLACEHOLDER } from "@components//utils/textVariables";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {

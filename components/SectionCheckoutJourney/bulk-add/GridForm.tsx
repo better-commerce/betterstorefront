@@ -6,7 +6,7 @@ import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik'
 
 // Other Imports
 import { VALUES_MAP } from '.'
-import { Messages } from '@components//utils/constants'
+import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface IGridFormProps {

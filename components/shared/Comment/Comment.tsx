@@ -1,4 +1,4 @@
-import { _getPersonNameRd } from "@components//Header/fakeData";
+import { _getPersonNameRd } from "@components/Header/fakeData";
 import React from "react";
 import { FC } from "react";
 import Avatar from "../Avatar/Avatar";

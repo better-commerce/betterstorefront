@@ -1,6 +1,6 @@
 import { logError } from '@framework/utils/app-util'
 import fetcher from '../../fetcher'
-import { INFRA_LOG_ENDPOINT } from '@components//utils/constants'
+import { INFRA_LOG_ENDPOINT } from '@components/utils/constants'
 
 export interface ILogRequestParams {
   readonly shortMessage: string

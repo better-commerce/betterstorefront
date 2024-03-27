@@ -1,10 +1,10 @@
 "use client";
 
 import React, { FC, useEffect, useId, useRef, useState } from "react";
-import Heading from "@components//Heading/Heading";
+import Heading from "@components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
-import CardCategory2 from "@components//CardCategories/CardCategory2";
+import CardCategory2 from "@components/CardCategories/CardCategory2";
 import department1Png from "images/collections/department1.png";
 import department2Png from "images/collections/department2.png";
 import department3Png from "images/collections/department3.png";

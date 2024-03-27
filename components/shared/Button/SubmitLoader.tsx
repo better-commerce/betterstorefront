@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Component Imports
-import { LoadingDots } from '@components//ui'
+import { LoadingDots } from '@components/ui'
 
 // Other Imports
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'

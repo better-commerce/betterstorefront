@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { CUSTOMER_BASE_API } from '@components//utils/constants'
+import { CUSTOMER_BASE_API } from '@components/utils/constants'
 export default function removeFromWishlist() {
   async function removeFromWishlistAsync({ query, cookies }: any) {
     try {

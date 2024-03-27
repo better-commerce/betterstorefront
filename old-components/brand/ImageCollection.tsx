@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Link from 'next/link'
 import { generateUri } from '@commerce/utils/uri-util'
 

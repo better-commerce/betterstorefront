@@ -1,16 +1,16 @@
 "use client";
 
 import { Popover, Transition } from "@headlessui/react";
-import { avatarImgs } from "@components//Header/fakeData";
+import { avatarImgs } from "@components/Header/fakeData";
 import { Fragment } from "react";
 import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
 import { getCurrentPage, getEnabledSocialLogins } from "@framework/utils/app-util";
-import { useUI } from "@components//ui";
+import { useUI } from "@components/ui";
 import { Guid } from "@commerce/types";
 import Router from 'next/router'
 import { signOut } from "next-auth/react";
-import { SocialMediaType } from "@components//utils/constants";
+import { SocialMediaType } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
 
 export default function AvatarDropdown({ pluginConfig = [] }) {

@@ -5,10 +5,10 @@ import SwiperCore, { Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import cartHandler from '@components//services/cart'
-import { useUI } from '@components//ui/context'
+import cartHandler from '@components/services/cart'
+import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 const PLPQuickView = dynamic(() => import('@old-components/product/QuickView/PLPQuickView'))
 const ProductCard = dynamic(() => import('@old-components/product/ProductCard/ProductCard'))
 

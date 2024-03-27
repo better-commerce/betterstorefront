@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
-import { DefaultSessionCookieKey, SessionIdCookieKey } from '@components//utils/constants'
-import DataLayerInstance from '@components//utils/dataLayer'
+import { DefaultSessionCookieKey, SessionIdCookieKey } from '@components/utils/constants'
+import DataLayerInstance from '@components/utils/dataLayer'
 import { v4 as uuid_v4 } from 'uuid'
 
 /**

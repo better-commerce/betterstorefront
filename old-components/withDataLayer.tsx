@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import DataLayerInstance, { KEYS_MAP } from '@components//utils/dataLayer'
-import Layout from '@components//Layout/Layout'
+import DataLayerInstance, { KEYS_MAP } from '@components/utils/dataLayer'
+import Layout from '@components/Layout/Layout'
 
 export const PAGE_TYPES = {
   Blog: 'Blog',

@@ -6,8 +6,8 @@ import * as _ from 'lodash'
 import { Formik, Form } from 'formik'
 
 // Component Imports
-import FormField from '@components//utils/FormField'
-import AddressFormField from '@components//utils/AddressFormField'
+import FormField from '@components/utils/FormField'
+import AddressFormField from '@components/utils/AddressFormField'
 
 // Other Imports
 import {
@@ -15,13 +15,13 @@ import {
   pincodeLookup,
   submittingClassName,
 } from '@framework/utils/app-util'
-import { AddressPageAction } from '@components//utils/constants'
+import { AddressPageAction } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
 import { IFormProps } from 'framework/contracts/IFormProps'
 import { INewAddressFormProps } from 'framework/contracts/address/INewAddressFormProps'
 import { useTranslation } from '@commerce/utils/use-translation'
-import SubmitButton from '@components//shared/Button/SubmitButton'
+import SubmitButton from '@components/shared/Button/SubmitButton'
 
 const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
   const translate = useTranslation()

@@ -3,20 +3,20 @@ import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
-import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
-import Layout from '@components//Layout/Layout'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import Layout from '@components/Layout/Layout'
 const ProductGrid = dynamic(() => import('@old-components/product/Grid/ProductGrid'))
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
-import useAnalytics from '@components//services/analytics/useAnalytics'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'

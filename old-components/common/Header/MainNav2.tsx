@@ -8,7 +8,7 @@ import DropdownCategories from "./DropdownCategories";
 import CartDropdown from "./CartDropdown";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { Logo } from "@components//ui";
+import { Logo } from "@components/ui";
 import MenuBar from "../MenuBar/MenuBar";
 import Link from "next/link";
 

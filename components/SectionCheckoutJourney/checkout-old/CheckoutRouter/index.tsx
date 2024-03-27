@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import Router from 'next/router'
-import useWishlist from '@components//services/wishlist'
+import useWishlist from '@components/services/wishlist'
 import {
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_LOGIN_CHECKOUT,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import axios from 'axios'
 import GuestForm from './GuestForm'
 import Link from 'next/link'
 import { useTranslation } from '@commerce/utils/use-translation'
-import Form from '@components//customer'
+import Form from '@components/customer'
 const config = [
   {
     title: "Log in",

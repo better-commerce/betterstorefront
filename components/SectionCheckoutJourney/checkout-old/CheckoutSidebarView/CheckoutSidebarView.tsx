@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { FC } from 'react'
-import { Button, Text } from '@components//ui'
-import { useUI } from '@components//ui/context'
+import { Button, Text } from '@components/ui'
+import { useUI } from '@components/ui/context'
 import useCheckout from '@framework/checkout/use-checkout'
 import ShippingWidget from '../ShippingWidget'
 import s from './CheckoutSidebarView.module.css'
 import { useTranslation } from '@commerce/utils/use-translation'
-import SidebarLayout from '@components//shared/SidebarLayout/SidebarLayout'
+import SidebarLayout from '@components/shared/SidebarLayout/SidebarLayout'
 
 const CheckoutSidebarView: FC<React.PropsWithChildren<unknown>> = () => {
   const translate = useTranslation();

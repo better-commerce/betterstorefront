@@ -1,4 +1,4 @@
-import { BASKET_ENDPOINT } from '@components//utils/constants'
+import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 interface Props {
   userBasketId: string

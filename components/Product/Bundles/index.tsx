@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react'
 import BundleCard from './BundleCard'
 
 import { useTranslation } from '@commerce/utils/use-translation'
-import ProductCard from '@components//ProductCard'
+import ProductCard from '@components/ProductCard'
 
 export default function Bundles({ onClose = () => {}, price = '', products = [], productBundleUpdate = () => {}, deviceInfo, onBundleAddToCart = () => {} }: any) {
   const translate = useTranslation()

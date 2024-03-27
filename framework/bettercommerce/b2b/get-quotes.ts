@@ -1,5 +1,5 @@
 import fetcher from '../fetcher'
-import { B2B_USER_QUOTES } from '@components//utils/constants'
+import { B2B_USER_QUOTES } from '@components/utils/constants'
 interface Props {
     userId: string
   }

@@ -1,4 +1,4 @@
-import { OMS_SHIPPING_PLANS } from '@components//utils/constants'
+import { OMS_SHIPPING_PLANS } from '@components/utils/constants'
 import { OMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '../fetcher'
 

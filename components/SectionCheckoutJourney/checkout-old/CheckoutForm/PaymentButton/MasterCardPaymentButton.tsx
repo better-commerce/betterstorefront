@@ -3,7 +3,7 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
-import { EmptyString } from '@components//utils/constants'
+import { EmptyString } from '@components/utils/constants'
 
 export class MasterCardPaymentButton extends BasePaymentButton {
   /**

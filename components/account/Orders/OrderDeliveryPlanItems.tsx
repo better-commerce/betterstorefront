@@ -1,6 +1,6 @@
 // import CartFreeGift from "@old-components/cart/CartSidebarView/FreeGift";
 // import ReplacementItem from "@old-components/cart/CartSidebarView/ReplacementItem";
-import { DATE_FORMAT } from '@components//utils/constants'
+import { DATE_FORMAT } from '@components/utils/constants'
 import Link from 'next/link'
 import {
   matchStrings,
@@ -16,7 +16,7 @@ import React from 'react'
 import OrderLog from './OrderLog'
 import OrderStatusMapping from './OrderStatusMapping'
 import TrackingDetail from './TrackingDetail'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 const OrderDeliveryPlanItems = ({

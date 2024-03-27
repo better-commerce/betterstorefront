@@ -12,12 +12,12 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
-import { EmptyString, Messages } from '@components//utils/constants'
-import getStripe from '@components//utils/get-stripe'
+import { EmptyString, Messages } from '@components/utils/constants'
+import getStripe from '@components/utils/get-stripe'
 import { initPayment } from '@framework/utils/payment-util'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
-import { GTMUniqueEventID } from '@components//services/analytics/ga4'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 export class StripePaymentButton extends BasePaymentButton {
   /**

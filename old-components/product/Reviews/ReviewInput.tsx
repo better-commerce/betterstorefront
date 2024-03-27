@@ -1,13 +1,13 @@
-import withAuth from '@components//utils/withAuth'
+import withAuth from '@components/utils/withAuth'
 import { StarIcon } from '@heroicons/react/24/solid'
-import classNames from '@components//utils/classNames'
+import classNames from '@components/utils/classNames'
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
-import { NEXT_CREATE_REVIEW } from '@components//utils/constants'
+import { NEXT_CREATE_REVIEW } from '@components/utils/constants'
 import axios from 'axios'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const MIN_LENGTH = 5

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useContactPrefConfig } from './configs/contact'
 import { Formik} from 'formik'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import { useHandleSubmit, URLS } from './common'
-import Button from '@components//ui/Button'
-import eventDispatcher from '@components//services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
+import Button from '@components/ui/Button'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 

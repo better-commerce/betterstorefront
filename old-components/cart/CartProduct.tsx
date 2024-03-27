@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
 import { generateUri } from '@commerce/utils/uri-util'
-import { LoadingDots, useUI } from '@components//ui'
+import { LoadingDots, useUI } from '@components/ui'
 import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline'
 import {
   EmptyGuid,
@@ -9,14 +9,14 @@ import {
   Messages,
   NEXT_CREATE_WISHLIST,
   NEXT_GET_ADDON_PRODUCTS,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
 import { deliveryDateFormat, matchStrings, stringFormat, tryParseJson} from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 export default function CartProduct({
   product,

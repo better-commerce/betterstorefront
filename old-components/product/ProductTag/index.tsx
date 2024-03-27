@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { PRODUCT_TAGS } from '@components//utils/constants'
+import { PRODUCT_TAGS } from '@components/utils/constants'
 import { BellIcon, ClockIcon, ShoppingBagIcon, SparklesIcon, StarIcon, TagIcon } from '@heroicons/react/24/outline'
-import IconDiscount from '@components//IconDiscount'
+import IconDiscount from '@components/IconDiscount'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {

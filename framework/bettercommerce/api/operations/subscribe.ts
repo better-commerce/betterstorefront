@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { CUSTOMER_NEWSLETTER } from '@components//utils/constants'
+import { CUSTOMER_NEWSLETTER } from '@components/utils/constants'
 export default function subscribeToNewsletter() {
   async function subscribeToNewsletterAsync({ query, cookies }: any) {
     try {

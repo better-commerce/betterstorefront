@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ButtonHTMLAttributes, FC } from "react";
-import twFocusClass from "@components//shared/utils/twFocusClass";
+import twFocusClass from "@components/shared/utils/twFocusClass";
 import Link from "next/link";
 
 export interface ButtonProps {

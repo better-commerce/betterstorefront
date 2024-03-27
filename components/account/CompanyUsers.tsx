@@ -1,4 +1,4 @@
-import Spinner from '@components//ui/Spinner'
+import Spinner from '@components/ui/Spinner'
 import React from 'react'
 import { useTranslation } from '@commerce/utils/use-translation'
 

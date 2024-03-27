@@ -5,7 +5,7 @@ import { Dialog, Popover, Transition } from "@headlessui/react";
 
 import Slider from "rc-slider";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import MySwitch from "@components//MySwitch";
+import MySwitch from "@components/MySwitch";
 import Checkbox from "./shared/Checkbox/Checkbox";
 import ButtonThird from "./shared/Button/ButtonThird";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";

@@ -7,26 +7,26 @@ import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components//utils/constants'
-import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
-import useAnalytics from '@components//services/analytics/useAnalytics'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import Layout from '@components//Layout/Layout'
-const SectionHero2 = dynamic(() => import('@components//SectionHero/SectionHero2'))
-const DiscoverMoreSlider = dynamic(() => import('@components//DiscoverMoreSlider'))
-const SectionSliderProductCard = dynamic(() => import('@components//SectionSliderProductCard'))
-const SectionHowItWork = dynamic(() => import('@components//SectionHowItWork/SectionHowItWork'))
-const BackgroundSection = dynamic(() => import('@components//BackgroundSection/BackgroundSection'))
-const SectionSliderLargeProduct = dynamic(() => import('@components//SectionSliderLargeProduct'))
-const SectionSliderCategories = dynamic(() => import('@components//SectionSliderCategories/SectionSliderCategories'))
-const SectionPromo3 = dynamic(() => import('@components//SectionPromo3'))
-const Loader = dynamic(() => import('@components//ui/LoadingDots'))
+import Layout from '@components/Layout/Layout'
+const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
+const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
+const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
+const SectionHowItWork = dynamic(() => import('@components/SectionHowItWork/SectionHowItWork'))
+const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'))
+const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'))
+const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
+const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
+const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])

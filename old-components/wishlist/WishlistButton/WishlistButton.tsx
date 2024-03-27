@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import cn from 'classnames'
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 import { Heart } from '@old-components/icons'
 import useAddItem from '@framework/wishlist/use-add-item'
 import useCustomer from '@framework/customer/use-customer'

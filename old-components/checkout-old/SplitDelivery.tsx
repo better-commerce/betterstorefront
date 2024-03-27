@@ -1,4 +1,4 @@
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'

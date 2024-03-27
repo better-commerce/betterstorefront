@@ -1,5 +1,5 @@
 import { FC, Fragment, useEffect, useState } from 'react'
-import { useUI } from '@components//ui/context'
+import { useUI } from '@components/ui/context'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Transition } from '@headlessui/react'
 

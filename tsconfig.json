@@ -23,7 +23,7 @@
       "@assets/*": ["assets/*"],
       "@assets/css/*": ["assets/css/*"],
       "@old-components/*": ["old-components/*"],
-      "@components//*": ["components/*"],
+      "@components/*": ["components/*"],
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/bettercommerce"],

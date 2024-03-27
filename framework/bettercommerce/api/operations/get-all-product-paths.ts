@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { CATALOG_SEARCH } from '@components//utils/constants'
+import { CATALOG_SEARCH } from '@components/utils/constants'
 
 export type GetAllProductPathsResult = {
   products: Array<{ path: string }>

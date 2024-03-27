@@ -17,12 +17,12 @@ import { IPaymentButtonProps } from '../BasePaymentButton'
 
 // Other Imports
 import { requestPayment } from '@framework/utils/payment-util'
-import { LocalStorage, Payments } from '@components//utils/payment-constants'
+import { LocalStorage, Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages, } from '@components//utils/constants'
-import { getItem, setItem } from '@components//utils/localStorage'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages, } from '@components/utils/constants'
+import { getItem, setItem } from '@components/utils/localStorage'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { GTMUniqueEventID } from '@components//services/analytics/ga4'
+import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 export const CARD_PAYMENT_3DS_ENABLED = true
 const ELEM_CARD_NUMBER = 'card-number'

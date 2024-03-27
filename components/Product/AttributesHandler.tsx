@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import attributesGenerator, { getAttributesFromSlug, productLookup } from '@components//utils/attributesGenerator'
+import attributesGenerator, { getAttributesFromSlug, productLookup } from '@components/utils/attributesGenerator'
 import { cloneDeep } from 'lodash'
 import SizeInline from './SizeInline'
 import InlineList from './InlineList'

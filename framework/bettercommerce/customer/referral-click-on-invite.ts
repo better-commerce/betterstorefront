@@ -1,4 +1,4 @@
-import { REFERRAL_REFEREE_ENDPOINT } from "@components//utils/constants";
+import { REFERRAL_REFEREE_ENDPOINT } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 
 interface props{

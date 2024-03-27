@@ -9,12 +9,12 @@ import { groupBy } from 'lodash'
 import OrderDetail from './OrderDetail'
 import OrderLines from './OrderLines'
 import DeliveryOrderLines from './DeliveryOrderLines'
-import { useUI } from '@components//ui/context'
-import InfiniteScroll from '@components//ui/InfiniteScroll'
+import { useUI } from '@components/ui/context'
+import InfiniteScroll from '@components/ui/InfiniteScroll'
 
 // Other Imports
-import { NEXT_GET_ORDER_DETAILS } from '@components//utils/constants'
-import Spinner from '@components//ui/Spinner'
+import { NEXT_GET_ORDER_DETAILS } from '@components/utils/constants'
+import Spinner from '@components/ui/Spinner'
 import Link from 'next/link'
 import OrdersListView from './OrdersListView'
 

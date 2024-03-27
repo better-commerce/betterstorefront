@@ -1,4 +1,4 @@
-import { REFERRAL_BY_SLUG } from "@components//utils/constants";
+import { REFERRAL_BY_SLUG } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 
 interface props{

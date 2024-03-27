@@ -1,14 +1,14 @@
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL, } from '@components//utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
-import Layout from '@components//Layout/Layout'
-import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
+import Layout from '@components/Layout/Layout'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { Hero } from '@components//ui'
+import { Hero } from '@components/ui'
 const PromotionBanner = dynamic(
   () => import('@old-components/home/PromotionBanner')
 )
@@ -19,7 +19,7 @@ const Heading = dynamic(() => import('@old-components/home/Heading'))
 const Categories = dynamic(() => import('@old-components/home/Categories'))
 const Collections = dynamic(() => import('@old-components/home/Collections'))
 const ProductSlider = dynamic(() => import('@old-components/home/ProductSlider'))
-const Loader = dynamic(() => import('@components//ui/LoadingDots'))
+const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Home
 function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, deviceInfo, config }: any) {

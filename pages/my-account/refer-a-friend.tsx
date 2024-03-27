@@ -1,13 +1,13 @@
 import { useState, useEffect, Fragment } from 'react'
-import Layout from '@components//Layout/Layout'
-import withDataLayer, { PAGE_TYPES } from '@components//withDataLayer'
-import { useConfig } from '@components//utils/myAccount'
-import withAuth from '@components//utils/withAuth'
+import Layout from '@components/Layout/Layout'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { useConfig } from '@components/utils/myAccount'
+import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
-import useAnalytics from '@components//services/analytics/useAnalytics'
-import { useUI } from '@components//ui/context'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { useUI } from '@components/ui/context'
 import React from 'react'
 import { Disclosure } from '@headlessui/react'
 import { Transition } from '@headlessui/react'
@@ -19,12 +19,12 @@ import {
   NEXT_REFERRAL_INVITE_SENT,
   NEXT_REFERRAL_VOUCHERS,
   SITE_ORIGIN_URL,
-} from '@components//utils/constants'
+} from '@components/utils/constants'
 import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from '@heroicons/react/24/outline'
-import Spinner from '@components//ui/Spinner'
+import Spinner from '@components/ui/Spinner'
 import SideMenu from '@old-components/account/MyAccountMenu'
 import NextHead from 'next/head'
 import { useTranslation } from '@commerce/utils/use-translation'

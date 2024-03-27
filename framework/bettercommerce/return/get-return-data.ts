@@ -1,4 +1,4 @@
-import { RETURNS_ENDPOINT } from '@components//utils/constants'
+import { RETURNS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 
 export default async function getReturnData(orderId: string, cookies?: any) {

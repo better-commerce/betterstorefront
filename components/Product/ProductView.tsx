@@ -4,41 +4,41 @@ import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
-import { useUI } from '@components//ui/context'
-import { KEYS_MAP, EVENTS } from '@components//utils/dataLayer'
-import cartHandler from '@components//services/cart'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE } from '@components//utils/constants'
-import eventDispatcher from '@components//services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components//services/analytics/constants'
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components//utils/textVariables'
+import { useUI } from '@components/ui/context'
+import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import cartHandler from '@components/services/cart'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE } from '@components/utils/constants'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
-import { LocalStorage } from '@components//utils/payment-constants'
-import wishlistHandler from '@components//services/wishlist'
-import AccordionInfo from '@components//AccordionInfo'
+import { LocalStorage } from '@components/utils/payment-constants'
+import wishlistHandler from '@components/services/wishlist'
+import AccordionInfo from '@components/AccordionInfo'
 import Link from 'next/link'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { PRODUCTS } from './data'
 import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
-const PDPCompare = dynamic(() => import('@components//Product/PDPCompare'))
-const ProductSpecifications = dynamic(() => import('@components//Product/Specifications'))
-const ProductTag = dynamic(() => import('@components//Product/ProductTag'))
-const ReviewItem = dynamic(() => import('@components//ReviewItem'))
-const Prices = dynamic(() => import('@components//Prices'))
-const AttributesHandler = dynamic(() => import('@components//Product/AttributesHandler'))
-const BreadCrumbs = dynamic(() => import('@components//ui/BreadCrumbs'))
-const Bundles = dynamic(() => import('@components//Product/Bundles'))
-const Engraving = dynamic(() => import('@components//Product/Engraving'))
-const Button = dynamic(() => import('@components//ui/IndigoButton'))
-const RelatedProductWithGroup = dynamic(() => import('@components//Product/RelatedProducts/RelatedProductWithGroup'))
-const AvailableOffers = dynamic(() => import('@components//Product/AvailableOffers'))
-const QuantityBreak = dynamic(() => import('@components//Product/QuantiyBreak'))
+const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
+const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
+const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
+const ReviewItem = dynamic(() => import('@components/ReviewItem'))
+const Prices = dynamic(() => import('@components/Prices'))
+const AttributesHandler = dynamic(() => import('@components/Product/AttributesHandler'))
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const Bundles = dynamic(() => import('@components/Product/Bundles'))
+const Engraving = dynamic(() => import('@components/Product/Engraving'))
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
+const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
+const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',

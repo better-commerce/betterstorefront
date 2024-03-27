@@ -3,19 +3,19 @@
 import React, { FC } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { Logo, useUI } from "@components//ui";
+import { Logo, useUI } from "@components/ui";
 import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
-import { IExtraProps } from "@components//Layout/Layout";
-const SearchBar = dynamic(() => import('@components//shared/Search/SearchBar'))
-const AvatarDropdown = dynamic(() => import('@components//Header/AvatarDropdown'))
-const LangDropdown = dynamic(() => import('@components//Header/LangDropdown'))
-const CartDropdown = dynamic(() => import('@components//Header/CartDropdown'))
-const MenuBar = dynamic(() => import('@components//shared/MenuBar/MenuBar'))
-const Navigation = dynamic(() => import('@components//shared/Navigation/Navigation'))
-const ToggleSwitch = dynamic(() => import('@components//shared/ToggleSwitch/ToggleSwitch'))
-const BulkAddTopNav = dynamic(() => import('@components//SectionCheckoutJourney/bulk-add/TopNav'))
+import { IExtraProps } from "@components/Layout/Layout";
+const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
+const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
+const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
+const CartDropdown = dynamic(() => import('@components/Header/CartDropdown'))
+const MenuBar = dynamic(() => import('@components/shared/MenuBar/MenuBar'))
+const Navigation = dynamic(() => import('@components/shared/Navigation/Navigation'))
+const ToggleSwitch = dynamic(() => import('@components/shared/ToggleSwitch/ToggleSwitch'))
+const BulkAddTopNav = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/TopNav'))
 export interface MainNav2LoggedProps { }
 interface Props {
   config: []

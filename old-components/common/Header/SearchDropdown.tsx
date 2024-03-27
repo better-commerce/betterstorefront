@@ -1,4 +1,4 @@
-import Input from "@components//shared/Input/Input";
+import Input from "@components/shared/Input/Input";
 import { Popover, Transition } from "@headlessui/react";
 import React, { FC, Fragment } from "react";
 

@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from 'react'
-import { Logo } from '@components//ui'
+import { Logo } from '@components/ui'
 import { useRouter } from 'next/router'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components//services/analytics/ga4'
+import { recordGA4Event } from '@components/services/analytics/ga4'
 import FooterMenu from '../Footer/FooterMenu'
 import SocialLinks from '../Footer/SocialLinks'
 import Newsletter from '../Footer/Newsletter'
 import { IExtraProps } from '../Layout/Layout'
 import Script from 'next/script'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components//utils/constants'
+import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {

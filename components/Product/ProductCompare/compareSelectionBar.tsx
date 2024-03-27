@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useUI } from '@components//ui'
+import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductCompare from '.'
 

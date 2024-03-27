@@ -1,4 +1,4 @@
-import { ORDERS_ENDPOINT } from '@components//utils/constants'
+import { ORDERS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 

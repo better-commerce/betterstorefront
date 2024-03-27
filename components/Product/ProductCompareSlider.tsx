@@ -4,7 +4,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import { useTranslation } from '@commerce/utils/use-translation'
-import CompareProductCard from '@components//CompareProductCard'
+import CompareProductCard from '@components/CompareProductCard'
 
 SwiperCore.use([Navigation])
 

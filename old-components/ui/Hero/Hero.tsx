@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import Link from 'next/link'
-import { IDeviceInfo } from '@components//ui/context'
+import { IDeviceInfo } from '@components/ui/context'
 
 interface HeroProps {
   banners?: []
@@ -19,7 +19,7 @@ interface BannerProps {
 
 // import Swiper core and required modules
 import SwiperCore, { Navigation } from 'swiper'
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 

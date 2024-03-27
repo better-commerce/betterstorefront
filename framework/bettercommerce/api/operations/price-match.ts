@@ -1,5 +1,5 @@
 import fetcher from '../../fetcher'
-import { PRICE_MATCH_ENDPOINT } from '@components//utils/constants'
+import { PRICE_MATCH_ENDPOINT } from '@components/utils/constants'
 export default function priceMatch() {
   async function priceMatchAsync(data: any, cookies?: any) {
     try {

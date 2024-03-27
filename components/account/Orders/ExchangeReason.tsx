@@ -10,8 +10,8 @@ import ExchangeSelection from '../../../components/account/Orders/ExchangeSelect
 
 // Other Imports
 // import { formatBytes } from '@framework/utils/app-util';
-// import { PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED, PRODUCTS_SLUG_PREFIX } from '@components//utils/constants';
-import { IMG_PLACEHOLDER } from '@components//utils/textVariables';
+// import { PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES, PDP_REVIEW_IMAGE_SIZE_IN_BYTES, PDP_REVIEW_NO_OF_IMAGES_ALLOWED, PRODUCTS_SLUG_PREFIX } from '@components/utils/constants';
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables';
 import { generateUri } from '@commerce/utils/uri-util';
 import { useTranslation } from '@commerce/utils/use-translation'
 

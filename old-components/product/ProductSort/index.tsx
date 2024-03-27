@@ -1,13 +1,13 @@
-import classNames from '@components//utils/classNames'
+import classNames from '@components/utils/classNames'
 import { Fragment, useEffect, useState } from 'react'
 import { Menu, Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/router'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import { getItem } from '@components//utils/localStorage'
-import { useUI } from '@components//ui'
+import { getItem } from '@components/utils/localStorage'
+import { useUI } from '@components/ui'
 import { Switch } from '@headlessui/react'
-import Radio from '@components//shared/Radio/Radio'
+import Radio from '@components/shared/Radio/Radio'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface Props {

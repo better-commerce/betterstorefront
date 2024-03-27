@@ -6,8 +6,8 @@ import {
   useLoginConfig,
   useB2bRegistrationConfig,
 } from './config'
-import LoadingDots from '@components//ui/LoadingDots'
-import Button from '@components//ui/Button'
+import LoadingDots from '@components/ui/LoadingDots'
+import Button from '@components/ui/Button'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { mergeSchema } from '@framework/utils/schema-util'
 import { useTranslation } from '@commerce/utils/use-translation'
