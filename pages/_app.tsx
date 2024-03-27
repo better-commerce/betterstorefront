@@ -1,48 +1,51 @@
 import '@assets/css/main.css'
 import "fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "styles/index.scss";
+import 'swiper/css/bundle'
 import '@assets/css/algolia-instant-search.css'
 import React, { FC, useEffect, useState } from 'react'
-import { Head } from '@components/common'
-import { ManagedUIContext, IDeviceInfo } from '@new-components/ui/context'
-import 'swiper/css/bundle'
+import { appWithTranslation } from 'next-i18next'
 import jwt from 'jsonwebtoken'
+import NextHead from 'next/head'
 import Cookies from 'js-cookie'
-import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@new-components/utils/constants'
-import DataLayerInstance from '@new-components/utils/dataLayer'
-import geoData from '@new-components/utils/geographicService'
 import TagManager from 'react-gtm-module'
-import analytics from '@new-components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@new-components/utils/setSessionId'
+import { v4 as uuid_v4 } from 'uuid'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import OverlayLoader from '@components/common/OverlayLoader'
+import { AppContext, AppInitialProps } from 'next/app'
+import uniqBy from 'lodash/uniqBy'
+import { SessionProvider } from 'next-auth/react'
+
 import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
-import { appWithTranslation } from 'next-i18next'
-import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
 import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, REVIEW_BASE_URL, SHARED_SECRET } from '@framework/utils/constants'
-import { initializeGA4 as initGA4 } from '@new-components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
-import InitDeviceInfo from '@components/common/InitDeviceInfo'
-import ErrorBoundary from '@components/error'
-import CustomCacheBuster from '@components/common/CustomCacheBuster'
+
 import packageInfo from '../package.json'
 import { cachedGetData } from '@framework/api/utils/cached-fetch'
-import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
-import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
-import CustomerReferral from '@components/customer/Referral'
 import fetcher from '@framework/fetcher'
-import { IScriptSnippet } from '@components/common/Content/ScriptContentSnippet'
-import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
-import uniqBy from 'lodash/uniqBy'
-import BrowserNavigation from '@components/routing/BrowserNavigation'
+
+import OverlayLoader from '@new-components/shared/OverlayLoader/OverlayLoader';
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@new-components/utils/constants'
+import DataLayerInstance from '@new-components/utils/dataLayer'
+import geoData from '@new-components/utils/geographicService'
+import analytics from '@new-components/services/analytics/analytics'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@new-components/utils/setSessionId'
+import { initializeGA4 as initGA4 } from '@new-components/services/analytics/ga4'
+import { ManagedUIContext, IDeviceInfo } from '@new-components/ui/context'
+import Head from '@new-components/shared/Head/Head';
+import NonHeadContentSnippet from '@new-components/shared/Snippet/NonHeadContentSnippet';
+import { IScriptSnippet } from '@new-components/shared/Snippet/ScriptContentSnippet';
+import InitDeviceInfo from '@new-components/shared/InitDeviceInfo';
+import BrowserNavigation from '@new-components/shared/routing/BrowserNavigation';
+import ErrorBoundary from '@new-components/shared/error';
+import CustomCacheBuster from '@new-components/shared/CustomCacheBuster';
+import CustomerReferral from '@new-components/customer/Referral';
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -379,23 +382,9 @@ function MyApp({
             <BrowserNavigation deviceInfo={deviceInfo} />
           )
         }
-        {/* TODO: Disable client-side payment link redirect */}
-        {/*<PaymentLinkRedirect router={router} />*/}
         <ErrorBoundary>
-          <Layout
-            nav={nav}
-            footer={footer}
-            config={appConfig}
-            pluginConfig={pluginConfig}
-            pageProps={updatedPageProps}
-            keywords={keywordsData}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount(appConfig)}
-          >
-            <div
-              ref={bodyStartScrCntrRef}
-              className={`${ELEM_ATTR}body-start-script-cntr`}
-            ></div>
+          <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
+            <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
             <OverlayLoader />
             <CustomerReferral router={router} />
             <SessionProvider session={pageProps?.session}>
@@ -408,11 +397,7 @@ function MyApp({
                 deviceInfo={deviceInfo}
               />
             </SessionProvider>
-            {/* <RedirectIntercept /> */}
-            <div
-              ref={bodyEndScrCntrRef}
-              className={`${ELEM_ATTR}body-end-script-cntr`}
-            ></div>
+            <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
           </Layout>
         </ErrorBoundary>
       </ManagedUIContext>
