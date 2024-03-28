@@ -69,7 +69,7 @@ export default function CurrencyDropdown() {
               <Popover.Panel className="absolute z-10 w-screen max-w-[140px] px-4 mt-3 right-0 sm:px-0">
                 <div className="overflow-hidden shadow-lg rounded-2xl ring-1 ring-black ring-opacity-5">
                   <div className="relative grid bg-white gap-7 dark:bg-neutral-800 p-7">
-                    {locales?.localizations?.map((localization: any, index: number) => {
+                    {locales?.localizations?.map((localization:any, index:number) => {
                       const item = headerCurrency(localization?.currencyCode)
                       return (
                         <a
@@ -81,7 +81,7 @@ export default function CurrencyDropdown() {
                             : "opacity-80"
                             }`}
                         >
-                          <item.icon className="w-[18px] h-[18px] " />
+                          <item.icon className="w-[18px] h-[18px]"/>
                           <p className="ml-2 text-sm font-medium ">{item?.name}</p>
                         </a>
                       )

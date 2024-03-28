@@ -29,7 +29,7 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
             />
           </div>
 
-          <div className="lg:w-[50%] max-w-lg relative z-[99999]">
+          <div className="lg:w-[50%] max-w-lg relative">
             <h2 className="text-4xl font-semibold md:text-5xl">
               {subs?.subscription_title}
             </h2>

@@ -26,9 +26,9 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
         className={`relative w-full aspect-w-16 aspect-h-11 sm:aspect-h-9 rounded-2xl overflow-hidden group ${color}`}
       >
         <div>
-          <div className="absolute inset-5 sm:inset-8 z-[99999]">
+          <div className="absolute inset-5 sm:inset-8">
             <img
-              alt=""
+              alt={name}
               src={featuredImage || ""}
               className="absolute end-0 w-1/2 max-w-[200px] h-full object-contain drop-shadow-xl"
             />
