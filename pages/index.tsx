@@ -36,7 +36,14 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
-  let Page_Slug = CURRENT_THEME == 'blue' ? HOME_PAGE_SLUG : HOME_PAGE_NEW_SLUG;
+  let Page_Slug = HOME_PAGE_SLUG;
+  if (CURRENT_THEME == "black") {
+    Page_Slug = HOME_PAGE_NEW_SLUG
+  } else if (CURRENT_THEME == "orange") {
+    Page_Slug = HOME_PAGE_SLUG
+  } else {
+    Page_Slug = HOME_PAGE_SLUG;
+  }
   const fetchData = async (pageContentUIDData: any[], pageContentUIDKey: string, channel: 'Web' | 'MobileWeb') => {
     if (!containsArrayData(pageContentUIDData)) {
       infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
