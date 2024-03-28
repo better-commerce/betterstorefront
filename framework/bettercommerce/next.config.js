@@ -51,7 +51,7 @@ const getSeoConfig = async function (token) {
           acc['keywords'] = obj.value || JSON.stringify(obj.value)
         return acc
       }, {})
-    console.log(path.join(__dirname), '====')
+    //console.log(path.join(__dirname), '====')
     fs.writeFileSync(
       path.join(__dirname, '/seo.json'),
       JSON.stringify(seoConfig),
@@ -121,11 +121,11 @@ const localeStore = {}
 
 let func = (async () => {
   let microsites = await getMicrosites()
-  console.log(microsites)
+  //console.log(microsites)
   localeStore.i18n = microsites
 })()
 
-console.log(locales, '====')
+//console.log(locales, '====')
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
   commerce,
