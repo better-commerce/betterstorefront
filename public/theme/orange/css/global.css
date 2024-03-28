@@ -1,4 +1,5 @@
 @tailwind base;
+
 /* base css start */
 :root {
   --primary: #ffffff;
@@ -39,7 +40,7 @@
   --accent-8: #111111;
   --accent-9: #000;
 
-  --font-primary: 'Oswald', sans-serif;
+  --font-primary: 'Poppins', sans-serif;
 
   /* font size variable */
   --font-10: 10px;
@@ -86,17 +87,17 @@
   /* secondary color variable */
 
   /* button primary variable */
-  --btn-bg-primary: #E8AA42;
+  --btn-bg-primary: #16223b;
   --btn-text-color-primary: #fff;
   --btn-hover-text-color-primary: #fff;
-  --btn-bg-hover-primary: #E57C23;
+  --btn-bg-hover-primary: #0f172a;
   /* button primary variable */
 
   /* button secondary variable */
-  --btn-bg-secondary: #E8AA42;
+  --btn-bg-secondary: #16223b;
   --btn-text-color-secondary: #fff;
   --btn-hover-text-color-secondary: #fff;
-  --btn-bg-hover-secondary: #E8AA42;
+  --btn-bg-hover-secondary: #16223b;
   /* button secondary variable */
 
   /* button primary red variable */
@@ -109,16 +110,16 @@
   /* button primary variable */
 
   /* button primary blue variable */
-  --btn-bg-blue: #11009E;
+  --btn-bg-blue: #212530;
   --btn-text-color-blue: #fff;
   --btn-hover-text-color-blue: #fff;
-  --btn-border-blue: #11009E;
+  --btn-border-blue: #212530;
   --btn-bg-hover-blue: #252E47;
   --btn-border-hover-blue: #252E47;
   /* button primary blue variable */
 
   /* button primary white variable */
-  --btn-bg-white: #F8F1F1;
+  --btn-bg-white: #F8F8F8;
   --btn-text-color-white: #212530;
   --btn-hover-text-color-white: #212530;
   --btn-border-white: #212530;
@@ -127,18 +128,18 @@
   /* button primary white variable */
 
   /* button primary teal variable */
-  --btn-bg-teal: #116A7B;
+  --btn-bg-teal: #345662;
   --btn-text-color-teal: #fff;
   --btn-hover-text-color-teal: #fff;
-  --btn-border-teal: #116A7B;
+  --btn-border-teal: #345662;
   --btn-bg-hover-teal: #3F6978;
   --btn-border-hover-teal: #3F6978;
   /* button primary teal variable */
 
   /* button default variable */
   --btn-bg-default: transparent;
-  --btn-text-color-default: #E8AA42;
-  --btn-border-clr-default: #E8AA42;
+  --btn-text-color-default: #000;
+  --btn-border-clr-default: #000;
   --btn-bg-hover-default: transparent;
   --btn-hover-text-color-default: #000;
   --btn-hover-border-clr-default: #cbd5e1;
@@ -220,19 +221,19 @@
   /* label default white variable */
 
   /* Header variable */
-  --bg-header-color: #ECE5C7;
-  --text-header-clr: #2e2929;
-  --text-hover-clr: #000;
-  --border-hover-clr: #DF340C;
-  --menu-icon-color: #000;
+  --bg-header-color: #ffffff;
+  --text-header-clr: #000000;
+  --text-hover-clr: #000000;
+  --border-hover-clr: #000000;
+  --menu-icon-color: #000000;
   /* footer variable */
 
   /* footer variable */
-  --bg-footer-color: #ECE5C7;
-  --text-footer-clr: #000;
+  --bg-footer-color: #f5f5f5;
+  --text-footer-clr: #000000;
   /* footer variable */
   /* compare outline color */
-  --outline-color-red: #ECE5C7;
+  --outline-color-red: #ffffff;
   /* compare outline color */
 }
 
@@ -296,58 +297,168 @@
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-SemiBold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Poppins';
+    src: url('../font/Poppins-BlackItalic.woff2') format('woff2'),
+        url('../font/Poppins-BlackItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-ExtraLight.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Bold.woff2') format('woff2'),
+        url('../font/Poppins-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Bold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Black.woff2') format('woff2'),
+        url('../font/Poppins-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Light.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Poppins';
+    src: url('../font/Poppins-BoldItalic.woff2') format('woff2'),
+        url('../font/Poppins-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Medium.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Medium.woff2') format('woff2'),
+        url('../font/Poppins-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Regular.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Poppins';
+    src: url('../font/Poppins-LightItalic.woff2') format('woff2'),
+        url('../font/Poppins-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
 }
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-ExtraLight.woff2') format('woff2'),
+        url('../font/Poppins-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-ExtraLightItalic.woff2') format('woff2'),
+        url('../font/Poppins-ExtraLightItalic.woff') format('woff');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-ExtraBoldItalic.woff2') format('woff2'),
+        url('../font/Poppins-ExtraBoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Light.woff2') format('woff2'),
+        url('../font/Poppins-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-ExtraBold.woff2') format('woff2'),
+        url('../font/Poppins-ExtraBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Italic.woff2') format('woff2'),
+        url('../font/Poppins-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-SemiBoldItalic.woff2') format('woff2'),
+        url('../font/Poppins-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Thin.woff2') format('woff2'),
+        url('../font/Poppins-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-ThinItalic.woff2') format('woff2'),
+        url('../font/Poppins-ThinItalic.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-Regular.woff2') format('woff2'),
+        url('../font/Poppins-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-MediumItalic.woff2') format('woff2'),
+        url('../font/Poppins-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../font/Poppins-SemiBold.woff2') format('woff2'),
+        url('../font/Poppins-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+
 
 html {
   height: 100%;
@@ -386,76 +497,24 @@ a {
 
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-SemiBold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-ExtraLight.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Bold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Light.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Medium.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Regular.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Oswald-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 body {
   font-family: var(--font-primary) !important;
-  font-size: var(--font-14);
+  font-size: var(--font-16);
   overflow-x: hidden;
 }
 
 h1 {
-  font-size: var(--font-32);
+  font-size: var(--font-36);
 }
 
 h2 {
-  font-size: var(--font-28);
+  font-size: var(--font-24);
+  line-height: 34px;
 }
 
 h3 {
-  font-size: var(--font-26);
+  font-size: var(--font-36);
 }
 
 h4 {
@@ -471,7 +530,7 @@ h6 {
 }
 
 p {
-  font-size: var(--font-12);
+  font-size: var(--font-16);
 }
 
 .font-10 {
@@ -534,6 +593,12 @@ p {
   font-size: 56px !important;
 }
 
+@media screen and (max-width:767px) {
+  .mob-font-16 {
+    font-size: 16px !important;
+  }
+}
+
 /* bg color css */
 .bg-blue-web {
   background: var(--barnd-blue);
@@ -568,37 +633,55 @@ p {
   color: var(--text-footer-clr);
 }
 
+.text-footer-clr p {
+  margin-bottom: 25px;
+}
+
 .btn-primary-white.btn-padding-none {
   padding: 0px !important;
 }
 
 /* button  css start */
+.btn {
+  font-size: var(--font-14);
+  box-sizing: border-box;
+  border-radius: 6px;
+  display: inline-block;
+  text-align: center !important;
+  padding: 0.70rem 12px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+.btn:hover {
+  opacity: 0.75 !important;
+}
+
 .btn-primary {
-  background: var(--btn-bg-primary);
-  color: var(--btn-text-color-primary);
-  font-size: var(--font-18);
+  background: var(--btn-bg-primary) !important;
+  color: var(--btn-text-color-primary) !important;
 }
 
 .btn-c.btn-primary {
-  background: var(--btn-bg-primary);
-  color: var(--btn-text-color-primary);
-  font-size: var(--font-18);
+  background: var(--btn-bg-primary) !important;
+  color: var(--btn-text-color-primary) !important;
+  border: 0 !important;
 }
 
 .btn-c.btn-primary:hover {
-  background: var(--btn-bg-hover-primary);
-  color: var(--btn-hover-text-color-primary);
+  background: var(--btn-bg-hover-primary) !important;
+  color: var(--btn-hover-text-color-primary) !important;
 }
 
 .btn-primary:hover {
-  background: var(--btn-bg-hover-primary);
-  color: var(--btn-hover-text-color-primary);
+  background: var(--btn-bg-hover-primary) !important;
+  color: var(--btn-hover-text-color-primary) !important;
 }
 
 .btn-secondary {
-  background: var(--btn-bg-secondary);
-  color: var(--btn-text-color-secondary);
-  font-size: var(--font-18);
+  background: var(--btn-bg-secondary) !important;
+  color: var(--btn-text-color-secondary) !important;
 }
 
 .btn-secondary:hover {
@@ -607,27 +690,21 @@ p {
 }
 
 .btn-c.btn-secondary {
-  display: inline-block;
-  text-align: center;
   background: var(--btn-bg-secondary) !important;
-  color: var(--btn-text-color-secondary);
-  font-size: var(--font-18);
-  padding: 12px 24px !important;
-  border-radius: 4px;
+  color: var(--btn-text-color-secondary) !important;
   border: 0 !important;
 }
 
 .btn-c.btn-secondary:hover {
   background: var(--btn-bg-hover-secondary) !important;
-  color: var(--btn-hover-text-color-secondary);
+  color: var(--btn-hover-text-color-secondary) !important;
 }
 
 .btn-default {
-  background: var(--btn-bg-default);
+  background: var(--btn-bg-default) !important;
   color: var(--btn-text-color-default);
-  border: 2px solid var(--btn-text-color-default);
-  border-color: var(--btn-border-clr-default);
-  font-size: var(--font-18);
+  border: 2px solid var(--btn-text-color-default) !important;
+  border-color: var(--btn-border-clr-default) !important;
 }
 
 .btn-default:hover {
@@ -637,33 +714,21 @@ p {
 }
 
 .btn-c.btn-primary-red {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px !important;
   background: var(--btn-bg-red) !important;
-  border-radius: 4px;
-  color: var(--btn-text-color-red);
+  color: var(--btn-text-color-red) !important;
   border: 2px solid var(--btn-border-red);
-  font-size: var(--font-18);
-  box-sizing: border-box;
 }
 
 .btn-c.btn-primary-red:hover {
   background: var(--btn-bg-hover-red) !important;
-  color: var(--btn-hover-text-color-red);
+  color: var(--btn-hover-text-color-red) !important;
   border: 2px solid var(--btn-border-hover-red);
 }
 
 .btn-primary-red {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
-  background: var(--btn-bg-red);
-  border-radius: 4px;
+  background: var(--btn-bg-red) !important;
   color: var(--btn-text-color-red);
   border: 2px solid var(--btn-border-red);
-  font-size: var(--font-18);
-  box-sizing: border-box;
 }
 
 .btn-primary-red:hover {
@@ -673,15 +738,9 @@ p {
 }
 
 .btn-primary-blue {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-blue);
-  border-radius: 4px;
   color: var(--btn-text-color-blue);
   border: 2px solid var(--btn-border-blue);
-  font-size: var(--font-18);
-  box-sizing: border-box;
 }
 
 .btn-primary-blue:hover {
@@ -691,16 +750,10 @@ p {
 }
 
 .btn-primary-teal {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-teal);
-  border-radius: 4px;
   color: var(--btn-text-color-teal);
   border: 2px solid var(--btn-border-teal);
-  font-size: var(--font-18);
-  box-sizing: border-box;
-}
+ }
 
 .btn-primary-teal:hover {
   background: var(--btn-bg-hover-teal);
@@ -709,15 +762,9 @@ p {
 }
 
 .btn-primary-white {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-bg-white);
-  border-radius: 4px;
   color: var(--btn-text-color-white);
   border: 2px solid var(--btn-border-white);
-  font-size: var(--font-18);
-  box-sizing: border-box;
 }
 
 .btn-primary-white:hover {
@@ -727,16 +774,10 @@ p {
 }
 
 .btn-default-red {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-d-bg-red);
-  border-radius: 4px;
   color: var(--btn-d-text-color-red);
   border: 2px solid var(--btn-d-border-red);
-  font-size: var(--font-18);
-  box-sizing: border-box;
-}
+ }
 
 .btn-default-red:hover {
   background: var(--btn-d-bg-hover-red);
@@ -745,15 +786,9 @@ p {
 }
 
 .btn-default-blue {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-d-bg-blue);
-  border-radius: 4px;
   color: var(--btn-d-text-color-blue);
   border: 2px solid var(--btn-d-border-blue);
-  font-size: var(--font-18);
-  box-sizing: border-box;
 }
 
 .btn-default-blue:hover {
@@ -763,15 +798,10 @@ p {
 }
 
 .btn-default-teal {
-  display: inline-block;
-  text-align: center;
-  padding: 12px 24px;
   background: var(--btn-d-bg-teal);
-  border-radius: 4px;
+  border-radius: 6px;
   color: var(--btn-d-text-color-teal);
   border: 2px solid var(--btn-d-border-teal);
-  font-size: var(--font-18);
-  box-sizing: border-box;
 }
 
 .btn-default-teal:hover {
@@ -904,11 +934,6 @@ p {
 }
 
 /* flag primary css start */
-.min-height-65 {
-  min-height: 65px;
-  height: 100%;
-}
-
 @media screen and (max-width: 767px) {
   .pagination-ul {
     display: block;
@@ -923,6 +948,15 @@ p {
   .pagination-ul li a {
     font-size: 13px !important;
   }
+
+  .font-36 {
+    font-size: 24px !important;
+  }
+}
+
+.min-height-65 {
+  min-height: 82px;
+  height: 100%;
 }
 
 /* footer css */
@@ -956,11 +990,15 @@ p {
   .min-cls-h {
     min-height: 470px;
   }
+
+  .min-cls-h-400 {
+    min-height: 400px;
+  }
 }
 
 /* product list image width and height control css  */
 .height-img-auto {
-  min-height: 0 !important;
+  min-height: 0;
   object-fit: contain !important;
   object-position: inherit;
   width: auto !important;
@@ -988,7 +1026,7 @@ p {
 
 @media screen and (min-width:1024px) {
   .height-img-auto {
-    min-height: 0 !important;
+    min-height: 0;
     object-fit: contain !important;
     object-position: inherit;
     width: auto !important;
@@ -1011,6 +1049,13 @@ p {
   .mobile-card-panel.white-card-sm {
     background: #fff !important;
     min-height: 250px !important;
+  }
+}
+
+@media screen and (min-width:1024px) {
+  .mobile-card-panel.white-card {
+    background: #fff !important;
+    min-height: 220px !important;
   }
 }
 
@@ -1076,9 +1121,348 @@ p {
   outline-color: var(--outline-color-red);
 }
 
+.mob-padding-container {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
 @media screen and (max-width:900px) {
   .text-10-mob {
     font-size: 10px !important;
+  }
+}
+
+@media screen and (min-width: 1220px) {
+  .container-ffx.small-screen {
+    max-width: 1120px !important;
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+  }
+
+  .checkout-container {
+    width: 60%;
+    padding-right: 5rem;
+  }
+
+  .basket-container {
+    width: 40%;
+    padding-left: 3rem;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1220px) {
+  .container-ffx.small-screen {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+  }
+
+  .checkout-container {
+    width: 100%;
+    padding-right: 0rem;
+  }
+
+  .basket-container {
+    width: 100%;
+    padding-left: 0rem;
+  }
+}
+
+.list-para p {
+  margin-bottom: 20px !important;
+}
+
+.checkout-frame-container>* {
+
+  .card-frame,
+  .card-number-frame,
+  .expiry-date-frame,
+  .cvv-frame {
+    height: 48px;
+  }
+
+  #schemeChoice {
+    height: 200px !important;
+  }
+
+  #payment-form {
+    width: 280px;
+    margin: 0 auto;
+  }
+
+  label {
+    display: block;
+    height: 10px;
+    color: #13395e;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 10px;
+    margin: 8px 0;
+  }
+
+  .date-and-code {
+    display: flex;
+    margin-bottom: 8px;
+  }
+
+  .date-and-code>div:nth-child(1) {
+    width: 55.715%;
+  }
+
+  .date-and-code>div:nth-child(2) {
+    width: 45.719%;
+  }
+
+  .input-container {
+    position: relative;
+    display: flex;
+    height: 40px;
+  }
+
+  .icon-container:last-child {
+    right: 0;
+  }
+
+  .icon-container.payment-method {
+    right: 0;
+  }
+
+  .input-container.card-number {
+    margin-bottom: 8px;
+  }
+
+  .input-container.expiry-date {
+    margin-right: 4px;
+  }
+
+  .input-container.cvv {
+    margin-left: 4px;
+  }
+
+  .card-number-frame {
+    padding-left: 10px;
+  }
+
+  .expiry-date-frame {
+    padding-left: 10px;
+  }
+
+  .cvv-frame {
+    padding-left: 10px;
+  }
+
+  div+button {
+    margin-top: 8px;
+  }
+
+  .icon-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    width: 26px;
+    margin: 0 7px;
+  }
+
+  .icon-container.payment-method {
+    transform: translateY(-50%) rotateY(90deg);
+    transition: opacity 0.15s ease-out;
+    opacity: 0;
+    top: 50%;
+  }
+
+  .icon-container.payment-method.show {
+    opacity: 1;
+    transition: all 0.4s ease-out;
+    transform: translateY(-50%) rotateY(0deg);
+  }
+
+  .icon-container.payment-method img {
+    width: 100%;
+  }
+
+  [id$="-error"] {
+    display: none;
+  }
+
+  .frame {
+    opacity: 0;
+  }
+
+  .frame--activated {
+    opacity: 1;
+    border: solid 1px #212530;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
+    margin-bottom: 2px;
+  }
+
+  .frame--activated.frame--focus {
+    border: solid 1px #13395e;
+    box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.15);
+  }
+
+  .frame--activated.frame--invalid {
+    border: solid 1px #d96830;
+    box-shadow: 0 2px 5px 0 rgba(217, 104, 48, 0.15);
+  }
+
+  .error-message {
+    display: block;
+    color: #c9501c;
+    font-size: 0.9rem;
+    margin: 8px 0 0 1px;
+    font-weight: 300;
+  }
+
+  #pay-button {
+    margin-top: 150px;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: 500;
+    height: 40px;
+    width: 100%;
+    background-color: #13395e;
+    box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
+  }
+
+  #pay-button:active {
+    background-color: #0b2a49;
+    box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
+  }
+
+  #pay-button:hover {
+    background-color: #15406b;
+    box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.4);
+  }
+
+  #pay-button:disabled {
+    background-color: #697887;
+    box-shadow: none;
+  }
+
+  #pay-button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  .success-payment-message {
+    color: #13395e;
+    line-height: 1.4;
+  }
+
+  .token {
+    color: #b35e14;
+    font-size: 0.9rem;
+    font-family: monospace;
+  }
+
+  /**
+    IE11-targeted optimisations
+    */
+
+  _:-ms-fullscreen,
+  :root .icon-container {
+    display: block;
+  }
+
+  _:-ms-fullscreen,
+  :root .icon-container img {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    position: absolute;
+  }
+
+  _:-ms-fullscreen,
+  #icon-card-number,
+  _:-ms-fullscreen,
+  #icon-expiry-date,
+  _:-ms-fullscreen,
+  #icon-cvv {
+    left: 7px;
+  }
+
+  #checkout-frames-card-number::-ms-clear {
+    display: none;
+  }
+
+}
+
+.max-panel-search {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.max-panel-search::-webkit-scrollbar {
+  width: 0px;
+}
+
+.max-panel-search::-webkit-scrollbar-track {
+  background: #fff;
+  opacity: 1;
+}
+
+.max-panel-search::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 0px;
+  border-radius: 0px;
+}
+
+.border-footer-btn {
+  border: 1px solid #fff;
+}
+
+@media screen and (max-width:1620px) {
+  .btn {
+    font-size: var(--font-12) !important;
+  }
+}
+
+.flex-grid-sec .grid-inner-section:nth-child(2n) {
+  flex-direction: row-reverse !important;
+}
+
+.flex-grid-sec .grid-inner-section:nth-child(2n) .left-flex-sec {
+  order: 2;
+}
+
+.flex-grid-sec .grid-inner-section:nth-child(2n) .right-flex-sec {
+  order: 1;
+}
+
+@media screen and (max-width:767px) {
+  .flex-grid-sec .grid-inner-section:nth-child(2n) {
+    flex-direction: row !important;
+  }
+
+  .flex-grid-sec .grid-inner-section .right-flex-sec {
+    order: 1;
+  }
+
+  .flex-grid-sec .grid-inner-section .left-flex-sec {
+    order: 2;
+  }
+
+  .mob-navigation-hide .swiper-button-prev,
+  .mob-navigation-hide .swiper-button-next {
+    display: none !important;
+  }
+
+  .mob-w-screen {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width:767px) and (max-width:1300px) {
+  .grid-sm-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 }
 .button {
@@ -1095,4 +1479,19 @@ p {
 .button:hover {
   background: var(--btn-bg-hover-secondary) !important;
   color: var(--btn-hover-text-color-secondary) !important;
+}
+@media screen and (max-width:767px) {
+.cart-recently-viewed{
+  width: 325px !important;
+  max-width: 325px !important;
+  min-width: auto;
+}
+}
+.wishlist-img-height{
+  min-height: 272px !important;
+}
+
+.brand-logo{
+  width: 80px;
+  height: auto;
 }
