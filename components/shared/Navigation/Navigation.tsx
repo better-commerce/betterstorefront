@@ -19,7 +19,7 @@ function Navigation({ navItems }: any) {
                 <div className="absolute inset-x-0 z-50 invisible transform group-hover:visible sub-menu top-full">
                   <div className="bg-white shadow-lg dark:bg-neutral-900">
                     <div className="container">
-                      <div className="flex text-sm border-t border-slate-200 dark:border-slate-700 py-14">
+                      <div className="flex py-6 text-sm border-t border-slate-200 dark:border-slate-700">
                         <div className="grid flex-1 grid-cols-1 gap-6 pr-6 xl:gap-8 xl:pr-8">
                           {item.navBlocks.map((navItem: any, navIndex: number) => (
                             <div key={`child-${navIndex}`}>

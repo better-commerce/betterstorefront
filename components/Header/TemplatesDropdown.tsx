@@ -55,7 +55,7 @@ export default function TemplatesDropdown() {
               <Popover.Panel className="absolute z-20 w-full mt-3.5 inset-x-0">
                 <div className="bg-white shadow-lg dark:bg-neutral-900">
                   <div className="container">
-                    <div className="flex text-sm border-t border-slate-200 dark:border-slate-700 py-14">
+                    <div className="flex py-6 text-sm border-t border-slate-200 dark:border-slate-700">
                       <div className="grid flex-1 grid-cols-4 gap-6 pr-6 xl:gap-8 xl:pr-8">
                         {MEGAMENU_TEMPLATES.map((item, index) => (
                           <div key={index}>
