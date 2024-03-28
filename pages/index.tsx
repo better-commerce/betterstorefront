@@ -7,11 +7,11 @@ import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -36,44 +36,36 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
-
-  const fetchData = async (
-    pageContentUIDData: any[],
-    pageContentUIDKey: string,
-    channel: 'Web' | 'MobileWeb'
-  ) => {
+  let Page_Slug = CURRENT_THEME == 'blue' ? HOME_PAGE_SLUG : HOME_PAGE_NEW_SLUG;
+  const fetchData = async (pageContentUIDData: any[], pageContentUIDKey: string, channel: 'Web' | 'MobileWeb') => {
     if (!containsArrayData(pageContentUIDData)) {
-      infra?.currencies
-        ?.map((x: any) => x?.currencyCode)
-        ?.forEach((currencyCode: string, index: number) => {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const pageContentsPromise = commerce.getPagePreviewContent({
-                  id: '',
-                  slug: HOME_PAGE_NEW_SLUG,
-                  workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                  channel: channel,
-                  currency: currencyCode,
-                  cachedCopy: true,
-                })
-                const pageContent = await pageContentsPromise
-                pageContentUIDData.push({ key: currencyCode, value: pageContent })
-                await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
-                resolve()
-              } catch (error: any) {
-                resolve()
-              }
+      infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
+        promises.push(new Promise(async (resolve: any, reject: any) => {
+          try {
+            const pageContentsPromise = commerce.getPagePreviewContent({
+              id: '',
+              slug: Page_Slug,
+              workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+              channel: channel,
+              currency: currencyCode,
+              cachedCopy: true,
             })
-          )
-        })
+            const pageContent = await pageContentsPromise
+            pageContentUIDData.push({ key: currencyCode, value: pageContent })
+            await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
+            resolve()
+          } catch (error: any) {
+            resolve()
+          }
+        }))
+      })
     }
   };
   fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web');
   fetchData(pageContentMobileWebUIDData, Redis.Key.HomepageMobileWeb, 'MobileWeb');
 
   await Promise.all(promises)
-  const slugsPromise = commerce.getSlugs({ slug: HOME_PAGE_DEFAULT_SLUG });
+  const slugsPromise = commerce.getSlugs({ slug: Page_Slug });
   const slugs = await slugsPromise;
   const hostName = os.hostname()
   return {
@@ -99,14 +91,21 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const translate = useTranslation()
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
-
+  let Page_Slug = HOME_PAGE_SLUG;
+  if (CURRENT_THEME == "black") {
+    Page_Slug = HOME_PAGE_NEW_SLUG
+  } else if (CURRENT_THEME == "orange") {
+    Page_Slug = HOME_PAGE_SLUG
+  } else {
+    Page_Slug = HOME_PAGE_SLUG;
+  }
   useEffect(() => {
     const currentCurrency = getCurrentCurrency()
     if (!matchStrings(currencyCode, currentCurrency, true)) {
       axios
         .post('/api/page-preview-content', {
           id: '',
-          slug: HOME_PAGE_NEW_SLUG,
+          slug: Page_Slug,
           workingVersion: process.env.NODE_ENV === 'production' ? true : true,
           channel: isMobile ? 'MobileWeb' : 'Web',
           cachedCopy: true,
