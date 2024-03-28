@@ -31,7 +31,7 @@ const CardCategory2: FC<CardCategory2Props> = ({
       <div
         className={`flex-1 relative w-full h-0 rounded-2xl overflow-hidden group ${ratioClass} ${bgClass}`}
       >
-        <div className="pt-14">
+        <div className="pt-0">
           <img
             alt={name}
             src={featuredImage}

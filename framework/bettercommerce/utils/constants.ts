@@ -38,7 +38,7 @@ export const TERMS_PAGE_DEFAULT_SLUG = 'terms-and-condition'
 export const PRIVACY_PAGE_DEFAULT_SLUG = 'privacy-policy'
 export const CONTACT_PAGE_DEFAULT_SLUG = 'contact-us'
 export const COOKIES_PAGE_DEFAULT_SLUG = 'cookies'
-export const HOME_PAGE_NEW_SLUG = 'new-home-bc'
+export const HOME_PAGE_NEW_SLUG = 'new-home-td'
 export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
 
 // google analytics
