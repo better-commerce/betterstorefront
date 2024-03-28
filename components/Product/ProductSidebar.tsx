@@ -4,12 +4,9 @@ import { FC, useEffect, useState } from 'react'
 import { ProductOptions } from '@old-components/product'
 import type { Product } from '@commerce/types/product'
 import { Button, Text, Rating, Collapse, useUI } from '@components/ui'
-import {
-  getProductVariant,
-  selectDefaultOptionFromProduct,
-  SelectedOptions,
-} from '../helpers'
+
 import { useTranslation } from '@commerce/utils/use-translation'
+import { SelectedOptions, getProductVariant, selectDefaultOptionFromProduct } from './helpers'
 
 interface ProductSidebarProps {
   product: Product
@@ -38,12 +35,12 @@ const ProductSidebar: FC<React.PropsWithChildren<ProductSidebarProps>> = ({ prod
         setSelectedOptions={setSelectedOptions}
       />
       <Text
-        className="pb-4 break-words w-full max-w-xl"
+        className="w-full max-w-xl pb-4 break-words"
         html={product.descriptionHtml || product.description}
       />
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row items-center justify-between">
         <Rating value={4} />
-        <div className="text-accent-6 pr-1 font-medium text-sm">{translate('label.product.productSidebar.36reviewsText')}</div>
+        <div className="pr-1 text-sm font-medium text-accent-6">{translate('label.product.productSidebar.36reviewsText')}</div>
       </div>
       <div>
         {process.env.COMMERCE_CART_ENABLED && (

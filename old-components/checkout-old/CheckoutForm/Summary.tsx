@@ -3,7 +3,7 @@ import Image from 'next/legacy/image'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { EyeIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
-import Engraving from '@components/product/Engraving'
+import Engraving from '@components/Product/Engraving'
 import classNames from 'classnames'
 import { Disclosure, Transition, Dialog } from '@headlessui/react'
 import axios from 'axios'
@@ -19,7 +19,7 @@ import {
   NEXT_REFERRAL_SEARCH,
   NEXT_REFERRAL_ADD_USER_REFEREE,
   NEXT_REFERRAL_BY_SLUG,
-} from '@components/utils/constants'
+} from '@old-components/utils/constants'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { useState } from 'react'

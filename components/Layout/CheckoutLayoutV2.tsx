@@ -11,7 +11,7 @@ import AlertRibbon from '@components/ui/AlertRibbon'
 import { useUI } from '@components/ui'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { ISnippet } from '@framework/content/use-content-snippet'
-import { IScriptSnippet } from '../Content/ScriptContentSnippet'
+import { IScriptSnippet } from '@components/shared/Snippet/ScriptContentSnippet'
 
 const CheckoutLayoutV2: FC<any> = ({ children }) => {
   const { displayAlert } = useUI()
