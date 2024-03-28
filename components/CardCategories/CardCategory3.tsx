@@ -19,7 +19,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
   const translate = useTranslation()
   return (
     <Link
-      href={link}
+      href={`/${link}`}
       className={`nc-CardCategory3 block ${className}`}
     >
       <div
@@ -54,7 +54,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
                 sizeClass="py-3 px-4 sm:py-3.5 sm:px-6"
                 fontSize="text-sm font-medium"
                 className="nc-shadow-lg"
-                href={"/"}
+                href={`/${link}`}
               >
                 {translate('common.label.showMeAllText')} </ButtonSecondary>
             </div>
