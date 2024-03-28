@@ -181,7 +181,7 @@ export async function getStaticProps({
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      brands: brandsUIDData?.result,
+      brands: brandsUIDData?.result || { results: new Array<any>() },
       snippets: brandsUIDData?.snippets ?? [],
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
