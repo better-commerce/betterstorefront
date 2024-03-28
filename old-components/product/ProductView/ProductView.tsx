@@ -17,9 +17,8 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Script from 'next/script';
 
 // Component Imports
-import classNames from '@components/utils/classNames'
 import { useUI } from '@components/ui/context'
-import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import { KEYS_MAP, EVENTS } from '@old-components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -51,13 +50,13 @@ import ButtonSecondary from '@components/shared/Button/ButtonSecondary'
 import { useTranslation } from '@commerce/utils/use-translation'
 const Preview = dynamic(() => import('@old-components/product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@old-components/product/ProductView/AttributesHandler'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+const BreadCrumbs = dynamic(() => import('@old-components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@old-components/product/Bundles'))
 const Reviews = dynamic(() => import('@old-components/product/Reviews'))
 const PriceMatch = dynamic(() => import('@old-components/product/PriceMatch'))
-const Engraving = dynamic(() => import('@components/product/Engraving'))
+const Engraving = dynamic(() => import('@old-components/product/Engraving'))
 const ProductDetails = dynamic(() => import('@old-components/product/ProductDetails'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const Button = dynamic(() => import('@old-components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@old-components/product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@old-components/product/ProductView/AvailableOffers'))
 const ReviewInput = dynamic(() => import('@old-components/product/Reviews/ReviewInput'))

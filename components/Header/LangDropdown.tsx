@@ -36,7 +36,7 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
   return (
     <div className="grid gap-8 lg:grid-cols-2">
       {languages?.map((language: any, index: number) => (
-        <Link legacyBehavior href={getLocaleUrl(language)} locale={language?.languageCulture}>
+        <Link key={index} legacyBehavior href={getLocaleUrl(language)} locale={language?.languageCulture}>
           <a key={index} href={getLocaleUrl(language)} onClick={() => {
             Cookies.set(Cookie.Key.LANGUAGE, language?.languageCode)
             close();
