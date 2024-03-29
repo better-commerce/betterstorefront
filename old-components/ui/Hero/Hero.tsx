@@ -55,7 +55,7 @@ const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
                   ) : (
                     <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
                   )}
-                  <div className="sr-only">Banner Image</div>
+                  <div className="sr-only">{translate('common.label.bannerImageText')}</div>
                 </div>
               </Link>
             </SwiperSlide>

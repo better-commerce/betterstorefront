@@ -224,8 +224,7 @@ function Contact({
                     {head?.heading_herotitle}
                   </p>
                   <p className="text-2xl transition-colors duration-300 hover:text-blue">
-                    Home / Contact Us
-                  </p>
+                    {translate('label.contactUs.homeContactUsText')} </p>
                 </div>
               </div>
             </Link>
