@@ -11,6 +11,7 @@ import ButtonClose from "../ButtonClose/ButtonClose";
 import ButtonPrimary from "../Button/ButtonPrimary";
 import { Logo } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { removePrecedingSlash } from "@framework/utils/app-util";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -26,10 +27,10 @@ const NavMobile: React.FC<NavMobileProps> = ({
   const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
     return (
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
-        {item.navBlocks?.map((i: any, index: number) => (
+        {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={`/${i.hyperlink}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
-              <span className={`py-2.5 ${!i.children ? "block w-full" : ""}`} onClick={onClickClose} >
+            <Link href={`/${i?.hyperlink}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
+              <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
                 {i?.boxTitle.toLowerCase()}
               </span>
               {i?.navItems?.length > 0 && (
@@ -40,12 +41,12 @@ const NavMobile: React.FC<NavMobileProps> = ({
                 </span>
               )}
             </Link>
-            {i.navItems && (
+            {i?.navItems && (
               <Disclosure.Panel>
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={`/${child?.itemLink}`} >
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white "  href={i?.navBlockType == 9 ? `/collection/${removePrecedingSlash(child?.itemLink)}` : `/${removePrecedingSlash(child?.itemLink)}`} >
                         {child?.caption.toLowerCase()}
                       </Link>
                     </li>
