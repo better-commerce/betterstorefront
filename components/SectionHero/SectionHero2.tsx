@@ -80,7 +80,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     return (
       <>
         <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative overflow-hidden ${className}`} key={index} >
-          <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[1]">
+          <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
             {data?.map((_:any, index:number) => {
               const isActive = indexActive === index;
               return (
@@ -99,12 +99,12 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Next className="absolute end-1 sm:end-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
           {/* BG */}
-          <div className="absolute inset-0 bg-green-100">
+          <div className="absolute inset-0 bg-banner">
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
 
           <div className="container relative pb-0 pt-14 sm:pt-20 lg:py-44">
-            <div className={`relative z-[1] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left`} >
+            <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left`} >
               <div className="space-y-5 sm:space-y-6">
                 <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
                   {item?.subTitle}
@@ -125,11 +125,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
               </ButtonPrimary>
             </div>
             <div className="top-0 bottom-0 w-full z-[1] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl">
-              <img
-                className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image"
-                src={item?.url}
-                alt={item?.name}
-              />
+              <img className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image" src={item?.url} alt={item?.name} />
             </div>
           </div>
         </div>
