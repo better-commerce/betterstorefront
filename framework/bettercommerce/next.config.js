@@ -1,4 +1,4 @@
-const commerce = require('./commerce.config.json')
+const commerce = require('./features.config.json')
 // const fetcher = require('./fetcher')
 const axios = require('axios')
 const path = require('path')

@@ -1,4 +1,4 @@
-const commerce = require('./commerce.config.json')
+const commerce = require('./features.config.json')
 
 module.exports = {
   commerce,
