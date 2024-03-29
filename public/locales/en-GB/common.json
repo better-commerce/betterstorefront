@@ -754,7 +754,27 @@
       "orderText" : "Order",
       "forBasketText" : "For basket",
       "orderPaymentIdText" : "OrderPaymentId"
-    }
+    },
+    "contactUs": {
+      "contactSalesText": "Contact sales",
+      "dummyText": "Aute magna irure deserunt veniam aliqua magna enim voluptate.",
+      "companyText": "Company",
+      "phoneNumberText": "Phone number",
+      "agreeOurPolicyText": "By selecting this, you agree to our",
+      "privacyText": "privacy",
+      "policyText": "policy",
+      "optionUSText": "US",
+      "optionCAText": "CA",
+      "optionEUText": "EU",
+      "homeContactUsText": "Home / Contact Us"
+    },
+    "faqs": {
+      "popularFaqsText": "Popular faqs",
+      "dummyFaq1": "Can I have my delivery sent to a different address?",
+      "dummyAns1": "If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.",
+      "dummyFaq2": "Can I request Weekend deliveries?",
+      "dummyFaq3": "Are your products brand new and in original packaging?"
+    }      
   },
   "common": {
     "color": {
@@ -985,7 +1005,16 @@
       "logOutText": "Log out",
       "recentlyViewedText": "Recently Viewed",
       "remainingTimeText": "Remaining time",
-      "colorText": "Color"
+      "colorText": "Color",
+      "agreeToPoliciesText": "Agree to policies",
+      "letsTalkText": "Let's talk",
+      "bannerImageText": "Banner Image",
+      "line1Text": "Line 1 (required)",
+      "line2Text": "Line 2 (optional)",
+      "line3Text": "Line 3 (optional)",
+      "addMsg3Text": "Add message 3",
+      "addMsg2Text": "Add message 2",
+      "addMsg1Text": "Add message 1"
     },
     "message": {
       "requiredTextMsg" : "Required",

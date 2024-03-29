@@ -36,7 +36,7 @@ const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCom
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const ProductSort = dynamic(() => import('@components/Product/ProductSort'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
-import faq from '@components/SectionBrands/faqData.json'
+import useFaqData from '@components/SectionBrands/faqData'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
@@ -86,6 +86,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, }: any) {
   const translate = useTranslation()
+  const faq = useFaqData();
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo

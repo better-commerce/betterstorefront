@@ -743,6 +743,35 @@
     "sectionHero":{
       "exploreText":"Explorar",
       "createText":"Crear"
+    },
+    "checkoutForm": {
+      "itemsForOrderText": "Artículos para ordenar",
+      "chequeNoText": "Número de cheque",
+      "pleaseWaitText": "Por favor espera...",
+      "validatingAccountText": "Validando cuenta...",
+      "orderText": "Orden",
+      "forBasketText": "Para la cesta",
+      "orderPaymentIdText": "ID de pago de la orden"
+    },
+    "contactUs": {
+      "contactSalesText": "Contactar ventas",
+      "dummyText": "Aute magna irure deserunt veniam aliqua magna enim voluptate.",
+      "companyText": "Empresa",
+      "phoneNumberText": "Número de teléfono",
+      "agreeOurPolicyText": "Al seleccionar esto, aceptas nuestra",
+      "privacyText": "política de privacidad",
+      "policyText": "política",
+      "optionUSText": "EE. UU.",
+      "optionCAText": "CA",
+      "optionEUText": "UE",
+      "homeContactUsText": "Inicio / Contáctanos"
+    },
+    "faqs": {
+      "popularFaqsText": "Preguntas frecuentes populares",
+      "dummyFaq1": "¿Puedo enviar mi entrega a una dirección diferente?",
+      "dummyAns1": "Si no estás satisfecho con tu compra por cualquier motivo, envíanos un correo electrónico dentro de los 90 días y te reembolsaremos por completo, sin preguntas.",
+      "dummyFaq2": "¿Puedo solicitar entregas los fines de semana?",
+      "dummyFaq3": "¿Tus productos son completamente nuevos y en su embalaje original?"
     }
   },
   "common": {
@@ -974,7 +1003,16 @@
       "logOutText": "Cerrar sesión",
       "recentlyViewedText": "Visto recientemente",
       "remainingTimeText": "Tiempo restante",
-      "colorText": "Color"
+      "colorText": "Color",
+      "agreeToPoliciesText": "Aceptar políticas",
+      "letsTalkText": "Hablemos",
+      "bannerImageText": "Imagen del banner",
+      "line1Text": "Línea 1 (obligatorio)",
+      "line2Text": "Línea 2 (opcional)",
+      "line3Text": "Línea 3 (opcional)",
+      "addMsg3Text": "Agregar mensaje 3",
+      "addMsg2Text": "Agregar mensaje 2",
+      "addMsg1Text": "Agregar mensaje 1"
     },
     "message": {
       "requiredTextMsg": "Requerido",

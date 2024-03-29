@@ -1,11 +1,11 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { config } from './config'
+import { useEngravingConfig } from './config'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 
 export default function EngravingForm({ submitForm }: any) {
-
+  const config = useEngravingConfig()
   const translate = useTranslation()
   const schema = Yup.object().shape({
     line1: Yup.string().required(translate('common.message.completeThisFieldMsg')),
@@ -21,7 +21,7 @@ export default function EngravingForm({ submitForm }: any) {
       {({ errors, touched, handleSubmit, values, handleChange }: any) => {
         return (
           <Form className="w-full font-semibold mt-4">
-            {config.map((itemForm: any, itemIdx: number) => {
+            {config?.map((itemForm: any, itemIdx: number) => {
               return (
                 <>
                   <label className="text-black font-semibold uppercase text-xs">

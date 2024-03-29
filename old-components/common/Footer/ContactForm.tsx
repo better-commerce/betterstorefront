@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Switch } from '@headlessui/react'
 import cn from 'classnames'
+import { useTranslation } from '@commerce/utils/use-translation'
 const ContactForm = () => {
+  const translate = useTranslation()
   const [agreed, setAgreed] = useState(false)
 
   return (
@@ -23,10 +25,10 @@ const ContactForm = () => {
           </div>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Contact sales
+              {translate('label.contactUs.contactSalesText')}
             </h2>
             <p className="mt-2 text-lg leading-8 text-gray-600">
-              Aute magna irure deserunt veniam aliqua magna enim voluptate.
+              {translate('label.contactUs.dummyText')}
             </p>
           </div>
           <form
@@ -40,7 +42,7 @@ const ContactForm = () => {
                   htmlFor="first-name"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  First name
+                  {translate('label.addressBook.firstNameText')}
                 </label>
                 <div className="mt-2.5">
                   <input
@@ -57,7 +59,7 @@ const ContactForm = () => {
                   htmlFor="last-name"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Last name
+                  {translate('label.addressBook.lastNameText')}
                 </label>
                 <div className="mt-2.5">
                   <input
@@ -74,7 +76,7 @@ const ContactForm = () => {
                   htmlFor="company"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Company
+                  {translate('label.contactUs.companyText')}
                 </label>
                 <div className="mt-2.5">
                   <input
@@ -91,7 +93,7 @@ const ContactForm = () => {
                   htmlFor="email"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Email
+                  {translate('label.addressBook.emailText')}
                 </label>
                 <div className="mt-2.5">
                   <input
@@ -108,21 +110,21 @@ const ContactForm = () => {
                   htmlFor="phone-number"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Phone number
+                  {translate('label.contactUs.phoneNumberText')}
                 </label>
                 <div className="relative mt-2.5">
                   <div className="absolute inset-y-0 left-0 flex items-center">
                     <label htmlFor="country" className="sr-only">
-                      Country
+                      {translate('label.checkout.countryText')}
                     </label>
                     <select
                       id="country"
                       name="country"
                       className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-9 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm"
                     >
-                      <option>US</option>
-                      <option>CA</option>
-                      <option>EU</option>
+                      <option>{translate('label.contactUs.optionUSText')}</option>
+                      <option>{translate('label.contactUs.optionCAText')}</option>
+                      <option>{translate('label.contactUs.optionEUText')}</option>
                     </select>
                     <ChevronDownIcon
                       className="pointer-events-none absolute right-3 top-0 h-full w-5 text-gray-400"
@@ -143,7 +145,7 @@ const ContactForm = () => {
                   htmlFor="message"
                   className="block text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Message
+                  {translate('label.product.messageText')}
                 </label>
                 <div className="mt-2.5">
                   <textarea
@@ -165,7 +167,7 @@ const ContactForm = () => {
                       'flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                     )}
                   >
-                    <span className="sr-only">Agree to policies</span>
+                    <span className="sr-only">{translate('common.label.agreeToPoliciesText')}</span>
                     <span
                       aria-hidden="true"
                       className={cn(
@@ -176,9 +178,9 @@ const ContactForm = () => {
                   </Switch>
                 </div>
                 <Switch.Label className="text-sm leading-6 text-gray-600">
-                  By selecting this, you agree to our{' '}
+                  {translate('label.contactUs.agreeOurPolicyText')}{' '}
                   <a href="#" className="font-semibold text-indigo-600">
-                    privacy&nbsp;policy
+                    {translate('label.contactUs.privacyText')} &nbsp; {translate('label.contactUs.policyText')}
                   </a>
                   .
                 </Switch.Label>
@@ -189,7 +191,7 @@ const ContactForm = () => {
                 type="submit"
                 className="block w-full rounded-md bg-black px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Let's talk
+                {translate('common.label.letsTalkText')}
               </button>
             </div>
           </form>

@@ -1,20 +1,26 @@
-export const config = [
-  {
-    key: 'line1',
-    label: 'Line 1 (required)',
-    type: 'text',
-    placeholder: 'Add message 1',
-  },
-  {
-    key: 'line2',
-    label: 'Line 2 (optional)',
-    type: 'text',
-    placeholder: 'Add message 2',
-  },
-  {
-    key: 'line3',
-    label: 'Line 3 (optional)',
-    type: 'text',
-    placeholder: 'Add message 3',
-  },
-]
+import { useTranslation } from "@commerce/utils/use-translation"
+
+export const useEngravingConfig = () =>{
+  const translate = useTranslation()
+  return [
+    {
+      key: 'line1',
+      label: translate('common.label.line1Text'),
+      type: 'text',
+      placeholder: translate('common.label.addMsg1Text'),
+    },
+    {
+      key: 'line2',
+      label: translate('common.label.line2Text'),
+      type: 'text',
+      placeholder: translate('common.label.addMsg2Text'),
+    },
+    {
+      key: 'line3',
+      label: translate('common.label.line3Text'),
+      type: 'text',
+      placeholder: translate('common.label.addMsg3Text'),
+    },
+  ]
+  
+} 

@@ -15,7 +15,7 @@ import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/parse-util";
 import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
-import _ from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 import { isMobile } from 'react-device-detect';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
@@ -59,7 +59,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         mappedAttribs.push(attrib)
       }
     })
-    setCompareAttributes(_.uniqBy(mappedAttribs, 'key'))
+    setCompareAttributes(uniqBy(mappedAttribs, 'key'))
     // if (shouldEnabled) {
     //   setIsEligibleToCompare(shouldEnabled)
     // }
