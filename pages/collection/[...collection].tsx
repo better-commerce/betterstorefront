@@ -245,7 +245,7 @@ export default function CollectionPage(props: any) {
     const dataToPass = IS_INFINITE_SCROLL
       ? productListMemory?.products
       : data?.products // productListMemory?.products
-    if (dataToPass.results.length > 0) {
+    if (dataToPass?.results?.length > 0) {
       setProductDataToPass(dataToPass)
     }
   }, [productListMemory?.products, data?.products])
@@ -257,16 +257,16 @@ export default function CollectionPage(props: any) {
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
-      data?.products?.currentPage !== productListMemory.products.currentPage ||
-      data?.products?.total !== productListMemory.products.total ||
-      data?.products?.sortBy !== productListMemory.products.sortBy
+      data?.products?.currentPage !== productListMemory?.products?.currentPage ||
+      data?.products?.total !== productListMemory?.products?.total ||
+      data?.products?.sortBy !== productListMemory?.products?.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone: any = { ...data }
-        if (state.currentPage > 1 && IS_INFINITE_SCROLL) {
+        if (state?.currentPage > 1 && IS_INFINITE_SCROLL) {
           dataClone.products.results = [
-            ...prevData.products.results,
-            ...dataClone.products.results,
+            ...prevData?.products?.results,
+            ...dataClone?.products?.results,
           ]
         }
         return dataClone
@@ -298,10 +298,10 @@ export default function CollectionPage(props: any) {
 
   const handleInfiniteScroll = () => {
     if (
-      data.products.pages &&
-      data.products.currentPage < data.products.pages
+      data?.products?.pages &&
+      data?.products?.currentPage < data?.products?.pages
     ) {
-      dispatch({ type: PAGE, payload: data.products.currentPage + 1 })
+      dispatch({ type: PAGE, payload: data?.products?.currentPage + 1 })
     }
   }
 
