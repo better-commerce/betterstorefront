@@ -3,7 +3,7 @@
  */
 
 const { withCommerceConfig, getProviderName, } = require('./framework/commerce/config')
-const commerce = require('./commerce.config.json')
+const commerce = require('./features.config.json')
 const provider = commerce.provider || getProviderName()
 const isBC = provider === 'bigcommerce'
 const crypto = require('crypto')

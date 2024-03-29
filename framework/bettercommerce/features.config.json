@@ -1,0 +1,13 @@
+{
+  "provider": "bettercommerce",
+  "features": {
+    "wishlist": false,
+    "cart": false,
+    "search": false,
+    "customerAuth": false,
+    "enableLanguage": true,
+    "enablePriceIncVatToggle": false,
+    "enableQuickOrderPad": false,
+    "enableCompare": false
+  }
+}
