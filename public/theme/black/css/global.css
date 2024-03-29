@@ -1495,3 +1495,7 @@ p {
   height: auto;
   filter: invert(1) brightness(2);
 }
+
+.bg-banner{
+  background-color: #ecfccb;
+}
