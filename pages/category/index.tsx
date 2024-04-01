@@ -37,13 +37,13 @@ export default function CategoryList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="container w-full mx-auto">
+      <main className="container w-full pt-6 mx-auto sm:pt-10">
         <section aria-labelledby="products-heading ">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {translate('label.category.shopByCategoryText')}
           </h1>
           {props?.data.length > 0 && (
-            <div className="flow-root mt-1 sm:mt-0 ">
+            <div className="flow-root mt-1 sm:mt-0">
               <div className="my-0">
                 <div className="box-content relative px-0 mt-2">
                   <div className="grid grid-cols-2 my-2 mb-6 gap-x-3 gap-y-3 md:grid-cols-5 lg:grid-cols-4 sm:my-4">
