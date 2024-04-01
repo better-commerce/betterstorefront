@@ -32,7 +32,7 @@ export default function CollectionList(props: any) {
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
       </NextHead>
       <main className="container w-full mx-auto">
-        <section aria-labelledby="products-heading" className="mt-8">
+        <section aria-labelledby="products-heading" className="mt-12">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {translate('label.collection.shopByCollectionText')}
           </h1>
