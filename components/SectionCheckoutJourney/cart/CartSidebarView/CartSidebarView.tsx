@@ -793,8 +793,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                       <Link href="/cart" onClick={() => {
+                    {cartItems.lineItems?.length > 0 &&
+                      <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
+                        <Link href="/cart" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
                         }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
@@ -806,7 +807,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
                           </span>
                         </Link>
-                    </div>
+                      </div>
+                    }
                   </div>
                 </div>
               </Transition.Child>

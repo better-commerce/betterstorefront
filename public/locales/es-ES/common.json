@@ -460,6 +460,7 @@
     },
     "orderSummary": {
       "orderSummaryText": "Resumen del Pedido",
+      "basketSummaryText": "Resumen del Pedido",
       "paymentDetailsBtnText": "Detalles del Pago",
       "priceTaxInclusiveText": "Los precios incluyen todos los impuestos",
       "totalText": "Total",
