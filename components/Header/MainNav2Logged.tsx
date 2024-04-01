@@ -16,7 +16,8 @@ const MenuBar = dynamic(() => import('@components/shared/MenuBar/MenuBar'))
 const Navigation = dynamic(() => import('@components/shared/Navigation/Navigation'))
 const ToggleSwitch = dynamic(() => import('@components/shared/ToggleSwitch/ToggleSwitch'))
 const BulkAddTopNav = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/TopNav'))
-import featureToggle from 'features.config.json'
+import { CURRENT_THEME } from "@components/utils/constants";
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 export interface MainNav2LoggedProps { }
 interface Props {
   config: []
