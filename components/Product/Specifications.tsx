@@ -57,7 +57,9 @@ export default function ProductSpecifications({
                           <div className="flex justify-start comma" key={cdx}>
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
                               {collarAttr.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['product.collar']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -81,7 +83,9 @@ export default function ProductSpecifications({
                           >
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
                               {featureAttr?.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['fabric.type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -103,7 +107,9 @@ export default function ProductSpecifications({
                           <div className="flex justify-start comma" key={ldx}>
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm">
                               {lengthAttr.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['occasion.type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -124,7 +130,9 @@ export default function ProductSpecifications({
                           <div className="flex justify-start comma" key={fdx}>
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fabric.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['product.fabric']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -145,7 +153,9 @@ export default function ProductSpecifications({
                           <div className="flex justify-start comma" key={fdx}>
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fit.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['clothing.size']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -166,7 +176,9 @@ export default function ProductSpecifications({
                           <div className="flex justify-start comma" key={fdx}>
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fit.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['dress.style']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -187,7 +199,9 @@ export default function ProductSpecifications({
                           <div className="flex justify-start comma" key={fdx}>
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
                               {fit.fieldText}
-                              <span className="s-icon">,</span>
+                              {attrGroup['clothing.type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
                             </span>
                           </div>
                         )
@@ -243,7 +257,9 @@ export default function ProductSpecifications({
                           key={idx}
                         >
                           {fabriccareAttr?.fieldText}
-                          <span className="s-icon">,</span>
+                          {attrGroup['product.fabriccare']?.length > 1 &&
+                            <span className="s-icon">,</span>
+                          }
                         </p>
                       )
                     )}
@@ -304,7 +320,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                     {translate('label.product.specifications.typeText')}
+                      {translate('label.product.specifications.typeText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -569,7 +585,7 @@ export default function ProductSpecifications({
                 <div>
                   <div className="flex flex-col mt-6">
                     <h4 className="mb-2 text-xs font-medium text-gray-400 uppercase">
-                    {translate('label.product.specifications.powerSourceText')}
+                      {translate('label.product.specifications.powerSourceText')}
                     </h4>
                   </div>
                   <div className="grid">
@@ -621,9 +637,8 @@ export default function ProductSpecifications({
                   {imageTagGroup?.specification?.map(
                     (img: any, iid: number) => (
                       <SwiperSlide
-                        className={`px-0 ${
-                          iid === 0 && isOnlyMobile ? 'cs-mr-1' : ''
-                        } `}
+                        className={`px-0 ${iid === 0 && isOnlyMobile ? 'cs-mr-1' : ''
+                          } `}
                         key={`product-${iid}-swiper-detil`}
                       >
                         <div className="image-container" style={{ paddingTop }}>
@@ -642,7 +657,7 @@ export default function ProductSpecifications({
                               IMG_PLACEHOLDER
                             }
                             //src={img?.image}
-                            alt={img.name||'slider-image'}
+                            alt={img.name || 'slider-image'}
                             className="image"
                           ></Image>
                           {/* <Image src={img?.image} className="bhdLno" layout="fill" alt={img.name}></Image> */}
