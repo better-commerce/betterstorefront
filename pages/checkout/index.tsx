@@ -409,7 +409,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       if (postCodeAddressRes?.length < 1) {
         return setAlert({
           type: AlertType.ERROR,
-          msg: translate('common.message.checkout.noAddressFoundErrorMsg'),
+          msg: translate('common.message.noAddressFoundErrorMsg'),
         })
       }
       return postCodeAddressRes
