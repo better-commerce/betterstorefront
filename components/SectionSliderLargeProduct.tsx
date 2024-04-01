@@ -86,35 +86,16 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
               </li>
             ))}
 
-            <li className={`glide__slide   `}>
+            <li className={`glide__slide`}>
               <Link href={"/lookbook"} className="relative block group">
                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                   <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
                   <div className="absolute flex flex-col items-center justify-center inset-y-6 inset-x-10">
                     <div className="relative flex items-center justify-center">
                       <span className="text-xl font-semibold">{translate('common.label.moreLooksText')}</span>
-                      <svg
-                        className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M18.0701 9.57L12.0001 3.5L5.93005 9.57"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 20.4999V3.66992"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
+                      <svg className="absolute w-5 h-5 ml-2 transition-transform rotate-45 left-full group-hover:scale-110" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                        <path d="M18.0701 9.57L12.0001 3.5L5.93005 9.57" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 20.4999V3.66992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                     <span className="mt-1 text-sm">{translate('common.label.showMeMoreText')}</span>

@@ -116,13 +116,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide ${itemClassName}`}>
-                <CardCategory2
-                  featuredImage={item.departments_image}
-                  name={item.departments_name}
-                  desc={item.departments_subtitle}
-                  link={item?.departments_link}
-                  bgClass={item.color}
-                />
+                <CardCategory2 featuredImage={item.departments_image} name={item?.departments_name} desc={item?.departments_subtitle} link={item?.departments_link} bgClass={item?.color} />
               </li>
             ))}
             <li className={`glide__slide ${itemClassName}`}>
@@ -143,10 +137,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
                     </span>
                   </div>
                 </div>
-                <Link
-                  href={"/collection"}
-                  className="absolute inset-0 transition-opacity bg-black opacity-0 group-hover:opacity-100 bg-opacity-10"
-                >{translate('common.label.showMeMoreText')}</Link>
+                <Link href={"/collection"} className="absolute inset-0 transition-opacity bg-black opacity-0 group-hover:opacity-100 bg-opacity-10" ><span className="sr-only">{translate('common.label.showMeMoreText')}</span></Link>
               </div>
             </li>
           </ul>
