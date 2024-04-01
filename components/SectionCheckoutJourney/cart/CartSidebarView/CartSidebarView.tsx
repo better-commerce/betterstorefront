@@ -557,13 +557,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           </button>
                         </div>
                       </div>
-                      {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
+                      {/* {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
                         <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
                           <h4 className="font-semibold text-green-dark">
                             {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {translate('label.basket.totalSavingsText')}
                           </h4>
                         </div>
-                      )}
+                      )} */}
                       <div className="mt-2">
                         <div className="flow-root">
                           <ul role="list" className="px-4">
@@ -661,7 +661,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                               <div className='w-full'></div>
                                             )}
                                             {product?.price?.raw?.withTax > 0 &&
-                                              <div className="flex flex-row px-4 text-gray-900 border items-center">
+                                              <div className="flex flex-row items-center px-4 text-gray-900 border">
                                                 <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
                                                 <span className="px-2 py-2 text-md"> {product.qty} </span>
                                                 <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
