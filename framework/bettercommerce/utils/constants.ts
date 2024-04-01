@@ -65,6 +65,7 @@ export module Cookie {
   export module Key {
     export const CURRENCY = 'Currency'
     export const CURRENT_CURRENCY = 'CurCurrency'
+    export const CURRENCY_SYMBOL = 'CurrencySymbol'
     export const LANGUAGE = 'Language'
     export const COUNTRY = 'Country'
     export const SESSION_ID = 'sessionId'

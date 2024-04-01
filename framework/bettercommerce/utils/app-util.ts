@@ -465,6 +465,11 @@ export const getCurrentCurrency = () => {
   return currencyCode
 }
 
+export const getCurrencySymbol = () => {
+  const currencySymbol = Cookies.get(Cookie.Key.CURRENCY_SYMBOL)
+  return currencySymbol
+}
+
 export const setCurrentCurrency = (value: string) => {
   Cookies.set(Cookie.Key.CURRENT_CURRENCY, value)
 }
