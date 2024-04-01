@@ -86,14 +86,7 @@ export const SCROLLABLE_LOCATIONS = [
   '/kit/'
 ]
 
-function MyApp({
-  Component,
-  pageProps,
-  nav,
-  footer,
-  clientIPAddress,
-  ...props
-}: any) {
+function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }: any) {
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [keywordsData, setKeywordsData] = useState([])
@@ -229,8 +222,11 @@ function MyApp({
     initializeGTM()
     document.body.classList?.remove('loading')
     if (appConfig) {
-      Cookies.set(Cookie.Key.CURRENCY, appConfig?.defaultCurrency)
-      Cookies.set(Cookie.Key.LANGUAGE, appConfig?.defaultLanguage)
+      const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || appConfig?.defaultCurrency
+      Cookies.set(Cookie.Key.CURRENCY, currencyCode)
+      const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale
+      Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
+      Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
     }
     fetchKeywords()
 
@@ -457,6 +453,7 @@ MyApp.getInitialProps = async (
   }
 
   const { ctx, Component } = context
+  const { locale } = ctx
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
@@ -554,6 +551,7 @@ MyApp.getInitialProps = async (
       navTree: navTreeResult,
       clientIPAddress: clientIPAddress,
       reviewData: reviewData,
+      locale,
     },
   }
 }
