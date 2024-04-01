@@ -4,10 +4,6 @@
     "search": false,
     "wishlist": false,
     "customerAuth": false,
-    "customCheckout": false,
-    "enableLanguage": true,
-    "enablePriceIncVatToggle": true,
-    "enableQuickOrderPad": false,
-    "enableCompare": false
+    "customCheckout": false
   }
 }
