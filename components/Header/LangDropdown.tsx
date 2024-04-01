@@ -38,7 +38,8 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
       {languages?.map((language: any, index: number) => (
         <Link key={index} legacyBehavior href={getLocaleUrl(language)} locale={language?.languageCulture}>
           <a key={index} href={getLocaleUrl(language)} onClick={() => {
-            Cookies.set(Cookie.Key.LANGUAGE, language?.languageCode)
+            Cookies.set(Cookie.Key.LANGUAGE, language?.languageCulture)
+            Cookies.set(Cookie.Key.COUNTRY, language?.languageCulture?.substring(3))
             close();
           }} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${isActiveLocale(language) ? "bg-gray-200 dark:bg-gray-700" : "bg-white"}`}
           >
