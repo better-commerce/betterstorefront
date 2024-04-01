@@ -11,7 +11,6 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import NextHead from 'next/head'
 import cookie from 'cookie'
-import { loqateAddress } from '@components/SectionCheckoutJourney/checkout-old/CheckoutForm'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
@@ -19,6 +18,7 @@ import {
   EmptyGuid,
   EmptyObject,
   EmptyString,
+  LOQATE_ADDRESS,
   Messages,
   NEXT_AUTHENTICATE,
   NEXT_BASKET_VALIDATE,
@@ -101,6 +101,27 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] =
     useState<boolean>(false)
   const [editAddressValues, setEditAddressValues] = useState<any>(undefined)
+
+  const loqateAddress = async (postCode: string ) => {
+    try {
+      const cartItems: any = tryParseJson(localStorage.getItem('cartItems'));
+      const deliveryMethod = cartItems?.shippingMethods?.find((method: any) => method?.id === cartItems?.shippingMethodId);
+      const response = await axios.post(LOQATE_ADDRESS, {
+        postCode,
+        country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      });
+  
+      const responseData = response?.data?.response?.data || [];
+      return responseData?.map((item: any) => ({
+        text: item?.Text,
+        id: item?.Id,
+        description: item?.Description,
+      }));
+    } catch (error) {
+      console.error('Error:', error);
+      return [];
+    }
+  }
 
   const getStepFromStage = (stage: number) => {
     let step = CheckoutStep.NONE
@@ -388,7 +409,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       if (postCodeAddressRes?.length < 1) {
         return setAlert({
           type: AlertType.ERROR,
-          msg: translate('common.message.checkout.noAddressFoundErrorMsg'),
+          msg: translate('common.message.noAddressFoundErrorMsg'),
         })
       }
       return postCodeAddressRes

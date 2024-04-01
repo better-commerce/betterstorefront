@@ -22,7 +22,7 @@ export const addressFinderSchema = () => {
       10,
       translate('common.message.profile.postCodeMaxLenMsg')
     )
-    .required(translate('common.message.profile.postCodeRequiredMsg')),
+    .required(translate('common.message.postCodeRequiredMsg')),
   })
 
   return ADDRESS_FINDER_SCHEMA;
@@ -90,6 +90,7 @@ export const checkoutAddressSchema = () => {
     .trim()
     .test(
       'no-whitespace',
+      translate('common.message.address.cityRequiredMsg'),
       (value: any) => {
         return Messages.Validations.RegularExpressions.EMPTY_SPACE.test(
           value || EmptyString
