@@ -2,7 +2,7 @@
 import { getB2BCompanyDetails } from '@framework/utils/payment-util'
 import { IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
-import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'
 
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants'
