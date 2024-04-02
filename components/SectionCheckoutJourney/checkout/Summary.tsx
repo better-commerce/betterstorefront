@@ -84,10 +84,18 @@ const Summary = ({
           </div>
           <div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
-              <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
+              <span>{translate('label.orderSummary.subTotalVATExText')}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
               {basket?.subTotal?.formatted?.withoutTax}
+            </dd>
+          </div>
+          <div className="flex items-center justify-between pt-2 sm:pt-1">
+            <dt className="flex items-center text-black font-14">
+              <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
+            </dt>
+            <dd className="font-semibold text-black text-md">
+              {basket?.subTotal?.formatted?.withTax}
             </dd>
           </div>
           {basket?.promotionsApplied?.length > 0 && (
