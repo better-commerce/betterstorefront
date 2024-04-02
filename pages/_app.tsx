@@ -231,6 +231,10 @@ function MyApp({
     if (appConfig) {
       Cookies.set(Cookie.Key.CURRENCY, appConfig?.defaultCurrency)
       Cookies.set(Cookie.Key.LANGUAGE, appConfig?.defaultLanguage)
+      const defaultCurrency = appConfig?.currencies?.find((x: any) => x.currencyCode === appConfig?.defaultCurrency)
+      if (defaultCurrency?.currencySymbol) {
+        Cookies.set(Cookie.Key.CURRENCY_SYMBOL, defaultCurrency?.currencySymbol)
+      }
     }
     fetchKeywords()
 
@@ -508,6 +512,7 @@ MyApp.getInitialProps = async (
   let appConfig = null
   if (appConfigResult) {
     const { result: appConfigData } = appConfigResult
+    console.log(JSON.stringify(appConfigData))
     const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
