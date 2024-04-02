@@ -1,5 +1,5 @@
 // Package Imports
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 import { Stripe, StripeElements } from '@stripe/stripe-js'
 import {
   Elements,
@@ -19,7 +19,7 @@ import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
-export class StripePaymentButton extends BasePaymentButton {
+class StripePaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -47,6 +47,7 @@ export class StripePaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: translate('common.label.initiatingOrderText'),
@@ -124,6 +125,7 @@ export class StripePaymentButton extends BasePaymentButton {
     stripe: Stripe,
     elements: StripeElements
   ) {
+    const { t: translate } = this.props
     // Block native form submission.
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -176,6 +178,7 @@ export class StripePaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
+    const { t: translate } = this.props
 
     return (
       <>
@@ -237,3 +240,5 @@ export class StripePaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(StripePaymentButton)

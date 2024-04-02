@@ -2,7 +2,7 @@
 import Router from 'next/router'
 import Script from 'next/script'
 import Cookies from 'js-cookie'
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 import { KlarnaOrderLine } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -23,7 +23,7 @@ import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 declare const Klarna: any
 
-export class KlarnaPaymentButton extends BasePaymentButton {
+class KlarnaPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -46,6 +46,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -89,6 +90,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     const gatewayName = this.state.paymentMethod?.systemName
     const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
@@ -239,7 +241,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    */
   private onScriptReady(): void {
     let that = this
-    const { uiContext, dispatchState }: any = this.props
+    const { uiContext, dispatchState, t: translate }: any = this.props
     const clientToken = this.state?.clientSession?.client_token
     if (clientToken) {
       Klarna.Payments.init({
@@ -274,6 +276,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
 
     const shippingMethodId = uiContext?.cartItems?.shippingMethodId
     const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
+    const { t: translate } = this.props
 
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
@@ -337,6 +340,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    */
   public render() {
     let that = this
+    const { t: translate } = this.props
     return (
       <>
         {!this.state.confirmed ? (
@@ -399,3 +403,5 @@ export class KlarnaPaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(KlarnaPaymentButton)
