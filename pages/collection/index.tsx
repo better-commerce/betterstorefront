@@ -13,6 +13,7 @@ import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 export default function CollectionList(props: any) {
   const router =useRouter();
   const translate = useTranslation()
@@ -102,21 +103,23 @@ export async function getStaticProps({
   } catch (error: any) {
     logError(error)
 
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
 
-    return {
-      props: {
-        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-        data: collectionUIDData,
-      },
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
+      return {
+        props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+          data: collectionUIDData,
+        },
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
     }
   }
 }
