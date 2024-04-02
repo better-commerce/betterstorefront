@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next'
 
 // Component Imports
 import Spinner from '@components/ui/Spinner'
-import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'
 
 // Other Imports
 import { getItem } from '@components/utils/localStorage'
@@ -17,7 +17,7 @@ import {
 } from '@better-commerce/bc-payments-sdk'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { CARD_PAYMENT_3DS_ENABLED } from '@components/SectionCheckoutJourney/checkout-old/CheckoutForm/PaymentButton/CheckoutPaymentButton'
+import { CARD_PAYMENT_3DS_ENABLED } from '@components/SectionCheckoutJourney/checkout/CheckoutForm/PaymentButton/CheckoutPaymentButton'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const GatewayPage = (props: IGatewayPageProps) => {
