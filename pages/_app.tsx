@@ -222,9 +222,11 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     initializeGTM()
     document.body.classList?.remove('loading')
     if (appConfig) {
-      const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || appConfig?.defaultCurrency
+      const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || appConfig?.defaultCurrency || EmptyString
       Cookies.set(Cookie.Key.CURRENCY, currencyCode)
-      const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale
+      const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
+      Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
+      const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale || EmptyString
       Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
       Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
     }
