@@ -512,7 +512,6 @@ MyApp.getInitialProps = async (
   let appConfig = null
   if (appConfigResult) {
     const { result: appConfigData } = appConfigResult
-    console.log(JSON.stringify(appConfigData))
     const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
