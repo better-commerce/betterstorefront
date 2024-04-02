@@ -1143,7 +1143,7 @@ p {
   }
 
   .checkout-container {
-    width: 60%;
+    width: 60% !important;
     padding-right: 5rem;
   }
 
@@ -1492,10 +1492,17 @@ p {
 }
 
 .brand-logo{
-  width: 80px;
+  width: 65px;
   height: auto;
 }
 
 .bg-banner{
   background-color: #ffedd5;
+}
+
+@media screen and (max-width:767px) {
+  .brand-logo {
+    width: 60px;
+    height: auto;
+}
 }

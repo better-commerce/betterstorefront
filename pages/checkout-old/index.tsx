@@ -14,10 +14,10 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
-import CheckoutHeading from '@components/SectionCheckoutJourney/checkout-old/CheckoutHeading'
+import CheckoutHeading from '@components/SectionCheckoutJourney/checkout/CheckoutHeading'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/CheckoutRouter'))
-const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout-old/CheckoutForm'))
+const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutRouter'))
+const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutForm'))
 
 export interface actionInterface {
   type?: string

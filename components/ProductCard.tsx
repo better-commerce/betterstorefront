@@ -251,8 +251,8 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
           <div className="space-y-4 px-2.5 pt-5 pb-2.5">
             <div>
-              <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
-              <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
+              <h2 className="text-base text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
+              <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
             </div>
             <div className="flex items-center justify-between ">
               <Prices price={data?.price} listPrice={data?.listPrice} />
