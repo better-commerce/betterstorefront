@@ -1,6 +1,6 @@
 // Package Imports
 import Cookies from 'js-cookie'
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 import { ClearPayPaymentIntent, PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -27,7 +27,7 @@ import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 declare const AfterPay: any
 
-export class ClearPayPaymentButton extends BasePaymentButton {
+class ClearPayPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -54,6 +54,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
@@ -80,7 +81,7 @@ export class ClearPayPaymentButton extends BasePaymentButton {
 
   private onScriptReady(): void {
     const that = this
-    const { uiContext, dispatchState } = this.props
+    const { uiContext, dispatchState, t: translate } = this.props
     const redirectionUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
     if (AfterPay) {
       const shippingMethodId = uiContext?.cartItems?.shippingMethodId
@@ -307,3 +308,5 @@ export class ClearPayPaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(ClearPayPaymentButton)

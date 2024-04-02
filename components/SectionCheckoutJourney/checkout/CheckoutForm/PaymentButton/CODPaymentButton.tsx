@@ -5,10 +5,10 @@ import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'
 
 // Other Imports
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 import { EmptyString } from '@components/utils/constants'
 
-export class CODPaymentButton extends BasePaymentButton {
+class CODPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -34,6 +34,7 @@ export class CODPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: 'Please wait...',
@@ -118,3 +119,5 @@ export class CODPaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(CODPaymentButton)

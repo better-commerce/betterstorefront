@@ -9,7 +9,7 @@ import {
   PaymentMethodType,
 } from '@better-commerce/bc-payments-sdk'
 import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
@@ -29,7 +29,7 @@ const ELEM_CARD_NUMBER = 'card-number'
 const ELEM_EXPIRY_DATE = 'expiry-date'
 const ELEM_CVV = 'cvv'
 
-export class CheckoutPaymentButton extends BasePaymentButton {
+class CheckoutPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -60,6 +60,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
@@ -103,7 +104,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
   }
 
   private onCardSubmitted(): void {
-    const { uiContext }: any = this.props
+    const { uiContext, t: translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
   }
 
@@ -139,6 +140,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     dispatchState: Function
   ) {
     let that = this
+    const { t: translate } = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     const redirectConfirmUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
@@ -275,7 +277,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext } = this.props
+    const { uiContext, t: translate } = this.props
     const publicKey = super.getPaymentMethodSetting(
       this?.state?.paymentMethod,
       'accountcode'
@@ -481,3 +483,5 @@ export class CheckoutPaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(CheckoutPaymentButton)

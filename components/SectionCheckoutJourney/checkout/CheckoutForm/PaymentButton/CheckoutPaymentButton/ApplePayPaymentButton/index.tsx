@@ -5,7 +5,7 @@ import React from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 import { CheckoutPaymentSourceType, CheckoutPaymentType, PaymentMethodType, PaymentMethodTypeId } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -26,7 +26,7 @@ import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 declare const ApplePaySession: any
 
-export class CheckoutApplePayPaymentButton extends BasePaymentButton {
+class CheckoutApplePayPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -51,6 +51,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -83,7 +84,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
    */
   public componentDidMount(): void {
     const that = this
-    const { paymentMethod, basketOrderInfo, uiContext, dispatchState, }: any = this.props
+    const { paymentMethod, basketOrderInfo, uiContext, dispatchState, t: translate }: any = this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
 
     const threeDSEnabled = this.state.threeDSEnabled
@@ -292,7 +293,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
   }
 
   private onValidateSession(validationUrl: string, successCallback: Function, errorCallback: Function) {
-    const { uiContext, dispatchState }: any = this.props
+    const { uiContext, dispatchState, t: translate }: any = this.props
     const gatewayName = this.state.paymentMethod?.systemName
     const validateSessionInput = {
       validationUrl,
@@ -314,7 +315,7 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
 
   private onCompletePayment(orderResult: any, token: any, processingChannelId: string, threeDSEnabled: boolean, logActivity: any, callback: Function) {
     const that = this
-    const { uiContext, dispatchState }: any = this.props
+    const { uiContext, dispatchState, t: translate }: any = this.props
 
     if (token?.paymentData) {
       const { version, data, signature, header } = token?.paymentData
@@ -519,3 +520,5 @@ export class CheckoutApplePayPaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(CheckoutApplePayPaymentButton)
