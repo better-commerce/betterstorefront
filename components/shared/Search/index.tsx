@@ -132,12 +132,14 @@ export default function Search(props: any) {
                   </div>
                   <div className="flex items-end justify-between ">
                     <Prices price={product?.price} listPrice={product?.listPrice} />
-                    <div className="flex items-center mb-0.5">
-                      <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
-                      <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                        {product?.rating || ""} ({product?.reviewCount || 0} reviews)
-                      </span>
-                    </div>
+                    {product?.reviewCount > 0 &&
+                      <div className="flex items-center mb-0.5">
+                        <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+                        <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+                          {product?.rating || ""} ({product?.reviewCount || 0} reviews)
+                        </span>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
