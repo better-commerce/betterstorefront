@@ -1,10 +1,11 @@
 import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
+import NextHead from 'next/head'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
@@ -98,7 +99,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [successMessage, setSuccessMessage] = useState('')
   const { addToCart, associateCart } = cartHandler()
   const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
-
+const router = useRouter()
   if (config?.configSettings?.length) {
     b2bSettings =
       config?.configSettings?.find((x: any) =>
@@ -215,6 +216,17 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   }
   return (
     <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.checkout.loginRegistrationText')}</title>
+        <meta name="title" content={translate('label.checkout.loginRegistrationText')} />
+        <meta name="description" content={translate('label.checkout.loginRegistrationText')} />
+        <meta name="keywords" content={translate('label.checkout.loginRegistrationText')} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={translate('label.checkout.loginRegistrationText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.checkout.loginRegistrationText')} key="ogdesc" />
+      </NextHead>
       <section aria-labelledby="trending-heading" className="bg-white">
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
@@ -247,9 +259,9 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
 
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
               {translate('label.myAccount.alreadyAccountText')} {` `}
-              <Link className="text-green-600" href="/my-account/login">
+              <a className="text-green-600" href="/my-account/login">
                 {translate('label.myAccount.SignInText')}
-              </Link>
+              </a>
             </span>
           </div>
         </div>
