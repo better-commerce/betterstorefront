@@ -17,6 +17,8 @@ import {
   BETTERCOMMERCE_DEFAULT_CURRENCY,
   BETTERCOMMERCE_CURRENCY,
   EmptyObject,
+  LOQATE_ADDRESS,
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-payment'
@@ -760,4 +762,25 @@ export const getSocialLoginSettings = (pluginSettings: Array<any>): Array<any> =
 export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
   const socialLoginSettings = getSocialLoginSettings(pluginSettings)
   return socialLoginSettings?.map((x: any) => x?.name?.toLowerCase())?.join(',') || EmptyString
+}
+
+export const loqateAddress = async (postCode: string ) => {
+  try {
+    const cartItems: any = getItem('cartItems') || {};
+    const deliveryMethod = cartItems?.shippingMethods?.find((method: any) => method?.id === cartItems?.shippingMethodId);
+    const response = await axios.post(LOQATE_ADDRESS, {
+      postCode,
+      country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+    });
+
+    const responseData = response?.data?.response?.data || [];
+    return responseData?.map((item: any) => ({
+      text: item?.Text,
+      id: item?.Id,
+      description: item?.Description,
+    }));
+  } catch (error) {
+    logError(error)
+    return [];
+  }
 }

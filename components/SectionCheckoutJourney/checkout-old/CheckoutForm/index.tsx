@@ -27,6 +27,7 @@ import setSessionIdCookie from '@components/utils/setSessionId'
 import PaymentWidget from '@components/SectionCheckoutJourney/checkout-old/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
 import {
+  loqateAddress,
   parseFullName,
   resetSubmitData,
   submitData,
@@ -57,27 +58,6 @@ export const retrieveAddress = async (id: string) => {
     postCode: response.data.response.data[0].PostalCode,
     address1: response.data.response.data[0].Line1,
     city: response.data.response.data[0].City,
-  }
-}
-
-export const loqateAddress = async (postCode: string ) => {
-  try {
-    const cartItems: any = tryParseJson(localStorage.getItem('cartItems'));
-    const deliveryMethod = cartItems?.shippingMethods?.find((method: any) => method?.id === cartItems?.shippingMethodId);
-    const response = await axios.post(LOQATE_ADDRESS, {
-      postCode,
-      country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-    });
-
-    const responseData = response?.data?.response?.data || [];
-    return responseData?.map((item: any) => ({
-      text: item?.Text,
-      id: item?.Id,
-      description: item?.Description,
-    }));
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
   }
 }
 
