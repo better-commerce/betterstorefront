@@ -2,7 +2,7 @@
 import ChequePayment, { CHEQUE_PAYMENT_FORM_ID } from './ChequePayment'
 import { IPaymentButtonProps } from '../BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
-import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout-old/PaymentGatewayNotification'
+import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'
 
 // Other Imports
 import { EmptyString } from '@components/utils/constants'
