@@ -73,6 +73,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
+
+
   useEffect(() => {
     if (compareProductsAttributes?.length < 0) return
     let mappedAttribsArrStr: any = compareProductsAttributes?.map((o: any) => o?.customAttributes).flat()
@@ -801,7 +803,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </button>
                 <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
-                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
