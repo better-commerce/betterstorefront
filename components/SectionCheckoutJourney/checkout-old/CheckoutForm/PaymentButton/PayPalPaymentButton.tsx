@@ -3,7 +3,7 @@ import React from 'react'
 
 // Package Imports
 import Router from 'next/router'
-import { t as translate } from "i18next";
+import { withTranslation } from 'react-i18next'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, } from '@paypal/paypal-js/types/components/buttons'
 
@@ -26,7 +26,7 @@ const BUTTONS_DEFAULT_LAYOUT: any = {
   label: 'pay',
 }
 
-export class PayPalPaymentButton extends BasePaymentButton {
+class PayPalPaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
@@ -52,6 +52,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { t: translate } = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -118,6 +119,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
    * @returns
    */
   private getOrderInputPayload() {
+    const { t: translate } = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     if (orderResult) {
@@ -220,6 +222,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
+    const { t: translate } = this.props
     const currency = getCurrency()
     const { dispatchState } = this.props
     const clientId = super.getPaymentMethodSetting(
@@ -257,3 +260,5 @@ export class PayPalPaymentButton extends BasePaymentButton {
     )
   }
 }
+
+export default withTranslation()(PayPalPaymentButton)

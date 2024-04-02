@@ -32,6 +32,7 @@ export interface IPaymentButtonProps {
   readonly contactDetails?: any
   onScrollToSection?: any
   recordEvent?: any
+  t?: any
 }
 
 export interface IApplePaymentProps {
