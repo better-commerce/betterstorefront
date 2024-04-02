@@ -16,11 +16,7 @@ interface Props {
   routerSortOption: any
 }
 
-export default function ProductSort({
-  products,
-  action,
-  routerSortOption,
-}: Props) {
+export default function ProductSort({ products, action, routerSortOption, }: Props) {
   const translate = useTranslation()
   const router = useRouter()
   const { isCompared, setIsCompared } = useUI()
@@ -33,13 +29,6 @@ export default function ProductSort({
   const handleChange = (val: boolean) => {
     setEnabled(val)
     setIsCompared(String(val))
-  }
-
-  const currentOption = products.sortList?.filter(
-    (item: any) => item.key === routerSortOption
-  )[0]
-  const getCompare = () => {
-    return stringToBoolean((getItem('includeVAT') as string) || 'false')
   }
   const renderXClear = () => {
     return (
@@ -90,7 +79,7 @@ export default function ProductSort({
               </svg>
 
               <span className="ml-2">
-                {sortOrderStates ? products?.sortList.filter((i: any) => i.key === sortOrderStates)[0].value : "Sort order"}
+                {sortOrderStates}{sortOrderStates ? products?.sortList.filter((i: any) => i.key === sortOrderStates) : "Sort order"}
               </span>
               {!sortOrderStates.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
@@ -108,8 +97,8 @@ export default function ProductSort({
                         key={index}
                         name="productSort"
                         label={item?.value}
-                        defaultChecked={sortOrderStates === item?.key}
-                        onChange={() => action(item?.key)}
+                        defaultChecked={sortOrderStates === item?.value}
+                        onChange={() => { action(item?.key); close(); setSortOrderStates(item.value); }}
                       />
                     ))}
                   </div>
