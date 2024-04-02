@@ -61,11 +61,16 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
                 <Link href="/store-locator" passHref>
                   <span className="flex items-end mb-4 upper case font-12">Stores</span>
                 </Link>
+                {/* <iframe
+                  width="100%"
+                  height="300"
+                  src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyC5hxzQ3BLwnTcUDQKu87saTyfLZ4-iiYw&center=${store?.longitude},${store?.latitude}&zoom=15`}>
+                </iframe> */}
                 <iframe width="100%"
                   height="300"
                   src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2229138595875!2d${store?.longitude}!2d${store?.latitude}!3d12.972442654034205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDIyJzA1LjYiTiA3NMKwMDInMjIuNyJF!5e0!3m2!1sen!2sus!4v1648926821092!5m2!1sen!2sus`}>
                 </iframe>
-                <h1 className='w-full my-4 font-semibold text-left font-24'>{store?.name} Branch</h1>
+                <h1 className='w-full pt-6 my-4 font-semibold text-left font-24'>{store?.name} Branch</h1>
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                   <div className='sm:col-span-1'>
                     <div className='flex flex-col mb-8'>

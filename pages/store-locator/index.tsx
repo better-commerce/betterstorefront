@@ -42,12 +42,15 @@ export default function StoreLocatorPage() {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       <div className='container py-4 mx-auto sm:py-10'>
+        <h1 className="pb-6 text-2xl font-semibold text-center text-gray-900 sm:pb-16 sm:text-5xl">
+          Stores
+        </h1>
         <div className='grid grid-cols-1 mt-0 sm:gap-20 sm:grid-cols-3'>
           {allStores?.length > 0 && allStores?.map((stores: any, storeIdx: number) => (
-            <div className='flex flex-col w-full' key={`stores-${storeIdx}`}>
+            <div className='flex flex-col w-full px-6 py-4 mb-4 border border-slate-200 bg-slate-100 rounded-2xl' key={`stores-${storeIdx}`}>
               <div className='flex flex-col pt-4'>
                 <Link href={`/store-locator/${stores?.id}`} passHref>
-                  <h2 className='font-semibold leading-7 text-slate-800 dark:text-slate-500 font-20'>{stores?.name} Branch</h2>
+                  <h2 className='font-semibold leading-7 hover:text-sky-800 text-slate-800 dark:text-slate-500 font-20'>{stores?.name} Branch</h2>
                 </Link>
               </div>
               <div className='grid grid-cols-1 gap-4 sm:grid-cols-1'>

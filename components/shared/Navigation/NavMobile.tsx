@@ -16,13 +16,15 @@ import { removePrecedingSlash } from "@framework/utils/app-util";
 export interface NavMobileProps {
   data?: NavItemType[];
   onClickClose?: () => void;
-  navItems?: any
+  navItems?: any;
+  featureToggle?: any
 }
 
 const NavMobile: React.FC<NavMobileProps> = ({
   data,
   navItems,
   onClickClose,
+  featureToggle
 }) => {
   const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
     return (
@@ -46,7 +48,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white "  href={i?.navBlockType == 9 ? `/collection/${removePrecedingSlash(child?.itemLink)}` : `/${removePrecedingSlash(child?.itemLink)}`} >
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={i?.navBlockType == 9 ? `/collection/${removePrecedingSlash(child?.itemLink)}` : `/${removePrecedingSlash(child?.itemLink)}`} >
                         {child?.caption.toLowerCase()}
                       </Link>
                     </li>
@@ -115,6 +117,15 @@ const NavMobile: React.FC<NavMobileProps> = ({
       </div>
       <ul className="flex flex-col px-2 py-6 space-y-1">
         {navItems?.map(_renderItem)}
+        {featureToggle?.features?.enableStoreLocator &&
+          <Disclosure as="li" className="text-slate-900 dark:text-white" >
+            <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href={`/store-locator`} >
+              <span className="" onClick={onClickClose} >
+                Stores
+              </span>
+            </Link>
+          </Disclosure>
+        }
       </ul>
     </div>
   );

@@ -4,7 +4,7 @@
     "enablePriceIncVatToggle": false,
     "enableQuickOrderPad": true,
     "enableCompare": false,
-    "enableStoreLocator": false
+    "enableStoreLocator": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
