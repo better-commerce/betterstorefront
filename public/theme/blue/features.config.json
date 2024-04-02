@@ -3,6 +3,7 @@
     "enableLanguage": true,
     "enablePriceIncVatToggle": true,
     "enableQuickOrderPad": false,
-    "enableCompare": true
+    "enableCompare": true,
+    "enableStoreLocator": false
   }
 }

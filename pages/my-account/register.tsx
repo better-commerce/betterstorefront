@@ -49,16 +49,19 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       <div className="flex flex-1 w-full">
         {
           socialLogins && (
-            <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto w-full" pluginSettings={pluginSettings} />
+            <>
+              <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto w-full" pluginSettings={pluginSettings} />
+              <div className="relative text-center">
+                <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
+                  {translate('label.myAccount.orText')}
+                </span>
+                <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
+              </div>
+            </>
           )
         }
       </div>
-      <div className="relative text-center">
-        <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-          {translate('label.myAccount.orText')}
-        </span>
-        <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
-      </div>
+
       <div className="flex flex-col items-center justify-center w-full">
         <div className="w-full px-5 font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
