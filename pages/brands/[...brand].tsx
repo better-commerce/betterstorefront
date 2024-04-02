@@ -40,6 +40,7 @@ import useFaqData from '@components/SectionBrands/faqData'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
@@ -552,7 +553,11 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ brand: string }>) {
-  const slug = `brands/${params!?.brand[0]}`
+  let  brandSlug :any = params!.brand;
+  if (brandSlug?.length) {
+    brandSlug = brandSlug.join('/');
+  }
+  const slug = `brands/${brandSlug}`
   const cachedDataUID = {
     infraUID: Redis.Key.INFRA_CONFIG,
     brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
@@ -577,9 +582,11 @@ export async function getStaticProps({
     await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
   }
 
-  if (brandBySlugUIDData?.status === "NotFound") {
-    return notFoundRedirect()
-  }
+  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    if (brandBySlugUIDData?.status === "NotFound") {
+      return notFoundRedirect()
+    }
+  }  
 
   const collections: any = {
     imageBannerCollection: collectionUIDData?.imageBannerCollection || [],

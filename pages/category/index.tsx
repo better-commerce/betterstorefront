@@ -13,6 +13,7 @@ import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 
 export default function CategoryList(props: any) {
   let absPath = ''
@@ -107,17 +108,19 @@ export async function getStaticProps({
     }
   } catch (error: any) {
     logError(error)
-
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
-    return {
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
+    
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
+      return {
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
     }
   }
   return {
