@@ -64,7 +64,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
         }
         <div className="container flex justify-between mx-auto">
           {isMobile &&
-            <div className="flex items-center flex-1"> <MenuBar navItems={config} /> </div>
+            <div className="flex items-center flex-1"> <MenuBar navItems={config} featureToggle={featureToggle} /> </div>
           }
           <div className="flex items-center lg:flex-1">
             <Link href="/" passHref>
@@ -73,7 +73,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
           </div>
           {!isMobile &&
             <div className="flex-[2] justify-center mx-4 lg:flex">
-              <Navigation navItems={config} />
+            <Navigation navItems={config} featureToggle={featureToggle} />
             </div>
           }
           <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
