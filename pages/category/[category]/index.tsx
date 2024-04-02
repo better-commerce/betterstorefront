@@ -29,6 +29,7 @@ import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -72,21 +73,25 @@ export async function getStaticProps(context: any) {
   } catch (error: any) {
     logError(error)
 
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
-    return {
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
+      return {
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
     }
   }
 
-  if (categorySlugUIDData?.status === "NotFound") {
-    return notFoundRedirect()
+  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    if (categorySlugUIDData?.status === "NotFound") {
+      return notFoundRedirect()
+    }
   }
 
   if (categorySlugUIDData && categorySlugUIDData?.id) {
