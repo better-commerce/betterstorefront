@@ -23,7 +23,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -253,6 +253,8 @@ export default function CollectionPage(props: any) {
       : data?.products // productListMemory?.products
     if (dataToPass?.results?.length > 0) {
       setProductDataToPass(dataToPass)
+    } else  {
+      setProductDataToPass(null)
     }
   }, [productListMemory?.products, data?.products])
 
@@ -605,7 +607,10 @@ export default function CollectionPage(props: any) {
 CollectionPage.Layout = Layout
 
 export async function getStaticProps({ params, locale, locales, ...context }: any) {
-  const slug: any = params!.collection
+  let slug: any = params!.collection
+  if (slug?.length) {
+    slug = slug.join('/');
+  }
   const cachedDataUID = {
     infraUID: Redis.Key.INFRA_CONFIG,
     collectionUID: Redis.Key.Collection + '_' + slug,
@@ -617,11 +622,11 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
 
   let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
   let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
-  let hostName
+  let hostName = EmptyString
 
   try {
     if (!collectionUIDData) {
-      collectionUIDData = await getCollectionBySlug(slug[0])
+      collectionUIDData = await getCollectionBySlug(slug)
       await setData([{ key: cachedDataUID.collectionUID, value: collectionUIDData }])
     }
     if (!infraUIDData) {
@@ -634,16 +639,18 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   } catch (error: any) {
     logError(error)
 
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
-    return {
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
+      return {
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
     }
   }
 
@@ -658,10 +665,10 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       ...collectionUIDData,
       query: context,
-      slug: params!.collection[0],
+      slug: slug,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: collectionUIDData?.snippets ?? [],
-      hostName: obfuscateHostName(hostName),
+      hostName: obfuscateHostName(hostName!),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
