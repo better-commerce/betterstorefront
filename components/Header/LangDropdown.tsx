@@ -3,13 +3,14 @@
 import { Popover, Tab, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
-import { FC, Fragment, useMemo } from "react";
+import { FC, Fragment, useCallback, useMemo } from "react";
 import { headerCurrency } from "./CurrencyDropdown";
 import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { Cookie } from "@framework/utils/constants";
 import { useRouter } from "next/router";
+import { getCurrency } from '@framework/utils/app-util'
 
 interface LangDropdownProps {
   readonly currencies: Array<any>;
@@ -56,25 +57,25 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
 const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], panelClassName = "", defaultLanguage = "", defaultCountry = "" }) => {
   const router = useRouter()
   const translateText = useTranslationText()
+  const isActiveCurrency = useMemo(() => (currencyCode: any) => getCurrency() === currencyCode, [])
+  const onSelectCurrency = useCallback(({ currency, close }: any) => {
+    if (isActiveCurrency(currency?.currencyCode)) return close()
+    Cookies.set(Cookie.Key.CURRENCY, currency?.currencyCode)
+    Cookies.set(Cookie.Key.CURRENT_CURRENCY, currency?.currencyCode)
+    Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currency?.currencySymbol)
+    close()
+    router.reload()
+  }, [router])
 
   const Currencies = ({ close }: any) => {
     return (
       <div className="grid gap-7 lg:grid-cols-2">
         {currencies?.map((currency, index) => {
-          const item = headerCurrency(currency?.currencyCode)
           return (
-            <a key={currency?.currencyCode} href="#" onClick={() => {
-              Cookies.set(Cookie.Key.CURRENCY, currency?.currencyCode)
-              Cookies.set(Cookie.Key.CURRENT_CURRENCY, currency?.currencyCode)
-              Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currency?.currencySymbol)
-              close();
-              router.reload()
-            }}
-              className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${currency?.currencyCode ? "bg-gray-200 dark:bg-gray-700" : "opacity-80"}`}
-            >
+            <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-gray-100 cursor-not-allowed select-none' : ''} `}>
               <>
-                <item.icon className="w-[18px] h-[18px] " />
-                <p className="ml-2 text-sm font-medium ">{item.name}</p>
+                <span className='border-[1px] border-gray-600 w-5 h-5 flex items-center justify-center text-xs rounded-full'>{currency?.currencySymbol}</span>
+                <p className="ml-2 text-sm font-medium "> {currency?.currencyCode}</p>
               </>
             </a>
           )
