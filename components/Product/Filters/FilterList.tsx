@@ -34,7 +34,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 
   const generateOptionName = () => {
     if (sectionKey === FILTER_KEYS.PRICE)
-      return `${option.name} ${currencySymbol}`
+      return `${option.name} ${currencySymbol != undefined ? currencySymbol : ''}`
     if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]
     else return option.name
   }
