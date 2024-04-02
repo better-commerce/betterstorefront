@@ -130,7 +130,7 @@ export default function NotifyUserPopup() {
                 </div>
               </div>
               {isPostedMessage ? null : (
-                <div className="px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                <div className="gap-2 px-4 py-3 bg-gray-50 sm:px-6 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
                     disabled={!isValidEmail}
@@ -145,7 +145,7 @@ export default function NotifyUserPopup() {
                     {translate('label.product.notifyMeText')}</button>
                   <button
                     type="button"
-                    className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm font-medium py-2.5 px-4 sm:px-6  ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800  border border-slate-300 dark:border-slate-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                    className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm font-medium py-2.5 px-4 sm:px-6  ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800  border border-slate-300 dark:border-slate-700  dark:focus:ring-offset-0"
                     onClick={closeNotifyUser}
                     ref={cancelButtonRef}
                   >
