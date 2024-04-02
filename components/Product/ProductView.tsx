@@ -640,6 +640,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setFullscreen(!fullscreen);
   };
 
+  let productDesc = product.description
+  if (product?.shortDescription == "") {
+    productDesc = product.description
+  }
+
   const renderCustomControls = () => {
     if (fullscreen) {
       return (
@@ -699,7 +704,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
   const detailsConfig = [
-    { name: translate('label.product.bundles.descriptionText'), content: product?.shortDescription },
+    { name: translate('label.product.bundles.descriptionText'), content: productDesc },
     { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
     { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
   ]
@@ -846,7 +851,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {/* DETAIL AND REVIEW */}
 
         <div className="mt-12 space-y-10 sm:mt-16 sm:space-y-16">
-          {renderDetailSection()}
+          {/* {renderDetailSection()} */}
           <hr className="border-slate-200 dark:border-slate-700" />
           <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
