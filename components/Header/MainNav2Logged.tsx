@@ -90,12 +90,10 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
       </div>
     );
   };
-
   return (
     <div className="bg-white border-b nc-MainNav2Logged dark:bg-neutral-900 border-slate-100 dark:border-slate-700">
       <div className="container ">{renderContent()}</div>
     </div>
   );
 };
-
 export default MainNav2Logged;
