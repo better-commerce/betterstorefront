@@ -7,8 +7,11 @@ import Badge from "./shared/Badge/Badge";
 import Input from "./shared/Input/Input";
 import ButtonCircle from "./shared/Button/ButtonCircle";
 import NcImage from "./shared/NcImage/NcImage";
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useUI } from '@components/ui'
 import { useTranslation } from "@commerce/utils/use-translation";
-
+import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
 export interface SectionPromo3Props {
   className?: string;
   data?: any;
@@ -16,6 +19,31 @@ export interface SectionPromo3Props {
 
 const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data }) => {
   const translate = useTranslation()
+  const [value, setValue] = useState('')
+  const [err, setErr] = useState<any>(null)
+  const { setAlert } = useUI()
+  const handleChange = (e: any) => {
+    setValue(e.target.value)
+  }
+  const submitSubscription = async (data: any) => {
+    const regex = Messages.Validations.RegularExpressions.EMAIL
+    if (regex.test(data.toString())) {
+      await axios.post(NEXT_SUBSCRIBE, {
+        email: data,
+        notifyByEmail: true,
+      })
+      setValue('')
+      setAlert({
+        type: 'SUCCESS',
+        msg: 'Email Registered Successfully for Newsletter',
+      })
+    } else setErr('Enter a valid email')
+  }
+
+  useEffect(() => {
+    if (err) setTimeout(() => setErr(null), 3000)
+  }, [err])
+
   return (
     <div className={`nc-SectionPromo3 ${className}`}>
       {data?.map((subs: any, subsIdx: number) => (
@@ -42,12 +70,19 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
               }}
               className="px-5 py-10 mt-5 text-gray-900"
             /> */}
-            <form className="relative max-w-sm mt-10">
+            <form className="relative max-w-sm mt-10"
+              onSubmit={(e) => {
+                e.preventDefault()
+                submitSubscription(value)
+              }}
+            >
               <Input
                 required
                 aria-required
                 placeholder={translate('common.message.enterYourEmailText')}
                 type="email"
+                value={value}
+                onChange={handleChange}
                 rounded="rounded-full"
               />
               <ButtonCircle
@@ -57,6 +92,7 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
                 <ArrowSmallRightIcon className="w-6 h-6" />
               </ButtonCircle>
             </form>
+            {err ? <p className="mt-1 text-sm error-text-clr px-0 sm:px-0">{err}</p> : null}
           </div>
 
           <img
