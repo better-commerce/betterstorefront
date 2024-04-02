@@ -740,20 +740,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
-            <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
+
             {reviews?.review?.totalRecord > 0 &&
-              <div className="flex items-center">
-                <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
-                  <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
-                  <div className="ms-1.5 flex">
-                    <span>{reviews?.review?.ratingAverage}</span>
-                    <span className="block mx-2">·</span>
-                    <span className="underline text-slate-600 dark:text-slate-400">
-                      {reviews?.review?.totalRecord} {translate('common.label.reviews')}
-                    </span>
-                  </div>
-                </Link>
-              </div>
+              <>
+                <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
+                <div className="flex items-center">
+                  <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
+                    <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
+                    <div className="ms-1.5 flex">
+                      <span>{reviews?.review?.ratingAverage}</span>
+                      <span className="block mx-2">·</span>
+                      <span className="underline text-slate-600 dark:text-slate-400">
+                        {reviews?.review?.totalRecord} {translate('common.label.reviews')}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </>
             }
           </div>
         </div>
