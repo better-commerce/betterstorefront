@@ -23,19 +23,7 @@ interface LoginProps {
 export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], }: LoginProps) {
   const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
-  const {
-    isGuestUser,
-    setIsGuestUser,
-    setUser,
-    user,
-    wishListItems,
-    setAlert,
-    setCartItems,
-    setBasketId,
-    setWishlist,
-    cartItems,
-    basketId,
-  } = useUI()
+  const { isGuestUser, setIsGuestUser, setUser, user, wishListItems, setAlert, setCartItems, setBasketId, setWishlist, cartItems, basketId, } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -105,7 +93,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
   return (
     <section aria-labelledby="trending-heading" className="bg-white">
-      <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20 px-10">
+      <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
         <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
           <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
             {translate('label.login.loginBtnText')}
@@ -114,30 +102,33 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         <div className="max-w-md mx-auto space-y-6">
           <div className="grid gap-3">
             {SOCIAL_LOGINS_ENABLED && (
-              <div className='social-login-section'>
-                <SocialSignInLinks isLoginSidebarOpen={isLoginSidebarOpen} containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full'}`} redirectUrl={redirectUrl} pluginSettings={pluginConfig} />
-              </div>
+              <>
+                <div className='social-login-section'>
+                  <SocialSignInLinks isLoginSidebarOpen={isLoginSidebarOpen} containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full'}`} redirectUrl={redirectUrl} pluginSettings={pluginConfig} />
+                </div>
+                <div className="relative text-center">
+                  <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
+                    OR
+                  </span>
+                  <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
+                </div>
+              </>
             )}
           </div>
-          <div className="relative text-center">
-            <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-              OR
-            </span>
-            <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
-          </div>
+
           <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
           <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
-            <Link href="/my-account/forgot-password" passHref>
+            <a href="/my-account/forgot-password">
               <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
                 {translate('label.login.forgotPasswordBtnText')}
               </span>
-            </Link>
+            </a>
           </div>
           <span className="block text-center text-neutral-700 dark:text-neutral-300">
             {translate('label.login.newUserText')}{` `}
-            <Link className="text-green-600" href="/my-account/register">
+            <a className="text-green-600" href="/my-account/register">
               {translate('label.login.createAccountText')}
-            </Link>
+            </a>
           </span>
         </div>
       </div>

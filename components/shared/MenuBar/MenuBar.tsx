@@ -5,9 +5,10 @@ import { Transition, Dialog } from "@headlessui/react";
 import dynamic from "next/dynamic";
 const NavMobile = dynamic(() => import('@components/shared/Navigation/NavMobile'))
 export interface MenuBarProps {
-  navItems?: any
+  navItems?: any;
+  featureToggle?:any
 }
-const MenuBar: React.FC<MenuBarProps> = ({ navItems }) => {
+const MenuBar: React.FC<MenuBarProps> = ({ navItems, featureToggle }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleOpenMenu = () => setIsVisible(true);
@@ -21,7 +22,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ navItems }) => {
             <React.Fragment>
               <Transition.Child as={Fragment} enter="transition duration-100 transform" enterFrom="opacity-0 -translate-x-14" enterTo="opacity-100 translate-x-0" leave="transition duration-150 transform" leaveFrom="opacity-100 translate-x-0" leaveTo="opacity-0 -translate-x-14" >
                 <div className="relative">
-                  <NavMobile onClickClose={handleCloseMenu} navItems={navItems} />
+                  <NavMobile onClickClose={handleCloseMenu} navItems={navItems} featureToggle={featureToggle} />
                 </div>
               </Transition.Child>
               <Transition.Child as={Fragment} enter=" duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave=" duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >

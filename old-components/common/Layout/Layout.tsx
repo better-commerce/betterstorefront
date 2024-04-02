@@ -13,11 +13,11 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { WishlistSidebarView } from '@old-components/wishlist'
 const BulkAddSidebarView = dynamic(() => import('@old-components/bulk-add/BulkAddSidebarView'))
 const FooterClean = dynamic(() => import('@old-components/common/Footer/FooterClean'))
-const ShippingView = dynamic(() => import('@old-components/checkout-old/ShippingView'))
+const ShippingView = dynamic(() => import('@components/SectionCheckoutJourney/checkout/ShippingView'))
 const CartSidebarView = dynamic(() => import('@old-components/cart/CartSidebarView'))
-const PaymentMethodView = dynamic(() => import('@old-components/checkout-old/PaymentMethodView'))
+const PaymentMethodView = dynamic(() => import('@components/SectionCheckoutJourney/checkout/PaymentMethodView'))
 const LoginSideBarView = dynamic(() => import('@old-components/account/Login/LoginSideBarView'))
-const CheckoutSidebarView = dynamic(() => import('@old-components/checkout-old/CheckoutSidebarView'))
+const CheckoutSidebarView = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutSidebarView'))
 import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))

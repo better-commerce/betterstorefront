@@ -157,7 +157,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
                   {isLoading ? (
                     <LoadingDots />
                   ) : (
-                    <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: 1.3, spaceBetween: 10 }, 1024: { slidesPerView:1.3, spaceBetween: 10 }, }} className="mySwiper" >
+                    <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: 1.5, spaceBetween: 10 }, 1024: { slidesPerView:1.5, spaceBetween: 10 }, }} className="mySwiper" >
                       {recentlyViewedState?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid} className="height-equal">

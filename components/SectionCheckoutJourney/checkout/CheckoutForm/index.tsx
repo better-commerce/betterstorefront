@@ -24,7 +24,7 @@ import { asyncHandler } from '@components/account/Address/AddressBook'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
-import PaymentWidget from '@components/SectionCheckoutJourney/checkout-old/PaymentWidget'
+import PaymentWidget from '@components/SectionCheckoutJourney/checkout/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
 import {
   loqateAddress,

@@ -108,7 +108,7 @@ export default function Search(props: any) {
           {products?.map((product: any, idx: number) => {
             return (
               <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
-                <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
+                <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
                   <Link href={`/${product.slug}`} className="block">
                     <div className="flex w-full h-0 aspect-w-11 aspect-h-12"
                       onClick={() => {
@@ -132,12 +132,14 @@ export default function Search(props: any) {
                   </div>
                   <div className="flex items-end justify-between ">
                     <Prices price={product?.price} listPrice={product?.listPrice} />
-                    <div className="flex items-center mb-0.5">
-                      <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
-                      <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                        {product?.rating || ""} ({product?.reviewCount || 0} reviews)
-                      </span>
-                    </div>
+                    {product?.reviewCount > 0 &&
+                      <div className="flex items-center mb-0.5">
+                        <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+                        <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+                          {product?.rating || ""} ({product?.reviewCount || 0} reviews)
+                        </span>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>

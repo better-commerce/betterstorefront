@@ -12,6 +12,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import ProductView from '@components/Product/ProductView'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
@@ -120,17 +121,19 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
     } catch (imgError) {}
   } catch (error: any) {
     logError(error)
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
-    return {
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
-    }
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
+      return {
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
+    }  
   }
 
   if(!infraUIDData){

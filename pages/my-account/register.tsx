@@ -1,10 +1,11 @@
 import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
+import NextHead from 'next/head'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
@@ -49,16 +50,19 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       <div className="flex flex-1 w-full">
         {
           socialLogins && (
-            <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto w-full" pluginSettings={pluginSettings} />
+            <>
+              <SocialSignInLinks containerCss="flex justify-center gap-2 mx-auto w-full" pluginSettings={pluginSettings} />
+              <div className="relative text-center">
+                <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
+                  {translate('label.myAccount.orText')}
+                </span>
+                <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
+              </div>
+            </>
           )
         }
       </div>
-      <div className="relative text-center">
-        <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-          {translate('label.myAccount.orText')}
-        </span>
-        <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
-      </div>
+
       <div className="flex flex-col items-center justify-center w-full">
         <div className="w-full px-5 font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
@@ -90,12 +94,12 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const translate = useTranslation()
-  const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
+  const { isGuestUser, setIsGuestUser, user, basketId, setAlert, setUser } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const { addToCart, associateCart } = cartHandler()
+  const { associateCart } = cartHandler()
   const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
-
+const router = useRouter()
   if (config?.configSettings?.length) {
     b2bSettings =
       config?.configSettings?.find((x: any) =>
@@ -124,6 +128,27 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
 
   const handleBasketAssociation = async (userId: string) => {
     const response: any = await associateCart(userId, basketId)
+  }
+
+  const handleUserLogin = (values: any, cb?: any) => {
+    const asyncLoginUser = async () => {
+      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
+      if (!result.data) {
+        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
+      } else if (result.data) {
+        setAlert({ type: 'success', msg: translate('common.label.successText') })
+        let userObj = { ...result.data }
+        const updatedUserObj = await axios.post(
+          `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
+        )
+        if (updatedUserObj?.data) userObj = { ...updatedUserObj?.data }
+        setUser(userObj)
+        setIsGuestUser(false)
+        Router.push('/')
+      }
+      if (cb) cb();
+    }
+    asyncLoginUser()
   }
 
   const handleUserRegister = async (values: any) => {
@@ -190,9 +215,8 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
         eventType: CustomerCreated,
       })
       await handleBasketAssociation(recordId)
-      setSuccessMessage('Success!')
+      handleUserLogin(values)
       setIsGuestUser(false)
-      Router.push('/my-account/login')
     }
   }
 
@@ -212,6 +236,17 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   }
   return (
     <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.checkout.loginRegistrationText')}</title>
+        <meta name="title" content={translate('label.checkout.loginRegistrationText')} />
+        <meta name="description" content={translate('label.checkout.loginRegistrationText')} />
+        <meta name="keywords" content={translate('label.checkout.loginRegistrationText')} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={translate('label.checkout.loginRegistrationText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.checkout.loginRegistrationText')} key="ogdesc" />
+      </NextHead>
       <section aria-labelledby="trending-heading" className="bg-white">
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
@@ -244,9 +279,9 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
 
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
               {translate('label.myAccount.alreadyAccountText')} {` `}
-              <Link className="text-green-600" href="/my-account/login">
+              <a className="text-green-600" href="/my-account/login">
                 {translate('label.myAccount.SignInText')}
-              </Link>
+              </a>
             </span>
           </div>
         </div>
