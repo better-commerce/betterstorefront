@@ -3,7 +3,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, Messages, BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
@@ -94,10 +94,10 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const translate = useTranslation()
-  const { isGuestUser, setIsGuestUser, user, basketId } = useUI()
+  const { isGuestUser, setIsGuestUser, user, basketId, setAlert, setUser } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const { addToCart, associateCart } = cartHandler()
+  const { associateCart } = cartHandler()
   const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
 const router = useRouter()
   if (config?.configSettings?.length) {
@@ -128,6 +128,27 @@ const router = useRouter()
 
   const handleBasketAssociation = async (userId: string) => {
     const response: any = await associateCart(userId, basketId)
+  }
+
+  const handleUserLogin = (values: any, cb?: any) => {
+    const asyncLoginUser = async () => {
+      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
+      if (!result.data) {
+        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
+      } else if (result.data) {
+        setAlert({ type: 'success', msg: translate('common.label.successText') })
+        let userObj = { ...result.data }
+        const updatedUserObj = await axios.post(
+          `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
+        )
+        if (updatedUserObj?.data) userObj = { ...updatedUserObj?.data }
+        setUser(userObj)
+        setIsGuestUser(false)
+        Router.push('/')
+      }
+      if (cb) cb();
+    }
+    asyncLoginUser()
   }
 
   const handleUserRegister = async (values: any) => {
@@ -194,9 +215,8 @@ const router = useRouter()
         eventType: CustomerCreated,
       })
       await handleBasketAssociation(recordId)
-      setSuccessMessage('Success!')
+      handleUserLogin(values)
       setIsGuestUser(false)
-      Router.push('/my-account/login')
     }
   }
 
