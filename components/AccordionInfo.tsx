@@ -64,10 +64,11 @@ const AccordionInfo: FC<Props> = ({
       {/* ============ */}
       {data.map((item, index) => {
         return (
+          item.content != "" &&
           <Disclosure key={index} defaultOpen={index < 2}>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
+                <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-800 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
                   <span>{item.name}</span>
                   {!open ? (
                     <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />

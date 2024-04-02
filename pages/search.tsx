@@ -327,7 +327,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
         <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
-      <div className="container pt-6 pb-24 mx-auto">
+      <div className="container pt-10 pb-24 mx-auto">
         <div className="max-w-screen-sm">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {translate('label.basket.catalogText')}

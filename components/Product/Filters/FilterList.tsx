@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
-import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { getCurrencySymbol } from '@framework/utils/app-util'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -18,7 +18,7 @@ const FILTER_KEYS = {
 
 const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
-  const { currency } = useUI()
+  const currencySymbol = getCurrencySymbol()
 
   useEffect(() => {
     setCheckbox(isChecked)
@@ -34,7 +34,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 
   const generateOptionName = () => {
     if (sectionKey === FILTER_KEYS.PRICE)
-      return `${option.name} ${currency?.currencySymbol}`
+      return `${option.name} ${currencySymbol != undefined ? currencySymbol : ''}`
     if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]
     else return option.name
   }

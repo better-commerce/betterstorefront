@@ -256,12 +256,14 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             </div>
             <div className="flex items-center justify-between ">
               <Prices price={data?.price} listPrice={data?.listPrice} />
-              <div className="flex items-center mb-0.5">
-                <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
-                <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
-                  {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
-                </span>
-              </div>
+              {data?.reviewCount > 0 &&
+                <div className="flex items-center mb-0.5">
+                  <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
+                  <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
+                    {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
+                  </span>
+                </div>
+              }
             </div>
             {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">

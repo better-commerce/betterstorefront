@@ -656,7 +656,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
               </section>
               <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-24 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5" >
                 <h4 id="summary-heading" className="text-lg font-semibold " >
-                  {translate('label.orderSummary.orderSummaryText')}
+                  {translate('label.orderSummary.basketSummaryText')}
                 </h4>
                 <div className="">
                   <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />

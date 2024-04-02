@@ -1,0 +1,8 @@
+{
+  "features": {
+    "enableLanguage": false,
+    "enablePriceIncVatToggle": false,
+    "enableQuickOrderPad": true,
+    "enableCompare": false
+  }
+}
