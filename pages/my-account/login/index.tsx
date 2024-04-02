@@ -54,7 +54,6 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
       <Login pluginConfig={pluginConfig} />
     </>
   )
-
 }
 
 LoginPage.Layout = Layout

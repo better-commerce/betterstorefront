@@ -517,7 +517,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div className="container w-full py-4 bg-white lg:pb-28 lg:pt-20">
+      <div className="container w-full py-4 pt-10 bg-white lg:pb-28 lg:pt-20">
         <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16">
           {translate('label.basket.shoppingCartText')}{' '}
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
@@ -584,7 +584,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                           <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
                                             <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer " />
                                           </div>
-                                          <span className="px-4 py-2 text-md sm:py-2">
+                                          <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                             {product.qty}
                                           </span>
                                           <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
@@ -600,7 +600,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                               {product?.price?.raw?.withTax !== 0 &&
                                 <div className="relative justify-center hidden text-center sm:flex">
                                   <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
-                                  <span className="px-4 py-2 text-md sm:py-2">
+                                  <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                     {product.qty}
                                   </span>
                                   <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
@@ -612,8 +612,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between pt-4 mt-auto text-sm">
-                            {Math.random() > 0.6 ? renderStatusSoldOut(soldOutMessage) : renderStatusInStock(product)}
+                          <div className="flex items-center justify-between pt-2 mt-auto text-sm">
+                            <div></div>
                             {product?.price?.raw?.withTax != 0 &&
                               <div className="flex items-end justify-end text-sm">
                                 <button type="button" onClick={() => { openModal(); setItemClicked(product); }} className="relative flex items-center text-sm font-medium text-primary-6000 hover:text-primary-500 " >
@@ -654,11 +654,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   })}
                 </div>
               </section>
-              <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-24 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5" >
-                <h4 id="summary-heading" className="text-lg font-semibold " >
+              <section aria-labelledby="summary-heading" className="p-4 mt-10 border sm:p-6 rounded-2xl bg-slate-50 border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0" >
+                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
-                <div className="">
+                <div className="mt-2 sm:mt-6">
                   <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
                 </div>
                 <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
@@ -786,7 +786,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   )}
                                   <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
                                     <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
-                                    <span className="px-4 py-2 text-md sm:py-2">
+                                    <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                       {product.qty}
                                     </span>
                                     <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
@@ -841,10 +841,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                 </div>
               </section>
               <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5" >
-                <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase" >
+                <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-3xl" >
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
-                <div className="">
+                <div className="mt-2 sm:mt-6">
                   <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
                 </div>
                 <dl className="mt-6 space-y-2 sm:space-y-2">
