@@ -19,6 +19,7 @@ import {
   EmptyObject,
   LOQATE_ADDRESS,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
+  CURRENT_THEME,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-payment'
@@ -784,3 +785,12 @@ export const loqateAddress = async (postCode: string ) => {
     return [];
   }
 }
+
+export const getFeaturesConfig = () => {
+  try {
+    const config = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`)
+    return config || {}
+  } catch (error) {
+    return {}
+  }
+};

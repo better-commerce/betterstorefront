@@ -1,6 +1,6 @@
 "use client";
 import cn from 'classnames'
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/parse-util";
-import { cartItemsValidateAddToCart } from "@framework/utils/app-util";
+import { cartItemsValidateAddToCart, getFeaturesConfig } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import uniqBy from 'lodash/uniqBy';
 import { isMobile } from 'react-device-detect';
@@ -286,7 +286,8 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
 const ButtonLink = (props: any) => {
   const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
-  if (isComparedEnabled) {
+  const { features } = useMemo(() => getFeaturesConfig(), [props])
+  if (features?.enableCompare && isComparedEnabled) {
     return (
       <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
     )
