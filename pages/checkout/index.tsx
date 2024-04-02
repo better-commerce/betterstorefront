@@ -33,7 +33,7 @@ import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import CheckoutLayoutV2 from '@components/Layout/CheckoutLayoutV2'
-import { saveUserToken } from '@framework/utils/app-util'
+import { loqateAddress, saveUserToken } from '@framework/utils/app-util'
 import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
 import cartHandler from '@components/services/cart'
 import {
@@ -101,27 +101,6 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] =
     useState<boolean>(false)
   const [editAddressValues, setEditAddressValues] = useState<any>(undefined)
-
-  const loqateAddress = async (postCode: string ) => {
-    try {
-      const cartItems: any = tryParseJson(localStorage.getItem('cartItems'));
-      const deliveryMethod = cartItems?.shippingMethods?.find((method: any) => method?.id === cartItems?.shippingMethodId);
-      const response = await axios.post(LOQATE_ADDRESS, {
-        postCode,
-        country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-      });
-  
-      const responseData = response?.data?.response?.data || [];
-      return responseData?.map((item: any) => ({
-        text: item?.Text,
-        id: item?.Id,
-        description: item?.Description,
-      }));
-    } catch (error) {
-      console.error('Error:', error);
-      return [];
-    }
-  }
 
   const getStepFromStage = (stage: number) => {
     let step = CheckoutStep.NONE
