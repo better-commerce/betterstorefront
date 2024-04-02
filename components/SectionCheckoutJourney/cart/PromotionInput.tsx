@@ -189,7 +189,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
         )}
       </div>
 
-      <div className="mt-7 text-sm text-slate-500 dark:text-slate-400 divide-y divide-slate-200/70 dark:divide-slate-700/80">
+      <div className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
         {cartItems.promotionsApplied?.length
           ? cartItems.promotionsApplied.map((promo: any, key: number) => {
               return (
@@ -306,13 +306,13 @@ const PromotionInput = (props: IPromotionInputProps) => {
               You may apply mutliple codes for max discount
             </label> */}
             <div className="flex flex-col mt-0">
-              <div className="flex items-center justify-between gap-2 mb-2 -mt-1 text">
+              <div className="flex items-center justify-between gap-2 mb-2 -mt-1 font-normal text-left cursor-text text">
                 <input
                   name={'promotion-code'}
                   placeholder={translate('label.promotion.applyPromotionText')}
                   onChange={handleChange}
                   value={value}
-                  className="w-full min-w-0 placeholder-gray-500 border border-gray-300 appearance-none placeholder:text-sm focus:outline-none focus:border-gray-700 btn !font-semibold"
+                  className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md"
                   required
                 />
 

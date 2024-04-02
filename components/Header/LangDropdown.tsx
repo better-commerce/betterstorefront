@@ -66,6 +66,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
             <a key={currency?.currencyCode} href="#" onClick={() => {
               Cookies.set(Cookie.Key.CURRENCY, currency?.currencyCode)
               Cookies.set(Cookie.Key.CURRENT_CURRENCY, currency?.currencyCode)
+              Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currency?.currencySymbol)
               close();
               router.reload()
             }}

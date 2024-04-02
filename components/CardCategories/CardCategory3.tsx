@@ -5,6 +5,8 @@ import Image, { StaticImageData } from "next/image";
 import { CATS_DISCOVER } from "./data";
 import ButtonSecondary from "../shared/Button/ButtonSecondary";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { generateUri } from "@commerce/utils/uri-util";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 
 export interface CardCategory3Props {
   className?: string;
@@ -27,11 +29,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
       >
         <div>
           <div className="absolute inset-5 sm:inset-8">
-            <img
-              alt={name}
-              src={featuredImage || ""}
-              className="absolute end-0 w-1/2 max-w-[200px] h-full object-contain drop-shadow-xl"
-            />
+            <img alt={name} src={generateUri(featuredImage, "h=200&fm=webp") || IMG_PLACEHOLDER} className="absolute end-0 w-1/2 max-w-[200px] h-full object-contain drop-shadow-xl rounded-3xl" />
           </div>
         </div>
         <span className="absolute inset-0 transition-opacity opacity-0 group-hover:opacity-40 bg-black/10"></span>
@@ -43,19 +41,11 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
                 {name}
               </span>
               {desc && (
-                <h2
-                  className={`text-xl md:text-2xl text-slate-900 font-semibold`}
-                  dangerouslySetInnerHTML={{ __html: desc }}
-                ></h2>
+                <h2 className={`text-xl md:text-2xl text-slate-900 font-semibold`} dangerouslySetInnerHTML={{ __html: desc }} ></h2>
               )}
             </div>
             <div className="mt-auto">
-              <ButtonSecondary
-                sizeClass="py-3 px-4 sm:py-3.5 sm:px-6"
-                fontSize="text-sm font-medium"
-                className="nc-shadow-lg"
-                href={`/${link}`}
-              >
+              <ButtonSecondary sizeClass="py-3 px-4 sm:py-3.5 sm:px-6" fontSize="text-sm font-medium" className="nc-shadow-lg" href={`/${link}`} >
                 {translate('common.label.showMeAllText')} </ButtonSecondary>
             </div>
           </div>

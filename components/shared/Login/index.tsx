@@ -120,12 +120,14 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
               </div>
             )}
           </div>
-          <div className="relative text-center">
-            <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-              OR
-            </span>
-            <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
-          </div>
+          {SOCIAL_LOGINS_ENABLED &&
+            <div className="relative text-center">
+              <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
+                OR
+              </span>
+              <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
+            </div>
+          }
           <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
           <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
             <Link href="/my-account/forgot-password" passHref>

@@ -16,7 +16,8 @@ const MenuBar = dynamic(() => import('@components/shared/MenuBar/MenuBar'))
 const Navigation = dynamic(() => import('@components/shared/Navigation/Navigation'))
 const ToggleSwitch = dynamic(() => import('@components/shared/ToggleSwitch/ToggleSwitch'))
 const BulkAddTopNav = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/TopNav'))
-import featureToggle from 'features.config.json'
+import { CURRENT_THEME } from "@components/utils/constants";
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 export interface MainNav2LoggedProps { }
 interface Props {
   config: []
@@ -42,7 +43,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const renderContent = () => {
     const translate = useTranslation()
     return (
-      <div className="fixed inset-x-0 top-0 z-20 w-full py-2 sm:py-0 bg-white/90 backdrop-blur-lg dark:border-gray-700/30 dark:bg-gray-900/90">
+      <div className="fixed inset-x-0 top-0 z-20 w-full py-2 border-b sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90">
         {!isMobile &&
           <div className="container justify-between hidden mx-auto sm:flex">
             <div className="promotion-banner mob-marquee"></div>

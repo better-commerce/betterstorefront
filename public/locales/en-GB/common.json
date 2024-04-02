@@ -461,6 +461,7 @@
     },
     "orderSummary": {
       "orderSummaryText": "Order Summary",
+      "basketSummaryText": "Basket Summary",
       "paymentDetailsBtnText": "Payment Details",
       "priceTaxInclusiveText": "Prices are inclusive of all taxes",
       "totalText": "Total",

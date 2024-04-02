@@ -446,26 +446,29 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       <div className="space-y-8">
         <div>
           <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000">
-            <Link href={product?.slug}>{product?.name}</Link>
+            <Link href={`/${product?.slug}`}>{product?.name}</Link>
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
-            <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
-            <div className="flex items-center">
-              <Link href={product?.slug} className="flex items-center text-sm font-medium" >
-                <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
-                <div className="ms-1.5 flex">
-                  <span>{product?.rating}</span>
-                  <span className="block mx-2">·</span>
-                  <span className="underline text-slate-600 dark:text-slate-400">
-                    {product?.reviewCount} {translate('common.label.reviews')}
-                  </span>
+            {product?.reviewCount > 0 &&
+              <>
+                <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
+                <div className="flex items-center">
+                  <Link href={`/${product?.slug}`} className="flex items-center text-sm font-medium" >
+                    <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
+                    <div className="ms-1.5 flex">
+                      <span>{product?.rating}</span>
+                      <span className="block mx-2">·</span>
+                      <span className="underline text-slate-600 dark:text-slate-400">
+                        {product?.reviewCount} {translate('common.label.reviews')}
+                      </span>
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            </div>
+              </>
+            }
           </div>
         </div>
-
         <div className="">{renderVariants()}</div>
 
         <div className="flex rtl:space-x-reverse">

@@ -3,6 +3,7 @@ import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 // Package Imports
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Script from 'next/script'
@@ -112,6 +113,11 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 export default function CollectionPage(props: any) {
   const { deviceInfo, config } = props
+
+  if (!props?.id) {
+    return <></>
+  }
+
   const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
   const [paddingTop, setPaddingTop] = useState('0')
@@ -498,7 +504,7 @@ export default function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container pt-6 pb-24 mx-auto bg-transparent">
+      <div className="container pt-10 pb-24 mx-auto bg-transparent">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
@@ -641,8 +647,10 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
     }
   }
 
-  if (collectionUIDData?.status === "NotFound") {
-    return notFoundRedirect()
+  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    if (collectionUIDData?.status === "NotFound") {
+      return notFoundRedirect()
+    }
   }
 
   return {

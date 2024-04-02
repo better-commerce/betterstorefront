@@ -332,8 +332,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                   {isSizeUpdateLoading
                     ? 'Updating...'
                     : value
-                    ? translate('label.product.uodqateSizeText')
-                    : translate('label.product.sizeSelectionText')
+                    ? translate('label.product.updateSizeText')
+                    : translate('label.product.sizeSelectiontext')
                   }
                 </Button>
               </div>

@@ -31,7 +31,7 @@ export default function AttributesHandler({
   } = product
 
   const TEMP_MAP = variantAttributes?.reduce((tempMap: any, attribute: any) => {
-    const componentKey = attribute?.fieldName == 'Colour' ?
+    const componentKey = (attribute?.fieldName == 'Colour' || attribute?.fieldName == 'Color') ?
       attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
       attribute?.inputType == "" ? 'SizeInline' : attribute?.inputType || 'SizeInline';
     tempMap[attribute?.fieldCode] = ATTR_COMPONENTS[componentKey];
@@ -39,7 +39,7 @@ export default function AttributesHandler({
   }, {});
 
   const dynamicComponentMap = variantAttributes?.reduce((map: any, attribute: any) => {
-    const componentKey = attribute?.fieldName == 'Colour' ?
+    const componentKey = (attribute?.fieldName == 'Colour' || attribute?.fieldName == 'Color') ?
       attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
       attribute?.inputType == "" ? 'SizeInline' : attribute?.inputType || 'SizeInline';
     map[attribute?.fieldCode] = ATTR_COMPONENTS[componentKey];
@@ -296,7 +296,7 @@ export default function AttributesHandler({
       })?.map((option: any, optionIdx: number) => {
         const optionsToPass = generateOptions(option)
         const originalAttribute = isCustomAttr ? stateAttributes[option?.fieldCode] : originalAttributes[option?.fieldCode]
-        const Component = ATTR_COMPONENTS[option?.fieldName == "Colour" ? "HorizontalList" : "SizeInline"] || mapComponents[option?.fieldCode] || DefaultComponent
+        const Component = ATTR_COMPONENTS[(option?.fieldName == "Colour" || option?.fieldName == "Color") ? "HorizontalList" : "SizeInline"] || mapComponents[option?.fieldCode] || DefaultComponent
         return (
           <div key={`attribute-handler-${optionIdx}`}>
             <Component
