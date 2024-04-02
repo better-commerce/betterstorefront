@@ -9,8 +9,8 @@ import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
 import { LoadingDots, useUI } from '@components/ui'
-import PaymentWidget from '@components/SectionCheckoutJourney/checkout-old/PaymentWidget'
-import PaymentButton from '@components/SectionCheckoutJourney/checkout-old/CheckoutForm/PaymentButton'
+import PaymentWidget from '@components/SectionCheckoutJourney/checkout/PaymentWidget'
+import PaymentButton from '@components/SectionCheckoutJourney/checkout/CheckoutForm/PaymentButton'
 
 // Other Imports
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
