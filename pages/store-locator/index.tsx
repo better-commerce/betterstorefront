@@ -6,6 +6,7 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
+import MapWithMarkers from '@components/ui/Map/MultiMarker'
 export default function StoreLocatorPage() {
   const translate = useTranslation()
   let absPath = ''
@@ -26,6 +27,11 @@ export default function StoreLocatorPage() {
       setAllStores([])
     }
   }
+  const storeLocations = [
+    { name: 'Store 1', latitude: 40.7128, longitude: -74.006 },
+    { name: 'Store 2', latitude: 34.0522, longitude: -118.2437 },
+    // Add more store locations as needed
+  ];
   return (
     <>
       <NextHead>
@@ -45,37 +51,46 @@ export default function StoreLocatorPage() {
         <h1 className="pb-6 text-2xl font-semibold text-center text-gray-900 sm:pb-16 sm:text-5xl">
           Stores
         </h1>
-        <div className='grid grid-cols-1 mt-0 sm:gap-20 sm:grid-cols-3'>
-          {allStores?.length > 0 && allStores?.map((stores: any, storeIdx: number) => (
-            <div className='flex flex-col w-full px-6 py-4 mb-4 border border-slate-200 bg-slate-100 rounded-2xl' key={`stores-${storeIdx}`}>
-              <div className='flex flex-col pt-4'>
-                <Link href={`/store-locator/${stores?.id}`} passHref>
-                  <h2 className='font-semibold leading-7 hover:text-sky-800 text-slate-800 dark:text-slate-500 font-20'>{stores?.name} Branch</h2>
-                </Link>
-              </div>
-              <div className='grid grid-cols-1 gap-4 sm:grid-cols-1'>
-                <div className='sm:col-span-1'>
-                  <div className='flex flex-col mb-2'>
-                    <div className='flex flex-col gap-0 mt-2'>
-                      <div dangerouslySetInnerHTML={{ __html: stores?.address1, }} className="text-sm text-gray-700 sm:block" />
-                      <div dangerouslySetInnerHTML={{ __html: stores?.address2, }} className="text-sm text-gray-700 sm:block" />
+        <div className='grid grid-cols-1 mt-0 sm:gap-4 sm:grid-cols-12'>
+          <div className='sm:col-span-4'>
+            <div className='grid grid-cols-1 mt-0 sm:gap-2 sm:grid-cols-1'>
+              {allStores?.length > 0 && allStores?.map((stores: any, storeIdx: number) => (
+                <div className='flex flex-col w-full px-6 py-4 mb-4 border border-slate-200 bg-slate-100 rounded-2xl' key={`stores-${storeIdx}`}>
+                  <div className='flex flex-col pt-4'>
+                    <Link href={`/store-locator/${stores?.id}`} passHref>
+                      <h2 className='font-semibold leading-7 hover:text-sky-800 text-slate-800 dark:text-slate-500 font-20'>{stores?.name} Branch</h2>
+                    </Link>
+                  </div>
+                  <div className='grid grid-cols-1 gap-4 sm:grid-cols-1'>
+                    <div className='sm:col-span-1'>
+                      <div className='flex flex-col mb-2'>
+                        <div className='flex flex-col gap-0 mt-2'>
+                          <div dangerouslySetInnerHTML={{ __html: stores?.address1, }} className="text-sm text-gray-700 sm:block" />
+                          <div dangerouslySetInnerHTML={{ __html: stores?.address2, }} className="text-sm text-gray-700 sm:block" />
+                        </div>
+                      </div>
+                      <div className='flex flex-col mb-2'>
+                        <h4 className='capitalize text-slate-800 font-16'>Telephone:</h4>
+                        <div className='flex flex-col gap-0 mt-2'>
+                          <span className='dark:text-black'>{stores?.phoneNo}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className='flex flex-col mb-2'>
-                    <h4 className='capitalize text-slate-800 font-16'>Telephone:</h4>
-                    <div className='flex flex-col gap-0 mt-2'>
-                      <span className='dark:text-black'>{stores?.phoneNo}</span>
-                    </div>
+                  <div className='flex flex-col flex-1'>
+                    <Link className='text-left text-sky-600 hover:underline' passHref href={`/store-locator/${stores?.id}`}>Store Details</Link>
                   </div>
                 </div>
-              </div>
-              <div className='flex flex-col flex-1'>
-                <Link className='text-left text-sky-600 hover:underline' passHref href={`/store-locator/${stores?.id}`}>Store Details</Link>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className='sm:col-span-8'>
+            <MapWithMarkers locations={allStores} />
+          </div>
+
         </div>
       </div>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY&libraries=places"></script>
     </>
   )
 }
