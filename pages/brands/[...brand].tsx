@@ -41,7 +41,6 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-import { removeQueryString } from '@commerce/utils/uri-util'
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
@@ -424,13 +423,12 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
-  const cleanPath = removeQueryString(router.asPath)
 
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
         <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
@@ -440,7 +438,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         <meta property="og:title" content={brandDetails?.metaTitle || brandDetails?.name} key="ogtitle" />
         <meta property="og:description" content={brandDetails?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>

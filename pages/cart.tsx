@@ -20,7 +20,7 @@ import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
 import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
-import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
+import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
@@ -502,13 +502,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       </div>
     );
   };
-  const cleanPath = removeQueryString(router.asPath)
-
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('label.basket.basketText')}</title>
         <meta name="title" content={translate('label.basket.basketText')} />
         <meta name="description" content={translate('label.basket.basketText')} />
@@ -517,7 +515,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         <meta property="og:title" content={translate('label.basket.basketText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.basket.basketText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       <div className="container w-full py-4 pt-10 bg-white lg:pb-28 lg:pt-20">
         <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16">

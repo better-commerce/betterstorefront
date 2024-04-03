@@ -1,9 +1,10 @@
-import fetcher from '../fetcher'
-import { STORE_LOCATOR_ALL_API } from '@components/utils/constants'
+import fetcher from '@framework/fetcher'
+import { GET_ALL_STORES } from '@components/utils/constants'
+
 export default async function getAllStores(cookies?: any) {
   try {
     const response: any = await fetcher({
-      url: `${STORE_LOCATOR_ALL_API}`,
+      url: `${GET_ALL_STORES}`,
       method: 'get',
       cookies,
     })

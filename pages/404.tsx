@@ -8,7 +8,6 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutError from '@components/Layout/LayoutError'
-import { removeQueryString } from '@commerce/utils/uri-util'
 
 export async function getStaticProps({
   preview,
@@ -32,7 +31,6 @@ export async function getStaticProps({
 export default function NotFound({ deviceInfo }: any) {
   const translate = useTranslation()
   const router = useRouter()
-  const cleanPath = removeQueryString(router.asPath)
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   return (
     <>
@@ -43,7 +41,7 @@ export default function NotFound({ deviceInfo }: any) {
               name="viewport"
               content="width=device-width, initial-scale=1, maximum-scale=1"
             />
-            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+            <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
             <title>{translate('label.404.titleText')}</title>
             <meta name="title" content={translate('label.404.titleText')} />
             <meta name="description" content={translate('label.404.titleText')} />

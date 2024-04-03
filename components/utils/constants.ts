@@ -42,11 +42,8 @@ export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/
 export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/order/`
 export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/`
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
-export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
-export const NEXT_GET_ALL_STORES = `/api/store-locator/all`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
 export const STORE_LOCATOR_API = '/api/v1/oms/store'
-export const STORE_LOCATOR_ALL_API = `api/${process.env.NEXT_PUBLIC_API_VERSION}/stores/all`
 export const BASE_SEARCH_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search`
 export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/shipping-method`
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
@@ -171,6 +168,19 @@ export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 export const NEXT_LOG_ACTIVITY = '/api/log/activity'
 export const NEXT_LOG_PAYMENT = '/api/log/payment'
+
+// Store Locator
+export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
+export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
+export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
+export const NEXT_POST_STORE_BY_POSTALCODE = '/api/store-locator/get-store-by-postalcode'
+export const NEXT_GOOGLE_AUTOCOMPLETE_API = '/api/store-locator/get-place-by-google-api'
+export const NEXT_PLACE_DETAILS_API = '/api/store-locator/get-addess-details-api'
+export const NEXT_GET_GOOGLE_API = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+export const NEXT_GET_PLACE_DETAILS = 'https://maps.googleapis.com/maps/api/place/details/json'
+export const GET_ALL_STORES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores/all`
+export const GET_STORES_DETAILS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
+export const POST_STORE_BY_POSTALCODE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
 
 //CONSTANTS
 

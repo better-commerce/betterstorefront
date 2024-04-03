@@ -17,7 +17,6 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { removeQueryString } from '@commerce/utils/uri-util'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid'))
@@ -314,13 +313,12 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
-  const cleanPath = removeQueryString(router.asPath)
 
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('label.basket.catalogText')}</title>
         <meta name="title" content={translate('label.basket.catalogText')} />
         <meta name="description" content={translate('label.basket.catalogText')} />
