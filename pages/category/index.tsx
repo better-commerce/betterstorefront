@@ -14,7 +14,6 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-import { removeQueryString } from '@commerce/utils/uri-util'
 
 export default function CategoryList(props: any) {
   let absPath = ''
@@ -23,13 +22,11 @@ export default function CategoryList(props: any) {
   }
   const router = useRouter()
   const translate = useTranslation()
-  const cleanPath = removeQueryString(router.asPath)
-
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('label.category.categoryText')}</title>
         <meta name="title" content={translate('label.category.categoryText')} />
         <meta name="description" content={translate('label.category.categoryText')} />
@@ -39,7 +36,7 @@ export default function CategoryList(props: any) {
         <meta property="og:title" content={translate('label.category.categoryText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.category.categoryText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       <main className="container w-full pt-6 mx-auto sm:pt-10">
         <section aria-labelledby="products-heading ">

@@ -107,5 +107,6 @@ module.exports = withCommerceConfig({
     REDIS_PORT: process.env.REDIS_PORT,
     REDIS_PASSWORD: process.env.REDIS_PASSWORD,
     REDIS_CACHE_DURATION_SECS: process.env.REDIS_CACHE_DURATION_SECS,
+    GOOGLE_MAP_API_KEY: process.env.GOOGLE_MAP_API_KEY,
   },
 })

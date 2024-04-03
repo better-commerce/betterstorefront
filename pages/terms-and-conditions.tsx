@@ -34,7 +34,6 @@ import {
 } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { removeQueryString } from '@commerce/utils/uri-util'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -134,7 +133,6 @@ function Terms({
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
-  const cleanPath = removeQueryString(router.asPath)
   const translate = useTranslation()
   const TermsPageContents = isMobile
     ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
@@ -200,7 +198,7 @@ function Terms({
           <link
             rel="canonical"
             id="canonical"
-            href={SITE_ORIGIN_URL + cleanPath}
+            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
           />
           <title>
             {pageContents?.metatitle ||
@@ -240,14 +238,14 @@ function Terms({
       <div className="container">
         {pageContents?.heading?.map((head: any, Idx: any) => (
           <div key={Idx}>
-            <h1 className="mt-20 mb-10 text-2xl font-semibold text-center sm:text-4xl">
+            <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold">
               {head?.heading_herotitle}
             </h1>
             <div
               dangerouslySetInnerHTML={{
                 __html: head?.heading_herodescription,
               }}
-              className="mt-10 break-all terms-text"
+              className="terms-text mt-10 break-all"
             />
           </div>
         ))}

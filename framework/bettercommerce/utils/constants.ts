@@ -41,7 +41,7 @@ export const COOKIES_PAGE_DEFAULT_SLUG = 'cookies'
 export const HOME_PAGE_NEW_SLUG = 'new-home-td'
 export const HOME_PAGE_SLUG = 'new-home-bc'
 export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
-export const GOOGLE_MAP_API_KEY ="AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY"
+export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 // google analytics
 export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED)
 export const GA4_MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID

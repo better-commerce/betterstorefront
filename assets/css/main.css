@@ -17280,3 +17280,9 @@ input[type=time]::-webkit-calendar-picker-indicator {
   margin-left: 30px;
   margin-right: 30px;
 }
+
+.center-fix-panel {
+  position: relative;
+  left: 0;
+  top: 35% !important;
+}

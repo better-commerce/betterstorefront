@@ -16,7 +16,7 @@ import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
+import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -401,13 +401,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
-  const cleanPath = removeQueryString(router.asPath)
-
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{category?.metaTitle || category?.name}</title>
         <meta name="title" content={category?.metaTitle || category?.name} />
         <meta name="description" content={category?.metaDescription} />
@@ -415,7 +413,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         <meta property="og:image" content="" />
         <meta property="og:title" content={category?.metaTitle || category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       <section className="main-section">
         <div className="container mx-auto mt-4 bg-transparent">
