@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import MapWithMarkers from '@components/ui/Map/MultiMarker'
+import { removeQueryString } from '@commerce/utils/uri-util'
 export default function StoreLocatorPage() {
   const translate = useTranslation()
   let absPath = ''
@@ -27,16 +28,14 @@ export default function StoreLocatorPage() {
       setAllStores([])
     }
   }
-  const storeLocations = [
-    { name: 'Store 1', latitude: 40.7128, longitude: -74.006 },
-    { name: 'Store 2', latitude: 34.0522, longitude: -118.2437 },
-    // Add more store locations as needed
-  ];
+  
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>Stores</title>
         <meta name="title" content="Stores" />
         <meta name="description" content="Stores" />
@@ -45,11 +44,11 @@ export default function StoreLocatorPage() {
         <meta property="og:title" content="Stores" key="ogtitle" />
         <meta property="og:description" content="Stores" key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       <div className='container py-4 mx-auto sm:py-10'>
-        <h1 className="pb-6 text-2xl font-semibold text-center text-gray-900 sm:pb-16 sm:text-5xl">
-          Stores
+        <h1 className="pb-6 text-2xl font-semibold text-left text-gray-900 sm:pb-8 sm:text-3xl">
+          Find a Store near you
         </h1>
         <div className='grid grid-cols-1 mt-0 sm:gap-4 sm:grid-cols-12'>
           <div className='sm:col-span-4'>

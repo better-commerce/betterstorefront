@@ -23,6 +23,7 @@ import {
 import SideMenu from '@old-components/account/MyAccountMenu'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { removeQueryString } from '@commerce/utils/uri-util'
 const PAGE_SIZE = 10
 
 function MyAccount({ deviceInfo }: any) {
@@ -152,6 +153,7 @@ function MyAccount({ deviceInfo }: any) {
   useEffect(() => {
     setIsShowDetailedOrder(displayDetailedOrder)
   }, [displayDetailedOrder])
+  const cleanPath = removeQueryString(router.asPath)
 
   return (
     <>
@@ -160,7 +162,7 @@ function MyAccount({ deviceInfo }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{currentOption}</title>
         <meta name="title" content={currentOption} />
         <meta name="description" content={currentOption} />

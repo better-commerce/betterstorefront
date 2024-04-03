@@ -22,7 +22,7 @@ import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
@@ -420,12 +420,12 @@ export default function CollectionPage(props: any) {
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
-
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{props?.metaTitle || props?.name}</title>
         <meta name="title" content={props?.metaTitle || props?.name} />
         <meta name="description" content={props?.metaDescription} />
@@ -434,7 +434,7 @@ export default function CollectionPage(props: any) {
         <meta property="og:title" content={props?.metaTitle || props?.name} key="ogtitle" />
         <meta property="og:description" content={props?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
       <div className='flex flex-col'>

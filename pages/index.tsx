@@ -18,6 +18,7 @@ import { containsArrayData, getDataByUID, parseDataValue, setData } from '@frame
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
+import { removeQueryString } from '@commerce/utils/uri-util'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -36,6 +37,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
   let Page_Slug = HOME_PAGE_SLUG;
+
   if (CURRENT_THEME == "black") {
     Page_Slug = HOME_PAGE_NEW_SLUG
   } else if (CURRENT_THEME == "orange") {
@@ -97,6 +99,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const translate = useTranslation()
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
+  const cleanPath = removeQueryString(router.asPath)
   let Page_Slug = HOME_PAGE_SLUG;
   if (CURRENT_THEME == "black") {
     Page_Slug = HOME_PAGE_NEW_SLUG
@@ -152,7 +155,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
+          <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
           <title>{pageContents?.metatitle || translate('common.label.homeText')}</title>
           <meta name="title" content={pageContents?.metatitle || translate('common.label.homeText')} />
           {pageContents?.metadescription && (<meta name="description" content={pageContents?.metadescription} />)}
@@ -160,6 +163,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <meta property="og:image" content={pageContents?.image} />
           {pageContents?.metatitle && (<meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />)}
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
+          <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}

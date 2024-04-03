@@ -34,6 +34,7 @@ import {
 } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { removeQueryString } from '@commerce/utils/uri-util'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -52,6 +53,7 @@ export async function getStaticProps({
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
+  const router = useRouter()
   const promises = new Array<Promise<any>>()
 
   const fetchData = async (
@@ -134,9 +136,11 @@ function Cookie({
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
+  const cleanPath = removeQueryString(router.asPath)
+
   const CookiePageContents = isMobile
     ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
-      []
+    []
     : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(CookiePageContents)
 
@@ -187,28 +191,12 @@ function Cookie({
   }
   return (
     <>
-      {(pageContents?.metatitle ||
-        pageContents?.metadescription ||
-        pageContents?.metakeywords) && (
+      {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=5"
-          />
-          <link
-            rel="canonical"
-            id="canonical"
-            href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath}
-          />
-          <title>
-            {pageContents?.metatitle || translate('common.message.cookiesPolicyText')}
-          </title>
-          <meta
-            name="title"
-            content={
-              pageContents?.metatitle || translate('common.message.cookiesPolicyText')
-            }
-          />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+          <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+          <title> {pageContents?.metatitle || translate('common.message.cookiesPolicyText')} </title>
+          <meta name="title" content={pageContents?.metatitle || translate('common.message.cookiesPolicyText')} />
           {pageContents?.metadescription && (
             <meta name="description" content={pageContents?.metadescription} />
           )}
@@ -217,18 +205,10 @@ function Cookie({
           )}
           <meta property="og:image" content={pageContents?.image} />
           {pageContents?.metatitle && (
-            <meta
-              property="og:title"
-              content={pageContents?.metatitle}
-              key="ogtitle"
-            />
+            <meta property="og:title" content={pageContents?.metatitle} key="ogtitle" />
           )}
           {pageContents?.metadescription && (
-            <meta
-              property="og:description"
-              content={pageContents?.metadescription}
-              key="ogdesc"
-            />
+            <meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />
           )}
         </NextHead>
       )}
@@ -236,15 +216,10 @@ function Cookie({
       <div className="container">
         {pageContents?.heading?.map((head: any, Idx: any) => (
           <div key={Idx}>
-            <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold">
+            <h1 className="mt-20 mb-10 text-2xl font-semibold text-center sm:text-4xl">
               {head?.heading_herotitle}
             </h1>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: head?.heading_herodescription,
-              }}
-              className="terms-text break-all"
-            />
+            <div dangerouslySetInnerHTML={{ __html: head?.heading_herodescription, }} className="break-all terms-text" />
           </div>
         ))}
       </div>

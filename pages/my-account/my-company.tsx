@@ -33,6 +33,7 @@ import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { removeQueryString } from '@commerce/utils/uri-util'
 function MyCompany({ deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
@@ -236,6 +237,7 @@ function MyCompany({ deviceInfo }: any) {
   useEffect(() => {
     setIsShowDetailedOrder(displayDetailedOrder)
   }, [displayDetailedOrder])
+  const cleanPath = removeQueryString(router.asPath)
 
   return (
     <>
@@ -244,7 +246,7 @@ function MyCompany({ deviceInfo }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{currentOption}</title>
         <meta name="title" content={currentOption} />
         <meta name="description" content={currentOption} />
@@ -258,13 +260,13 @@ function MyCompany({ deviceInfo }: any) {
           <Spinner />
         </>
       ) : (
-       <section className="relative pb-10 text-gray-900">
+        <section className="relative pb-10 text-gray-900">
           <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
             {/* {!isShowDetailedOrder && (
               <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-                <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
+                <h3 className="flex gap-1 mx-5 mt-2 text-xl font-semibold text-black">
                   <Link
-                    className="mx-2 leading-none mt-1 align-middle"
+                    className="mx-2 mt-1 leading-none align-middle"
                     href="/my-account"
                   >
                     <svg
@@ -290,9 +292,8 @@ function MyCompany({ deviceInfo }: any) {
                 currentOption={currentOption}
               />
               <div
-                className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-                  isShow ? `` : ''
-                }`}
+                className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${isShow ? `` : ''
+                  }`}
               >
                 <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
                   <div className="w-full \max-w-md px-2 py-9 sm:px-0">
@@ -304,59 +305,59 @@ function MyCompany({ deviceInfo }: any) {
                       >
                         {optionsConfig?.map((option: any, Idx: any) => (
                           <>
-                          {option?.name == 'Users' ? (
-                            <>
-                             {user?.companyUserRole === UserRoleType.ADMIN &&
-                             <Tab as={Fragment} key={Idx}>
-                             {({ selected }) => (
-                              <button
-                                className={classNames(
-                                  'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                  'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                  selected
-                                    ? 'bg-white shadow hover:bg-gray-50'
-                                    : 'text-blue-100 hover:bg-white/[0.32] '
-                                )}
-                                onClick={() => {
-                                  option?.onClick(option?.value)
-                                }}
-                              >
-                                {option?.name}
-                              </button>
-                            )}
-                             </Tab>}
-                            </>
-                          ) : (
-                            <>
-                              <Tab as={Fragment} key={Idx}>
-                              {({ selected }) => (
-                                <button
-                                  className={classNames(
-                                    'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                    'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                    selected
-                                      ? 'bg-white shadow hover:bg-gray-50'
-                                      : 'text-blue-100 hover:bg-white/[0.32] '
+                            {option?.name == 'Users' ? (
+                              <>
+                                {user?.companyUserRole === UserRoleType.ADMIN &&
+                                  <Tab as={Fragment} key={Idx}>
+                                    {({ selected }) => (
+                                      <button
+                                        className={classNames(
+                                          'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                          'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                          selected
+                                            ? 'bg-white shadow hover:bg-gray-50'
+                                            : 'text-blue-100 hover:bg-white/[0.32] '
+                                        )}
+                                        onClick={() => {
+                                          option?.onClick(option?.value)
+                                        }}
+                                      >
+                                        {option?.name}
+                                      </button>
+                                    )}
+                                  </Tab>}
+                              </>
+                            ) : (
+                              <>
+                                <Tab as={Fragment} key={Idx}>
+                                  {({ selected }) => (
+                                    <button
+                                      className={classNames(
+                                        'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                        'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                        selected
+                                          ? 'bg-white shadow hover:bg-gray-50'
+                                          : 'text-blue-100 hover:bg-white/[0.32] '
+                                      )}
+                                      onClick={() => {
+                                        option?.onClick(option?.value)
+                                      }}
+                                    >
+                                      {option?.name}
+                                    </button>
                                   )}
-                                  onClick={() => {
-                                    option?.onClick(option?.value)
-                                  }}
-                                >
-                                  {option?.name}
-                                </button>
-                                )}
-                              </Tab>
-                            </>
-                          )}
+                                </Tab>
+                              </>
+                            )}
                           </>
                         ))}
                       </Tab.List>
                       <Tab.Panels>
                         {user?.companyUserRole === UserRoleType.ADMIN &&
-                            <Tab.Panel>
-                              <CompanyUsers users={b2bUsers} />
-                            </Tab.Panel>
-                          }
+                          <Tab.Panel>
+                            <CompanyUsers users={b2bUsers} />
+                          </Tab.Panel>
+                        }
                         <Tab.Panel>
                           <B2BOrders
                             selectedOption={selectedOption}
@@ -374,7 +375,7 @@ function MyCompany({ deviceInfo }: any) {
                           <AddressBook />
                         </Tab.Panel>
                         <Tab.Panel>
-                          <div className="font-Inter text-lg font-bold text-brand-blue p-10">{`No Invoices Generated Yet`}</div>
+                          <div className="p-10 text-lg font-bold font-Inter text-brand-blue">{`No Invoices Generated Yet`}</div>
                         </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>
@@ -396,7 +397,7 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export async function getServerSideProps(context: any) {
   const { locale } = context
   return {
-    props: { 
+    props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!))
     }, // will be passed to the page component as props
   }
