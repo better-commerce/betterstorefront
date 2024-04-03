@@ -53,7 +53,6 @@ export async function getStaticProps({
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
-  const router = useRouter()
   const promises = new Array<Promise<any>>()
 
   const fetchData = async (
@@ -136,12 +135,8 @@ function Cookie({
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
-  const cleanPath = removeQueryString(router.asPath)
 
-  const CookiePageContents = isMobile
-    ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
-    []
-    : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
+  const CookiePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(CookiePageContents)
 
   useEffect(() => {
@@ -180,7 +175,7 @@ function Cookie({
     entityId: '',
     eventType: 'PageViewed',
   })
-
+  const cleanPath = removeQueryString(router.asPath)
   if (!pageContents) {
     return (
       <div className="flex w-full text-center flex-con">
