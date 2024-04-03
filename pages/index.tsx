@@ -21,7 +21,6 @@ import Layout from '@components/Layout/Layout'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
-const SectionHowItWork = dynamic(() => import('@components/SectionHowItWork/SectionHowItWork'))
 const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'))
 const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'))
 const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
@@ -176,9 +175,6 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
-          <div className="py-24 border-y lg:py-32 border-slate-200 dark:border-slate-700">
-            <SectionHowItWork data={pageContents?.features} />
-          </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
       </div>
