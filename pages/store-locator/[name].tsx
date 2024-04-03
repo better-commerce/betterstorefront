@@ -4,15 +4,13 @@ import getAllStores from '@framework/storeLocator/getAllStores'
 import dynamic from 'next/dynamic';
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'));
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables';
 import Link from 'next/link';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-
+import {  ChevronRightIcon } from '@heroicons/react/24/outline';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 interface Props {
   data: any
 }
@@ -35,19 +33,20 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
       }
     }
   }]
-
+  const mapStyles = {
+    height: '400px',
+    width: '100%'
+  };
   return (
     <>
       <div className="container py-10 mx-auto">
         {data?.length && data?.map((store: any, storeIdx: number) => {
-          const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          const currentDate = new Date();
-          const currentDayIndex = currentDate.getDay();
-          const currentDay = days[currentDayIndex];
           let openingHours = store?.openingHours;
-          openingHours = openingHours.replace(/,/g, function (match:any) {
-            return `<br/> ${currentDay} `;
-          });
+          openingHours = openingHours.replace(/,/g, "<br/>");
+          const defaultCenter = {
+            lat: parseFloat(store?.latitude),
+            lng: parseFloat(store?.longitude)
+          };
           return (
             store?.id == ids &&
             <>
@@ -72,8 +71,11 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
                   </span>
                   <span className='font-medium text-black font-14'>{store?.name} Branch</span>
                 </div>
-                {/* <iframe width="100%" height="300" src={`https://www.google.com/maps/embed/v1/view?key=GOOGLE_MAP_API_KEY&center=LONGITUDE,LATITUDE&zoom=15`}></iframe> */}
-                <iframe width="100%" height="300" src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2229138595875!2d${store?.longitude}!2d${store?.latitude}!3d12.972442654034205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDIyJzA1LjYiTiA3NMKwMDInMjIuNyJF!5e0!3m2!1sen!2sus!4v1648926821092!5m2!1sen!2sus`}></iframe>
+                <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY}>
+                  <GoogleMap mapContainerStyle={mapStyles} zoom={15} center={defaultCenter} >
+                    <Marker position={defaultCenter} />
+                  </GoogleMap>
+                </LoadScript>
                 <h1 className='w-full pt-6 my-4 font-semibold text-left font-24'>{store?.name} Branch</h1>
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                   <div className='sm:col-span-1'>
