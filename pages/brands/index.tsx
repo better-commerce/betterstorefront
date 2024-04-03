@@ -17,6 +17,7 @@ import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-ut
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -80,6 +81,8 @@ function BrandsPage({ brands }: any) {
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       <NextHead>
@@ -87,7 +90,7 @@ function BrandsPage({ brands }: any) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{translate('common.label.brandsText')}</title>
         <meta name="title" content={translate('common.label.brandsText')} />
         <meta name="description" content={translate('common.label.brandsText')} />
@@ -95,6 +98,7 @@ function BrandsPage({ brands }: any) {
         <meta property="og:image" content="" />
         <meta property="og:title" content={translate('common.label.brandsText')} key="ogtitle" />
         <meta property="og:description" content={translate('common.label.brandsText')} key="ogdesc" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       <div className="bg-white">
         {/* Mobile menu */}

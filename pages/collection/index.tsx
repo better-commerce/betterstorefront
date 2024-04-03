@@ -14,14 +14,16 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import { removeQueryString } from '@commerce/utils/uri-util'
 export default function CollectionList(props: any) {
   const router =useRouter();
+  const cleanPath = removeQueryString(router.asPath)
   const translate = useTranslation()
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{translate('label.collection.collectionsText')}</title>
         <meta name="title" content={translate('label.collection.collectionsText')} />
         <meta name="description" content={translate('label.collection.collectionsText')} />
@@ -30,7 +32,7 @@ export default function CollectionList(props: any) {
         <meta property="og:title" content={translate('label.collection.collectionsText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.collection.collectionsText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath}  key="ogurl" />
       </NextHead>
       <main className="container w-full mx-auto">
         <section aria-labelledby="products-heading" className="mt-12">

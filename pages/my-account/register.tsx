@@ -21,6 +21,7 @@ import { getEnabledSocialLogins } from '@framework/utils/app-util'
 import Link from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
@@ -234,11 +235,13 @@ const router = useRouter()
       console.log(error)
     }
   }
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{translate('label.checkout.loginRegistrationText')}</title>
         <meta name="title" content={translate('label.checkout.loginRegistrationText')} />
         <meta name="description" content={translate('label.checkout.loginRegistrationText')} />
@@ -246,6 +249,7 @@ const router = useRouter()
         <meta property="og:image" content="" />
         <meta property="og:title" content={translate('label.checkout.loginRegistrationText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.checkout.loginRegistrationText')} key="ogdesc" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       <section aria-labelledby="trending-heading" className="bg-white">
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">

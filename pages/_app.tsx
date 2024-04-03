@@ -46,6 +46,7 @@ import BrowserNavigation from '@components/shared/routing/BrowserNavigation';
 import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
+import { removeQueryString } from '@commerce/utils/uri-util';
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -336,6 +337,8 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       <NextHead>
@@ -349,7 +352,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
             <title>{seoInfo?.metaTitle}</title>
             {
               router.asPath.startsWith('/products/') && (
-                <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+                <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + cleanPath} />
               )
             }
             <meta name="title" content={seoInfo?.metaTitle} />
@@ -361,7 +364,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         )}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
         <meta property="og:image" content={seoImage} />
         {headElements}
       </NextHead>

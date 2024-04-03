@@ -9,8 +9,10 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import LayoutError from '@components/Layout/LayoutError'
+import { removeQueryString } from '@commerce/utils/uri-util'
+import { useRouter } from 'next/router'
 
 export async function getStaticProps({
   preview,
@@ -28,19 +30,19 @@ export async function getStaticProps({
 
 export default function InternalServerError({ deviceInfo }: any) {
   const translate = useTranslation()
+  const router = useRouter()
   const { isMobile, isIPadorTablet } = deviceInfo
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-        <link rel="canonical" id="canonical" href={absPath} />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{translate('label.500.titleText')}</title>
         <meta name="title" content={translate('label.500.titleText')} />
         <meta name="description" content={translate('label.500.titleText')} />

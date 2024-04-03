@@ -11,6 +11,7 @@ import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MapWithMarker from '@components/ui/Map/Marker';
+import { removeQueryString } from '@commerce/utils/uri-util';
 interface Props {
   data: any
 }
@@ -37,6 +38,8 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
     height: '400px',
     width: '100%'
   };
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       <div className="container py-10 mx-auto">
@@ -52,7 +55,7 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
             <>
               <NextHead>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-                <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+                <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
                 <title>{store?.name}</title>
                 <meta name="title" content={store?.name} />
                 <meta name="description" content={store?.name} />

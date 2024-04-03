@@ -36,6 +36,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import ContactForm from '@old-components/common/Footer/ContactForm'
+import { removeQueryString } from '@commerce/utils/uri-util'
 // import ContactUsForm from '@old-components/contact/ContactUsForm'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
@@ -189,12 +190,14 @@ function Contact({
       </div>
     )
   }
+  const cleanPath = removeQueryString(router.asPath)
+
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
+          <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
           <title> {pageContents?.metatitle || translate('common.message.ContactUsText')} </title>
           <meta name="title" content={ pageContents?.metatitle || translate('common.message.ContactUsText') } />
           {pageContents?.metadescription && (

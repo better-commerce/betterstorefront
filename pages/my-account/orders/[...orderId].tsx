@@ -35,6 +35,7 @@ import withAuth from '@components/utils/withAuth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetServerSideProps } from 'next'
 import { matchStrings } from '@framework/utils/parse-util'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 function OrderDetail({ deviceInfo }: any) {
     const router: any = useRouter();
@@ -242,6 +243,7 @@ function OrderDetail({ deviceInfo }: any) {
             orderData?.subTotal?.raw?.withoutTax -
             orderData?.discount?.raw?.withoutTax
         ).toFixed(2)
+  const cleanPath = removeQueryString(router.asPath)
 
     return (
         <>
@@ -255,7 +257,7 @@ function OrderDetail({ deviceInfo }: any) {
                                 name="viewport"
                                 content="width=device-width, initial-scale=1, maximum-scale=1"
                             />
-                            <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+                            <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
                             <title>Order Detail : {orderData?.orderNo}</title>
                             <meta
                                 name="title"
