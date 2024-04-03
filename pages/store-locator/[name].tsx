@@ -11,6 +11,7 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constan
 import Layout from '@components/Layout/Layout';
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables';
 import Link from 'next/link';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   data: any
@@ -38,11 +39,15 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
   return (
     <>
       <div className="container py-10 mx-auto">
-        {/* <div className="mx-auto mb-4 2xl:w-4/5 2xl:px-0 sm:mb-6">
-          <BreadCrumbs items={breadcrumbData} currentProduct={''} />
-        </div> */}
         {data?.length && data?.map((store: any, storeIdx: number) => {
-          const mapUrl = store?.id == '35c3eae6-fe55-ee11-b1c4-000d3a211cf7' ? 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2502.70845320819!2d0.8538179592468076!3d51.15072722744828!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47deda3beeb4d633%3A0x810bc7066354893a!2sFFX+Ashford!5e0!3m2!1sen!2suk!4v1424179058640' : 'https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3333.12202896661!2d1.166945338012787!3d51.09627710260628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sffx.folkestone!5e0!3m2!1sen!2suk!4v1535705944120'
+          const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          const currentDate = new Date();
+          const currentDayIndex = currentDate.getDay();
+          const currentDay = days[currentDayIndex];
+          let openingHours = store?.openingHours;
+          openingHours = openingHours.replace(/,/g, function (match:any) {
+            return `<br/> ${currentDay} `;
+          });
           return (
             store?.id == ids &&
             <>
@@ -58,53 +63,35 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
                 <meta property="og:description" content={store?.name} key="ogdesc" />
               </NextHead>
               <div className='flex flex-col' key={`store-detail-${storeIdx}`}>
-                <Link href="/store-locator" passHref>
-                  <span className="flex items-end mb-4 upper case font-12">Stores</span>
-                </Link>
-                {/* <iframe
-                  width="100%"
-                  height="300"
-                  src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyC5hxzQ3BLwnTcUDQKu87saTyfLZ4-iiYw&center=${store?.longitude},${store?.latitude}&zoom=15`}>
-                </iframe> */}
-                <iframe width="100%"
-                  height="300"
-                  src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2229138595875!2d${store?.longitude}!2d${store?.latitude}!3d12.972442654034205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDIyJzA1LjYiTiA3NMKwMDInMjIuNyJF!5e0!3m2!1sen!2sus!4v1648926821092!5m2!1sen!2sus`}>
-                </iframe>
+                <div className='flex items-center justify-start gap-1 mb-4 sm:mb-6'>
+                  <Link href="/store-locator" passHref>
+                    <span className="flex items-end font-14">Stores</span>
+                  </Link>
+                  <span>
+                    <ChevronRightIcon className="w-3 h-3 text-slate-400" />
+                  </span>
+                  <span className='font-medium text-black font-14'>{store?.name} Branch</span>
+                </div>
+                {/* <iframe width="100%" height="300" src={`https://www.google.com/maps/embed/v1/view?key=GOOGLE_MAP_API_KEY&center=LONGITUDE,LATITUDE&zoom=15`}></iframe> */}
+                <iframe width="100%" height="300" src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2229138595875!2d${store?.longitude}!2d${store?.latitude}!3d12.972442654034205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDIyJzA1LjYiTiA3NMKwMDInMjIuNyJF!5e0!3m2!1sen!2sus!4v1648926821092!5m2!1sen!2sus`}></iframe>
                 <h1 className='w-full pt-6 my-4 font-semibold text-left font-24'>{store?.name} Branch</h1>
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                   <div className='sm:col-span-1'>
                     <div className='flex flex-col mb-8'>
                       <h4 className='font-semibold underline'>Address</h4>
                       <div className='flex flex-col gap-0 mt-2'>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: store?.address1,
-                          }}
-                          className="text-sm text-gray-700 sm:block"
-                        />
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: store?.address2,
-                          }}
-                          className="text-sm text-gray-700 sm:block"
-                        />
+                        <div dangerouslySetInnerHTML={{ __html: store?.address1, }} className="text-sm text-gray-700 sm:block" />
+                        <div dangerouslySetInnerHTML={{ __html: store?.address2, }} className="text-sm text-gray-700 sm:block" />
                       </div>
                     </div>
                     <div className='flex flex-col mb-8'>
                       <h4 className='font-semibold underline'>Telephone Lines</h4>
-                      <div className='flex flex-col gap-0 mt-2'>
-                        <span>{store?.phoneNo}</span>
-                      </div>
+                      <div className='flex flex-col gap-0 mt-2'>{store?.phoneNo}</div>
                     </div>
                     <div className='flex flex-col mb-8'>
                       <h4 className='font-semibold underline'>Opening Hours</h4>
-                      <div className='flex flex-col gap-0 mt-2'>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: store?.openingHours,
-                          }}
-                          className="text-sm text-gray-700 sm:block"
-                        />
+                      <div className='flex flex-col gap-2 mt-2'>
+                        <div dangerouslySetInnerHTML={{ __html: openingHours }} className="text-sm text-gray-700 sm:block" />
                       </div>
                     </div>
                   </div>
