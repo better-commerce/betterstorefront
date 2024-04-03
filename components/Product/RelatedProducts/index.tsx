@@ -186,15 +186,7 @@ export default function RelatedProducts({
                   <div>
                     <div className="flex flex-col mb-3">
                       <h2 className="text-lg font-medium text-gray-900">
-                        {key == 'You May Also Like'
-                          ? 'Frequent Bought Together'
-                          : key == 'undefined'
-                            ? 'Frequent Bought Together'
-                            : key == 'Upgrade'
-                              ? 'Quick Add'
-                              : key == 'Basket Group'
-                                ? 'Frequent Bought Together'
-                                : key}
+                        {key == 'You May Also Like' ? 'Frequent Bought Together' : key == 'undefined' ? 'Frequent Bought Together' : key == 'Upgrade' ? 'Quick Add' : key == 'Basket Group' ? 'Frequent Bought Together' : key}
                       </h2>
                     </div>
                   </div>
@@ -203,7 +195,7 @@ export default function RelatedProducts({
                       {values?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid}>
-                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
                           </SwiperSlide>
                         )
                       })}

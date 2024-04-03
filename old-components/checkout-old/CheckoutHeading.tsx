@@ -9,11 +9,7 @@ export default function CheckoutHeading() {
           <h1 className='sr-only'>{translate('label.basket.checkoutBtnText')}</h1>
           <h2 className='flex items-center justify-end font-semibold uppercase mob-font-16 sm:justify-center dark:text-black mob-line-height-1'>secure checkout <span><i className='ml-4 sprite-icons sprite-secure'></i></span></h2>
           <div className='absolute top-2/4 -translate-y-2/4'>
-            <Link
-              passHref
-              href={`/cart`}
-              className="flex items-center mt-0 text-black mob-font-12 font-18"
-            >
+            <Link passHref href={`/cart`} className="flex items-center mt-0 text-black mob-font-12 font-18" >
               <i className='mr-2 sprite-icons sprite-left-arrow sm:mr-4'></i>{translate('label.checkout.backToBasketText')}
             </Link>
           </div>
