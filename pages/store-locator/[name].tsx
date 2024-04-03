@@ -9,8 +9,8 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
-import {  ChevronRightIcon } from '@heroicons/react/24/outline';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import MapWithMarker from '@components/ui/Map/Marker';
 interface Props {
   data: any
 }
@@ -71,11 +71,7 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
                   </span>
                   <span className='font-medium text-black font-14'>{store?.name} Branch</span>
                 </div>
-                <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY}>
-                  <GoogleMap mapContainerStyle={mapStyles} zoom={15} center={defaultCenter} >
-                    <Marker position={defaultCenter} />
-                  </GoogleMap>
-                </LoadScript>
+                <MapWithMarker latitude={defaultCenter?.lat} longitude={defaultCenter?.lng} />
                 <h1 className='w-full pt-6 my-4 font-semibold text-left font-24'>{store?.name} Branch</h1>
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                   <div className='sm:col-span-1'>
@@ -121,6 +117,8 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
           )
         })}
       </div>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY&libraries=places"></script>
+
     </>
   )
 }
