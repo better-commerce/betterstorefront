@@ -17,7 +17,8 @@ const LoginOrGuest: React.FC<any> = ({
   shippingCountries,
   handleCollect,
   deliveryTypeMethod,
-  setDeliveryTypeMethod
+  setDeliveryTypeMethod,
+  featureToggle,
 }) => {
   const GUEST_LOGIN_CHECKOUT2_SCHEMA = guestLoginCheckout2Schema();
   const translate = useTranslation()
@@ -178,6 +179,7 @@ const LoginOrGuest: React.FC<any> = ({
             basket={basket}
             deliveryTypeMethod={deliveryTypeMethod}
             setDeliveryTypeMethod={setDeliveryTypeMethod}
+            featureToggle={featureToggle}
           />
           {deliveryTypeMethod?.type === 1 ? (
             <ShippingAddressForm

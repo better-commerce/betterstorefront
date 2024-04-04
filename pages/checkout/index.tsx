@@ -69,19 +69,10 @@ const steps = [
   { key: 'review', label: 'Payment', shouldActiveOn: '' },
 ]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle }: any) => {
   const router = useRouter()
   const uiContext = useUI()
-  const {
-    isGuestUser,
-    user,
-    setAlert,
-    setUser,
-    setIsGuestUser,
-    setIsGhostUser,
-    setOverlayLoaderState,
-    hideOverlayLoaderState,
-  } = useUI()
+  const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
   const [appConfigData, setAppConfigData] = useState<any>()
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -662,6 +653,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
 
   const loginOrGuestProps = {
     basket,
+    featureToggle,
     onLoginSuccess: handleLoginSuccess,
     onGuestCheckout: handleGuestCheckout,
   }
@@ -694,7 +686,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     basket,
     deliveryTypeMethod,
     setDeliveryTypeMethod,
-    handleCollect
+    handleCollect,
+    featureToggle,
   }
 
 
@@ -707,7 +700,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     billingCountries: appConfigData?.billingCountries,
     handleCollect,
     deliveryTypeMethod,
-    setDeliveryTypeMethod
+    setDeliveryTypeMethod,
+    featureToggle,
   }
 
   const editAddressFormProps = {
@@ -716,6 +710,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     onEditAddressToggleView,
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,
+    featureToggle,
   }
 
   const deliveryMethodSelectionProps = {
