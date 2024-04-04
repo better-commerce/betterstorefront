@@ -142,7 +142,6 @@ export default function RecentlyViewedProduct({ deviceInfo, config, productPerRo
   return (
     recentlyViewedState?.length > 0 && (
       <>
-        <hr className="border-slate-200 dark:border-slate-700" />
         <div className="flex flex-col pt-5 sm:pt-10">
           <div className="flex items-center justify-between gap-1 pb-2 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0 sm:pb-4">
             <h2 className="flex items-center text-2xl font-semibold md:text-3xl">
