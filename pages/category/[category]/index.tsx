@@ -708,7 +708,7 @@ function CategoryLandingPage({
                     </div>
                   ))}
                   <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-                  <div className="cart-recently-viewed">
+                  <div className="col-span-12 cart-recently-viewed">
                     <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
                   </div>
                 </div>
