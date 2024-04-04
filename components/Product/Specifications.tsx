@@ -22,11 +22,11 @@ export default function ProductSpecifications({
       <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
         <div className="sm:col-span-8">
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
-            <h2 className="flex items-center pb-8 text-2xl font-semibold md:text-3xl sm:pb-16">
+            <h2 className="flex items-center pb-2 text-2xl font-semibold md:text-3xl sm:pb-2">
               {translate('label.product.productSpecificationText')}
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
-              <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+              <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                 <div className="flex flex-wrap ul-li-disc">
                   {attrGroup['whyweloveit'].map((detail: any, cdx: number) => (
                     <div
@@ -45,7 +45,7 @@ export default function ProductSpecifications({
             <div className="flex flex-col">
               <div className="grid grid-cols-2 gap-x-2 gap-y-0 sm:gap-x-4 sm:gap-y-1 sm:grid-cols-3">
                 {attrGroup['product.collar']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         {translate('label.product.specifications.collarText')}
@@ -68,7 +68,7 @@ export default function ProductSpecifications({
                   </div>
                 )}
                 {attrGroup['fabric.type']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         {translate('label.product.specifications.fabricText')}
@@ -95,7 +95,7 @@ export default function ProductSpecifications({
                 )}
 
                 {attrGroup['occasion.type']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         Occasion
@@ -118,7 +118,7 @@ export default function ProductSpecifications({
                   </div>
                 )}
                 {attrGroup['product.fabric']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         {translate('label.product.specifications.fabricTypeText')}
@@ -141,7 +141,7 @@ export default function ProductSpecifications({
                   </div>
                 )}
                 {attrGroup['clothing.size']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         {translate('label.product.specifications.fitText')}
@@ -164,7 +164,7 @@ export default function ProductSpecifications({
                   </div>
                 )}
                 {attrGroup['dress.style']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         {translate('label.product.specifications.dressStyleText')}
@@ -187,7 +187,7 @@ export default function ProductSpecifications({
                   </div>
                 )}
                 {attrGroup['clothing.type']?.length > 0 && (
-                  <div className="pb-2 mb-1 border-b border-gray-200 sm:pb-3 sm:mb-3">
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
                       <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
                         {translate('label.product.specifications.clothingText')}

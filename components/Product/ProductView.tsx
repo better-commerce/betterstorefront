@@ -852,10 +852,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
         {/* DETAIL AND REVIEW */}
 
-        <div className="mt-12 space-y-10 sm:mt-16 sm:space-y-16">
+        <div className="mt-12 sm:mt-12">
           {/* {renderDetailSection()} */}
           <hr className="border-slate-200 dark:border-slate-700" />
-          <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
+          <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
           </div>
           {reviews?.review?.productReviews?.length > 0 &&
