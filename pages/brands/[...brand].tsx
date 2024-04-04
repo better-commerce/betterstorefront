@@ -41,6 +41,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
@@ -541,6 +542,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </div>
           <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+          <div className="cart-recently-viewed">
+            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+          </div>
         </div>
       )}
     </>
@@ -553,7 +557,7 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ brand: string }>) {
-  let  brandSlug :any = params!.brand;
+  let brandSlug: any = params!.brand;
   if (brandSlug?.length) {
     brandSlug = brandSlug.join('/');
   }
@@ -586,7 +590,7 @@ export async function getStaticProps({
     if (brandBySlugUIDData?.status === "NotFound") {
       return notFoundRedirect()
     }
-  }  
+  }
 
   const collections: any = {
     imageBannerCollection: collectionUIDData?.imageBannerCollection || [],

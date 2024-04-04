@@ -26,6 +26,7 @@ import { PRODUCTS } from './data'
 import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
+import RecentlyViewedProduct from './RelatedProducts/RecentlyViewedProducts'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -871,11 +872,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
           {alternativeProducts?.length > 0 && (
             <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto">
-              <div className="flex flex-col section-devider"></div>
               <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
             </div>
           )}
-
+          <div className="cart-recently-viewed">
+            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+          </div>
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
               <hr className="border-slate-200 dark:border-slate-700" />

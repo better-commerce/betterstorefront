@@ -36,6 +36,7 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -253,7 +254,7 @@ export default function CollectionPage(props: any) {
       : data?.products // productListMemory?.products
     if (dataToPass?.results?.length > 0) {
       setProductDataToPass(dataToPass)
-    } else  {
+    } else {
       setProductDataToPass(null)
     }
   }, [productListMemory?.products, data?.products])
@@ -575,7 +576,9 @@ export default function CollectionPage(props: any) {
         <PLPFilterSidebar handleSortBy={handleSortBy} openSidebar={openPLPSidebar} handleTogglePLPSidebar={handleTogglePLPSidebar} plpFilterState={plpFilterState} />
 
         <CompareSelectionBar name={props?.name} showCompareProducts={showCompareProducts} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-
+        <div className="cart-recently-viewed">
+          <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+        </div>
         {data?.products?.results?.length > 0 && (
           <Script
             type="application/ld+json"
