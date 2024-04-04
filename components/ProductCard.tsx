@@ -202,7 +202,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   }
   const itemPrice = data?.price?.formatted?.withTax
   const buttonConfig = buttonTitle()
-  const isComparedEnabled = stringToBoolean(isCompared)
+  const isComparedEnabled = useMemo(() => {
+    return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
+  }, [])
   const renderGroupButtons = () => {
     return (
       <>
@@ -286,8 +288,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
 const ButtonLink = (props: any) => {
   const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
-  const { features } = useMemo(() => getFeaturesConfig(), [props])
-  if (features?.enableCompare && isComparedEnabled) {
+  if (isComparedEnabled) {
     return (
       <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
     )
