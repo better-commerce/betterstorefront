@@ -742,7 +742,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           )}
                           {isEmpty && (
                             <div className="cart-recently-viewed">
-                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} />
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
                             </div>
                           )}
                           {!isEmpty && relatedProductData && (

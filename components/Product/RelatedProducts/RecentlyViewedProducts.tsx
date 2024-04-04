@@ -27,7 +27,7 @@ import {
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
 
-export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
+export default function RecentlyViewedProduct({ deviceInfo, config, productPerRow }: any) {
   const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
@@ -82,7 +82,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
         }
         fetchProductsByStockCodes()
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleReferralByEmail = async () => {
@@ -103,7 +103,6 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
   const handleReferralInfo = async () => {
     let { data: data } = await axios.get(NEXT_REFERRAL_INFO)
     if (data?.referralDetails?.referrerPromo && !isGuestUser) {
-      //rm user?.email if guest user can refer
       setReferralOffers(data?.referralDetails)
       setIsReferModalOpen(true)
       handleReferralByEmail()
@@ -141,38 +140,46 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
   }, [])
 
   return (
-    <>
-      <div>
-        {' '}
-        {recentlyViewedState?.length > 0 && (
-          <div className="flex flex-col pt-8 mx-5 mt-8 border-gray-200 sm:pt-16">
-            <div className="flex flex-col w-full container-ffx">
-              <div>
-                <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
-                  <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18">
-                    {translate('common.label.recentlyViewedText')}
-                  </h2>
-                </div>
-                <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
-                  {isLoading ? (
-                    <LoadingDots />
-                  ) : (
-                    <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: 1.5, spaceBetween: 10 }, 1024: { slidesPerView:1.5, spaceBetween: 10 }, }} className="mySwiper" >
-                      {recentlyViewedState?.map((product: any, pid: number) => {
-                        return (
-                          <SwiperSlide key={pid} className="height-equal">
-                             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
-                          </SwiperSlide>
-                        )
-                      })}
-                    </Swiper>
-                  )}
-                </div>
-              </div>
+    recentlyViewedState?.length > 0 && (
+      <>
+        <hr className="border-slate-200 dark:border-slate-700" />
+        <div className="flex flex-col pt-5 sm:pt-10">
+          <div className="flex items-center justify-between gap-1 pb-2 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0 sm:pb-4">
+            <h2 className="flex items-center text-2xl font-semibold md:text-3xl">
+              {translate('common.label.recentlyViewedText')}
+            </h2>
+            <div className="flex flex-row gap-2">
+              <button onClick={() => swiperRefBasket.current.swiper.slidePrev()} className="relative flex items-center justify-center rounded arrow-container group" >
+                <svg className="w-10 h-10 p-2 ml-2 transition-transform -rotate-90 border rounded-full left-full group-hover:scale-110 border-slate-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                  <path d="M18.0701 9.57L12.0001 3.5L5.93005 9.57" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 20.4999V3.66992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button onClick={() => swiperRefBasket.current.swiper.slideNext()} className="relative flex items-center justify-center rounded arrow-container group" >
+                <svg className="w-10 h-10 p-2 ml-2 transition-transform rotate-90 border rounded-full left-full group-hover:scale-110 border-slate-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                  <path d="M18.0701 9.57L12.0001 3.5L5.93005 9.57" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 20.4999V3.66992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
             </div>
           </div>
-        )}
-      </div>
-    </>
+          <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
+            {isLoading ? (
+              <LoadingDots />
+            ) : (
+              <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: productPerRow, spaceBetween: 10 }, 1024: { slidesPerView: productPerRow, spaceBetween: 10 }, }} className="mySwiper" >
+                {recentlyViewedState?.map((product: any, pid: number) => {
+                  return (
+                    <SwiperSlide key={pid} className="height-equal">
+                      <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                    </SwiperSlide>
+                  )
+                })}
+              </Swiper>
+            )}
+          </div>
+        </div>
+      </>
+    )
   )
 }

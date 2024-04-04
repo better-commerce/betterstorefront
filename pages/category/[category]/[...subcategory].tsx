@@ -28,6 +28,7 @@ import CompareSelectionBar from '@components/Product/ProductCompare/compareSelec
 import { useUI } from '@components/ui'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
 const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
@@ -493,6 +494,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                 </div>
               ))}
               <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+              <div className="cart-recently-viewed">
+                <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+              </div>
             </div>
           ) : (
             <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
