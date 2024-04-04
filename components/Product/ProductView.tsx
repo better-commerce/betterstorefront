@@ -835,14 +835,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="w-full lg:w-[55%]">
             <div className="relative">
               <div className="relative aspect-w-16 aspect-h-16">
-                <img src={product?.image} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
               </div>
               {renderStatus()}
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
               {product?.images?.map((item: any, index: number) => (
                 <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                  <img src={item?.image} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                  <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
                 </div>
               ))}
             </div>
