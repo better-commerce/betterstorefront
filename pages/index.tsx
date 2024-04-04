@@ -181,6 +181,5 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     </>
   )
 }
-
 Home.Layout = Layout
 export default withDataLayer(Home, PAGE_TYPE)
