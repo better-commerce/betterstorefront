@@ -1504,5 +1504,9 @@ p {
   .brand-logo {
     width: 60px;
     height: auto;
+  }
 }
+
+.comma:last-child .s-icon{
+  display: none;
 }

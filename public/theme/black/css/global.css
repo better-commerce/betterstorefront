@@ -1499,3 +1499,7 @@ p {
 .bg-banner{
   background-color: #ecfccb;
 }
+
+.comma:last-child .s-icon{
+  display: none;
+}
