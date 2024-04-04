@@ -11,7 +11,7 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, SITE_ORIGIN_URL } from 
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
