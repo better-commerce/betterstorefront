@@ -1,9 +1,11 @@
 import type { GetStaticPropsContext } from 'next'
 import commerce from '@lib/api/commerce'
-import { Bag } from '@components/icons'
-import { Layout } from '@components/common'
+import { Bag } from '@components/shared/icons'
+import Layout from '@components/Layout/Layout'
 import { Container, Text } from '@components/ui'
-import { GENERAL_MY_ORDERS, MESSAGE_NO_ORDER_FOUND, MESSAGE_NO_ORDER_FOUND_TEXT } from '@components/utils/textVariables'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 export async function getStaticProps({
   preview,
@@ -17,23 +19,28 @@ export async function getStaticProps({
   const { categories } = await siteInfoPromise
 
   return {
-    props: { pages, categories },
+    props: { 
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      pages, 
+      categories 
+    },
   }
 }
 
 export default function Orders() {
+  const translate = useTranslation()
   return (
     <Container>
-      <Text variant="pageHeading">{GENERAL_MY_ORDERS}</Text>
-      <div className="flex-1 p-24 flex flex-col justify-center items-center ">
-        <span className="border border-dashed border-secondary rounded-full flex items-center justify-center w-16 h-16 p-12 bg-primary text-primary">
+      <Text variant="pageHeading">{translate('label.order.myOrdersText')}</Text>
+      <div className="flex flex-col items-center justify-center flex-1 p-24 ">
+        <span className="flex items-center justify-center w-16 h-16 p-12 border border-dashed rounded-full border-secondary bg-primary text-primary">
           <Bag className="absolute" />
         </span>
         <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">
-          {MESSAGE_NO_ORDER_FOUND}
+          {translate('label.order.NoOrderFoundText')}
         </h2>
-        <p className="text-accent-6 px-10 text-center pt-2">
-          {MESSAGE_NO_ORDER_FOUND_TEXT}
+        <p className="px-10 pt-2 text-center text-accent-6">
+          {translate('label.order.noOrderFoundDisplayText')}
         </p>
       </div>
     </Container>

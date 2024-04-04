@@ -5,13 +5,12 @@ import React from 'react'
 import Link from 'next/link'
 import NextHead from 'next/head'
 import type { GetStaticPropsContext } from 'next'
-
-// Component Imports
-import LayoutError from '../components/common/Layout/LayoutError'
-
-// Other Imports
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import LayoutError from '@components/Layout/LayoutError'
 
 export async function getStaticProps({
   preview,
@@ -21,12 +20,14 @@ export async function getStaticProps({
   const config = { locale, locales }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }
 }
 
 export default function InternalServerError({ deviceInfo }: any) {
+  const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -40,35 +41,31 @@ export default function InternalServerError({ deviceInfo }: any) {
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
         <link rel="canonical" id="canonical" href={absPath} />
-        <title>500 Error</title>
-        <meta name="title" content="500 Error" />
-        <meta name="description" content="500 Error" />
-        <meta name="keywords" content="500 Error" />
+        <title>{translate('label.500.titleText')}</title>
+        <meta name="title" content={translate('label.500.titleText')} />
+        <meta name="description" content={translate('label.500.titleText')} />
+        <meta name="keywords" content={translate('label.500.titleText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content="500 Error" key="ogtitle" />
-        <meta property="og:description" content="500 Error" key="ogdesc" />
+        <meta property="og:title" content={translate('label.500.titleText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.500.titleText')} key="ogdesc" />
       </NextHead>
 
       {(isMobile || isIPadorTablet) ? (
         <>
-          <div className="w-full px-10 py-8 pr-10">
-            <div className="error-container py-4 sm:py-12">
-              <div className="w-full px-10 pr-10 mt-24 mb-8 text-left error-text-section">
-                <h1 className="mb-2 font-22 font-semibold text-black">
-                  500 : Internal Server Error
-                </h1>
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-red-100">
+            <div className="py-4 error-container sm:py-12">
+              <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
+                <h1 className='text-5xl font-bold text-red-800 font-h1-xl'>500</h1>
+                <h2 className="mb-2 font-semibold text-red-600 font-32">
+                  {translate('label.500.internalServerErrorText')}
+                </h2>
                 <p className="font-16 text-brown-light">
-                  Check that you typed the address correctly. Maybe go back to
-                  your previous page or try using our site search to find
-                  something specific.
+                  {translate('common.label.pageErrorDesc')}
                 </p>
               </div>
-              <div className="w-40 mx-auto mt-5 text-center">
-                <Link
-                  href="/"
-                  className="block p-4 text-sm font-semibold text-center text-white bg-black"
-                >
-                  Back to Homepage
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
+                  {translate('common.label.backToHomepageText')}
                 </Link>
               </div>
             </div>
@@ -76,25 +73,20 @@ export default function InternalServerError({ deviceInfo }: any) {
         </>
       ) : (
         <>
-          <div className="w-full px-10 py-8 pr-10">
-            <div className="error-container py-4 sm:py-12">
+          <div className="w-full px-10 pt-8 pb-24 pr-10 bg-red-100">
+            <div className="py-4 error-container sm:py-12">
               <div className="w-full px-10 pr-10 mt-24 mb-8 text-center error-text-section">
-                <h1 className='text-5xl font-bold font-h1-xl'>500</h1>
-                <h2 className="mb-2 font-32 font-semibold text-black">
-                  Internal Server Error
+                <h1 className='text-5xl font-bold text-red-800 font-h1-xl'>500</h1>
+                <h2 className="mb-2 font-semibold text-red-600 font-32">
+                  {translate('common.label.internalServerError')}
                 </h2>
                 <p className="font-16 text-brown-light">
-                  Check that you typed the address correctly. Maybe go back to
-                  your previous page or try using our site search to find
-                  something specific.
+                  {translate('common.label.pageErrorDesc')}
                 </p>
               </div>
-              <div className="w-40 mx-auto mt-5 text-center">
-                <Link
-                  href="/"
-                  className="block p-4 text-sm font-semibold text-center text-white bg-black"
-                >
-                  Back to Homepage
+              <div className="mx-auto mt-5 text-center w-80">
+                <Link href="/" className="block p-4 text-sm font-semibold text-center text-white bg-black rounded-3xl" >
+                  {translate('common.label.backToHomepageText')}
                 </Link>
               </div>
             </div>

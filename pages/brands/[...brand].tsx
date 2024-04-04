@@ -3,54 +3,45 @@ import NextHead from 'next/head'
 import Link from 'next/link'
 import useSwr from 'swr'
 import commerce from '@lib/api/commerce'
-import { useReducer, useEffect, useState, useRef } from 'react'
-import { useRouter } from 'next/router'
-import { postData } from '@components/utils/clientFetcher'
-import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { BTN_RECOMMENDED_PROD, BTN_SEE_ALL, FEATURES_HEADING, IMG_PLACEHOLDER, RESULTS, SHOP_NOW } from '@components/utils/textVariables'
-import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { tryParseJson } from '@framework/utils/parse-util'
-import { PlainText, Video } from '@components/brand'
-import getCollectionById from '@framework/api/content/getCollectionById'
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import useAnalytics from '@components/services/analytics/useAnalytics'
-import ImageCollection from '@components/brand/ImageCollection'
-// const MultiBrandVideo = dynamic(
-//   () => import('@components/brand/MultiBrandVideo')
-// )
-import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
-import faq from '@components/brand/faqData.json'
 import SwiperCore, { Navigation } from 'swiper'
+import Glide from '@glidejs/glide'
 import 'swiper/swiper.min.css'
 import 'swiper/css'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import { useUI } from '@components/ui'
-import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
+
+import { useReducer, useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-
-const RecommendedProductCollection = dynamic(() => import('@components/brand/RecommendedProductCollection'))
-const OfferCard = dynamic(() => import('@components/brand/OfferCard'))
-const ProductSort = dynamic(() => import('@components/product/ProductSort'))
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
-const Slider = dynamic(() => import('@components/brand/Slider'))
-const Disclosure = dynamic(() => import('@components/brand/Disclosure'))
-
-export const ACTION_TYPES = {
-  SORT_BY: 'SORT_BY',
-  PAGE: 'PAGE',
-  SORT_ORDER: 'SORT_ORDER',
-  CLEAR: 'CLEAR',
-  HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
-  ADD_FILTERS: 'ADD_FILTERS',
-  REMOVE_FILTERS: 'REMOVE_FILTERS',
-}
+import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
+import { tryParseJson } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from '@commerce/utils/use-translation'
+import getCollectionById from '@framework/api/content/getCollectionById'
+import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
+import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { postData } from '@components/utils/clientFetcher'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import { useUI } from '@components/ui'
+import { ImageCollection, PlainText, Video } from '@components/SectionBrands'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+const Heading = dynamic(() => import('@components/Heading/Heading'))
+const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
+const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
+const ProductSort = dynamic(() => import('@components/Product/ProductSort'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
+import useFaqData from '@components/SectionBrands/faqData'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import Slider from '@components/SectionBrands/Slider'
+import BrandDisclosure from '@components/SectionBrands/Disclosure'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
   type?: string
@@ -64,17 +55,9 @@ interface stateInterface {
   filters: any
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
-
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-}
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
@@ -102,26 +85,46 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({
-  query,
-  setEntities,
-  recordEvent,
-  brandDetails,
-  slug,
-  deviceInfo,
-  config,
-  collections, // ...for Attribute Collection api response
-}: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, }: any) {
+  const translate = useTranslation()
+  const faq = useFaqData();
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
-  let imageBannerCollectionResponse: any =
-    collections.imageBannerCollectionResponse
-  let imageCategoryCollectionResponse: any =
-    collections.imageCategoryCollection
+  let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
+  let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
   let imgFeatureCollection: any = collections.imgFeatureCollection
   let offerBannerResult: any = collections.offerBannerResult
   let productCollectionRes: any = collections.productCollection
+  let saleProductCollectionRes: any = collections.saleProductCollection
+  const sliderRef = useRef(null);
+  const sliderRefNew = useRef(null);
+  const [isShow, setIsShow] = useState(false);
+  useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+    };
+    if (!sliderRef.current) return;
+    let slider = new Glide(sliderRef.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRef]);
+
+  useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+    };
+    if (!sliderRefNew.current) return;
+    let slider = new Glide(sliderRefNew.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRefNew]);
 
   useAnalytics(BrandViewed, {
     entity: JSON.stringify({
@@ -406,9 +409,9 @@ function BrandDetailPage({
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          This is a bad url. please go back to
+          {translate('common.label.badUrlText')}
           <Link href="/brands">
-            <span className="px-3 text-indigo-500">All brands</span>
+            <span className="px-3 text-indigo-500">{translate('common.label.allBrandsText')}</span>
           </Link>
         </h1>
       </div>
@@ -428,7 +431,7 @@ function BrandDetailPage({
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
-        <meta name="title" content={brandDetails?.name || 'Brands'} />
+        <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
         <meta name="description" content={brandDetails?.metaDescription} />
         <meta name="keywords" content={brandDetails?.metaKeywords} />
         <meta property="og:image" content="" />
@@ -439,45 +442,39 @@ function BrandDetailPage({
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="w-full px-4 pb-0 mx-auto bg-white md:pb-20 2xl:w-4/5 lg:px-0 sm:px-10">
-            <div className="grid grid-cols-1 gap-5 mt-20 md:grid-cols-2">
-              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#FEBD18] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+          <div className="container w-full pb-0 mx-auto bg-white md:pb-10">
+            <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2">
+              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#1f2261] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
-                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="text-2xl font-semibold uppercase w-3/4 text-[#212530] text-center leading-10 py-5" />
-                <button className="px-6 py-3 font-semibold text-white uppercase bg-black rounded-md hover:opacity-80" onClick={handleClick} > {SHOP_NOW} </button>
+                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
+                <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
               <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
+            </div>
+            <div className="mt-10">
+              <div className={`nc-SectionSliderProductCard`}>
+                <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
+                    {translate('label.product.recommendedProductText')}
+                  </Heading>
+                  <div className="glide__track" data-glide-el="track">
+                    <ul className="glide__slides">
+                      {productCollectionRes?.map((item: any, index: number) => (
+                        <li key={index} className={`glide__slide`}>
+                          <ProductCard data={item} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="mt-0 md:mt-10">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
-            <div className="mt-10">
-              <Slider images={imageCategoryCollectionResponse || []} isBanner={true} />
-            </div>
-            <div className="mt-10">
-              <div className="flex flex-col gap-4 sm:px-4">
-                <div className="flex flex-row justify-between">
-                  <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {BTN_RECOMMENDED_PROD} </p>
-                  <button className="font-semibold uppercase text-[#212530] cursor-pointer font-lg hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
-                </div>
-                <RecommendedProductCollection recommendedProducts={productCollectionRes} deviceInfo={deviceInfo} config={config} />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-5 my-10 md:grid-cols-2">
-              {offerBannerResult?.map((val: any, Idx: number) => (
-                <OfferCard key={Idx} index={Idx} title={val.title} description={val.description} src={val.url} link={val.link} buttonText={val.buttonText} />
-              ))}
-            </div>
           </div>
 
-          <div className="w-full px-4 pb-20 mx-auto md:w-4/5 lg:px-0 sm:px-10">
-            <div className="flex justify-between pb-10 mt-4">
-              <p className="font-semibold text-[#212530] uppercase cursor-default font-lg"> {FEATURES_HEADING} {` `} {brandDetails.name} </p>
-              {!isOnlyMobile && (
-                <button className="font-semibold text-[#212530] uppercase cursor-pointer font-lg md:block hover:underline" onClick={handleClick} > {BTN_SEE_ALL} </button>
-              )}
-            </div>
+          <div className="container w-full mx-auto">
             {isOnlyMobile ? (
               <div className="mb-10 max-h-[30vh]">
                 <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
@@ -488,34 +485,58 @@ function BrandDetailPage({
               </div>
             )}
             <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
-            <div className="mb-20">
-              <p className="my-10 font-semibold text-[#212530] uppercase cursor-default font-lg"> {faq.title} </p>
+            <div className="mt-10">
+              <div className={`nc-SectionSliderProductCard`}>
+                <div ref={sliderRefNew} className={`flow-root`}>
+                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
+                    {translate('label.product.saleProductText')}
+                  </Heading>
+                  <div className="glide__track" data-glide-el="track">
+                    <ul className="glide__slides">
+                      {saleProductCollectionRes?.map((item: any, index: number) => (
+                        <li key={index} className={`glide__slide`}>
+                          <ProductCard data={item} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="my-10">
+              <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
               {faq?.results?.map((val: any, Idx: number) => {
                 return (
-                  <Disclosure key={Idx} heading={val.faq} details={val.ans} />
+                  <BrandDisclosure key={Idx} heading={val.faq} details={val.ans} />
                 )
               })}
             </div>
           </div>
         </>
       ) : (
-        <div className="pt-5 pb-0 mx-auto mt-4 bg-transparent 2xl:w-4/5 sm:mt-6 sm:px-6 md:px-6 2xl:px-0">
-          <div className="px-3 py-3 text-left sm:py-1 sm:px-0">
+        <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
+          <div className="max-w-screen-sm">
             <Link href="/brands" passHref>
-              <span className="flex items-end upper case">Brands</span>
+              <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
             </Link>
-            <div className="">
-              <h1 className="inline-block text-black">{brandDetails?.name}</h1>
-              <span className="inline-block ml-2 text-sm font-semibold text-black"> Showing {data?.products?.total} {RESULTS} </span>
+            <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+              {brandDetails?.name}
+            </h1>
+            {sanitizedDescription &&
+              <div className='flex justify-between w-full align-bottom'>
+                <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" />
+              </div>
+            }
+          </div>
+          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
+            <div className="flex justify-end align-bottom">
+              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
-            {sanitizedDescription && (
-              <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="mt-2 text-black sm:mt-5" />
-            )}
           </div>
-          <div className="flex justify-end w-full col-span-12">
-            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-          </div>
-          <div className="flex justify-end w-full">
+          <hr className='border-slate-200 dark:border-slate-700' />
+
+          <div className="flex justify-end w-full pt-6">
             <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
           </div>
           <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
@@ -532,9 +553,13 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ brand: string }>) {
-  const slug = `brands/${params!?.brand[0]}`
+  let  brandSlug :any = params!.brand;
+  if (brandSlug?.length) {
+    brandSlug = brandSlug.join('/');
+  }
+  const slug = `brands/${brandSlug}`
   const cachedDataUID = {
-    infraUID : Redis.Key.INFRA_CONFIG,
+    infraUID: Redis.Key.INFRA_CONFIG,
     brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
     collectionUID: Redis.Key.Brands.Collection + '_' + slug
   }
@@ -551,15 +576,17 @@ export async function getStaticProps({
     brandBySlugUIDData = await getBrandBySlug(slug, {})
     await setData([{ key: cachedDataUID.brandSlugUID, value: brandBySlugUIDData }])
   }
-  
-  if(!infraUIDData) {
+
+  if (!infraUIDData) {
     infraUIDData = await commerce.getInfra()
     await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
   }
 
+  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     if (brandBySlugUIDData?.status === "NotFound") {
-    return notFoundRedirect()
-  }
+      return notFoundRedirect()
+    }
+  }  
 
   const collections: any = {
     imageBannerCollection: collectionUIDData?.imageBannerCollection || [],
@@ -576,7 +603,7 @@ export async function getStaticProps({
       widgets?.forEach(async (widget: any) => {
         if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'ImageBanner'
+          widget.code == 'HeroBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
@@ -584,26 +611,26 @@ export async function getStaticProps({
                 collections.imageBannerCollection = await getCollectionById(
                   widget.recordId
                 )
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
         } else if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'MultipleImagesBanner'
+          widget.code == 'MultipleImageBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.imageCategoryCollection = res?.images
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
         } else if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'FeaturedDewaltImageList'
+          widget.code == 'HeroBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
@@ -611,33 +638,46 @@ export async function getStaticProps({
                 collections.imgFeatureCollection = await getCollectionById(
                   widget.recordId
                 )
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
         } else if (
           widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'FFXOffers'
+          widget.code == 'HeroBanner'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.offerBannerCollection = res.images
-              } catch (error: any) {}
+              } catch (error: any) { }
               resolve()
             })
           )
         } else if (
           widget.manufacturerSettingType == 'ProductCollection' &&
-          widget.code == 'FeaturedDewaltSaws'
+          widget.code == 'RecommendedProductCollection'
         ) {
           promises.push(
             new Promise(async (resolve: any, reject: any) => {
               try {
                 const res = await getCollectionById(widget.recordId)
                 collections.productCollection = res.products.results
-              } catch (error: any) {}
+              } catch (error: any) { }
+              resolve()
+            })
+          )
+        } else if (
+          widget.manufacturerSettingType == 'ProductCollection' &&
+          widget.code == 'SaleProductCollection'
+        ) {
+          promises.push(
+            new Promise(async (resolve: any, reject: any) => {
+              try {
+                const res = await getCollectionById(widget.recordId)
+                collections.saleProductCollection = res.products.results
+              } catch (error: any) { }
               resolve()
             })
           )
@@ -654,6 +694,7 @@ export async function getStaticProps({
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
       slug: slug,

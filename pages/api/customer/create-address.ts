@@ -9,7 +9,7 @@ const createAddressApiMiddleware = async (req: any, res: any) => {
     }
     const response = await commerce.createAddress({
       query: req.body,
-      cookie: req.cookies,
+      cookies: req.cookies,
     })
     res.status(200).json(response)
   } catch (error) {

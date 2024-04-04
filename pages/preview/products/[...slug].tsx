@@ -1,12 +1,14 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import { Layout } from '@components/common'
-import { ProductView } from '@components/product'
+import Layout from '@components/Layout/Layout'
+import { ProductView } from '@old-components/product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { LOADER_LOADING } from '@components/utils/textVariables'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string }>) {
   let pdpCachedImages = null
@@ -29,6 +31,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: product,
       slug: params!.slug[0],
       globalSnippets: infra?.snippets ?? [],
@@ -64,8 +67,9 @@ function Slug({
   config,
 }: any) {
   const router = useRouter()
+  const translate = useTranslation()
   return router.isFallback ? (
-    <h1>{LOADER_LOADING}</h1>
+    <h1>{translate('common.message.loaderLoadingText')}</h1>
   ) : (
     data && (
       <ProductView

@@ -1,45 +1,44 @@
-// Base Imports
 import { useReducer, useState, useEffect } from 'react'
-
-// Package Imports
 import Link from 'next/link'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
-
-// Component Imports
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { getCategoryBySlug } from '@framework/category'
-import { getCategoryProducts } from '@framework/api/operations'
 import useSwr from 'swr'
-import { postData } from '@components/utils/clientFetcher'
-import { ALL_CATEGORY, BAD_URL_TEXT, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
-import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import { useUI } from '@components/ui'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
-import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/product/Grid'))
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+import { getCategoryBySlug } from '@framework/category'
+import { getCategoryProducts } from '@framework/api/operations'
+import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
+import commerce from '@lib/api/commerce'
+import { generateUri } from '@commerce/utils/uri-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { postData } from '@components/utils/clientFetcher'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
+import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
+import { useUI } from '@components/ui'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
+const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
+const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 
 export async function getStaticProps(context: any) {
+  const { locale, locales } = context
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
   const slug =
@@ -59,54 +58,52 @@ export async function getStaticProps(context: any) {
     cachedDataUID.infraUID,
     cachedDataUID.categorySlugUID,
     cachedDataUID.categoryProductUID,
-  ]) 
+  ])
 
   let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
   let categorySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.categorySlugUID)
   let categoryProductUIDData: any = parseDataValue(cachedData, cachedDataUID.categoryProductUID)
-  
+
   try {
-    if(!categorySlugUIDData){
+    if (!categorySlugUIDData) {
       categorySlugUIDData = await getCategoryBySlug(slug)
       // save to redis
       await setData([{ key: cachedDataUID.categorySlugUID, value: categorySlugUIDData }])
     }
-    if(!infraUIDData){
+    if (!infraUIDData) {
       const infraPromise = commerce.getInfra()
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
   } catch (error: any) {
     logError(error)
-
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
-    return {
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
+      return {
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
     }
   }
 
-
-
-  if (categorySlugUIDData?.status === "NotFound") {
-    return notFoundRedirect()
+  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    if (categorySlugUIDData?.status === "NotFound") {
+      return notFoundRedirect()
+    }
   }
-
-
   if (categorySlugUIDData && categorySlugUIDData?.id) {
-    if(!categoryProductUIDData){
+    if (!categoryProductUIDData) {
       categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id)
-      // save to redis
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
-
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -116,9 +113,10 @@ export async function getStaticProps(context: any) {
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
     }
-    else{
+    else {
       return {
         props: {
+          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -127,18 +125,19 @@ export async function getStaticProps(context: any) {
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
-  }
-  }else
-  return {
-    props: {
-      category: categorySlugUIDData,
-      slug,
-      products: null,
-      globalSnippets: infraUIDData?.snippets ?? [],
-      snippets: categorySlugUIDData?.snippets ?? [],
-    },
-    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
-  }
+    }
+  } else
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+        category: categorySlugUIDData,
+        slug,
+        products: null,
+        globalSnippets: infraUIDData?.snippets ?? [],
+        snippets: categorySlugUIDData?.snippets ?? [],
+      },
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
+    }
 }
 
 const generateCategories = (categories: any) => {
@@ -147,9 +146,7 @@ const generateCategories = (categories: any) => {
     if (category?.link) {
       const segments = category.link.split('/')
       if (segments.length >= 3) {
-        category?.link.includes('category/')
-          ? categoryMap.push(`/${category?.link}`)
-          : categoryMap.push(`/${categoryPrefix}/${category?.link}`)
+        category?.link.includes('category/') ? categoryMap.push(`/${category?.link}`) : categoryMap.push(`/${categoryPrefix}/${category?.link}`)
       }
     }
     if (category?.subCategories) {
@@ -196,36 +193,20 @@ interface stateInterface {
   categoryId: any
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-  SET_CATEGORY_ID,
-} = ACTION_TYPES
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-  categoryId: '',
-}
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], categoryId: '', }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
-       return { ...state, sortBy: payload, currentPage: 1 }
+      return { ...state, sortBy: payload, currentPage: 1 }
     case PAGE:
       return { ...state, currentPage: payload }
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-       return { ...state, currentPage: 1, filters: [] }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
@@ -233,7 +214,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
-      return { ...state, filters: state.filters.filter( (item: any) => item.Value !== payload.Value ), }
+      return { ...state, filters: state.filters.filter((item: any) => item.Value !== payload.Value), }
     default:
       return { ...state }
   }
@@ -242,21 +223,14 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
-  adaptedQuery.currentPage
-    ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
-    : false
-  adaptedQuery.filters
-    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
-    : false
+  adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
+  adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const { isCompared } = useUI()
-  const initialState = {
-    ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
-    categoryId: category?.id,
-  }
+  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], categoryId: category?.id, }
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -275,7 +249,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true , excludeOOSProduct } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct } },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -305,7 +279,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     //if (IS_INFINITE_SCROLL) {
     if (
       data?.products?.currentPage !==
-        productListMemory?.products?.currentPage ||
+      productListMemory?.products?.currentPage ||
       data?.products?.total !== productListMemory?.products?.total
     ) {
       setProductListMemory((prevData: any) => {
@@ -349,7 +323,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     } /*else {
       resetPageScroll()
     }*/
-  },[])
+  }, [])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -406,19 +380,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
-          {BAD_URL_TEXT}
+          {translate('common.label.badUrlText')}
           <Link href="/category">
-            <span className="px-3 text-indigo-500">{ALL_CATEGORY}</span>
+            <span className="px-3 text-indigo-500">{translate('label.category.allCategoriesText')}</span>
           </Link>
         </h1>
       </div>
     )
   }
 
-  /*const productDataToPass =
-    IS_INFINITE_SCROLL && productListMemory.products?.results?.length
-      ? productListMemory.products
-      : products*/
   const css = { maxWidth: '100%', height: 'auto' }
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -434,10 +404,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{category?.metaTitle || category?.name}</title>
         <meta name="title" content={category?.metaTitle || category?.name} />
@@ -445,42 +412,41 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
         <meta property="og:title" content={category?.metaTitle || category?.name} key="ogtitle" />
-        <meta
-          property="og:description"
-          content={category?.metaDescription}
-          key="ogdesc"
-        />
+        <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section">
-        <div className="container px-4 mx-auto mt-4 bg-transparent">
-          {/* breadcrumb section start */}
+        <div className="container mx-auto mt-4 bg-transparent">
           {category?.breadCrumbs && (
-            <BreadCrumbs
-              items={category?.breadCrumbs}
-              currentProduct={category}
-            />
+            <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
-          {/* breadcrumb section End */}
         </div>
 
-        {/* Category info section start */}
-        <div className="container px-4 mx-auto my-6 mt-4 bg-transparent">
-          <h1 className='dark:text-black'>{category?.name}</h1>
-          <div
-            className="font-18 dark:text-black"
-            dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }}
-          ></div>
+        <div className="container mx-auto my-6 mt-4 bg-transparent">
+          <div className='flex flex-col'>
+            <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+              {category?.name.toLowerCase()}
+            </h1>
+            {category?.description &&
+              <div className='flex justify-between w-full align-bottom'>
+                <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+              </div>
+            }
+          </div>
+          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {products?.total} results</span>
+            <div className="flex justify-end align-bottom">
+              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+            </div>
+          </div>
+          <hr className='border-slate-200 dark:border-slate-700' />
         </div>
-        {/* Category info section End */}
-        {/* category banner info start */}
+
+
         <div className="w-full py-4">
           {category && category?.images && category?.images.length ? (
             <>
               {category?.images.map((cat: any, idx: number) => (
-                <div
-                  className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2"
-                  key={idx}
-                >
+                <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
                   <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
                     <div className="w-full h-full">
                       <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
@@ -494,126 +460,44 @@ function CategoryPage({ category, slug, products, deviceInfo, config }: any) {
                     </div>
                   </div>
                   <div className="order-1 sm:order-2">
-                    <img
-                      src={
-                        generateUri(cat?.url, 'h=700&fm=webp') ||
-                        IMG_PLACEHOLDER
-                      }
-                      className="w-full"
-                      alt={category?.name || 'category'}
-                      width={700}
-                      height={700}
-                    />
+                    <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'category'} width={700} height={700} />
                   </div>
                 </div>
               ))}
             </>
-          ): null }
+          ) : null}
         </div>
-        <div className="container px-4 py-6 mx-auto">
-          {/* category banner info End */}
-
-          {/*TODO: For browser caching of product images*/}
-          {/*{productDataToPass?.results?.length > 0 && (
-          <CacheProductImages
-            data={productDataToPass?.results
-              ?.map((x: any) => x.images?.map((y: any) => y?.image).flat(1))
-              .flat(1)}
-            setIsLoading={setIsLoading}
-          />
-        )}*/}
-
+        <div className={`container mx-auto ${products?.total > 0 ? ' py-0' : 'py-6'}`}>
           {products?.total > 0 ? (
             <div className="grid w-full grid-cols-1 sm:grid-cols-12">
-              {!!products &&
-                (products?.filters?.length > 0 ? (
-                  <>
-                    {isMobile ? (
-                      <ProductMobileFilters
-                        handleFilters={handleFilters}
-                        products={products}
-                        routerFilters={state.filters}
-                        handleSortBy={handleSortBy}
-                        clearAll={clearAll}
-                        routerSortOption={state.sortBy}
-                        removeFilter={removeFilter}
-                      />
-                    ) : (
+              {!!products && (products?.filters?.length > 0 ? (
+                <>
+                  {isMobile ? (
+                    <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                  ) : (
                     <>
-                      <div className="flex float-right w-1/5 py-2 mt-1 -top-16">
-                        <OutOfStockFilter
-                          excludeOOSProduct={excludeOOSProduct}
-                          onEnableOutOfStockItems={onEnableOutOfStockItems}
-                        />
-                      </div>
-
-                        <ProductFilterRight
-                          handleFilters={handleFilters}
-                          products={productDataToPass}
-                          routerFilters={state.filters}
-                        />
+                      <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                     </>
+                  )}
+                  <div className="sm:col-span-10 p-[1px]">
+                    {isMobile ? null : (
+                      <ProductFiltersTopBar products={products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
                     )}
-                    <div className="sm:col-span-10 p-[1px]">
-                      {isMobile ? null : (
-                        <ProductFiltersTopBar
-                          products={products}
-                          handleSortBy={handleSortBy}
-                          routerFilters={state.filters}
-                          clearAll={clearAll}
-                          routerSortOption={state.sortBy}
-                          removeFilter={removeFilter}
-                        />
-                      )}
-                      <ProductGridWithFacet
-                        products={productDataToPass}
-                        currentPage={state?.currentPage}
-                        handlePageChange={handlePageChange}
-                        handleInfiniteScroll={handleInfiniteScroll}
-                        deviceInfo={deviceInfo}
-                        maxBasketItemsCount={maxBasketItemsCount(config)}
-                        isCompared={isCompared}
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                    <div className="flex justify-end w-full col-span-12">
-                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                    </div>
-                    <ProductFiltersTopBar
-                      products={productDataToPass}
-                      handleSortBy={handleSortBy}
-                      routerFilters={state.filters}
-                      clearAll={clearAll}
-                      routerSortOption={state.sortBy}
-                      removeFilter={removeFilter}
-                    />
-                    <ProductGrid
-                      products={productDataToPass}
-                      currentPage={state?.currentPage}
-                      handlePageChange={handlePageChange}
-                      handleInfiniteScroll={handleInfiniteScroll}
-                      deviceInfo={deviceInfo}
-                      maxBasketItemsCount={maxBasketItemsCount(config)}
-                      isCompared={isCompared}
-                    />
+                    <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                   </div>
-                ))}
-                <CompareSelectionBar
-                  name={category?.name}
-                  showCompareProducts={showCompareProducts}
-                  products={productDataToPass}
-                  isCompare={isProductCompare}
-                  maxBasketItemsCount={maxBasketItemsCount(config)}
-                  closeCompareProducts={closeCompareProducts}
-                  deviceInfo={deviceInfo}
-                />
+                </>
+              ) : (
+                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                  <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                  <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                </div>
+              ))}
+              <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
             </div>
           ) : (
             <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
               <h4 className="text-3xl font-bold text-gray-300">
-                No Products availabe in {category?.name}
+                {translate('common.label.noProductAvailableText')} {category?.name}
               </h4>
             </div>
           )}

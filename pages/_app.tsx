@@ -1,48 +1,51 @@
 import '@assets/css/main.css'
-import '@assets/icon.css'
-import '@assets/css/chrome-bug.css'
-import '@assets/css/checkout-frame.css'
+import "fonts/line-awesome-1.3.0/css/line-awesome.css";
+import "styles/index.scss";
+import 'swiper/css/bundle'
 import '@assets/css/algolia-instant-search.css'
 import React, { FC, useEffect, useState } from 'react'
-import { Head } from '@components/common'
-import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
-import 'swiper/css/bundle'
+import { appWithTranslation } from 'next-i18next'
 import jwt from 'jsonwebtoken'
+import NextHead from 'next/head'
 import Cookies from 'js-cookie'
-import { v4 as uuid_v4 } from 'uuid'
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION } from '@components/utils/constants'
-import DataLayerInstance from '@components/utils/dataLayer'
-import geoData from '@components/utils/geographicService'
 import TagManager from 'react-gtm-module'
-import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@components/utils/setSessionId'
+import { v4 as uuid_v4 } from 'uuid'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import OverlayLoader from '@components/common/OverlayLoader'
+import { AppContext, AppInitialProps } from 'next/app'
+import uniqBy from 'lodash/uniqBy'
+import { SessionProvider } from 'next-auth/react'
+
 import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
-import { ContentSnippet } from '@components/common/Content'
-import NextHead from 'next/head'
 import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
 import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, REVIEW_BASE_URL, SHARED_SECRET } from '@framework/utils/constants'
-import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { DeviceType } from '@commerce/utils/use-device'
-import InitDeviceInfo from '@components/common/InitDeviceInfo'
-import ErrorBoundary from '@components/error'
-import CustomCacheBuster from '@components/common/CustomCacheBuster'
+
 import packageInfo from '../package.json'
 import { cachedGetData } from '@framework/api/utils/cached-fetch'
-import { AppContext, AppInitialProps } from 'next/app'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
-import { SessionProvider } from 'next-auth/react'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
-import CustomerReferral from '@components/customer/Referral'
 import fetcher from '@framework/fetcher'
-import { IScriptSnippet } from '@components/common/Content/ScriptContentSnippet'
-import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
-import { uniqBy } from 'lodash'
+
+import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@components/utils/constants'
+import DataLayerInstance from '@components/utils/dataLayer'
+import geoData from '@components/utils/geographicService'
+import analytics from '@components/services/analytics/analytics'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@components/utils/setSessionId'
+import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
+import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
+import Head from '@components/shared/Head/Head';
+import NonHeadContentSnippet from '@components/shared/Snippet/NonHeadContentSnippet';
+import { IScriptSnippet } from '@components/shared/Snippet/ScriptContentSnippet';
+import InitDeviceInfo from '@components/shared/InitDeviceInfo';
+import BrowserNavigation from '@components/shared/routing/BrowserNavigation';
+import ErrorBoundary from '@components/shared/error';
+import CustomCacheBuster from '@components/shared/CustomCacheBuster';
+import CustomerReferral from '@components/customer/Referral';
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -83,14 +86,7 @@ export const SCROLLABLE_LOCATIONS = [
   '/kit/'
 ]
 
-function MyApp({
-  Component,
-  pageProps,
-  nav,
-  footer,
-  clientIPAddress,
-  ...props
-}: any) {
+function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }: any) {
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [keywordsData, setKeywordsData] = useState([])
@@ -197,6 +193,11 @@ function MyApp({
     appConfig = tryParseJson(decrypt(pageProps?.appConfig))
   }
 
+  let pluginConfig: any = null
+  if (pageProps?.pluginConfig) {
+    pluginConfig = tryParseJson(decrypt(pageProps?.pluginConfig))
+  }
+
   const initializeGTM = () => {
     if (process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID)
       TagManager.initialize(tagManagerArgs)
@@ -221,8 +222,13 @@ function MyApp({
     initializeGTM()
     document.body.classList?.remove('loading')
     if (appConfig) {
-      Cookies.set(Cookie.Key.CURRENCY, appConfig?.defaultCurrency)
-      Cookies.set(Cookie.Key.LANGUAGE, appConfig?.defaultLanguage)
+      const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || appConfig?.defaultCurrency || EmptyString
+      Cookies.set(Cookie.Key.CURRENCY, currencyCode)
+      const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
+      Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
+      const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale || EmptyString
+      Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
+      Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
     }
     fetchKeywords()
 
@@ -369,22 +375,14 @@ function MyApp({
         )}
         <CustomCacheBuster buildVersion={packageInfo?.version} />
         <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-        {/* TODO: Disable client-side payment link redirect */}
-        {/*<PaymentLinkRedirect router={router} />*/}
+        {
+          (deviceInfo && (deviceInfo.isDesktop || deviceInfo.isMobile || deviceInfo.isIPadorTablet)) && (
+            <BrowserNavigation deviceInfo={deviceInfo} />
+          )
+        }
         <ErrorBoundary>
-          <Layout
-            nav={nav}
-            footer={footer}
-            config={appConfig}
-            pageProps={updatedPageProps}
-            keywords={keywordsData}
-            deviceInfo={deviceInfo}
-            maxBasketItemsCount={maxBasketItemsCount(appConfig)}
-          >
-            <div
-              ref={bodyStartScrCntrRef}
-              className={`${ELEM_ATTR}body-start-script-cntr`}
-            ></div>
+          <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
+            <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
             <OverlayLoader />
             <CustomerReferral router={router} />
             <SessionProvider session={pageProps?.session}>
@@ -393,14 +391,11 @@ function MyApp({
                 location={location}
                 ipAddress={location.Ip}
                 config={appConfig}
+                pluginConfig={pluginConfig}
                 deviceInfo={deviceInfo}
               />
             </SessionProvider>
-            {/* <RedirectIntercept /> */}
-            <div
-              ref={bodyEndScrCntrRef}
-              className={`${ELEM_ATTR}body-end-script-cntr`}
-            ></div>
+            <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
           </Layout>
         </ErrorBoundary>
       </ManagedUIContext>
@@ -460,6 +455,7 @@ MyApp.getInitialProps = async (
   }
 
   const { ctx, Component } = context
+  const { locale } = ctx
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
@@ -492,88 +488,36 @@ MyApp.getInitialProps = async (
     clientIPAddress = forwardedFor.split(',').at(0) ?? ''
   }
 
-  let appConfigResult,
-    navTreeResult = {
-      nav: new Array(),
-      footer: new Array(),
-    }
+  let appConfigResult, navTreeResult = { nav: new Array(), footer: new Array(), }
   let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
   let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
   let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
 
+  const headers = { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, }
   try {
-    const headers = {
-      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-    }
     appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
-    const languageCookie =
-      req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
-
-    const currencyCookie =
-      req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
-
-    const countryCookie =
-      req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
-
-    defaultCurrency =
-      currencyCookie ||
-      appConfigResult?.result?.configSettings
-        .find((setting: any) => setting.configType === 'RegionalSettings')
-        .configKeys.find(
-          (item: any) => item.key === 'RegionalSettings.DefaultCurrencyCode'
-        ).value ||
-      BETTERCOMMERCE_DEFAULT_CURRENCY
-
-    defaultCountry =
-      countryCookie ||
-      appConfigResult?.result?.configSettings
-        .find((setting: any) => setting.configType === 'RegionalSettings')
-        .configKeys.find(
-          (item: any) => item.key === 'RegionalSettings.DefaultCountry'
-        ).value ||
-      BETTERCOMMERCE_DEFAULT_COUNTRY
-
-    defaultLanguage =
-      languageCookie ||
-      appConfigResult?.result?.configSettings
-        .find((setting: any) => setting.configType === 'RegionalSettings')
-        .configKeys.find(
-          (item: any) => item.key === 'RegionalSettings.DefaultLanguageCode'
-        ).value ||
-      BETTERCOMMERCE_DEFAULT_LANGUAGE
-
+    const languageCookie = req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
+    const currencyCookie = req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
+    const countryCookie = req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
+    defaultCurrency = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCurrencyCode')?.value || currencyCookie || BETTERCOMMERCE_DEFAULT_CURRENCY
+    defaultCountry = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCountry')?.value || countryCookie || BETTERCOMMERCE_DEFAULT_COUNTRY
+    defaultLanguage = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultLanguageCode')?.value || languageCookie || BETTERCOMMERCE_DEFAULT_LANGUAGE
   } catch (error: any) { }
 
   let appConfig = null
   if (appConfigResult) {
     const { result: appConfigData } = appConfigResult
-    const {
-      configSettings,
-      shippingCountries,
-      billingCountries,
-      currencies,
-      languages,
-      snippets,
-    } = appConfigData
+    const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
-        configSettings:
-          configSettings?.filter((x: any) =>
-            ['B2BSettings', 'BasketSettings', 'ShippingSettings'].includes(
-              x?.configType
-            )
-          ) || [],
+        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings'].includes(x?.configType)) || [],
         shippingCountries,
         billingCountries,
         currencies,
         languages,
         snippets,
       },
-      ...{
-        defaultCurrency,
-        defaultLanguage,
-        defaultCountry,
-      },
+      ...{ defaultCurrency, defaultLanguage, defaultCountry, },
     }
     appConfig = encrypt(JSON.stringify(appConfigObj))
   }
@@ -591,14 +535,27 @@ MyApp.getInitialProps = async (
     logError(error)
   }
 
+  let pluginConfig = new Array<any>()
+  const socialLoginConfigUrl = `${INFRA_PLUGIN_CATEGORY_ENDPOINT}?categoryCode=${PluginCategory.SOCIAL_LOGIN}`
+  try {
+    const socialLoginConfig: any = await cachedGetData(socialLoginConfigUrl, req?.cookies, headers)
+    if (socialLoginConfig?.result) {
+      pluginConfig = pluginConfig?.concat(socialLoginConfig?.result)
+    }
+  } catch (error: any) {
+    logError(error)
+  }
+
   return {
     pageProps: {
       appConfig: appConfig,
+      pluginConfig: encrypt(JSON.stringify(pluginConfig)),
       navTree: navTreeResult,
       clientIPAddress: clientIPAddress,
       reviewData: reviewData,
+      locale,
     },
   }
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

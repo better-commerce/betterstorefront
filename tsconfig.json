@@ -22,12 +22,14 @@
       "@config/*": ["config/*"],
       "@assets/*": ["assets/*"],
       "@assets/css/*": ["assets/css/*"],
+      "@old-components/*": ["old-components/*"],
       "@components/*": ["components/*"],
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/bettercommerce"],
       "@theme/*": ["theme/*"],
-      "@framework/*": ["framework/bettercommerce/*"]
+      "@framework/*": ["framework/bettercommerce/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],

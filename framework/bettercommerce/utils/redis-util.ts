@@ -7,8 +7,8 @@ import {
   getFromRedis,
   saveToRedis,
 } from '@lib/redis/service'
-import { logError } from './app-util'
-import { Redis } from './redis-constants'
+import { logError } from '@framework/utils/app-util'
+import { Redis } from '@framework/utils/redis-constants'
 
 /**
  * Create app build ID

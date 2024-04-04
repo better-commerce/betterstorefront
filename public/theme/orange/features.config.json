@@ -1,0 +1,15 @@
+{
+  "features": {
+    "enableLanguage": false,
+    "enablePriceIncVatToggle": false,
+    "enableQuickOrderPad": true,
+    "enableCompare": false,
+    "enableStoreLocator": true
+  },
+  "social":[
+    { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
+    { "name": "Youtube", "icon": "images/socials/twitter.svg", "href": "", "enable":false },
+    { "name": "Telegram", "icon": "images/socials/telegram.svg", "href": "", "enable":false },
+    { "name": "Twitter", "icon": "images/socials/youtube.svg", "href": "", "enable":true }
+  ]
+}

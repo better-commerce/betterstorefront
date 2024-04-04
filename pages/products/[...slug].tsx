@@ -1,15 +1,18 @@
 import type { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
-import ProductLayout from '@components/common/Layout/ProductLayout'
-import { ProductView } from '@components/product'
+import ProductLayout from '@components/Layout/ProductLayout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { LOADER_LOADING } from '@components/utils/textVariables'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { logError, notFoundRedirect } from '@framework/utils/app-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import ProductView from '@components/Product/ProductView'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
@@ -118,17 +121,19 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
     } catch (imgError) {}
   } catch (error: any) {
     logError(error)
-    let errorUrl = '/500'
-    const errorData = error?.response?.data
-    if (errorData?.errorId) {
-      errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-    }
-    return {
-      redirect: {
-        destination: errorUrl,
-        permanent: false,
-      },
-    }
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      let errorUrl = '/500'
+      const errorData = error?.response?.data
+      if (errorData?.errorId) {
+        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
+      }
+      return {
+        redirect: {
+          destination: errorUrl,
+          permanent: false,
+        },
+      }
+    }  
   }
 
   if(!infraUIDData){
@@ -138,13 +143,14 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   }
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: productSlugUIDData,
       slug: slug,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: productSlugUIDData?.snippets ?? [],
       relatedProducts: relatedProductUIDData,
       availabelPromotions: availablePromoUIDData,
-      allProductsByCategory: productCategoryUIDData,
+      allProductsByCategory: productCategoryUIDData ?? [],
       reviews: productReviewUIDData,
       pdpCachedImages: pdpCacheImageUIDData?.images
         ? JSON.parse(pdpCacheImageUIDData?.images)
@@ -181,8 +187,9 @@ function Slug({
   config,
 }: any) {
   const router = useRouter()
+  const translate = useTranslation()
   return router.isFallback ? (
-    <h1>{LOADER_LOADING}</h1>
+    <h1>{translate('common.message.loaderLoadingText')}</h1>
   ) : (
     data && (
       <ProductView
