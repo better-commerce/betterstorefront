@@ -29,7 +29,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
       >
         <div>
           <div className="absolute inset-5 sm:inset-8">
-            <img alt={name} src={generateUri(featuredImage, "h=200&fm=webp") || IMG_PLACEHOLDER} className="absolute end-0 w-1/2 max-w-[200px] h-full object-contain drop-shadow-xl rounded-3xl" />
+            <img alt={name} src={generateUri(featuredImage, "h=300&fm=webp") || IMG_PLACEHOLDER} className="absolute end-0 w-1/2 max-w-[200px] h-full object-contain drop-shadow-xl rounded-3xl" />
           </div>
         </div>
         <span className="absolute inset-0 transition-opacity opacity-0 group-hover:opacity-40 bg-black/10"></span>

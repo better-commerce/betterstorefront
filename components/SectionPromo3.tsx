@@ -12,6 +12,8 @@ import axios from 'axios'
 import { useUI } from '@components/ui'
 import { useTranslation } from "@commerce/utils/use-translation";
 import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
+import { IMG_PLACEHOLDER } from "./utils/textVariables";
+import { generateUri } from "@commerce/utils/uri-util";
 export interface SectionPromo3Props {
   className?: string;
   data?: any;
@@ -92,12 +94,12 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
                 <ArrowSmallRightIcon className="w-6 h-6" />
               </ButtonCircle>
             </form>
-            {err ? <p className="mt-1 text-sm error-text-clr px-0 sm:px-0">{err}</p> : null}
+            {err ? <p className="px-0 mt-1 text-sm error-text-clr sm:px-0">{err}</p> : null}
           </div>
 
           <img
             alt={subs?.subscription_title}
-            src={subs?.subscription_image}
+            src={generateUri(subs?.subscription_image, "h=500&fm=webp") || IMG_PLACEHOLDER}
             sizes="(max-width: 768px) 100vw, 50vw "
             className="relative block lg:absolute lg:right-0 lg:bottom-0 mt-10 lg:mt-0 max-w-lg lg:max-w-[calc(40%-40px)]"
           />
