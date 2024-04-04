@@ -46,6 +46,8 @@ import BrowserNavigation from '@components/shared/routing/BrowserNavigation';
 import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
+import { CURRENT_THEME } from "@components/utils/constants";
+const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -554,6 +556,7 @@ MyApp.getInitialProps = async (
       clientIPAddress: clientIPAddress,
       reviewData: reviewData,
       locale,
+      featureToggle,
     },
   }
 }
