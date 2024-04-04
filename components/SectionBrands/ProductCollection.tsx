@@ -211,6 +211,7 @@ export default function ProductCollection({
             routerSortOption={state.sortBy}
             products={data.products}
             action={handleSortBy}
+            featureToggle={featureToggle}
           />
         </div> */}
         <ProductGrid
