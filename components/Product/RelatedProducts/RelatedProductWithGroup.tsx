@@ -98,9 +98,9 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
   }
   return (
     <>
-      <Swiper slidesPerView={1} spaceBetween={20} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: productPerColumn }, 1024: { slidesPerView: productPerColumn }, }} >
+      <Swiper slidesPerView={1} spaceBetween={10} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: productPerColumn }, 1024: { slidesPerView: productPerColumn }, }} >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer height-auto-slide group lg:w-auto h-100">
+          <SwiperSlide key={pId} className="relative inline-flex flex-col text-left cursor-pointer height-auto-slide group">
             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
           </SwiperSlide>
         ))}

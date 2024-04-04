@@ -878,10 +878,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
-              <div className="flex flex-col section-devider"></div>
-              <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
-                <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+              <hr className="border-slate-200 dark:border-slate-700" />
+              <div className="container flex flex-col w-full px-4 py-10 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
+                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
+                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>
           )}
