@@ -795,7 +795,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     )}
                     {cartItems.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                        <Link href="/cart" onClick={() => {
+                        <Link href="/checkout" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
                         }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
