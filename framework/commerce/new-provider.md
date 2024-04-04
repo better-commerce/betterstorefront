@@ -35,7 +35,7 @@ Adding a commerce provider means adding a new folder in `framework` with a folde
 - `env.template`
 - `index.ts`
 - `provider.ts`
-- `commerce.config.json`
+- `features.config.json`
 - `next.config.js`
 - `README.md`
 

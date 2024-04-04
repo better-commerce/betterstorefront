@@ -7,16 +7,17 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import { NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/utils/constants'
 import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
-import CheckoutHeading from '@components/checkout-old/CheckoutHeading'
-const CheckoutRouter = dynamic(() => import('@components/checkout-old/CheckoutRouter'))
-const CheckoutForm = dynamic(() => import('@components/checkout-old/CheckoutForm'))
+import CheckoutHeading from '@components/SectionCheckoutJourney/checkout/CheckoutHeading'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutRouter'))
+const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutForm'))
 
 export interface actionInterface {
   type?: string
@@ -98,10 +99,12 @@ function Checkout({ cart, config, location }: any) {
   }, [user, cartItems, guestUser])
 
   useEffect(() => {
-    const billingAddress = userAddresses?.find((o: any) => o.isDefaultBilling)
-    const shippingAddress = userAddresses?.find((o: any) => o.isDefaultDelivery)
+    const billingAddress = userAddresses?.find((o: any) => o.isDefault || o.isDefaultBilling)
+    const shippingAddress = userAddresses?.find((o: any) => o.isDefault || o.isDefaultDelivery)
     if (billingAddress) setDefaultBillingAddress(billingAddress)
+    else setDefaultBillingAddress(userAddresses?.[0] || {})
     if (shippingAddress) setDefaultShippingAddress(shippingAddress)
+    else setDefaultShippingAddress(userAddresses?.[0] || {})
   }, [userAddresses])
 
   const handleGuestMail = (values: any) => {
@@ -127,7 +130,7 @@ function Checkout({ cart, config, location }: any) {
     let userId =
       customerId ||
       (cartItems?.userId === Guid.empty ? user?.userId : cartItems?.userId)
-    if (!userId || (userId && userId === Guid.empty)) return
+    if (guestUser || !userId || (userId && userId === Guid.empty)) return
     try {
       const response: any = await getAddress(userId)
       setUserAddresses(response || [])
@@ -165,8 +168,8 @@ function Checkout({ cart, config, location }: any) {
           shipping_tier: cartItems?.shippingMethods[0]?.countryCode,
           coupon: cartItems?.promotionsApplied?.length
             ? cartItems?.promotionsApplied
-                ?.map((x: any) => x?.promoCode)
-                ?.join(',')
+              ?.map((x: any) => x?.promoCode)
+              ?.join(',')
             : '',
           value: cartItems?.subTotal?.raw?.withTax,
           item_var_id: cartItems?.id,
@@ -232,6 +235,7 @@ function Checkout({ cart, config, location }: any) {
   return <></>
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketRef: any = cookies.basketId
   if (!basketRef) {
@@ -245,10 +249,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })
 
   return {
-    props: { cart: response }, // will be passed to the page component as props
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      cart: response,
+    }, // will be passed to the page component as props
   }
 }
 
 const PAGE_TYPE = PAGE_TYPES['Checkout']
 
-export default withDataLayer(Checkout, PAGE_TYPE, false)
+export default withDataLayer(Checkout, PAGE_TYPE)

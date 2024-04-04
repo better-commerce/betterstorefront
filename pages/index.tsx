@@ -1,86 +1,82 @@
-// Base Imports
 import { useEffect, useState } from 'react'
-
-// Package Imports
-import os from 'os'
-import type { GetStaticPropsContext } from 'next'
+import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
-
-// Component Imports
-import { Layout } from '@components/common'
-
-// Other Imports
+import os from 'os'
+import type { GetStaticPropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { Hero } from '@components/ui'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { useRouter } from 'next/router'
+import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-const PromotionBanner = dynamic(() => import('@components/home/PromotionBanner'))
-const Heading = dynamic(() => import('@components/home/Heading'))
-const Categories = dynamic(() => import('@components/home/Categories'))
-const Collections = dynamic(() => import('@components/home/Collections'))
-const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
+import { useTranslation } from '@commerce/utils/use-translation'
+import Layout from '@components/Layout/Layout'
+const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
+const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
+const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
+const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'))
+const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'))
+const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
+const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-
   const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
-
-  const fetchData = async (
-    pageContentUIDData: any[],
-    pageContentUIDKey: string,
-    channel: 'Web' | 'MobileWeb'
-  ) => {
+  let Page_Slug = HOME_PAGE_SLUG;
+  if (CURRENT_THEME == "black") {
+    Page_Slug = HOME_PAGE_NEW_SLUG
+  } else if (CURRENT_THEME == "orange") {
+    Page_Slug = HOME_PAGE_SLUG
+  } else {
+    Page_Slug = HOME_PAGE_SLUG;
+  }
+  const fetchData = async (pageContentUIDData: any[], pageContentUIDKey: string, channel: 'Web' | 'MobileWeb') => {
     if (!containsArrayData(pageContentUIDData)) {
-      infra?.currencies
-        ?.map((x: any) => x?.currencyCode)
-        ?.forEach((currencyCode: string, index: number) => {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const pageContentsPromise = commerce.getPagePreviewContent({
-                  id: '',
-                  slug: HOME_PAGE_DEFAULT_SLUG,
-                  workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                  channel: channel,
-                  currency: currencyCode,
-                  cachedCopy: true,
-                })
-                const pageContent = await pageContentsPromise
-                pageContentUIDData.push({ key: currencyCode, value: pageContent })
-                await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
-                resolve()
-              } catch (error: any) {
-                resolve()
-              }
+      infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
+        promises.push(new Promise(async (resolve: any, reject: any) => {
+          try {
+            const pageContentsPromise = commerce.getPagePreviewContent({
+              id: '',
+              slug: Page_Slug,
+              workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+              channel: channel,
+              currency: currencyCode,
+              cachedCopy: true,
             })
-          )
-        })
+            const pageContent = await pageContentsPromise
+            pageContentUIDData.push({ key: currencyCode, value: pageContent })
+            await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
+            resolve()
+          } catch (error: any) {
+            resolve()
+          }
+        }))
+      })
     }
   };
   fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web');
   fetchData(pageContentMobileWebUIDData, Redis.Key.HomepageMobileWeb, 'MobileWeb');
 
   await Promise.all(promises)
-  const slugsPromise = commerce.getSlugs({ slug: HOME_PAGE_DEFAULT_SLUG });
+  const slugsPromise = commerce.getSlugs({ slug: Page_Slug });
   const slugs = await slugsPromise;
   const hostName = os.hostname()
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       globalSnippets: infra?.snippets ?? [],
       snippets: slugs?.snippets ?? [],
       pageContentsWeb: pageContentWebUIDData,
@@ -98,16 +94,24 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
+  const translate = useTranslation()
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
-
+  let Page_Slug = HOME_PAGE_SLUG;
+  if (CURRENT_THEME == "black") {
+    Page_Slug = HOME_PAGE_NEW_SLUG
+  } else if (CURRENT_THEME == "orange") {
+    Page_Slug = HOME_PAGE_SLUG
+  } else {
+    Page_Slug = HOME_PAGE_SLUG;
+  }
   useEffect(() => {
     const currentCurrency = getCurrentCurrency()
     if (!matchStrings(currencyCode, currentCurrency, true)) {
       axios
         .post('/api/page-preview-content', {
           id: '',
-          slug: HOME_PAGE_DEFAULT_SLUG,
+          slug: Page_Slug,
           workingVersion: process.env.NODE_ENV === 'production' ? true : true,
           channel: isMobile ? 'MobileWeb' : 'Web',
           cachedCopy: true,
@@ -137,22 +141,20 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     entityId: '',
     eventType: 'PageViewed',
   })
-  const css = { maxWidth: '100%', minHeight: '350px' }
 
   if (!pageContents) {
     return (
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
-
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
-          <title>{pageContents?.metatitle || 'Home'}</title>
-          <meta name="title" content={pageContents?.metatitle || 'Home'} />
+          <title>{pageContents?.metatitle || translate('common.label.homeText')}</title>
+          <meta name="title" content={pageContents?.metatitle || translate('common.label.homeText')} />
           {pageContents?.metadescription && (<meta name="description" content={pageContents?.metadescription} />)}
           {pageContents?.metakeywords && (<meta name="keywords" content={pageContents?.metakeywords} />)}
           <meta property="og:image" content={pageContents?.image} />
@@ -160,34 +162,21 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
-
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <Hero deviceInfo={deviceInfo} banners={pageContents?.banner} />
-      <div className="px-4 py-3 mx-auto lg:container sm:py-6 sm:px-4 md:px-4 lg:px-6 2xl:px-0">
-        <div className='w-full flex flex-col min-h-[400px]'>
-          {pageContents?.heading?.map((heading: any, hId: number) => (
-            <Heading title={heading?.heading_title} subTitle={heading?.heading_subtitle} key={`category-heading-${hId}`} />
-          ))}
-          <Categories data={pageContents?.categorylist} deviceInfo={deviceInfo} />
+      <div className="relative overflow-hidden nc-PageHome">
+        <SectionHero2 data={pageContents?.banner} />
+        <div className="mt-24 lg:mt-32">
+          <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
-        <div className='w-full flex flex-col min-h-[100px]'>
-          {pageContents?.productheading?.map((productH: any, Pid: number) => (
-            <Heading title={productH?.productheading_title} subTitle={productH?.productheading_subtitle} key={`product-heading-${Pid}`} />
-          ))}
+        <div className="container relative my-24 space-y-24 lg:space-y-32 lg:my-32">
+          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
+          <div className="relative py-16 lg:py-20">
+            <BackgroundSection />
+            <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
+          </div>
+          <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
+          <SectionPromo3 data={pageContents?.subscription} />
         </div>
-        <div className='w-full flex flex-col min-h-[560px]'>
-          <ProductSlider config={pageContents} deviceInfo={deviceInfo} />
-        </div>
-      </div>
-
-      {pageContents?.promotions?.map((banner: any, bId: number) => (
-        <PromotionBanner data={banner} key={bId} css={css} />
-      ))}
-      <div className="px-4 py-3 mx-auto lg:container sm:px-4 lg:px-0 sm:py-6 md:px-4">
-        {pageContents?.collectionheadings?.map((heading: any, cId: number) => (
-          <Heading title={heading?.collectionheadings_title} subTitle={heading?.collectionheadings_subtitle} key={`collection-heading-${cId}`} />
-        ))}
-        <Collections data={pageContents?.collectionlist} />
       </div>
     </>
   )

@@ -34,8 +34,14 @@ export const TEST_PAYMENT_AMOUNT = process.env.TEST_PAYMENT_AMOUNT
 export const BETTERCMS_API_VERSION = process.env.BETTERCMS_API_VERSION
 export const BETTERCMS_API_URL = process.env.BETTERCMS_API_URL
 export const HOME_PAGE_DEFAULT_SLUG = 'home'
+export const TERMS_PAGE_DEFAULT_SLUG = 'terms-and-condition'
+export const PRIVACY_PAGE_DEFAULT_SLUG = 'privacy-policy'
+export const CONTACT_PAGE_DEFAULT_SLUG = 'contact-us'
+export const COOKIES_PAGE_DEFAULT_SLUG = 'cookies'
+export const HOME_PAGE_NEW_SLUG = 'new-home-td'
+export const HOME_PAGE_SLUG = 'new-home-bc'
 export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
-
+export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 // google analytics
 export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED)
 export const GA4_MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID
@@ -59,6 +65,7 @@ export module Cookie {
   export module Key {
     export const CURRENCY = 'Currency'
     export const CURRENT_CURRENCY = 'CurCurrency'
+    export const CURRENCY_SYMBOL = 'CurrencySymbol'
     export const LANGUAGE = 'Language'
     export const COUNTRY = 'Country'
     export const SESSION_ID = 'sessionId'

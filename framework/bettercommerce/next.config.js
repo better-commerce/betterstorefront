@@ -1,4 +1,4 @@
-const commerce = require('./commerce.config.json')
+const commerce = require('./features.config.json')
 // const fetcher = require('./fetcher')
 const axios = require('axios')
 const path = require('path')
@@ -9,7 +9,9 @@ const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
 const fs = require('fs')
-const locales = require('./locales.json')
+const localeSettings = require('./locales.json')
+const { localizations, ...rest } = localeSettings
+const locales = { ...rest }
 
 const url = new URL('oAuth/token', AUTH_URL)
 
@@ -49,13 +51,13 @@ const getSeoConfig = async function (token) {
           acc['keywords'] = obj.value || JSON.stringify(obj.value)
         return acc
       }, {})
-    console.log(path.join(__dirname), '====')
+    //console.log(path.join(__dirname), '====')
     fs.writeFileSync(
       path.join(__dirname, '/seo.json'),
       JSON.stringify(seoConfig),
       (err) => console.log(err)
     )
-  } catch (error) {}
+  } catch (error) { }
 }
 
 const handler = async () => {
@@ -119,11 +121,11 @@ const localeStore = {}
 
 let func = (async () => {
   let microsites = await getMicrosites()
-  console.log(microsites)
+  //console.log(microsites)
   localeStore.i18n = microsites
 })()
 
-console.log(locales, '====')
+//console.log(locales, '====')
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
   commerce,

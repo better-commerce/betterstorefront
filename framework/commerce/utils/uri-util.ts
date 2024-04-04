@@ -35,3 +35,11 @@ export const uriParams = (uri: string) => {
 
    return params;
 }
+
+export const removeQueryString = (path: any) => {
+   const queryStringIndex = path.indexOf('?')
+   if (queryStringIndex !== -1) {
+      return path.slice(0, queryStringIndex)
+   }
+   return path
+}

@@ -9,18 +9,20 @@ import { signOut } from 'next-auth/react'
 
 // Component Imports
 import Spinner from '@components/ui/Spinner'
-import BasicLayout from '@components/common/Layout/BasicLayout'
+import BasicLayout from '@old-components/common/Layout/BasicLayout'
 
 // Other Imports
 import { Guid } from '@commerce/types'
 import { useUI } from '@components/ui'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   Messages,
   NEXT_GET_CART,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_VALIDATE_PAYMENT_LINK,
 } from '@components/utils/constants'
 import { AlertType } from '@framework/utils/enums'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const PaymentLinkPage = ({ paymentCode, deviceInfo, config }: any) => {
   const {
@@ -122,11 +124,13 @@ const PaymentLinkPage = ({ paymentCode, deviceInfo, config }: any) => {
 PaymentLinkPage.Layout = BasicLayout
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
   const params: any = context?.query
   const paymentCode = params?.paymentCode?.length ? params?.paymentCode[0] : ''
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       paymentCode: paymentCode,
     }, // will be passed to the page component as props
   }

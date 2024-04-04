@@ -4,26 +4,29 @@ import getLookbooks from '@framework/api/content/lookbook'
 import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { Layout } from '@components/common'
-const ProductGrid = dynamic(() => import('@components/product/Grid/ProductGrid'))
+import Layout from '@components/Layout/Layout'
+const ProductGrid = dynamic(() => import('@old-components/product/Grid/ProductGrid'))
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { IMG_PLACEHOLDER, SHOP_THE_LOOK } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
+import CompareSelectionBar from '@old-components/product/ProductCompare/compareSelectionBar'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
+  const translate = useTranslation()
   const router = useRouter()
   const { basketId, openCart, setCartItems, isCompared } = useUI()
   const [isProductCompare, setProductCompare] = useState(false)
@@ -117,7 +120,7 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
               onClick={handleBulk}
               className="px-10 py-3 mt-5 text-lg font-semibold text-white uppercase bg-black hover:bg-gray-900"
             >
-              {SHOP_THE_LOOK}
+              {translate('label.myAccount.shopTheLookText')}
             </button>
           </div>
         </div>
@@ -160,6 +163,7 @@ export async function getStaticProps({
   const infra = await infraPromise
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: response,
       slug: slug[0],
       globalSnippets: infra?.snippets ?? [],

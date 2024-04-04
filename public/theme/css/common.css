@@ -161,3 +161,6 @@
         font-size: 135px !important;
     }
 }
+.border-r{
+    border-right-width: 1px;
+}

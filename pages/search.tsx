@@ -1,39 +1,34 @@
 // Base Imports
 import { useReducer, useEffect, useState } from 'react'
-
-// Package Imports
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import useSwr from 'swr'
-
-// Component Imports
-import { postData } from '@components/utils/clientFetcher'
-import { GetServerSideProps } from 'next'
 import Script from 'next/script'
+import NextHead from 'next/head'
+import { GetServerSideProps } from 'next'
+import { maxBasketItemsCount } from '@framework/utils/app-util'
+import commerce from '@lib/api/commerce'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { GENERAL_CATALOG } from '@components/utils/textVariables'
-import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import NextHead from 'next/head'
-import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CompareSelectionBar from '@components/product/ProductCompare/compareSelectionBar'
-import OutOfStockFilter from '@components/product/Filters/OutOfStockFilter'
-import commerce from '@lib/api/commerce'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
+const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid'))
+const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
 declare const window: any
-export const ACTION_TYPES = {
-  SORT_BY: 'SORT_BY',
-  PAGE: 'PAGE',
-  SORT_ORDER: 'SORT_ORDER',
-  CLEAR: 'CLEAR',
-  HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
-  ADD_FILTERS: 'ADD_FILTERS',
-  REMOVE_FILTERS: 'REMOVE_FILTERS',
-  FREE_TEXT: 'FREE_TEXT',
-}
-
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const PAGE_TYPE = PAGE_TYPES['Search']
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
 interface actionInterface {
   type?: string
   payload?: object | any
@@ -46,17 +41,6 @@ interface stateInterface {
   filters: any
   freeText: string
 }
-
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const PAGE_TYPE = PAGE_TYPES['Search']
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
-const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
-const ProductGrid = dynamic(() => import('@components/product/Grid'))
-const ProductMobileFilters = dynamic(() => import('@components/product/Filters'))
-const ProductFilterRight = dynamic(() => import('@components/product/Filters/filtersRight'))
-const ProductFiltersTopBar = dynamic(() => import('@components/product/Filters/FilterTopBar'))
-
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -90,6 +74,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const adaptedQuery = { ...query }
+  const translate = useTranslation()
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
 
@@ -334,37 +319,46 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{GENERAL_CATALOG}</title>
-        <meta name="title" content={GENERAL_CATALOG} />
-        <meta name="description" content={GENERAL_CATALOG} />
-        <meta name="keywords" content="Search" />
+        <title>{translate('label.basket.catalogText')}</title>
+        <meta name="title" content={translate('label.basket.catalogText')} />
+        <meta name="description" content={translate('label.basket.catalogText')} />
+        <meta name="keywords" content={translate('label.search.searchText')} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={GENERAL_CATALOG} key="ogtitle" />
-        <meta property="og:description" content={GENERAL_CATALOG} key="ogdesc" />
+        <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
-      <div className="container pt-6 pb-24 mx-auto">
-        <div className="">
-          <h1 className="inline-block pl-0 font-semibold tracking-tight text-black sm:px-0">
-            {GENERAL_CATALOG}
+      <div className="container pt-10 pb-24 mx-auto">
+        <div className="max-w-screen-sm">
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+            {translate('label.basket.catalogText')}
           </h1>
-          <span className="inline-block ml-2 text-sm font-medium sm:px-0 dark:text-black">
-            Showing {data.products.total} Results for
-          </span>
+          <div className='flex justify-between w-full align-bottom'>
+            <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
+              {translate('label.search.stepIntoWorldText')}
+            </span>
+          </div>
         </div>
-        <div className={`sm:grid-cols-3 lg:grid-cols-12 md:grid-cols-4 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-6 overflow-hidden sm:px-0 lg:px-0`}>
+        <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-4 sm:mb-4 align-center'>
+          <span className="inline-block text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} <span className='font-semibold text-black'>{data.products.total}</span> {translate('common.label.resultsText')} </span>
+          <div className="flex justify-end align-bottom">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+          </div>
+        </div>
+        <hr className="border-slate-200 dark:border-slate-700" />
+
+        <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
           {isMobile ? (
             <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
           ) : (
-            <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
-          )}
-          <div className={`sm:col-span-10`}>
-            <div className="flex justify-end w-full col-span-12">
-              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+            <div className='sm:col-span-3 md:col-span-3 lg:col-span-3'>
+              <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
             </div>
+          )}
+          <div className={`sm:col-span-9 lg:col-span-9 md:col-span-9`}>
             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
             <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           </div>
-          <CompareSelectionBar name={GENERAL_CATALOG} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+          <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
         </div>
       </div>
       <Script
@@ -392,9 +386,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config }: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context
   const allProducts = await commerce.getAllProducts({ ...DEFAULT_STATE })
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
       snippets: allProducts?.snippets ?? [],
     }, // will be passed to the page component as props

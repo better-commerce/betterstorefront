@@ -3,17 +3,13 @@ import React, { useEffect, useState } from "react"
 
 // Package Imports
 import axios from "axios"
-import { useRouter } from "next/router"
-
-// Component Imports
-import ReferralCard from '@components/customer/Referral/ReferralCard'
-
-// Other Imports
 import { NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_CLICK_ON_INVITE, NEXT_REFERRAL_INFO } from "@components/utils/constants"
-import { EMAIL_FIELD_VALIDATION } from "@components/utils/textVariables"
 import { useUI } from "@components/ui"
+import { useTranslation } from "@commerce/utils/use-translation"
+import ReferralCard from "./ReferralCard"
 
 const CustomerReferral = ({ router }: any) => {
+    const translate = useTranslation()
     const [referralInfoObj, setReferralInfoObj] = useState<any>(null)
     const [isReferralAvailable, setIsReferralAvailable] = useState(false)
     const [referralEmail, setReferralEmail] = useState('')
@@ -44,8 +40,8 @@ const CustomerReferral = ({ router }: any) => {
     }
     const onNewReferral = async (e: any) => {
         e.preventDefault()
-        if(referralEmail.length<1){
-            setErrors(EMAIL_FIELD_VALIDATION)
+        if(referralEmail?.length < 1){
+            setErrors(translate('common.message.emailEmptyErrorMsg'))
         } else{
             setIsLoading(true)
             let { data } = await axios.post(NEXT_REFERRAL_ADD_USER_REFEREE, { referralId: referralInfoObj?.id, email: referralEmail })
@@ -55,7 +51,7 @@ const CustomerReferral = ({ router }: any) => {
                 // setReferralAvailable(false)
             } else{
                 setIsLoading(false)
-                setErrors('Offer already used by this email address')
+                setErrors(translate('label.referral.offerAlreadyUsedByEmailText'))
             }
         }
     }
@@ -82,8 +78,8 @@ const CustomerReferral = ({ router }: any) => {
         <>
             {isReferralAvailable && (
                 <ReferralCard
-                    title={'Get your Discount Coupon'}
-                    description={'You have a referral code! Avail a discount voucher by entering your email'}
+                    title={translate('label.referral.getDiscountCoupanText')}
+                    description={translate('label.referral.availDiscountByEmailText')}
                     hide={isReferralAvailable}
                     className="!flex !flex-col gap-y-2 "
                     onInputChange={onInputChange}

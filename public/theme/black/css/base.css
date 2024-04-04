@@ -37,7 +37,7 @@
   --accent-8: #111111;
   --accent-9: #000;
 
-  --font-primary: 'Inter', sans-serif;
+  --font-primary: 'Urbanist', sans-serif;
 
   /* font size variable */
   --font-10: 10px;
@@ -84,17 +84,17 @@
   /* secondary color variable */
 
   /* button primary variable */
-  --btn-bg-primary: #212530;
+  --btn-bg-primary: #16223b;
   --btn-text-color-primary: #fff;
   --btn-hover-text-color-primary: #fff;
-  --btn-bg-hover-primary: #252E47;
+  --btn-bg-hover-primary: #0f172a;
   /* button primary variable */
 
   /* button secondary variable */
-  --btn-bg-secondary: #DF340C;
+  --btn-bg-secondary: #16223b;
   --btn-text-color-secondary: #fff;
   --btn-hover-text-color-secondary: #fff;
-  --btn-bg-hover-secondary: #FF3600;
+  --btn-bg-hover-secondary: #16223b;
   /* button secondary variable */
 
   /* button primary red variable */
@@ -134,12 +134,12 @@
   /* button primary teal variable */
 
   /* button default variable */
-  --btn-bg-default: #F8F8F8;
-  --btn-text-color-default: #212530;
-  --btn-border-clr-default: #212530;
-  --btn-bg-hover-default: #FFFFFF;
-  --btn-hover-text-color-default: #212530;
-  --btn-hover-border-clr-default: #212530;
+  --btn-bg-default: transparent;
+  --btn-text-color-default: #000;
+  --btn-border-clr-default: #000;
+  --btn-bg-hover-default: transparent;
+  --btn-hover-text-color-default: #000;
+  --btn-hover-border-clr-default: #cbd5e1;
   /* button default variable */
 
   /* button default red variable */
@@ -218,25 +218,19 @@
   /* label default white variable */
 
   /* Header variable */
-  --bg-header-color: #212530;
-  --text-header-clr: #FFFFFF;
-  --text-hover-clr: #FFFFFF;
-  --border-hover-clr: #FF3600;
-  --header-icon-clr: #fff;
-  --header-icon-hover-clr: #FF3600;
-  --text-header-font-weight: 600;
-  --text-font-size: 14px;
-  --menu-icon-color: #fff;
+  --bg-header-color: #ffffff;
+  --text-header-clr: #000000;
+  --text-hover-clr: #000000;
+  --border-hover-clr: #000000;
+  --menu-icon-color: #000000;
   /* footer variable */
 
   /* footer variable */
-  --bg-footer-color: #212530;
-  --text-footer-clr: #fff;
-  --text-font-weight: 300;
+  --bg-footer-color: #f5f5f5;
+  --text-footer-clr: #000000;
   /* footer variable */
-
   /* compare outline color */
-  --outline-color-red: #DF340C;
+  --outline-color-red: #ffffff;
   /* compare outline color */
 }
 
@@ -278,7 +272,7 @@
     --font-12: 12px;
     --font-14: 14px;
     --font-16: 16px;
-    --font-18: 14px;
+    --font-18: 18px;
     --font-20: 18px;
     --font-22: 22px;
     --font-24: 18px;
@@ -286,7 +280,7 @@
     --font-28: 24px;
     --font-30: 24px;
     --font-32: 24px;
-    --font-34: 24px;
+    --font-34: 30px;
     --font-36: 28px;
     --font-40: 30px;
     --font-44: 30px;
@@ -300,83 +294,254 @@
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Bold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-ExtraBold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-ExtraBold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Black.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Black.woff') format('woff');
+  font-family: 'Urbanist';
+  src: local('Urbanist-Black') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Black.woff2') format('woff2'),
+  local('Urbanist-Black') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Black.woff') format('woff');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-ExtraLight.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-ExtraLight.woff') format('woff');
+  font-family: 'Urbanist';
+  src: local('Urbanist-ExtraLight') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraLight.woff2') format('woff2'),
+  local('Urbanist-ExtraLight') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraLight.woff') format('woff');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Light.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Light.woff') format('woff');
+  font-family: 'Urbanist';
+  src: local('Urbanist-Italic') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Italic.woff2') format('woff2'),
+  local('Urbanist-Italic') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-ExtraBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraBoldItalic.woff2') format('woff2'),
+  local('Urbanist-ExtraBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraBoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-Black') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-BlackItalic.woff2') format('woff2'),
+  local('Urbanist-Black') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-Light') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Light.woff2') format('woff2'),
+  local('Urbanist-Light') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-SemiBold.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-SemiBold.woff') format('woff');
+  font-family: 'Urbanist';
+  src: local('Urbanist-Bold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-BoldItalic.woff2') format('woff2'),
+  local('Urbanist-Bold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-ExtraBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraBold.woff2') format('woff2'),
+  local('Urbanist-ExtraBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-ExtraLight') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraLightItalic.woff2') format('woff2'),
+  local('Urbanist-ExtraLight') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ExtraLightItalic.woff') format('woff');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-Bold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Bold.woff2') format('woff2'),
+  local('Urbanist-Bold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-SemiBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-SemiBold.woff2') format('woff2'),
+  local('Urbanist-SemiBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-SemiBold.woff') format('woff');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Thin.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Thin.woff') format('woff');
-  font-weight: 100;
-  font-style: normal;
+  font-family: 'Urbanist';
+  src: local('Urbanist-SemiBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-SemiBoldItalic.woff2') format('woff2'),
+  local('Urbanist-SemiBold') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-SemiBoldItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Regular.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Regular.woff') format('woff');
+  font-family: 'Urbanist';
+  src: local('Urbanist-Regular') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Regular.woff2') format('woff2'),
+  local('Urbanist-Regular') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Medium.woff2') format('woff2'),
-    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Inter-Medium.woff') format('woff');
+  font-family: 'Urbanist';
+  src: local('Urbanist-Thin') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ThinItalic.woff2') format('woff2'),
+  local('Urbanist-Thin') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-ThinItalic.woff') format('woff');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-MediumItalic') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-MediumItalic.woff2') format('woff2'),
+  local('Urbanist-MediumItalic') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-Light') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-LightItalic.woff2') format('woff2'),
+  local('Urbanist-Light') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-Medium') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Medium.woff2') format('woff2'),
+  local('Urbanist-Medium') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Medium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: local('Urbanist-Thin') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Thin.woff2') format('woff2'),
+  local('Urbanist-Thin') url('https://cdnbs.bettercommerce.tech/theme/blue/font/Urbanist-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Black.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-BlackItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-LightItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Light.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Bold.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato Hairline';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Hairline.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Hairline.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato Hairline';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-HairlineItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-HairlineItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Regular.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Italic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-BoldItalic.woff2') format('woff2'),
+    url('https://cdnbs.bettercommerce.tech/theme/blue/font/Lato-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
   font-display: swap;
 }
 

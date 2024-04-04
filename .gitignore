@@ -49,3 +49,6 @@ tsconfig.tsbuildinfo
 .env.dev
 .env.prod
 .vscode/settings.json
+.env-demostore
+.env-forever
+.env-tagdeal

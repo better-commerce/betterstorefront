@@ -2,29 +2,16 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import cn from 'classnames'
 import {
-  registrationConfig,
-  loginConfig,
-  b2bRegistrationConfig,
+  useRegistrationConfig,
+  useLoginConfig,
+  useB2bRegistrationConfig,
 } from './config'
 import LoadingDots from '@components/ui/LoadingDots'
 import Button from '@components/ui/Button'
-import {
-  GENERAL_REGISTER,
-  VALIDATION_PASSWORD_MUST_MATCH,
-} from '@components/utils/textVariables'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { mergeSchema } from '@framework/utils/schema-util'
-
+import { useTranslation } from '@commerce/utils/use-translation'
 import { Checkbox } from '@components/account/Address'
-
-const registerSchema = Yup.object({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  password: Yup.string().min(8).max(24).required(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], VALIDATION_PASSWORD_MUST_MATCH)
-    .required(),
-})
 
 /**
  * This is a schema for registration to enable Trading account registration.
@@ -99,18 +86,6 @@ const loginInitialValues = {
   password: '',
 }
 
-const VALUES_MAP: any = {
-  register: {
-    schema: registerSchema,
-    initialValues: registerInitialValues,
-    config: registrationConfig,
-  },
-  login: {
-    schema: loginSchema,
-    initialValues: loginInitialValues,
-    config: loginConfig,
-  },
-}
 
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
@@ -119,18 +94,44 @@ const COMPONENTS_MAP: any = {
 export default function CustomerForm({
   type = 'register',
   isLoginSidebarOpen,
-  onSubmit = () => {},
-  btnText = GENERAL_REGISTER,
+  onSubmit = () => { },
+  btnText = "Register",
   email = '', // This prop contains the value of "Email Address" that is validated for availability at first step.
   b2bSettings = new Array<{ key: string; value: string }>(), // B2B settings passed from parent.
 }: any) {
-  const { config, initialValues, schema } = VALUES_MAP[type]
+  const translate = useTranslation()
+  const registerSchema = Yup.object({
+    firstName: Yup.string().required(),
+    lastName: Yup.string().required(),
+    password: Yup.string().min(8).max(24).required(),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password')],translate('label.myAccount.passwordMustMatchText'))
+      .required(),
+  })
 
+  const registrationConfig = useRegistrationConfig();
+  const loginConfig = useLoginConfig();
+  const b2bRegistrationConfig = useB2bRegistrationConfig();
+  
+  const VALUES_MAP: any = {
+    register: {
+      schema: registerSchema,
+      initialValues: registerInitialValues,
+      config: registrationConfig,
+    },
+    login: {
+      schema: loginSchema,
+      initialValues: loginInitialValues,
+      config: loginConfig,
+    },
+  }
+  const { config, initialValues, schema } = VALUES_MAP[type]
+  
   // Read b2b enabled value from settings
   const b2bEnabled = b2bSettings?.length
-    ? stringToBoolean(
-        b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
-      )
+  ? stringToBoolean(
+    b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+    )
     : false
 
   // Extend initial values based on form type & b2b setting.
@@ -139,10 +140,10 @@ export default function CustomerForm({
     type === 'register'
       ? b2bEnabled
         ? {
-            ...initialValues,
-            ...b2bRegisterInitialValues,
-            ...{ isRequestTradingAccount: b2bEnabled, email: email },
-          }
+          ...initialValues,
+          ...b2bRegisterInitialValues,
+          ...{ isRequestTradingAccount: b2bEnabled, email: email },
+        }
         : initialValues
       : initialValues
 
@@ -165,37 +166,11 @@ export default function CustomerForm({
       : schema
 
   return (
-    <Formik
-      validationSchema={extendedSchema}
-      initialValues={extendedInitialValues}
-      // onSubmit={onSubmit}
-      onSubmit={(values, actions) => {
-        onSubmit(values, () => {
-          actions.setSubmitting(false)
-          // actions.resetForm()
-        })
-      }}
-    >
-      {({
-        errors,
-        touched,
-        handleSubmit,
-        values,
-        handleChange,
-        isSubmitting,
-      }: any) => {
+    <Formik validationSchema={extendedSchema} initialValues={extendedInitialValues} onSubmit={(values, actions) => { onSubmit(values, () => { actions.setSubmitting(false) }) }} >
+      {({ errors, touched, handleSubmit, values, handleChange, isSubmitting, }: any) => {
         return (
-          <div
-            className={`flex flex-col items-center justify-center w-full lg:px-0 px-5 py-5 ${
-              !isLoginSidebarOpen && `px-5`
-            }`}
-          >
-            <Form
-              onSubmit={handleSubmit}
-              className={`w-full font-semibold ${
-                !isLoginSidebarOpen && `sm:w-1/2`
-              }`}
-            >
+          <div className={`flex flex-col items-center justify-center w-full lg:px-0 px-5 ${!isLoginSidebarOpen && `px-5`}`} >
+            <Form onSubmit={handleSubmit} className={`w-full font-semibold ${!isLoginSidebarOpen && `sm:w-full`}`} >
               {extendedConfig.map((formItem: any, idx: number) => {
                 function handleKeyPress(e: any) {
                   if (e.keyCode == 13) {
@@ -204,65 +179,26 @@ export default function CustomerForm({
                 }
                 return (
                   <>
-                    <div
-                      key={`${formItem.key}_${idx}`}
-                      className={`form-field ${idx + 1}`}
-                    >
-                      {formItem?.customComponent ? (
-                        COMPONENTS_MAP[formItem?.customComponent]({
-                          formItem,
-                          values,
-                          handleChange,
-                        })
-                      ) : (
-                        <>
-                          {
-                            // 1. Renders {formItem} when show() method is undefined (handles non-registration forms).
-                            // 2. Renders {formItems} if show() method is defined and its execution result is TRUE (handles registration form).
-                            !formItem?.show ||
-                            (formItem?.show && formItem?.show(values)) ? (
-                              <>
-                                <label className="text-sm text-gray-700">
-                                  {formItem?.label}
-                                </label>
-                                <Field
-                                  key={idx}
-                                  name={formItem?.key}
-                                  placeholder={formItem?.placeholder}
-                                  onChange={handleChange}
-                                  value={values[formItem?.key]}
-                                  onKeyUp={(e: any) => handleKeyPress(e)}
-                                  type={formItem?.type}
-                                  className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
-                                />
-
-                                {errors[formItem?.key] &&
-                                touched[formItem?.key] ? (
-                                  <div className="mb-2 text-xs text-red-400 capitalize">
-                                    {errors[formItem?.key]}
-                                  </div>
-                                ) : null}
-                              </>
-                            ) : null
-                          }
-                        </>
+                    <div key={`${formItem.key}_${idx}`} className={`form-field mb-4 ${idx + 1}`} >
+                      {formItem?.customComponent ? (COMPONENTS_MAP[formItem?.customComponent]({ formItem, values, handleChange, })) : (
+                        !formItem?.show || (formItem?.show && formItem?.show(values)) ? (
+                          <>
+                            <label className="text-neutral-800 dark:text-neutral-200"> {formItem?.label} </label>
+                            <Field key={idx} name={formItem?.key} placeholder={formItem?.placeholder} onChange={handleChange} value={values[formItem?.key]} onKeyUp={(e: any) => handleKeyPress(e)} type={formItem?.type} className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 " />
+                            {errors[formItem?.key] && touched[formItem?.key] ? (
+                              <div className="mb-2 font-medium text-red-400 font-12">
+                                {errors[formItem?.key]}
+                              </div>
+                            ) : null}
+                          </>
+                        ) : null
                       )}
                     </div>
                   </>
                 )
               })}
-              <div
-                className={`flex items-center justify-center !w-full my-5 ${
-                  !isLoginSidebarOpen && `md:w-1/2`
-                }`}
-              >
-                <Button
-                  type="submit"
-                  // onClick={handleSubmit}
-                  className="w-full border border-black btn btn-c btn-primary"
-                  loading={isSubmitting}
-                  disabled={isSubmitting}
-                >
+              <div className={`flex items-center justify-center !w-full my-5 ${!isLoginSidebarOpen && `md:w-1/2`}`} >
+                <Button type="submit" className="w-full border border-black btn btn-c btn-primary rounded-2xl" loading={isSubmitting} disabled={isSubmitting} >
                   {!isSubmitting && btnText}
                 </Button>
               </div>
