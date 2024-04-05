@@ -18,6 +18,7 @@ import { containsArrayData, getDataByUID, parseDataValue, setData } from '@frame
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
+import { useUI } from '@components/ui/context'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -90,6 +91,7 @@ const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
   const router = useRouter()
+  const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -123,6 +125,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [currencyCode, isMobile])
 
+  useEffect(() =>{
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_index_page_view_before({ item_id :"index", bc_user_id : user?.userId}) 
+    }
+  },[])
+
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
       id: '',
@@ -139,7 +147,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     entityType: 'Page',
     entityId: '',
     eventType: 'PageViewed',
-  })
+    })
 
   if (!pageContents) {
     return (
