@@ -301,10 +301,6 @@ const PromotionInput = (props: IPromotionInputProps) => {
       {SHOW_APPLY_COUPON_SECTION && !(isMobile || isIPadorTablet) && (
         <div className="flex items-center w-full pt-0 mt-3">
           <div className="w-full">
-            {/* <h3 className="text-lg text-gray-900 font-display">Use Coupon</h3>
-            <label className="text-sm font-light text-gray-600">
-              You may apply mutliple codes for max discount
-            </label> */}
             <div className="flex flex-col mt-0">
               <div className="flex items-center justify-between gap-2 mb-2 -mt-1 font-normal text-left cursor-text text">
                 <input
