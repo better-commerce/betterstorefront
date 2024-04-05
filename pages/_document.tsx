@@ -14,6 +14,7 @@ export default class MyDocument extends NextDocument /*Document*/ {
         <Head>
           <link rel="preload" href={`/theme/${CURRENT_THEME}/css/global.css`} as="style" />
           <link rel="stylesheet" href={`/theme/${CURRENT_THEME}/css/global.css`} />
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY&libraries=places"></script>
         </Head>
         <body className="custom_class promo-banner-inactive">
           <Main />
