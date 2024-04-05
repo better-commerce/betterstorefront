@@ -380,8 +380,8 @@ export default function CollectionPage(props: any) {
 
   useEffect(()=> {
     // for engage
-    if (typeof window !== "undefined" && window.ch_session) {
-      window.ch_collection_page_view_before({ item_id : props.name}) 
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_collection_page_view_before({ item_id : props?.name}) 
     }
   },[])
 
