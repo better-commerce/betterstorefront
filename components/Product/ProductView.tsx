@@ -162,51 +162,53 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         ...response?.data?.product,
       })
     }
-  }  
-   // added for engage
-   const dataForEngage={
-    item:{
-      item_id: product.stockCode,
-      title: product.name,
-      sku: product.productCode,
-      categories: product.classification.category,
-      base_category:  product.classification.category,
-      collection_name: product.collections? product.collections[0].name : '' ,
-      description: product.fullName,
-      product_url: window.location.href,
-      image_url: product.image,
-      availability:product.availability,
-      price: product.price.maxPrice,
-      sale_price: product.price.minPrice,
-      brand: product.brand,
-      variant: {
+  }
+
+  let dataForEngage: any = null
+  if (typeof window !== 'undefined') {
+    // added for engage
+    dataForEngage = {
+      item: {
+        item_id: product.stockCode,
+        title: product.name,
+        sku: product.productCode,
+        categories: product.classification.category,
+        base_category: product.classification.category,
+        collection_name: product.collections ? product.collections[0].name : '',
+        description: product.fullName,
+        product_url: window.location.href,
+        image_url: product.image,
+        availability: product.availability,
+        price: product.price.maxPrice,
+        sale_price: product.price.minPrice,
+        brand: product.brand,
+        variant: {
           id: product.stockCode,
           title: product.name,
-          sku:  product.productCode,
+          sku: product.productCode,
           image_url: product.image,
           product_url: window.location.href,
           price: product.price.maxPrice,
-          sale_price:  product.price.minPrice,
-          availability:product.availability,
+          sale_price: product.price.minPrice,
+          availability: product.availability,
           metadata: {
-              // "color": product.customAttributes[0].key=="global.colour"?product.customAttributes[0].value:product.customAttributes[1].value || '',
-              color:'',
-              // "size": product.customAttributes[2].key=="clothing.size"?product.customAttributes[2].value:product.customAttributes[3].value || '',
-              size:'',
-              weight: 0,
-              weight_unit: "",
-              make: "",
-              model: product.brand,
-              rating: 0
-          }
+            color: product?.customAttributes[0].key=="global.colour" ? product?.customAttributes[0].value : product?.customAttributes[1].value || '',
+            size: product?.customAttributes[2].key=="clothing.size" ? product?.customAttributes[2].value : product?.customAttributes[3].value || '',
+            weight: 0,
+            weight_unit: '',
+            make: '',
+            model: product.brand,
+            rating: 0,
+          },
         },
-        customAttributes:product.customAttributes
-  },
-    item_id: product.stockCode
+        customAttributes: product.customAttributes,
+      },
+      item_id: product.stockCode,
+    }
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && dataForEngage) {
       window.ch_product_view_before(dataForEngage)  
      }
     fetchProduct()
@@ -354,7 +356,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               },
             })
           }
-          if(window?.ch_session){
+          if(window?.ch_session && dataForEngage){
             window.ch_product_view_before(dataForEngage) 
           }
         }
