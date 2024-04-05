@@ -731,7 +731,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onContinue: () => {
       goToStep(CheckoutStep.REVIEW)
     },
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const reviewOrderProps = {
