@@ -1,5 +1,5 @@
 // Base Imports
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 // Component Imports
 import { useUI } from '@components/ui'
@@ -11,6 +11,7 @@ import { eddDateFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import FindStore from './FindStore'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { DeliveryType } from '@components/utils/constants'
 
 interface ShippingMethod {
   id: string
@@ -25,6 +26,7 @@ interface DeliveryMethodSelectionProps {
   onDeliveryMethodSelect: (method: ShippingMethod, store: any) => void
   onContinue: () => void
   goToStep: any
+  deliveryTypeMethod?: any
 }
 
 const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
@@ -32,7 +34,8 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   deliveryMethod,
   onDeliveryMethodSelect,
   onContinue,
-  goToStep = () => { }
+  goToStep = () => { },
+  deliveryTypeMethod
 }) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -41,8 +44,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   const [showFindStore, setShowFindStore] = useState<boolean>(false)
   const [selectedStore, setSelectedStore] = useState<any>(null)
   const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>()
-  const [selectedShippingMethodId, setSelectedShippingMethodId] =
-    useState<string>(basket?.shippingMethodId)
+  const [selectedShippingMethodId, setSelectedShippingMethodId] = useState<string>(basket?.shippingMethodId)
 
   const handleMethodSelection = (method: any) => {
     setSelectedShippingMethodId(method?.id)
@@ -50,6 +52,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   }
 
   const handleContinue = async () => {
+    if (shouldContinueBtnEnabled) return
     let isValid = false;
     let errorMessage = '';
 
@@ -105,6 +108,14 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
     // handle selected store 
     setSelectedStore(store)
   }
+
+  const shouldContinueBtnEnabled = useMemo(() => {
+    let isEnabled = false
+    if (deliveryTypeMethod?.type === DeliveryType.DELIVER) isEnabled = !selectedShippingMethodId
+    if (deliveryTypeMethod?.type === DeliveryType.COLLECT) isEnabled = !selectedStore?.Id
+    return isEnabled
+  }, [deliveryTypeMethod, selectedStore, selectedShippingMethodId])
+
   return (
     <>
       {selectedDeliveryMethod?.children?.length > 0 ? (
@@ -152,9 +163,9 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
           )}
           <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
             <button
-              className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4"
+              className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-55 rounded-xl"
               onClick={handleContinue}
-              disabled={!selectedShippingMethodId}
+              disabled={shouldContinueBtnEnabled}
             >
               {translate('label.checkout.continueToPaymentText')}
             </button>
