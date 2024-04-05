@@ -21,11 +21,14 @@ const BillingAddressForm: React.FC<any> = ({
   billingCountries,
   useSameForBilling,
   shouldDisplayEmail = true,
+  guestCheckoutFormik,
+  onGuestCheckout,
 }) => {
   const translate = useTranslation()
   const BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA = billingAddressWithPhoneCheckout2Schema();
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
-  const { isGuestUser, user } = useUI()
+  const { isGuestUser, user, setOverlayLoaderState } = useUI()
+  const [isGuestCheckoutSubmit, setIsGuestCheckoutSubmit] = useState(false)
   const [searchedAddresses, setSearchedAddresses] = useState([])
 
   const addressFinderFormik = useFormik({
@@ -82,6 +85,34 @@ const BillingAddressForm: React.FC<any> = ({
       )
     },
   })
+
+  const handleGuestWithAddressSubmit = async (e: any) => {
+    e.preventDefault()
+    setIsGuestCheckoutSubmit(false)
+    if (guestCheckoutFormik) {
+      setIsGuestCheckoutSubmit(true)
+      const guestCheckoutErrors = await guestCheckoutFormik.validateForm()
+      const addressErrors = await formik.validateForm()
+      if (
+        (!guestCheckoutErrors ||
+          (guestCheckoutErrors &&
+            Object.keys(guestCheckoutErrors).length == 0)) &&
+        (!addressErrors ||
+          (addressErrors && Object.keys(addressErrors).length == 0))
+      ) {
+        setOverlayLoaderState({ visible: true, message: 'Please wait...' })
+        if (onGuestCheckout) {
+          onGuestCheckout(guestCheckoutFormik.values, () => {
+            formik.handleSubmit()
+          })
+        } else {
+          formik.handleSubmit()
+        }
+      }
+    } else {
+      formik.handleSubmit()
+    }
+  }
 
   const handleSelectAddress = async (address: any) => {
     if (!address?.id) return
@@ -167,7 +198,7 @@ const BillingAddressForm: React.FC<any> = ({
           </form>
           {/* address form */}
           <form
-            onSubmit={formik.handleSubmit}
+            onSubmit={handleGuestWithAddressSubmit}
             className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
           >
             <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">

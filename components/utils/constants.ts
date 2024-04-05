@@ -558,3 +558,8 @@ export enum QuantityBreakRule {
   FIXED_PRICE = 1,
   PERCENTAGE = 2,
 }
+
+export enum DeliveryType {
+  DELIVER = 1,
+  COLLECT = 2,
+}

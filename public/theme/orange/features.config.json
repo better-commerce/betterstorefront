@@ -5,7 +5,7 @@
     "enableQuickOrderPad": true,
     "enableCompare": false,
     "enableStoreLocator": true,
-    "enableCollectDeliveryOption": false
+    "enableCollectDeliveryOption": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
