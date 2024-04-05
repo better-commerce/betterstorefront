@@ -100,16 +100,21 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       }
 
       // find product size values
+      let fieldValues : any[] = productDetailsObj?.variantAttributes?.find(
+        (o: any) => o.fieldCode === SIZE_ATTRIBUTE
+      ).fieldValues
+
       let productSizesArrObj: any[] = productDetailsObj?.variantProducts
         ?.filter((item: any) => item?.attributes?.find((attr: any) => attr.fieldCode === SIZE_ATTRIBUTE))
         ?.map((o: any) => {
           const field = o?.attributes?.find((attr: any) => attr.fieldCode === SIZE_ATTRIBUTE);
+          const fieldValueData = fieldValues.find( (value: any) => value.fieldValue === field?.fieldValue)
           return {
             currentStock: o?.currentStock,
             stockCode: o?.stockCode,
             sellWithoutInventory: o?.sellWithoutInventory,
             slug: o?.slug,
-            ...field,
+            ...fieldValueData,
           };
         });
 

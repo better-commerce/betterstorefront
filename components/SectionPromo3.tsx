@@ -26,17 +26,22 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data })
   }
   const submitSubscription = async (data: any) => {
     const regex = Messages.Validations.RegularExpressions.EMAIL
-    if (regex.test(data.toString())) {
-      await axios.post(NEXT_SUBSCRIBE, {
-        email: data,
-        notifyByEmail: true,
-      })
-      setValue('')
-      setAlert({
-        type: 'SUCCESS',
-        msg: 'Email Registered Successfully for Newsletter',
-      })
-    } else setErr('Enter a valid email')
+    try {
+      if (regex.test(data.toString())) {
+        await axios.post(NEXT_SUBSCRIBE, {
+          email: data,
+          notifyByEmail: true,
+        })
+        setValue('')
+        setAlert({
+          type: 'success',
+          msg: translate('label.newsLetter.successText'),
+        })
+      }
+    }
+    catch {
+      setErr(translate('common.message.validEmailErrorMsg'))
+    }
   }
 
   useEffect(() => {
