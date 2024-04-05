@@ -20,18 +20,13 @@ export interface SectionHero2Props {
 let TIME_OUT: NodeJS.Timeout | null = null;
 
 const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
-  // =================
   const translate = useTranslation()
   const [indexActive, setIndexActive] = useState(0);
   const [isRunning, toggleIsRunning] = useBoolean(true);
 
   useInterval(
-    () => {
-      handleAutoNext();
-    },
-    isRunning ? 6000 : null
+    () => { handleAutoNext(); }, isRunning ? 6000 : null
   );
-  //
 
   const handleAutoNext = () => {
     setIndexActive((state) => {
@@ -67,11 +62,8 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     if (TIME_OUT) {
       clearTimeout(TIME_OUT);
     }
-    TIME_OUT = setTimeout(() => {
-      toggleIsRunning(true);
-    }, 1000);
+    TIME_OUT = setTimeout(() => { toggleIsRunning(true); }, 1000);
   };
-  // =================
 
   const renderItem = (index: number) => {
     const isActive = indexActive === index;
@@ -100,7 +92,6 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Prev className="absolute start-1 sm:start-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
           <Next className="absolute end-1 sm:end-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
-          {/* BG */}
           <div className="absolute inset-0 bg-banner">
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
