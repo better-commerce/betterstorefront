@@ -8,7 +8,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
+import { NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
@@ -21,7 +21,6 @@ const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
 const ModalQuickView = dynamic(() => import('@components/ModalQuickView'))
-const NcImage = dynamic(() => import('@components/shared/NcImage/NcImage'))
 const ButtonSecondary = dynamic(() => import('@components/shared/Button/ButtonSecondary'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
