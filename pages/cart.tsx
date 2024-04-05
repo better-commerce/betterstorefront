@@ -393,6 +393,33 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketId, cartItems])
+
+  const recordEventInEngage= () => {
+    const iterator = cart?.lineItems?.values();
+    const itemsFromArr = []
+    for (const value of iterator) {
+      itemsFromArr?.push({
+        id:value?.stockCode,
+        name:value?.name,
+        quantity:value?.qty,
+        price:value?.totalPrice?.raw?.withTax,
+        line_price:value?.totalPrice?.raw?.withTax,
+        sku:value?.id
+      })
+    }
+    
+    const cardData = {
+      item_id: "cart",
+      item_ids: cart?.lineItems?.map((x:any) =>  x?.stockCode),
+      items: itemsFromArr,
+      total_value: cart?.grandTotal?.formatted?.withTax
+    }
+  
+    if (typeof window !== "undefined" && window.ch_session) {
+      window.ch_checkout_initiate_before(cardData) 
+    }
+   }
+
   useEffect(() => {
     async function loadShippingPlans() {
       await fetchShippingPlans([])
@@ -403,7 +430,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     } else {
       setCartItems(cart)
     }
-
+    // calling Engage event
+    recordEventInEngage()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

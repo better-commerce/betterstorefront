@@ -430,6 +430,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
             },
           })
         }
+        if(window?.ch_session){
+          window.ch_remove_from_cart_before({ item_id : product?.sku})
+        }
       }
       try {
         const item = await addToCart(data, type, { product })
