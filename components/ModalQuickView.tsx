@@ -3,7 +3,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { FC, Fragment } from "react";
 import ProductQuickView from "./ProductQuickView";
-import ProductQuickView2 from "./ProductQuickView2";
 import { usePathname } from "next/navigation";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
 
