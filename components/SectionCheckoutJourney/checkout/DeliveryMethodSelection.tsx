@@ -32,7 +32,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   deliveryMethod,
   onDeliveryMethodSelect,
   onContinue,
-  goToStep = () => {}
+  goToStep = () => { }
 }) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -52,7 +52,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   const handleContinue = async () => {
     let isValid = false;
     let errorMessage = '';
-  
+
     if (showFindStore) {
       isValid = selectedStore !== null;
       errorMessage = translate('common.message.selectStoreErrorMsg');
@@ -61,7 +61,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
         selectedShippingMethod?.type === 1 && selectedDeliveryMethod?.type === 1;
       errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg');
     }
-  
+
     if (isValid) {
       await onDeliveryMethodSelect(selectedShippingMethod, showFindStore ? selectedStore : null);
       onContinue();
@@ -74,7 +74,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   }
 
   useEffect(() => {
-    if(deliveryMethod){
+    if (deliveryMethod) {
       setSelectedDeliveryMethod(deliveryMethod)
     } else {
       goToStep(CheckoutStep.ADDRESS)
@@ -93,17 +93,17 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
     }
   }, [basket])
 
-  useEffect(()=>{
-    const isDeliveryTypeCollect = 
-    selectedDeliveryMethod?.type === 2 &&
-    selectedDeliveryMethod?.children?.some((x:any) => x?.id === selectedShippingMethodId);
+  useEffect(() => {
+    const isDeliveryTypeCollect =
+      selectedDeliveryMethod?.type === 2 &&
+      selectedDeliveryMethod?.children?.some((x: any) => x?.id === selectedShippingMethodId);
 
     setShowFindStore(isDeliveryTypeCollect);
-  },[selectedShippingMethodId, selectedDeliveryMethod])
+  }, [selectedShippingMethodId, selectedDeliveryMethod])
 
-  const handleStoreSelection = (store:any) => {
-  // handle selected store 
-  setSelectedStore(store)
+  const handleStoreSelection = (store: any) => {
+    // handle selected store 
+    setSelectedStore(store)
   }
   return (
     <>
@@ -128,7 +128,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                         {basket?.estimatedDeliveryDate && (
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
-                          <span className="font-bold">
+                            <span className="font-bold">
                               {eddDateFormat(basket?.estimatedDeliveryDate)}{' '}
                             </span>
                           </span>
@@ -148,7 +148,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
             </div>
           </div>
           {showFindStore && (
-           <FindStore onStoreSelected={handleStoreSelection}/>
+            <FindStore basket={basket} onStoreSelected={handleStoreSelection} />
           )}
           <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
             <button
