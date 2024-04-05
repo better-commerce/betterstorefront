@@ -68,7 +68,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
           {translate('label.checkout.reviewAndPaymentText')}
         </h5>
         <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
-          {selectedDeliveryMethod?.type === 1 && <div className="flex flex-col w-full pb-2 border-b border-gray-200 sm:pb-4">
+          <div className="flex flex-col w-full pb-2 border-b border-gray-200 sm:pb-4">
             <div className="flex items-center justify-between w-full">
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
                 {translate('label.addressBook.shippingAddressHeadingText')}
@@ -103,9 +103,9 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
             ) : (
               <p>{translate('label.checkout.noAddressSelectedText')}</p>
             )}
-          </div>}
+          </div>
 
-          {selectedDeliveryMethod?.type === 1 && <div className="flex flex-col w-full pb-2 border-b border-gray-200 sm:pb-4">
+          <div className="flex flex-col w-full pb-2 border-b border-gray-200 sm:pb-4">
             <div className="flex items-center justify-between w-full">
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
                 {translate('label.addressBook.BillingAddressHeadingText')}
@@ -143,7 +143,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
             ) : (
               <p>{translate('label.checkout.noAddressSelectedText')}</p>
             )}
-          </div>}
+          </div>
 
           <div className="flex flex-col w-full">
           <div className="flex items-center justify-between w-full">
