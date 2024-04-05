@@ -17286,3 +17286,6 @@ input[type=time]::-webkit-calendar-picker-indicator {
   left: 0;
   top: 35% !important;
 }
+.cart-z-index-9999{
+  z-index: 99 !important;
+}
