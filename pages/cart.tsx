@@ -415,7 +415,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       total_value: cart?.grandTotal?.formatted?.withTax
     }
   
-    if (typeof window !== "undefined" && window.ch_session) {
+    if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_checkout_initiate_before(cardData) 
     }
    }

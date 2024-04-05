@@ -169,25 +169,25 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     // added for engage
     dataForEngage = {
       item: {
-        item_id: product.stockCode,
-        title: product.name,
-        sku: product.productCode,
-        categories: product.classification.category,
-        base_category: product.classification.category,
-        collection_name: product.collections ? product.collections[0].name : '',
-        description: product.fullName,
-        product_url: window.location.href,
-        image_url: product.image,
-        availability: product.availability,
-        price: product.price.maxPrice,
-        sale_price: product.price.minPrice,
-        brand: product.brand,
+        item_id: product?.stockCode,
+        title: product?.name,
+        sku: product?.productCode,
+        categories: product?.classification?.category,
+        base_category: product?.classification?.category,
+        collection_name: product?.collections ? product?.collections[0]?.name : '',
+        description: product?.fullName,
+        product_url: window?.location?.href,
+        image_url: product?.image,
+        availability: product?.availability,
+        price: product?.price?.maxPrice,
+        sale_price: product?.price?.minPrice,
+        brand: product?.brand,
         variant: {
           id: product?.stockCode,
           title: product?.name,
           sku: product?.productCode,
           image_url: product?.image,
-          product_url: window.location.href,
+          product_url: window?.location?.href,
           price: product?.price?.maxPrice,
           sale_price: product?.price?.minPrice,
           availability: product?.availability,
@@ -203,12 +203,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         },
         customAttributes: product?.customAttributes,
       },
-      item_id: product.stockCode,
+      item_id: product?.stockCode,
     }
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined" && dataForEngage) {
+    if (typeof window !== "undefined" && dataForEngage && window?.ch_session) {
       window.ch_product_view_before(dataForEngage)  
      }
     fetchProduct()
@@ -357,7 +357,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             })
           }
           if(window?.ch_session && dataForEngage){
-            window.ch_product_view_before(dataForEngage) 
+            window.ch_add_to_cart_before(dataForEngage) 
           }
         }
       },
