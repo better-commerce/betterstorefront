@@ -31,7 +31,6 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-  const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
