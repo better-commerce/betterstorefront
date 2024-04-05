@@ -191,7 +191,7 @@ export default function RelatedProducts({
                     </div>
                   </div>
                   <div className="mb-8 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-8">
-                    <Swiper slidesPerView={2.3} spaceBetween={8} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 2.3, spaceBetween: 15 }, 1024: { slidesPerView: 2.3, spaceBetween: 15 }, }} className="mySwiper" >
+                    <Swiper slidesPerView={2.3} spaceBetween={8} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, spaceBetween: 4 }, 768: { slidesPerView: 2, spaceBetween: 15 }, 1024: { slidesPerView: 2, spaceBetween: 15 }, }} className="mySwiper" >
                       {values?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid}>
