@@ -281,9 +281,9 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
 
               <div className="p-3">
                 <RadioGroup value={value} onChange={setValue}>
-                  <RadioGroup.Label>
+                  {/* <RadioGroup.Label>
                     <span className="font-semibold">Size:</span> {value}
-                  </RadioGroup.Label>
+                  </RadioGroup.Label> */}
                   <div className="grid grid-cols-5 gap-2 mt-2 mb-6 sm:grid-cols-7">
                     {productSizeData?.length > 0 ? (productSizeData?.map((size: any) => (
                       <RadioGroup.Option key={size?.fieldValue} value={size?.fieldValue} as={Fragment} disabled={size?.fieldValue === value} >
@@ -312,23 +312,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
 
               </div>
               <div className='flex flex-col items-center justify-end p-2 border-t border-slate-200'>
-                <Button
-                  type="button"
-                  className={`!py-3 text-sm font-bold w-full text-center text-white bg-red-700 border cursor-pointer ${false ? 'opacity-80 !cursor-not-allowed' : ''
-                    }`}
-                  disabled={
-                    !Boolean(value) ||
-                    isSizeUpdateLoading ||
-                    value === defaultSize
-                  }
-                  onClick={handleSubmit}
-                >
-                  {isSizeUpdateLoading
-                    ? 'Updating...'
-                    : value
-                      ? translate('label.product.updateSizeText')
-                      : translate('label.product.sizeSelectiontext')
-                  }
+                <Button type="button" className={`!py-3 text-sm font-bold w-full text-center text-white bg-red-700 border cursor-pointer ${false ? 'opacity-80 !cursor-not-allowed' : ''}`} disabled={!Boolean(value) || isSizeUpdateLoading || value === defaultSize} onClick={handleSubmit} >
+                  {isSizeUpdateLoading ? 'Updating...' : value ? translate('label.product.updateSizeText') : translate('label.product.sizeSelectiontext')}
                 </Button>
               </div>
             </Dialog.Panel>
