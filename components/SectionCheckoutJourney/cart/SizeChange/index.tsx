@@ -104,13 +104,22 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       }
 
       // find product size values
-      let productSizesArrObj = productDetailsObj?.variantAttributes?.find(
-        (o: any) => o.fieldCode === SIZE_ATTRIBUTE
-      )
+      let productSizesArrObj: any[] = productDetailsObj?.variantProducts
+      ?.filter((item: any) => item?.attributes?.find((attr: any) => attr.fieldCode === SIZE_ATTRIBUTE))
+      ?.map((o: any) => {
+        const field = o?.attributes?.find((attr: any) => attr.fieldCode === SIZE_ATTRIBUTE);
+        return {
+          currentStock: o?.currentStock,
+          stockCode: o?.stockCode,
+          sellWithoutInventory: o?.sellWithoutInventory,
+          slug: o?.slug,
+          ...field,
+        };
+      });
 
-      if (productSizesArrObj?.fieldValues.length > 0) {
+      if (productSizesArrObj?.length > 0) {
         // sort product sizes
-        productSizesArrObj = productSizesArrObj?.fieldValues.sort(
+        productSizesArrObj = productSizesArrObj?.sort(
           (a: any, b: any) => a.displayOrder - b.displayOrder
         )
         setProductSizeData(productSizesArrObj)
@@ -184,10 +193,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           products = [...products, ...[personalizedItemToBeSaved]]
         }
 
-        const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, {
-          basketId,
-          products,
-        })
+        const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, {data:{ basketId, products } })
 
         if (newCart?.id && newCart?.id != Guid.empty) {
           setCartItems(newCart)
@@ -300,13 +306,15 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                           {({ checked, disabled }) => (
                             <li
                               className={cn(
-                                'outline outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors uppercase duration-75',
+                                'outline relative outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors uppercase duration-75',
                                 {
                                   'bg-gray-100 outline-gray-700 z-50': checked,
                                   '!cursor-default': disabled,
+                                  '!bg-gray-100 !cursor-not-allowed !pointer-events-none !text-gray-300' : !( size?.currentStock ||  size?.sellWithoutInventory )
                                 }
                               )}
                             >
+                              {!( size?.currentStock ||  size?.sellWithoutInventory ) && <div className="w-[1px] h-[55px] bg-[#0000004d] absolute -top-[8px] left-1/2 rotate-45" />}
                               {size?.fieldValue}
                             </li>
                           )}
