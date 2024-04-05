@@ -162,9 +162,53 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         ...response?.data?.product,
       })
     }
+  }  
+   // added for engage
+   const dataForEngage={
+    item:{
+      item_id: product.stockCode,
+      title: product.name,
+      sku: product.productCode,
+      categories: product.classification.category,
+      base_category:  product.classification.category,
+      collection_name: product.collections? product.collections[0].name : '' ,
+      description: product.fullName,
+      product_url: window.location.href,
+      image_url: product.image,
+      availability:product.availability,
+      price: product.price.maxPrice,
+      sale_price: product.price.minPrice,
+      brand: product.brand,
+      variant: {
+          id: product.stockCode,
+          title: product.name,
+          sku:  product.productCode,
+          image_url: product.image,
+          product_url: window.location.href,
+          price: product.price.maxPrice,
+          sale_price:  product.price.minPrice,
+          availability:product.availability,
+          metadata: {
+              // "color": product.customAttributes[0].key=="global.colour"?product.customAttributes[0].value:product.customAttributes[1].value || '',
+              color:'',
+              // "size": product.customAttributes[2].key=="clothing.size"?product.customAttributes[2].value:product.customAttributes[3].value || '',
+              size:'',
+              weight: 0,
+              weight_unit: "",
+              make: "",
+              model: product.brand,
+              rating: 0
+          }
+        },
+        customAttributes:product.customAttributes
+  },
+    item_id: product.stockCode
   }
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.ch_product_view_before(dataForEngage)  
+     }
     fetchProduct()
     setIsCompared('true')
   }, [slug, currency])
@@ -309,6 +353,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 current_page: currentPage,
               },
             })
+          }
+          if(window?.ch_session){
+            window.ch_product_view_before(dataForEngage) 
           }
         }
       },

@@ -306,6 +306,10 @@ function CategoryLandingPage({
   useEffect(() => {
     if (category.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+    // for Engage
+    if (typeof window !== "undefined" && window.ch_session) {
+      window.ch_page_view_before({ item_id : category.name}) 
+    }
   }, [category.id])
 
   useEffect(() => {
