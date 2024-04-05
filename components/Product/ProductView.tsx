@@ -915,7 +915,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
-              <div className="flex flex-col section-devider"></div>
               <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} />
             </>
           )}
