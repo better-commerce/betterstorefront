@@ -8,7 +8,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
+import { NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
@@ -21,7 +21,6 @@ const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
 const ModalQuickView = dynamic(() => import('@components/ModalQuickView'))
-const NcImage = dynamic(() => import('@components/shared/NcImage/NcImage'))
 const ButtonSecondary = dynamic(() => import('@components/shared/Button/ButtonSecondary'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 export interface ProductCardProps {
@@ -202,7 +201,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   }
   const itemPrice = data?.price?.formatted?.withTax
   const buttonConfig = buttonTitle()
-  const isComparedEnabled = stringToBoolean(isCompared)
+  const isComparedEnabled = useMemo(() => {
+    return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
+  }, [])
   const renderGroupButtons = () => {
     return (
       <>
@@ -237,7 +238,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
-              <img src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
+              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
             </div>
           </ButtonLink>
           <div className={CLASSES}>
@@ -286,8 +287,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
 const ButtonLink = (props: any) => {
   const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
-  const { features } = useMemo(() => getFeaturesConfig(), [props])
-  if (features?.enableCompare && isComparedEnabled) {
+  if (isComparedEnabled) {
     return (
       <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
     )

@@ -136,6 +136,7 @@ export const NEXT_LOGIN_CHECKOUT = '/api/customer/login-checkout'
 export const NEXT_SEARCH_PRODUCTS = `/api/catalog/search`
 export const NEXT_GET_PRODUCT = '/api/catalog/get-product'
 export const NEXT_GET_PRODUCT_PREVIEW = '/api/catalog/get-product-preview'
+export const NEXT_CONTACT_US = `/api/customer/contact-us`
 export const NEXT_PAYMENT_METHODS = '/api/payment-methods'
 export const NEXT_INFRA_ENDPOINT = '/api/infra'
 export const NEXT_SET_CONFIG = '/api/set-config'
@@ -169,6 +170,7 @@ export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 export const NEXT_LOG_ACTIVITY = '/api/log/activity'
 export const NEXT_LOG_PAYMENT = '/api/log/payment'
+export const NEXT_GET_SUBJECTS = '/api/subjects'
 
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
@@ -227,6 +229,7 @@ export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE
 export const BETTERCOMMERCE_COUNTRY = process.env.BETTERCOMMERCE_COUNTRY
 export const SHOW_APPLY_COUPON_SECTION = true
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
+export const CONTACT_DETAILS_EMAIL = 'support.bettercommerce.io'
 export const SITE_HOST = process.env.SITE_HOST
 export const SITE_ORIGIN_URL = process.env.SITE_ORIGIN_URL
 export const SITE_NAME = process.env.SITE_NAME
@@ -244,7 +247,7 @@ export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
 
 export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
 export const CURRENT_THEME = process.env.CURRENT_THEME
-export const OMNILYTICS_DISABLED = process.env.OMNILYTICS_DISABLED
+export const OMNILYTICS_DISABLED = stringToBoolean(process.env.OMNILYTICS_DISABLED)
 export const PDP_SIZE_OPTIONS_COUNT = parseInt(
   process.env.PDP_SIZE_OPTIONS_COUNT || '0'
 )
@@ -405,7 +408,6 @@ export module Messages {
       }
     }
   }
-
   export const Messages: any = {
     RETURN_SUCCESS: 'Return success',
     EXCHANGE_SUCCESS: 'Exchange successful',

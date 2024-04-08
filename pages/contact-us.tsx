@@ -35,7 +35,7 @@ import {
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
-import ContactForm from '@old-components/common/Footer/ContactForm'
+import ContactForm from '@components/contact/ContactForm'
 // import ContactUsForm from '@old-components/contact/ContactUsForm'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 

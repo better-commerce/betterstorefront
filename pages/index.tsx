@@ -11,13 +11,14 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, SITE_ORIGIN_URL } from 
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
+import { useUI } from '@components/ui/context'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -31,7 +32,6 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-  const config = { locale, locales }
   const infraPromise = commerce.getInfra()
   const infra = await infraPromise
   const promises = new Array<Promise<any>>()
@@ -91,6 +91,7 @@ const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
   const router = useRouter()
+  const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -124,6 +125,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [currencyCode, isMobile])
 
+  useEffect(() =>{
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_index_page_view_before({ item_id :"index", bc_user_id : user?.userId}) 
+    }
+  },[])
+
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
       id: '',
@@ -140,7 +147,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     entityType: 'Page',
     entityId: '',
     eventType: 'PageViewed',
-  })
+    })
 
   if (!pageContents) {
     return (
@@ -181,6 +188,5 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     </>
   )
 }
-
 Home.Layout = Layout
 export default withDataLayer(Home, PAGE_TYPE)
