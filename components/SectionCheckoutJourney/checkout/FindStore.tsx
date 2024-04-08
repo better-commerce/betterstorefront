@@ -128,7 +128,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                         <br/>
                         {/* <p className="text-black mb-1">{store.City}</p>
                         <span className="text-black mr-1 text-base">
-                          {store.PostCode}
+                          {store?.PostCode}
                         </span> */}
                       </div>
                     </div>
