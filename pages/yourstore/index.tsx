@@ -1,0 +1,31 @@
+import Layout from "@components/Layout/Layout";
+import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
+import { SITE_ORIGIN_URL } from "@components/utils/constants";
+import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
+import NextHead from 'next/head'
+import { useRouter } from "next/router";
+const PAGE_TYPE = PAGE_TYPES.YourStore
+function YourStore({ deviceInfo, config }: any) {
+  const router = useRouter()
+  return (
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>Your Store</title>
+        <meta name="title" content="Your Store" />
+        <meta name="description" content="Your Store" />
+        <meta name="keywords" content="Your Store" />
+        <meta property="og:image" content="Your Store" />
+        <meta property="og:title" content="Your Store" key="ogtitle" />
+        <meta property="og:description" content="Your Store" key="ogdesc" />
+      </NextHead>
+      <div className="container py-6 mx-auto cart-recently-viewed sm:py-10">
+        <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+      </div>
+    </>
+  )
+}
+
+YourStore.Layout = Layout
+export default withDataLayer(YourStore, PAGE_TYPE)
