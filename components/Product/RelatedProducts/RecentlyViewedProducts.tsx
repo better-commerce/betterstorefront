@@ -1,24 +1,30 @@
+// Base Imports
 import React, { useEffect, useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
+
+// Package Imports
 import axios from 'axios'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { decrypt } from '@framework/utils/cipher'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
-import { LoadingDots } from '@components/ui'
-import { useUI } from '@components/ui/context'
-import { LocalStorage } from '@components/utils/payment-constants'
-import { dateFormat, tryParseJson } from '@framework/utils/parse-util'
+
+// Component Imports
 const ProductCard = dynamic(() => import('@components/ProductCard'))
+import { LoadingDots } from '@components/ui'
+
+// Other Imports
+import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
+import { LocalStorage } from '@components/utils/payment-constants'
+import { tryParseJson } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+
 const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
   const translate = useTranslation()
   const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
   const swiperRefBasket: any = useRef(null)
   const [isLoading, setIsLoading] = useState(true)
-  const { cartItems, } = useUI()
 
   const recentlyViewedProds = () => {
     let prodStockCodes: any = []
@@ -52,29 +58,10 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
       }
     } catch (error) { }
   }
-
-  const groupItemsByDeliveryDate = (items: any) => {
-    if (items?.length < 1) {
-      return []
-    }
-    const groupedItems: any = {}
-
-    if (items?.length) {
-      for (const item of items) {
-        const deliveryDate = dateFormat(item?.deliveryDateTarget, 'DD/MM/yyyy')
-        if (groupedItems.hasOwnProperty(deliveryDate)) {
-          groupedItems[deliveryDate].push(item)
-        } else {
-          groupedItems[deliveryDate] = [item]
-        }
-      }
-    }
-    return groupedItems
-  }
-
+  
   useEffect(() => {
     recentlyViewedProds()
-  }, [cartItems?.lineItems])
+  }, [])
 
   if (recentlyViewedState?.length == 0) {
     return null
