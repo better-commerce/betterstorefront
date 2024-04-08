@@ -1,10 +1,25 @@
 import Layout from "@components/Layout/Layout";
 import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
-import { SITE_ORIGIN_URL } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
+import { getSecondsInMinutes } from "@framework/utils/parse-util";
+import { GetServerSideProps, GetStaticPropsContext } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import NextHead from 'next/head'
 import { useRouter } from "next/router";
+import { obfuscateHostName } from "@framework/utils/app-util";
+
 const PAGE_TYPE = PAGE_TYPES.YourStore
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    }, // will be passed to the page component as props
+  }
+}
+
 function YourStore({ deviceInfo, config }: any) {
   const router = useRouter()
   return (
