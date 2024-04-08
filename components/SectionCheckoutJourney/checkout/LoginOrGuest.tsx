@@ -21,6 +21,7 @@ const LoginOrGuest: React.FC<any> = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod,
   featureToggle,
+  deliveryMethods,
 }) => {
   const GUEST_LOGIN_CHECKOUT2_SCHEMA = guestLoginCheckout2Schema();
   const translate = useTranslation()
@@ -240,6 +241,7 @@ const LoginOrGuest: React.FC<any> = ({
             deliveryTypeMethod={deliveryTypeMethod}
             setDeliveryTypeMethod={setDeliveryTypeMethod}
             featureToggle={featureToggle}
+            deliveryMethods={deliveryMethods}
           />
           {displayView()}
         </>
