@@ -353,6 +353,49 @@ export default function OrderConfirmation({ config }: any) {
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
 
+  useEffect(() => {
+    const iterator = order?.items?.values();
+    const itemsFromArr = []
+    for (const value of iterator) {
+      itemsFromArr?.push({
+        id:value?.stockCode,
+        name:value?.name,
+        quantity:value?.qty,
+        price:value?.totalPrice?.raw?.withTax,
+        line_price:value?.totalPrice?.raw?.withTax,
+        sku:value?.id
+      })
+    }
+    const orderData = {
+      item_id: "thankyou",
+      order_id: order?.orderNo,
+      order_price: order?.grandTotal,
+      order_shipping_zip: order?.shippingAddress?.postCode, 
+      order_shipping_city: order?.shippingAddress?.city, 	
+      payment_transactions:  [{
+          amount: order?.payments?.orderAmount, 
+          gateway: order?.payments?.paymentGateway, 
+          status:"paid"
+      }],
+      coupons:  [{
+          code: '',
+          discount_amt:  order?.discount?.raw?.withTax
+      }],
+      item_ids: order?.items?.map((x:any) =>  x?.stockCode),
+      items: itemsFromArr,
+      customer: {
+        id: order?.customerId,
+        f_name: order?.billingAddress?.firstName,
+        l_name: order?.billingAddress?.lastName,
+        email: order?.customer?.username,
+        contact_no: order?.billingAddress?.phoneNo
+      }
+    }
+    if( window !== undefined && window?.ch_session){
+      window.ch_purchase_complete_before(orderData)
+    }
+  },[order])
+
   return (
     <>
       <div

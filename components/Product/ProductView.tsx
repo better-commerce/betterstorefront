@@ -26,6 +26,7 @@ import { PRODUCTS } from './data'
 import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -163,7 +164,53 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   }
 
+  let dataForEngage: any = null
+  if (typeof window !== 'undefined') {
+    // added for engage
+    dataForEngage = {
+      item: {
+        item_id: product?.stockCode,
+        title: product?.name,
+        sku: product?.productCode,
+        categories: product?.classification?.category,
+        base_category: product?.classification?.category,
+        collection_name: product?.collections ? product?.collections[0]?.name : '',
+        description: product?.fullName,
+        product_url: window?.location?.href,
+        image_url: product?.image,
+        availability: product?.availability,
+        price: product?.price?.maxPrice,
+        sale_price: product?.price?.minPrice,
+        brand: product?.brand,
+        variant: {
+          id: product?.stockCode,
+          title: product?.name,
+          sku: product?.productCode,
+          image_url: product?.image,
+          product_url: window?.location?.href,
+          price: product?.price?.maxPrice,
+          sale_price: product?.price?.minPrice,
+          availability: product?.availability,
+          metadata: {
+            color: product?.customAttributes[0]?.key=="global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || '',
+            size: product?.customAttributes[2]?.key=="clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || '',
+            weight: 0,
+            weight_unit: '',
+            make: '',
+            model: product?.brand,
+            rating: 0,
+          },
+        },
+        customAttributes: product?.customAttributes,
+      },
+      item_id: product?.stockCode,
+    }
+  }
+
   useEffect(() => {
+    if (typeof window !== "undefined" && dataForEngage && window?.ch_session) {
+      window.ch_product_view_before(dataForEngage)  
+     }
     fetchProduct()
     setIsCompared('true')
   }, [slug, currency])
@@ -308,6 +355,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 current_page: currentPage,
               },
             })
+          }
+          if(window?.ch_session && dataForEngage){
+            window.ch_add_to_cart_before(dataForEngage) 
           }
         }
       },
@@ -834,14 +884,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="w-full lg:w-[55%]">
             <div className="relative">
               <div className="relative aspect-w-16 aspect-h-16">
-                <img src={product?.image} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
               </div>
               {renderStatus()}
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
               {product?.images?.map((item: any, index: number) => (
                 <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                  <img src={item?.image} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                  <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
                 </div>
               ))}
             </div>
@@ -852,10 +902,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
         {/* DETAIL AND REVIEW */}
 
-        <div className="mt-12 space-y-10 sm:mt-16 sm:space-y-16">
+        <div className="mt-12 sm:mt-12">
           {/* {renderDetailSection()} */}
           <hr className="border-slate-200 dark:border-slate-700" />
-          <div className="flex flex-col w-full px-0 lg:mx-auto sm:container page-container">
+          <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
           </div>
           {reviews?.review?.productReviews?.length > 0 &&
@@ -865,23 +915,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
-              <div className="flex flex-col section-devider"></div>
               <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} />
             </>
           )}
           {alternativeProducts?.length > 0 && (
             <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto">
-              <div className="flex flex-col section-devider"></div>
               <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
             </div>
           )}
-
+          <div className="cart-recently-viewed">
+            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+          </div>
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
-              <div className="flex flex-col section-devider"></div>
-              <div className="container flex flex-col w-full px-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
-                <h3 className="justify-center pb-8 text-3xl font-bold text-center text-black sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={5} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+              <hr className="border-slate-200 dark:border-slate-700" />
+              <div className="container flex flex-col w-full px-4 py-10 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
+                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
+                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>
           )}

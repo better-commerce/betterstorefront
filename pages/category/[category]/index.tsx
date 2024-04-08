@@ -30,6 +30,7 @@ import CompareSelectionBar from '@components/Product/ProductCompare/compareSelec
 import { useUI } from '@components/ui'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -299,6 +300,10 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   useEffect(() => {
     if (category.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+    // for Engage
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_page_view_before({ item_id : category?.name}) 
+    }
   }, [category.id])
 
   useEffect(() => {
@@ -701,6 +706,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                     </div>
                   ))}
                   <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+                  <div className="col-span-12 cart-recently-viewed">
+                    <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+                  </div>
                 </div>
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">

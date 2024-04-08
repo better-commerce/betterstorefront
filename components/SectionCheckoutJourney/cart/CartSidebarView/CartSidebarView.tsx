@@ -430,6 +430,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
             },
           })
         }
+        if(window?.ch_session){
+          window.ch_remove_from_cart_before({ item_id : product?.sku})
+        }
       }
       try {
         const item = await addToCart(data, type, { product })
@@ -741,8 +744,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             </div>
                           )}
                           {isEmpty && (
-                            <div className="cart-recently-viewed">
-                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} />
+                            <div className="px-4 cart-recently-viewed sm:px-8">
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={1.4} />
                             </div>
                           )}
                           {!isEmpty && relatedProductData && (
