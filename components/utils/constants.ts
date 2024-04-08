@@ -564,5 +564,5 @@ export enum QuantityBreakRule {
 
 export enum DeliveryType {
   DELIVER = 1,
-  COLLECT = 2,
+  COLLECT = 4,
 }
