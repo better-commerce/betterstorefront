@@ -129,6 +129,10 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     ) {
       dispatch({ type: FREE_TEXT, payload: query.freeText })
     }
+    // for Engage
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_page_view_before({ item_id :`search_for ${router.query.freeText || ''} `}) 
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.freeText])

@@ -1057,6 +1057,7 @@
       "postCodeRequiredMsg": "Postcode is a required field",
       "firstNameRequiredMsg": "First Name is a required field",
       "lastNameRequiredMsg": "Last Name is a required field",
+      "RequiredFieldMsg": "*required fields",
       "nameMinLengthMsg": "Name must be at least 3 characters",
       "nameInputMsg": "Name should only contain alpha-numerics",
       "postCodeMaxLenMsg": "Postcode must be at most 10 digits",

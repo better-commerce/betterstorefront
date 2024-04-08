@@ -19,18 +19,20 @@ const BasketPromo = (props: IPromotionInputProps) => {
     <>
       <div className="flex items-center justify-between mb-1">
         {/* {cartItems.promotionsApplied?.length === 0 ? ( */}
-        <div className="flex items-center justify-start">
-          <div className="flex flex-col col-span-7">
-            <p className="flex items-center gap-1 font-semibold text-md dark:text-black">
-              <GifIcon className="w-4 h-4 text-emerald-500" />
-              {PromotionsCount > 0 ? `${PromotionsCount}` : translate('common.label.noText')}{' '}
-              {PromotionsCount > 1 ? translate('label.basket.couponsAvailableText') : translate('label.basket.couponAvailableText')}
-            </p>
-            <p className="text-xs font-normal text-gray-500">
-              {translate('label.basket.multipleCodesApplyText')}
-            </p>
+        {PromotionsCount > 0 &&
+          <div className="flex items-center justify-start">
+            <div className="flex flex-col col-span-7">
+              <p className="flex items-center gap-1 font-semibold text-md dark:text-black">
+                <GifIcon className="w-4 h-4 text-emerald-500" />
+                {PromotionsCount > 0 ? `${PromotionsCount}` : translate('common.label.noText')}{' '}
+                {PromotionsCount > 1 ? translate('label.basket.couponsAvailableText') : translate('label.basket.couponAvailableText')}
+              </p>
+              <p className="text-xs font-normal text-gray-500">
+                {translate('label.basket.multipleCodesApplyText')}
+              </p>
+            </div>
           </div>
-        </div>
+        }
         {/* ) : ( */}
 
         {/* )} */}

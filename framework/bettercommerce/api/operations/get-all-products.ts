@@ -22,6 +22,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       categoryId = '',
       brandId = '',
       pageSize = 20,
+      stockCodes = [],
       excludeOOSProduct = true,
     } = query
     const data: any = {
@@ -35,6 +36,7 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       collectionId,
       categoryId,
       brandId,
+      stockCodes,
       excludeOOSProduct,
     }
 
