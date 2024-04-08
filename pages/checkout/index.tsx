@@ -203,11 +203,37 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     } else {
       updateAddressList({ ...basketRes?.shippingAddress, isBilling: false })
     }
-    const step = undefined //getStepFromStage(basketRes?.stage)
+    await checkIfGuestShippingAndBilling(basketRes)
+    const step = getStepFromStage(basketRes?.stage)
     new Promise(() => {
       goToStep(step || CheckoutStep.LOGIN)
     })
     hideOverlayLoaderState()
+  }
+
+  const checkIfGuestShippingAndBilling = async (basket: any) => {
+    let redirectToStep: any = CheckoutStep.LOGIN
+    const hasShippingAddress = basket?.shippingAddress?.id > 0
+    const hasBillingAddress = basket?.billingAddress?.id > 0
+    const isDeliveryMethodSelected = basket?.deliveryPlans?.length > 0
+
+    if (hasShippingAddress && hasBillingAddress && isDeliveryMethodSelected) {
+      setCompletedSteps((prev) => [...new Set([...prev, CheckoutStep.ADDRESS, CheckoutStep.DELIVERY])])
+      redirectToStep = CheckoutStep.REVIEW
+    } else if (hasShippingAddress && hasBillingAddress) {
+      setCompletedSteps((prev) => [...new Set([...prev, CheckoutStep.ADDRESS])])
+      redirectToStep = CheckoutStep.DELIVERY
+    } else if ((hasShippingAddress && !hasBillingAddress) || (!hasShippingAddress && hasBillingAddress)) {
+      setCompletedSteps((prev) => [...new Set([...prev, CheckoutStep.ADDRESS])])
+      redirectToStep = CheckoutStep.ADDRESS
+    }
+
+    if (redirectToStep) {
+      return new Promise(() => {
+        goToStep(redirectToStep)
+        hideOverlayLoaderState()
+      })
+    }
   }
 
   const fetchBasketReValidate = async () => {
