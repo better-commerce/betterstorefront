@@ -1022,7 +1022,7 @@
       "requiredTextMsg" : "Required",
       "invalidAccountMsg": "No account has been found with this email/password",
       "alreadyLoggedInMsg": "You're already logged in",
-      "loginSuccessMsg": "login successfully",
+      "loginSuccessMsg": "Logged in Successfully",
       "promoCodeInvalidErrorMsg": "Promotion code is not valid",
       "loginSuccesfulMsg": "Login Successful",
       "wishlistSuccessMsg": "Item was added in the cart",
