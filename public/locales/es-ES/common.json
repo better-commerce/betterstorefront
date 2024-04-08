@@ -213,8 +213,7 @@
       "streetAndHouseNoText": "Calle y número de casa",
       "appartmentSuiteEtcText": "Apartamento, Suite, etc. (Opcional)",
       "milesText": "millas",
-      "lessThanAMileText": "Menos de una milla",
-      "availableToCollectInText": "Disponible para recoger en"
+      "lessThanAMileText": "Menos de una milla"
     },
     "collection": {
       "topListCollectionText": "Colecciones más destacadas.",

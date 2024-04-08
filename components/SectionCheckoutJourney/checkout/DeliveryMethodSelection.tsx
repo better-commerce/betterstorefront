@@ -140,7 +140,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
                             <span className="font-bold">
-                              {eddDateFormat(basket?.estimatedDeliveryDate)}{' '}
+                              {method?.type === DeliveryType.DELIVER ? eddDateFormat(basket?.estimatedDeliveryDate) : eddDateFormat(method?.expectedDeliveryDate)}{' '}
                             </span>
                           </span>
                         )}
