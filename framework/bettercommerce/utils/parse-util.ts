@@ -274,3 +274,9 @@ export const eddDateFormat = (date: string | Date) => {
     sameElse: 'dddd, D MMMM',
   })
 }
+
+export const metresToMiles = (meters: number): number => {
+  const milesConversionFactor = 0.000621371; // 1 meter is approximately 0.000621371 miles
+  const miles = meters * milesConversionFactor;
+  return parseFloat(miles.toFixed(2)); // Round to 2 decimal points
+}

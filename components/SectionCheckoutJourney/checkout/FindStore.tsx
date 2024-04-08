@@ -4,6 +4,7 @@ import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
 import { NEXT_CLICK_AND_COLLECT } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { metresToMiles } from '@framework/utils/parse-util'
 
 interface FindStoreProps {
   readonly basket: any
@@ -84,46 +85,61 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
       </div>
       {stores?.length > 0 && (
         <div>
-          {stores?.map((store: any) => (
-            <>
-              <div
-                key={store.Id}
-                onClick={() => handleStoreSelection(store)}
-                className={`${selectedStore?.Id === store.Id
-                  ? 'bg-gray-200'
-                  : 'bg-white border-gray-200'
-                  } sm:p-4 p-2 border cursor-pointer rounded mb-1`}
-              >
-                <div className="flex justify-start w-full gap-0 sm:gap-3">
-                  <div className="check-panel">
-                    <span
-                      className={`rounded-check rounded-full check-address ${selectedStore?.Id === store.Id
-                        ? 'bg-black border border-black'
-                        : 'bg-white border border-gray-600'
-                        }`}
-                    ></span>
-                  </div>
-                  <div>
+          {stores?.map((store: any) =>{ 
+            const distance = metresToMiles(store?.DistanceInMetres)
+            let distanceText;
+            if (distance < 0.1) {
+              distanceText= translate('label.checkout.lessThanAMileText')
+            }
+            else{
+              distanceText= translate('label.checkout.milesText')
+            }
+            return(
+              <>
+                <div
+                  key={store.Id}
+                  onClick={() => handleStoreSelection(store)}
+                  className={`${selectedStore?.Id === store.Id
+                    ? 'bg-gray-200'
+                    : 'bg-white border-gray-200'
+                    } sm:p-4 p-2 border cursor-pointer rounded mb-1`}
+                >
+                  <div className="flex justify-start w-full gap-0 sm:gap-3">
+                    <div className="check-panel">
+                      <span
+                        className={`rounded-check rounded-full check-address ${selectedStore?.Id === store.Id
+                          ? 'bg-black border border-black'
+                          : 'bg-white border border-gray-600'
+                          }`}
+                      ></span>
+                    </div>
                     <div>
-                      <h2 className="text-base font-semibold mb-1">
-                        {store.Name}
-                      </h2>
-                      <p className="text-black mb-1">{store.City}</p>
-                      <span className="text-black mr-1 text-base">
-                        {store.Postcode}
-                      </span>
-                      <span className="text-gray-500 mb-1 font-semibold">
-                        {store.DistanceInMetres}
-                      </span>
+                      <div>
+                        <h2 className="text-base font-semibold mb-1">
+                          {store?.Name}
+                        </h2>
+                        {store?.DistanceInMetres && <span className="text-gray-500 mb-1 font-semibold">
+                          {distanceText}
+                        </span>}
+                        <br/>
+                        {store?.AvailableToCollectIn && <span className="text-black mr-1 text-base">
+                          {`${translate('label.checkout.availableToCollectInText')} ${store?.AvailableToCollectIn} ${translate('label.productSidebar.daysText')}`}
+                        </span>}
+                        <br/>
+                        {/* <p className="text-black mb-1">{store.City}</p>
+                        <span className="text-black mr-1 text-base">
+                          {store?.PostCode}
+                        </span> */}
+                      </div>
                     </div>
                   </div>
+                  {/* {selectedStore?.id === store.id && (
+                      <button className='ml-8 px-1 py-3 mb-2 border border-black btn-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
+                  )} */}
                 </div>
-                {/* {selectedStore?.id === store.id && (
-                    <button className='ml-8 px-1 py-3 mb-2 border border-black btn-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
-                )} */}
-              </div>
-            </>
-          ))}
+              </>
+            )
+          })}
         </div>
       )}
     </div>
