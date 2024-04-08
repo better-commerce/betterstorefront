@@ -58,7 +58,7 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
       }
     } catch (error) { }
   }
-  
+
   useEffect(() => {
     recentlyViewedProds()
   }, [])
@@ -91,17 +91,13 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
             </div>
           </div>
           <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
-            {isLoading ? (
-              <LoadingDots />
-            ) : (
+            {isLoading ? (<LoadingDots />) : (
               <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: productPerRow, spaceBetween: 10 }, 1024: { slidesPerView: productPerRow, spaceBetween: 10 }, }} className="mySwiper" >
-                {recentlyViewedState?.map((product: any, pid: number) => {
-                  return (
-                    <SwiperSlide key={pid} className="height-equal">
-                      <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
-                    </SwiperSlide>
-                  )
-                })}
+                {recentlyViewedState?.map((product: any, pid: number) => (
+                  <SwiperSlide key={pid} className="height-equal">
+                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                  </SwiperSlide>
+                ))}
               </Swiper>
             )}
           </div>

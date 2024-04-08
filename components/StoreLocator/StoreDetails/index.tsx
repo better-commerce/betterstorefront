@@ -1,4 +1,4 @@
-import { MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline'
+import { MapIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
 function StoreDetails({ store }: any) {
@@ -21,9 +21,13 @@ function StoreDetails({ store }: any) {
         <div className="sm:col-span-1">
           <div className="flex flex-col mb-2">
             <div className="flex gap-0 mt-2">
-              <MapPinIcon className='w-4 h-4 mr-2' />
+              <MapIcon className='w-4 h-4 mr-2' />
               <div dangerouslySetInnerHTML={{ __html: `${store?.address1}, ${store?.address2}` }} className="text-sm text-gray-700 sm:block" />
             </div>
+          </div>
+          <div className="flex mb-2">
+            <MapPinIcon className='w-4 h-4 mr-2' />
+            <span className="text-sm text-gray-700 sm:block dark:text-black">{store?.postCode}</span>
           </div>
           <div className="flex mb-2">
             <PhoneIcon className='w-4 h-4 mr-2' />
