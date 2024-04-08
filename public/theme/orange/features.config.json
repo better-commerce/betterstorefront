@@ -7,7 +7,7 @@
     "enableStoreLocator": true,
     "enableCollectDeliveryOption": true,
     "enableEngage":true,
-    "enableYourStoreFeature": true
+    "enableYourStoreFeature": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
