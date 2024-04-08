@@ -7,7 +7,7 @@ import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -127,7 +127,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
   useEffect(() =>{
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_index_page_view_before({ item_id :"index", bc_user_id : user?.userId}) 
+      window.ch_index_page_view_before({ item_id :"index", bc_user_id : user?.userId || EmptyGuid}) 
     }
   },[])
 
