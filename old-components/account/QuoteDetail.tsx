@@ -592,7 +592,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                       <dl className="mt-2 space-y-2 sm:space-y-2">
                                         <div className="flex items-center justify-between py-3 border-gray-200 border-y">
                                           <dt className="text-sm text-black">
-                                            {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
+                                            {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                                           </dt>
                                           <dd className="font-semibold text-black text-md">
                                             {isIncludeVAT ? quoteViewData?.subTotal?.formatted?.withTax : quoteViewData?.subTotal?.formatted?.withoutTax}

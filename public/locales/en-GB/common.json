@@ -469,8 +469,6 @@
       "discountText": "Discount",
       "bagDiscountText": "Bag Discount",
       "subTotalText": "Subtotal",
-      "subTotalTaxIncText": "Subtotal (Inc. VAT)",
-      "subTotalTaxExcText": "Subtotal (ex. VAT)",
       "subTotalVATIncText": "Subtotal (Inc. VAT)",
       "subTotalVATExText": "Subtotal (ex. VAT)",
       "shippingChargesText": "Shipping charges",
