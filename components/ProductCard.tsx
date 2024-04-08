@@ -23,6 +23,8 @@ const Prices = dynamic(() => import('@components/Prices'))
 const ModalQuickView = dynamic(() => import('@components/ModalQuickView'))
 const ButtonSecondary = dynamic(() => import('@components/shared/Button/ButtonSecondary'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
+import { CURRENT_THEME } from "@components/utils/constants";
+const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 export interface ProductCardProps {
   className?: string;
   data?: any;
@@ -209,8 +211,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       <>
         {isMobile ? (
           <>
-            <div className="absolute grid justify-center visible grid-cols-2 px-2 transition-all bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
-              <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+              {featureToggle?.features?.enableAddToBagPlp &&
+                <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              }
               <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
@@ -219,8 +223,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </>
         ) : (
           <>
-            <div className="absolute grid justify-center invisible grid-cols-2 px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible">
-              <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+              {featureToggle?.features?.enableAddToBagPlp &&
+                <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+              }
               <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
