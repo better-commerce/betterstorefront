@@ -2,8 +2,19 @@ import { useState, useEffect } from 'react'
 import eventDispatcher from './eventDispatcher'
 import { useUI } from '@components/ui/context'
 declare global {
-  interface window {
-    dataLayer: any
+  interface Window {
+    dataLayer: any,
+    ch_session:any,
+    ch_page_view_before: any,
+    ch_collection_page_view_before:any,
+    ch_index_page_view_before:any,
+    ch_add_to_cart_before:any,
+    ch_product_view_before:any,
+    ch_checkout_initiate_before:any,
+    ch_index_page_view_after:any,
+    ch_product_view_after:any,
+    ch_remove_from_cart_before:any,
+    ch_purchase_complete_before:any
   }
 }
 

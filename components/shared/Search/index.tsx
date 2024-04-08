@@ -117,7 +117,7 @@ export default function Search(props: any) {
                           pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
                         }
                       }}>
-                      <img src={generateUri(product?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
+                      <img src={generateUri(product?.image, 'h=270&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
                     </div>
                   </Link>
                   <div className={CLASSES}>

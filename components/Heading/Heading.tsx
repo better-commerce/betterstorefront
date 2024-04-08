@@ -3,53 +3,17 @@ import NextPrev from "../shared/NextPrev/NextPrev";
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   fontClass?: string;
   rightDescText?: ReactNode;
-  rightPopoverOptions?: typeof solutions;
+  rightPopoverOptions?: any;
   desc?: ReactNode;
   hasNextPrev?: boolean;
   isCenter?: boolean;
 }
 
-const solutions = [
-  {
-    name: "last 24 hours",
-    href: "##",
-  },
-  {
-    name: "last 7 days",
-    href: "##",
-  },
-  {
-    name: "last 30 days",
-    href: "##",
-  },
-];
-
-const Heading: React.FC<HeadingProps> = ({
-  children,
-  desc = "",
-  className = "mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50",
-  isCenter = false,
-  hasNextPrev = false,
-  fontClass = "text-3xl md:text-4xl font-semibold",
-  rightDescText,
-  rightPopoverOptions = solutions,
-  ...args
-}) => {
+const Heading: React.FC<HeadingProps> = ({ children, desc = "", className = "mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50", isCenter = false, hasNextPrev = false, fontClass = "text-3xl md:text-4xl font-semibold", rightDescText, rightPopoverOptions, ...args }) => {
   return (
-    <div
-      className={`nc-Section-Heading relative flex flex-col sm:flex-row sm:items-end justify-between ${className}`}
-    >
-      <div
-        className={
-          isCenter
-            ? "flex flex-col items-center text-center w-full mx-auto"
-            : ""
-        }
-      >
-        <h2
-          className={`${isCenter ? "justify-center" : ""} ${fontClass}`}
-          {...args}
-        >
+    <div className={`nc-Section-Heading relative flex flex-col sm:flex-row sm:items-end justify-between ${className}`} >
+      <div className={isCenter ? "flex flex-col items-center text-center w-full mx-auto" : ""} >
+        <h2 className={`${isCenter ? "justify-center" : ""} ${fontClass}`} {...args} >
           {children || `Section Heading`}
           {rightDescText && (
             <>
@@ -68,7 +32,7 @@ const Heading: React.FC<HeadingProps> = ({
       </div>
       {hasNextPrev && !isCenter && (
         <div className="flex justify-end flex-shrink-0 mt-4 sm:ms-2 sm:mt-0">
-          <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
+          <NextPrev onClickNext={() => { }} onClickPrev={() => { }} />
         </div>
       )}
     </div>

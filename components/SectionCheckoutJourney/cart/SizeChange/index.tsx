@@ -6,11 +6,7 @@ import cn from 'classnames'
 import * as yup from 'yup'
 import axios from 'axios'
 import { Button, LoadingDots, useUI } from '@components/ui'
-import {
-  NEXT_BULK_ADD_TO_CART,
-  NEXT_GET_PRODUCT,
-  PRODUCTS_SLUG_PREFIX,
-} from '@components/utils/constants'
+import { NEXT_BULK_ADD_TO_CART, NEXT_GET_PRODUCT, PRODUCTS_SLUG_PREFIX, } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -104,13 +100,27 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
       }
 
       // find product size values
-      let productSizesArrObj = productDetailsObj?.variantAttributes?.find(
+      let fieldValues : any[] = productDetailsObj?.variantAttributes?.find(
         (o: any) => o.fieldCode === SIZE_ATTRIBUTE
-      )
+      ).fieldValues
 
-      if (productSizesArrObj?.fieldValues.length > 0) {
+      let productSizesArrObj: any[] = productDetailsObj?.variantProducts
+        ?.filter((item: any) => item?.attributes?.find((attr: any) => attr.fieldCode === SIZE_ATTRIBUTE))
+        ?.map((o: any) => {
+          const field = o?.attributes?.find((attr: any) => attr.fieldCode === SIZE_ATTRIBUTE);
+          const fieldValueData = fieldValues.find( (value: any) => value.fieldValue === field?.fieldValue)
+          return {
+            currentStock: o?.currentStock,
+            stockCode: o?.stockCode,
+            sellWithoutInventory: o?.sellWithoutInventory,
+            slug: o?.slug,
+            ...fieldValueData,
+          };
+        });
+
+      if (productSizesArrObj?.length > 0) {
         // sort product sizes
-        productSizesArrObj = productSizesArrObj?.fieldValues.sort(
+        productSizesArrObj = productSizesArrObj?.sort(
           (a: any, b: any) => a.displayOrder - b.displayOrder
         )
         setProductSizeData(productSizesArrObj)
@@ -184,10 +194,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           products = [...products, ...[personalizedItemToBeSaved]]
         }
 
-        const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, {
-          basketId,
-          products,
-        })
+        const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, { data: { basketId, products } })
 
         if (newCart?.id && newCart?.id != Guid.empty) {
           setCartItems(newCart)
@@ -268,14 +275,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
             <Dialog.Panel className="w-full max-w-lg mx-auto bg-white">
               <Dialog.Title className="p-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-lg font-bold">{translate('label.filters.changeSizeText')}</p>
-                  <span
-                    className="p-2 -mr-2 cursor-pointer hover:bg-gray-100"
-                    role="button"
-                    tabIndex={0}
-                    onClick={handleCloseModal}
-                    onKeyDown={handleCloseModal}
-                  >
+                  <p className="font-semibold font-20">{translate('label.filters.changeSizeText')}</p>
+                  <span className="p-2 -mr-2 cursor-pointer hover:bg-gray-100" role="button" tabIndex={0} onClick={handleCloseModal} onKeyDown={handleCloseModal} >
                     <XMarkIcon className="w-4 h-4" />
                   </span>
                 </div>
@@ -285,56 +286,39 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
 
               <div className="p-3">
                 <RadioGroup value={value} onChange={setValue}>
-                  <RadioGroup.Label>
+                  {/* <RadioGroup.Label>
                     <span className="font-semibold">Size:</span> {value}
-                  </RadioGroup.Label>
-                  <div className="flex flex-wrap mt-3 mb-8">
-                    {productSizeData?.length > 0 ? (
-                      productSizeData?.map((size: any) => (
-                        <RadioGroup.Option
-                          key={size?.fieldValue}
-                          value={size?.fieldValue}
-                          as={Fragment}
-                          disabled={size?.fieldValue === value}
-                        >
-                          {({ checked, disabled }) => (
-                            <li
-                              className={cn(
-                                'outline outline-gray-300 hover:outline-gray-700 hover:z-50 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-gray-100 text-gray-900 transition-colors uppercase duration-75',
-                                {
-                                  'bg-gray-100 outline-gray-700 z-50': checked,
-                                  '!cursor-default': disabled,
-                                }
-                              )}
-                            >
-                              {size?.fieldValue}
-                            </li>
-                          )}
-                        </RadioGroup.Option>
-                      ))
+                  </RadioGroup.Label> */}
+                  <div className="grid grid-cols-5 gap-2 mt-2 mb-6 sm:grid-cols-7">
+                    {productSizeData?.length > 0 ? (productSizeData?.map((size: any) => (
+                      <RadioGroup.Option key={size?.fieldValue} value={size?.fieldValue} as={Fragment} disabled={size?.fieldValue === value} >
+                        {({ checked, disabled }) => (
+                          <li
+                            className={cn(
+                              'outline relative outline-gray-300 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-sky-700 transition-colors uppercase duration-75 rounded-xl',
+                              {
+                                'bg-sky-500 text-white outline-sky-500 z-50 cursor-pointer': checked,
+                                '!cursor-default': disabled,
+                                '!bg-slate-100 !cursor-not-allowed !pointer-events-none !text-slate-400': !(size?.currentStock || size?.sellWithoutInventory)
+                              }
+                            )}
+                          >
+                            {!(size?.currentStock || size?.sellWithoutInventory) && <div className="w-[1px] h-[55px] bg-[#0000004d] absolute -top-[8px] left-1/2 rotate-45" />}
+                            {size?.fieldValue}
+                          </li>
+                        )}
+                      </RadioGroup.Option>
+                    ))
                     ) : (
                       <LoadingDots />
                     )}
                   </div>
                 </RadioGroup>
-                <Button
-                  type="button"
-                  className={`!py-3 text-sm font-bold text-center text-white bg-red-700 border cursor-pointer ${
-                    false ? 'opacity-50 !cursor-not-allowed' : ''
-                  }`}
-                  disabled={
-                    !Boolean(value) ||
-                    isSizeUpdateLoading ||
-                    value === defaultSize
-                  }
-                  onClick={handleSubmit}
-                >
-                  {isSizeUpdateLoading
-                    ? 'Updating...'
-                    : value
-                    ? translate('label.product.updateSizeText')
-                    : translate('label.product.sizeSelectiontext')
-                  }
+
+              </div>
+              <div className='flex flex-col items-center justify-end p-2 border-t border-slate-200'>
+                <Button type="button" className={`!py-3 text-sm font-bold w-full text-center text-white bg-red-700 border cursor-pointer ${false ? 'opacity-80 !cursor-not-allowed' : ''}`} disabled={!Boolean(value) || isSizeUpdateLoading || value === defaultSize} onClick={handleSubmit} >
+                  {isSizeUpdateLoading ? 'Updating...' : value ? translate('label.product.updateSizeText') : translate('label.product.sizeSelectiontext')}
                 </Button>
               </div>
             </Dialog.Panel>
