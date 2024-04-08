@@ -106,11 +106,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       title: 'Deliver',
       content: translate('label.checkout.toChoiceAddressText'),
       children: [],
-      type: 1,
+      type: DeliveryType.DELIVER,
     },
     {
       id: 1,
-      type: 2,
+      type: DeliveryType.COLLECT,
       title: 'Collect',
       content: translate('common.label.inStoreUsingCollectPlusText'),
       children: [],
@@ -845,12 +845,15 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           const data: any = DELIVERY_METHODS_TYPE?.find(
             (o: any) => o.type === parseInt(key)
           )
-          data.children = value
+
+          if (data?.children) {
+            data.children = value
   
-          if (data.type === 2 && !featureToggle?.features?.enableCollectDeliveryOption) {
-            return
+            if (data.type === DeliveryType.COLLECT && !featureToggle?.features?.enableCollectDeliveryOption) {
+              return
+            }
+            output.push(data)
           }
-          output.push(data)
         })
         setDeliveryMethods(output)
         if(deliveryTypeMethod) {

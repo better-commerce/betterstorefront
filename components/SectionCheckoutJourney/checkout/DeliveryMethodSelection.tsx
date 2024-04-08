@@ -61,7 +61,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
       errorMessage = translate('common.message.selectStoreErrorMsg');
     } else {
       isValid =
-        selectedShippingMethod?.type === 1 && selectedDeliveryMethod?.type === 1;
+        selectedShippingMethod?.type === DeliveryType.DELIVER && selectedDeliveryMethod?.type === DeliveryType.DELIVER;
       errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg');
     }
 
@@ -98,7 +98,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
 
   useEffect(() => {
     const isDeliveryTypeCollect =
-      selectedDeliveryMethod?.type === 2 &&
+      selectedDeliveryMethod?.type === DeliveryType.COLLECT &&
       selectedDeliveryMethod?.children?.some((x: any) => x?.id === selectedShippingMethodId);
 
     setShowFindStore(isDeliveryTypeCollect);
