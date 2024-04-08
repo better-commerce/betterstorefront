@@ -211,7 +211,10 @@
       "expiresText": "Expires",
       "cardCVCText": "CVC",
       "streetAndHouseNoText": "Street and House Number",
-      "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)"
+      "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)",
+      "milesText":"miles",
+      "lessThanAMileText":"Less than a mile",
+      "availableToCollectInText": "Available to collect in"
     },
     "collection": {
       "topListCollectionText": "Top List Collections.",

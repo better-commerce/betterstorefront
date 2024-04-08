@@ -211,7 +211,10 @@
       "expiresText": "Expira",
       "cardCVCText": "CVC",
       "streetAndHouseNoText": "Calle y número de casa",
-      "appartmentSuiteEtcText": "Apartamento, Suite, etc. (Opcional)"
+      "appartmentSuiteEtcText": "Apartamento, Suite, etc. (Opcional)",
+      "milesText": "millas",
+      "lessThanAMileText": "Menos de una milla",
+      "availableToCollectInText": "Disponible para recoger en"
     },
     "collection": {
       "topListCollectionText": "Colecciones más destacadas.",
@@ -737,13 +740,13 @@
       "addedToWishlistText": "Agregado a la lista de deseos"
     },
     "modalEdit": {
-      "ethText":"ETH",
-      "btcText":"BTC",
-      "bthText":"BTH"
+      "ethText": "ETH",
+      "btcText": "BTC",
+      "bthText": "BTH"
     },
-    "sectionHero":{
-      "exploreText":"Explorar",
-      "createText":"Crear"
+    "sectionHero": {
+      "exploreText": "Explorar",
+      "createText": "Crear"
     },
     "checkoutForm": {
       "itemsForOrderText": "Artículos para ordenar",
