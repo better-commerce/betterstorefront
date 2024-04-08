@@ -89,10 +89,10 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
             const distance = metresToMiles(store?.DistanceInMetres)
             let distanceText;
             if (distance < 0.1) {
-              distanceText= 'less than a mile'
+              distanceText= translate('label.checkout.lessThanAMileText')
             }
             else{
-              distanceText= `${metresToMiles(store?.DistanceInMetres)} miles`
+              distanceText= translate('label.checkout.milesText')
             }
             return(
               <>
@@ -116,14 +116,14 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                     <div>
                       <div>
                         <h2 className="text-base font-semibold mb-1">
-                          {store.Name}
+                          {store?.Name}
                         </h2>
-                        {store.DistanceInMetres && <span className="text-gray-500 mb-1 font-semibold">
+                        {store?.DistanceInMetres && <span className="text-gray-500 mb-1 font-semibold">
                           {distanceText}
                         </span>}
                         <br/>
-                        {store.AvailableToCollectIn && <span className="text-black mr-1 text-base">
-                          {`Available to collect in ${store.AvailableToCollectIn} Days`}
+                        {store?.AvailableToCollectIn && <span className="text-black mr-1 text-base">
+                          {`${translate('label.checkout.availableToCollectInText')} ${store?.AvailableToCollectIn} ${translate('label.productSidebar.daysText')}`}
                         </span>}
                         <br/>
                         {/* <p className="text-black mb-1">{store.City}</p>
