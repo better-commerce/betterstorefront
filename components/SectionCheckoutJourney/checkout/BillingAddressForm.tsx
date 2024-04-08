@@ -140,7 +140,9 @@ const BillingAddressForm: React.FC<any> = ({
             : 'sm:border sm:border-gray-200 sm:bg-gray-50 bg-white rounded-md sm:p-4'
         } flex flex-col gap-2 my-4 `}
       >
-        <h5 className="font-medium font-18 dark:text-black">{translate('label.addressBook.BillingAddressHeadingText')}</h5>
+        <h5 className="font-medium font-18 dark:text-black">
+          {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.BillingAddressHeadingText')}
+        </h5>
         {/* address finder form */}
         <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4">
           <form
