@@ -57,59 +57,60 @@ const DeliveryTypeSelection = ({
                       classNames(
                         checked ? 'border-transparent' : 'border-gray-300',
                         active ? 'ring-emerald-500' : '',
-                        'relative bg-white border shadow-sm p-4 w-full flex rounded-md cursor-pointer focus:outline-none'
+                        'relative bg-white border shadow-sm p-2 w-full flex rounded-md cursor-pointer focus:outline-none'
                       )
                     }
                   >
                     {({ checked, active }) => (
                       <>
                         <div className="flex flex-col w-full">
-                          <div className="flex flex-col items-center p-4 text-center rounded">
+                          <div className="flex p-1 rounded">
                             <RadioGroup.Label
                               as="span"
-                              className="block font-bold text-gray-900 uppercase text-md"
+                              className="flex gap-x-5 font-bold text-gray-900 uppercase text-md"
                             >
-                              <span
-                                className={classNames(
-                                  active ? '' : '',
-                                  checked ? 'bg-emerald-500' : 'bg-gray-100',
-                                  'flex items-center justify-center w-16 h-16 mb-3 rounded-full '
-                                )}
-                              >
-                                {deliveryMethod?.type == 1 ? (
-                                  <>
-                                    <TruckIcon
-                                      className={classNames(
-                                        active ? '' : '',
-                                        checked
-                                          ? 'text-white'
-                                          : 'text-gray-300',
-                                        'w-8 h-8 '
-                                      )}
-                                    />
-                                  </>
-                                ) : (
-                                  <>
-                                    <CubeIcon
-                                      className={classNames(
-                                        active ? '' : '',
-                                        checked
-                                          ? 'text-white'
-                                          : 'text-gray-300',
-                                        'w-8 h-8 '
-                                      )}
-                                    />
-                                  </>
-                                )}
-                              </span>
-                              {deliveryMethod.title}
+                              <div>
+                                <span
+                                  className={classNames(
+                                    active ? '' : '',
+                                    checked ? 'bg-emerald-500' : 'bg-gray-100',
+                                    'flex items-center justify-center w-16 h-16 mb-3 rounded-full '
+                                  )}
+                                >
+                                  {deliveryMethod?.type == 1 ? (
+                                    <>
+                                      <TruckIcon
+                                        className={classNames(
+                                          active ? '' : '',
+                                          checked
+                                            ? 'text-white'
+                                            : 'text-gray-300',
+                                          'w-8 h-8 '
+                                        )}
+                                      />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CubeIcon
+                                        className={classNames(
+                                          active ? '' : '',
+                                          checked
+                                            ? 'text-white'
+                                            : 'text-gray-300',
+                                          'w-8 h-8 '
+                                        )}
+                                      />
+                                    </>
+                                  )}
+                                </span>
+                              </div>
+                              <div>
+                                <div>{deliveryMethod.title}</div>
+                                <div className="flex mt-1 text-sm text-gray-500 lowercase font-normal">
+                                  {deliveryMethod.content}
+                                </div>
+                              </div>
                             </RadioGroup.Label>
-                            <RadioGroup.Description
-                              as="span"
-                              className="flex items-center mt-1 text-sm text-gray-500"
-                            >
-                              {deliveryMethod.content}
-                            </RadioGroup.Description>
                           </div>
                         </div>
                         <div

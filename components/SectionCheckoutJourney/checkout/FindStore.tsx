@@ -73,7 +73,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
       <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
         <input
           type="text"
-          className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
+          className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default rounded"
           placeholder={translate('common.label.enterPostcodePlaceholder')}
           value={postCode}
           onChange={handlePostCode}
