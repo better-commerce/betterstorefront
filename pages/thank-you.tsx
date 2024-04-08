@@ -328,43 +328,20 @@ export default function OrderConfirmation({ config }: any) {
     handleReferralInfo()
   }, [])
 
-  if (isLoading) {
-    return (
-      <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
-        <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
-          {translate('label.checkout.loadingYourOrderText')}
-        </h2>
-        <div className="flex items-center justify-center w-full mt-10 text-gray-900">
-          <LoadingDots />
-        </div>
-      </main>
-    )
-  }
-  const css = { maxWidth: '100%', height: 'auto' }
-
-  const getPaymentMethodName = (payments: any) => {
-    return (
-      payments?.find(
-        (x: any) => x?.isValid /* && x?.status === PaymentStatus.PAID */
-      )?.paymentGateway || EmptyString
-    )
-  }
-
-  const bodyStartScrCntrRef = React.createRef<any>()
-  const bodyEndScrCntrRef = React.createRef<any>()
-
   useEffect(() => {
-    const iterator = order?.items?.values();
     const itemsFromArr = []
-    for (const value of iterator) {
-      itemsFromArr?.push({
-        id:value?.stockCode,
-        name:value?.name,
-        quantity:value?.qty,
-        price:value?.totalPrice?.raw?.withTax,
-        line_price:value?.totalPrice?.raw?.withTax,
-        sku:value?.id
-      })
+    if( order?.items ){
+      const iterator = order?.items?.values();
+      for (const value of iterator) {
+        itemsFromArr?.push({
+          id:value?.stockCode,
+          name:value?.name,
+          quantity:value?.qty,
+          price:value?.totalPrice?.raw?.withTax,
+          line_price:value?.totalPrice?.raw?.withTax,
+          sku:value?.id
+        })
+      }
     }
     const orderData = {
       item_id: "thankyou",
@@ -391,10 +368,36 @@ export default function OrderConfirmation({ config }: any) {
         contact_no: order?.billingAddress?.phoneNo
       }
     }
-    if( window !== undefined && window?.ch_session){
+    if( window !== undefined && window?.ch_session && order?.orderNo){
       window.ch_purchase_complete_before(orderData)
     }
-  },[order])
+  },[order?.orderNo])
+
+  if (isLoading) {
+    return (
+      <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
+        <h2 className="w-full text-5xl font-extrabold text-center text-gray-600 uppercase tracking-light">
+          {translate('label.checkout.loadingYourOrderText')}
+        </h2>
+        <div className="flex items-center justify-center w-full mt-10 text-gray-900">
+          <LoadingDots />
+        </div>
+      </main>
+    )
+  }
+  const css = { maxWidth: '100%', height: 'auto' }
+
+  const getPaymentMethodName = (payments: any) => {
+    return (
+      payments?.find(
+        (x: any) => x?.isValid /* && x?.status === PaymentStatus.PAID */
+      )?.paymentGateway || EmptyString
+    )
+  }
+
+  const bodyStartScrCntrRef = React.createRef<any>()
+  const bodyEndScrCntrRef = React.createRef<any>()
+
 
   return (
     <>
