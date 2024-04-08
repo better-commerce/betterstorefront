@@ -159,7 +159,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={addressFinderFormik.values.postCode}
                   onChange={addressFinderFormik.handleChange}
                   placeholder={translate('common.label.enterYourPostCodePlaceholder')}
-                  className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
+                  className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default rounded"
                 />
                 {addressFinderFormik.errors.postCode &&
                   addressFinderFormik.touched.postCode && (
@@ -235,7 +235,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.firstNameText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                 />
                 {formik.errors.firstName && (
                   <span className="form-input-error">
@@ -250,7 +250,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.lastName}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.lastNameText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                 />
                 {formik.errors.lastName && (
                   <span className="form-input-error">
@@ -265,7 +265,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.phoneNo}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.mobileNumText')}
                   onKeyDown={(ev: any) => {
                     const target = ev?.target
@@ -316,7 +316,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.companyName}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.companyNameAndVATNumText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                 />
                 {formik.errors.companyName && (
                   <span className="form-input-error">
@@ -331,7 +331,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   value={formik.values.address1}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.addressLine1Text')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                 />
                 {formik.errors.address1 && (
                   <span className="form-input-error">
@@ -345,7 +345,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address2}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.addressLine2Text')}
                 />
                 {formik.errors.address2 && (
@@ -360,7 +360,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address3}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.addressLine3Text')}
                 />
                 {formik.errors.address3 && (
@@ -375,7 +375,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.city}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.cityText')}
                 />
                 {formik.errors.city && (
@@ -388,7 +388,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.postCode}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.postcodeText')}
                 />
                 {formik.errors.postCode && (
@@ -404,7 +404,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.state}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.countyStateEtcText')}
                 />
                 {formik.errors.state && (
