@@ -1,7 +1,12 @@
+import { Fragment, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import LoadingDots from '@components/ui/LoadingDots'
 import { MapPinIcon } from '@heroicons/react/24/outline'
+import Cookies from 'js-cookie'
+
+//
+import LoadingDots from '@components/ui/LoadingDots'
+import { Cookie } from '@framework/utils/constants'
+import { stringToBoolean } from '@framework/utils/parse-util'
 
 const UseMyLocationModal = ({
   isLocationDialog,
@@ -14,7 +19,12 @@ const UseMyLocationModal = ({
   deviceInfo,
 }: any) => {
   const { isMobile } = deviceInfo
-  
+  const disableUserLocationPopup = useMemo(() => stringToBoolean(Cookies.get(Cookie.Key.DISABLE_USER_LOCATION_POPUP)), [])
+
+  if (disableUserLocationPopup) {
+    return <></>
+  }
+
   return (
     <Transition.Root show={isLocationDialog} as={Fragment}>
       <Dialog
@@ -70,6 +80,7 @@ const UseMyLocationModal = ({
                               onClick={() => {
                                 setLocationDialog(false)
                                 setErrorMsg(false)
+                                Cookies.set(Cookie.Key.DISABLE_USER_LOCATION_POPUP, 'true')
                               }}
                             >
                               Skip
@@ -84,6 +95,7 @@ const UseMyLocationModal = ({
                             onClick={() => {
                               getUserLocation()
                               setLoadingDots('currentLocation')
+                              Cookies.set(Cookie.Key.DISABLE_USER_LOCATION_POPUP, 'true')
                             }}
                           >
                             {' '}
