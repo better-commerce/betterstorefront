@@ -16,6 +16,7 @@ interface DeliveryTypeSelectionProps {
   readonly deliveryTypeMethod: any
   readonly featureToggle?: any
   setDeliveryTypeMethod: any
+  deliveryMethods: any
 }
 
 const DeliveryTypeSelection = ({
@@ -23,62 +24,9 @@ const DeliveryTypeSelection = ({
   deliveryTypeMethod,
   setDeliveryTypeMethod,
   featureToggle,
+  deliveryMethods = [],
 }: DeliveryTypeSelectionProps) => {
   const translate = useTranslation()
-  const DELIVERY_METHODS_TYPE = [
-    {
-      id: 0,
-      title: 'Deliver',
-      content: translate('label.checkout.toChoiceAddressText'),
-      children: [],
-      type: 1,
-    },
-    {
-      id: 1,
-      type: 2,
-      title: 'Collect',
-      content: translate('common.label.inStoreUsingCollectPlusText'),
-      children: [],
-    },
-  ]
-  const [deliveryMethods, setDeliveryMethods] = useState(new Array<any>())
-  const { basketId } = useUI()
-  const loadDeliveryMethods = async (shippingAddress: any) => {
-    const response = await postData(NEXT_SHIPPING_ENDPOINT, {
-      basketId,
-      countryCode:
-        shippingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-    })
-
-    if (response.length) {
-      const tempArrNew = groupBy(response, 'type')
-      const output = new Array<any>()
-      Object.entries(tempArrNew)?.forEach(([key, value]) => {
-        const data: any = DELIVERY_METHODS_TYPE?.find(
-          (o: any) => o.type === parseInt(key)
-        )
-        data.children = value
-
-        if (data.type === 2 && !featureToggle?.features?.enableCollectDeliveryOption) {
-          return
-        }
-        output.push(data)
-      })
-      setDeliveryMethods(output)
-      if(deliveryTypeMethod) {
-        setDeliveryTypeMethod(output[deliveryTypeMethod?.id])
-      } else {
-        setDeliveryTypeMethod(output[0])
-      }
-    }
-  }
-  useEffect(() => {
-    if(basket?.shippingAddress?.id){
-      loadDeliveryMethods(basket?.shippingAddress)
-    } else {
-      loadDeliveryMethods(null)
-    }
-  }, [])
 
   if (deliveryMethods?.length < 1) {
     return <></>
