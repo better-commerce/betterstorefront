@@ -280,13 +280,12 @@ const router = useRouter()
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
               {translate('label.myAccount.alreadyAccountText')} {` `}
               <a className="text-green-600" href="/my-account/login">
-                {translate('label.myAccount.SignInText')}
+                {translate('label.login.loginBtnText')}
               </a>
             </span>
           </div>
         </div>
       </section>
-
     </>
   )
 }

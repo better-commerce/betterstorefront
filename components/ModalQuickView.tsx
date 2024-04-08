@@ -3,7 +3,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { FC, Fragment } from "react";
 import ProductQuickView from "./ProductQuickView";
-import ProductQuickView2 from "./ProductQuickView2";
 import { usePathname } from "next/navigation";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
 
@@ -28,7 +27,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
     <Transition appear show={show} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-50"
+        className="fixed inset-0 z-50 cart-z-index-9999"
         onClose={onCloseModalQuickView}
       >
         <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">

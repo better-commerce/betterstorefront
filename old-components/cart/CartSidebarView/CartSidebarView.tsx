@@ -430,6 +430,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
               current_page: 'Cart',
             },
           })
+          if(window?.ch_session){
+            window.ch_remove_from_cart_before({ item_id : product?.sku})
+          }
         }
       }
       try {
