@@ -15,6 +15,7 @@ interface Props {
   clearAll: any
   routerSortOption: any
   removeFilter: any
+  featureToggle?: any
 }
 
 export default function Filters({
@@ -25,6 +26,7 @@ export default function Filters({
   clearAll,
   routerSortOption,
   removeFilter,
+  featureToggle,
 }: Props) {
   const [open, setOpen] = useState(false)
   const translate = useTranslation()
@@ -97,7 +99,7 @@ export default function Filters({
             </button>
           </div>
         </div>
-        <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} />
+        <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />
       </section>
       {appliedFilters?.length > 0 && (
         <>

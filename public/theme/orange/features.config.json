@@ -5,6 +5,7 @@
     "enableQuickOrderPad": true,
     "enableCompare": false,
     "enableStoreLocator": true,
+    "enableCollectDeliveryOption": true,
     "enableEngage":true
   },
   "social":[

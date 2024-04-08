@@ -16,8 +16,7 @@ const MenuBar = dynamic(() => import('@components/shared/MenuBar/MenuBar'))
 const Navigation = dynamic(() => import('@components/shared/Navigation/Navigation'))
 const ToggleSwitch = dynamic(() => import('@components/shared/ToggleSwitch/ToggleSwitch'))
 const BulkAddTopNav = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/TopNav'))
-import { CURRENT_THEME } from "@components/utils/constants";
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
+
 export interface MainNav2LoggedProps { }
 interface Props {
   config: []
@@ -29,7 +28,7 @@ interface Props {
   defaultCountry: string
 }
 
-const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [] }) => {
+const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const { setShowSearchBar, openBulkAdd } = useUI()

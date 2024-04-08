@@ -86,7 +86,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, }: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, }: any) {
   const translate = useTranslation()
   const faq = useFaqData();
   const adaptedQuery = { ...query }
@@ -538,7 +538,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           <hr className='border-slate-200 dark:border-slate-700' />
 
           <div className="flex justify-end w-full pt-6">
-            <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
+            <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
           </div>
           <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
           <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />

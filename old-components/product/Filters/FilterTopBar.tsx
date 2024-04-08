@@ -8,9 +8,10 @@ interface Props {
   clearAll: any
   routerSortOption: any
   removeFilter: any
+  featureToggle?: any
 }
 
-export default function FiltersRightOpen({ products = { filters: [] }, handleSortBy, routerFilters, clearAll, routerSortOption, removeFilter }: Props) {
+export default function FiltersRightOpen({ products = { filters: [] }, handleSortBy, routerFilters, clearAll, routerSortOption, removeFilter, featureToggle }: Props) {
   const translate =  useTranslation()
   const appliedFilters = products?.filters?.reduce(
     (acc: any, obj: any) => {
@@ -49,7 +50,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
       ) : (
         <div></div>
       )}
-      <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} />
+      <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />
     </section>
   )
 }
