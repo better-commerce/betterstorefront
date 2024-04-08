@@ -232,13 +232,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryLandingPage({
-  category,
-  slug,
-  products,
-  deviceInfo,
-  config,
-}: any) {
+function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const translate = useTranslation()
@@ -694,20 +688,20 @@ function CategoryLandingPage({
                   {!!products && (products?.filters?.length > 0 ? (
                     <>
                       {isMobile ? (
-                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
                         <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                       )}
                       <div className="sm:col-span-10 p-[1px]">
                         {isMobile ? null : (
-                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                         )}
                         <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                       </div>
                     </>
                   ) : (
                     <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
                     </div>
                   ))}

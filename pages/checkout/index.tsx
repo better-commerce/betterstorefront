@@ -22,6 +22,7 @@ import {
   Messages,
   NEXT_AUTHENTICATE,
   NEXT_BASKET_VALIDATE,
+  NEXT_CLICK_AND_COLLECT_STORE_DELIVERY,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_GUEST_CHECKOUT,
   NEXT_UPDATE_CHECKOUT2_ADDRESS,
@@ -69,19 +70,10 @@ const steps = [
   { key: 'review', label: 'Payment', shouldActiveOn: '' },
 ]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle }: any) => {
   const router = useRouter()
   const uiContext = useUI()
-  const {
-    isGuestUser,
-    user,
-    setAlert,
-    setUser,
-    setIsGuestUser,
-    setIsGhostUser,
-    setOverlayLoaderState,
-    hideOverlayLoaderState,
-  } = useUI()
+  const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
   const [appConfigData, setAppConfigData] = useState<any>()
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -548,48 +540,58 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
 
   const handleDeliveryMethodSelect = async (method: any, store: any) => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
-    let deliveryPlans = basket?.deliveryPlans
-    if (basket?.shippingMethodId != method?.id) {
-      // Update shipping method
-      const { data: updateShippingMethodResult } = await axios.post(
-        NEXT_UPDATE_SHIPPING,
-        {
-          basketId,
-          countryCode:
-            selectedAddress?.shippingAddress?.countryCode ||
-            BETTERCOMMERCE_DEFAULT_COUNTRY,
-          shippingId: method?.id,
+    if (store) {
+      const data = { basketId: basket?.id, deliveryMethodId: deliveryTypeMethod?.id, store }
+      const { data: clickCollectStoreResult } = await axios.post(NEXT_CLICK_AND_COLLECT_STORE_DELIVERY, data)
+      if (clickCollectStoreResult?.message || !clickCollectStoreResult?.isValid) {
+        hideOverlayLoaderState()
+        setAlert({ type: AlertType.ERROR, msg: clickCollectStoreResult?.message })
+        //const basketResult = await getBasket(basketId)
+        return
+      }
+    } else {
+      let deliveryPlans = basket?.deliveryPlans
+      if (basket?.shippingMethodId != method?.id) {
+        // Update shipping method
+        const { data: updateShippingMethodResult } = await axios.post(
+          NEXT_UPDATE_SHIPPING,
+          {
+            basketId,
+            countryCode:
+              selectedAddress?.shippingAddress?.countryCode ||
+              BETTERCOMMERCE_DEFAULT_COUNTRY,
+            shippingId: method?.id,
+          }
+        )
+        setBasket({ ...basket, ...updateShippingMethodResult })
+        deliveryPlans = updateShippingMethodResult?.deliveryPlans
+      }
+
+      if (appConfigData && appConfigData?.configSettings?.length) {
+        const configSettings = appConfigData?.configSettings
+        const domainSettings =
+          configSettings?.find((x: any) =>
+            matchStrings(x?.configType, 'DomainSettings', true)
+          )?.configKeys || []
+        const enableOmniOms =
+          domainSettings?.find((x: any) =>
+            matchStrings(x?.key, 'DomainSettings.EnableOmniOms', true)
+          )?.value || 'False'
+
+        // If 'EnableOmniOms' is enabled.
+        if (stringToBoolean(enableOmniOms) && deliveryPlans?.length) {
+          for (let i = 0; i < deliveryPlans.length; i++) {
+            delete deliveryPlans[i].deliveryPlanNo
+          }
+
+          // Update delivery method
+          const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
+            id: basketId,
+            data: deliveryPlans || [],
+          })
         }
-      )
-      setBasket({ ...basket, ...updateShippingMethodResult })
-      deliveryPlans = updateShippingMethodResult?.deliveryPlans
-    }
-
-    if (appConfigData && appConfigData?.configSettings?.length) {
-      const configSettings = appConfigData?.configSettings
-      const domainSettings =
-        configSettings?.find((x: any) =>
-          matchStrings(x?.configType, 'DomainSettings', true)
-        )?.configKeys || []
-      const enableOmniOms =
-        domainSettings?.find((x: any) =>
-          matchStrings(x?.key, 'DomainSettings.EnableOmniOms', true)
-        )?.value || 'False'
-
-      // If 'EnableOmniOms' is enabled.
-      if (stringToBoolean(enableOmniOms) && deliveryPlans?.length) {
-        for (let i = 0; i < deliveryPlans.length; i++) {
-          delete deliveryPlans[i].deliveryPlanNo
-        }
-
-        // Update delivery method
-        const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
-          id: basketId,
-          data: deliveryPlans || [],
-        })
       }
     }
-
     setSelectedDeliveryMethod(method)
     hideOverlayLoaderState()
     goToStep(CheckoutStep.REVIEW)
@@ -625,7 +627,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
             ? 'text-black font-medium'
             : !isCompleted && !isActive
               ? 'text-gray-400'
-              : 'text-black font-semibold underline' 
+              : 'text-black font-semibold underline'
           }`}
       >
         <span>{label}</span>
@@ -662,19 +664,20 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
 
   const loginOrGuestProps = {
     basket,
+    featureToggle,
     onLoginSuccess: handleLoginSuccess,
     onGuestCheckout: handleGuestCheckout,
   }
 
   const handleCollect = () => {
-    if(deliveryTypeMethod.type === 2){
+    if (deliveryTypeMethod.type === 2) {
       setCompletedSteps((prev) => [
         ...new Set([...prev, CheckoutStep.ADDRESS]),
       ])
     }
     goToStep(CheckoutStep.DELIVERY)
   }
-  
+
   const addressBookProps = {
     selectedAddress,
     editAddressValues,
@@ -694,7 +697,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     basket,
     deliveryTypeMethod,
     setDeliveryTypeMethod,
-    handleCollect
+    handleCollect,
+    featureToggle,
   }
 
 
@@ -707,7 +711,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     billingCountries: appConfigData?.billingCountries,
     handleCollect,
     deliveryTypeMethod,
-    setDeliveryTypeMethod
+    setDeliveryTypeMethod,
+    featureToggle,
   }
 
   const editAddressFormProps = {
@@ -716,6 +721,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     onEditAddressToggleView,
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,
+    featureToggle,
   }
 
   const deliveryMethodSelectionProps = {
@@ -725,7 +731,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     onContinue: () => {
       goToStep(CheckoutStep.REVIEW)
     },
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const reviewOrderProps = {
@@ -980,9 +987,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
   return {
-    props: { 
+    props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      basketId, 
+      basketId,
     }
   }
 }

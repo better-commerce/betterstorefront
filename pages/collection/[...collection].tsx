@@ -113,7 +113,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 export default function CollectionPage(props: any) {
-  const { deviceInfo, config } = props
+  const { deviceInfo, config, featureToggle } = props
 
   if (!props?.id) {
     return <></>
@@ -543,7 +543,7 @@ export default function CollectionPage(props: any) {
               <>
                 {isMobile ? (
                   <>
-                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   </>
                 ) : (
                   <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
@@ -551,7 +551,7 @@ export default function CollectionPage(props: any) {
                 <div className="sm:col-span-9 p-[1px]">
                   {isMobile ? null : (
                     <>
-                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     </>
                   )}
                   <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
@@ -559,7 +559,7 @@ export default function CollectionPage(props: any) {
               </>
             ) : (
               <div className="col-span-12">
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                 <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
               </div>
             )}

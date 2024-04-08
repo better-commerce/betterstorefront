@@ -595,8 +595,8 @@ export default function OrderConfirmation({ config }: any) {
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
                       {isIncludeVAT
-                        ? translate('label.orderSummary.subTotalTaxIncText')
-                        : translate('label.orderSummary.subTotalTaxExcText')}
+                        ? translate('label.orderSummary.subTotalVATIncText')
+                        : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="text-gray-700">
                       {isIncludeVAT

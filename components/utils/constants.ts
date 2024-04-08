@@ -10,6 +10,7 @@ export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
 export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
   '/api/basket/update-checkout2-address'
+export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY = '/api/delivery/click-collect-store'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
@@ -559,4 +560,9 @@ export const EmptyGuid = '00000000-0000-0000-0000-000000000000'
 export enum QuantityBreakRule {
   FIXED_PRICE = 1,
   PERCENTAGE = 2,
+}
+
+export enum DeliveryType {
+  DELIVER = 1,
+  COLLECT = 2,
 }

@@ -1,6 +1,7 @@
 import { OMS_CLICK_AND_COLLECT } from '@components/utils/constants'
 import { OMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   items: []
@@ -26,9 +27,9 @@ export default function getClickAndCollectPlans() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      return response.result
+      return response?.Result?.length ? response?.Result : []
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

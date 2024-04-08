@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { EmptyString, Messages, } from '@components/utils/constants'
+import { DeliveryType, EmptyString, Messages, } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { guestLoginCheckout2Schema } from './config'
 import ShippingAddressForm from './ShippingAddressForm'
 import DeliveryTypeSelection from './DeliveryTypeSelection'
 import { useTranslation } from '@commerce/utils/use-translation'
+import BillingAddressForm from './BillingAddressForm'
 
 const LoginOrGuest: React.FC<any> = ({
   basket,
@@ -15,9 +16,11 @@ const LoginOrGuest: React.FC<any> = ({
   onSubmit,
   searchAddressByPostcode,
   shippingCountries,
+  billingCountries,
   handleCollect,
   deliveryTypeMethod,
-  setDeliveryTypeMethod
+  setDeliveryTypeMethod,
+  featureToggle,
 }) => {
   const GUEST_LOGIN_CHECKOUT2_SCHEMA = guestLoginCheckout2Schema();
   const translate = useTranslation()
@@ -71,6 +74,64 @@ const LoginOrGuest: React.FC<any> = ({
   const onToggleLoginView = () => {
     if (guestCheckoutFormik.isSubmitting) return
     setIsLogin(!isLogin)
+  }
+
+  const displayView = () => {
+    switch (deliveryTypeMethod?.type) {
+      case DeliveryType.DELIVER:
+        return (
+          <ShippingAddressForm
+            shippingCountries={shippingCountries}
+            guestCheckoutFormik={guestCheckoutFormik}
+            onSubmit={onSubmit}
+            searchAddressByPostcode={searchAddressByPostcode}
+            deliveryType={deliveryTypeMethod?.type}
+            isGuest={true}
+            onGuestCheckout={onGuestCheckout}
+          />
+        )
+      case DeliveryType.COLLECT:
+        return (
+          <BillingAddressForm
+            guestCheckoutFormik={guestCheckoutFormik}
+            onGuestCheckout={onGuestCheckout}
+            editAddressValues={null}
+            shippingCountries={shippingCountries}
+            billingCountries={billingCountries}
+            searchAddressByPostcode={searchAddressByPostcode}
+            onSubmit={onSubmit}
+            useSameForBilling={false}
+            shouldDisplayEmail={false}
+          />
+        )
+      default:
+        return (
+          <div className="grid flex-col w-full gap-2 mt-6 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
+            {isLogin ? (
+              <>
+                <button
+                  className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
+                  onClick={handleCollect}
+                >
+                  {translate('label.checkout.saveAndContinueToCollectBtnText')}
+                </button>
+              </>
+            ) : (
+              <>
+                <form onSubmit={guestCheckoutFormik.handleSubmit}>
+                  <button
+                    type="submit"
+                    disabled={guestCheckoutFormik.isSubmitting}
+                    className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
+                  >
+                    {translate('label.checkout.saveAndContinueToCollectBtnText')}
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        )
+    }
   }
 
   return (
@@ -178,45 +239,9 @@ const LoginOrGuest: React.FC<any> = ({
             basket={basket}
             deliveryTypeMethod={deliveryTypeMethod}
             setDeliveryTypeMethod={setDeliveryTypeMethod}
+            featureToggle={featureToggle}
           />
-          {deliveryTypeMethod?.type === 1 ? (
-            <ShippingAddressForm
-              shippingCountries={shippingCountries}
-              guestCheckoutFormik={guestCheckoutFormik}
-              onSubmit={onSubmit}
-              searchAddressByPostcode={searchAddressByPostcode}
-              deliveryType={deliveryTypeMethod.type}
-              isGuest={true}
-              onGuestCheckout={onGuestCheckout}
-            />
-          ) : (
-            <>
-              <div className="grid flex-col w-full gap-2 mt-6 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
-                {isLogin ? (
-                  <>
-                    <button
-                      className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
-                      onClick={handleCollect}
-                    >
-                      {translate('label.checkout.saveAndContinueToCollectBtnText')}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <form onSubmit={guestCheckoutFormik.handleSubmit}>
-                      <button
-                        type="submit"
-                        disabled={guestCheckoutFormik.isSubmitting}
-                        className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
-                      >
-                        {translate('label.checkout.saveAndContinueToCollectBtnText')}
-                      </button>
-                    </form>
-                  </>
-                )}
-              </div>
-            </>
-          )}
+          {displayView()}
         </>
       )}
     </div>

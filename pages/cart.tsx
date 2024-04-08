@@ -692,7 +692,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                 <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                   <div className="flex items-center justify-between py-4">
                     <dt className="text-sm text-gray-600">
-                      {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT ? cartItems?.subTotal?.formatted?.withTax : cartItems?.subTotal?.formatted?.withoutTax}
@@ -878,7 +878,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                 <dl className="mt-6 space-y-2 sm:space-y-2">
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-600">
-                      {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}

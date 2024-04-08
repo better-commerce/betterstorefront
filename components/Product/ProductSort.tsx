@@ -8,15 +8,15 @@ import { useUI } from '@components/ui'
 import { Switch } from '@headlessui/react'
 import Radio from '@components/shared/Radio/Radio'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { CURRENT_THEME } from '@components/utils/constants'
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
+
 interface Props {
   products: any
   action: any
   routerSortOption: any
+  featureToggle?: any
 }
 
-export default function ProductSort({ products, action, routerSortOption, }: Props) {
+export default function ProductSort({ products, action, routerSortOption, featureToggle }: Props) {
   const translate = useTranslation()
   const router = useRouter()
   const { isCompared, setIsCompared } = useUI()

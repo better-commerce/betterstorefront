@@ -24,6 +24,7 @@ interface AddressBookProps {
   deliveryTypeMethod?: any
   setDeliveryTypeMethod?: any
   handleCollect?: any
+  featureToggle?: any
 }
 
 const AddressBook: React.FC<AddressBookProps> = ({
@@ -41,7 +42,8 @@ const AddressBook: React.FC<AddressBookProps> = ({
   basket,
   deliveryTypeMethod,
   setDeliveryTypeMethod,
-  handleCollect
+  handleCollect,
+  featureToggle,
 }) => {
   const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
@@ -99,6 +101,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
         basket={basket}
         deliveryTypeMethod={deliveryTypeMethod}
         setDeliveryTypeMethod={setDeliveryTypeMethod}
+        featureToggle={featureToggle}
       />
       {deliveryTypeMethod?.type === 1 ? (
         <>

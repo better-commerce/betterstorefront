@@ -12,8 +12,9 @@ import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface DeliveryTypeSelectionProps {
-  basket: any
-  deliveryTypeMethod: any
+  readonly basket: any
+  readonly deliveryTypeMethod: any
+  readonly featureToggle?: any
   setDeliveryTypeMethod: any
 }
 
@@ -21,6 +22,7 @@ const DeliveryTypeSelection = ({
   basket,
   deliveryTypeMethod,
   setDeliveryTypeMethod,
+  featureToggle,
 }: DeliveryTypeSelectionProps) => {
   const translate = useTranslation()
   const DELIVERY_METHODS_TYPE = [
@@ -39,7 +41,7 @@ const DeliveryTypeSelection = ({
       children: [],
     },
   ]
-  const [deliveryMethods, setDeliveryMethods] = useState(DELIVERY_METHODS_TYPE)
+  const [deliveryMethods, setDeliveryMethods] = useState(new Array<any>())
   const { basketId } = useUI()
   const loadDeliveryMethods = async (shippingAddress: any) => {
     const response = await postData(NEXT_SHIPPING_ENDPOINT, {
@@ -47,6 +49,7 @@ const DeliveryTypeSelection = ({
       countryCode:
         shippingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
     })
+
     if (response.length) {
       const tempArrNew = groupBy(response, 'type')
       const output = new Array<any>()
@@ -55,6 +58,10 @@ const DeliveryTypeSelection = ({
           (o: any) => o.type === parseInt(key)
         )
         data.children = value
+
+        if (data.type === 2 && !featureToggle?.features?.enableCollectDeliveryOption) {
+          return
+        }
         output.push(data)
       })
       setDeliveryMethods(output)
@@ -72,6 +79,11 @@ const DeliveryTypeSelection = ({
       loadDeliveryMethods(null)
     }
   }, [])
+
+  if (deliveryMethods?.length < 1) {
+    return <></>
+  }
+
   return (
     <>
       <h5 className="mt-4 mb-2 font-medium text-black font-18 sm:mt-6 sm:mb-4">
