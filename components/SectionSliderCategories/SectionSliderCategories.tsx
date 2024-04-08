@@ -1,14 +1,10 @@
 "use client";
 
-import React, { FC, useEffect, useId, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Heading from "@components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import CardCategory2 from "@components/CardCategories/CardCategory2";
-import department1Png from "images/collections/department1.png";
-import department2Png from "images/collections/department2.png";
-import department3Png from "images/collections/department3.png";
-import department4Png from "images/collections/department4.png";
 import { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@commerce/utils/use-translation";
@@ -19,32 +15,7 @@ export interface CardCategoryData {
   img: string | StaticImageData;
   color?: string;
 }
-const CATS: CardCategoryData[] = [
-  {
-    name: "Travel Kits",
-    desc: "20+ categories",
-    img: department1Png,
-    color: "bg-indigo-100",
-  },
-  {
-    name: "Beauty Products",
-    desc: "10+ categories",
-    img: department2Png,
-    color: "bg-slate-100",
-  },
-  {
-    name: "Sport Kits",
-    desc: "34+ categories",
-    img: department3Png,
-    color: "bg-sky-100",
-  },
-  {
-    name: "Pets Food",
-    desc: "12+ categories",
-    img: department4Png,
-    color: "bg-orange-100",
-  },
-];
+
 export interface SectionSliderCategoriesProps {
   className?: string;
   itemClassName?: string;
@@ -66,29 +37,13 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
 
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: 4,
-      gap: 32,
-      bound: true,
+      perView: 4, gap: 32, bound: true,
       breakpoints: {
-        1280: {
-          perView: 4,
-        },
-        1024: {
-          gap: 20,
-          perView: 3.4,
-        },
-        768: {
-          gap: 20,
-          perView: 3,
-        },
-        640: {
-          gap: 20,
-          perView: 2.3,
-        },
-        500: {
-          gap: 20,
-          perView: 1.4,
-        },
+        1280: { perView: 4, },
+        1024: { gap: 20, perView: 3.4, },
+        768: { gap: 20, perView: 3, },
+        640: { gap: 20, perView: 2.3, },
+        500: { gap: 20, perView: 1.4, },
       },
     };
 
