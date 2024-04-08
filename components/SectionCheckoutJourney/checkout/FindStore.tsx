@@ -12,12 +12,13 @@ interface FindStoreProps {
 }
 
 const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
+  const translate = useTranslation()
   const { setAlert } = useUI()
   const [postCode, setPostCode] = useState<any>(null)
   const [stores, setStores] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [selectedStore, setSelectedStore] = useState<any>(null)
-  const translate = useTranslation()
+
   // Function to fetch stores based on postcode
   const handleFetchStores = async () => {
     try {
