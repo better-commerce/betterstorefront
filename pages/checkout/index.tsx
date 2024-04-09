@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
@@ -520,29 +520,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         })
       } else {
         if (address?.useSameForBilling) {
-          await updateCheckoutAddress(
-            {
-              billingAddress: newAddressData,
-              shippingAddress: newAddressData,
-            },
-            true
-          )
-          setSelectedAddress({
-            billingAddress: newAddressData,
-            shippingAddress: newAddressData,
-          })
+          await updateCheckoutAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, }, true)
+          setSelectedAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, })
         } else {
-          await updateCheckoutAddress(
-            {
-              shippingAddress: newAddressData,
-            },
-            true
-          )
+          await updateCheckoutAddress({ shippingAddress: newAddressData, }, true)
 
-          setSelectedAddress({
-            billingAddress: undefined,
-            shippingAddress: newAddressData,
-          })
+          setSelectedAddress({ billingAddress: undefined, shippingAddress: newAddressData, })
         }
       }
     }
@@ -648,14 +631,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     goToStep(CheckoutStep.REVIEW)
   }
 
-  const updateCheckoutAddress = async (address: any, cdp = false, isCNC = false) => {
+  const updateCheckoutAddress = async (address: any, cdp = false) => {
     const response = await axios.post(NEXT_UPDATE_CHECKOUT2_ADDRESS, {
       basketId,
       model: address,
       cdp,
-      basketItems: basket?.lineItems,
+      basket,
       postCode: basket?.postCode,
-      isCNC,
+      isCNC: (deliveryTypeMethod?.type === DeliveryType.COLLECT),
     })
     return response
   }
@@ -707,7 +690,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const onContinueAddressBook = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
     if (deliveryTypeMethod?.type === DeliveryType.COLLECT) {
-      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, false, true)
+      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, false)
     } else {
       await updateCheckoutAddress({ shippingAddress: selectedAddress?.shippingAddress, billingAddress: selectedAddress?.billingAddress }, true)
     }
@@ -849,7 +832,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
           if (data?.children) {
             data.children = value
-  
+
             if (data.type === DeliveryType.COLLECT && !featureToggle?.features?.enableCollectDeliveryOption) {
               return
             }
@@ -857,7 +840,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           }
         })
         setDeliveryMethods(output)
-        if(deliveryTypeMethod) {
+        if (deliveryTypeMethod) {
           setDeliveryTypeMethod(output[deliveryTypeMethod?.id])
         } else {
           setDeliveryTypeMethod(output[0])
