@@ -79,7 +79,7 @@ export default function ProductSort({ products, action, routerSortOption, featur
               </svg>
 
               <span className="ml-2">
-                {sortOrderStates}{sortOrderStates ? products?.sortList.filter((i: any) => i.key === sortOrderStates) : "Sort order"}
+                {sortOrderStates}{sortOrderStates ? products?.sortList.filter((i: any) => i.key === sortOrderStates) : translate('label.filters.sortOrderText')}
               </span>
               {!sortOrderStates.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
