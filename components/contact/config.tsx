@@ -51,53 +51,57 @@ export const CONTACT_US_DEFAULT_VALUES = {
   message: EmptyString,
 }
 
-export const CONTACT_US_FIELDS = [
+export const useContactUsFields = () => {
+  const translate = useTranslation();
+  const contactUsFields = [
   {
     name: 'title',
-    label: 'Title*',
+    label: translate('common.label.titleRequiredText'),
     type: 'text',
-    placeholder: 'Enter your Title',
+    placeholder: translate('common.label.enterTitleText'),
   },
   {
     name: 'firstName',
-    label: 'First Name*',
-    placeholder: 'Enter your First Name',
+    label: translate('common.label.firstNameRequiredText'),
+    placeholder: translate('common.label.enterFirstNameText'),
     type: 'text',
   },
   {
     name: 'lastName',
-    label: 'Last Name',
-    placeholder: 'Enter your last Name',
+    label: translate('common.label.lastNameText'),
+    placeholder: translate('common.label.enterLastNameText'),
     type: 'text',
   },
   {
     name: 'company',
-    label: 'Company',
-    placeholder: "Enter Company Name",
+    label: translate('label.contactUs.companyText'),
+    placeholder: translate('label.contactUs.enterCompanyText'),
     type: 'text',
   },
   {
     name: 'email',
-    label: 'Email address*',
-    placeholder: 'example@example.com',
+    label: translate('label.myAccount.emailAddressRequiredText'),
+    placeholder: translate('label.myAccount.emailAddressplaceholderText'),
     type: 'text',
   },
   {
     name: 'phoneNo',
-    label: 'Phone number',
-    placeholder: 'Phone number',
+    label: translate('label.contactUs.phoneNumberText'),
+    placeholder: translate('label.contactUs.phoneNumberText'),
     type: 'text',
   },
   {
     name: 'subject',
-    label: 'Subject*',
+    label: translate('common.label.subjectRequiredText'),
     type: 'text',
-    placeholder: 'Subject',
+    placeholder: translate('common.label.subjectText'),
   },
   {
     name: 'message',
-    label: 'Message*',
-    placeholder: 'Brief Message of Query',
+    label: translate('label.product.messageRequiredText'),
+    placeholder: translate('label.product.messagePlaceholderText'),
     type: 'textarea',
   },
 ]
+return contactUsFields;
+}
