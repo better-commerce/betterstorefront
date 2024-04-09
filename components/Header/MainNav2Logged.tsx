@@ -33,6 +33,10 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
+  let classTop = 'top-full'
+  if (!isGuestUser && user.userId && featureToggle?.features?.enableYourStoreFeature) {
+    classTop = 'top-[82px]'
+  }
   const renderMagnifyingGlassIcon = () => {
     return (
       <SearchBar onClick={setShowSearchBar} keywords={keywords} />
@@ -73,7 +77,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
             </div>
             {!isMobile &&
               <div className="flex-[2] justify-center mx-4 lg:flex">
-                <Navigation navItems={config} featureToggle={featureToggle} />
+                <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
               </div>
             }
             <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
@@ -87,38 +91,39 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               <CartDropdown />
             </div>
           </div>
+          {!isGuestUser && user.userId && featureToggle?.features?.enableYourStoreFeature ? (
+            <>
+              <div className="flex flex-col w-full bg-white border-t border-slate-100">
+                <ul className="container flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-6">
+                  <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">Your Fashion Store</li>
+                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                    <Link href={`/yourstore`} passHref>
+                      <span>Your Browsing History</span>
+                    </Link>
+                  </li>
+                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                    <Link href={`/yourstore/recommendations`} passHref>
+                      <span>Recommended For You</span>
+                    </Link>
+                  </li>
+                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                    <Link href={`/yourstore/improve-recommendations`} passHref>
+                      <span>Improve Your Recommendation</span>
+                    </Link>
+                  </li>
+                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                    <Link href={`/my-account`} passHref>
+                      <span>Your Profile</span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <div></div>
+          )}
         </div>
-        {!isGuestUser && user.userId && featureToggle?.features?.enableYourStoreFeature ? (
-          <>
-            <div className="flex flex-col w-full bg-white border-t border-slate-200">
-              <ul className="flex items-center justify-start pl-0 gap-x-4 sm:gap-x-6">
-                <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">Your Fashion Store</li>
-                <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                  <Link href={`/yourstore`} passHref>
-                    <span>Your Browsing History</span>
-                  </Link>
-                </li>
-                <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                  <Link href={`/yourstore/recommendations`} passHref>
-                    <span>Recommended For You</span>
-                  </Link>
-                </li>
-                <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                  <Link href={`/yourstore/improve-recommendations`} passHref>
-                    <span>Improve Your Recommendation</span>
-                  </Link>
-                </li>
-                <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                  <Link href={`/my-account`} passHref>
-                    <span>Your Profile</span>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </>
-        ) : (
-          <div></div>
-        )}
+
       </>
     );
   };
