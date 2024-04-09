@@ -1031,6 +1031,7 @@
       "addMsg1Text": "Add message 1"
     },
     "message": {
+      "authenticationFailedText": "Email Authentication failed",
       "requiredTextMsg" : "Required",
       "invalidAccountMsg": "No account has been found with this email/password",
       "alreadyLoggedInMsg": "You're already logged in",

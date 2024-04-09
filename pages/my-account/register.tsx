@@ -133,7 +133,8 @@ const router = useRouter()
     const asyncLoginUser = async () => {
       const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       if (!result.data) {
-        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
+        setAlert({ type: 'error', msg: translate('common.message.authenticationFailedText') })
+        Router.push('/my-account/login')
       } else if (result.data) {
         setAlert({ type: 'success', msg: translate('common.label.successText') })
         let userObj = { ...result.data }
