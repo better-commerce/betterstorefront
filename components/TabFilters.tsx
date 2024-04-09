@@ -322,7 +322,7 @@ const PRICE_RANGE = [1, 500];
                   ? DATA_sortOrderRadios?.filter(
                       (i) => i.id === sortOrderStates
                     )[0].name
-                  : "Sort order"}
+                  : translate('label.filters.sortOrderText')}
               </span>
               {!sortOrderStates.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
