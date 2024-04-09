@@ -13,14 +13,13 @@ import axios from 'axios'
 import { Disclosure, Transition, Dialog } from '@headlessui/react'
 import { Fragment, useReducer } from 'react'
 import { LoadingDots } from '@components/ui'
-import {  ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { getCurrentPage, vatIncluded } from '@framework/utils/app-util'
 import { CheckoutStepType, LoadingActionType, NEXT_BASKET_VALIDATE, } from '@components/utils/constants'
 import Router, { useRouter } from 'next/router'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import CartProduct from '@old-components/cart/CartProduct'
-import { asyncHandler } from '@old-components/account/Address/AddressBook'
 import { Cookie } from '@framework/utils/constants'
 import DefaultButton from '@components/ui/IndigoButton'
 import { Guid } from '@commerce/types'
@@ -462,13 +461,13 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
 
   return (
     <>
-      <Transition.Root show={isQuoteViewOpen} as={Fragment}>
+      <Transition appear show={isQuoteViewOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="fixed inset-0 overflow-hidden z-999"
-          onClose={() => setQuoteModelClose()}
+          className="fixed inset-0 z-50 cart-z-index-9999"
+         onClose={() => setQuoteModelClose()}
         >
-          <div className="absolute inset-0 overflow-hidden z-999">
+          <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -478,25 +477,28 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay
-                className="w-full h-screen bg-black opacity-80"
-                onClick={() => setQuoteModelClose()}
-              />
+              <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
             </Transition.Child>
 
-            <div className="fixed inset-0 flex items-center justify-center mobile-inset-0">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
-                  <div className="flex flex-col h-full p-0 px-0 pb-6 mx-auto bg-white shadow-xl sm:rounded-md">
-                    <div className='flex items-center justify-between w-full py-4'>
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span className="inline-block align-middle" aria-hidden="true">
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
+                <div
+                  className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:rounded-2xl dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100"
+                >
+                  <span className="absolute top-0 z-50 flex w-full bg-white end-0">
+                    <div className='flex items-center justify-between w-full p-4 border-b border-slate-200'>
                       <h5 className='font-semibold text-black uppercase font-18'>{translate('label.quotes.quoteDetailHeadingText')}{quoteData?.customQuoteNo}</h5>
                       <div className='justify-end'>
                         <button type="button" className="justify-end lg:-top-12 lg:-right-10 p-0.5 z-10 rounded-full dark:text-black" onClick={() => setQuoteModelClose()}>
@@ -505,9 +507,12 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         </button>
                       </div>
                     </div>
+                  </span>
+
+                  <div className="flex-1 pt-10 overflow-y-auto rounded-xl hiddenScrollbar">
                     {!quoteViewData ? (<Spinner />) : (
-                      <div className='grid grid-cols-1 gap-4 sm:grid-cols-12 max-panel-mobile'>
-                        <div className='sm:col-span-8'>
+                      <div className='grid grid-cols-1 gap-4 py-4 sm:grid-cols-12 max-panel-mobile'>
+                        <div className='flex-1 overflow-y-auto sm:col-span-8 rounded-xl hiddenScrollbar'>
                           <div className='grid grid-cols-1 gap-2 max-panel-desktop hide-addon-button'>
                             {quoteViewData?.lineItems?.map((product: any, productIdx: number) => {
                               let soldOutMessage = ''
@@ -578,14 +583,14 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         </div>
                         <div className='sm:col-span-4'>
                           <>
-                            <section aria-labelledby="summary-heading" className="p-4 px-4 mt-4 bg-white border border-gray-200 rounded-sm md:sticky top-24 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
+                            <section aria-labelledby="summary-heading" className="top-0 p-4 px-4 mt-0 bg-slate-100 rounded-2xl md:sticky sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
                               <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{translate('label.quotes.quoteSummaryText')}</h4>
                               <Disclosure defaultOpen>
                                 {({ open }) => (
                                   <>
-                                    <Disclosure.Button className="flex items-center justify-between w-full gap-2 px-0 py-2 text-sm font-medium text-left text-black uppercase bg-white rounded-lg hover:bg-white">
+                                    <Disclosure.Button className="flex items-center justify-between w-full gap-2 px-0 py-2 text-sm font-medium text-left text-black uppercase bg-transparent">
                                       <span>{translate('common.label.viewDetailsText')}</span>
-                                      <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5`}/>
+                                      <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5`} />
                                       {/* <i className={`${open ? 'rotate-180 transform' : ''} sprite-icons sprite-dropdown`} /> */}
                                     </Disclosure.Button>
                                     <Disclosure.Panel className="px-0 pt-0 pb-2">
@@ -688,30 +693,8 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                   {quoteViewData?.grandTotal?.formatted?.withTax}
                                 </dd>
                               </div>
-                              {/* <div className="mt-4">
-                              <PromotionInput
-                                deviceInfo={deviceInfo}
-                                basketPromos={basketPromos}
-                                items={quoteViewData}
-                                getBasketPromoses={getBasketPromos}
-                              />
-                            </div> */}
-                              {/* <div className="mt-2">
-                              <Link href="/checkout">
-                                <button
-                                  type="submit"
-                                  className="w-full px-4 py-3 font-medium text-center text-white uppercase btn-secondary"
-                                >
-                                  {BTN_CHECKOUT}
-                                </button>
-                              </Link>
-                            </div> */}
-
-
-
                               <div className="flex flex-col w-full my-4">
                                 <DefaultButton
-                                  // For the scenario where formId is provided, buttonType will be overridden to "submit"
                                   buttonType="button"
                                   action={async () => onPlaceOrder()}
                                   title="Place Order"
@@ -724,11 +707,11 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                     )}
                   </div>
                 </div>
-              </Transition.Child>
-            </div>
+              </div>
+            </Transition.Child>
           </div>
         </Dialog>
-      </Transition.Root>
+      </Transition>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -780,7 +763,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         setLoadingAction(LoadingActionType.REMOVE_ITEM)
                         handleItem(itemClicked, 'delete')
                       }}
-                      className="btn-primary"
+                      className="btn-primary btn"
                     >
                       {loadingAction === LoadingActionType.REMOVE_ITEM ? (
                         <>{LoadingDots}</>
@@ -788,23 +771,6 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         <>{translate('common.label.removeText')}</>
                       )}
                     </button>
-
-                    {/* <button
-                                    onClick={() => {
-                                      setLoadingAction(
-                                        LoadingActionType.MOVE_TO_WISHLIST
-                                      )
-                                      handleWishList(itemClicked)
-                                    }}
-                                    className="w-full btn-secondary btn-sm"
-                                  >
-                                    {loadingAction ===
-                                      LoadingActionType.MOVE_TO_WISHLIST ? (
-                                      <>{loadingDots}</>
-                                    ) : (
-                                      <>{BTN_MOVE_TO_WISHLIST}</>
-                                    )}
-                                  </button> */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

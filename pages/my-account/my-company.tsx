@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment, useMemo } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
 import { useConfig } from '@components/utils/myAccount'
@@ -21,12 +21,11 @@ import {
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import classNames from 'classnames'
-import CompanyUsers from '@old-components/account/CompanyUsers'
-import B2BOrders from '@old-components/account/Orders/B2BOrders'
-import B2BQuotes from '@old-components/account/B2BQuotes'
-import AddressBook from '@old-components/account/Address/AddressBook'
+import CompanyUsers from '@components/account/CompanyUsers'
+import B2BOrders from '@components/account/Orders/B2BOrders'
+import B2BQuotes from '@components/account/B2BQuotes'
+import AddressBook from '@components/account/Address/AddressBook'
 import Spinner from '@components/ui/Spinner'
-import SideMenu from '@old-components/account/MyAccountMenu'
 import { Guid } from '@commerce/types'
 import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
@@ -34,7 +33,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 function MyCompany({ deviceInfo }: any) {
-  const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
+  const { user, deleteUser, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
@@ -48,9 +47,60 @@ function MyCompany({ deviceInfo }: any) {
   const [currentTab, setCurrentTab] = useState(0)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const [b2bQuotes, setB2BQuotes] = useState<any>(null)
+  const config = useConfig();
   const [isAdmin, setIsAdmin] = useState(false)
   const currentOption = translate('label.myAccount.myCompanyText')
-
+  const newConfig: any = useMemo(() => {
+    let output: any = []
+    let isB2B = user?.companyId !== Guid.empty
+    const hasMyCompany = config?.some((item: any) => item?.props === 'my-company')
+    const hasReferral = config?.some((item: any) => item?.props === 'refer-a-friend')
+    output = [...config]
+    if (isB2B) {
+      let i = output.length
+      if (referralProgramActive) {
+        if (!hasReferral) {
+          output.push({
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href: "/my-account/refer-a-friend"
+          })
+        }
+      }
+      while (i--) {
+        if (output[i]?.props === 'address-book' || output[i]?.props === 'orders') {
+          output.splice(i, 1)
+        }
+      }
+    }
+    if (!isB2B) {
+      if (referralProgramActive) {
+        if (!hasReferral) {
+          output = [...config]
+          output.push({
+            type: 'tab',
+            text: 'Refer a Friend',
+            mtext: 'Refer a Friend',
+            props: 'refer-a-friend',
+            href: "/my-account/refer-a-friend"
+          })
+        }
+      } else {
+        output = [...config]
+      }
+    } else if (!hasMyCompany) {
+      output.push({
+        type: 'tab',
+        text: 'My Company',
+        mtext: 'My Company',
+        props: 'my-company',
+        href: '/my-account/my-company',
+      })
+    }
+    return output
+  }, [config])
   const optionsConfig = [
     {
       name: 'Users',
@@ -236,15 +286,14 @@ function MyCompany({ deviceInfo }: any) {
   useEffect(() => {
     setIsShowDetailedOrder(displayDetailedOrder)
   }, [displayDetailedOrder])
-
+  const handleToggleShowState = () => {
+    setShow(!isShow)
+  }
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-        <link rel="canonical" href={SITE_ORIGIN_URL+router.asPath} />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{currentOption}</title>
         <meta name="title" content={currentOption} />
         <meta name="description" content={currentOption} />
@@ -258,105 +307,130 @@ function MyCompany({ deviceInfo }: any) {
           <Spinner />
         </>
       ) : (
-       <section className="relative pb-10 text-gray-900">
-          <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
-            {/* {!isShowDetailedOrder && (
-              <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-                <h3 className="flex gap-1 mx-5 mt-2 text-xl font-semibold text-black">
-                  <Link
-                    className="mx-2 mt-1 leading-none align-middle"
-                    href="/my-account"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-arrow-left"
-                      viewBox="0 0 16 16"
-                    >
-                      {' '}
-                      <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-                    </svg>
-                  </Link>
-                  <span className="leading-none">{translate('label.myAccount.myCompanyText')}</span>
-                </h3>
+        <>
+          <section className="relative pb-10 text-gray-900">
+            <div className="container w-full">
+              <div className="mt-14 sm:mt-20">
+                <div className="max-w-4xl mx-auto">
+                  <div className="max-w-2xl">
+                    <h2 className="text-3xl font-semibold xl:text-4xl">My Company</h2>
+                    <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
+                      <span className="font-semibold text-slate-900 dark:text-slate-200">
+                        {user?.firstName},
+                      </span>{" "}
+                      {user.email}
+                    </span>
+                  </div>
+                  <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
+                  <div className="flex space-x-8 overflow-x-auto md:space-x-13 hiddenScrollbar">
+                    {newConfig?.map((item: any, idx: number) => (
+                      <>
+                        {item.text == 'My Company' ? (
+                          <>
+                            <Link
+                              key={`my-acc-${idx}`}
+                              shallow={true}
+                              href={item.href}
+                              passHref
+                              onClick={() => {
+                                handleClick()
+                                handleToggleShowState()
+                              }}
+                              className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Company'
+                                ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
+                                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                                }`}
+                            >
+                              {item.text}
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              shallow={true}
+                              href={item.href}
+                              passHref
+                              onClick={() => {
+                                handleClick()
+                              }}
+                              className="flex-shrink-0 block py-5 text-sm md:py-8 sm:text-base"
+                            >
+                              <span className="inline-block text-black sm:hidden dark:text-black">
+                                {item.mtext}
+                              </span>
+                              <span className="hidden text-black sm:inline-block dark:text-black">
+                                {item.text}
+                              </span>
+                            </Link>
+                          </>
+                        )}
+
+                      </>
+                    ))}
+                  </div>
+                  <hr className="border-slate-200 dark:border-slate-700"></hr>
+                </div>
               </div>
-            )} */}
-            <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-              <SideMenu
-                handleClick={handleClick}
-                setShow={setShow}
-                currentOption={currentOption}
-              />
-              <div
-                className={`relative col-span-9 lg:col-span-8 md:col-span-8 border-l tabpanel-sm mob-tab-full ${
-                  isShow ? `` : ''
-                }`}
-              >
-                <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-                  <div className="w-full \max-w-md px-2 py-9 sm:px-0">
+              <div className="max-w-4xl pt-4 pb-24 mx-auto sm:pt-6 lg:pb-32">
+                <div className="relative col-span-12 mob-tab-full" >
+                  <div className={'orders bg-white'}>
                     <Tab.Group selectedIndex={currentTab}>
-                      <Tab.List
-                        className={
-                          'flex space-x-1 rounded-xl bg-gray-200 p-1 mx-20 '
-                        }
-                      >
+                      <Tab.List className={'flex space-x-1 rounded-2xl bg-slate-100 p-1 mx-0 '} >
                         {optionsConfig?.map((option: any, Idx: any) => (
                           <>
-                          {option?.name == 'Users' ? (
-                            <>
-                             {user?.companyUserRole === UserRoleType.ADMIN &&
-                             <Tab as={Fragment} key={Idx}>
-                             {({ selected }) => (
-                              <button
-                                className={classNames(
-                                  'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                  'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                  selected
-                                    ? 'bg-white shadow hover:bg-gray-50'
-                                    : 'text-blue-100 hover:bg-white/[0.32] '
-                                )}
-                                onClick={() => {
-                                  option?.onClick(option?.value)
-                                }}
-                              >
-                                {option?.name}
-                              </button>
-                            )}
-                             </Tab>}
-                            </>
-                          ) : (
-                            <>
-                              <Tab as={Fragment} key={Idx}>
-                              {({ selected }) => (
-                                <button
-                                  className={classNames(
-                                    'w-full rounded-lg py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                    'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                    selected
-                                      ? 'bg-white shadow hover:bg-gray-50'
-                                      : 'text-blue-100 hover:bg-white/[0.32] '
+                            {option?.name == 'Users' ? (
+                              <>
+                                {user?.companyUserRole === UserRoleType.ADMIN &&
+                                  <Tab as={Fragment} key={Idx}>
+                                    {({ selected }) => (
+                                      <button
+                                        className={classNames(
+                                          'w-full rounded-2xl py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                          'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                          selected
+                                            ? 'bg-white shadow hover:bg-gray-50'
+                                            : 'text-blue-100 hover:bg-white/[0.32] '
+                                        )}
+                                        onClick={() => {
+                                          option?.onClick(option?.value)
+                                        }}
+                                      >
+                                        {option?.name}
+                                      </button>
+                                    )}
+                                  </Tab>}
+                              </>
+                            ) : (
+                              <>
+                                <Tab as={Fragment} key={Idx}>
+                                  {({ selected }) => (
+                                    <button
+                                      className={classNames(
+                                        'w-full rounded-2xl py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                        'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                        selected
+                                          ? 'bg-white shadow hover:bg-gray-50'
+                                          : 'text-blue-100 hover:bg-white/[0.32] '
+                                      )}
+                                      onClick={() => {
+                                        option?.onClick(option?.value)
+                                      }}
+                                    >
+                                      {option?.name}
+                                    </button>
                                   )}
-                                  onClick={() => {
-                                    option?.onClick(option?.value)
-                                  }}
-                                >
-                                  {option?.name}
-                                </button>
-                                )}
-                              </Tab>
-                            </>
-                          )}
+                                </Tab>
+                              </>
+                            )}
                           </>
                         ))}
                       </Tab.List>
                       <Tab.Panels>
                         {user?.companyUserRole === UserRoleType.ADMIN &&
-                            <Tab.Panel>
-                              <CompanyUsers users={b2bUsers} />
-                            </Tab.Panel>
-                          }
+                          <Tab.Panel>
+                            <CompanyUsers users={b2bUsers} />
+                          </Tab.Panel>
+                        }
                         <Tab.Panel>
                           <B2BOrders
                             selectedOption={selectedOption}
@@ -374,7 +448,7 @@ function MyCompany({ deviceInfo }: any) {
                           <AddressBook />
                         </Tab.Panel>
                         <Tab.Panel>
-                          <div className="p-10 text-lg font-bold font-Inter text-brand-blue">{`No Invoices Generated Yet`}</div>
+                          <div className="py-20 font-medium text-center font-24 text-slate-300">{`No Invoices Generated Yet`}</div>
                         </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>
@@ -382,8 +456,9 @@ function MyCompany({ deviceInfo }: any) {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+          
+        </>
       )}
     </>
   )
@@ -396,10 +471,10 @@ const PAGE_TYPE = PAGE_TYPES.Page
 export async function getServerSideProps(context: any) {
   const { locale } = context
   return {
-    props: { 
+    props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!))
     }, // will be passed to the page component as props
   }
 }
 
-export default withDataLayer(withAuth(MyCompany), PAGE_TYPE, true,LayoutAccount)
+export default withDataLayer(withAuth(MyCompany), PAGE_TYPE, true, LayoutAccount)
