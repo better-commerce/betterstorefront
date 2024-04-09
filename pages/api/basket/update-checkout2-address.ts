@@ -3,7 +3,7 @@ import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from '../base/api-route-guard'
 
 const updateAddressApiMiddleware = async (req: any, res: any) => {
-  const { basketItems, postCode, basketId, model, cdp }: any = req.body
+  const { basketItems, postCode, basketId, model, cdp, isCNC = false }: any = req.body
   try {
     const response = await updateAddress()({
       basketId,
@@ -11,6 +11,7 @@ const updateAddressApiMiddleware = async (req: any, res: any) => {
       cdp,
       basketItems,
       postCode,
+      isCNC,
       cookies: req?.cookies,
     })
     res.status(200).json(response)

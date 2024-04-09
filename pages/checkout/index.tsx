@@ -648,13 +648,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     goToStep(CheckoutStep.REVIEW)
   }
 
-  const updateCheckoutAddress = async (address: any, cdp = false) => {
+  const updateCheckoutAddress = async (address: any, cdp = false, isCNC = false) => {
     const response = await axios.post(NEXT_UPDATE_CHECKOUT2_ADDRESS, {
       basketId,
       model: address,
       cdp,
       basketItems: basket?.lineItems,
       postCode: basket?.postCode,
+      isCNC,
     })
     return response
   }
@@ -706,7 +707,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const onContinueAddressBook = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
     if (deliveryTypeMethod?.type === DeliveryType.COLLECT) {
-      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, false)
+      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, false, true)
     } else {
       await updateCheckoutAddress({ shippingAddress: selectedAddress?.shippingAddress, billingAddress: selectedAddress?.billingAddress }, true)
     }

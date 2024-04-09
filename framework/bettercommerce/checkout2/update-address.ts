@@ -8,6 +8,7 @@ interface Props {
   basketId?: string
   model: any
   cdp: boolean
+  isCNC?: boolean
   cookies?: any
 }
 
@@ -18,12 +19,14 @@ export default function updateShippingMethod() {
     basketId,
     model,
     cdp,
+    isCNC = false,
     cookies,
   }: Props) {
     try {
       const response = await updateAddress()({
         basketId,
         model,
+        isCNC,
         cookies,
       })
       if (cdp) {
