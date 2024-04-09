@@ -574,58 +574,59 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
   const handleDeliveryMethodSelect = async (method: any, store: any) => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
-    if (store) {
+
+    if (store && basket?.storeId !== store?.Id) {
       const data = { basketId: basket?.id, deliveryMethodId: deliveryTypeMethod?.id, store }
       const { data: clickCollectStoreResult } = await axios.post(NEXT_CLICK_AND_COLLECT_STORE_DELIVERY, data)
       if (clickCollectStoreResult?.message || !clickCollectStoreResult?.isValid) {
         hideOverlayLoaderState()
         setAlert({ type: AlertType.ERROR, msg: clickCollectStoreResult?.message })
-        //const basketResult = await getBasket(basketId)
         return
       }
-    } else {
-      let deliveryPlans = basket?.deliveryPlans
-      if (basket?.shippingMethodId != method?.id) {
-        // Update shipping method
-        const { data: updateShippingMethodResult } = await axios.post(
-          NEXT_UPDATE_SHIPPING,
-          {
-            basketId,
-            countryCode:
-              selectedAddress?.shippingAddress?.countryCode ||
-              BETTERCOMMERCE_DEFAULT_COUNTRY,
-            shippingId: method?.id,
-          }
-        )
-        setBasket({ ...basket, ...updateShippingMethodResult })
-        deliveryPlans = updateShippingMethodResult?.deliveryPlans
-      }
+    }
 
-      if (appConfigData && appConfigData?.configSettings?.length) {
-        const configSettings = appConfigData?.configSettings
-        const domainSettings =
-          configSettings?.find((x: any) =>
-            matchStrings(x?.configType, 'DomainSettings', true)
-          )?.configKeys || []
-        const enableOmniOms =
-          domainSettings?.find((x: any) =>
-            matchStrings(x?.key, 'DomainSettings.EnableOmniOms', true)
-          )?.value || 'False'
-
-        // If 'EnableOmniOms' is enabled.
-        if (stringToBoolean(enableOmniOms) && deliveryPlans?.length) {
-          for (let i = 0; i < deliveryPlans.length; i++) {
-            delete deliveryPlans[i].deliveryPlanNo
-          }
-
-          // Update delivery method
-          const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
-            id: basketId,
-            data: deliveryPlans || [],
-          })
+    let deliveryPlans = basket?.deliveryPlans
+    if (basket?.shippingMethodId != method?.id) {
+      // Update shipping method
+      const { data: updateShippingMethodResult } = await axios.post(
+        NEXT_UPDATE_SHIPPING,
+        {
+          basketId,
+          countryCode:
+            selectedAddress?.shippingAddress?.countryCode ||
+            BETTERCOMMERCE_DEFAULT_COUNTRY,
+          shippingId: method?.id,
         }
+      )
+      setBasket({ ...basket, ...updateShippingMethodResult })
+      deliveryPlans = updateShippingMethodResult?.deliveryPlans
+    }
+
+    if (appConfigData && appConfigData?.configSettings?.length) {
+      const configSettings = appConfigData?.configSettings
+      const domainSettings =
+        configSettings?.find((x: any) =>
+          matchStrings(x?.configType, 'DomainSettings', true)
+        )?.configKeys || []
+      const enableOmniOms =
+        domainSettings?.find((x: any) =>
+          matchStrings(x?.key, 'DomainSettings.EnableOmniOms', true)
+        )?.value || 'False'
+
+      // If 'EnableOmniOms' is enabled.
+      if (stringToBoolean(enableOmniOms) && deliveryPlans?.length) {
+        for (let i = 0; i < deliveryPlans.length; i++) {
+          delete deliveryPlans[i].deliveryPlanNo
+        }
+
+        // Update delivery method
+        const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
+          id: basketId,
+          data: deliveryPlans || [],
+        })
       }
     }
+
     setSelectedDeliveryMethod(method)
     hideOverlayLoaderState()
     goToStep(CheckoutStep.REVIEW)
