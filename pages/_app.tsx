@@ -29,7 +29,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
-
+import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
 import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
@@ -372,34 +372,36 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
 
       <ManagedUIContext>
-        {(snippets?.length > 0) && (
-          <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
-        )}
-        <CustomCacheBuster buildVersion={packageInfo?.version} />
-        <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
-        {
-          (deviceInfo && (deviceInfo.isDesktop || deviceInfo.isMobile || deviceInfo.isIPadorTablet)) && (
-            <BrowserNavigation deviceInfo={deviceInfo} />
-          )
-        }
-        <ErrorBoundary>
-          <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
-            <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
-            <OverlayLoader />
-            <CustomerReferral router={router} />
-            <SessionProvider session={pageProps?.session}>
-              <Component
-                {...pageProps}
-                location={location}
-                ipAddress={location.Ip}
-                config={appConfig}
-                pluginConfig={pluginConfig}
-                deviceInfo={deviceInfo}
-              />
-            </SessionProvider>
-            <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
-          </Layout>
-        </ErrorBoundary>
+        <PasswordProtectedRoute config={appConfig}>
+          {(snippets?.length > 0) && (
+            <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
+          )}
+          <CustomCacheBuster buildVersion={packageInfo?.version} />
+          <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
+          {
+            (deviceInfo && (deviceInfo.isDesktop || deviceInfo.isMobile || deviceInfo.isIPadorTablet)) && (
+              <BrowserNavigation deviceInfo={deviceInfo} />
+            )
+          }
+          <ErrorBoundary>
+            <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
+              <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
+              <OverlayLoader />
+              <CustomerReferral router={router} />
+              <SessionProvider session={pageProps?.session}>
+                <Component
+                  {...pageProps}
+                  location={location}
+                  ipAddress={location.Ip}
+                  config={appConfig}
+                  pluginConfig={pluginConfig}
+                  deviceInfo={deviceInfo}
+                />
+              </SessionProvider>
+              <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
+            </Layout>
+          </ErrorBoundary>
+        </PasswordProtectedRoute>
       </ManagedUIContext>
     </>
   )
@@ -512,7 +514,7 @@ MyApp.getInitialProps = async (
     const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
-        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings'].includes(x?.configType)) || [],
+        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings','PasswordProtectionSettings'].includes(x?.configType)) || [],
         shippingCountries,
         billingCountries,
         currencies,
