@@ -13,7 +13,7 @@ export default function updateShippingMethod() {
   return async function handler({ basketId, model, isCNC = false, cookies }: Props) {
     let url = CHECKOUT_ENDPOINT + `/${basketId}/address`
     if (isCNC) {
-      url = CHECKOUT_ENDPOINT + `/${basketId}/address-billing`
+      url = CHECKOUT_ENDPOINT + `/${basketId}/address-billing?sameAsShipping=false`
     }
 
     try {
@@ -25,7 +25,6 @@ export default function updateShippingMethod() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
         cookies,
-        logRequest: true,
       })
       return response.result
     } catch (error: any) {
