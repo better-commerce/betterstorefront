@@ -354,8 +354,8 @@ export default function CartProduct({
                   </>
                 </div>
               ) : matchStrings(soldOutMessage, "price changed", true) && (
-                <div className="col-span-12 items-center w-full">
-                  <div className="flex text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded p-1 w-full justify-center">
+                <div className="items-center w-full col-span-12">
+                  <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
                     {soldOutMessage}
                   </div>
                 </div>
@@ -407,7 +407,7 @@ export default function CartProduct({
                 <button
                   type="button"
                   onClick={() => handleWishList(product)}
-                  className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-primary btn-sm sm:btn-none uppercase font-semibold border-[1px] rounded border-brand-blue group-hover:border-gray-900 group-hover:bg-gray-900 flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-70"
+                  className="sm:h-10 sm:w-10 w-full col-span-2 text-slate-800 hover:text-red-600 font-semibold border-[1px] rounded border-brand-blue flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-70"
                   disabled={loadingWishlist}
                 >
                   {loadingWishlist ? (
@@ -415,7 +415,7 @@ export default function CartProduct({
                       <LoadingDots />
                     </i>
                   ) : (
-                    <HeartIcon className='h-6 w-6'/>
+                    <HeartIcon className='w-6 h-6'/>
                   )}
                 </button>
               )}
@@ -426,12 +426,12 @@ export default function CartProduct({
                   setItemClicked(product)
                   openModal()
                 }}
-                className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-primary sm:btn-none btn-sm uppercase font-semibold border-[1px] rounded border-brand-blue group-hover:border-gray-900 group-hover:bg-gray-900 flex items-center justify-center ipad-btn-primary"
+                className="sm:h-10 sm:w-10 w-full col-span-2 text-slate-800 hover:text-red-600 font-semibold border-[1px] rounded border-brand-blue flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isMobile ? (
                   <>{translate('common.label.removeText')}</>
                 ) : (
-                 <TrashIcon className='h-6 w-6'/>
+                 <TrashIcon className='w-6 h-6'/>
                 )}
               </button>
             </div>
