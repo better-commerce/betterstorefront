@@ -212,7 +212,7 @@ export default function CartProduct({
         <div className="flex flex-col col-span-10 sm:col-span-7">
           {isMobile && (
             <div className="flex justify-between">
-              <div className="mt-0 font-semibold text-black font-14 font-Inter">
+              <div className="mt-0 font-semibold text-green font-14 font-Inter">
                 {isIncludeVAT
                   ? product.price?.formatted?.withTax
                   : product.price?.formatted?.withoutTax}
@@ -270,7 +270,7 @@ export default function CartProduct({
         </div>
         {isMobile ? null : (
           <div className="col-span-10 text-left sm:text-right sm:col-span-3">
-            <div className="flex flex-col mt-0 font-semibold text-black font-18 font-Inter">
+            <div className="flex flex-col mt-0 font-semibold text-green font-18 font-Inter">
               {product.price?.raw?.withTax == '0' ? (
                 <>
                   <span>
