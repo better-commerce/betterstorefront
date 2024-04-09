@@ -11,8 +11,8 @@ import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import LoginOTPForm from '@old-components/customer/login-otp-form'
 import { useTranslation } from '@commerce/utils/use-translation'
-import LoginOTPForm from '@components/customer/login-otp-form'
 
 function LoginOTPComp() {
   const translate = useTranslation()
@@ -51,7 +51,7 @@ function LoginOTPComp() {
 
   if (!isGuestUser && user.userId) {
     return (
-      <div className="w-full h-full font-extrabold text-center text-gray-900">
+      <div className="font-extrabold text-center w-full h-full text-gray-900">
         {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
@@ -121,17 +121,17 @@ function LoginOTPComp() {
     return null
   }
   return (
-    <section aria-labelledby="trending-heading" className="h-full bg-white">
+    <section aria-labelledby="trending-heading" className="bg-white h-full">
       <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-          <h1 className="text-6xl font-extrabold tracking-tight text-center text-gray-900">
+        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
+          <h1 className="text-6xl font-extrabold text-center tracking-tight text-gray-900">
             {translate('label.login.loginBtnText')} via OTP
           </h1>
         </div>
         <LoginOTPForm handleUserLogin={handleUserLogin} />
-        <div className="flex flex-col items-center justify-center w-full">
+        <div className="w-full flex flex-col justify-center items-center">
           {noAccount && (
-            <span className="text-lg text-red-700">
+            <span className="text-red-700 text-lg">
               {translate('label.login.noMobileAccountFoundText')}
             </span>
           )}
