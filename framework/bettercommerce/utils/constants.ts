@@ -82,5 +82,6 @@ export module Cookie {
     export const NAV_ENDPOINT_DATA_CACHED = 'nedc'
     export const ALGOLIA_SETTINGS_DATA_CACHED = 'asdc'
     export const DISABLE_USER_LOCATION_POPUP = 'dulp'
+    export const PASSWORD_PROTECTION_AUTH = 'ppa'
   }
 }
