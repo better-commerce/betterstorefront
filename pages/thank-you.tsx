@@ -346,12 +346,12 @@ export default function OrderConfirmation({ config }: any) {
     const orderData = {
       item_id: "thankyou",
       order_id: order?.orderNo,
-      order_price: order?.grandTotal,
+      order_price: order?.grandTotal?.raw?.withTax,
       order_shipping_zip: order?.shippingAddress?.postCode, 
       order_shipping_city: order?.shippingAddress?.city, 	
       payment_transactions:  [{
-          amount: order?.payments?.orderAmount, 
-          gateway: order?.payments?.paymentGateway, 
+          amount: order?.payments[0]?.orderAmount, 
+          gateway: order?.payments[0]?.paymentGateway, 
           status:"paid"
       }],
       coupons:  [{
