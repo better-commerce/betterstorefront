@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { removePrecedingSlash } from "@framework/utils/app-util";
 
-function Navigation({ navItems, featureToggle }: any) {
+function Navigation({ navItems, featureToggle, subMenuPosition }: any) {
   return (
     <>
       <ul className="flex items-center nc-Navigation">
@@ -17,7 +17,7 @@ function Navigation({ navItems, featureToggle }: any) {
                 )}
               </Link>
               {item?.navBlocks?.length > 0 &&
-                <div className="absolute inset-x-0 z-50 invisible transform group-hover:visible sub-menu top-full">
+                <div className={`absolute inset-x-0 z-50 invisible transform group-hover:visible sub-menu ${subMenuPosition}`}>
                   <div className="bg-white shadow-lg dark:bg-neutral-900">
                     <div className="container">
                       <div className="flex py-6 text-sm border-t border-slate-200 dark:border-slate-700">
