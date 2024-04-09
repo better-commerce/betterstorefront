@@ -3,6 +3,7 @@ import { updateAddress } from '@framework/checkout'
 import { createDeliveryPlans, getShippingPlans } from '@framework/shipping'
 import { Guid } from '@commerce/types'
 import { DeliveryType, EmptyObject, EmptyString } from '@components/utils/constants'
+import { updateDelivery } from '@framework/shipping'
 
 interface Props {
   postCode: any
@@ -64,6 +65,45 @@ export default function updateShippingMethod() {
             secondaryInventoryPool: EmptyString,
           }
           const deliveryPlanRes = await getShippingPlans()({ model: deliveryPlanModel, cookies })
+          const updateDeliveryPlanModel = deliveryPlanRes?.map((plan: any) => ({
+            recordId: plan?.RecordId,
+            deliveryType: plan?.DeliveryType,
+            fulfilmentChannel: plan?.FulfilmentChannel,
+            shippingType: plan?.ShippingType,
+            shippingMethodId: plan?.ShippingMethodId,
+            shippingCharge: 0,
+            pickupStoreId: plan?.PickupStoreId,
+            refStoreId: plan?.RefStoreId,
+            pickupStoreCode: plan?.PickupStoreCode,
+            deliveryCenter: {
+              recordId: plan?.DeliveryCenter?.RecordId,
+              code: plan?.DeliveryCenter?.Code,
+              name: plan?.DeliveryCenter?.Name,
+            },
+            leadTime: plan?.LeadTime,
+            leadTimeUom: plan?.LeadTimeUom,
+            poolCode: plan?.PoolCode,
+            items: plan?.Items?.map((item: any) => ({
+              recordId: item?.RecordId,
+              basketLineId: item?.BasketLineId,
+              parentProductId: item?.ParentProductId,
+              orderLineRecordId: item?.OrderLineRecordId,
+              stockCode: item?.StockCode,
+              productId: item?.ProductId,
+              qty: item?.Qty,
+              fulfilmentChannel: item?.FulfilmentChannel,
+              created: item?.Created,
+              leadTime: item?.LeadTime,
+              leadTimeUom: item?.LeadTimeUom,
+              deliveryType: item?.DeliveryType,
+              inventoryType: item?.InventoryType,
+              poolCode: item?.PoolCode,
+              lineDeliveryCenterCode: item?.LineDeliveryCenterCode,
+              lineDeliveryCenterId: item?.LineDeliveryCenterId,
+            })),
+            deliveryPlanNo: plan?.DeliveryPlanNo,
+          }))
+          const updateDeliveryPlanRes = await updateDelivery()({ data: updateDeliveryPlanModel, id: basketId!, cookies })
         } else {
           const deliveryPlanModel = {
             basketId,
