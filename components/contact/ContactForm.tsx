@@ -17,13 +17,14 @@ import {
   CONTACT_US_DEFAULT_VALUES,
   CONTACT_US_FORM_ID,
   useContactUsFormSchema,
-  CONTACT_US_FIELDS,
+  useContactUsFields,
 } from './config'
 
 function ContactForm() {
   const { setAlert } = useUI()
   const translate = useTranslation()
   const ContactUsFormSchema = useContactUsFormSchema();
+  const ContactUsFields = useContactUsFields();
   const [subjectOptions, setSubjectOptions] = useState<any>(null)
   const formik: any = useFormik({
     enableReinitialize: true,
@@ -107,7 +108,7 @@ function ContactForm() {
         >
           <div>
             <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
-              {CONTACT_US_FIELDS?.slice(0, 4).map((field: any) => (
+              {ContactUsFields?.slice(0, 4).map((field: any) => (
                 <div className="mb-1 margin-bottom-form mt-5" key={field?.name}>
                   <label className="block text-sm font-semibold leading-6 text-gray-900">
                     {field?.label}
@@ -162,7 +163,7 @@ function ContactForm() {
               ))}
             </div>
             {/* Render the remaining fields outside the div */}
-            {CONTACT_US_FIELDS?.slice(4).map((field: any) => (
+            {ContactUsFields?.slice(4).map((field: any) => (
               <div className="mb-2 margin-bottom-form mt-6" key={field?.name}>
                 <label className="block text-sm font-semibold leading-6 text-gray-900">
                   {field?.label}
