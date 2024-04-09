@@ -13,7 +13,7 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -46,7 +46,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
 
   return (
     <>
-      <div className="flex flex-1 w-full">
+      {/* <div className="flex flex-1 w-full">
         {
           socialLogins && (
             <>
@@ -60,7 +60,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
             </>
           )
         }
-      </div>
+      </div> */}
 
       <div className="flex flex-col items-center justify-center w-full">
         <div className="w-full px-5 font-semibold sm:px-0">
@@ -129,9 +129,19 @@ const router = useRouter()
     const response: any = await associateCart(userId, basketId)
   }
 
+  const b2bEnabled = b2bSettings?.length
+  ? stringToBoolean(
+    b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+    )
+    : false
+
   const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {
-      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
+      const data = {
+        ...values,
+        email: userEmail
+      }
+      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: b2bEnabled ? values : data })
       if (!result.data) {
         setAlert({ type: 'error', msg: translate('common.message.authenticationFailedText') })
         Router.push('/my-account/login')
