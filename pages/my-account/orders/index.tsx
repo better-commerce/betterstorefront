@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
@@ -23,6 +22,7 @@ import {
 import SideMenu from '@old-components/account/MyAccountMenu'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 const PAGE_SIZE = 10
 
 function MyAccount({ deviceInfo }: any) {
@@ -207,7 +207,7 @@ function MyAccount({ deviceInfo }: any) {
   )
 }
 
-MyAccount.Layout = Layout
+MyAccount.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.Page
 
@@ -220,4 +220,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true)
+export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true, LayoutAccount)

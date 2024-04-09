@@ -15,6 +15,7 @@ import NextHead from 'next/head'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 function MyAccount() {
   const [isShow, setShow] = useState(true)
   const config = useConfig();
@@ -132,16 +133,16 @@ function MyAccount() {
           <div className="mt-14 sm:mt-20">
             <div className="max-w-4xl mx-auto">
               <div className="max-w-2xl">
-                <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
-                <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
-                  <span className="text-slate-900 dark:text-slate-200 font-semibold">
+                <h2 className="text-3xl font-semibold xl:text-4xl">Account</h2>
+                <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
+                  <span className="font-semibold text-slate-900 dark:text-slate-200">
                     {user?.firstName},
                   </span>{" "}
                   {user.email}
                 </span>
               </div>
               <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-              <div className="flex space-x-8 md:space-x-13 overflow-x-auto hiddenScrollbar">
+              <div className="flex space-x-8 overflow-x-auto md:space-x-13 hiddenScrollbar">
                 {newConfig?.map((item: any, idx: number) => (
                   <>
                     {item.text == 'My Details' ? (
@@ -172,7 +173,7 @@ function MyAccount() {
                           onClick={() => {
                             handleClick()
                           }}
-                          className="block py-5 md:py-8  flex-shrink-0 text-sm sm:text-base"
+                          className="flex-shrink-0 block py-5 text-sm md:py-8 sm:text-base"
                         >
                           <span className="inline-block text-black sm:hidden dark:text-black">
                             {item.mtext}
@@ -190,9 +191,9 @@ function MyAccount() {
               <hr className="border-slate-200 dark:border-slate-700"></hr>
             </div>
           </div>
-          <div className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
+          <div className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
             <div
-              className="relative col-span-12  mob-tab-full"
+              className="relative col-span-12 mob-tab-full"
             >
               <div className={'orders bg-white'}>
                 <MyDetails handleToggleShowState={handleToggleShowState} />
@@ -205,7 +206,7 @@ function MyAccount() {
   )
 }
 
-MyAccount.Layout = Layout
+MyAccount.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.Page
 
@@ -218,4 +219,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true)
+export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true, LayoutAccount)

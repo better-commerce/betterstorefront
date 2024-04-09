@@ -1,5 +1,4 @@
 import { useState, useEffect, Fragment } from 'react'
-import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { Tab } from '@headlessui/react'
 import { useConfig } from '@components/utils/myAccount'
@@ -33,6 +32,7 @@ import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 function MyCompany({ deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
@@ -262,9 +262,9 @@ function MyCompany({ deviceInfo }: any) {
           <div className="w-full px-0 mx-auto md:container sm:px-0 lg:px-0">
             {/* {!isShowDetailedOrder && (
               <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-                <h3 className="mt-2 text-xl font-semibold text-black flex gap-1 mx-5">
+                <h3 className="flex gap-1 mx-5 mt-2 text-xl font-semibold text-black">
                   <Link
-                    className="mx-2 leading-none mt-1 align-middle"
+                    className="mx-2 mt-1 leading-none align-middle"
                     href="/my-account"
                   >
                     <svg
@@ -374,7 +374,7 @@ function MyCompany({ deviceInfo }: any) {
                           <AddressBook />
                         </Tab.Panel>
                         <Tab.Panel>
-                          <div className="font-Inter text-lg font-bold text-brand-blue p-10">{`No Invoices Generated Yet`}</div>
+                          <div className="p-10 text-lg font-bold font-Inter text-brand-blue">{`No Invoices Generated Yet`}</div>
                         </Tab.Panel>
                       </Tab.Panels>
                     </Tab.Group>
@@ -389,7 +389,7 @@ function MyCompany({ deviceInfo }: any) {
   )
 }
 
-MyCompany.Layout = Layout
+MyCompany.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.Page
 
@@ -402,4 +402,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(MyCompany), PAGE_TYPE, true)
+export default withDataLayer(withAuth(MyCompany), PAGE_TYPE, true,LayoutAccount)

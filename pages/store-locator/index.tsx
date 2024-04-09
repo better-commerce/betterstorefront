@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import Layout from '@components/Layout/Layout'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_GET_ALL_STORES,
   NEXT_GOOGLE_AUTOCOMPLETE_API,
   NEXT_PLACE_DETAILS_API,
@@ -17,10 +18,21 @@ import { StoreSearch } from '@components/StoreLocator/StoreSearch'
 import { useDebounce } from 'hooks/useDebounce'
 import { StoreList } from '@components/StoreLocator/StoreList'
 import { removeQueryString } from '@commerce/utils/uri-util';
-
+import { GetServerSideProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+const PAGE_TYPE = PAGE_TYPES.YourStore
 const DEBOUNCE_TIMER = 300
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    },
+  }
+}
 
-export default function StoreLocatorPage({ deviceInfo }: any) {
+function StoreLocatorPage({ deviceInfo }: any) {
   const translate = useTranslation()
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -320,4 +332,5 @@ export default function StoreLocatorPage({ deviceInfo }: any) {
   )
 }
 
-StoreLocatorPage.Layout = Layout
+StoreLocatorPage.LayoutAccount = Layout
+export default withDataLayer(StoreLocatorPage, PAGE_TYPE, true)

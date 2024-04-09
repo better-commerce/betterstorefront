@@ -740,7 +740,8 @@
       "saveItemsText": "Explora más y guarda artículos en tu lista de deseos.",
       "myWishlistText": "Mi lista de deseos",
       "moveToWishlistText": "Mover a lista de deseos",
-      "addedToWishlistText": "Agregado a la lista de deseos"
+      "addedToWishlistText": "Agregado a la lista de deseos",
+      "YourStore": "tu tienda"
     },
     "modalEdit": {
       "ethText": "ETH",

@@ -29,12 +29,12 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { isB2BUser, notFoundRedirect, vatIncluded } from '@framework/utils/app-util'
 import axios from 'axios'
 import Spinner from '@components/ui/Spinner'
-import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import withAuth from '@components/utils/withAuth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetServerSideProps } from 'next'
 import { matchStrings } from '@framework/utils/parse-util'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 
 function OrderDetail({ deviceInfo }: any) {
     const router: any = useRouter();
@@ -407,6 +407,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     }
 }
 
-OrderDetail.Layout = Layout
+OrderDetail.LayoutAccount = LayoutAccount
 const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(withAuth(OrderDetail), PAGE_TYPE, true)
+export default withDataLayer(withAuth(OrderDetail), PAGE_TYPE, true, LayoutAccount)

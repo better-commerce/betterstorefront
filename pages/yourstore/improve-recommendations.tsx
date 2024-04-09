@@ -1,4 +1,5 @@
 import Layout from "@components/Layout/Layout";
+import LayoutAccount from "@components/Layout/LayoutAccount";
 import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
 import { SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
@@ -26,6 +27,5 @@ function ImproveRecommendations({ deviceInfo, config }: any) {
     </>
   )
 }
-
-ImproveRecommendations.Layout = Layout
-export default withDataLayer(ImproveRecommendations, PAGE_TYPE)
+ImproveRecommendations.LayoutAccount = LayoutAccount
+export default withDataLayer(ImproveRecommendations, PAGE_TYPE, true, LayoutAccount)

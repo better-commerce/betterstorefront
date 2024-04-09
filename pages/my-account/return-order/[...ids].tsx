@@ -10,7 +10,6 @@ import Link from 'next/link'
 // Component Imports
 import { useUI } from '@components/ui/context'
 import ReturnReason from '../../../components/account/Orders/ReturnReason'
-import Layout from '@components/Layout/Layout'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
@@ -27,6 +26,7 @@ import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 
 export default function ReturnOrder({
   orderId = Guid.empty,
@@ -344,4 +344,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-ReturnOrder.Layout = Layout
+ReturnOrder.LayoutAccount = LayoutAccount

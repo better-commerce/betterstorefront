@@ -1,4 +1,5 @@
 import Layout from "@components/Layout/Layout";
+import LayoutAccount from "@components/Layout/LayoutAccount";
 import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
 import { SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
@@ -26,6 +27,5 @@ function Recommendations({ deviceInfo, config }: any) {
     </>
   )
 }
-
-Recommendations.Layout = Layout
-export default withDataLayer(Recommendations, PAGE_TYPE)
+Recommendations.LayoutAccount = LayoutAccount
+export default withDataLayer(Recommendations, PAGE_TYPE, true, LayoutAccount)

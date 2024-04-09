@@ -11,7 +11,7 @@ import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const MainNav2Logged = dynamic(() => import('@components/Header/MainNav2Logged'))
+const MainNav = dynamic(() => import('@components/Header/MainNav'))
 const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
 const WishlistSidebarView = dynamic(() => import('@components/shared/Wishlist/WishlistSidebarView'))
 const BulkAddSidebarView = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/BulkAddSidebarView'))
@@ -164,7 +164,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={`text-base sm:pt-20 pt-16 border-b border-slate-200 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           {children}
           <Footer navItems={navTree?.footer} />
