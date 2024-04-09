@@ -18,7 +18,6 @@ import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
-import Link from 'next/link'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
 
@@ -250,7 +249,7 @@ const router = useRouter()
       <section aria-labelledby="trending-heading" className="bg-white">
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-            <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+            <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
               {translate('label.register.freeRegisterText')}
             </h1>
           </div>

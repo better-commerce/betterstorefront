@@ -42,6 +42,7 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
             pageSize: 10,
             filters: [],
             stockCodes: prodStockCodes,
+            excludeOOSProduct: false
           }
           setIsLoading(true)
           const res: any = await axios
