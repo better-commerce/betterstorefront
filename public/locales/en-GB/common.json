@@ -741,7 +741,8 @@
       "saveItemsText": "Explore more and save items in your wishlist.",
       "myWishlistText": "My Wishlist",
       "moveToWishlistText": "Move to Wishlist",
-      "addedToWishlistText": "Added to Wishlist"
+      "addedToWishlistText": "Added to Wishlist",
+      "YourStore": "Your Store"
     },
     "modalEdit": {
       "ethText":"ETH",

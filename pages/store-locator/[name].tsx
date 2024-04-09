@@ -1,16 +1,19 @@
 
-import type { GetStaticPropsContext } from 'next'
+import type { GetServerSideProps, GetStaticPropsContext } from 'next'
 import getAllStores from '@framework/storeLocator/getAllStores'
 import dynamic from 'next/dynamic';
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MapWithMarker from '@components/ui/Map/Marker';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer';
+const PAGE_TYPE = PAGE_TYPES.YourStore
 interface Props {
   data: any
 }
@@ -129,11 +132,12 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export async function getStaticProps({ params, locale }: GetStaticPropsContext) {
   const response = await getAllStores()
   return {
     props: {
-      data: response
+      data: response,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }

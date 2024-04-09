@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import NextHead from 'next/head'
-import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
@@ -14,6 +13,7 @@ import SideMenu from '@components/account/MyAccountMenu'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 
 function MyAccount() {
   const [isShow, setShow] = useState(true)
@@ -80,9 +80,9 @@ function MyAccount() {
         <div className="mt-14 sm:mt-20">
           <div className="max-w-4xl mx-auto">
             <div className="max-w-2xl">
-              <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
-              <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
-                <span className="text-slate-900 dark:text-slate-200 font-semibold">
+              <h2 className="text-3xl font-semibold xl:text-4xl">Account</h2>
+              <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
+                <span className="font-semibold text-slate-900 dark:text-slate-200">
                   {user?.firstName},
                 </span>{" "}
                 {user.email}
@@ -97,8 +97,8 @@ function MyAccount() {
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>
           <div
-            className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
-            <h2 className='text-2xl sm:text-3xl font-semibold'>Address Book</h2>
+            className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
+            <h2 className='text-2xl font-semibold sm:text-3xl'>Address Book</h2>
             <div className={'orders bg-white my-2 sm:my-6'}>
               <AddressBook />
             </div>
@@ -109,7 +109,7 @@ function MyAccount() {
   )
 }
 
-MyAccount.Layout = Layout
+MyAccount.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.Page
 
@@ -122,4 +122,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true)
+export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true, LayoutAccount)

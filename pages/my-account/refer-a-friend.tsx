@@ -1,5 +1,4 @@
 import { useState, useEffect, Fragment } from 'react'
-import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
@@ -29,6 +28,7 @@ import SideMenu from '@old-components/account/MyAccountMenu'
 import NextHead from 'next/head'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 
 function ReferralPage() {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
@@ -185,7 +185,7 @@ function ReferralPage() {
                   }`}
               >
                 <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-                  <h1 className="py-2  px-5 font-bold">
+                  <h1 className="px-5 py-2 font-bold">
                     {referralInfo?.successfulInvites > 0
                       ? referralInfo?.successfulInvites == 1
                         ? `1 ${translate('label.myAccount.successfulInviteHeadingText')}`
@@ -194,18 +194,18 @@ function ReferralPage() {
                   </h1>
                   <div className="w-full border-t-[1px] mt-4 border-gray-300 border-b-[1px] ">
                     <div className="border-b-[1px] border-gray-300 flex flex-row justify-between px-5 py-2">
-                      <p className="text-sm text-black font-semibold ">
+                      <p className="text-sm font-semibold text-black ">
                         {translate('label.myAccount.invitesSentText')}
                       </p>
-                      <p className="text-sm text-black font-semibold">
+                      <p className="text-sm font-semibold text-black">
                         {referralInfo?.invitesSent}
                       </p>
                     </div>
                     <div className="flex flex-row justify-between px-5 py-2">
-                      <p className="text-sm text-black font-semibold">
+                      <p className="text-sm font-semibold text-black">
                         {translate('label.myAccount.clicksOnInvitesText')}
                       </p>
-                      <p className="text-sm text-black font-semibold">
+                      <p className="text-sm font-semibold text-black">
                         {referralInfo?.clickOnInvites}
                       </p>
                     </div>
@@ -214,12 +214,12 @@ function ReferralPage() {
                   <Disclosure defaultOpen={true}>
                     {({ open }) => (
                       <div className="border-b-[1px] border-gray-300 pt-2">
-                        <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                          <div className=" w-full flex flex-row justify-between items-center">
-                            <h2 className="text-sm text-black font-semibold capitalize">
+                        <Disclosure.Button className="flex justify-between w-full px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                          <div className="flex flex-row items-center justify-between w-full ">
+                            <h2 className="text-sm font-semibold text-black capitalize">
                               {translate('label.myAccount.shareInPersonBtnText')}
                             </h2>
-                            <span className="h-5 w-5 text-gray-500">
+                            <span className="w-5 h-5 text-gray-500">
                               {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
                             </span>
                           </div>
@@ -237,7 +237,7 @@ function ReferralPage() {
                               {REFERRAL_CODE_INSTRUCTIONS}
                               <div className="px-5 my-4 text-sm">
                                 {translate('label.myAccount.yourFriendsEnterText')}
-                                <h2 className="text-black text-lg">
+                                <h2 className="text-lg text-black">
                                   {referralInfo?.slug}{' '}
                                   {/* {user?.firstName+" "+ user?.lastName} */}
                                 </h2>
@@ -255,12 +255,12 @@ function ReferralPage() {
                   <Disclosure defaultOpen={false}>
                     {({ open }) => (
                       <div className="border-b-[1px] border-gray-300 pt-2">
-                        <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                          <div className=" w-full flex flex-row justify-between items-center">
-                            <h2 className="text-sm text-black font-semibold capitalize">
+                        <Disclosure.Button className="flex justify-between w-full px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                          <div className="flex flex-row items-center justify-between w-full ">
+                            <h2 className="text-sm font-semibold text-black capitalize">
                               {translate('label.myAccount.shareByEmailHeadingText')}
                             </h2>
-                            <span className="h-5 w-5 text-gray-500">
+                            <span className="w-5 h-5 text-gray-500">
                               {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
                             </span>
                           </div>
@@ -293,12 +293,12 @@ function ReferralPage() {
                   <Disclosure defaultOpen={false}>
                     {({ open }) => (
                       <div className="border-b-[1px] border-gray-300 pt-2">
-                        <Disclosure.Button className="flex w-full justify-between px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
-                          <div className=" w-full flex flex-row justify-between items-center">
-                            <h2 className="text-sm text-black font-semibold capitalize">
+                        <Disclosure.Button className="flex justify-between w-full px-5 py-2 text-sm font-medium text-left text-gray-500 focus-visible:ring-opacity-75 link-button">
+                          <div className="flex flex-row items-center justify-between w-full ">
+                            <h2 className="text-sm font-semibold text-black capitalize">
                               {translate('label.myAccount.vouchersEarnedHeadingText')}
                             </h2>
-                            <span className="h-5 w-5 text-gray-500">
+                            <span className="w-5 h-5 text-gray-500">
                               {open ? <ChevronUpIcon /> : <ChevronDownIcon />}
                             </span>
                           </div>
@@ -399,7 +399,7 @@ function ReferralPage() {
   )
 }
 
-ReferralPage.Layout = Layout
+ReferralPage.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.Page
 
@@ -412,4 +412,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(ReferralPage), PAGE_TYPE, true)
+export default withDataLayer(withAuth(ReferralPage), PAGE_TYPE, true, LayoutAccount)

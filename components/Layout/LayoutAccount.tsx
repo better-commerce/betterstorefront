@@ -11,8 +11,7 @@ import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const ProgressBar = dynamic(() => import('@components/ui/ProgressBar'))
-const MainNav = dynamic(() => import('@components/Header/MainNav'))
+const MainNav2Logged = dynamic(() => import('@components/Header/MainNav2Logged'))
 const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
 const WishlistSidebarView = dynamic(() => import('@components/shared/Wishlist/WishlistSidebarView'))
 const BulkAddSidebarView = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/BulkAddSidebarView'))
@@ -25,6 +24,8 @@ import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
+import ProgressBar from '@components/ui/ProgressBar'
+
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
@@ -105,7 +106,7 @@ export interface IExtraProps {
   featureToggle?: any
 }
 
-const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, featureToggle = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
+const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, featureToggle = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
@@ -145,26 +146,25 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
   return (
     <>
       <Head>
-        <link rel="apple-touch-icon" sizes="57x57" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
-        <link rel="apple-touch-icon" sizes="60x60" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
-        <link rel="apple-touch-icon" sizes="72x72" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
-        <link rel="apple-touch-icon" sizes="76x76" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
-        <link rel="apple-touch-icon" sizes="114x114" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`} />
-        <link rel="apple-touch-icon" sizes="120x120" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`} />
-        <link rel="apple-touch-icon" sizes="144x144" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`} />
-        <link rel="apple-touch-icon" sizes="152x152" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`} />
-        <link rel="apple-touch-icon" sizes="180x180" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`} />
-        <link rel="icon" type="image/png" sizes="192x192" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`} />
-        <link rel="icon" type="image/png" sizes="32x32" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`} />
-        <link rel="icon" type="image/png" sizes="96x96" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`} />
-        <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
-        <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
-        <link rel="stylesheet" href={`/assets/css/image-gallery.css`} />
+        <link rel="apple-touch-icon" sizes="57x57" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
+        <link rel="apple-touch-icon" sizes="60x60" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
+        <link rel="apple-touch-icon" sizes="72x72" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
+        <link rel="apple-touch-icon" sizes="76x76" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
+        <link rel="apple-touch-icon" sizes="114x114" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`} />
+        <link rel="apple-touch-icon" sizes="120x120" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`} />
+        <link rel="apple-touch-icon" sizes="144x144" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`} />
+        <link rel="apple-touch-icon" sizes="152x152" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`} />
+        <link rel="icon" type="image/png" sizes="192x192" href={`/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="96x96" href={`/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
+        <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+        <div className={`text-base sm:pt-20 pt-16 border-b border-slate-200 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           {children}
           <Footer navItems={navTree?.footer} />
@@ -178,4 +178,4 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
     </>
   );
 }
-export default Layout
+export default LayoutAccount

@@ -1,6 +1,5 @@
 // Base Imports
 import { useEffect, useState } from 'react'
-import Layout from '@components/Layout/Layout'
 
 // Package Imports
 import axios from 'axios'
@@ -26,6 +25,7 @@ import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
@@ -281,4 +281,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-OrderCancel.Layout = Layout
+OrderCancel.LayoutAccount = LayoutAccount
