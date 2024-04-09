@@ -6,7 +6,7 @@
     "enableCompare": false,
     "enableStoreLocator": true,
     "enableCollectDeliveryOption": true,
-    "enableEngage":true,
+    "enableEngage":true,      
     "enableYourStoreFeature": false,
     "enableAddToBagPlp": false
   },

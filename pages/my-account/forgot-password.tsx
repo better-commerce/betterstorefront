@@ -2,10 +2,8 @@ import Layout from '@components/Layout/Layout'
 import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import { Button } from '@components/ui'
-import {
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
-  NEXT_FORGOT_PASSWORD,
-} from '@components/utils/constants'
+import NextHead from 'next/head'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_FORGOT_PASSWORD, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
@@ -87,49 +85,47 @@ function ForgotPasswordPage() {
   const stateForm: any = form
 
   return (
-    <section>
-      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">
-            {translate('label.myAccount.forgotPasswordText')}
-          </h1>
-          <form
-            onSubmit={handleSubmit}
-            className="flex-col px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2"
-          >
-            {config.map((field: any, Idx: any) => {
-              return (
-                <div key={Idx} className="w-full">
-                  <label className="text-gray-700 text-sm">{field.label}</label>
-                  <input
-                    className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    name={field.name}
-                    value={email}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {emailStatus !== '' &&
-                    emailStatus !==
-                      Messages.Validations.ResetPassword.VALID_EMAIL && (
-                      <div className="text-red-600 w-full">{emailStatus}</div>
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.myAccount.forgotPasswordText')}</title>
+        <meta name="title" content={translate('label.myAccount.forgotPasswordText')} />
+        <meta name="description" content={translate('label.myAccount.forgotPasswordText')} />
+        <meta name="keywords" content={translate('label.myAccount.forgotPasswordText')} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={translate('label.myAccount.forgotPasswordText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.myAccount.forgotPasswordText')} key="ogdesc" />
+      </NextHead>
+
+      <section>
+        <div className="pt-16 pb-10 sm:pt-24 sm:pb-10 lg:max-w-7xl lg:mx-auto lg:px-8">
+          <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+            <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+              <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+                {translate('label.myAccount.forgotPasswordText')}
+              </h1>
+            </div>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full px-5 py-5 font-semibold sm:w-1/2" >
+              {config.map((field: any, Idx: any) => {
+                return (
+                  <div key={Idx} className="w-full mb-4">
+                    <label className="text-neutral-800 dark:text-neutral-200">{field.label}</label>
+                    <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
+                    {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
+                      <div className="w-full text-red-600">{emailStatus}</div>
                     )}
-                </div>
-              )
-            })}
-            <Button
-              type="submit"
-              className="w-full btn btn-primary"
-              loading={isLoading}
-              disabled={isLoading}
-            >
-              {!isLoading && translate('common.label.submitText')}
-            </Button>
-          </form>
+                  </div>
+                )
+              })}
+              <Button type="submit" className="w-full btn btn-primary" loading={isLoading} disabled={isLoading} >
+                {!isLoading && translate('common.label.submitText')}
+              </Button>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 

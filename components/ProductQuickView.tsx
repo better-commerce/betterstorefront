@@ -475,7 +475,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           {!isEngravingAvailable && (
             <div className="flex mt-6 sm:mt-4 !text-sm w-full">
               <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn">
+              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
                 {isInWishList(selectedAttrData?.productId) ? (
                   <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                 ) : (
@@ -496,7 +496,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
                   <span className="font-bold"> {translate('label.product.engravingText')} </span>
                 </button>
-                <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
+                <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
                     <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                   ) : (
@@ -522,8 +522,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             <div className="aspect-w-16 aspect-h-16">
               <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
             </div>
-            {renderStatus()}
-            <LikeButton className="absolute end-3 top-3 " />
+            {renderStatus()}            
           </div>
           <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
             {product?.images?.slice(0, 2).map((item: any, index: number) => {
