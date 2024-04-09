@@ -17295,3 +17295,7 @@ input[type=time]::-webkit-calendar-picker-indicator {
 .bg-brand-blue {
   background: #212530 !important;
 }
+.ch-announcement-bar-1{
+  z-index: 20 !important;
+  top: 85px !important;
+}
