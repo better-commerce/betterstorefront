@@ -126,6 +126,28 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                         </span> */}
                     </div>
                   </div>
+
+                  {
+                    selectedStore?.Id === store?.Id && (
+                      <div>
+                        <span className="text-black mr-1 text-base">
+                          {store?.Address1}
+                        </span>
+                        <br />
+                        <span className="text-black mr-1 text-base">
+                          {store?.Address2}
+                        </span>
+                        <br />
+                        <span className="text-black mr-1 text-base">
+                          {store?.City}{' '}{store?.PostCode}
+                        </span>
+                        <br />
+                        <span className="text-black mr-1 text-base">
+                          {store?.County}
+                        </span>
+                      </div>
+                    )
+                  }
                 </div>
                 {/* {selectedStore?.id === store.id && (
                       <button className='ml-8 px-1 py-3 mb-2 border border-black btn-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
