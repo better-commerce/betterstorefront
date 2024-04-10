@@ -60,12 +60,13 @@ function ImproveRecommendations({ deviceInfo, config }: any) {
                     <img width={140} height={60} src={generateUri(data?.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={data?.name || 'cart-item'} className="object-cover object-center w-10 rounded-lg sm:w-16 image" />
                   </div>
                 </div>
-                <div className="col-span-10 ">
+                <div className="col-span-8">
                   <Link href={data?.link} passHref>
                     <h3 className="font-semibold text-black font-16 hover:text-sky-600">{data?.name}</h3>
                   </Link>
                 </div>
-                <div className="col-span-1">
+                <div className="flex items-center justify-around col-span-3 gap-2">
+                  <span className="font-normal font-12 text-slate-600">Use this product for recommendation</span>
                   <Switch checked={data?.isRecommended} className={`${data?.isRecommended ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
                     <span className="sr-only">is Enable</span>
                     <span aria-hidden="true" className={`${data?.isRecommended ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
