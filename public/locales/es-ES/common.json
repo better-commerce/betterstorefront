@@ -1035,6 +1035,7 @@
       "requiredTextMsg": "Requerido",
       "invalidAccountMsg": "No se encontró ninguna cuenta con este correo electrónico/contraseña",
       "alreadyLoggedInMsg": "Ya has iniciado sesión",
+      "registerSuccessMsg": "Registro exitoso",
       "loginSuccessMsg": "inicio de sesión exitoso",
       "promoCodeInvalidErrorMsg": "El código de promoción no es válido",
       "loginSuccesfulMsg": "Inicio de sesión exitoso",

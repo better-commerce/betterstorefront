@@ -3,7 +3,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
@@ -20,6 +20,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
+import { AlertType } from '@framework/utils/enums'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
@@ -161,9 +162,10 @@ const router = useRouter()
     asyncLoginUser()
   }
 
-  const handleUserRegister = async (values: any) => {
+  const handleUserRegister = async (values: any, cb = () => {}) => {
     let userCreated = false
     let recordId = Guid.empty
+    let responseMsg = EmptyString
     const reqData = {
       ...values,
       email: userEmail,
@@ -198,6 +200,10 @@ const router = useRouter()
           ? true
           : false
       recordId = tradingAccountResponse.data?.recordId
+
+      if (tradingAccountResponse?.data?.message) {
+        responseMsg = tradingAccountResponse?.data?.message
+      }
     } else {
       // Otherwise, consider it as user registration.
 
@@ -209,9 +215,12 @@ const router = useRouter()
       recordId = response.data?.recordId
     }
 
+    // execute form helper
+    cb()
+
     // Trigger error message for failed registration.
     if (!userCreated) {
-      setError(translate('common.message.requestCouldNotProcessErrorMsg'))
+      setAlert({ type: 'error', msg: responseMsg || translate('common.message.requestCouldNotProcessErrorMsg') })
     }
 
     // If registration is SUCCESS
@@ -224,8 +233,10 @@ const router = useRouter()
         }),
         eventType: CustomerCreated,
       })
-      await handleBasketAssociation(recordId)
-      handleUserLogin(values)
+      setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.registerSuccessMsg')})
+      Router.push('/my-account/login')
+      // await handleBasketAssociation(recordId)
+      // handleUserLogin(values)
       setIsGuestUser(false)
     }
   }
