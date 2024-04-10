@@ -183,7 +183,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
                       <div className="flex items-center space-x-3">
                         <img className="w-10 h-10 text-lg rounded-full" alt={title} src={`/assets/user-avatar.png`} />
                         <div className="flex-grow">
-                          <h4 className="font-semibold">{title}</h4>
+                          <h4 className="font-semibold capitalize">{title}</h4>
                         </div>
                       </div>
                       <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
@@ -192,11 +192,11 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
                     {accountDropdownConfig?.map((item: any, idx: number) => (
                       <>
                         <Link key={idx} title={item?.title} passHref href={item?.href} className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => { if (item?.onClick) item?.onClick(ev); close() }}>
-                          <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
+                          <div className="flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300">
                             {item?.head ?? null}
                           </div>
                           <div className="ml-4">
-                            <p className="text-sm font-medium ">{item?.title}</p>
+                            <p className="text-sm font-medium capitalize">{item?.title}</p>
                           </div>
                         </Link>
                       </>
