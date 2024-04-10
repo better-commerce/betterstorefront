@@ -1,4 +1,3 @@
-import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
@@ -6,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import NextHead from 'next/head'
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
+import BrowsingHistoryProducts from "@components/Product/RelatedProducts/BrowsingHistory";
 
 const PAGE_TYPE = PAGE_TYPES.YourStore
 
@@ -34,7 +34,7 @@ function YourStore({ deviceInfo, config }: any) {
         <meta property="og:description" content="Your Store" key="ogdesc" />
       </NextHead>
       <div className="container py-6 mx-auto cart-recently-viewed sm:py-10">
-        <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+        <BrowsingHistoryProducts deviceInfo={deviceInfo} config={config} productPerRow={4} />
       </div>
     </>
   )

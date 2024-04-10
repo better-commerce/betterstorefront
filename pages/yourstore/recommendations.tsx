@@ -1,6 +1,5 @@
-import Layout from "@components/Layout/Layout";
 import LayoutAccount from "@components/Layout/LayoutAccount";
-import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
+import BrowsingHistoryProducts from "@components/Product/RelatedProducts/BrowsingHistory";
 import { SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import NextHead from 'next/head'
@@ -22,7 +21,7 @@ function Recommendations({ deviceInfo, config }: any) {
         <meta property="og:description" content="Recommended For You" key="ogdesc" />
       </NextHead>
       <div className="container py-6 mx-auto cart-recently-viewed sm:py-10">
-        <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+        <BrowsingHistoryProducts deviceInfo={deviceInfo} config={config} productPerRow={4} />
       </div>
     </>
   )
