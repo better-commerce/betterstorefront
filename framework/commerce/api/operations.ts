@@ -7,6 +7,7 @@ import type {
   GetAllProductPathsOperation,
   GetAllProductsOperation,
   GetProductOperation,
+  getAllRecentlyViewedProductsOperation,
 } from '../types/product'
 import type { APIProvider, CommerceAPI } from '.'
 
@@ -22,6 +23,7 @@ export const OPERATIONS = [
   'getCustomerWishlist',
   'getAllProductPaths',
   'getAllProducts',
+  'getAllRecentlyViewedProducts',
   'getProduct',
   'getProductPreview',
   'getInfra',
@@ -193,6 +195,22 @@ export type Operations<P extends APIProvider> = {
     }): Promise<T['data']>
 
     <T extends GetAllProductsOperation>(
+      opts: {
+        variables?: T['variables']
+        config?: P['config']
+        preview?: boolean
+      } & OperationOptions
+    ): Promise<T['data']>
+  }
+
+  getAllRecentlyViewedProducts: {
+    <T extends getAllRecentlyViewedProductsOperation>(opts: {
+      variables?: T['variables']
+      config?: P['config']
+      preview?: boolean
+    }): Promise<T['data']>
+
+    <T extends getAllRecentlyViewedProductsOperation>(
       opts: {
         variables?: T['variables']
         config?: P['config']

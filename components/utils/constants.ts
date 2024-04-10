@@ -88,6 +88,7 @@ export const STATIC_BRAND_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/in
 export const NEXT_GET_COLLECTION_BY_ID = '/api/collection/get-collection-by-id'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
 export const NEXT_GET_CATALOG_PRODUCTS = '/api/catalog/products'
+export const NEXT_GET_RECENTLY_VIEWED_PRODUCTS = '/api/catalog/get-recently-viewed-products'
 export const NEXT_GET_ORDER_RELATED_PRODUCTS =
   '/api/catalog/get-related-products'
 export const NEXT_PAYMENT_METHODS_LIST = '/api/payment-methods-list'

@@ -15,7 +15,7 @@ const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { LoadingDots } from '@components/ui'
 
 // Other Imports
-import { NEXT_GET_CATALOG_PRODUCTS } from '@components/utils/constants'
+import { NEXT_GET_CATALOG_PRODUCTS, NEXT_GET_RECENTLY_VIEWED_PRODUCTS } from '@components/utils/constants'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -39,7 +39,7 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
             sortBy: '',
             sortOrder: '',
             currentPage: 1,
-            pageSize: 10,
+            pageSize: 20,
             filters: [],
             stockCodes: prodStockCodes,
             excludeOOSProduct: false,
@@ -47,7 +47,7 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
           }
           setIsLoading(true)
           const res: any = await axios
-            .post(NEXT_GET_CATALOG_PRODUCTS, data)
+            .post(NEXT_GET_RECENTLY_VIEWED_PRODUCTS, data)
             .then((results: any) => {
               setRecentlyViewedState(results?.data?.products?.results)
               setIsLoading(false)
