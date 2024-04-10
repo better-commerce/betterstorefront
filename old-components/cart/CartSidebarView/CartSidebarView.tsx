@@ -11,7 +11,7 @@ import PromotionInput from '../PromotionInput'
 import RelatedProducts from '@old-components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
@@ -431,7 +431,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
             },
           })
           if(window?.ch_session){
-            window.ch_remove_from_cart_before({ item_id : product?.sku})
+            window.ch_remove_from_cart_before({ item_id : product?.sku || EmptyString})
           }
         }
       }
