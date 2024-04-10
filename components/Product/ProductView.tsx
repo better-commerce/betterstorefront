@@ -192,8 +192,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice,
           availability: product?.availability,
           metadata: {
-            color: product?.customAttributes[0]?.key=="global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || '',
-            size: product?.customAttributes[2]?.key=="clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || '',
+            color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || '',
+            size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || '',
             weight: 0,
             weight_unit: '',
             make: '',
@@ -209,8 +209,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   useEffect(() => {
     if (typeof window !== "undefined" && dataForEngage && window?.ch_session) {
-      window.ch_product_view_before(dataForEngage)  
-     }
+      window.ch_product_view_before(dataForEngage)
+    }
     fetchProduct()
     setIsCompared('true')
   }, [slug, currency])
@@ -356,8 +356,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               },
             })
           }
-          if(window?.ch_session && dataForEngage){
-            window.ch_add_to_cart_before(dataForEngage) 
+          if (window?.ch_session && dataForEngage) {
+            window.ch_add_to_cart_before(dataForEngage)
           }
         }
       },
@@ -763,29 +763,32 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const renderReviews = () => {
     return (
-      <div className="" id='productReview'>
-        <h2 className="flex items-center text-2xl font-semibold">
-          <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
-          <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
-        </h2>
+      <>
+        <hr className="pt-10 mt-10 sm:pt-10 border-slate-200 dark:border-slate-700" />
+        <div className="" id='productReview'>
+          <h2 className="flex items-center text-2xl font-semibold">
+            <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
+            <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
+          </h2>
 
-        <div className="mt-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
-            {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
-              <div key={`review-${reviewIdx}`}>
-                <ReviewItem
-                  data={{
-                    comment: review?.comment,
-                    date: review?.postedOn,
-                    name: review?.title,
-                    starPoint: review?.rating,
-                  }}
-                />
-              </div>
-            ))}
+          <div className="mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
+              {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
+                <div key={`review-${reviewIdx}`}>
+                  <ReviewItem
+                    data={{
+                      comment: review?.comment,
+                      date: review?.postedOn,
+                      name: review?.title,
+                      starPoint: review?.rating,
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   };
   const renderSectionContent = () => {
