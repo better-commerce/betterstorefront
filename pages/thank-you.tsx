@@ -334,38 +334,38 @@ export default function OrderConfirmation({ config }: any) {
       const iterator = order?.items?.values();
       for (const value of iterator) {
         itemsFromArr?.push({
-          id:value?.stockCode,
-          name:value?.name,
-          quantity:value?.qty,
-          price:value?.totalPrice?.raw?.withTax,
-          line_price:value?.totalPrice?.raw?.withTax,
-          sku:value?.id
+          id: value?.stockCode || EmptyString,
+          name: value?.name || EmptyString,
+          quantity: value?.qty || 1,
+          price: value?.totalPrice?.raw?.withTax || 1,
+          line_price: value?.totalPrice?.raw?.withTax * value?.qty,
+          sku: value?.sku || EmptyString
         })
       }
     }
     const orderData = {
       item_id: "thankyou",
-      order_id: order?.orderNo,
+      order_id: order?.orderNo || EmptyString,
       order_price: order?.grandTotal?.raw?.withTax,
-      order_shipping_zip: order?.shippingAddress?.postCode, 
-      order_shipping_city: order?.shippingAddress?.city, 	
+      order_shipping_zip: order?.shippingAddress?.postCode || EmptyString, 
+      order_shipping_city: order?.shippingAddress?.city || EmptyString, 	
       payment_transactions:  [{
-          amount: order?.payments[0]?.orderAmount, 
-          gateway: order?.payments[0]?.paymentGateway, 
+          amount: order?.payments ? order?.payments[0]?.orderAmount : EmptyString, 
+          gateway: order?.payments ? order?.payments[0]?.paymentGateway : EmptyString, 
           status:"paid"
       }],
       coupons:  [{
           code: '',
           discount_amt:  order?.discount?.raw?.withTax
       }],
-      item_ids: order?.items?.map((x:any) =>  x?.stockCode),
+      item_ids: order?.items?.map((x:any) =>  x?.stockCode) || [],
       items: itemsFromArr,
       customer: {
-        id: order?.customerId,
-        f_name: order?.billingAddress?.firstName,
-        l_name: order?.billingAddress?.lastName,
-        email: order?.customer?.username,
-        contact_no: order?.billingAddress?.phoneNo
+        id: order?.customerId || EmptyString,
+        f_name: order?.billingAddress?.firstName || EmptyString,
+        l_name: order?.billingAddress?.lastName || EmptyString,
+        email: order?.customer?.username || EmptyString,
+        contact_no: order?.billingAddress?.phoneNo || EmptyString
       }
     }
     if( window !== undefined && window?.ch_session && order?.orderNo){

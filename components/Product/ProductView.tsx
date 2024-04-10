@@ -7,7 +7,7 @@ import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
@@ -169,41 +169,41 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     // added for engage
     dataForEngage = {
       item: {
-        item_id: product?.stockCode,
-        title: product?.name,
-        sku: product?.productCode,
-        categories: product?.classification?.category,
-        base_category: product?.classification?.category,
-        collection_name: product?.collections ? product?.collections[0]?.name : '',
-        description: product?.fullName,
-        product_url: window?.location?.href,
-        image_url: product?.image,
-        availability: product?.availability,
-        price: product?.price?.maxPrice,
-        sale_price: product?.price?.minPrice,
-        brand: product?.brand,
+        item_id: product?.stockCode || EmptyString,
+        title: product?.name || EmptyString,
+        sku: product?.productCode || EmptyString,
+        categories: product?.classification?.category || [],
+        base_category: product?.classification?.category || EmptyString,
+        collection_name: product?.collections ? product?.collections[0]?.name : EmptyString,
+        description: product?.fullName || EmptyString,
+        product_url: window?.location?.href || EmptyString,
+        image_url: product?.image || EmptyString,
+        availability: product?.availability || EmptyString,
+        price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
+        sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
+        brand: product?.brand || EmptyString,
         variant: {
-          id: product?.stockCode,
-          title: product?.name,
-          sku: product?.productCode,
-          image_url: product?.image,
-          product_url: window?.location?.href,
-          price: product?.price?.maxPrice,
-          sale_price: product?.price?.minPrice,
-          availability: product?.availability,
+          id: product?.stockCode || EmptyString,
+          title: product?.name || EmptyString,
+          sku: product?.productCode || EmptyString,
+          image_url: product?.image || EmptyString,
+          product_url: window?.location?.href || EmptyString,
+          price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
+          sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
+          availability: product?.availability || EmptyString,
           metadata: {
-            color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || '',
-            size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || '',
+            color: product?.customAttributes[0]?.key=="global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
+            size: product?.customAttributes[2]?.key=="clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
             weight: 0,
-            weight_unit: '',
-            make: '',
-            model: product?.brand,
+            weight_unit: EmptyString,
+            make: EmptyString,
+            model: product?.brand || EmptyString,
             rating: 0,
           },
         },
-        customAttributes: product?.customAttributes,
+        customAttributes: product?.customAttributes || EmptyString,
       },
-      item_id: product?.stockCode,
+      item_id: product?.stockCode || EmptyString,
     }
   }
 
