@@ -57,11 +57,15 @@ export default function Search(props: any) {
         setIsLoading(false)
       }
     }
-    if (inputValue.length > 2) fetchItems()
+    if (inputValue.trim().length > 2) fetchItems()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
-
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.key === 'Enter') {
+        Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
+    }
+};
 
   useEffect(() => {
     if (path !== Router.asPath) {
@@ -87,7 +91,7 @@ export default function Search(props: any) {
             <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
-            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} />
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown}/>
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
               <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
             </div>
