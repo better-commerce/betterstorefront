@@ -28,7 +28,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -302,7 +302,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_page_view_before({ item_id : category?.name}) 
+      window.ch_page_view_before({ item_id : category?.name || EmptyString}) 
     }
   }, [category.id])
 

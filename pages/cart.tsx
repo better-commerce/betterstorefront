@@ -24,7 +24,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -399,20 +399,20 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     const itemsFromArr = []
     for (const value of iterator) {
       itemsFromArr?.push({
-        id:value?.stockCode,
-        name:value?.name,
-        quantity:value?.qty,
-        price:value?.totalPrice?.raw?.withTax,
-        line_price:value?.totalPrice?.raw?.withTax,
-        sku:value?.id
+        id: value?.stockCode || EmptyString,
+        name: value?.name || EmptyString,
+        quantity: value?.qty || 1,
+        price: value?.totalPrice?.raw?.withTax || 1,
+        line_price: value?.totalPrice?.raw?.withTax * value?.qty,
+        sku: value?.sku || EmptyString
       })
     }
     
     const cardData = {
       item_id: "cart",
-      item_ids: cart?.lineItems?.map((x:any) =>  x?.stockCode),
+      item_ids: cart?.lineItems?.map((x:any) =>  x?.stockCode) || [],
       items: itemsFromArr,
-      total_value: cart?.grandTotal?.formatted?.withTax
+      total_value: cart?.grandTotal?.raw?.withTax || EmptyString
     }
   
     if (typeof window !== "undefined" && window?.ch_session) {

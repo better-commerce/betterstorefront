@@ -26,7 +26,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
@@ -276,7 +276,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
       dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_page_view_before({ item_id : category?.name}) 
+      window.ch_page_view_before({ item_id : category?.name || EmptyString}) 
     }
   }, [category?.id])
 
