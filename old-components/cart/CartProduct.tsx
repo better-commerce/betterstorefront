@@ -438,13 +438,7 @@ export default function CartProduct({
           </div>
         </div>
       </div>
-      <CartAddonsSidebar
-        addonProducts={addonProducts}
-        isModalClose={isModalClose}
-        closeModal={closeModal}
-        deviceInfo={deviceInfo}
-        maxBasketItemsCount={maxBasketItemsCount}
-      />
+      <CartAddonsSidebar addonProducts={addonProducts} isModalClose={isModalClose} closeModal={closeModal} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
     </Fragment>
   )
 }
