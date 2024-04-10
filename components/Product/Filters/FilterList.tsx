@@ -36,6 +36,17 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
     if (sectionKey === FILTER_KEYS.PRICE)
       return <><span>{currencySymbol != undefined ? currencySymbol : ''}{option?.from}</span>-<span>{currencySymbol != undefined ? option?.to != null ? currencySymbol : '' : ''}{option?.to != null ? option?.to : 'Max'}</span></>
     if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]
+    if (sectionKey === FILTER_KEYS.RATING) {
+      // Check if the option name contains a decimal point
+      if (option.name.includes('.')) {
+        const ratingValue = parseFloat(option.name); // Parse string to float
+        const formattedRating = ratingValue.toFixed(2); // Format to always display 2 digits after the decimal point
+        return formattedRating.toString(); // Convert it back to string and return
+      } else {
+        return option.name;
+      }
+    }
+    
     else return option.name
   }
 

@@ -537,7 +537,7 @@ export default function CollectionPage(props: any) {
           </div>
         </div>
         <hr className='border-slate-200 dark:border-slate-700' />
-        {productDataToPass?.results?.length > 0 && (
+        { 
           <div className="grid grid-cols-1 gap-1 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3">
             {props?.allowFacets ? (
               <>
@@ -554,17 +554,17 @@ export default function CollectionPage(props: any) {
                       <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     </>
                   )}
-                  <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                  {productDataToPass?.results.length>0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />}
                 </div>
               </>
             ) : (
               <div className="col-span-12">
                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                {productDataToPass?.results.length>0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />}
               </div>
             )}
           </div>
-        )}
+        }
         {props?.products?.total == 0 && (
           <div className="w-full py-32 mx-auto text-center">
             <h3 className="py-3 text-3xl font-semibold text-gray-200">

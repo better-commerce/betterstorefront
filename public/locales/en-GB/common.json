@@ -640,6 +640,11 @@
         "leftText": "LEFT",
         "preOrderText": "PRE-ORDER"
       },
+      "priceFilterSlider":{
+        "maxText": "Max",
+        "minText": "Min",
+        "noLimitText": "No limit"
+      },
       "priceMatchWebsiteNameText" : "Name of website you have found cheaper to*",
       "priceMatchDirectLinkText" : "Full direct link to product (copy/paste website URL)*",
       "priceMatchCostText" : "Cost of product*",
