@@ -1,11 +1,11 @@
-import { GetAllProductsOperation } from '@commerce/types/product'
+import { getAllRecentlyViewedProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import fetcher from '../../fetcher'
 import qs from 'qs'
 import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
 
-export default function getAllProductsOperation({}: OperationContext<any>) {
-  async function getAllProducts<T extends GetAllProductsOperation>({
+export default function getAllRecentlyViewedProductsOperation({}: OperationContext<any>) {
+  async function getAllRecentlyViewedProducts<T extends getAllRecentlyViewedProductsOperation>({
     query = '',
     cookies = {},
   }: {
@@ -23,7 +23,8 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       brandId = '',
       pageSize = 20,
       stockCodes = [],
-      excludeOOSProduct = true
+      excludeOOSProduct = true,
+      IgnoreDisplayInSerach = true
     } = query
     const data: any = {
       freeText,
@@ -37,7 +38,8 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       categoryId,
       brandId,
       stockCodes,
-      excludeOOSProduct
+      excludeOOSProduct,
+      IgnoreDisplayInSerach
     }
 
     if (filters?.length) {
@@ -67,5 +69,5 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       throw new Error(error)
     }
   }
-  return getAllProducts
+  return getAllRecentlyViewedProducts
 }
