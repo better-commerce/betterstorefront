@@ -199,7 +199,6 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
                     </>
                     }
                     {accountDropdownConfig?.map((item: any, idx: number) => {
-
                       return (
                         item?.isEnable &&
                         <>
