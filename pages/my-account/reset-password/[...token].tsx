@@ -1,10 +1,9 @@
 import Layout from '@components/Layout/Layout'
 import { useEffect, useState } from 'react'
-import {
-    EmptyString,
-  NEXT_RESET_PASSWORD,
-  NEXT_VALIDATE_TOKEN,
-} from '@components/utils/constants'
+import NextHead from 'next/head'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, NEXT_RESET_PASSWORD, NEXT_VALIDATE_TOKEN, SITE_ORIGIN_URL } from '@components/utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { Button } from '@components/ui'
@@ -14,7 +13,17 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-export default function ForgotPasswordPage() {
+
+export async function getServerSideProps(context: any) {
+  const { locale } = context
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    },
+  }
+}
+
+export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [token, setToken] = useState(null)
   const translate = useTranslation()
@@ -54,13 +63,7 @@ export default function ForgotPasswordPage() {
     },
     validationSchema: yup.object({
       userName: yup.string(),
-      password: yup
-        .string()
-        .required(Messages.Validations.ResetPassword.PASSWORD_REQUIRED_MESSAGE)
-        .matches(
-          Messages.Validations.RegularExpressions.PASSWORD_VALIDATION,
-          Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE
-        ),
+      password: yup.string().required(Messages.Validations.ResetPassword.PASSWORD_REQUIRED_MESSAGE).matches(Messages.Validations.RegularExpressions.PASSWORD_VALIDATION, Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE),
       confirmPassword: yup
         .string()
         .required(Messages.Validations.ResetPassword.CONFIRM_REQUIRED_MESSAGE)
@@ -115,53 +118,48 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <section>
-      <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-        <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-          <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">
-            {translate('common.label.changePasswordText')}
-          </h1>
-        </div>
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex-col m-auto px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2"
-        >
-          {config.map((field:any,Idx:any) => {
-            return (
+    <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.myAccount.resetPasswordText')}</title>
+        <meta name="title" content={translate('label.myAccount.resetPasswordText')} />
+        <meta name="description" content={translate('label.myAccount.resetPasswordText')} />
+        <meta name="keywords" content={translate('label.myAccount.resetPasswordText')} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={translate('label.myAccount.resetPasswordText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.myAccount.resetPasswordText')} key="ogdesc" />
+      </NextHead>
+
+      <section>
+        <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
+          <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
+            <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">{translate('common.label.changePasswordText')}</h1>
+          </div>
+          <form onSubmit={formik.handleSubmit} className="flex-col m-auto px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2">
+            {config.map((field: any, Idx: any) => {
+              return (
                 <div key={Idx} className="mt-6 w-full sm:w-1/2">
-                  <label className="text-gray-700 text-sm">
-                    {field.label}
-                  </label>
-                  <input
-                    className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-                    name={field.name}
-                    type={field.type}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values[field.name]}
-                  />
+                  <label className="text-gray-700 text-sm">{field.label}</label>
+                  <input className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" name={field.name} type={field.type} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values[field.name]} />
                   {formik.errors[field.name] && formik.touched[field.name] && (
                     <p className="text-red-500">
                       <>{formik.errors[field.name]}</>
                     </p>
                   )}
                 </div>
-            )
-          })}          
-          <div className="mt-10 w-full sm:w-1/2">
-            <Button
-              type="submit"
-              className="!font-normal w-full"
-              loading={formik.isSubmitting}
-              disabled={!formik.isValid || formik.isSubmitting}
-            >
-              {translate('common.label.changePasswordText')}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </section>
+              )
+            })}
+            <div className="mt-10 w-full sm:w-1/2">
+              <Button type="submit" className="!font-normal w-full" loading={formik.isSubmitting} disabled={!formik.isValid || formik.isSubmitting}>
+                {translate('common.label.changePasswordText')}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </>
   )
 }
 
-ForgotPasswordPage.Layout = Layout
+ResetPasswordPage.Layout = Layout
