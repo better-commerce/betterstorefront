@@ -93,7 +93,7 @@ export default function SaveB2BQuote({ basket }: SaveB2BQuoteProps) {
    *  - If b2b user is NOT logged in
    *  - If quote is already created
    */
-  if (!isB2BUser(user) && basket?.quoteStatus !== QuoteStatus.NOT_QUOTE) {
+  if (!isB2BUser(user) || basket?.quoteStatus !== QuoteStatus.NOT_QUOTE) {
     return <></>
   }
 
