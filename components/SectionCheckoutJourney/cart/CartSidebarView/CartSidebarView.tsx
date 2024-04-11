@@ -803,7 +803,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           beginCheckout(cartItems)
                         }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
                           <span className='flex flex-col justify-start pl-5 text-left'>
-                            <span>{cartItems?.totalWithoutShipping?.formatted?.withTax}</span>
+                            <span>{cartItems.grandTotal?.formatted?.withTax}</span>
                             <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
                           </span>
                           <span className='flex items-center gap-2 pr-5'>
