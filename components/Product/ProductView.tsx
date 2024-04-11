@@ -851,10 +851,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
               <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                 <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                  <span className="font-bold"> {translate('label.product.engravingText')} </span>
+                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                  {translate('label.product.engravingText')}
                 </button>
-                <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
+                <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
                     <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
                   ) : (
