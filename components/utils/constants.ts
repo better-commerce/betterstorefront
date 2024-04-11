@@ -33,6 +33,7 @@ export const GET_BASKET_PROMOTIONS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_AP
 export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket/validate`
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
+export const CREATE_QUOTE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/quote/save`
 export const B2B_COMPANY_USERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const B2B_USER_QUOTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
