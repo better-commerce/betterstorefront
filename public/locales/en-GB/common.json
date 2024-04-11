@@ -698,7 +698,10 @@
       "validUntilText": "Valid Until:",
       "validityDaysText": "Validity Days:",
       "quoteDetailHeadingText": "Quote Detail-",
-      "quoteSummaryText": "Quote summary"
+      "quoteSummaryText": "Quote summary",
+      "saveQuote": "Save Quote",
+      "quoteRefNumPlaceholder": "Quote Reference Number (Optional)",
+      "quoteSavedSuccessMsg": "Your Quote {quoteNum} has been successfully saved."
     },
     "search": {
       "searchText": "Search",

@@ -692,7 +692,10 @@
       "validUntilText": "Válido Hasta:",
       "validityDaysText": "Días de Validez:",
       "quoteDetailHeadingText": "Detalles de la Cotización-",
-      "quoteSummaryText": "Resumen de la Cotización"
+      "quoteSummaryText": "Resumen de la Cotización",
+      "saveQuote": "Guardar Cotización",
+      "quoteRefNumPlaceholder": "Número de Referencia de la Cotización (Opcional)",
+      "quoteSavedSuccessMsg": "Su Cotización {quoteNum} se ha guardado exitosamente."
     },
     "search": {
       "searchText": "Buscar",
