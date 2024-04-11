@@ -380,25 +380,24 @@ function MyCompany({ deviceInfo }: any) {
                           <>
                             {option?.name == 'Users' ? (
                               <>
-                                {user?.companyUserRole === UserRoleType.ADMIN &&
-                                  <Tab as={Fragment} key={Idx}>
-                                    {({ selected }) => (
-                                      <button
-                                        className={classNames(
-                                          'w-full rounded-2xl py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                          'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                          selected
-                                            ? 'bg-white shadow hover:bg-gray-50'
-                                            : 'text-blue-100 hover:bg-white/[0.32] '
-                                        )}
-                                        onClick={() => {
-                                          option?.onClick(option?.value)
-                                        }}
-                                      >
-                                        {option?.name}
-                                      </button>
-                                    )}
-                                  </Tab>}
+                                <Tab as={Fragment} key={Idx}>
+                                  {({ selected }) => (
+                                    <button
+                                      className={classNames(
+                                        'w-full rounded-2xl py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                        'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                        selected
+                                          ? 'bg-white shadow hover:bg-gray-50'
+                                          : 'text-blue-100 hover:bg-white/[0.32] '
+                                      )}
+                                      onClick={() => {
+                                        option?.onClick(option?.value)
+                                      }}
+                                    >
+                                      {option?.name}
+                                    </button>
+                                  )}
+                                </Tab>
                               </>
                             ) : (
                               <>
@@ -426,11 +425,9 @@ function MyCompany({ deviceInfo }: any) {
                         ))}
                       </Tab.List>
                       <Tab.Panels>
-                        {user?.companyUserRole === UserRoleType.ADMIN &&
-                          <Tab.Panel>
-                            <CompanyUsers users={b2bUsers} />
-                          </Tab.Panel>
-                        }
+                        <Tab.Panel>
+                          <CompanyUsers users={b2bUsers} />
+                        </Tab.Panel>
                         <Tab.Panel>
                           <B2BOrders
                             selectedOption={selectedOption}
@@ -457,7 +454,7 @@ function MyCompany({ deviceInfo }: any) {
               </div>
             </div>
           </section>
-          
+
         </>
       )}
     </>
