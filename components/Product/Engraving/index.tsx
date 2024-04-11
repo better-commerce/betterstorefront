@@ -1,7 +1,6 @@
 import { useState, useEffect, Fragment } from 'react'
 import { Dialog, Transition } from "@headlessui/react";
 import LoadingDots from '@components/ui/LoadingDots'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { ProductPersonaliser } from '../ProductPersonaliser'
 import ButtonClose from '@components/shared/ButtonClose/ButtonClose'

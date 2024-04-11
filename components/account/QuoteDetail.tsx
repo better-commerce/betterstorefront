@@ -1,4 +1,4 @@
-import { DeviceIdKey, NEXT_GET_CART, SessionIdCookieKey, } from '@components/utils/constants'
+import { DeviceIdKey, NEXT_GET_CART, QuoteStatus, SessionIdCookieKey, } from '@components/utils/constants'
 import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
@@ -465,7 +465,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
         <Dialog
           as="div"
           className="fixed inset-0 z-50 cart-z-index-9999"
-         onClose={() => setQuoteModelClose()}
+          onClose={() => setQuoteModelClose()}
         >
           <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
             <Transition.Child
@@ -493,7 +493,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
+              <div className="relative inline-flex w-full max-w-7xl max-h-full xl:py-8 z-[99999]">
                 <div
                   className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:rounded-2xl dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100"
                 >
@@ -693,13 +693,11 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                                   {quoteViewData?.grandTotal?.formatted?.withTax}
                                 </dd>
                               </div>
-                              <div className="flex flex-col w-full my-4">
-                                <DefaultButton
-                                  buttonType="button"
-                                  action={async () => onPlaceOrder()}
-                                  title="Place Order"
-                                />
-                              </div>
+                              {quoteData?.status != QuoteStatus.CONVERTED && quoteData?.status != QuoteStatus.CANCELLED && quoteData?.status != QuoteStatus.ABANDONED &&
+                                <div className="flex flex-col w-full my-4">
+                                  <DefaultButton buttonType="button" action={async () => onPlaceOrder()} title="Place Order" />
+                                </div>
+                              }
                             </section>
                           </>
                         </div>
