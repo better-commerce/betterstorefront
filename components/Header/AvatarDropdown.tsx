@@ -13,7 +13,7 @@ import { signOut } from "next-auth/react";
 import { SocialMediaType } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
 
-export default function AvatarDropdown({ pluginConfig = [] }) {
+export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any) {
   const translate = useTranslation()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
@@ -104,6 +104,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
           <path d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
+      isEnable: true
     },
     {
       href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders',
@@ -117,6 +118,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
           <path d="M16 4.02002C19.33 4.20002 21 5.43002 21 10V16C21 20 20 22 15 22H9C4 22 3 20 3 16V10C3 5.44002 4.67 4.20002 8 4.02002" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
+      isEnable: true
     },
     {
       href: '/my-account/wishlist',
@@ -127,6 +129,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
           <path d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
+      isEnable: true
     },
     {
       href: '/yourstore',
@@ -142,6 +145,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
           <path d="M19.05 4.92993L15.51 8.45993" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
+      isEnable: featureToggle?.features?.enableYourStoreFeature
     },
     {
       href: '/',
@@ -160,6 +164,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
           await signOut()
         }
       },
+      isEnable: true
     },
   ]
   let accountDropdownConfig = accountDropDownConfigUnauthorized
@@ -189,18 +194,22 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
                       <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
                     </>
                     }
-                    {accountDropdownConfig?.map((item: any, idx: number) => (
-                      <>
-                        <Link key={idx} title={item?.title} passHref href={item?.href} className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => { if (item?.onClick) item?.onClick(ev); close() }}>
-                          <div className="flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300">
-                            {item?.head ?? null}
-                          </div>
-                          <div className="ml-4">
-                            <p className="text-sm font-medium capitalize">{item?.title}</p>
-                          </div>
-                        </Link>
-                      </>
-                    ))}
+                    {accountDropdownConfig?.map((item: any, idx: number) => {
+
+                      return (
+                        item?.isEnable &&
+                        <>
+                          <Link key={idx} title={item?.title} passHref href={item?.href} className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => { if (item?.onClick) item?.onClick(ev); close() }}>
+                            <div className="flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300">
+                              {item?.head ?? null}
+                            </div>
+                            <div className="ml-4">
+                              <p className="text-sm font-medium capitalize">{item?.title}</p>
+                            </div>
+                          </Link>
+                        </>
+                      )
+                    })}
                   </div>
                 </div>
               </Popover.Panel>
