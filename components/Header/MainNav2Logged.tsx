@@ -87,7 +87,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
                 {renderMagnifyingGlassIcon()}
               </button>
-              <AvatarDropdown pluginConfig={pluginConfig} />
+              <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
               <CartDropdown />
             </div>
           </div>
