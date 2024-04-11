@@ -22,6 +22,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
     {
       type: SocialMediaType.GOOGLE,
       title: translate('label.login.googleLoginText'),
+      isEnable: true,
       className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
       head: (
         <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded google-plus-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -33,6 +34,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
     {
       type: SocialMediaType.FACEBOOK,
       title: translate('label.login.facebookLoginText'),
+      isEnable: true,
       className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
       head: (
         <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded fb-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -66,6 +68,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
         </svg>
       ),
       tail: null,
+      isEnable: true
     },
     {
       href: '/my-account/register',
@@ -78,6 +81,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
         </svg>
       ),
       tail: null,
+      isEnable: true
     },
   ]
 
