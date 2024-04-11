@@ -67,7 +67,7 @@ export default function SaveB2BQuote({ basket }: SaveB2BQuoteProps) {
         hideOverlayLoaderState()
         
         // redirect to home page
-        router.push('/')
+        // router.push('/')
         
         // reset basket items
         setCartItems({ lineItems: [] })
