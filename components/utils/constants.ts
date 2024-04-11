@@ -10,7 +10,8 @@ export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
 export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
   '/api/basket/update-checkout2-address'
-export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY = '/api/delivery/click-collect-store'
+export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY =
+  '/api/delivery/click-collect-store'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
@@ -24,7 +25,8 @@ export const SEARCH_MINIMAL_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSI
 export const SEARCH_ADVANCED_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/advanced`
 export const CACHED_IMAGE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product`
 export const LOOKBOOK_SLUG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/lookbook/slug`
-export const NEXT_SEARCH_ADVANCED_ENDPOINT = '/api/catalog/get-category-products'
+export const NEXT_SEARCH_ADVANCED_ENDPOINT =
+  '/api/catalog/get-category-products'
 export const PRODUCT_CUSTOM_ATTRIBUTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/custom-attributes`
 export const PRODUCT_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/`
 export const PRODUCT_PREVIEW_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/preview`
@@ -89,7 +91,8 @@ export const STATIC_BRAND_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/in
 export const NEXT_GET_COLLECTION_BY_ID = '/api/collection/get-collection-by-id'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
 export const NEXT_GET_CATALOG_PRODUCTS = '/api/catalog/products'
-export const NEXT_GET_RECENTLY_VIEWED_PRODUCTS = '/api/catalog/get-recently-viewed-products'
+export const NEXT_GET_RECENTLY_VIEWED_PRODUCTS =
+  '/api/catalog/get-recently-viewed-products'
 export const NEXT_GET_ORDER_RELATED_PRODUCTS =
   '/api/catalog/get-related-products'
 export const NEXT_PAYMENT_METHODS_LIST = '/api/payment-methods-list'
@@ -178,11 +181,16 @@ export const NEXT_GET_SUBJECTS = '/api/subjects'
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
 export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
-export const NEXT_POST_STORE_BY_POSTALCODE = '/api/store-locator/get-store-by-postalcode'
-export const NEXT_GOOGLE_AUTOCOMPLETE_API = '/api/store-locator/get-place-by-google-api'
-export const NEXT_PLACE_DETAILS_API = '/api/store-locator/get-addess-details-api'
-export const NEXT_GET_GOOGLE_API = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-export const NEXT_GET_PLACE_DETAILS = 'https://maps.googleapis.com/maps/api/place/details/json'
+export const NEXT_POST_STORE_BY_POSTALCODE =
+  '/api/store-locator/get-store-by-postalcode'
+export const NEXT_GOOGLE_AUTOCOMPLETE_API =
+  '/api/store-locator/get-place-by-google-api'
+export const NEXT_PLACE_DETAILS_API =
+  '/api/store-locator/get-addess-details-api'
+export const NEXT_GET_GOOGLE_API =
+  'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+export const NEXT_GET_PLACE_DETAILS =
+  'https://maps.googleapis.com/maps/api/place/details/json'
 export const GET_ALL_STORES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores/all`
 export const GET_STORES_DETAILS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
 export const POST_STORE_BY_POSTALCODE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
@@ -249,7 +257,9 @@ export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
 
 export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
 export const CURRENT_THEME = process.env.CURRENT_THEME
-export const OMNILYTICS_DISABLED = stringToBoolean(process.env.OMNILYTICS_DISABLED)
+export const OMNILYTICS_DISABLED = stringToBoolean(
+  process.env.OMNILYTICS_DISABLED
+)
 export const PDP_SIZE_OPTIONS_COUNT = parseInt(
   process.env.PDP_SIZE_OPTIONS_COUNT || '0'
 )
@@ -312,14 +322,14 @@ export module Messages {
       POST_CODE_NUM: 'Postcode should contain only digits',
       CITY_REQUIRED: 'City is a required field',
       STATE_REQUIRED: 'State is a required field',
-      COUNTRY_REQUIRED : 'Country is a required field',
+      COUNTRY_REQUIRED: 'Country is a required field',
       ADDRESS_1_REQUIRED: 'Address 1 is a required field',
       ADDRESS_1_INPUT: 'Address 1 should only contain alpha-numerics',
       ADDRESS_2_INPUT: 'Address 2 should only contain alpha-numerics',
       ADDRESS_3_INPUT: 'Address 2 should only contain alpha-numerics',
 
       FIRST_NAME_REQUIRED: 'First Name is a required field',
-      LAST_NAME_REQUIRED : 'Last Name is a required field',
+      LAST_NAME_REQUIRED: 'Last Name is a required field',
       FIRST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
       FIRST_NAME_INPUT: 'Name should only contain alpha-numerics',
       LAST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
@@ -441,16 +451,16 @@ export module Messages {
   //   ADDRESS_NOT_FOUND: 'No address found for the given postcode'
   // }
 
-//   export const ContactUs: any = {
-//     FIRST_NAME_REQUIRED: 'First Name is a required field',
-//     FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
-//     FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
-//     EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
-//     EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
-//     FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
-//     TITLE_REQUIRED: 'Title is a require field',
-//     MESSAGE_REQUIRED: 'Message is a require field',
-//   }
+  //   export const ContactUs: any = {
+  //     FIRST_NAME_REQUIRED: 'First Name is a required field',
+  //     FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
+  //     FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+  //     EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
+  //     EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
+  //     FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
+  //     TITLE_REQUIRED: 'Title is a require field',
+  //     MESSAGE_REQUIRED: 'Message is a require field',
+  //   }
 }
 export const EmptyObject: any = {}
 export module PageActions {
@@ -567,4 +577,14 @@ export enum QuantityBreakRule {
 export enum DeliveryType {
   DELIVER = 1,
   COLLECT = 4,
+}
+
+export enum QuoteStatus {
+  NOT_QUOTE = 0,
+  DRAFT = 1,
+  PAYMENT_LINK_SENT = 2,
+  CONVERTED = 3,
+  ABANDONED = 4,
+  CANCELLED = 5,
+  QUOTE_SENT = 6,
 }
