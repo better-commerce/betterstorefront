@@ -5,12 +5,20 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Button } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { stringFormat } from '@framework/utils/parse-util'
+import { useRouter } from 'next/router'
 
 function SaveQuoteSuccessModal({ quoteDetails, isQuoteSuccessOpen = false, handleToggleOpenQuoteSuccess = () => {} }: any) {
   const translate = useTranslation()
+  const router = useRouter()
+
+  const onCloseAndGoBack = () => {
+    handleToggleOpenQuoteSuccess()
+    router.push('/')
+  }
+
   return (
     <Transition appear show={isQuoteSuccessOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={handleToggleOpenQuoteSuccess}>
+      <Dialog as="div" className="relative z-10" onClose={onCloseAndGoBack}>
         <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
           <div className="fixed inset-0 bg-black/25" />
         </Transition.Child>
@@ -27,8 +35,8 @@ function SaveQuoteSuccessModal({ quoteDetails, isQuoteSuccessOpen = false, handl
                     quoteNum: quoteDetails?.message,
                   })}
                 </p>
-                <Button type="button" onClick={handleToggleOpenQuoteSuccess} className="!rounded-full !bg-slate-900 !capitalize mt-8 float-right hover:!bg-slate-800 dark:!bg-slate-100 focus:!ring-black focus:!outline-none focus:!ring-2 focus:!ring-offset-2">
-                  {translate('common.label.closeText')}
+                <Button type="button" onClick={onCloseAndGoBack} className="!rounded-full !bg-slate-900 !capitalize mt-8 float-right hover:!bg-slate-800 dark:!bg-slate-100 focus:!ring-black focus:!outline-none focus:!ring-2 focus:!ring-offset-2">
+                  {translate('common.label.backToHomepageText')}
                 </Button>
               </Dialog.Panel>
             </Transition.Child>
