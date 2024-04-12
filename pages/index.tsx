@@ -164,8 +164,10 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let trending = []
+  let recentProduct = []
   if (typeof window !== 'undefined') {
     trending = window.trend_first_orders_index;
+    recentProduct = window.recent_products_index;
   }
 
   return (
@@ -199,6 +201,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <div className='flex flex-col w-full'>
             {trending?.length > 0 &&
               <EngageProductCard data={trending} heading="Trending" subHeading="Products" />
+            }
+            {recentProduct?.length > 0 &&
+              <EngageProductCard data={recentProduct} heading="Recently Viewed" subHeading="Products" />
             }
           </div>
           <SectionPromo3 data={pageContents?.subscription} />
