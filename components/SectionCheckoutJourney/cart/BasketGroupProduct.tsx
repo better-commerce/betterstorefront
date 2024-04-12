@@ -91,9 +91,7 @@ export default function BasketGroupProduct({
           },
         })
       })
-      const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, {
-        data: bulkAddPayload,
-      })
+      const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, { ...bulkAddPayload })
       setCartItems(newCart)
       setKitQty(kitQty)
       setKitCartLoaded(false)
