@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
+import cn from 'classnames'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
@@ -12,13 +13,19 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
+import { getCurrency, getCurrentCurrency, getFeaturesConfig, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
+import { getSecondsInMinutes, matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
+import Link from 'next/link'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
+import LikeButton from '@components/LikeButton'
+import Prices from '@components/Prices'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -27,7 +34,7 @@ const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSlide
 const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
 const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-
+declare const window: any
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
@@ -91,7 +98,7 @@ const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
   const router = useRouter()
-  const { user } = useUI()
+  const { user, isCompared } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -106,6 +113,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   } else {
     Page_Slug = HOME_PAGE_SLUG;
   }
+  const isComparedEnabled = useMemo(() => {
+    return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
+  }, [])
   useEffect(() => {
     const currentCurrency = getCurrentCurrency()
     if (!matchStrings(currencyCode, currentCurrency, true)) {
@@ -125,11 +135,11 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [currencyCode, isMobile])
 
-  useEffect(() =>{
+  useEffect(() => {
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_index_page_view_before({ item_id :"index", bc_user_id : user?.userId || EmptyGuid}) 
+      window.ch_index_page_view_before({ item_id: "index", bc_user_id: user?.userId || EmptyGuid })
     }
-  },[])
+  }, [])
 
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
@@ -147,13 +157,20 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     entityType: 'Page',
     entityId: '',
     eventType: 'PageViewed',
-    })
+  })
 
   if (!pageContents) {
     return (
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
+
+  // CHECK TRENDING PRODUCTS FROM ENGAGE
+  let trending = []
+  if (typeof window !== 'undefined') {
+    trending = window.trend_first_orders_index;
+  }
+
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -182,10 +199,29 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
+          <div className='flex flex-col w-full'>
+            {trending?.length > 0 &&
+              <EngageProductCard data={trending} heading="Trending" subHeading="Products" />
+            }
+          </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
       </div>
     </>
+  )
+}
+
+const ButtonLink = (props: any) => {
+  const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
+  if (isComparedEnabled) {
+    return (
+      <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
+    )
+  }
+  return (
+    <Link passHref href={href} className="img-link-display" title={`${productName} \t ${itemPrice}`}>
+      {children}
+    </Link>
   )
 }
 Home.Layout = Layout
