@@ -2,6 +2,7 @@ import { Fragment, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { MapPinIcon } from '@heroicons/react/24/outline'
 import Cookies from 'js-cookie'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 //
 import LoadingDots from '@components/ui/LoadingDots'
@@ -18,6 +19,7 @@ const UseMyLocationModal = ({
   setErrorMsg,
   deviceInfo,
 }: any) => {
+  const { translate } = useTranslation()
   const { isMobile } = deviceInfo
   const disableUserLocationPopup = useMemo(() => stringToBoolean(Cookies.get(Cookie.Key.DISABLE_USER_LOCATION_POPUP)), [])
 
@@ -67,10 +69,10 @@ const UseMyLocationModal = ({
                           <div className="flex justify-between items-baseline">
                             <div>
                               <h3 className="text-base font-semibold text-black">
-                                See Nearby Stores
+                                {translate('label.store.useeNearbyStoreText')}
                               </h3>
                               <h5 className="text-xs font-light text-primary">
-                                We use your location to show you nearby stores
+                                {translate('label.store.usingLocationToShowStoresText')}
                               </h5>
                             </div>
 

@@ -188,7 +188,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
                   <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                     <span className="font-semibold text-black">
                       {basket?.lineItems?.length}{' '}
-                      {basket?.lineItems?.length > 1 ? 'items' : 'item'}
+                      {basket?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
                     </span>
                     <i
                       className={`${open ? 'rotate-180 transform' : ''
