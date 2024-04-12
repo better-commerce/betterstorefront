@@ -700,8 +700,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
+  let recentProduct = []
   if (typeof window !== 'undefined') {
     similarProduct = window.similar_products_sorted_product;
+    recentProduct = window.recent_products_product;
   }
   let productDesc = product.description
   if (product?.shortDescription == "") {
@@ -896,60 +898,60 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
         <div className="lg:flex">
           {isMobile ? (
-          <div className="w-full lg:w-[55%]">
-            <Swiper
-              slidesPerView={1}
-              spaceBetween={30}
-              navigation
-              loop
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                <div className="relative">
-                  <img
-                    src={
-                      generateUri(product?.image, 'h=1000&fm=webp') ||
-                      IMG_PLACEHOLDER
-                    }
-                    className="object-cover object-top w-full rounded-2xl"
-                    alt={product?.name}
-                  />
-                  {renderStatus()}
-                </div>
-              </SwiperSlide>
-              {product?.images?.map((item: any, index: number) => (
-                <SwiperSlide key={index}>
+            <div className="w-full lg:w-[55%]">
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={30}
+                navigation
+                loop
+                className="mySwiper"
+              >
+                <SwiperSlide>
                   <div className="relative">
                     <img
                       src={
-                        generateUri(item?.image, 'h=500&fm=webp') ||
+                        generateUri(product?.image, 'h=1000&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
-                      className="object-cover w-full rounded-2xl"
+                      className="object-cover object-top w-full rounded-2xl"
                       alt={product?.name}
                     />
+                    {renderStatus()}
                   </div>
                 </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+                {product?.images?.map((item: any, index: number) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative">
+                      <img
+                        src={
+                          generateUri(item?.image, 'h=500&fm=webp') ||
+                          IMG_PLACEHOLDER
+                        }
+                        className="object-cover w-full rounded-2xl"
+                        alt={product?.name}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
           ) : (
-          <div className="w-full lg:w-[55%]">
-            <div className="relative">
-              <div className="relative aspect-w-16 aspect-h-16">
-                <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
-              </div>
-              {renderStatus()}
-            </div>
-            <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-              {product?.images?.map((item: any, index: number) => (
-                <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                  <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+            <div className="w-full lg:w-[55%]">
+              <div className="relative">
+                <div className="relative aspect-w-16 aspect-h-16">
+                  <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
                 </div>
-              ))}
+                {renderStatus()}
+              </div>
+              <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
+                {product?.images?.map((item: any, index: number) => (
+                  <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                    <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-           )}
+          )}
           <div className="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
             {renderSectionContent()}
           </div>
@@ -992,6 +994,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className='flex flex-col w-full'>
             {similarProduct?.length > 0 &&
               <EngageProductCard data={similarProduct} heading="Similar" subHeading="Products" />
+            }
+            {recentProduct?.length > 0 &&
+              <EngageProductCard data={recentProduct} heading="Recently Viewed" subHeading="Products" />
             }
           </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
