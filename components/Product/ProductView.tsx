@@ -6,6 +6,8 @@ import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -61,6 +63,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const { isMobile, isIPadorTablet } = deviceInfo
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
@@ -892,6 +895,45 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
         </div>
         <div className="lg:flex">
+          {isMobile ? (
+          <div className="w-full lg:w-[55%]">
+            <Swiper
+              slidesPerView={1}
+              spaceBetween={30}
+              navigation
+              loop
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <div className="relative">
+                  <img
+                    src={
+                      generateUri(product?.image, 'h=1000&fm=webp') ||
+                      IMG_PLACEHOLDER
+                    }
+                    className="object-cover object-top w-full rounded-2xl"
+                    alt={product?.name}
+                  />
+                  {renderStatus()}
+                </div>
+              </SwiperSlide>
+              {product?.images?.map((item: any, index: number) => (
+                <SwiperSlide key={index}>
+                  <div className="relative">
+                    <img
+                      src={
+                        generateUri(item?.image, 'h=500&fm=webp') ||
+                        IMG_PLACEHOLDER
+                      }
+                      className="object-cover w-full rounded-2xl"
+                      alt={product?.name}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+          ) : (
           <div className="w-full lg:w-[55%]">
             <div className="relative">
               <div className="relative aspect-w-16 aspect-h-16">
@@ -907,6 +949,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               ))}
             </div>
           </div>
+           )}
           <div className="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
             {renderSectionContent()}
           </div>
