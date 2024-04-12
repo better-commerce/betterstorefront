@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react'
-import { MagnifyingGlassIcon, StarIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, StarIcon, XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import axios from 'axios'
 import { SEARCH_PROVIDER, NEXT_SEARCH_PRODUCTS, } from '@components/utils/constants'
-import Link from 'next/link'
-import { XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
-import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { useUI } from '@components/ui/context'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-//import ElasticSearchBar from './ElasticSearchBar'
-import ElasticSearch from './elastic/ElasticSearch'
 import ElasticSearchResult from './elastic/ElasticSearchResult'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider } from '@framework/utils/enums'
@@ -58,23 +54,20 @@ export default function Search(props: any) {
       }
     }
     if (inputValue.trim().length > 2) fetchItems()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue])
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter') {
-        Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
+      Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
     }
-};
+  };
 
   useEffect(() => {
     if (path !== Router.asPath) {
       closeWrapper()
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
-  const css = { maxWidth: '100%', height: 'auto' }
+
   const CLASSES = "absolute top-3 start-3";
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
@@ -91,9 +84,9 @@ export default function Search(props: any) {
             <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
-            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown}/>
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
-              <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
+              <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true"/>
             </div>
           </div>
         </div>
