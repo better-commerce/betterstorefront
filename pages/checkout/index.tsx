@@ -1021,7 +1021,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       ) : (
         <></>
       )}
-      <div className="flex justify-between w-full gap-0 container-storefront small-screen !mt-12">
+      <div className="flex justify-between w-full gap-0 container-storefront small-screen">
         <div className="justify-start w-full pr-0 bg-white dark:bg-white checkout-container">
           <div className="flex justify-start w-full pt-5 pb-2">
             <div className="flex items-center justify-between gap-2">
