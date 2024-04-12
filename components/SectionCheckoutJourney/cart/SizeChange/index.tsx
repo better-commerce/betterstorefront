@@ -194,7 +194,7 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
           products = [...products, ...[personalizedItemToBeSaved]]
         }
 
-        const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART, { data: { basketId, products } })
+        const { data: newCart }: any = await axios.post(NEXT_BULK_ADD_TO_CART,  { basketId, products })
 
         if (newCart?.id && newCart?.id != Guid.empty) {
           setCartItems(newCart)
