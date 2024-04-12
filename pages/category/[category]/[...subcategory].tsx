@@ -411,12 +411,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{category?.metaTitle || category?.name}</title>
-        <meta name="title" content={category?.metaTitle || category?.name} />
+        <title>{category?.name || translate('label.category.categoryText')}</title>
+        <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
         <meta name="keywords" content={category?.metaKeywords} />
         <meta property="og:image" content="" />
-        <meta property="og:title" content={category?.metaTitle || category?.name} key="ogtitle" />
+        <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section">

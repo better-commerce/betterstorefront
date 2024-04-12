@@ -13,6 +13,7 @@ import { Cookie } from '@framework/utils/constants'
 import Cookies from 'js-cookie'
 import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import Router from 'next/router'
+import { SITE_NAME } from '@components/utils/constants'
 
 function PasswordProtectionPage({ config }: any) {
   let configSettings: any
@@ -140,13 +141,10 @@ function PasswordProtectionPage({ config }: any) {
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="description" content={getSeoConfig()?.description} />
         <meta name="keywords" content={getSeoConfig()?.keywords} />
-        <title>{getSeoConfig()?.title} - Password Protection</title>
+        <title>{SITE_NAME} - Password Protection</title>
       </NextHead>
       <header className="fixed top-0 right-0 w-full py-0 bg-white shadow-md lg:top-0 sm:py-3 bg-header-color z-999 navbar-min-64">
         <div className="flex justify-center w-full">
@@ -180,28 +178,15 @@ function PasswordProtectionPage({ config }: any) {
                 autoFocus
               />
               {formik.errors.password && (
-                <span className="form-input-error !capitalize">
-                  {formik.errors.password}
-                </span>
+                <span className="form-input-error !capitalize"> {formik.errors.password} </span>
               )}
-              <Button
-                type="submit"
-                className="!font-normal w-full border border-black btn-c btn-primary mt-4"
-                loading={formik.isSubmitting}
-                disabled={formik.isSubmitting}
-              >
+              <Button type="submit" className="!font-normal w-full border border-black btn-c btn-primary mt-4" loading={formik.isSubmitting} disabled={formik.isSubmitting} >
                 {BTN_SUBMIT}
               </Button>
             </form>
             {passwordMatched !== null && (
-              <div
-                className={`mt-4 ${
-                  passwordMatched ? 'text-green-600' : 'text-red-600'
-                }`}
-              >
-                {passwordMatched
-                  ? 'Password matched! Redirecting...'
-                  : 'Incorrect password. Please try again.'}
+              <div className={`mt-4 ${passwordMatched ? 'text-green-600' : 'text-red-600'}`} >
+                {passwordMatched ? 'Password matched! Redirecting...' : 'Incorrect password. Please try again.'}
               </div>
             )}
           </div>
