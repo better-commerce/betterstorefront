@@ -147,6 +147,7 @@
       "offerValidForText": "This offer is valid for",
       "deafultCountryDropdownText": "Hong Kong",
       "checkoutTitleText": "checkout",
+      "debitCreditDetailsText" : "Debit/Credit Card details",
       "secureCheckoutText": "Secure Checkout",
       "checkoutSecurelyText": "Checkout securely",
       "backToBasketText": "Back to basket",
@@ -741,7 +742,9 @@
     },
     "store": {
       "findStoresText": "Find Stores",
-      "findStoreNearYouText": "Find Store Near You"
+      "findStoreNearYouText": "Find Store Near You",
+      "usingLocationToShowStoresText":"We use your location to show you nearby stores",
+      "seeNearbyStoreText":"See Nearby Stores"
     },
     "thankyou": {
       "summaryText": "Summary",

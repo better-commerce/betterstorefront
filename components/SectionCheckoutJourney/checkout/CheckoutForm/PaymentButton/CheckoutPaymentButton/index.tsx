@@ -327,7 +327,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
         {that.state?.scriptLoaded && (
           <div className="checkout-frame-container">
             <h5 className="mb-6 font-semibold text-black font-18">
-              Debit/Credit Card details
+              {translate('label.checkout.debitCreditDetailsText')}
             </h5>
             <Frames
               config={config}

@@ -196,7 +196,8 @@
       "otherAddressTypeText": "Otro tipo de dirección",
       "whatsappUpdatesText": "Envíame actualizaciones por WhatsApp",
       "payLaterWithKlarnaText": "Haz clic en Pagar más tarde con Klarna para verificar si eres elegible",
-      "paymentFailedText": "falló.",
+      "paymentFailedText": "falló.",   
+      "debitCreditDetailsText": "Detalles de la tarjeta de débito/crédito",
       "betterStoreCheckoutText": "BetterStore | Pagar",
       "splitDeliveryText": "Entrega dividida",
       "deliverToThisAddressText": "Entregar a esta dirección",
@@ -607,6 +608,11 @@
         "warrantyNotApplicableReasonText3": "(3) El producto es comprado a un distribuidor no autorizado",
         "headToFaqText": "Dirígete a la sección de Preguntas Frecuentes para obtener más información"
       },
+      "priceFilterSlider":{
+        "maxText": "Máximo",
+        "minText": "Mínimo",
+        "noLimitText": "Sin límite"
+      },
       "copiedText": "¡Copiado!",
       "copyText": "COPIAR",
       "compareSameRangeText": "Comparar el Mismo Rango",
@@ -734,7 +740,9 @@
     },
     "store": {
       "findStoresText": "Buscar tiendas",
-      "findStoreNearYouText": "Encuentra una tienda cerca de ti"
+      "findStoreNearYouText": "Encuentra una tienda cerca de ti",
+      "usingLocationToShowStoresText": "Utilizamos tu ubicación para mostrarte tiendas cercanas",
+      "seeNearbyStoreText": "Ver tiendas cercanas"
     },
     "thankyou": {
       "summaryText": "Resumen",
