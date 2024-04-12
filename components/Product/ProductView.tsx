@@ -27,6 +27,7 @@ import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -40,6 +41,7 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
 const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
+declare const window: any
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -192,8 +194,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.availability || EmptyString,
           metadata: {
-            color: product?.customAttributes[0]?.key=="global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
-            size: product?.customAttributes[2]?.key=="clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
+            color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
+            size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
             weight: 0,
             weight_unit: EmptyString,
             make: EmptyString,
@@ -692,6 +694,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setFullscreen(!fullscreen);
   };
 
+
+  // CHECK TRENDING PRODUCTS FROM ENGAGE
+  let similarProduct = []
+  if (typeof window !== 'undefined') {
+    similarProduct = window.similar_products_sorted_product;
+  }
   let productDesc = product.description
   if (product?.shortDescription == "") {
     productDesc = product.description
@@ -938,6 +946,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </>
           )}
+          <div className='flex flex-col w-full'>
+            {similarProduct?.length > 0 &&
+              <EngageProductCard data={similarProduct} heading="Similar" subHeading="Products" />
+            }
+          </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />

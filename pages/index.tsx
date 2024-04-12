@@ -98,7 +98,7 @@ const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
   const router = useRouter()
-  const { user, isCompared } = useUI()
+  const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -113,9 +113,6 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   } else {
     Page_Slug = HOME_PAGE_SLUG;
   }
-  const isComparedEnabled = useMemo(() => {
-    return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
-  }, [])
   useEffect(() => {
     const currentCurrency = getCurrentCurrency()
     if (!matchStrings(currencyCode, currentCurrency, true)) {
@@ -211,18 +208,5 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   )
 }
 
-const ButtonLink = (props: any) => {
-  const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
-  if (isComparedEnabled) {
-    return (
-      <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
-    )
-  }
-  return (
-    <Link passHref href={href} className="img-link-display" title={`${productName} \t ${itemPrice}`}>
-      {children}
-    </Link>
-  )
-}
 Home.Layout = Layout
 export default withDataLayer(Home, PAGE_TYPE)
