@@ -133,7 +133,6 @@ function PasswordProtectionPage({ config }: any) {
 
   useEffect(() => {
     if (passwordMatched) {
-      // Redirect to home page on successful auth.
       Router.push('/')
     }
   }, [passwordMatched])
@@ -164,19 +163,8 @@ function PasswordProtectionPage({ config }: any) {
           </div>
           <div>
             <form onSubmit={formik.handleSubmit}>
-              <label htmlFor="password" className="text-sm text-gray-700">
-                Password
-              </label>
-              <input
-                name="password"
-                type="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                placeholder="Enter password"
-                className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                autoComplete="off"
-                autoFocus
-              />
+              <label htmlFor="password" className="text-sm text-gray-700"> Password </label>
+              <input name="password" type="password" value={formik.values.password} onChange={formik.handleChange} placeholder="Enter password" className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default" autoComplete="off" autoFocus />
               {formik.errors.password && (
                 <span className="form-input-error !capitalize"> {formik.errors.password} </span>
               )}

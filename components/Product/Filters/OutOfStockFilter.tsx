@@ -7,10 +7,7 @@ interface OutOfStockFilterProps {
   excludeOOSProduct: any
 }
 
-const OutOfStockFilter: React.FC<OutOfStockFilterProps> = ({
-  onEnableOutOfStockItems,
-  excludeOOSProduct,
-}) => {
+const OutOfStockFilter: React.FC<OutOfStockFilterProps> = ({ onEnableOutOfStockItems, excludeOOSProduct, }) => {
   const translate = useTranslation()
   return (
     <>
