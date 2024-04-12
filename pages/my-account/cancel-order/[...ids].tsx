@@ -26,6 +26,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
@@ -140,8 +141,8 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
+                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.order.cancelOrderText')}
                 </h3>
               </Link>
@@ -150,7 +151,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
                 <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.order.cancelOrderText')}
                 </h4>
               </Link>
@@ -246,8 +247,8 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                   hideCancellationReasons()
                 }}
               >
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
+                  <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.cancelReason.cancelReasonHeadingText')}
                 </h3>
               </a>

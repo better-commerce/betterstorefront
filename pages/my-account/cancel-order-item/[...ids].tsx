@@ -27,6 +27,7 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 declare const window: any
 
 export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
@@ -151,16 +152,16 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
+                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase flex items-center">
+                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                 </h4>
               </Link>
