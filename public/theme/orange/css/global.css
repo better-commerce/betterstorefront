@@ -1676,3 +1676,6 @@ p {
 .border-r{
   border-right-width: 1px;
 }
+.icon-text-black .text-gray-500{
+  color: #000 !important;
+  }

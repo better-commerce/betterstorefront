@@ -2,12 +2,14 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
+import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import React from 'react'
 
-function SideMenu({ handleClick, setShow, currentOption }: any) {
+function SideMenu({ handleClick, setShow, currentOption, deviceInfo }: any) {
   const config = useConfig();
   const translate = useTranslation()
+  const { isMobile, isIPadorTablet } = deviceInfo;
   const { user, referralProgramActive } = useUI()
   let isB2B = user?.companyId !== Guid.empty
   let newConfig: any = []
@@ -61,6 +63,7 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
         type: 'tab',
         text: translate('label.myAccount.myCompanyText'),
         mtext: translate('label.myAccount.myCompanyText'),
+        head: <BuildingOffice2Icon className="w-7 h-7 text-gray-500" />,
         props: 'my-company',
         href: '/my-account/my-company',
       })
@@ -82,12 +85,12 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
                       handleClick
                       setShow(false)
                     }}
-                    className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == currentOption
-                    ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
+                    className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == currentOption
+                    ? "border-primary-500 font-medium icon-text-black dark:text-slate-200"
                     : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                     }`}
                   >
-                    {item.text}
+                    {isMobile ? item?.head : item?.text}
                   </Link>
               </>
             ) : (
@@ -99,16 +102,16 @@ function SideMenu({ handleClick, setShow, currentOption }: any) {
                   onClick={() => {
                     handleClick
                   }}
-                  className="block py-5 md:py-8  flex-shrink-0 text-sm sm:text-base"
+                  className="block py-3 md:py-8  flex-shrink-0 text-sm sm:text-base"
                 >
                   <span className="inline-block text-black sm:hidden dark:text-black">
-                    {item.mtext}
+                  {isMobile ? item?.head : item?.mtext}
                   </span>
                   <span
                     className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Company' && 'font-display'
                       }`}
                   >
-                    {item.text}
+                     {isMobile ? item?.head : item?.text}
                   </span>
                 </Link>
               </>

@@ -42,7 +42,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({ id = 'search'
   const { showSearchBar, setShowSearchBar } = useUI()
   const defaultSearch = (
     <>
-      <div className="relative items-center justify-center w-10 h-10 rounded-full sm:top-0 top-2 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none" onClick={onClick}>
+      <div className="relative items-center justify-center w-10 h-10 rounded-full lg:top-0 top-header-search lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none" onClick={onClick}>
         <img src="/images/searchIcon.svg" className="w-6 h-6"/>    
       </div>
       {showSearchBar && (

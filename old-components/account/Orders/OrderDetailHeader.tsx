@@ -17,7 +17,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                 href="#"
                 className="absolute left-0 top-2/4 -translate-y-2/4 "
                 onClick={() => {
-                  router.push('/my-account/orders')
+                  router.push('/my-account/my-company?tab=orders')
                   // showDetailedOrder(false)
                 }}
               >
