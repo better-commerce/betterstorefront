@@ -3,7 +3,7 @@ import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from './base/api-route-guard'
 
 async function bulkAddToCartApiMiddleware(req: any, res: any) {
-  const { basketId, products }: any = req.body.data
+  const { basketId, products }: any = req.body
   try {
     const response = await useBulkAdd()({
       basketId,
