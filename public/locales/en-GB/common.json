@@ -350,6 +350,13 @@
       "emailAddressplaceholderText": "example@example.com",
       "referAFriendText": "Refer a Friend",
       "myCompanyText": "My Company",
+      "myCompanyMenus": {
+        "user": "Users",
+        "order": "Orders",
+        "quote": "Quotes",
+        "address": "Addresses",
+        "invoice": "Invoices"
+      },
       "myDetailsHeadingText": "My Details",
       "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
       "myOrders": {
