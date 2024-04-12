@@ -493,6 +493,10 @@
       "generalETAText": "ETA:"
     },
     "password": {
+      "enterNewPasswordText": "Enter New Password",
+      "enterNewPasswordPlaceHolderText": "Strong Password",
+      "confirmNewPasswordText": "Confirm New Password",
+      "confirmNewPasswordPlaceHolderText": "Confirm Strong Password",
       "enterPasswordText": "Enter password",
       "passwordMatchedText": "Password matched! Redirecting...",
       "incorrectPasswordText": "Incorrect password. Please try again.",
@@ -1065,6 +1069,7 @@
       "ContactUsText": "Contact Us",
       "enterEmailText": "Enter Email ID",
       "enterYourEmailText": "Enter your email",
+      "enterYourEmailPlaceHolderText": "joe@example.com",
       "reviewSubmitSuccessfulMsg": "Review submitted successfully.",
       "somethingWentWrongMsg": "Woops!, Something went wrong",
       "orderDeliveryMsg": "For orders above {currencySymbol}{freeShippingOverXValue}, Usually delivered in 2-5 days.",

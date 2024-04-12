@@ -491,6 +491,10 @@
       "getHelpText": "Obtener ayuda con este pedido"
     },
     "password": {
+      "enterNewPasswordText": "Introducir Nueva Contraseña",
+      "enterNewPasswordPlaceHolderText": "Contraseña Segura",
+      "confirmNewPasswordText": "Confirmar Nueva Contraseña",
+      "confirmNewPasswordPlaceHolderText": "Confirmar Contraseña Segura",
       "enterPasswordText": "Ingrese la contraseña",
       "passwordMatchedText": "¡Contraseña coincidente! Redirigiendo...",
       "incorrectPasswordText": "Contraseña incorrecta. Por favor, inténtelo de nuevo.",
@@ -1057,6 +1061,7 @@
       "ContactUsText": "Contáctenos",
       "enterEmailText": "Ingresar ID de correo electrónico",
       "enterYourEmailText": "Ingresa tu correo electrónico",
+      "enterYourEmailPlaceHolderText": "joe@ejemplo.com",
       "reviewSubmitSuccessfulMsg": "Reseña enviada correctamente.",
       "somethingWentWrongMsg": "¡Vaya!, algo salió mal",
       "orderDeliveryMsg": "Para pedidos superiores a {currencySymbol}{freeShippingOverXValue}, generalmente se entregan en 2-5 días.",
