@@ -116,7 +116,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
             )}
           </div>
 
-          <Form btnText="Login" type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
+          <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
           <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
             <a href="/my-account/forgot-password">
               <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
