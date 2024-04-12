@@ -77,9 +77,9 @@ function ForgotPasswordPage() {
   const config: any = [
     {
       name: 'email',
-      label: 'Enter your email',
+      label: translate('common.message.enterYourEmailText'),
       type: 'email',
-      placeholder: 'joe@example.com',
+      placeholder: translate('common.message.enterYourEmailPlaceHolderText'),
     },
   ]
   const stateForm: any = form

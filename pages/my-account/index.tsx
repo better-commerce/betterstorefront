@@ -136,7 +136,7 @@ function MyAccount({ deviceInfo }:any) {
           <div className="mt-14 sm:mt-20">
             <div className="max-w-4xl mx-auto">
               <div className="max-w-2xl">
-                <h2 className="text-3xl font-semibold xl:text-4xl">Account</h2>
+                <h2 className="text-3xl font-semibold xl:text-4xl">{translate('common.label.accountText')}</h2>
                 <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
                   <span className="font-semibold text-slate-900 dark:text-slate-200">
                     {user?.firstName},

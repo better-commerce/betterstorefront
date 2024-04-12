@@ -33,15 +33,15 @@ export default function ResetPasswordPage() {
   const config = [
     {
       name: 'password',
-      label: 'Enter New Password',
+      label: translate('label.password.enterNewPasswordText'),
       type: 'password',
-      placeholder: 'Strong Password',
+      placeholder: translate('label.password.enterNewPasswordPlaceHolderText'),
     },
     {
       name: 'confirmPassword',
-      label: 'Confirm New Password',
+      label: translate('label.password.confirmNewPasswordText'),
       type: 'password',
-      placeholder: 'Confirm Strong Password',
+      placeholder: translate('label.password.confirmNewPasswordPlaceHolderText'),
     },
   ]
   const formik = useFormik({
