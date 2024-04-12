@@ -14,7 +14,7 @@ import SideMenu from '@components/account/MyAccountMenu'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-function MyAccount() {
+function MyAccount({ deviceInfo }:any) {
   const [isShow, setShow] = useState(true)
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
@@ -75,6 +75,7 @@ function MyAccount() {
             handleClick={handleClick}
             setShow={setShow}
             currentOption={currentOption}
+            deviceInfo={deviceInfo}
           />
           <hr className="border-slate-200 dark:border-slate-700"></hr>
         </div>

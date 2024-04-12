@@ -32,6 +32,7 @@ import { UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
 function MyCompany({ deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
   const router = useRouter()
@@ -96,6 +97,7 @@ function MyCompany({ deviceInfo }: any) {
         text: 'My Company',
         mtext: 'My Company',
         props: 'my-company',
+        head: <BuildingOffice2Icon className="w-7 h-7 text-gray-500" />,
         href: '/my-account/my-company',
       })
     }
@@ -107,6 +109,10 @@ function MyCompany({ deviceInfo }: any) {
       value: 'Users',
       onClick: (value: any) => {
         setSelectedOption(value)
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, tab: value.toLowerCase() }
+        });
       },
     },
     {
@@ -114,6 +120,10 @@ function MyCompany({ deviceInfo }: any) {
       value: 'Orders',
       onClick: (value: any) => {
         setSelectedOption(value)
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, tab: value.toLowerCase() }
+        });
       },
     },
     {
@@ -121,13 +131,21 @@ function MyCompany({ deviceInfo }: any) {
       value: 'Quotes',
       onClick: (value: any) => {
         setSelectedOption(value)
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, tab: value.toLowerCase() }
+        });
       },
     },
     {
-      name: 'Address Book',
+      name: 'Address',
       value: 'AddressBook',
       onClick: (value: any) => {
         setSelectedOption(value)
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, tab: value.toLowerCase() }
+        });
       },
     },
     {
@@ -135,6 +153,10 @@ function MyCompany({ deviceInfo }: any) {
       value: 'Invoices',
       onClick: (value: any) => {
         setSelectedOption(value)
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, tab: value.toLowerCase() }
+        });
       },
     },
   ]
@@ -336,12 +358,12 @@ function MyCompany({ deviceInfo }: any) {
                                 handleClick()
                                 handleToggleShowState()
                               }}
-                              className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Company'
-                                ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
+                              className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Company'
+                                ? "border-primary-500 font-medium icon-text-black dark:text-slate-200"
                                 : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                                 }`}
                             >
-                              {item.text}
+                              {isMobile ? item?.head : item?.text}
                             </Link>
                           </>
                         ) : (
@@ -353,13 +375,13 @@ function MyCompany({ deviceInfo }: any) {
                               onClick={() => {
                                 handleClick()
                               }}
-                              className="flex-shrink-0 block py-5 text-sm md:py-8 sm:text-base"
+                              className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base"
                             >
                               <span className="inline-block text-black sm:hidden dark:text-black">
-                                {item.mtext}
+                                {isMobile ? item?.head : item?.mtext}
                               </span>
                               <span className="hidden text-black sm:inline-block dark:text-black">
-                                {item.text}
+                                {isMobile ? item?.head : item?.text}
                               </span>
                             </Link>
                           </>
@@ -384,7 +406,7 @@ function MyCompany({ deviceInfo }: any) {
                                   {({ selected }) => (
                                     <button
                                       className={classNames(
-                                        'w-full rounded-2xl py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                        'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
                                         'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
                                         selected
                                           ? 'bg-white shadow hover:bg-gray-50'
@@ -405,7 +427,7 @@ function MyCompany({ deviceInfo }: any) {
                                   {({ selected }) => (
                                     <button
                                       className={classNames(
-                                        'w-full rounded-2xl py-2.5 text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                        'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
                                         'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
                                         selected
                                           ? 'bg-white shadow hover:bg-gray-50'

@@ -126,6 +126,44 @@ const NavMobile: React.FC<NavMobileProps> = ({
             </Link>
           </Disclosure>
         }
+         {/* New Link Added */}
+         <Disclosure as="li" className="text-slate-900 dark:text-white">
+          <Link
+            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            href={`/my-account`}
+            passHref
+          >
+            Your Fashion Store
+          </Link>
+          <Link
+            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            href={`/yourstore`}
+            passHref
+          >
+            <span>Your Browsing History</span>
+          </Link>
+          <Link
+            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            href={`/yourstore/recommendations`}
+            passHref
+          >
+            <span>Recommended For You</span>
+          </Link>
+          <Link
+            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            href={`/yourstore/improve-recommendations`}
+            passHref
+          >
+            <span>Improve Your Recommendation</span>
+          </Link>
+          <Link
+            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            href={`/my-account`}
+            passHref
+          >
+            <span>Your Profile</span>
+          </Link>
+        </Disclosure>
       </ul>
     </div>
   );

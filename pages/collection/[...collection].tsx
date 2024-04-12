@@ -514,7 +514,7 @@ export default function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container pt-10 pb-24 mx-auto bg-transparent">
+      <div className="container pt-20 pb-24 mx-auto bg-transparent">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
@@ -538,7 +538,7 @@ export default function CollectionPage(props: any) {
         </div>
         <hr className='border-slate-200 dark:border-slate-700' />
         { 
-          <div className="grid grid-cols-1 gap-1 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-1 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3 mt-2 sm:mt-0">
             {props?.allowFacets ? (
               <>
                 {isMobile ? (

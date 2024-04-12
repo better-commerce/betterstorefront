@@ -1119,6 +1119,9 @@ body {
   .mobile-view {
     display: none;
   }
+  .top-header-search {
+    top: .5rem !important;
+  }
   .category-landing-image {
     height: 100% !important;
     width: auto;
@@ -3804,8 +3807,8 @@ select {
 .top-10 {
   top: 2.5rem;
 }
-.top-2 {
-  top: 0.5rem;
+.top-header-search {
+  top: .8rem;
 }
 .top-28 {
   top: 7rem;

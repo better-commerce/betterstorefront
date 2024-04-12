@@ -97,6 +97,7 @@ function MyAccount({
               handleClick={handleClick}
               setShow={setShow}
               currentOption={currentOption}
+              deviceInfo={deviceInfo}
             />
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>

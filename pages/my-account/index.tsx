@@ -16,11 +16,13 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/ut
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-function MyAccount() {
+import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
+function MyAccount({ deviceInfo }:any) {
   const [isShow, setShow] = useState(true)
   const config = useConfig();
   const { user, deleteUser, isGuestUser, referralProgramActive } = useUI()
   const router = useRouter()
+  const { isMobile, isIPadorTablet } = deviceInfo
   const translate = useTranslation()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
@@ -70,6 +72,7 @@ function MyAccount() {
         text: 'My Company',
         mtext: 'My Company',
         props: 'my-company',
+        head: <BuildingOffice2Icon className="w-7 h-7 text-gray-500" />,
         href: '/my-account/my-company',
       })
     }
@@ -156,12 +159,12 @@ function MyAccount() {
                             handleClick()
                             handleToggleShowState()
                           }}
-                          className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Details'
-                            ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
+                          className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Details'
+                            ? "border-primary-500 font-medium icon-text-black dark:text-slate-200"
                             : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                             }`}
                         >
-                          {item.text}
+                          {isMobile ? item?.head : item?.text}
                         </Link>
                       </>
                     ) : (
@@ -173,13 +176,13 @@ function MyAccount() {
                           onClick={() => {
                             handleClick()
                           }}
-                          className="flex-shrink-0 block py-5 text-sm md:py-8 sm:text-base"
+                          className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base"
                         >
                           <span className="inline-block text-black sm:hidden dark:text-black">
-                            {item.mtext}
+                            {isMobile ? item?.head : item?.mtext}
                           </span>
                           <span className="hidden text-black sm:inline-block dark:text-black">
-                            {item.text}
+                            {isMobile ? item?.head : item?.text}
                           </span>
                         </Link>
                       </>
