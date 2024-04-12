@@ -17298,7 +17298,34 @@ input[type=time]::-webkit-calendar-picker-indicator {
 .bg-brand-blue {
   background: #212530 !important;
 }
-.ch-announcement-bar-1{
-  z-index: 20 !important;
-  top: 85px !important;
+@media screen and (min-width: 768px) {
+  .ch-announcement-bar-1{
+    z-index: 20 !important;
+    top: 85px !important;
+  }
 }
+@media screen and (max-width: 768px) {
+  .ch-announcement-bar-1{
+    top: 53px !important;
+  }
+}
+@media screen and (max-width: 640px) {
+  .ch-announcement-bar-1{
+    top: 65px !important;
+  }
+}
+body:has(.ch-announcement-bar-1) {
+  .container.py-4.mx-auto {
+    padding-top: 70px !important;
+  }
+  .nc-SectionHero2Item.nc-SectionHero2Item--animation.flex.flex-col-reverse {
+    padding-top: 30px !important;
+  }
+  .flex.justify-between.w-full.gap-0.container-storefront.small-screen {
+    padding-top: 55px !important;
+  }
+  .container.pt-10.pb-24.mx-auto.bg-transparent {
+    padding-top: 80px !important;
+  }
+}
+

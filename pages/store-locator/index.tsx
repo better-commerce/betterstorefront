@@ -286,7 +286,7 @@ function StoreLocatorPage({ deviceInfo }: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
-      <div className="container py-4 mx-auto sm:py-10 pt-20">
+      <div className="container py-4 mx-auto sm:py-10">
         <h1 className="pb-6 text-2xl font-semibold text-left text-gray-900 sm:pb-8 sm:text-3xl">
           Find a Store near you
         </h1>

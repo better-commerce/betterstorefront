@@ -73,7 +73,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     }
     return (
       <>
-        <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative overflow-hidden ${className}`} key={index} >
+        <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative overflow-hidden sm:!pt-0 ${className}`} key={index} >
           <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
             {data?.map((_: any, index: number) => {
               const isActive = indexActive === index;
