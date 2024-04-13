@@ -42,7 +42,9 @@
       "basket": {
         "createBasketLinkText": "Crear Canasta",
         "deleteBasketLinkText": "Eliminar Canasta",
-        "listBasketsHeadingText": "Lista de Canastas"
+        "listBasketsHeadingText": "Lista de Canastas",
+        "removeBasketHeadingText": "¿Eliminar esta canasta?",
+        "removeBasketConfirmText": "¿Estás seguro de que no quieres esta canasta?"
       }
     },
     "basket": {

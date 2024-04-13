@@ -16,14 +16,17 @@ import { Guid } from "@commerce/types";
 
 const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
+const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function CartDropdown() {
-  const { getUserCarts } = useCart()
+  const { getUserCarts, deleteCart } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
   const translate = useTranslation()
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
+  const [basketIdToDelete, setBasketIdToDelete] = useState<string>(Guid.empty)
   const [isCreateBasketModalOpen, setIsCreateBasketModalOpen] = useState<boolean>(false)
+  const [isDeleteBasketModalOpen, setIsDeleteBasketModalOpen] = useState<boolean>(false)
   const [userCarts, setUserCarts] = useState<any>()
   let currentPage = getCurrentPage()
 
@@ -55,6 +58,14 @@ export default function CartDropdown() {
   const openMiniBasket = (basket: any) => {
     viewCart(basket);
     openCart();
+  }
+
+  const handleDeleteBasket = async () => {
+    await deleteCart({ basketId: basketIdToDelete })
+    if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
+      getBaskets(user?.userId)
+    }
+    closeDeleteBasketModal()
   }
 
   const b2bBasketConfig: any = [
@@ -126,7 +137,7 @@ export default function CartDropdown() {
   const handleCreateBasket = async (basketName: string) => {
     if (basketName) {
       const oldBasketId = JSON.parse(JSON.stringify(basketId))
-      setLoadingAction(LoadingActionType.GENERIC_OK_ACTION)
+      setLoadingAction(LoadingActionType.CREATE_BASKET)
       const newBasketId = generateBasketId(true)
       const { data: createBasketResult }: any = await axios.post(NEXT_CREATE_BASKET, { basketId: newBasketId, basketName, })
       if (createBasketResult?.message && matchStrings(createBasketResult?.message, "Product Added Successfully", true)) {
@@ -141,10 +152,22 @@ export default function CartDropdown() {
       //console.log(createBasketResult)
     }
   }
+  const deleteBasket = async (basketId: string) => {
+    if (basketId && basketId !== Guid.empty) {
+      setBasketIdToDelete(basketId)
+    }
+  }
   const openCreateBasketModal = () => setIsCreateBasketModalOpen(true)
   const closeCreateBasketModal = () => {
     setLoadingAction(LoadingActionType.NONE)
     setIsCreateBasketModalOpen(!isCreateBasketModalOpen)
+  }
+
+  const openDeleteBasketModal = () => setIsDeleteBasketModalOpen(true)
+  const closeDeleteBasketModal = () => {
+    setLoadingAction(LoadingActionType.NONE)
+    setIsDeleteBasketModalOpen(!isDeleteBasketModalOpen)
+    setBasketIdToDelete(Guid.empty)
   }
 
   useEffect(() => {
@@ -153,6 +176,12 @@ export default function CartDropdown() {
       getBaskets(user?.userId)
     }
   }, [user?.userId])
+
+  useEffect(() => {
+    if (basketIdToDelete !== Guid.empty) {
+      openDeleteBasketModal()
+    }
+  }, [basketIdToDelete])
 
   return (
     <>
@@ -216,7 +245,7 @@ export default function CartDropdown() {
 
                         {
                           (userCarts?.length > 0) && (
-                            <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} />
+                            <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} deleteBasket={deleteBasket} />
                           )
                         }
                       </div>
@@ -240,6 +269,7 @@ export default function CartDropdown() {
       </Popover>
 
       <AddBasketModal isOpen={isCreateBasketModalOpen} closeModal={closeCreateBasketModal} loadingAction={loadingAction} handleCreateBasket={handleCreateBasket} setLoadingAction={setLoadingAction} />
+      <DeleteBasketModal isOpen={isDeleteBasketModalOpen} closeModal={closeDeleteBasketModal} loadingAction={loadingAction} handleDeleteBasket={handleDeleteBasket} setLoadingAction={setLoadingAction} />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 interface Props {
   basketId?: string
   productId?: string
@@ -24,7 +25,7 @@ export default function useRemoveItem() {
       })
       return response.result
     } catch (error: any) {
-      throw new Error(error)
+      logError(error)
     }
   }
 }

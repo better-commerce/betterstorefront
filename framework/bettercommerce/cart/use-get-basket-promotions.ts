@@ -1,5 +1,6 @@
 import { GET_BASKET_PROMOTIONS_ENDPOINT } from '@components/utils/constants';
 import fetcher from '../fetcher';
+import { logError } from '@framework/utils/app-util';
 
 interface Props {
     basketId?: string;
@@ -20,7 +21,7 @@ export default function useGetBasketPromotions() {
             });
             return response?.result;
         } catch (error: any) {
-            console.log(error);
+            logError(error);
             // throw new Error(error.message)
         }
     }

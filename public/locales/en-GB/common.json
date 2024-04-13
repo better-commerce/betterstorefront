@@ -42,7 +42,9 @@
       "basket": {
         "createBasketLinkText": "Create Basket",
         "deleteBasketLinkText": "Delete Basket",
-        "listBasketsHeadingText": "Basket List"
+        "listBasketsHeadingText": "Basket List",
+        "removeBasketHeadingText": "Remove this basket?",
+        "removeBasketConfirmText": "Are you sure you don't want this basket?"
       }
     },
     "basket": {
