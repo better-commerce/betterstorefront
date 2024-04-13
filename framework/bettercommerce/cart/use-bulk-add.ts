@@ -1,6 +1,7 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
+import { logError } from '@framework/utils/app-util'
 interface Props {
   basketId: string
   products: any
@@ -21,8 +22,8 @@ export default function useBulkAdd() {
       })
       return response.result
     } catch (error: any) {
-      console.log('error while throwing the response to NEXT api', error)
-      throw new Error(error)
+      logError(error)
+      //throw new Error(error)
     }
   }
 }

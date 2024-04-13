@@ -90,6 +90,7 @@ export const NEXT_MERGE_CART = '/api/merge-cart'
 export const STATIC_BRAND_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/staticpath/brand`
 export const NEXT_GET_COLLECTION_BY_ID = '/api/collection/get-collection-by-id'
 export const NEXT_GET_USER_CART = '/api/get-user-cart'
+export const NEXT_DELETE_CART = '/api/delete-cart'
 export const NEXT_GET_CATALOG_PRODUCTS = '/api/catalog/products'
 export const NEXT_GET_RECENTLY_VIEWED_PRODUCTS =
   '/api/catalog/get-recently-viewed-products'
@@ -566,7 +567,8 @@ export enum LoadingActionType {
   NONE = 0,
   REMOVE_ITEM = 1,
   MOVE_TO_WISHLIST = 2,
-  GENERIC_OK_ACTION = 3,
+  CREATE_BASKET = 3,
+  REMOVE_BASKET = 4,
 }
 
 export const EmptyGuid = '00000000-0000-0000-0000-000000000000'
