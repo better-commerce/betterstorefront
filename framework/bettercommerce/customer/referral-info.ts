@@ -1,5 +1,6 @@
 import { REFERRAL_INFO_ENDPOINT } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
+import { logError } from "@framework/utils/app-util";
 
 interface props{
 
@@ -17,7 +18,7 @@ export default async function useReferralInfo(){
             })
             return response
         } catch (error: any) {
-            console.log(error, 'err')
+            logError(error)
             // throw new Error(error.message)
         }
 }

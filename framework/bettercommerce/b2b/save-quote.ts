@@ -1,5 +1,6 @@
 import fetcher from '@framework/fetcher'
 import { B2B_USER_QUOTES } from '@components/utils/constants'
+import { logError } from '@framework/utils/app-util'
 
 export default function useB2BSaveQuote() {
   return async function handler({ quote, cookies }: any) {
@@ -13,7 +14,7 @@ export default function useB2BSaveQuote() {
       })
       return response
     } catch (error: any) {
-      console.log(error, 'error')
+      logError(error)
     }
   }
 }

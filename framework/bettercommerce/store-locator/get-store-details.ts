@@ -1,5 +1,6 @@
 import { GET_STORES_DETAILS } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'
+import { logError } from '@framework/utils/app-util'
 
 export default async function getStoreDetails(id: string) {
   try {
@@ -9,6 +10,6 @@ export default async function getStoreDetails(id: string) {
     })
     return response.result
   } catch (error: any) {
-    console.error(error)
+    logError(error)
   }
 }

@@ -3,6 +3,7 @@ import {
   SHIPPING_ENDPOINT,
 } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   userId?: string
@@ -43,7 +44,7 @@ export default function getShippingMethods() {
       })
       return response.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

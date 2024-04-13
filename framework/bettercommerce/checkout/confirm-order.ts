@@ -1,5 +1,6 @@
 import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   basketId?: string
@@ -22,7 +23,7 @@ export default function useConfirmOrder() {
       })
       return response
     } catch (error: any) {
-      console.log(error, 'err')
+      logError(error)
       // throw new Error(error.message)
     }
   }

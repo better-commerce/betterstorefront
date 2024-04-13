@@ -1,5 +1,6 @@
 import fetcher from '@framework/fetcher'
 import { GET_ALL_STORES } from '@components/utils/constants'
+import { logError } from '@framework/utils/app-util'
 
 export default async function getAllStores(cookies?: any) {
   try {
@@ -10,6 +11,6 @@ export default async function getAllStores(cookies?: any) {
     })
     return response.result
   } catch (error) {
-    console.log(error)
+    logError(error)
   }
 }

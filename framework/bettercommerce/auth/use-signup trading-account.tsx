@@ -2,6 +2,7 @@ import { REGISTER_CUSTOMER_TRADING_ACCOUNT } from '@components/utils/constants'
 import qs from 'qs'
 import { Guid } from '@commerce/types'
 import fetcher from '@framework/fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   readonly title: string
@@ -110,7 +111,7 @@ export default function useSignupTradingAccount() {
       //console.log(response.result);
       return response.result
     } catch (error: any) {
-      //console.log(error)
+      logError(error)
       throw new Error(error.message)
     }
   }

@@ -1,3 +1,4 @@
+import { logError } from '@framework/utils/app-util'
 import { CLIENT_ID, SHARED_SECRET, AUTH_URL } from '../utils/constants'
 import { setToken, setRefreshToken } from '../utils/index'
 export default async function getAuthToken() {
@@ -14,6 +15,6 @@ export default async function getAuthToken() {
     setRefreshToken(result.refresh_token)
     return result
   } catch (error) {
-    console.log(error)
+    logError(error)
   }
 }
