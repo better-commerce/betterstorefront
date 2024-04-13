@@ -1,4 +1,4 @@
-import googlePlaceAutocomplete from '@framework/storeLocator/getPlacebyGoogleApi'
+import googlePlaceAutocomplete from '@framework/store-locator/get-place-by-google-api'
 
 export default async (req: any, res: any) => {
   const { input } = req.query

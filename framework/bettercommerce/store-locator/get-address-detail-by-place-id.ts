@@ -1,5 +1,6 @@
 import { NEXT_GET_PLACE_DETAILS } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'
+import { logError } from '@framework/utils/app-util'
 import { GOOGLE_MAP_API_KEY } from '@framework/utils/constants'
 
 export default async function getAddressDetailByPlaceId(id: string) {
@@ -10,6 +11,6 @@ export default async function getAddressDetailByPlaceId(id: string) {
     })
     return response
   } catch (error) {
-    console.error(error)
+    logError(error)
   }
 }

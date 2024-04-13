@@ -1,6 +1,7 @@
 import { AUTHENTICATE_CUSTOMER } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   email: string
@@ -27,7 +28,7 @@ export default function useLogin() {
       })
       return response.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       throw new Error(error.message)
     }
   }

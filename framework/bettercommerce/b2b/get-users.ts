@@ -1,3 +1,4 @@
+import { logError } from '@framework/utils/app-util'
 import fetcher from '../fetcher'
 import { B2B_COMPANY_USERS } from '@components/utils/constants'
 interface Props {
@@ -14,7 +15,7 @@ export default function useB2BCompanyUsers() {
         })
         return response
       } catch (error: any) {
-        console.log(error, 'error')
+        logError(error)
         // throw new Error(error.message)
       }
     }

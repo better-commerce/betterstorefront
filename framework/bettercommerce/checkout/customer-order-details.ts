@@ -1,5 +1,6 @@
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   id?: string
@@ -20,7 +21,7 @@ export default function getCustomerOrderDetails() {
       })
       return response
     } catch (error: any) {
-      console.log(error, 'err')
+      logError(error)
       // throw new Error(error.message)
     }
   }

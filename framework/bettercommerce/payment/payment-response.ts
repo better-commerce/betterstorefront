@@ -1,5 +1,6 @@
 import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 interface Props {
   orderId: string
   model: any
@@ -22,7 +23,7 @@ export default function putPaymentResponse() {
 
       return response
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

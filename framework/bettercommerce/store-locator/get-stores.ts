@@ -1,6 +1,7 @@
 import { OMS_BASE_URL } from '@framework/utils/constants'
 import { STORE_LOCATOR_API } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'
+import { logError } from '@framework/utils/app-util'
 
 export default async function getStores(postCode: string, cookies?: any) {
   try {
@@ -13,6 +14,6 @@ export default async function getStores(postCode: string, cookies?: any) {
     })
     return response.Result
   } catch (error) {
-    console.log(error)
+    logError(error)
   }
 }

@@ -1,6 +1,6 @@
 
 import type { GetServerSideProps, GetStaticPropsContext } from 'next'
-import getAllStores from '@framework/storeLocator/getAllStores'
+import getAllStores from '@framework/store-locator/get-all-stores'
 import dynamic from 'next/dynamic';
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'

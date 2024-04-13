@@ -1,6 +1,7 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   data: any
@@ -23,7 +24,7 @@ export default function getShippingPlans() {
       })
       return response
     } catch (error: any) {
-      console.log(error, 'error')
+      logError(error)
       // throw new Error(error.message)
     }
   }
