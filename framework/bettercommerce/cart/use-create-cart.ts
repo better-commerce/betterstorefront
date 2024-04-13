@@ -1,6 +1,7 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import { Guid } from '@commerce/types'
+import { logError } from '@framework/utils/app-util'
 interface Props {
     basketId: string
     basketName: string
@@ -22,7 +23,7 @@ export default function useCreateCart() {
             })
             return { ...response.result, ...{ message: response.message } }
         } catch (error: any) {
-            console.log(error)
+            logError(error)
             // throw new Error(error.message)
         }
     }
