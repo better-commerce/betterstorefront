@@ -79,6 +79,7 @@ export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
 export const PRICE_MATCH_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket/pricematch/add`
+export const NEXT_CREATE_BASKET = `/api/create-cart`
 export const NEXT_ADD_TO_CART = `/api/add-item-cart`
 export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
@@ -565,6 +566,7 @@ export enum LoadingActionType {
   NONE = 0,
   REMOVE_ITEM = 1,
   MOVE_TO_WISHLIST = 2,
+  GENERIC_OK_ACTION = 3,
 }
 
 export const EmptyGuid = '00000000-0000-0000-0000-000000000000'
