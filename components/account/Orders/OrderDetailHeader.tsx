@@ -4,9 +4,13 @@ import moment from 'moment'
 import React from 'react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useRouter } from 'next/router'
+import { isB2BUser } from '@framework/utils/app-util'
+import { useUI } from '@components/ui'
 const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
   const translate = useTranslation();
   const router = useRouter();
+  const { user, setAlert, isGuestUser } = useUI()
+  const isB2B = isB2BUser(user)
   return (
     <>
       <div className="w-full pb-6 o-detail-header">
@@ -17,7 +21,9 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                 href="#"
                 className="absolute left-0 top-2/4 -translate-y-2/4 "
                 onClick={() => {
+                  isB2B ?
                   router.push('/my-account/my-company?tab=orders')
+                  :  router.push('/my-account/orders');
                 }}
               >
                 <svg
