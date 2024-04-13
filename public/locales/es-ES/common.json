@@ -38,7 +38,12 @@
       "requestTradingAccountText": "Solicitar cuenta de trading",
       "companyNameText": "Nombre de la empresa",
       "registeredNumberText": "Número registrado",
-      "phoneNumberText": "Número de teléfono"
+      "phoneNumberText": "Número de teléfono",
+      "basket": {
+        "createBasketLinkText": "Crear Canasta",
+        "deleteBasketLinkText": "Eliminar Canasta",
+        "listBasketsHeadingText": "Lista de Canastas"
+      }
     },
     "basket": {
       "addToBasketText": "Agregar al carrito",

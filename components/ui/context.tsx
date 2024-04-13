@@ -15,11 +15,16 @@ import { Cookie } from '@framework/utils/constants'
 
 declare const window: any
 
-export const basketId = () => {
+export const basketId = (generateOnly = false) => {
+  const basketId = uuid()
+  if (generateOnly) {
+    return basketId
+  }
+
   if (Cookies.get(Cookie.Key.BASKET_ID)) {
     return Cookies.get(Cookie.Key.BASKET_ID) || ''
   }
-  const basketId = uuid()
+  
   Cookies.set(Cookie.Key.BASKET_ID, basketId, {
     expires: getExpiry(getMinutesInDays(365)),
   })

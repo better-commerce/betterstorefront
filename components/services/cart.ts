@@ -11,6 +11,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
+import { logError } from '@framework/utils/app-util'
 
 interface CartItem {
   basketId?: string
@@ -226,7 +227,7 @@ export default function cartHandler() {
             })[0]
           }
         } catch (error) {
-          console.log(error, 'err')
+          logError(error)
         }
       }
       return null
@@ -252,6 +253,29 @@ export default function cartHandler() {
       } catch (error) {
         console.log(error, 'err')
       }
+    },
+    getUserCarts: async ({ userId, basketId }: any) => {
+      if (userId && userId !== Guid.empty) {
+        try {
+          const { data: userCarts }: any = await axios.get(NEXT_GET_USER_CART, {
+            params: {
+              userId: userId,
+            },
+          })
+
+          if (userCarts?.length) {
+            return userCarts?.sort((cart1: any, cart2: any) => {
+              return (
+                new Date(cart2?.lastUpdated).getTime() -
+                new Date(cart1?.lastUpdated).getTime()
+              )
+            })
+          }
+        } catch (error) {
+          logError(error)
+        }
+      }
+      return null
     },
   }
 }
