@@ -1,5 +1,6 @@
 import { CHECKOUT_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 interface Props {
   basketId: string
   email: string
@@ -24,7 +25,7 @@ export default function useLoginCheckout() {
       })
       return response.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

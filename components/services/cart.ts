@@ -5,6 +5,7 @@ import {
   NEXT_GET_USER_CART,
   NEXT_ASSOCIATE_CART,
   NEXT_MERGE_CART,
+  NEXT_DELETE_CART,
 } from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -271,6 +272,19 @@ export default function cartHandler() {
               )
             })
           }
+        } catch (error) {
+          logError(error)
+        }
+      }
+      return null
+    },
+    deleteCart: async ({ basketId }: any) => {
+      if (basketId && basketId !== Guid.empty) {
+        try {
+          const { data: deleteCartResult }: any = await axios.post(NEXT_DELETE_CART, {
+            basketId,
+          })
+          return deleteCartResult
         } catch (error) {
           logError(error)
         }
