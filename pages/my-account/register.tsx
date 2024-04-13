@@ -80,7 +80,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
             className="w-full border border-black btn btn-c btn-primary rounded-2xl"
             buttonType="default"
             action={handleSubmit}
-            title={'Submit'}
+            title={translate('common.label.submitText')}
           />
         </div>
       </div>

@@ -6,6 +6,8 @@ import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -27,6 +29,7 @@ import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -40,6 +43,7 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
 const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
+declare const window: any
 const PLACEMENTS_MAP: any = {
   Head: {
     element: 'head',
@@ -59,6 +63,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const { isMobile, isIPadorTablet } = deviceInfo
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
@@ -192,8 +197,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.availability || EmptyString,
           metadata: {
-            color: product?.customAttributes[0]?.key=="global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
-            size: product?.customAttributes[2]?.key=="clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
+            color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
+            size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
             weight: 0,
             weight_unit: EmptyString,
             make: EmptyString,
@@ -692,6 +697,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setFullscreen(!fullscreen);
   };
 
+
+  // CHECK TRENDING PRODUCTS FROM ENGAGE
+  let similarProduct = []
+  let recentProduct = []
+  if (typeof window !== 'undefined') {
+    similarProduct = window.similar_products_sorted_product;
+    recentProduct = window.recent_products_product;
+  }
   let productDesc = product.description
   if (product?.shortDescription == "") {
     productDesc = product.description
@@ -884,21 +897,61 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
         </div>
         <div className="lg:flex">
-          <div className="w-full lg:w-[55%]">
-            <div className="relative">
-              <div className="relative aspect-w-16 aspect-h-16">
-                <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
-              </div>
-              {renderStatus()}
+          {isMobile ? (
+            <div className="w-full lg:w-[55%]">
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={30}
+                navigation
+                loop
+                className="mySwiper"
+              >
+                <SwiperSlide>
+                  <div className="relative">
+                    <img
+                      src={
+                        generateUri(product?.image, 'h=1000&fm=webp') ||
+                        IMG_PLACEHOLDER
+                      }
+                      className="object-cover object-top w-full rounded-2xl"
+                      alt={product?.name}
+                    />
+                    {renderStatus()}
+                  </div>
+                </SwiperSlide>
+                {product?.images?.map((item: any, index: number) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative">
+                      <img
+                        src={
+                          generateUri(item?.image, 'h=500&fm=webp') ||
+                          IMG_PLACEHOLDER
+                        }
+                        className="object-cover w-full rounded-2xl"
+                        alt={product?.name}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
-            <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-              {product?.images?.map((item: any, index: number) => (
-                <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                  <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+          ) : (
+            <div className="w-full lg:w-[55%]">
+              <div className="relative">
+                <div className="relative aspect-w-16 aspect-h-16">
+                  <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
                 </div>
-              ))}
+                {renderStatus()}
+              </div>
+              <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
+                {product?.images?.map((item: any, index: number) => (
+                  <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                    <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
             {renderSectionContent()}
           </div>
@@ -938,6 +991,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </>
           )}
+          <div className='flex flex-col w-full'>
+            {similarProduct?.length > 0 &&
+              <EngageProductCard data={similarProduct} heading="Similar" subHeading="Products" />
+            }
+            {recentProduct?.length > 0 &&
+              <EngageProductCard data={recentProduct} heading="Recently Viewed" subHeading="Products" />
+            }
+          </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />

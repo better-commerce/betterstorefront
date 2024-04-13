@@ -135,7 +135,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
             countryCode:
               selectedAddress?.billingAddress?.countryCode ||
               BETTERCOMMERCE_DEFAULT_COUNTRY,
-            basketId: basketId,
+            basketId: basket?.id != Guid.empty ? basket?.id : basketId,
           })
         )
       )
@@ -215,7 +215,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     const getPaymentOrderInfo = async (paymentMethod: any) => {
       const paymentOrderInfo = {
         user,
-        basketId,
+        basketId: basket?.id != Guid.empty ? basket?.id : basketId,
         customerId: basket.userId != Guid.empty ? basket.userId : user?.userId,
         basket,
         billingAddress: {

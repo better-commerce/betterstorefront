@@ -154,6 +154,7 @@
       "offerValidForText": "This offer is valid for",
       "deafultCountryDropdownText": "Hong Kong",
       "checkoutTitleText": "checkout",
+      "debitCreditDetailsText" : "Debit/Credit Card details",
       "secureCheckoutText": "Secure Checkout",
       "checkoutSecurelyText": "Checkout securely",
       "backToBasketText": "Back to basket",
@@ -357,6 +358,13 @@
       "emailAddressplaceholderText": "example@example.com",
       "referAFriendText": "Refer a Friend",
       "myCompanyText": "My Company",
+      "myCompanyMenus": {
+        "user": "Users",
+        "order": "Orders",
+        "quote": "Quotes",
+        "address": "Addresses",
+        "invoice": "Invoices"
+      },
       "myDetailsHeadingText": "My Details",
       "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
       "myOrders": {
@@ -741,7 +749,9 @@
     },
     "store": {
       "findStoresText": "Find Stores",
-      "findStoreNearYouText": "Find Store Near You"
+      "findStoreNearYouText": "Find Store Near You",
+      "usingLocationToShowStoresText":"We use your location to show you nearby stores",
+      "seeNearbyStoreText":"See Nearby Stores"
     },
     "thankyou": {
       "summaryText": "Summary",

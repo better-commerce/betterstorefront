@@ -33,6 +33,9 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
+import { CompanyTabs, companyMenuTabs } from '@components/account/configs/company'
+import { matchStrings } from '@framework/utils/parse-util'
+
 function MyCompany({ deviceInfo }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
   const router = useRouter()
@@ -43,14 +46,13 @@ function MyCompany({ deviceInfo }: any) {
   const translate = useTranslation()
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const [active, setActive] = useState(false)
-
-  const [selectedOption, setSelectedOption] = useState<any>('Users')
-  const [currentTab, setCurrentTab] = useState(0)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const config = useConfig();
   const [isAdmin, setIsAdmin] = useState(false)
+
   const currentOption = translate('label.myAccount.myCompanyText')
+
   const newConfig: any = useMemo(() => {
     let output: any = []
     let isB2B = user?.companyId !== Guid.empty
@@ -63,8 +65,8 @@ function MyCompany({ deviceInfo }: any) {
         if (!hasReferral) {
           output.push({
             type: 'tab',
-            text: 'Refer a Friend',
-            mtext: 'Refer a Friend',
+            text: translate('label.myAccount.referAFriendText'),
+            mtext: translate('label.myAccount.referAFriendText'),
             props: 'refer-a-friend',
             href: "/my-account/refer-a-friend"
           })
@@ -82,8 +84,8 @@ function MyCompany({ deviceInfo }: any) {
           output = [...config]
           output.push({
             type: 'tab',
-            text: 'Refer a Friend',
-            mtext: 'Refer a Friend',
+            text: translate('label.myAccount.referAFriendText'),
+            mtext: translate('label.myAccount.referAFriendText'),
             props: 'refer-a-friend',
             href: "/my-account/refer-a-friend"
           })
@@ -94,81 +96,39 @@ function MyCompany({ deviceInfo }: any) {
     } else if (!hasMyCompany) {
       output.push({
         type: 'tab',
-        text: 'My Company',
-        mtext: 'My Company',
+        text: translate('label.myAccount.myCompanyText'),
+        mtext: translate('label.myAccount.myCompanyText'),
         props: 'my-company',
         head: <BuildingOffice2Icon className="w-7 h-7 text-gray-500" />,
-        href: '/my-account/my-company',
+        href: `/my-account/my-company`,
       })
     }
     return output
   }, [config])
-  const optionsConfig = [
-    {
-      name: 'Users',
-      value: 'Users',
-      onClick: (value: any) => {
-        setSelectedOption(value)
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, tab: value.toLowerCase() }
-        });
-      },
-    },
-    {
-      name: 'Orders',
-      value: 'Orders',
-      onClick: (value: any) => {
-        setSelectedOption(value)
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, tab: value.toLowerCase() }
-        });
-      },
-    },
-    {
-      name: 'Quotes',
-      value: 'Quotes',
-      onClick: (value: any) => {
-        setSelectedOption(value)
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, tab: value.toLowerCase() }
-        });
-      },
-    },
-    {
-      name: 'Address',
-      value: 'AddressBook',
-      onClick: (value: any) => {
-        setSelectedOption(value)
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, tab: value.toLowerCase() }
-        });
-      },
-    },
-    {
-      name: 'Invoices',
-      value: 'Invoices',
-      onClick: (value: any) => {
-        setSelectedOption(value)
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, tab: value.toLowerCase() }
-        });
-      },
-    },
-  ]
+
+  const optionsConfig = useMemo(() => {
+    const options: any = []
+    companyMenuTabs({ translate })?.forEach((opt: any) => {
+      if (user?.companyUserRole !== UserRoleType.ADMIN) {
+        if (opt.value === CompanyTabs.USER) return
+      }
+      options.push(opt)
+    })
+    return options
+  }, [translate, user])
+  
+  const onSelectTab = (tab: any) => {
+    router.replace({ query: { tab: tab?.value } }, undefined, { shallow: true })
+  }
+
+  const fetchOrders = async (userId: any) => {
+    const { data } = await axios.post(NEXT_GET_ORDERS, { id: userId })
+    return data?.map((order: any) => order?.id) || []
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       if (!b2bUsers) return
-
-      const fetchOrders = async (userId: any) => {
-        const { data } = await axios.post(NEXT_GET_ORDERS, { id: userId })
-        return data?.map((order: any) => order?.id) || []
-      }
 
       const userOrderMap = await Promise.all(
         b2bUsers
@@ -185,23 +145,11 @@ function MyCompany({ deviceInfo }: any) {
   }, [b2bUsers])
 
   useEffect(() => {
-    const handleCurrentTab = () => {
-      let Index = optionsConfig.findIndex(
-        (x: any) => x.value === selectedOption
-      )
-
-      setCurrentTab(Index)
-    }
-    handleCurrentTab()
-  }, [selectedOption])
-
-  useEffect(() => {
     if (isGuestUser) {
       router.push('/')
     } else if (user?.companyId === Guid.empty) {
       router.push('/404')
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -255,27 +203,17 @@ function MyCompany({ deviceInfo }: any) {
   }
 
   useEffect(() => {
-    if (selectedOption === 'Users') {
-      fetchB2BUsers()
-    } else if (selectedOption === 'Quotes') {
-      fetchB2BUserQuotes()
-    } else if (selectedOption === 'AddressBook') {
-      fetchB2BAddressBook()
-    } else if (selectedOption === 'Invoices') {
-      fetchB2BInvoices()
+    const { tab: selectedTab } = router.query
+    if (selectedTab) {
+      if (selectedTab === CompanyTabs.USER) fetchB2BUsers()
+      if (selectedTab === CompanyTabs.ORDER) fetchOrders(user?.userId)
+      if (selectedTab === CompanyTabs.QUOTE) fetchB2BUserQuotes()
+      if (selectedTab === CompanyTabs.ADDRESS) fetchB2BAddressBook()
+      if (selectedTab === CompanyTabs.INVOICE) fetchB2BInvoices()
+    } else {
+      router.replace({ query: { tab: optionsConfig[0]?.value } }, undefined, { shallow: true })
     }
-  }, [selectedOption])
-
-  useEffect(() => {
-    if (router.query.tab) {
-      let Index = optionsConfig.findIndex(
-        (x: any) => x.value.toLowerCase() === router.query.tab
-      )
-      setSelectedOption(optionsConfig[Index].value)
-      setCurrentTab(Index)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath])
+  }, [router.query, optionsConfig])
 
   let loggedInEventData: any = {
     eventType: CustomerProfileViewed,
@@ -311,6 +249,12 @@ function MyCompany({ deviceInfo }: any) {
   const handleToggleShowState = () => {
     setShow(!isShow)
   }
+
+  const selectedTabIndex = useMemo(() => {
+    const { tab: selectedTab }: any = router.query
+    return optionsConfig?.findIndex((opt: any) => matchStrings(opt.value, selectedTab))
+  }, [router.query])
+
   return (
     <>
       <NextHead>
@@ -396,63 +340,35 @@ function MyCompany({ deviceInfo }: any) {
               <div className="max-w-4xl pt-4 pb-24 mx-auto sm:pt-6 lg:pb-32">
                 <div className="relative col-span-12 mob-tab-full" >
                   <div className={'orders bg-white'}>
-                    <Tab.Group selectedIndex={currentTab}>
+                    <Tab.Group selectedIndex={selectedTabIndex}>
                       <Tab.List className={'flex space-x-1 rounded-2xl bg-slate-100 p-1 mx-0 '} >
-                        {optionsConfig?.map((option: any, Idx: any) => (
-                          <>
-                            {option?.name == 'Users' ? (
-                              <>
-                                <Tab as={Fragment} key={Idx}>
-                                  {({ selected }) => (
-                                    <button
-                                      className={classNames(
-                                        'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                        'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                        selected
-                                          ? 'bg-white shadow hover:bg-gray-50'
-                                          : 'text-blue-100 hover:bg-white/[0.32] '
-                                      )}
-                                      onClick={() => {
-                                        option?.onClick(option?.value)
-                                      }}
-                                    >
-                                      {option?.name}
-                                    </button>
-                                  )}
-                                </Tab>
-                              </>
-                            ) : (
-                              <>
-                                <Tab as={Fragment} key={Idx}>
-                                  {({ selected }) => (
-                                    <button
-                                      className={classNames(
-                                        'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                        'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                        selected
-                                          ? 'bg-white shadow hover:bg-gray-50'
-                                          : 'text-blue-100 hover:bg-white/[0.32] '
-                                      )}
-                                      onClick={() => {
-                                        option?.onClick(option?.value)
-                                      }}
-                                    >
-                                      {option?.name}
-                                    </button>
-                                  )}
-                                </Tab>
-                              </>
+                        {optionsConfig?.map((option: any, id: any) => (
+                          <Tab as={Fragment} key={id}>
+                            {({ selected }) => (
+                              <button
+                                className={classNames(
+                                  'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                                  'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                                  selected
+                                    ? 'bg-white shadow hover:bg-gray-50'
+                                    : 'text-blue-100 hover:bg-white/[0.32] '
+                                )}
+                                onClick={() => onSelectTab({ ...option, id })}
+                              >
+                                {option?.name}
+                              </button>
                             )}
-                          </>
+                          </Tab>
                         ))}
                       </Tab.List>
                       <Tab.Panels>
-                        <Tab.Panel>
-                          <CompanyUsers users={b2bUsers} />
-                        </Tab.Panel>
+                        {user?.companyUserRole === UserRoleType.ADMIN && (
+                          <Tab.Panel>
+                            <CompanyUsers users={b2bUsers} />
+                          </Tab.Panel>
+                        )}
                         <Tab.Panel>
                           <B2BOrders
-                            selectedOption={selectedOption}
                             deviceInfo={deviceInfo}
                             isShowDetailedOrder={isShowDetailedOrder}
                             setIsShowDetailedOrder={setIsShowDetailedOrder}

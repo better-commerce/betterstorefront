@@ -92,7 +92,7 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
                 </>
               ) : (
                 <>
-                  <p className="font-medium text-12 text-green">Free</p>
+                  <p className="font-medium text-12 text-green">{translate('label.orderSummary.freeText')}</p>
                 </>
               )}
             </div>

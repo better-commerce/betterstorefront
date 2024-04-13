@@ -548,7 +548,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         <Dialog.Title className="text-lg font-medium text-gray-900 ">
                           {translate('label.basket.shoppingCartText')}
                           {itemsInBag() > 0 ? (
-                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? ' items' : ' item'}{' '} </span>
+                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? translate('common.label.itemSingularText') : translate('common.label.itemPluralText')}{' '} </span>
                           ) : (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '}{translate('common.label.emptyText')}{' '} </span>
                           )}
