@@ -12,14 +12,14 @@ export default function useDeleteCart() {
             const response: any = await fetcher({
                 url: `${BASKET_ENDPOINT}/${basketId}/delete`,
                 method: 'delete',
-                data: { basketId, },
+                params: { basketId, },
                 cookies,
                 headers: {
                     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
                 },
             })
             //url changed according to api20 get all baskets api
-            return { ...response?.result, message: response?.message }
+            return response
         } catch (error: any) {
             logError(error)
             //throw new Error(error.message)
