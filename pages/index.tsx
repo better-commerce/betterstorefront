@@ -199,7 +199,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
           <div className='flex flex-col w-full'>
-            <EngageProductCard type={EngageEventTypes.TRENDING} campaignData={campaignData} title="Trending Products" />
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending Products" />
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData}  title="Recently Viewed"/>
           </div>
           <SectionPromo3 data={pageContents?.subscription} />

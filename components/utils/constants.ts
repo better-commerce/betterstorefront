@@ -239,6 +239,7 @@ export const BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE =
 export const ENGAGE_QUERY_USER_EVENTS = `${process.env.ENGAGE_QUERY_BASE_URL}/userevents`
 export const ENGAGE_QUERY_USER_ITEMS = `${process.env.ENGAGE_QUERY_BASE_URL}/item`
 export const ENGAGE_WEB_CAMPAIGN = `${process.env.ENGAGE_QUERY_BASE_URL}/webcampaign`
+export const ENGAGE_TRENDING = `${process.env.ENGAGE_QUERY_BASE_URL}/trending`
 export const NEXT_ENGAGE_PRODUCT_CAMPAIGNS = `/api/product-campaigns`
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
@@ -600,10 +601,11 @@ export enum QuoteStatus {
 }
 
 export enum EngageEventTypes {
-  TRENDING = 'trend_first_orders',
+  TRENDING_FIRST_ORDER = 'trend_first_orders',
   RECENTLY_VIEWED = 'recent_products',
   ALSO_BOUGHT = 'also_bought',
   RECOMMENDED = 'recommendation_products',
   TOP_VIEWED = 'top_viewed_products',
   SIMILAR_PRODUCTS = 'similar_products_sorted',
+  BOUGHT_TOGETHER = 'bought_together',
 }
