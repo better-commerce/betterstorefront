@@ -770,7 +770,7 @@
       "myWishlistText": "Mi lista de deseos",
       "moveToWishlistText": "Mover a lista de deseos",
       "addedToWishlistText": "Agregado a la lista de deseos",
-      "my-store": "mi tienda"
+      "myStore": "mi tienda"
     },
     "modalEdit": {
       "ethText": "ETH",
