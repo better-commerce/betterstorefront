@@ -3,7 +3,7 @@ import "fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "styles/index.scss";
 import 'swiper/css/bundle'
 import '@assets/css/algolia-instant-search.css'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { appWithTranslation } from 'next-i18next'
 import jwt from 'jsonwebtoken'
 import NextHead from 'next/head'
@@ -31,7 +31,7 @@ import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory, ENGAGE_WEB_CAMPAIGN } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
@@ -105,6 +105,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     isOnlyMobile: undefined,
   })
   const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
+  const [campaignData, setCampaignData] = useState()
 
   let snippets = [
     ...(pageProps?.globalSnippets ?? []),
@@ -146,6 +147,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   useEffect(() => {
     setNavTree()
+    productCampaigns()
     setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
@@ -167,6 +169,37 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       setUpdatedPageProps(updatedPageProps)
     }
   }
+
+  const productCampaigns = useCallback(
+    async () => {
+      try {
+        const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
+        let apiUrl = ENGAGE_WEB_CAMPAIGN
+        // generate respective API url
+        if (router.asPath?.startsWith('/products')) {
+          // for PDP
+          apiUrl += `/productpage/all/`
+        } else if (router.asPath === '/') {
+          // for homepage
+          apiUrl += `/indexpage/all/`
+        } else {
+          return
+        }
+        const res = await axios({
+          url: apiUrl,
+          method: 'GET',
+          params: {
+            ch_guid: chCookie?.user_id,
+            ch_data: JSON.stringify({ data: {} }),
+          },
+        })
+        setCampaignData(res?.data)
+      } catch (error: any) {
+        logError(error)
+      }
+    },
+    [router],
+  )
 
   useEffect(() => {
     // Listener for snippet injector reset.
@@ -392,6 +425,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
               <SessionProvider session={pageProps?.session}>
                 <Component
                   {...pageProps}
+                  campaignData={campaignData}
                   location={location}
                   ipAddress={location.Ip}
                   config={appConfig}
@@ -540,14 +574,6 @@ MyApp.getInitialProps = async (
     logError(error)
   }
 
-  let campaignData: any = EmptyObject
-  try {
-    const res: any = await useGetEngageCampaigns(req, ctx?.asPath)
-    campaignData = res
-  } catch (error: any) {
-    logError(error)
-  }
-
   let pluginConfig = new Array<any>()
   const socialLoginConfigUrl = `${INFRA_PLUGIN_CATEGORY_ENDPOINT}?categoryCode=${PluginCategory.SOCIAL_LOGIN}`
   try {
@@ -568,7 +594,6 @@ MyApp.getInitialProps = async (
       reviewData: reviewData,
       locale,
       featureToggle,
-      campaignData,
     },
   }
 }
