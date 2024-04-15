@@ -10,7 +10,6 @@ export default function useB2BSaveQuote() {
         method: 'post',
         data: quote,
         cookies,
-        logRequest: true,
       })
       return response
     } catch (error: any) {

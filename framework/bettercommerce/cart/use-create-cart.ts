@@ -19,7 +19,6 @@ export default function useCreateCart() {
                 headers: {
                     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
                 },
-                logRequest: true,
             })
             return { ...response.result, ...{ message: response.message } }
         } catch (error: any) {
