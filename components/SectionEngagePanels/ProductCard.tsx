@@ -19,9 +19,10 @@ export interface SectionSliderProductCardProps {
   campaignData: any
   subHeading?: any
   title?: any
+  sku?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const [currentCampaign, setCurrentCampaign] = useState<any>(undefined)
   const { isCompared } = useUI()
@@ -37,6 +38,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
         const { data: campaignRes }: any = await axios.post(NEXT_ENGAGE_PRODUCT_CAMPAIGNS, {
           type,
           guid: campaignData?.ch_guid,
+          sku,
         })
         if (campaignRes?.items?.length > 0) {
           setProductList(campaignRes?.items)

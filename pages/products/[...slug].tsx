@@ -185,6 +185,7 @@ function Slug({
   reviews,
   deviceInfo,
   config,
+  campaignData,
 }: any) {
   const router = useRouter()
   const translate = useTranslation()
@@ -206,6 +207,7 @@ function Slug({
         reviews={reviews}
         deviceInfo={deviceInfo}
         config={config}
+        campaignData={campaignData}
       />
     )
   )
