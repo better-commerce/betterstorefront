@@ -20,7 +20,7 @@ export default async function useGetEngageCampaigns(req: any, currentUrl = '/') 
       url: apiUrl,
       method: 'get',
       headers: {
-        Origin: 'https://demostore.bettercommerce.tech',
+        Origin: 'https://fashion.bettercommerce.tech',
       },
       params: {
         ch_guid: chCookie?.user_id,
