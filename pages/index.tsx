@@ -8,7 +8,7 @@ import cn from 'classnames'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -96,7 +96,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData }: any) {
   const router = useRouter()
   const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -199,12 +199,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
           <div className='flex flex-col w-full'>
-            {trending?.length > 0 &&
-              <EngageProductCard data={trending} heading="Trending" subHeading="Products" />
-            }
-            {recentProduct?.length > 0 &&
-              <EngageProductCard data={recentProduct} heading="Recently Viewed" subHeading="Products" />
-            }
+            <EngageProductCard type={EngageEventTypes.TRENDING} campaignData={campaignData} title="Trending Products" />
+            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData}  title="Recently Viewed"/>
           </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>

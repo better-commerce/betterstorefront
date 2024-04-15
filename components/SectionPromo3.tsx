@@ -16,7 +16,7 @@ export interface SectionPromo3Props {
   data?: any;
 }
 
-const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-10", data }) => {
+const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-2", data }) => {
   const translate = useTranslation()
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
