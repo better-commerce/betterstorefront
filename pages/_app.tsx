@@ -47,6 +47,7 @@ import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
+import useGetEngageCampaigns from '@framework/api/endpoints/engage-campaign/get-campaings-by-page';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
@@ -539,6 +540,14 @@ MyApp.getInitialProps = async (
     logError(error)
   }
 
+  let campaignData: any = EmptyObject
+  try {
+    const res: any = await useGetEngageCampaigns(req, ctx?.asPath)
+    campaignData = res
+  } catch (error: any) {
+    logError(error)
+  }
+
   let pluginConfig = new Array<any>()
   const socialLoginConfigUrl = `${INFRA_PLUGIN_CATEGORY_ENDPOINT}?categoryCode=${PluginCategory.SOCIAL_LOGIN}`
   try {
@@ -559,6 +568,7 @@ MyApp.getInitialProps = async (
       reviewData: reviewData,
       locale,
       featureToggle,
+      campaignData,
     },
   }
 }

@@ -235,6 +235,11 @@ export const BETTERCOMMERCE_DEFAULT_COUNTRY =
 export const BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE =
   process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE
 
+// Engage API endpoints
+export const ENGAGE_QUERY_USER_EVENTS = `${process.env.ENGAGE_BASE_URL}/userevents`
+export const ENGAGE_WEB_CAMPAIGN = `${process.env.ENGAGE_BASE_URL}/webcampaign`
+export const NEXT_ENGAGE_PRODUCT_CAMPAIGNS = `/api/product-campaigns`
+
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY
 export const BETTERCOMMERCE_LANGUAGE = process.env.BETTERCOMMERCE_LANGUAGE
@@ -591,4 +596,13 @@ export enum QuoteStatus {
   ABANDONED = 4,
   CANCELLED = 5,
   QUOTE_SENT = 6,
+}
+
+export enum EngageEventTypes {
+  TRENDING = 'trend_first_orders',
+  RECENTLY_VIEWED = 'recent_products',
+  ALSO_BOUGHT = 'also_bought',
+  RECOMMENDED = 'recommendation_products',
+  TOP_VIEWED = 'top_viewed_products',
+  SIMILAR_PRODUCTS = 'similar_products_sorted',
 }
