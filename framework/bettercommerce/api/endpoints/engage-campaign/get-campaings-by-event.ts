@@ -67,7 +67,7 @@ export default async function useGetEngageCampaignData(req: any, payload: any) {
       method: 'GET',
       url: baseUrl + apiUrl,
       headers: {
-        Origin: 'https://demostore.bettercommerce.tech',
+        Origin: 'https://fashion.bettercommerce.tech',
       },
       params: {
         ch_guid: guid,
