@@ -30,7 +30,6 @@ export default async function useGetEngageCampaignData(req: any, payload: any) {
           data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: 12 },
         }),
       },
-      logRequest: true,
     });
     return response
   } catch (error: any) {
