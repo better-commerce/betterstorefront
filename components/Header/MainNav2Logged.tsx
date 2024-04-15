@@ -34,7 +34,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   let classTop = 'top-full'
-  if (!isGuestUser && user.userId && featureToggle?.features?.enableYourStoreFeature) {
+  if (!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature) {
     classTop = 'top-[82px]'
   }
   const renderMagnifyingGlassIcon = () => {
@@ -91,23 +91,23 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               <CartDropdown />
             </div>
           </div>
-          {!isGuestUser && user.userId && featureToggle?.features?.enableYourStoreFeature ? (
+          {!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature ? (
             <>
-              <div className="flex flex-col w-full bg-white border-t border-slate-100 hidden sm:block">
+              <div className="flex-col hidden w-full bg-white border-t border-slate-100 sm:block">
                 <ul className="container flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-6">
                   <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">Your Fashion Store</li>
                   <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                    <Link href={`/yourstore`} passHref>
+                    <Link href={`/my-store`} passHref>
                       <span>Your Browsing History</span>
                     </Link>
                   </li>
                   <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                    <Link href={`/yourstore/recommendations`} passHref>
+                    <Link href={`/my-store/recommendations`} passHref>
                       <span>Recommended For You</span>
                     </Link>
                   </li>
                   <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
-                    <Link href={`/yourstore/improve-recommendations`} passHref>
+                    <Link href={`/my-store/improve-recommendations`} passHref>
                       <span>Improve Your Recommendation</span>
                     </Link>
                   </li>

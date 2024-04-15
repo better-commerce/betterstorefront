@@ -137,21 +137,21 @@ const NavMobile: React.FC<NavMobileProps> = ({
           </Link>
           <Link
             className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/yourstore`}
+            href={`/my-store`}
             passHref
           >
             <span>Your Browsing History</span>
           </Link>
           <Link
             className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/yourstore/recommendations`}
+            href={`/my-store/recommendations`}
             passHref
           >
             <span>Recommended For You</span>
           </Link>
           <Link
             className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/yourstore/improve-recommendations`}
+            href={`/my-store/improve-recommendations`}
             passHref
           >
             <span>Improve Your Recommendation</span>

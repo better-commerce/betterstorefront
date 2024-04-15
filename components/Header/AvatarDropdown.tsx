@@ -127,13 +127,13 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
       isEnable: true
     },
     {
-      href: '/yourstore',
-      title: translate('label.wishlist.YourStore'),
+      href: '/my-store',
+      title: translate('label.wishlist.myStore'),
       className: 'text-left p-2 cursor-pointer',
       head: (
         <BuildingStorefrontIcon className="w-6 h-6 text-gray-500"/>
       ),
-      isEnable: featureToggle?.features?.enableYourStoreFeature
+      isEnable: featureToggle?.features?.enablemystoreFeature
     },
     {
       href: '/',

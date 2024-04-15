@@ -21,7 +21,7 @@ import { removeQueryString } from '@commerce/utils/uri-util';
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-const PAGE_TYPE = PAGE_TYPES.YourStore
+const PAGE_TYPE = PAGE_TYPES.MyStore
 const DEBOUNCE_TIMER = 300
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context

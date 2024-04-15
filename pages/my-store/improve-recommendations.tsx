@@ -11,7 +11,7 @@ import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import Link from "next/link";
 import { Switch } from "@headlessui/react";
 
-const PAGE_TYPE = PAGE_TYPES.YourStore
+const PAGE_TYPE = PAGE_TYPES.MyStore
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
