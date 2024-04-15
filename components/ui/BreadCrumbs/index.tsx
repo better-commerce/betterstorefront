@@ -55,9 +55,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
             </span>
           </Link>
           {breadcrumbIdx !== flattenedItems.length - 1 && (
-            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" className="flex-shrink-0 w-4 h-4 ml-0 text-gray-300 sm:ml-0" >
-              <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-            </svg>
+            <ChevronRightIcon className='w-3 h-3 mx-1'></ChevronRightIcon>
           )}
         </li>
       ))}
