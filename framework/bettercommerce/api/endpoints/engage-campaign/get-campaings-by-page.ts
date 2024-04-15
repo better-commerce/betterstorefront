@@ -19,9 +19,9 @@ export default async function useGetEngageCampaigns(req: any, currentUrl = '/') 
     const response = await fetcher({
       url: apiUrl,
       method: 'get',
-      // headers: {
-      //   Origin: req.headers?.host,
-      // },
+      headers: {
+        Origin: 'https://demostore.bettercommerce.tech',
+      },
       params: {
         ch_guid: chCookie?.user_id,
         ch_data: JSON.stringify({ data: {} }),
