@@ -13,7 +13,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MapWithMarker from '@components/ui/Map/Marker';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer';
-const PAGE_TYPE = PAGE_TYPES.YourStore
+const PAGE_TYPE = PAGE_TYPES.MyStore
 interface Props {
   data: any
 }

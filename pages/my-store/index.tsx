@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import BrowsingHistoryProducts from "@components/Product/RelatedProducts/BrowsingHistory";
 
-const PAGE_TYPE = PAGE_TYPES.YourStore
+const PAGE_TYPE = PAGE_TYPES.MyStore
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 }
 
-function Recommendations({ deviceInfo, config }: any) {
+function MyStore({ deviceInfo, config }: any) {
   const router = useRouter()
   return (
     <>
@@ -40,5 +40,5 @@ function Recommendations({ deviceInfo, config }: any) {
   )
 }
 
-Recommendations.LayoutAccount = LayoutAccount
-export default withDataLayer(Recommendations, PAGE_TYPE, true, LayoutAccount)
+MyStore.LayoutAccount = LayoutAccount
+export default withDataLayer(MyStore, PAGE_TYPE, true, LayoutAccount)

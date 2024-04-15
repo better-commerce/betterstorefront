@@ -17,7 +17,7 @@ export const PAGE_TYPES = {
   Privacy: 'Privacy',
   Terms: 'Terms',
   Survey: 'Survey',
-  YourStore: 'YourStore',
+  MyStore: 'my-store',
 }
 export default function withDataLayer(
   Component: any,
