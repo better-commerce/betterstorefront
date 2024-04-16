@@ -979,9 +979,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
             </div>
           )}
-          {/* <div className="cart-recently-viewed">
-            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
-          </div> */}
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
@@ -991,14 +988,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </>
           )}
+
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
+            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} title="Similar Products" sku={product?.stockCode} isSlider={true} productPerRow={4} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
+            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Similar Products" isSlider={true} productPerRow={4} />
+          </div>
           <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Recently Viewed" isSlider={true} productPerRow={4} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
-            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} title="Similar Products" sku={product?.stockCode} isSlider={true}  productPerRow={4}/>
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
-            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Recently Viewed" isSlider={true} productPerRow={4} />
           </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
