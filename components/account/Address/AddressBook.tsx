@@ -350,9 +350,8 @@ export default function AddressBook({ deviceInfo }: any) {
               if (callback) {
                 callback()
               }
-
+              setAlert({type: AlertType.SUCCESS,msg: translate('common.label.addressAddedSuccessfullyMsg')})
               closeNewAddressModal()
-              // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
               setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
@@ -378,7 +377,7 @@ export default function AddressBook({ deviceInfo }: any) {
           if (callback) { callback()}
           else{ setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})}
           closeNewAddressModal()
-          // setAlert({type:'success',msg:ADDRESS_UPDATE})
+          setAlert({type: AlertType.SUCCESS,msg: translate('common.label.addressUpdatedSuccessfullyMsg')})
         })
         .catch((error: any) => {
           setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})

@@ -75,14 +75,8 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
     >
       {(context) => {
         const {
-          errors,
-          touched,
           handleSubmit,
           values,
-          handleChange,
-          setValues,
-          handleBlur,
-          setFieldValue,
         } = context
         // form.setTouched({...form.touched,[field.name]: true });
         return (

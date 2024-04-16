@@ -44,7 +44,7 @@ export default function MyDetails({ handleToggleShowState }: any) {
     firstName: user?.firstName,
     lastName: user?.lastName,
     mobile: user?.mobile,
-    phone: user?.phone,
+    telephone: user?.telephone,
     gender: user?.gender
       ? user?.gender
       : findByFieldName(formConfig, 'gender')?.options?.length
