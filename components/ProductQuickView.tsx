@@ -534,7 +534,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             })}
           </div>
         </div>
-        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8">
+        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0">
           {renderSectionContent()}
         </div>
       </div>

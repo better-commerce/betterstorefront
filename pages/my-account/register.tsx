@@ -64,7 +64,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       </div> */}
 
       <div className="flex flex-col items-center justify-center w-full">
-        <div className="w-full px-5 font-semibold sm:px-0">
+        <div className="w-full px-10 font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
           <input
             className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
@@ -75,7 +75,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
           />
         </div>
         {error ? <span className="text-red-500 capitalize">{error}</span> : null}
-        <div className="flex items-center justify-center w-full my-5">
+        <div className="flex items-center justify-center w-full my-5 px-10 sm:px-0">
           <Button
             className="w-full border border-black btn btn-c btn-primary rounded-2xl"
             buttonType="default"

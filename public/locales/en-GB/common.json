@@ -481,6 +481,7 @@
     },
     "orderSummary": {
       "orderSummaryText": "Order Summary",
+      "orderHideSummaryText": "Hide Summary",
       "basketSummaryText": "Basket Summary",
       "paymentDetailsBtnText": "Payment Details",
       "priceTaxInclusiveText": "Prices are inclusive of all taxes",

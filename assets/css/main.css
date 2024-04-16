@@ -17315,6 +17315,11 @@ input[type=time]::-webkit-calendar-picker-indicator {
     z-index: 20 !important;
   }
 }
+body:has(.flex-col.hidden.w-full.bg-white.border-t.border-slate-100){
+  .ch-announcement-bar-1{
+    margin-top: 25px !important;
+  }
+}
 body:has(.ch-announcement-bar-1) {
   .container.py-4.mx-auto {
     padding-top: 70px !important;
@@ -17336,6 +17341,15 @@ body:has(.ch-announcement-bar-1) {
   }
   .container.pb-24.mx-auto.overflow-hidden {
     padding-top: 45px !important;
+  }
+  .justify-start.w-full.bar {
+    padding-top: 50px !important;
+  }
+  .flex.justify-between.gap-1.mb-5.lg\:gap-3.sm\:mb-10 {
+    padding-top: 55px !important;
+  }
+  .container.pt-5.sm\:pb-24.mx-auto.bg-transparent {
+    padding-top: 70px !important;
   }
 }
 
@@ -17418,5 +17432,11 @@ body:has(.ch-announcement-bar-1) {
     height: 300px !important;
     width: 100%;
     object-position: top !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .ch-announcement-pop-over-1 .popover-panel {
+    left: 6% !important;
+    width: 87% !important;
   }
 }

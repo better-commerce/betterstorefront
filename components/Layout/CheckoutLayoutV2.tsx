@@ -165,7 +165,7 @@ const CheckoutLayoutV2: FC<any> = ({ children }) => {
         <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
         {headElements}
       </Head>
-      <main className="fit gradient">
+      <main className="sm:fit gradient">
         {displayAlert && <AlertRibbon />}
         {children}
       </main>

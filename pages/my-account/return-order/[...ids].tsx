@@ -192,7 +192,7 @@ export default function ReturnOrder({
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase flex items-center">
+                <h4 className="mr-2 text-xl font-semibold leading-none text-gray-900 uppercase flex items-center">
                  <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>
                  {translate('label.help.returnItemText')}
                 </h4>
@@ -257,13 +257,13 @@ export default function ReturnOrder({
                               {translate('label.myAccount.selectQuantityText')}
                             </label>
                           </div>
-                          <div className="flex items-end px-3 py-2 pl-0 mt-1 ml-2">
-                            <div className="flex items-end flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
-                              <label className="text-xs text-primary">
+                          <div className="py-2">
+                            <div className="flex flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
+                              <label className="text-xs text-primary mt-2 mr-2">
                                 {translate('common.label.qtyText')}{' '}
                               </label>
                               <select
-                                className="w-full px-1 text-xs bg-white sm:w-22 text-primary"
+                                className="text-xs bg-white sm:w-22 text-primary"
                                 value={value}
                                 onChange={handleChange}
                               >

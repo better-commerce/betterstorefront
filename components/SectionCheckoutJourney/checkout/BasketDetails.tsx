@@ -129,10 +129,10 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
           <Disclosure>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-gray-50">
+                <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-white">
                   <span className="font-medium text-orange-700 font-12">
                     <ShoppingCartIcon className="inline-block w-4 h-4 text-orange-700" />{' '}
-                    {open ? translate('common.label.hideText') : translate('common.label.showText')}{translate('label.orderSummary.orderSummaryText')}{' '}
+                    {open ? translate('label.orderSummary.orderHideSummaryText') : translate('label.orderSummary.orderSummaryText')}{' '}
                     <ChevronDownIcon className={`inline-block w-4 h-4 text-orange-700 ${open ? 'rotate-180 transform' : ''}`} />
                   </span>
                   <span className="font-semibold text-black">
