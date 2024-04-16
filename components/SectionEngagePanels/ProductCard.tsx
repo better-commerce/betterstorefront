@@ -26,9 +26,10 @@ export interface SectionSliderProductCardProps {
   sku?: any
   isSlider?: boolean
   productPerRow?: any
+  productLimit?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider, productPerRow }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider, productPerRow, productLimit }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()
@@ -60,11 +61,11 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
       const getReqPayload = (rData?: any) => {
         if (rData?.sku) {
           return JSON.stringify({
-            data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: EmptyString, limit: 12, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type }},
+            data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: EmptyString, limit: productLimit, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type } },
           })
         }
         return JSON.stringify({
-          data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: 12, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type }},
+          data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: productLimit, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type } },
         })
       }
 
@@ -181,7 +182,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
           </>
         ) : (
           <>
-            <div className='grid grid-cols-1 gap-6 sm:grid-cols-4'>
+            <div className={`grid grid-cols-1 gap-6 sm:grid-cols-${productPerRow}`}>
               {productList?.map((item: any, index: number) => (
                 <div key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
                   <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6`)}>
