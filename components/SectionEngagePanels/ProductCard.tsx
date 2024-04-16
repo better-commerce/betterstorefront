@@ -9,13 +9,15 @@ import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Heading from '@components/Heading/Heading'
-import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_TRENDING, EngageEventTypes, NEXT_ENGAGE_PRODUCT_CAMPAIGNS } from '@components/utils/constants'
+import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_TRENDING, EngageEventTypes } from '@components/utils/constants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCore, { Navigation } from 'swiper'
 import { ArrowLeftIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Cookie } from '@framework/utils/constants'
+import withOmnilytics from '@components/shared/withOmnilytics'
+
 export interface SectionSliderProductCardProps {
   type: any
   campaignData: any
@@ -51,9 +53,18 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
             }),
           }
           break
-        case EngageEventTypes.SIMILAR_PRODUCTS:
+        case EngageEventTypes.SIMILAR_PRODUCTS_SORTED:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/similaritemssorted'
+          params = {
+            ch_data: JSON.stringify({
+              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
+            }),
+          }
+          break
+        case EngageEventTypes.SIMILAR_PRODUCTS:
+          baseUrl = ENGAGE_QUERY_USER_ITEMS
+          apiUrl = '/similaritems'
           params = {
             ch_data: JSON.stringify({
               data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
@@ -182,4 +193,5 @@ const ButtonLink = (props: any) => {
     </Link>
   )
 }
-export default EngageProductCard
+
+export default withOmnilytics(EngageProductCard)
