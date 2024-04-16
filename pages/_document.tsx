@@ -1,15 +1,18 @@
 import { CURRENT_THEME } from '@components/utils/constants'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import Cookies from 'js-cookie';
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 import Script from 'next/script'
+import { useState } from 'react';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
-export default class MyDocument extends NextDocument /*Document*/ {
+export default class MyDocument extends NextDocument {
   static async getInitialProps(ctx: any) {
     const initialProps = await NextDocument.getInitialProps(ctx)
     return { ...initialProps }
   }
 
   render() {
+    
     return (
       <Html>
         <Head>
@@ -19,7 +22,7 @@ export default class MyDocument extends NextDocument /*Document*/ {
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY&libraries=places"></script>
           }
         </Head>
-        <body className="custom_class promo-banner-inactive">
+        <body className={`custom_class promo-banner-inactive`}>
           <Main />
           <NextScript />
           {OMNILYTICS_DISABLED ? null :

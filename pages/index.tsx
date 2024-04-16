@@ -26,6 +26,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import LikeButton from '@components/LikeButton'
 import Prices from '@components/Prices'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import Cookies from 'js-cookie'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -161,6 +162,10 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
+  const ch_close_pop_over = () => {
+    Cookies.set('ch_announcement_hidden', 'true', { expires: 7 }); // Save cookie for 7 days
+  };
+  const isAnnouncementHidden = Cookies.get('ch_announcement_hidden');
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let trending = []
@@ -199,8 +204,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
           <div className='flex flex-col w-full'>
-            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending Products" />
-            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData}  title="Recently Viewed"/>
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending Products" isSlider={true}  />
+            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Recently Viewed" isSlider={true} />
           </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
