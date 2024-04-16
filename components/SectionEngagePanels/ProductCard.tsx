@@ -164,13 +164,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
                         <div className="flex items-center justify-between ">
                           <div className="font-semibold font-14 text-green">
                             {currencyCode}
-                            {roundToDecimalPlaces(item?.price, 2)}
-                            {priceFormat(item?.sale_price) > priceFormat(item?.price) && (
-                              <span className="px-1 font-normal text-gray-400 line-through font-12">
-                                {currencyCode}
-                                {roundToDecimalPlaces(item?.sale_price, 2)}
-                              </span>
-                            )}
+                            {roundToDecimalPlaces(item?.price, 2)}                            
                           </div>
                         </div>
                       </div>
@@ -203,13 +197,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
                         <div className="flex items-center justify-between ">
                           <div className="font-semibold font-14 text-green">
                             {currencyCode}
-                            {roundToDecimalPlaces(item?.price, 2)}
-                            {priceFormat(item?.sale_price) > priceFormat(item?.price) && (
-                              <span className="px-1 font-normal text-gray-400 line-through font-12">
-                                {currencyCode}
-                                {roundToDecimalPlaces(item?.sale_price, 2)}
-                              </span>
-                            )}
+                            {roundToDecimalPlaces(item?.price, 2)}                            
                           </div>
                         </div>
                       </div>
