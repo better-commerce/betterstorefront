@@ -34,7 +34,7 @@ function MyStore({ deviceInfo, config, campaignData }: any) {
         <meta property="og:description" content="My Store" key="ogdesc" />
       </NextHead>
       <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-10">
-        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="My Browsing History" isSlider={false} />
+        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Your Browsing History" isSlider={false} productPerRow={5} />
       </div>
     </>
   )
