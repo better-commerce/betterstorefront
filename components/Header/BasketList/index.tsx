@@ -26,7 +26,7 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
                     index = index + 1
                 }
                 return (
-                    <Link key={basket?.id} title={!basket?.name ? basket?.id.substring(0, 8) : basket?.name} passHref href="#" className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => {
+                    <Link key={basket?.id} title={basketName} passHref href="#" className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => {
                         ev.preventDefault()
                         ev.stopPropagation()
                         if (basket?.id && basket?.id !== Guid.empty) {

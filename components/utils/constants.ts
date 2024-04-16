@@ -37,6 +37,7 @@ export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/co
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
 export const B2B_COMPANY_USERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const B2B_USER_QUOTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
+export const B2B_TRANSFER_BASKET = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/transfer`
 export const AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/authenticate`
 export const SOCIAL_AUTHENTICATE_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/social-login`
 export const REVIEW_SERVICE_BASE_API = `${process.env.BETTERCOMMERCE_REVIEW_BASE_URL}/api/v1/service`
@@ -80,6 +81,7 @@ export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
 export const PRICE_MATCH_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/basket/pricematch/add`
 export const NEXT_CREATE_BASKET = `/api/create-cart`
+export const NEXT_TRANSFER_BASKET = `/api/b2b/transfer-basket`
 export const NEXT_ADD_TO_CART = `/api/add-item-cart`
 export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
@@ -576,6 +578,7 @@ export enum LoadingActionType {
   MOVE_TO_WISHLIST = 2,
   CREATE_BASKET = 3,
   REMOVE_BASKET = 4,
+  TRANSFER_BASKET = 5,
 }
 
 export const EmptyGuid = '00000000-0000-0000-0000-000000000000'
