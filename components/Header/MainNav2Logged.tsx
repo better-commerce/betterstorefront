@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Logo, useUI } from "@components/ui";
@@ -8,6 +8,7 @@ import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
+import { useRouter } from "next/router";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -26,13 +27,34 @@ interface Props {
   keywords?: any
   defaultLanguage: string
   defaultCountry: string
+  href?: any
 }
 
-const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
+const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle, href }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
+  const router = useRouter();
+  const [nextPageTitle, setNextPageTitle] = useState('');
+  const getPageTitle = (path: any) => {
+    // Logic to get page title based on path (e.g., from a database or a predefined mapping)
+    // For demonstration, let's just return hardcoded titles
+    const titleMap: any = {
+      '/my-store': 'My Store',
+      '/my-store/recommendations': 'Your Recommendations',
+      '/my-store/improve-recommendations': 'Improve Recommendations',
+      '/my-account': 'My Account'
+    };
+
+    return titleMap[path] || '';
+  };
+  // useEffect to update nextPageTitle whenever route changes
+  useEffect(() => {
+    const { pathname } = router;
+    const title = getPageTitle(pathname);
+    setNextPageTitle(title);
+  }, [router]);
   let classTop = 'top-full'
   if (!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature) {
     classTop = 'top-[82px]'
@@ -96,22 +118,22 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               <div className="flex-col hidden w-full bg-white border-t border-slate-100 sm:block">
                 <ul className="container flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-6">
                   <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">My Fashion Store</li>
-                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                  <li className={`pt-1 mt-0 font-normal border-b-2  font-12 hover:border-sky-500 hover:text-sky-600 ${nextPageTitle === 'My Store' ? 'border-sky-500 text-sky-600' : 'border-white text-black'}`}>
                     <Link href={`/my-store`} passHref>
                       <span>Browsing History</span>
                     </Link>
                   </li>
-                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                  <li className={`pt-1 mt-0 font-normal  border-b-2  font-12 hover:border-sky-500 hover:text-sky-600 ${nextPageTitle === 'Your Recommendations' ? 'border-sky-500 text-sky-600' : 'border-white text-black'}`}>
                     <Link href={`/my-store/recommendations`} passHref>
                       <span>Recommended For You</span>
                     </Link>
                   </li>
-                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                  <li className={`pt-1 mt-0 font-normal  border-b-2  font-12 hover:border-sky-500 hover:text-sky-600 ${nextPageTitle === 'Improve Recommendations' ? 'border-sky-500 text-sky-600' : 'border-white text-black'}`}>
                     <Link href={`/my-store/improve-recommendations`} passHref>
                       <span>Improve Your Recommendation</span>
                     </Link>
                   </li>
-                  <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
+                  <li className={`pt-1 mt-0 font-normal  border-b-2  font-12 hover:border-sky-500 hover:text-sky-600 ${nextPageTitle === 'My Account' ? 'border-sky-500 text-sky-600' : 'border-white text-black'}`}>
                     <Link href={`/my-account`} passHref>
                       <span>Your Profile</span>
                     </Link>
