@@ -133,14 +133,14 @@ const NavMobile: React.FC<NavMobileProps> = ({
             href={`/my-account`}
             passHref
           >
-            Your Fashion Store
+            My Fashion Store
           </Link>
           <Link
             className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
             href={`/my-store`}
             passHref
           >
-            <span>Your Browsing History</span>
+            <span>Browsing History</span>
           </Link>
           <Link
             className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
