@@ -9,23 +9,25 @@ import { getCurrentPage, isB2BUser } from "@framework/utils/app-util";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { LoadingActionType, NEXT_CREATE_BASKET } from "@components/utils/constants";
+import { LoadingActionType, NEXT_CREATE_BASKET , NEXT_TRANSFER_BASKET } from "@components/utils/constants";
 import axios from "axios";
 import { matchStrings } from "@framework/utils/parse-util";
 import { Guid } from "@commerce/types";
 
 const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
+const TransferBasketModal = dynamic(() => import('@components/transferBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function CartDropdown() {
   const { getUserCarts, deleteCart } = useCart()
-  const { isGuestUser, user, basketId, cartItems, openCart } = useUI()
+  const { isGuestUser, user, basketId, cartItems, openCart, setAlert} = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
   const translate = useTranslation()
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [basketIdToDelete, setBasketIdToDelete] = useState<string>(Guid.empty)
   const [isCreateBasketModalOpen, setIsCreateBasketModalOpen] = useState<boolean>(false)
+  const [isTransferBasketModalOpen, setIsTransferBasketModalOpen] = useState<boolean>(false)
   const [isDeleteBasketModalOpen, setIsDeleteBasketModalOpen] = useState<boolean>(false)
   const [userCarts, setUserCarts] = useState<any>()
   let currentPage = getCurrentPage()
@@ -87,6 +89,26 @@ export default function CartDropdown() {
         openCreateBasketModal()
       },
       enabled: true
+    },
+    {
+      id: 'transferBasket',
+      href: '#',
+      title: translate('label.b2b.basket.transferBasketLinkText'),
+      className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+      head: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 90 90" version="1.1" preserveAspectRatio="xMidYMid meet">
+        <g>
+          <path d="M 68.557 75.78 c -0.747 0 -1.501 -0.145 -2.221 -0.443 c -2.171 -0.899 -3.573 -2.998 -3.573 -5.348 v -2.334 H 35.023 c -2.209 0 -4 -1.791 -4 -4 c 0 -2.209 1.791 -4 4 -4 h 29.953 c 2.939 0 5.373 2.201 5.74 5.042 l 10.369 -10.369 L 70.716 43.958 C 70.348 46.799 67.914 49 64.975 49 H 47.074 c -2.209 0 -4 -1.791 -4 -4 s 1.791 -4 4 -4 h 15.689 v -2.334 c 0 -2.35 1.402 -4.449 3.573 -5.348 c 2.172 -0.897 4.646 -0.406 6.308 1.256 l 15.662 15.661 c 2.257 2.257 2.257 5.929 0 8.186 L 72.643 74.082 C 71.534 75.192 70.06 75.78 68.557 75.78 z" />
+          <path d="M 21.443 57.125 c -1.503 0 -2.976 -0.588 -4.086 -1.697 L 1.694 39.765 c -1.093 -1.092 -1.695 -2.546 -1.695 -4.093 s 0.603 -3.001 1.696 -4.094 l 15.661 -15.661 c 1.661 -1.661 4.139 -2.152 6.308 -1.254 c 2.171 0.899 3.573 2.998 3.573 5.348 v 2.334 h 27.741 c 2.209 0 4 1.791 4 4 s -1.791 4 -4 4 H 25.025 c -2.939 0 -5.373 -2.202 -5.74 -5.042 L 8.915 35.673 l 10.369 10.369 c 0.367 -2.84 2.801 -5.042 5.74 -5.042 h 22.049 c 2.209 0 4 1.791 4 4 s -1.791 4 -4 4 H 27.237 v 2.334 c 0 2.349 -1.402 4.448 -3.573 5.347 C 22.944 56.98 22.19 57.125 21.443 57.125 z" />
+        </g>
+      </svg>
+      ),
+      onClick: (ev: any) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        openTransferBasketModal();
+      },
+      enabled: true,
     },
     {
       id: 'deleteBasket',
@@ -152,6 +174,26 @@ export default function CartDropdown() {
       //console.log(createBasketResult)
     }
   }
+
+  const handleTransferBasket = async (basketId: string , transitUserId : string , currentUserId : string , companyId : string) => {
+    const data = {
+      currentUserId,
+      basketId,
+      transitUserId,
+      companyId
+    }
+    const { data: transferBasketResult }: any = await axios.post(NEXT_TRANSFER_BASKET, data)
+      if (transferBasketResult?.isValid) {
+        closeTransferBasketModal()
+        if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
+          getBaskets(user?.userId)
+        }
+        
+      } else {
+        setLoadingAction(LoadingActionType.NONE)
+        setAlert({ type: 'error', msg: transferBasketResult.message })
+      }
+  }
   const deleteBasket = async (basketId: string) => {
     if (basketId && basketId !== Guid.empty) {
       setBasketIdToDelete(basketId)
@@ -161,6 +203,13 @@ export default function CartDropdown() {
   const closeCreateBasketModal = () => {
     setLoadingAction(LoadingActionType.NONE)
     setIsCreateBasketModalOpen(!isCreateBasketModalOpen)
+  }
+
+  const openTransferBasketModal = () => setIsTransferBasketModalOpen(true)
+
+  const closeTransferBasketModal = () => {
+    setLoadingAction(LoadingActionType.NONE)
+    setIsTransferBasketModalOpen(!isTransferBasketModalOpen)
   }
 
   const openDeleteBasketModal = () => setIsDeleteBasketModalOpen(true)
@@ -269,6 +318,7 @@ export default function CartDropdown() {
       </Popover>
 
       <AddBasketModal isOpen={isCreateBasketModalOpen} closeModal={closeCreateBasketModal} loadingAction={loadingAction} handleCreateBasket={handleCreateBasket} setLoadingAction={setLoadingAction} />
+      <TransferBasketModal isOpen={isTransferBasketModalOpen} userCarts={userCarts} closeModal={closeTransferBasketModal} loadingAction={loadingAction} handleTransferBasket={handleTransferBasket} setLoadingAction={setLoadingAction} />
       <DeleteBasketModal isOpen={isDeleteBasketModalOpen} closeModal={closeDeleteBasketModal} loadingAction={loadingAction} handleDeleteBasket={handleDeleteBasket} setLoadingAction={setLoadingAction} />
     </>
   );

@@ -41,10 +41,16 @@
       "phoneNumberText": "Número de teléfono",
       "basket": {
         "createBasketLinkText": "Crear Canasta",
+        "transferBasketLinkText": "Canasta de transferencia",
         "deleteBasketLinkText": "Eliminar Canasta",
         "listBasketsHeadingText": "Lista de Canastas",
         "removeBasketHeadingText": "¿Eliminar esta canasta?",
-        "removeBasketConfirmText": "¿Estás seguro de que no quieres esta canasta?"
+        "removeBasketConfirmText": "¿Estás seguro de que no quieres esta canasta?",      
+        "selectBasketToTransferText" : "Seleccionar una Canasta",
+        "selectUserToTransferText" : "Seleccionar un Usuario",
+        "noCartSelectedText" : "No se ha seleccionado ningún carrito",
+        "noUserSelectedText" : "No se ha seleccionado ningún usuario",
+        "Unnamed" : "Sin nombre"
       }
     },
     "basket": {
@@ -826,6 +832,7 @@
     },
     "label": {
       "homeText": "Inicio",
+      "optional": "(Opcional)",
       "postText": "Publicar",
       "reviews": "reseñas",
       "backToHomepageText": "Volver a la página de inicio",

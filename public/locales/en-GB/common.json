@@ -41,10 +41,16 @@
       "phoneNumberText": "Phone Number",
       "basket": {
         "createBasketLinkText": "Create Basket",
+        "transferBasketLinkText": "Transfer Basket",
         "deleteBasketLinkText": "Delete Basket",
         "listBasketsHeadingText": "Basket List",
         "removeBasketHeadingText": "Remove this basket?",
-        "removeBasketConfirmText": "Are you sure you don't want this basket?"
+        "removeBasketConfirmText": "Are you sure you don't want this basket?",
+        "selectBasketToTransferText" : "Select a Basket",
+        "selectUserToTransferText" : "Select a User",
+        "noCartSelectedText" : "No Cart Selected",
+        "noUserSelectedText" : "No User Selected",
+        "Unnamed" : "Unnamed"
       }
     },
     "basket": {
@@ -830,6 +836,7 @@
       "homeText": "Home",
       "postText": "Post",
       "reviews": "reviews",
+      "optional": "(Optional)",
       "backToHomepageText": "Back to Homepage",
       "closePanelText": "Close panel",
       "otherText": "Other",
