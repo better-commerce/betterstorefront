@@ -16,7 +16,7 @@ import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNA
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
-import { matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { matchStrings, parseItemId, stringFormat } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
@@ -174,7 +174,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     // added for engage
     dataForEngage = {
       item: {
-        item_id: product?.stockCode || EmptyString,
+        item_id: parseItemId(product?.stockCode) || EmptyString,
         title: product?.name || EmptyString,
         sku: product?.productCode || EmptyString,
         categories: product?.classification?.category || [],
@@ -188,7 +188,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
         brand: product?.brand || EmptyString,
         variant: {
-          id: product?.stockCode || EmptyString,
+          id: parseItemId(product?.stockCode) || EmptyString,
           title: product?.name || EmptyString,
           sku: product?.productCode || EmptyString,
           image_url: product?.image || EmptyString,
@@ -208,7 +208,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         },
         customAttributes: product?.customAttributes || EmptyString,
       },
-      item_id: product?.stockCode || EmptyString,
+      item_id: parseItemId(product?.stockCode) || EmptyString,
     }
   }
 

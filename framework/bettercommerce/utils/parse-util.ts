@@ -280,3 +280,8 @@ export const metresToMiles = (meters: number): number => {
   const miles = meters * milesConversionFactor;
   return parseFloat(miles.toFixed(2)); // Round to 2 decimal points
 }
+
+export const parseItemId = (stockCode : any) => {
+  let prodInfo = stockCode?.split('-')
+  return prodInfo?.slice(0,prodInfo?.length -1)?.join('-')
+}
