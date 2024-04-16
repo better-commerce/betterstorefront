@@ -196,19 +196,17 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         <div className="mt-14 sm:mt-24 lg:mt-32">
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
-        <div className="container relative my-16 sm:my-24 space-y-16 sm:space-y-24 lg:space-y-32 lg:my-32">
+        <div className="container relative my-16 space-y-16 sm:my-24 sm:space-y-24 lg:space-y-32 lg:my-32">
           <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
           <div className="relative py-10 sm:py-16 lg:py-20">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
-          {campaignData && campaignData.length > 0 && (
           <div className='flex flex-col w-full'>
             <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending Products" isSlider={true} productPerRow={4} productLimit={12}/>
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Recently Viewed" isSlider={true} productPerRow={4} productLimit={12} />
           </div>
-          )}
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
       </div>
