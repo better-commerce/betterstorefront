@@ -47,7 +47,6 @@ import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
-import useGetEngageCampaigns from '@framework/api/endpoints/engage-campaign/get-campaings-by-page';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
@@ -147,7 +146,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   useEffect(() => {
     setNavTree()
-    productCampaigns()
     setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
@@ -155,6 +153,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     )
     if (!OMNILYTICS_DISABLED) {
+      productCampaigns()
       document.body.appendChild(addScript)
         ; (window as any).googleTranslateElementInit = googleTranslateElementInit
       document.getElementById('goog-gt-tt')?.remove()

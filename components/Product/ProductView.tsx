@@ -995,7 +995,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Recently Viewed" />
           </div>
           <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
-            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Similar Products" sku={product?.stockCode} />
+            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} title="Similar Products" sku={product?.stockCode} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
+            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Recently Viewed" />
           </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
