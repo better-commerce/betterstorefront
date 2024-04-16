@@ -116,24 +116,24 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
           {!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature ? (
             <>
               <div className="flex-col hidden w-full bg-white border-t border-slate-100 sm:block">
-                <ul className="container flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-6">
+                <ul className="container flex items-center justify-start pl-0 mx-auto -mb-1 gap-x-4 sm:gap-x-6">
                   <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">My Fashion Store</li>
-                  <li className={`pt-1 mt-0 border-b-2  font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'My Store' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
+                  <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'My Store' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
                     <Link href={`/my-store`} passHref>
                       <span>Browsing History</span>
                     </Link>
                   </li>
-                  <li className={`pt-1 mt-0 border-b-2  font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'Your Recommendations' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
+                  <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'Your Recommendations' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
                     <Link href={`/my-store/recommendations`} passHref>
                       <span>Recommended For You</span>
                     </Link>
                   </li>
-                  <li className={`pt-1 mt-0 border-b-2  font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'Improve Recommendations' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
+                  <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'Improve Recommendations' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
                     <Link href={`/my-store/improve-recommendations`} passHref>
                       <span>Improve Your Recommendation</span>
                     </Link>
                   </li>
-                  <li className={`pt-1 mt-0 border-b-2  font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'My Account' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
+                  <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-purple-500 hover:text-purple-700 ${nextPageTitle === 'My Account' ? 'border-purple-500 text-purple-700 font-medium' : 'border-white text-black font-normal'}`}>
                     <Link href={`/my-account`} passHref>
                       <span>Your Profile</span>
                     </Link>
