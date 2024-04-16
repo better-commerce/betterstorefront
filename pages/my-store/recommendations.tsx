@@ -1,4 +1,4 @@
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes, SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -6,6 +6,7 @@ import NextHead from 'next/head'
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import BrowsingHistoryProducts from "@components/Product/RelatedProducts/BrowsingHistory";
+import EngageProductCard from "@components/SectionEngagePanels/ProductCard";
 
 const PAGE_TYPE = PAGE_TYPES.MyStore
 
@@ -18,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 }
 
-function Recommendations({ deviceInfo, config }: any) {
+function Recommendations({ deviceInfo, config, campaignData }: any) {
   const router = useRouter()
   return (
     <>
@@ -33,8 +34,11 @@ function Recommendations({ deviceInfo, config }: any) {
         <meta property="og:title" content="Your Store" key="ogtitle" />
         <meta property="og:description" content="Your Store" key="ogdesc" />
       </NextHead>
-      <div className="container py-6 mx-auto cart-recently-viewed sm:py-10">
-        <BrowsingHistoryProducts deviceInfo={deviceInfo} config={config} productPerRow={4} />
+      <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-10">
+        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending" isSlider={false} />
+        <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Trending" isSlider={false} />
+        <EngageProductCard type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} title="Trending" isSlider={false} />
+        <EngageProductCard type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} title="Trending" isSlider={false} />
       </div>
     </>
   )
