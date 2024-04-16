@@ -95,10 +95,10 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
             <>
               <div className="flex-col hidden w-full bg-white border-t border-slate-100 sm:block">
                 <ul className="container flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-6">
-                  <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">Your Fashion Store</li>
+                  <li className="pt-1 mt-0 font-semibold text-black border-b-2 border-white font-12">My Fashion Store</li>
                   <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
                     <Link href={`/my-store`} passHref>
-                      <span>Your Browsing History</span>
+                      <span>Browsing History</span>
                     </Link>
                   </li>
                   <li className="pt-1 mt-0 font-normal text-black border-b-2 border-white font-12 hover:border-sky-500 hover:text-sky-600">
