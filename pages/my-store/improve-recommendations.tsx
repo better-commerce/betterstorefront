@@ -38,13 +38,13 @@ function ImproveRecommendations({ deviceInfo, config }: any) {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>Your Store</title>
-        <meta name="title" content="Your Store" />
-        <meta name="description" content="Your Store" />
-        <meta name="keywords" content="Your Store" />
-        <meta property="og:image" content="Your Store" />
-        <meta property="og:title" content="Your Store" key="ogtitle" />
-        <meta property="og:description" content="Your Store" key="ogdesc" />
+        <title>Improve Recommendations</title>
+        <meta name="title" content="Improve Recommendations" />
+        <meta name="description" content="Improve Recommendations" />
+        <meta name="keywords" content="Improve Recommendations" />
+        <meta property="og:image" content="Improve Recommendations" />
+        <meta property="og:title" content="Improve Recommendations" key="ogtitle" />
+        <meta property="og:description" content="Improve Recommendations" key="ogdesc" />
       </NextHead>
       <div className="container py-6 mx-auto cart-recently-viewed sm:py-10">
         <div className="flex flex-col justify-start mt-4 sm:mt-6">

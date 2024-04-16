@@ -25,9 +25,10 @@ export interface SectionSliderProductCardProps {
   title?: any
   sku?: any
   isSlider?: boolean
+  productPerRow?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider, productPerRow }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const [currentCampaign, setCurrentCampaign] = useState<any>(undefined)
   const { isCompared } = useUI()
@@ -148,7 +149,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
         </div>
         {isSlider ? (
           <>
-            <Swiper className="px-4 bg-white sm:px-0 min-cls-h" slidesPerView={1.1} spaceBetween={10} navigation={false} ref={swiperRef} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 4.01 }, 1024: { slidesPerView: 4.01 } }}>
+            <Swiper className="px-4 bg-white sm:px-0 min-cls-h" slidesPerView={1.1} spaceBetween={10} navigation={false} ref={swiperRef} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: productPerRow }, 1024: { slidesPerView: productPerRow } }}>
               {productList?.map((item: any, index: number) => (
                 <SwiperSlide key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
                   <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6`)}>

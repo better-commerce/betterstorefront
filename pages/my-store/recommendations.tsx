@@ -26,19 +26,18 @@ function Recommendations({ deviceInfo, config, campaignData }: any) {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>Your Store</title>
-        <meta name="title" content="Your Store" />
-        <meta name="description" content="Your Store" />
-        <meta name="keywords" content="Your Store" />
-        <meta property="og:image" content="Your Store" />
-        <meta property="og:title" content="Your Store" key="ogtitle" />
-        <meta property="og:description" content="Your Store" key="ogdesc" />
+        <title>Your Recommendations</title>
+        <meta name="title" content="Your Recommendations" />
+        <meta name="description" content="Your Recommendations" />
+        <meta name="keywords" content="Your Recommendations" />
+        <meta property="og:image" content="Your Recommendations" />
+        <meta property="og:title" content="Your Recommendations" key="ogtitle" />
+        <meta property="og:description" content="Your Recommendations" key="ogdesc" />
       </NextHead>
       <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-10">
-        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending" isSlider={false} />
-        <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Trending" isSlider={false} />
-        <EngageProductCard type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} title="Trending" isSlider={false} />
-        <EngageProductCard type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} title="Trending" isSlider={false} />
+        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending" isSlider={false} productPerRow={5} />
+        <EngageProductCard type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} title="Trending" isSlider={false} sku="SS23072-YELMULT-24" productPerRow={5} />
+        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="My Browsing History" isSlider={true} productPerRow={5} />
       </div>
     </>
   )
