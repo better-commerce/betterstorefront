@@ -19,7 +19,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
-import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import NonHeadContentSnippet from '@old-components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
@@ -334,7 +334,7 @@ export default function OrderConfirmation({ config }: any) {
       const iterator = order?.items?.values();
       for (const value of iterator) {
         itemsFromArr?.push({
-          id: value?.stockCode || EmptyString,
+          id: parseItemId(value?.stockCode) || EmptyString,
           name: value?.name || EmptyString,
           quantity: value?.qty || 1,
           price: value?.totalPrice?.raw?.withTax || 1,
@@ -358,7 +358,7 @@ export default function OrderConfirmation({ config }: any) {
           code: '',
           discount_amt:  order?.discount?.raw?.withTax
       }],
-      item_ids: order?.items?.map((x:any) =>  x?.stockCode) || [],
+      item_ids: order?.items?.map((x:any) =>  parseItemId(x?.stockCode)) || [],
       items: itemsFromArr,
       customer: {
         id: order?.customerId || EmptyString,
