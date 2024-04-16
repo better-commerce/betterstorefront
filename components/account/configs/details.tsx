@@ -30,7 +30,7 @@ export const useDetailsFormConfig = () => {
     },
     {
       type: 'phone',
-      name: 'phone',
+      name: 'telephone',
       placeholder: translate('label.b2b.phoneNumberText'),
       label: translate('label.b2b.phoneNumberText'),
     },
@@ -75,7 +75,7 @@ export const useSchema = () => {
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.mobileNumInputMsg'),
       }),
-    phone: Yup.string()
+    telephone: Yup.string()
       .max(10)
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.phoneNumInputMsg'),

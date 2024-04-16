@@ -1123,7 +1123,9 @@
       "tokenInvalidErrorMsg": "Woops! Token is invalid",
       "tokenExpiredErrorMsg": "Woops! Token is expired or invalid",
       "companyNotFoundErrorMsg": "Company not found.",
-      "cartItemMaxAddedErrorMsg" : "Cart item limit reached. Please remove some items and try again.",
+      "cartItemMaxAddedErrorMsg": "Cart item limit reached. Please remove some items and try again.",
+      "addressAddedSuccessfullyMsg": "New address added successfully",
+      "addressUpdatedSuccessfullyMsg": "Address updated successfully",
       "address": {
         "postCodeNotServicableMsg": "Postcode non-serviceable",
         "postCodeNumMsg": "Postcode should contain only digits",
