@@ -19,7 +19,7 @@ const UseMyLocationModal = ({
   setErrorMsg,
   deviceInfo,
 }: any) => {
-  const { translate } = useTranslation()
+  const  translate  = useTranslation()
   const { isMobile } = deviceInfo
   const disableUserLocationPopup = useMemo(() => stringToBoolean(Cookies.get(Cookie.Key.DISABLE_USER_LOCATION_POPUP)), [])
 
@@ -69,7 +69,7 @@ const UseMyLocationModal = ({
                           <div className="flex justify-between items-baseline">
                             <div>
                               <h3 className="text-base font-semibold text-black">
-                                {translate('label.store.useeNearbyStoreText')}
+                                {translate('label.store.seeNearbyStoreText')}
                               </h3>
                               <h5 className="text-xs font-light text-primary">
                                 {translate('label.store.usingLocationToShowStoresText')}
