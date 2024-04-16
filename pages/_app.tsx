@@ -153,7 +153,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
     )
     if (!OMNILYTICS_DISABLED) {
-      productCampaigns()
       document.body.appendChild(addScript)
         ; (window as any).googleTranslateElementInit = googleTranslateElementInit
       document.getElementById('goog-gt-tt')?.remove()
@@ -312,6 +311,12 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       Cookies.remove(SessionIdCookieKey)
     }
   }, [])
+
+  useEffect(() => {
+    if (!OMNILYTICS_DISABLED) {
+      productCampaigns()
+    }
+  }, [router.asPath])
 
   const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
     let scripts = new Array<IScriptSnippet>()

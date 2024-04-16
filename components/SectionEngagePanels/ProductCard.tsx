@@ -9,7 +9,7 @@ import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Heading from '@components/Heading/Heading'
-import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_TRENDING, EngageEventTypes } from '@components/utils/constants'
+import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_TRENDING, EmptyString, EngageEventTypes } from '@components/utils/constants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -30,7 +30,6 @@ export interface SectionSliderProductCardProps {
 
 const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider, productPerRow }) => {
   const [productList, setProductList] = useState<any>(undefined)
-  const [currentCampaign, setCurrentCampaign] = useState<any>(undefined)
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
@@ -43,62 +42,56 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
       const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
       let apiUrl: any
       let baseUrl: any
-      let params: any = {}
+      let currentCampaign = {
+        campaign_uuid: EmptyString,
+        component_type: EmptyString,
+        campaign_type: EmptyString,
+      }
+
+      if (campaignData) {
+        const { campaigns = [] } = campaignData?.campaigns?.find((campaign: any) => campaign?._id === type) || {}
+        currentCampaign = {
+          campaign_uuid: campaigns?.[0]?.campaign_uuid,
+          component_type: campaigns?.[0]?.component_type,
+          campaign_type: campaigns?.[0]?.campaign_type,
+        }
+      }
+
+      const getReqPayload = (rData?: any) => {
+        if (rData?.sku) {
+          return JSON.stringify({
+            data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: EmptyString, limit: 12, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type }},
+          })
+        }
+        return JSON.stringify({
+          data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: 12, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type }},
+        })
+      }
 
       switch (type) {
         case EngageEventTypes.RECENTLY_VIEWED:
           baseUrl = ENGAGE_QUERY_USER_EVENTS
           apiUrl = '/recentitems'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.SIMILAR_PRODUCTS_SORTED:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/similaritemssorted'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.SIMILAR_PRODUCTS:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/similaritems'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.ALSO_BOUGHT:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/alsobought'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.BOUGHT_TOGETHER:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/boughttogether'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.TRENDING_FIRST_ORDER:
           baseUrl = ENGAGE_TRENDING
           apiUrl = '/byfirstorder'
-          params = {
-            ch_data: JSON.stringify({
-              data: { limit: 12 },
-            }),
-          }
           break
         default:
           return {}
@@ -108,8 +101,8 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
 
       const response = await axios.get(baseUrl + apiUrl, {
         params: {
-          ch_guid: campaignData?.guid,
-          ch_data: params?.ch_data,
+          ch_guid: campaignData?.ch_guid,
+          ch_data: getReqPayload({ sku }),
         },
       })
       setProductList(response?.data?.items)
@@ -120,7 +113,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
 
   useEffect(() => {
     fetchCampaignProducts()
-  }, [type, campaignData])
+  }, [campaignData])
 
   if (!productList || productList?.length < 1) {
     return <></>
