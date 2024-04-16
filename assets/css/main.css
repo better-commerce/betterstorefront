@@ -17338,6 +17338,63 @@ body:has(.ch-announcement-bar-1) {
     padding-top: 45px !important;
   }
 }
+
+.ch-announcement-pop-over-1{
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.ch-announcement-pop-over-1 .popover-panel {
+    left: 30% !important;
+    width: 40% !important;
+    min-height: 55vh !important;
+    top: 15% !important;
+}
+
+.message_panel {
+    min-height: 55vh !important;
+    background-color: #fff2f6;
+}
+
+.message_panel .message_text {
+    font-size: 22px !important;
+    padding: 30px !important;
+}
+
+.image_panel {
+    width: 50% !important;
+    min-height: 50vh !important;
+}
+
+.image_panel img {
+    height: 55vh !important;
+}
+
+.close-popover {
+    background: #fff !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    right: -15px !important;
+    top: -15px !important;
+    color: #000000 !important;
+}
+
+.close-popover:hover {
+    background: #9e0000 !important;
+    color: #ffffff !important;
+}
+
+.message_panel .message_text .code {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 3px 0px;
+    font-size: 20px;
+    margin-top: 20px;
+    border: 2px dashed #000000;
+}
+
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .ch-announcement-pop-over-1 .popover-panel {
     left: 7% !important;
