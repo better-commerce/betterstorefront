@@ -17344,10 +17344,11 @@ body:has(.ch-announcement-bar-1) {
 }
 
 .ch-announcement-pop-over-1 .popover-panel {
-    left: 30% !important;
+    left: 50% !important;
     width: 40% !important;
     min-height: 55vh !important;
-    top: 15% !important;
+    top: 50% !important;
+    transform: translate(-50%,-50%);
 }
 
 .message_panel {
@@ -17397,8 +17398,25 @@ body:has(.ch-announcement-bar-1) {
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .ch-announcement-pop-over-1 .popover-panel {
-    left: 7% !important;
     width: 85% !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .message_panel{
+    min-height: 20vh !important;
+  }
+  .ch-announcement-pop-over-1 .popover-panel{
+    width: 90% !important;
     top: 10% !important;
+    transform: translate(-50%, 0);
+  }
+  .image_panel{
+    min-height: 30vh !important;
+    width: 100% !important;
+  }
+  .image_panel img{
+    height: 300px !important;
+    width: 100%;
+    object-position: top !important;
   }
 }
