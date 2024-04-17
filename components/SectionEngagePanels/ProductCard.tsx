@@ -21,6 +21,7 @@ import withOmnilytics from '@components/shared/withOmnilytics'
 export interface SectionSliderProductCardProps {
   product: any
   type: any
+  heading?: any
   campaignData: any
   subHeading?: any
   title?: any
@@ -30,11 +31,12 @@ export interface SectionSliderProductCardProps {
   productLimit?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, campaignData, subHeading, title, sku, isSlider, productPerRow, productLimit }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, sku, isSlider, productPerRow, productLimit }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
+  const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
   }, [])
@@ -57,6 +59,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, c
           component_type: campaigns?.[0]?.component_type,
           campaign_type: campaigns?.[0]?.campaign_type,
         }
+        setCampaignDetails(campaigns?.[0])
       }
 
       const getReqPayload = (rData?: any) => {
@@ -125,7 +128,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, c
     <div className={`nc-SectionSliderProductCard`}>
       <div>
         <div className="flex justify-between gap-1 mb-5 lg:gap-3 sm:mb-10">
-          <h2 className="flex-1 pb-0 pr-4 mb-2 text-3xl font-semibold md:text-4xl">{title}</h2>
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-3xl font-semibold md:text-4xl">{title || campaignDetails?.campaign_title}</h2>
           {isSlider ? (
             <>
               <div className="flex gap-4">
@@ -165,7 +168,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, c
                         <div className="flex items-center justify-between ">
                           <div className="font-semibold font-14 text-green">
                             {currencyCode}
-                            {roundToDecimalPlaces(item?.sale_price, 2)}                            
+                            {roundToDecimalPlaces(item?.sale_price, 2)}
                           </div>
                         </div>
                       </div>
@@ -198,7 +201,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, c
                         <div className="flex items-center justify-between ">
                           <div className="font-semibold font-14 text-green">
                             {currencyCode}
-                            {roundToDecimalPlaces(item?.sale_price, 2)}                            
+                            {roundToDecimalPlaces(item?.sale_price, 2)}
                           </div>
                         </div>
                       </div>
