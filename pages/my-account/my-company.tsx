@@ -275,7 +275,7 @@ function MyCompany({ deviceInfo }: any) {
       ) : (
         <>
           <section className="relative pb-10 text-gray-900">
-            <div className="container w-full">
+            <div className="container w-full bar">
               <div className="mt-14 sm:mt-20">
                 <div className="max-w-4xl mx-auto">
                   <div className="max-w-2xl">
