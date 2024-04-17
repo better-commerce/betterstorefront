@@ -183,7 +183,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         description: product?.fullName || EmptyString,
         product_url: window?.location?.href || EmptyString,
         image_url: product?.image || EmptyString,
-        availability: product?.availability || EmptyString,
+        availability: product?.seoAvailability || EmptyString,
         price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
         sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
         brand: product?.brand || EmptyString,
@@ -195,7 +195,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           product_url: window?.location?.href || EmptyString,
           price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
-          availability: product?.availability || EmptyString,
+          availability: product?.seoAvailability || EmptyString,
           metadata: {
             color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
             size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
