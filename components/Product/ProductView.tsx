@@ -994,7 +994,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </>
           )}
           <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} sku={product?.variantGroupCode || product?.productCode} product={product} isSlider={true} productPerRow={4} />
+            <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS} title="Similar Products" campaignData={campaignData} sku={product?.variantGroupCode || product?.productCode} product={product} isSlider={true} productPerRow={4} />
           </div>
           <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
             <EngageProductCard productLimit={12} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} />
