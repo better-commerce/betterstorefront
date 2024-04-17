@@ -31,7 +31,7 @@ import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory, ENGAGE_WEB_CAMPAIGN } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory, ENGAGE_QUERY_WEB_CAMPAIGN } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
@@ -172,7 +172,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     async () => {
       try {
         const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
-        let apiUrl = ENGAGE_WEB_CAMPAIGN
+        let apiUrl = ENGAGE_QUERY_WEB_CAMPAIGN
         // generate respective API url
         if (router.asPath?.startsWith('/products')) {
           // for PDP

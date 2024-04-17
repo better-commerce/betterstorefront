@@ -9,7 +9,7 @@ import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Heading from '@components/Heading/Heading'
-import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_TRENDING, EngageEventTypes } from '@components/utils/constants'
+import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_TRENDING, EngageEventTypes, EmptyString, ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_COUPON } from '@components/utils/constants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -18,6 +18,7 @@ import { ArrowLeftIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/
 import { Cookie } from '@framework/utils/constants'
 import withOmnilytics from '@components/shared/withOmnilytics'
 import { Switch } from '@headlessui/react'
+import { getReqPayload } from '@components/utils/engageQuery'
 
 export interface SectionSliderProductCardProps {
   type: any
@@ -33,6 +34,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
   const [productList, setProductList] = useState<any>(undefined)
   const [currentCampaign, setCurrentCampaign] = useState<any>(undefined)
   const { isCompared } = useUI()
+  const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
   const [isProductRecommmended, setIsProductRecommmended] = useState<any>({})
@@ -53,80 +55,92 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
       const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
       let apiUrl: any
       let baseUrl: any
-      let params: any = {}
+      let currentCampaign = { campaign_uuid: EmptyString, component_type: EmptyString, campaign_type: EmptyString }
+
+      if (campaignData) {
+        const { campaigns = [] } = campaignData?.campaigns?.find((campaign: any) => campaign?._id === type) || {}
+        currentCampaign = { campaign_uuid: campaigns?.[0]?.campaign_uuid, component_type: campaigns?.[0]?.component_type, campaign_type: campaigns?.[0]?.campaign_type }
+        setCampaignDetails(campaigns?.[0])
+      }
 
       switch (type) {
         case EngageEventTypes.RECENTLY_VIEWED:
           baseUrl = ENGAGE_QUERY_USER_EVENTS
           apiUrl = '/recentitems'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.SIMILAR_PRODUCTS_SORTED:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/similaritemssorted'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.SIMILAR_PRODUCTS:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/similaritems'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.ALSO_BOUGHT:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/alsobought'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.BOUGHT_TOGETHER:
           baseUrl = ENGAGE_QUERY_USER_ITEMS
           apiUrl = '/boughttogether'
-          params = {
-            ch_data: JSON.stringify({
-              data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: '', limit: 12 },
-            }),
-          }
           break
         case EngageEventTypes.TRENDING_FIRST_ORDER:
-          baseUrl = ENGAGE_TRENDING
+          baseUrl = ENGAGE_QUERY_TRENDING
           apiUrl = '/byfirstorder'
-          params = {
-            ch_data: JSON.stringify({
-              data: { limit: 12 },
-            }),
-          }
+          break
+        case EngageEventTypes.COLLAB_ITEM_VIEW:
+          baseUrl = ENGAGE_QUERY_COLLABORATIVE
+          apiUrl = '/itemview'
+          break
+        case EngageEventTypes.COLLAB_USER_ITEMS_VIEW:
+          baseUrl = ENGAGE_QUERY_COLLABORATIVE
+          apiUrl = '/useritemsview'
+          break
+        case EngageEventTypes.COLLAB_ITEM_PURCHASE:
+          baseUrl = ENGAGE_QUERY_COLLABORATIVE
+          apiUrl = '/itempurchase'
+          break
+        case EngageEventTypes.INTEREST_USER_ITEMS:
+          baseUrl = ENGAGE_QUERY_INTEREST
+          apiUrl = '/itempurchase'
+          break
+        case EngageEventTypes.TRENDING_COLLECTION:
+          baseUrl = ENGAGE_QUERY_TRENDING
+          apiUrl = '/collection'
+          break
+        case EngageEventTypes.COUPON_COLLECTION:
+          baseUrl = ENGAGE_QUERY_COUPON
+          apiUrl = '/collection'
+          break
+        case EngageEventTypes.SEARCH:
+          baseUrl = ENGAGE_QUERY_SEARCH
+          apiUrl = ''
+          break
+        case EngageEventTypes.CROSS_SELL_BY_CATEGORIES:
+          baseUrl = ENGAGE_QUERY_USER_ITEMS
+          apiUrl = '/crosssellbycategories'
+          break
+        case EngageEventTypes.CROSS_SELL_ITEMS_SORTED:
+          baseUrl = ENGAGE_QUERY_USER_ITEMS
+          apiUrl = '/crosssellitemssorted'
           break
         default:
-          return {}
+          return
       }
 
-      if (!baseUrl || !apiUrl) return {}
+      const chDataPayload: any = getReqPayload({ type, chCookie, limit: 12, currentCampaign })
 
       const response = await axios.get(baseUrl + apiUrl, {
         params: {
-          ch_guid: campaignData?.guid,
-          ch_data: params?.ch_data,
+          ch_guid: campaignData?.ch_guid,
+          ch_data: chDataPayload,
         },
       })
       setProductList(response?.data?.items)
     } catch (error: any) {
       logError(error)
     }
-  }, [type, sku, campaignData])
+  }, [type, campaignData])
 
   useEffect(() => {
     fetchCampaignProducts()
@@ -140,7 +154,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
     <div className={`nc-SectionSliderProductCard`}>
       <div>
         <div className="flex justify-between gap-1 mb-5 lg:gap-3 sm:mb-10">
-          <h2 className="flex-1 pb-0 pr-4 mb-2 text-3xl font-semibold md:text-4xl">{title}</h2>
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-3xl font-semibold md:text-4xl">{title || campaignDetails?.campaign_title}</h2>
         </div>
         <div className='grid grid-cols-1 mx-auto border sm:grid-cols-1 border-slate-200 rounded-2xl sm:max-w-5xl'>
           {productList?.map((item: any, index: number) => (

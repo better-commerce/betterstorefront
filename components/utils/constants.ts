@@ -238,8 +238,12 @@ export const BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE =
 // Engage API endpoints
 export const ENGAGE_QUERY_USER_EVENTS = `${process.env.ENGAGE_QUERY_BASE_URL}/userevents`
 export const ENGAGE_QUERY_USER_ITEMS = `${process.env.ENGAGE_QUERY_BASE_URL}/item`
-export const ENGAGE_WEB_CAMPAIGN = `${process.env.ENGAGE_QUERY_BASE_URL}/webcampaign`
-export const ENGAGE_TRENDING = `${process.env.ENGAGE_QUERY_BASE_URL}/trending`
+export const ENGAGE_QUERY_WEB_CAMPAIGN = `${process.env.ENGAGE_QUERY_BASE_URL}/webcampaign`
+export const ENGAGE_QUERY_TRENDING = `${process.env.ENGAGE_QUERY_BASE_URL}/trending`
+export const ENGAGE_QUERY_COLLABORATIVE = `${process.env.ENGAGE_QUERY_BASE_URL}/collaborative`
+export const ENGAGE_QUERY_INTEREST = `${process.env.ENGAGE_QUERY_BASE_URL}/interest`
+export const ENGAGE_QUERY_COUPON = `${process.env.ENGAGE_QUERY_BASE_URL}/coupon`
+export const ENGAGE_QUERY_SEARCH = `${process.env.ENGAGE_QUERY_BASE_URL}/search`
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY
@@ -600,12 +604,22 @@ export enum QuoteStatus {
 }
 
 export enum EngageEventTypes {
+  // Homepage
   TRENDING_FIRST_ORDER = 'trend_first_orders',
-  RECENTLY_VIEWED = 'recent_products',
+  INTEREST_USER_ITEMS = 'user_interest_items',
+  TRENDING_COLLECTION = 'trending_collection',
+  COUPON_COLLECTION = 'coupon_collection',
+  SEARCH = 'search',
+  // PDP
   ALSO_BOUGHT = 'also_bought',
-  RECOMMENDED = 'recommendation_products',
-  TOP_VIEWED = 'top_viewed_products',
   SIMILAR_PRODUCTS = 'similar_products',
   SIMILAR_PRODUCTS_SORTED = 'similar_products_sorted',
   BOUGHT_TOGETHER = 'bought_together',
+  COLLAB_ITEM_VIEW = 'item_view',
+  COLLAB_USER_ITEMS_VIEW = 'user_items_view',
+  COLLAB_ITEM_PURCHASE = 'item_purchase',
+  CROSS_SELL_BY_CATEGORIES = 'cross_sell_by_categories',
+  CROSS_SELL_ITEMS_SORTED = 'cross_sell_items_sorted',
+  // Homepage, PDP
+  RECENTLY_VIEWED = 'recent_products',
 }

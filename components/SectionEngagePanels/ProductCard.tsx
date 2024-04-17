@@ -9,7 +9,7 @@ import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Heading from '@components/Heading/Heading'
-import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_TRENDING, EmptyString, EngageEventTypes } from '@components/utils/constants'
+import { ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_COUPON, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_TRENDING, EmptyString, EngageEventTypes } from '@components/utils/constants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -17,6 +17,7 @@ import SwiperCore, { Navigation } from 'swiper'
 import { ArrowLeftIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Cookie } from '@framework/utils/constants'
 import withOmnilytics from '@components/shared/withOmnilytics'
+import { getReqPayload } from '@components/utils/engageQuery'
 
 export interface SectionSliderProductCardProps {
   product: any
@@ -25,13 +26,12 @@ export interface SectionSliderProductCardProps {
   campaignData: any
   subHeading?: any
   title?: any
-  sku?: any
   isSlider?: boolean
   productPerRow?: any
   productLimit?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, sku, isSlider, productPerRow, productLimit }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()
@@ -46,31 +46,12 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
       const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
       let apiUrl: any
       let baseUrl: any
-      let currentCampaign = {
-        campaign_uuid: EmptyString,
-        component_type: EmptyString,
-        campaign_type: EmptyString,
-      }
+      let currentCampaign = { campaign_uuid: EmptyString, component_type: EmptyString, campaign_type: EmptyString }
 
       if (campaignData) {
         const { campaigns = [] } = campaignData?.campaigns?.find((campaign: any) => campaign?._id === type) || {}
-        currentCampaign = {
-          campaign_uuid: campaigns?.[0]?.campaign_uuid,
-          component_type: campaigns?.[0]?.component_type,
-          campaign_type: campaigns?.[0]?.campaign_type,
-        }
+        currentCampaign = { campaign_uuid: campaigns?.[0]?.campaign_uuid, component_type: campaigns?.[0]?.component_type, campaign_type: campaigns?.[0]?.campaign_type }
         setCampaignDetails(campaigns?.[0])
-      }
-
-      const getReqPayload = (rData?: any) => {
-        if (rData?.sku) {
-          return JSON.stringify({
-            data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: product?.classification?.category?.toLowerCase() || EmptyString, limit: productLimit, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type } },
-          })
-        }
-        return JSON.stringify({
-          data: { user_uuid: chCookie?.user_id, exclusion_item_id: 'index', limit: productLimit, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type } },
-        })
       }
 
       switch (type) {
@@ -95,29 +76,67 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
           apiUrl = '/boughttogether'
           break
         case EngageEventTypes.TRENDING_FIRST_ORDER:
-          baseUrl = ENGAGE_TRENDING
+          baseUrl = ENGAGE_QUERY_TRENDING
           apiUrl = '/byfirstorder'
           break
+        case EngageEventTypes.COLLAB_ITEM_VIEW:
+          baseUrl = ENGAGE_QUERY_COLLABORATIVE
+          apiUrl = '/itemview'
+          break
+        case EngageEventTypes.COLLAB_USER_ITEMS_VIEW:
+          baseUrl = ENGAGE_QUERY_COLLABORATIVE
+          apiUrl = '/useritemsview'
+          break
+        case EngageEventTypes.COLLAB_ITEM_PURCHASE:
+          baseUrl = ENGAGE_QUERY_COLLABORATIVE
+          apiUrl = '/itempurchase'
+          break
+        case EngageEventTypes.INTEREST_USER_ITEMS:
+          baseUrl = ENGAGE_QUERY_INTEREST
+          apiUrl = '/userinterestitems'
+          break
+        case EngageEventTypes.TRENDING_COLLECTION:
+          baseUrl = ENGAGE_QUERY_TRENDING
+          apiUrl = '/collection'
+          break
+        case EngageEventTypes.COUPON_COLLECTION:
+          baseUrl = ENGAGE_QUERY_COUPON
+          apiUrl = '/collection'
+          break
+        case EngageEventTypes.SEARCH:
+          baseUrl = ENGAGE_QUERY_SEARCH
+          apiUrl = ''
+          break
+        case EngageEventTypes.CROSS_SELL_BY_CATEGORIES:
+          baseUrl = ENGAGE_QUERY_USER_ITEMS
+          apiUrl = '/crosssellbycategories'
+          break
+        case EngageEventTypes.CROSS_SELL_ITEMS_SORTED:
+          baseUrl = ENGAGE_QUERY_USER_ITEMS
+          apiUrl = '/crosssellitemssorted'
+          break
         default:
-          return {}
+          return
       }
 
-      if (!baseUrl || !apiUrl) return {}
+      const chDataPayload: any = getReqPayload({ type, chCookie, limit: productLimit, product, currentCampaign })
 
       const response = await axios.get(baseUrl + apiUrl, {
         params: {
           ch_guid: campaignData?.ch_guid,
-          ch_data: getReqPayload({ sku }),
+          ch_data: chDataPayload,
         },
       })
       setProductList(response?.data?.items)
     } catch (error: any) {
       logError(error)
     }
-  }, [type, sku, campaignData])
+  }, [type, campaignData])
 
   useEffect(() => {
-    fetchCampaignProducts()
+    if (campaignData) {
+      fetchCampaignProducts()
+    }
   }, [campaignData])
 
   if (!productList || productList?.length < 1) {
@@ -143,7 +162,6 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
           ) : (
             <></>
           )}
-
         </div>
         {isSlider ? (
           <>
@@ -212,7 +230,6 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
             </div>
           </>
         )}
-
       </div>
     </div>
   )
