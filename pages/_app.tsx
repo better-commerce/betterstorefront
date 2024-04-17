@@ -177,6 +177,12 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         if (router.asPath?.startsWith('/products')) {
           // for PDP
           apiUrl += `/productpage/all/`
+        } else if (router.asPath?.startsWith('/collection')) {
+          // for PDP
+          apiUrl += `/collectionpage`
+        } else if (router.asPath?.startsWith('/checkout')) {
+          // for PDP
+          apiUrl += `/checkoutindexpage/all`
         } else if (router.asPath === '/') {
           // for homepage
           apiUrl += `/indexpage/all/`

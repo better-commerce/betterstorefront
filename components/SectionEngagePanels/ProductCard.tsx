@@ -32,6 +32,14 @@ export interface SectionSliderProductCardProps {
 }
 
 const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit }) => {
+  
+  /**
+   * Do not render if campaigns were not found for this page.
+   */
+  if (!campaignData || !campaignData?.campaigns || campaignData?.campaigns?.length < 1) {
+    return <></>
+  }
+
   const [productList, setProductList] = useState<any>(undefined)
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()

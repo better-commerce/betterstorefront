@@ -20,6 +20,7 @@ import {
   EmptyGuid,
   EmptyObject,
   EmptyString,
+  EngageEventTypes,
   LOQATE_ADDRESS,
   Messages,
   NEXT_AUTHENTICATE,
@@ -55,6 +56,8 @@ import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Cookie } from '@framework/utils/constants'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+
 export enum BasketStage {
   CREATED = 0,
   ANONYMOUS = 1,
@@ -75,7 +78,7 @@ const steps = [
   { key: 'review', label: 'Payment', shouldActiveOn: '' },
 ]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData }: any) => {
   const router = useRouter()
   const uiContext = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
@@ -1052,6 +1055,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
             <BasketDetails basket={basket} deviceInfo={deviceInfo} />
           </div>
         )}
+      </div>
+      <div className='flex flex-col w-full'>
+        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+        <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
       </div>
     </>
   )
