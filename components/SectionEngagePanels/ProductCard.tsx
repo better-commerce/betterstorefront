@@ -19,6 +19,7 @@ import { Cookie } from '@framework/utils/constants'
 import withOmnilytics from '@components/shared/withOmnilytics'
 
 export interface SectionSliderProductCardProps {
+  product: any
   type: any
   campaignData: any
   subHeading?: any
@@ -29,7 +30,7 @@ export interface SectionSliderProductCardProps {
   productLimit?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider, productPerRow, productLimit }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, campaignData, subHeading, title, sku, isSlider, productPerRow, productLimit }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()
@@ -61,7 +62,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ type, campaignDa
       const getReqPayload = (rData?: any) => {
         if (rData?.sku) {
           return JSON.stringify({
-            data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: EmptyString, limit: productLimit, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type } },
+            data: { user_uuid: chCookie?.user_id, current_item_id: sku, base_category: product?.classification?.category?.toLowerCase() || EmptyString, limit: productLimit, source: { campaign_uuid: currentCampaign.campaign_uuid, component_type: currentCampaign.component_type, campaign_type: currentCampaign.campaign_type } },
           })
         }
         return JSON.stringify({
