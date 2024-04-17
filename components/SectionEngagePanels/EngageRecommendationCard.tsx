@@ -35,6 +35,15 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
   const { isCompared } = useUI()
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
+  const [isProductRecommmended, setIsProductRecommmended] = useState<any>({})
+
+  const onToggleRecommendation = (product: any) => {
+    setIsProductRecommmended((v: any) => ({
+      ...v,
+      [product?._id]: !isProductRecommmended?.[product?._id] ?? false
+    }))
+  }
+
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
   }, [])
@@ -149,9 +158,9 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
                 </div>
                 <div className="flex items-center justify-around col-span-3 gap-2">
                   <span className="font-normal font-12 text-slate-600">Use this product for recommendation</span>
-                  <Switch checked={item?.isRecommended} className={`${item?.isRecommended ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
+                  <Switch checked={isProductRecommmended?.[item?._id]} onChange={() => onToggleRecommendation(item)} className={`${isProductRecommmended?.[item?._id] ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
                     <span className="sr-only">is Enable</span>
-                    <span aria-hidden="true" className={`${item?.isRecommended ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
+                    <span aria-hidden="true" className={`${isProductRecommmended?.[item?._id] ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
                   </Switch>
                 </div>
               </div>
