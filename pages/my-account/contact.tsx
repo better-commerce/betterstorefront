@@ -58,7 +58,7 @@ function MyAccount({ deviceInfo }:any) {
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   return (
-    <section className="container w-full">
+    <section className="container w-full bar">
       <div className="mt-14 sm:mt-20">
         <div className='max-w-4xl mx-auto'>
           <div className="max-w-2xl">
