@@ -221,7 +221,20 @@
       "streetAndHouseNoText": "Street and House Number",
       "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)",
       "milesText":"miles",
-      "lessThanAMileText":"Less than a mile"
+      "lessThanAMileText":"Less than a mile",
+      "payment": {
+        "debitCreditCardDetailsHeadingText": "Debit/Credit Card details",
+        "cardNumberLabelText": "Card number*",
+        "cardNumberRequiredText": "Card number is required",
+        "cardNumberInvalidText": "Card number is invalid",
+        "expiryDateLabelText": "Expiry date*",
+        "expiryDateRequiredText": "Expiry date is required",
+        "expiryDateInvalidText": "Expiry date is invalid",
+        "cvvRequiredText": "CVV is required",
+        "cvvInvalidText": "CVV is invalid",
+        "chequeNoText": "Cheque Number",
+        "chequeNumberLabelText": "Cheque Number"
+      }
     },
     "collection": {
       "topListCollectionText": "Top List Collections.",
@@ -784,15 +797,6 @@
       "exploreText":"Explore",
       "createText":"Create"
     },
-    "checkoutForm":{
-      "itemsForOrderText":"Items for order",
-      "chequeNoText": "Cheque Number",
-      "pleaseWaitText" :"Please wait...",
-      "validatingAccountText" : "Validating account...",
-      "orderText" : "Order",
-      "forBasketText" : "For basket",
-      "orderPaymentIdText" : "OrderPaymentId"
-    },
     "contactUs": {
       "contactSalesText": "Contact sales",
       "dummyText": "Aute magna irure deserunt veniam aliqua magna enim voluptate.",
@@ -1029,6 +1033,7 @@
       "addToCartText": "Added to cart!",
       "initiatingOrderText": "Initiating order...",
       "pleaseWaitText": "Please wait...",
+      "validatingAccountText" : "Validating account...",
       "authorizingPaymentText": "Authorizing payment...",
       "initiatingPaymentText": "initiating payment...",
       "capturingPaymentText": "capturing payment...",

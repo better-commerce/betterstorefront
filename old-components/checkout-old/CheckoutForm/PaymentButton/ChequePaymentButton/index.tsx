@@ -48,7 +48,7 @@ export class ChequePaymentButton extends BasePaymentButton {
     const translate = useTranslation()
     uiContext?.setOverlayLoaderState({
       visible: true,
-      message: translate('label.checkoutForm.pleaseWaitText'),
+      message: translate('common.label.pleaseWaitText'),
     })
     const paymentInfo = {
       paymentInfo1: null,

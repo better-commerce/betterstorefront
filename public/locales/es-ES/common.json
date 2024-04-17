@@ -203,7 +203,7 @@
       "otherAddressTypeText": "Otro tipo de dirección",
       "whatsappUpdatesText": "Envíame actualizaciones por WhatsApp",
       "payLaterWithKlarnaText": "Haz clic en Pagar más tarde con Klarna para verificar si eres elegible",
-      "paymentFailedText": "falló.",   
+      "paymentFailedText": "falló.",
       "debitCreditDetailsText": "Detalles de la tarjeta de débito/crédito",
       "betterStoreCheckoutText": "BetterStore | Pagar",
       "splitDeliveryText": "Entrega dividida",
@@ -221,7 +221,20 @@
       "streetAndHouseNoText": "Calle y número de casa",
       "appartmentSuiteEtcText": "Apartamento, Suite, etc. (Opcional)",
       "milesText": "millas",
-      "lessThanAMileText": "Menos de una milla"
+      "lessThanAMileText": "Menos de una milla",
+      "payment": {
+        "debitCreditCardDetailsHeadingText": "Detalles de tarjeta de débito/crédito",
+        "cardNumberLabelText": "Número de tarjeta*",
+        "cardNumberRequiredText": "Se requiere el número de tarjeta",
+        "cardNumberInvalidText": "El número de tarjeta no es válido",
+        "expiryDateLabelText": "Fecha de vencimiento*",
+        "expiryDateRequiredText": "Se requiere la fecha de vencimiento",
+        "expiryDateInvalidText": "La fecha de vencimiento no es válida",
+        "cvvRequiredText": "Se requiere el CVV",
+        "cvvInvalidText": "El CVV no es válido",
+        "chequeNoText": "Número de cheque",
+        "chequeNumberLabelText": "Número de cheque"
+      }
     },
     "collection": {
       "topListCollectionText": "Colecciones más destacadas.",
@@ -615,7 +628,7 @@
         "warrantyNotApplicableReasonText3": "(3) El producto es comprado a un distribuidor no autorizado",
         "headToFaqText": "Dirígete a la sección de Preguntas Frecuentes para obtener más información"
       },
-      "priceFilterSlider":{
+      "priceFilterSlider": {
         "maxText": "Máximo",
         "minText": "Mínimo",
         "noLimitText": "Sin límite"
@@ -780,15 +793,6 @@
     "sectionHero": {
       "exploreText": "Explorar",
       "createText": "Crear"
-    },
-    "checkoutForm": {
-      "itemsForOrderText": "Artículos para ordenar",
-      "chequeNoText": "Número de cheque",
-      "pleaseWaitText": "Por favor espera...",
-      "validatingAccountText": "Validando cuenta...",
-      "orderText": "Orden",
-      "forBasketText": "Para la cesta",
-      "orderPaymentIdText": "ID de pago de la orden"
     },
     "contactUs": {
       "contactSalesText": "Contactar ventas",
@@ -1026,6 +1030,7 @@
       "addToCartText": "¡Añadido al carrito!",
       "initiatingOrderText": "Iniciando pedido...",
       "pleaseWaitText": "Por favor, espera...",
+      "validatingAccountText" : "Validando cuenta...",
       "authorizingPaymentText": "Autorizando el pago...",
       "initiatingPaymentText": "iniciando el pago...",
       "capturingPaymentText": "capturando el pago...",
