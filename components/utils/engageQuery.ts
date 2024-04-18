@@ -67,7 +67,7 @@ export const getReqPayload = (rData?: any) => {
       payload = {
         data: {
           ...payload.data,
-          primary_category_type: EmptyString,
+          primary_category_type: 'categories_1',
           secondary_category_type: EmptyString,
           retry: false,
           limit,
@@ -78,7 +78,7 @@ export const getReqPayload = (rData?: any) => {
       payload = {
         data: {
           ...payload.data,
-          page_id: EmptyString,
+          page_id: 'mini_dress',
           limit,
         },
       }

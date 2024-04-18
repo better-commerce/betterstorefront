@@ -606,7 +606,7 @@ export enum QuoteStatus {
 export enum EngageEventTypes {
   // Homepage
   TRENDING_FIRST_ORDER = 'trend_first_orders',
-  INTEREST_USER_ITEMS = 'user_interest_items',
+  INTEREST_USER_ITEMS = 'user_interest',
   TRENDING_COLLECTION = 'trending_collection',
   COUPON_COLLECTION = 'coupon_collection',
   SEARCH = 'search',

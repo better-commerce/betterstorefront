@@ -29,9 +29,10 @@ export interface SectionSliderProductCardProps {
   isSlider?: boolean
   productPerRow?: any
   productLimit?: any
+  forceDisplay?: boolean
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit, forceDisplay = false }) => {
   
   /**
    * Do not render if campaigns were not found for this page.
@@ -62,7 +63,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
         setCampaignDetails(campaigns?.[0])
       }
 
-      if (!currentCampaign?.campaign_uuid) return
+      if (!currentCampaign?.campaign_uuid && !forceDisplay) return
 
       switch (type) {
         case EngageEventTypes.RECENTLY_VIEWED:

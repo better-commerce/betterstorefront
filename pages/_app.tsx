@@ -47,6 +47,7 @@ import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
+import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
@@ -168,45 +169,14 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }
 
-  const productCampaigns = useCallback(
-    async () => {
-      try {
-        const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
-        let apiUrl = ENGAGE_QUERY_WEB_CAMPAIGN
-        // generate respective API url
-        if (router.asPath?.startsWith('/products')) {
-          // for PDP
-          apiUrl += `/productpage/all/`
-        } else if (router.asPath?.startsWith('/my-store')) {
-          // for my-store page
-          apiUrl += `/productpage/all`
-        } else if (router.asPath?.startsWith('/collection')) {
-          // for PDP
-          apiUrl += `/collectionpage`
-        } else if (router.asPath?.startsWith('/checkout')) {
-          // for PDP
-          apiUrl += `/checkoutindexpage/all`
-        } else if (router.asPath === '/') {
-          // for homepage
-          apiUrl += `/indexpage/all/`
-        } else {
-          return
-        }
-        const res = await axios({
-          url: apiUrl,
-          method: 'GET',
-          params: {
-            ch_guid: chCookie?.user_id,
-            ch_data: JSON.stringify({ data: {} }),
-          },
-        })
-        setCampaignData(res?.data)
-      } catch (error: any) {
-        logError(error)
-      }
-    },
-    [router],
-  )
+  const fetchEngageCampaigns = useCallback(async () => {
+    try {
+      const campaignRes = await fetchCampaignsByPagePath(router.asPath)
+      setCampaignData(campaignRes)
+    } catch (error: any) {
+      logError(error)
+    }
+  }, [router.asPath])
 
   useEffect(() => {
     // Listener for snippet injector reset.
@@ -323,7 +293,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   useEffect(() => {
     if (!OMNILYTICS_DISABLED) {
-      productCampaigns()
+      fetchEngageCampaigns()
     }
   }, [router.asPath])
 
