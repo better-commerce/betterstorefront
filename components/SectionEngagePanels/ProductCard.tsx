@@ -62,6 +62,8 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
         setCampaignDetails(campaigns?.[0])
       }
 
+      if (!currentCampaign?.campaign_uuid) return
+
       switch (type) {
         case EngageEventTypes.RECENTLY_VIEWED:
           baseUrl = ENGAGE_QUERY_USER_EVENTS
