@@ -177,6 +177,9 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         if (router.asPath?.startsWith('/products')) {
           // for PDP
           apiUrl += `/productpage/all/`
+        } else if (router.asPath?.startsWith('/my-store')) {
+          // for my-store page
+          apiUrl += `/productpage/all`
         } else if (router.asPath?.startsWith('/collection')) {
           // for PDP
           apiUrl += `/collectionpage`

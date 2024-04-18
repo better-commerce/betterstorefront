@@ -1,38 +1,42 @@
-import { EmptyString, EngageEventTypes } from './constants'
+import { EmptyGuid, EmptyString, EngageEventTypes } from './constants'
 
 export const getReqPayload = (rData?: any) => {
-  const { type, chCookie, limit, product, currentCampaign = {} } = rData
+  const { type, chCookie, limit, product, currentCampaign = {}, user } = rData
   const sku = product?.variantGroupCode || product?.productCode || EmptyString
   let payload: any = { data: { user_uuid: chCookie?.user_id } }
+
+  if (user?.userId && user?.userId !== EmptyGuid) {
+    payload = { data: { ...payload.data, bc_user_id: user?.userId } }
+  }
 
   // set request payload
   switch (type) {
     case EngageEventTypes.ALSO_BOUGHT:
     case EngageEventTypes.BOUGHT_TOGETHER:
       payload = {
-        data: { user_uuid: chCookie?.user_id, current_item_ids: [sku], limit },
+        data: { ...payload.data, current_item_ids: [sku], limit },
       }
       break
     case EngageEventTypes.COLLAB_ITEM_VIEW:
       payload = {
-        data: { user_uuid: chCookie?.user_id, item_id: sku, limit },
+        data: { ...payload.data, item_id: sku, limit },
       }
       break
     case EngageEventTypes.COLLAB_USER_ITEMS_VIEW:
       payload = {
-        data: { user_uuid: chCookie?.user_id },
+        data: { ...payload.data },
       }
       break
     case EngageEventTypes.COLLAB_ITEM_PURCHASE:
       payload = {
-        data: { user_uuid: chCookie?.user_id, item_ids: [sku], limit },
+        data: { ...payload.data, item_ids: [sku], limit },
       }
       break
     case EngageEventTypes.TRENDING_FIRST_ORDER:
     case EngageEventTypes.RECENTLY_VIEWED:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           exclusion_item_id: 'index',
           limit,
           source: {
@@ -47,7 +51,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.SIMILAR_PRODUCTS_SORTED:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           current_item_id: sku,
           base_category: product?.classification?.category?.toLowerCase() || EmptyString,
           limit,
@@ -62,7 +66,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.INTEREST_USER_ITEMS:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           primary_category_type: EmptyString,
           secondary_category_type: EmptyString,
           retry: false,
@@ -73,7 +77,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.TRENDING_COLLECTION:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           page_id: EmptyString,
           limit,
         },
@@ -82,7 +86,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.COUPON_COLLECTION:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           page_id: EmptyString,
           category_type: EmptyString,
           limit,
@@ -92,7 +96,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.SEARCH:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           term: EmptyString,
           limit,
         },
@@ -101,7 +105,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.CROSS_SELL_BY_CATEGORIES:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           campaign_uuid: currentCampaign.campaign_uuid,
           current_item_id: sku,
           cross_sell_category_type: product?.classification?.category?.toLowerCase() || EmptyString,
@@ -112,7 +116,7 @@ export const getReqPayload = (rData?: any) => {
     case EngageEventTypes.CROSS_SELL_ITEMS_SORTED:
       payload = {
         data: {
-          user_uuid: chCookie?.user_id,
+          ...payload.data,
           current_item_id: sku,
           base_category: product?.classification?.category?.toLowerCase() || EmptyString,
           limit,

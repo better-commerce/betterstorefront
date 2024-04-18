@@ -41,7 +41,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
   }
 
   const [productList, setProductList] = useState<any>(undefined)
-  const { isCompared } = useUI()
+  const { isCompared, user } = useUI()
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
   const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
@@ -129,7 +129,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
           return
       }
 
-      const chDataPayload: any = getReqPayload({ type, chCookie, limit: productLimit, product, currentCampaign })
+      const chDataPayload: any = getReqPayload({ type, chCookie, limit: productLimit, product, currentCampaign, user })
 
       const response = await axios.get(baseUrl + apiUrl, {
         params: {
