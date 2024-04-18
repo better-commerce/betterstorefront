@@ -209,7 +209,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
           </>
         ) : (
           <>
-            <div className={`grid grid-cols-1 gap-6 sm:grid-cols-${productPerRow}`}>
+            <div className={`grid grid-cols-1 gap-3 sm:grid-cols-${productPerRow}`}>
               {productList?.map((item: any, index: number) => (
                 <div key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
                   <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6`)}>
