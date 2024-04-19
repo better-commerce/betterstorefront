@@ -4,6 +4,7 @@ import axios from 'axios'
 //
 import { tryParseJson } from '@framework/utils/parse-util'
 import {
+  ENGAGE_QUERY_ANNOUNCEMENT,
   ENGAGE_QUERY_WEB_CAMPAIGN,
   EmptyObject,
   EmptyString,
@@ -12,7 +13,7 @@ import {
 import { Cookie } from '@framework/utils/constants'
 import { logError } from '@framework/utils/app-util'
 
-module EngageCampaignPageApi {
+namespace EngageCampaignPageApi {
   export module HOME_PAGE {
     export const ALLOWED_PAGES = ['/']
     export const API = '/indexpage/all'
@@ -28,6 +29,25 @@ module EngageCampaignPageApi {
   export module CHECKOUT_PAGE {
     export const ALLOWED_PAGES = ['checkout']
     export const API = '/checkoutindexpage/all'
+  }
+}
+
+namespace EngageAnnouncementPageApi {
+  export module HOME_PAGE {
+    export const ALLOWED_PAGES = ['/']
+    export const API = '/indexpage'
+  }
+  export module PRODUCT_DETAIL_PAGE {
+    export const ALLOWED_PAGES = ['products']
+    export const API = '/productpage'
+  }
+  export module PRODUCT_LISTING_PAGE {
+    export const ALLOWED_PAGES = [ 'collection', 'category', 'search', 'brands' ]
+    export const API = '/collectionpage'
+  }
+  export module CHECKOUT_PAGE {
+    export const ALLOWED_PAGES = ['checkout']
+    export const API = '/checkoutindexpage'
   }
 }
 
@@ -71,9 +91,44 @@ export const fetchCampaignsByPagePath = async (path: string) => {
   }
 }
 
-export const fetchCampaignWidgetByEvent = async (event: EngageEventTypes) => {
+function getAnnouncementApiUrlByPagePath(path: string) {
+  if (!path || typeof path !== 'string') return EmptyString
+  // set default base url
+  let announcementApiUrl = ENGAGE_QUERY_ANNOUNCEMENT
+  // set API url by path
+  if (pathStartsWith(path, EngageAnnouncementPageApi.PRODUCT_DETAIL_PAGE.ALLOWED_PAGES)) {
+    announcementApiUrl += EngageAnnouncementPageApi.PRODUCT_DETAIL_PAGE.API
+  } else if (pathStartsWith(path, EngageAnnouncementPageApi.PRODUCT_LISTING_PAGE.ALLOWED_PAGES)) {
+    announcementApiUrl += EngageAnnouncementPageApi.PRODUCT_LISTING_PAGE.API
+  } else if (pathStartsWith(path, EngageAnnouncementPageApi.CHECKOUT_PAGE.ALLOWED_PAGES)) {
+    announcementApiUrl += EngageAnnouncementPageApi.CHECKOUT_PAGE.API
+  } else if (pathStartsWith(path, EngageAnnouncementPageApi.HOME_PAGE.ALLOWED_PAGES, 0)) {
+    announcementApiUrl += EngageAnnouncementPageApi.HOME_PAGE.API
+  }
+  return announcementApiUrl
+}
+
+export const fetchAnnouncementsByPagePath = async (path: string, { user, basketItemsCount, product }: any) => {
   try {
-    //    
+    const engageSession: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
+    const announcementApiUrl = getAnnouncementApiUrlByPagePath(path)
+    if (!announcementApiUrl) return EmptyObject
+    const res = await axios({
+      url: announcementApiUrl,
+      method: 'GET',
+      params: {
+        ch_guid: engageSession?.user_id,
+        ch_data: JSON.stringify({
+          data: {
+            user_uuid: engageSession?.user_id,
+            bc_user_id: user?.userId,
+            cart_value: basketItemsCount,
+            item_id: product?.variantGroupCode || product?.productCode || EmptyString,
+          },
+        }),
+      },
+    })
+    return res?.data
   } catch (error) {
     logError(error)
   }

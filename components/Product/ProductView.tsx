@@ -62,7 +62,7 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData }: any) {
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
@@ -144,6 +144,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         LocalStorage.Key.RECENTLY_VIEWED,
         encrypt(JSON.stringify(viewedProductsList))
       )
+      setProductInfo({
+        recordId: response?.data?.product?.recordId,
+        variantGroupCode: response?.data?.product?.variantGroupCode,
+        productCode: response?.data?.product?.productCode,
+      })
     }
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
@@ -243,8 +248,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           .getElementsByName(snippet.name)
           .forEach((node: any) => node.remove())
       })
+      setProductInfo(undefined)
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

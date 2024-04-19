@@ -8,6 +8,7 @@ import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
+import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -89,6 +90,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               <CartDropdown />
             </div>
           </div>
+          <EngagePromoBar />
         </div>
       </>
     );
