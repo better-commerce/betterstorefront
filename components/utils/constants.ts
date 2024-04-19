@@ -244,6 +244,7 @@ export const ENGAGE_QUERY_COLLABORATIVE = `${process.env.ENGAGE_QUERY_BASE_URL}/
 export const ENGAGE_QUERY_INTEREST = `${process.env.ENGAGE_QUERY_BASE_URL}/interest`
 export const ENGAGE_QUERY_COUPON = `${process.env.ENGAGE_QUERY_BASE_URL}/coupon`
 export const ENGAGE_QUERY_SEARCH = `${process.env.ENGAGE_QUERY_BASE_URL}/search`
+export const ENGAGE_QUERY_ANNOUNCEMENT = `${process.env.ENGAGE_QUERY_BASE_URL}/announcement`
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY

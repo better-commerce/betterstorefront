@@ -124,6 +124,7 @@ const initialState = {
   isCompared: getItem('isCompared') || 'false',
   compareProductList: getItem('compareProductList') || {},
   isPaymentLink: getItem('isPaymentLink') || false,
+  productInfo: undefined,
 }
 
 type Action =
@@ -235,6 +236,7 @@ type Action =
   | { type: 'SET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'SET_CURRENCY'; payload: any }
+  | { type: 'SET_PRODUCT_INFO'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -539,6 +541,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         currency: action.payload,
+      }
+    }
+    case 'SET_PRODUCT_INFO': {
+      return {
+        ...state,
+        productInfo: action.payload,
       }
     }
   }
@@ -1082,6 +1090,14 @@ export const UIProvider: React.FC<any> = (props) => {
     },
     [dispatch]
   )
+
+  const setProductInfo = useCallback(
+    (payload: any) => {
+      dispatch({ type: 'SET_PRODUCT_INFO', payload })
+    },
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -1134,6 +1150,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setCompareProducts,
       resetCompareProducts,
       setCurrency,
+      setProductInfo,
     }),
 
     [state]

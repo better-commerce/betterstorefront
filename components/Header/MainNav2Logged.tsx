@@ -9,6 +9,7 @@ import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
 import { useRouter } from "next/router";
+import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -144,6 +145,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
           ) : (
             <div></div>
           )}
+          <EngagePromoBar />
         </div>
 
       </>
