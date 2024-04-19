@@ -128,7 +128,7 @@ export default function ProductSpecifications({
                       {attrGroup['product.fabric']?.map(
                         (fabric: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fabric.fieldText}
                               {attrGroup['product.fabric']?.length > 1 &&
                                 <span className="s-icon">,</span>
@@ -151,7 +151,7 @@ export default function ProductSpecifications({
                       {attrGroup['clothing.size']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               {attrGroup['clothing.size']?.length > 1 &&
                                 <span className="s-icon">,</span>
@@ -174,7 +174,7 @@ export default function ProductSpecifications({
                       {attrGroup['dress.style']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               {attrGroup['dress.style']?.length > 1 &&
                                 <span className="s-icon">,</span>
@@ -197,7 +197,7 @@ export default function ProductSpecifications({
                       {attrGroup['clothing.type']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               {attrGroup['clothing.type']?.length > 1 &&
                                 <span className="s-icon">,</span>

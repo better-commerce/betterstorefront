@@ -10,18 +10,18 @@ const Footer = ({navItems}:any) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => (
         <div key={index} className="text-sm">
-          <h2 className="font-semibold text-neutral-700 dark:text-neutral-200"> {menu?.boxTitle} </h2>
+          <h2 className="font-semibold text-neutral-700 dark:text-white"> {menu?.boxTitle} </h2>
           <ul role="list" className="mt-0 space-y-6">
             <>
               {menu?.contentBody != '' && (
-                <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
+                <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight dark:text-white" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
               )}
               {menu?.navItems != '' && (
                 <>
                   {menu?.navItems?.map((navItem: any, navItemIdx: number) => (
                     <li key={navItemIdx + 'navItem'} className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight" >
                       <Link passHref href={`/men/${navItem?.itemLink}`} >
-                        <a href={`/men/${navItem?.itemLink}`} className="text-xs" >
+                        <a href={`/men/${navItem?.itemLink}`} className="text-xs dark:text-white" >
                           {navItem?.caption}
                         </a>
                       </Link>

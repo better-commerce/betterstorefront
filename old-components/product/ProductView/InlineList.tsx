@@ -46,7 +46,7 @@ export default function InlineList({ items = [], onChange = () => { }, label = "
   return (
     <>
       <div className="flex flex-col justify-start gap-1 mt-2">
-        <h4 className="text-gray-700 font-14">{label} :
+        <h4 className="text-gray-700 font-14 dark:text-white">{label} :
           {validation && <span className='relative inline-block w-5 h-5 ml-1 rounded-full top-1' style={{ background: colorName }}></span>}
         </h4>
       </div>
