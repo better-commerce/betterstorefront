@@ -9,7 +9,7 @@ import SocialsList from "../SocialsList/SocialsList";
 import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
 import ButtonPrimary from "../Button/ButtonPrimary";
-import { Logo } from "@components/ui";
+import { Logo, useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { removePrecedingSlash } from "@framework/utils/app-util";
 
@@ -20,12 +20,8 @@ export interface NavMobileProps {
   featureToggle?: any
 }
 
-const NavMobile: React.FC<NavMobileProps> = ({
-  data,
-  navItems,
-  onClickClose,
-  featureToggle
-}) => {
+const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, featureToggle }) => {
+  const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
   const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
     return (
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
@@ -126,46 +122,27 @@ const NavMobile: React.FC<NavMobileProps> = ({
             </Link>
           </Disclosure>
         }
-         {/* New Link Added */}
-         <Disclosure as="li" className="text-slate-900 dark:text-white">
-          <Link
-            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/my-account`}
-            passHref
-          >
-            My Fashion Store
-          </Link>
-          <Link
-            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/my-store`}
-            passHref
-          >
-            <span>Browsing History</span>
-          </Link>
-          <Link
-            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/my-store/recommendations`}
-            passHref
-          >
-            <span>Recommended For You</span>
-          </Link>
-          <Link
-            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/my-store/improve-recommendations`}
-            passHref
-          >
-            <span>Improve Your Recommendation</span>
-          </Link>
-          <Link
-            className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
-            href={`/my-account`}
-            passHref
-          >
-            <span>Your Profile</span>
-          </Link>
-        </Disclosure>
+        {!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature &&
+          <Disclosure as="li" className="py-4 text-black border bg-slate-50 dark:text-white border-slate-200 rounded-xl">
+            <div className="flex w-full items-center pb-2.5 px-4 font-semibold tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" >
+              My Fashion Store
+            </div>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-store`} passHref >
+              <span>Browsing History</span>
+            </Link>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-store/recommendations`} passHref >
+              <span>Recommended For You</span>
+            </Link>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-store/improve-recommendations`} passHref >
+              <span>Improve Your Recommendation</span>
+            </Link>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-account`} passHref >
+              <span>Your Profile</span>
+            </Link>
+          </Disclosure>
+        }
       </ul>
-    </div>
+    </div >
   );
 };
 
