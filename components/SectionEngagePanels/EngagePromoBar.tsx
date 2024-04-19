@@ -30,8 +30,8 @@ function EngagePromoBar() {
     return <></>
   }
 
-  return promoData?.map((promo: any) => (
-    <div className="w-full bg-black text-gray-50 flex justify-between items-center text-sm py-2 px-3">
+  return promoData?.map((promo: any, idx: number) => (
+    <div key={idx} className="w-full bg-black text-gray-50 flex justify-between items-center text-sm py-2 px-3">
       <div></div>
       <div>
         {promo?.message}
