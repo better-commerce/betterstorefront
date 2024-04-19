@@ -34,7 +34,7 @@ function Recommendations({ deviceInfo, config, campaignData }: any) {
         <meta property="og:title" content="Your Recommendations" key="ogtitle" />
         <meta property="og:description" content="Your Recommendations" key="ogdesc" />
       </NextHead>
-      <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-10">
+      <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-10 mob-padding-0">
         <EngageProductCard productLimit={12} type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Top picks for you" isSlider={false} productPerRow={5} forceDisplay={true} />
         <EngageProductCard productLimit={12} type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} title="Style Spotlight: Editor's Choice" isSlider={true} productPerRow={5} forceDisplay={true} />
         <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} title="Buy it again" isSlider={false} productPerRow={5} forceDisplay={true} />

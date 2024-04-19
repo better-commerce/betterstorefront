@@ -17458,3 +17458,9 @@ body:has(.px-4.pt-16.pb-24.bg-white.sm\:px-6.sm\:pt-24.lg\:px-8.lg\:py-32) {
 .rc-slider-mark-text-active{
   @apply dark:!text-white;
 }
+
+@media screen and (max-width:767px) {
+  .mob-padding-0{
+    padding: 0px !important;
+  }
+}
