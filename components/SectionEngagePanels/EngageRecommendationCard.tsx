@@ -158,8 +158,8 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
         </div>
         <div className='grid grid-cols-1 mx-auto border sm:grid-cols-1 border-slate-200 rounded-2xl sm:max-w-5xl'>
           {productList?.map((item: any, index: number) => (
-            <div key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto text-left cursor-pointer height-auto-slide group lg:w-auto`}>
-              <div className="grid items-center grid-cols-12 gap-3 p-2 border-b border-slate-300" key={index}>
+            <div key={`pdp-compare-product-${index}`} className={`relative flex-col sm:w-64 w-full h-auto text-left cursor-pointer height-auto-slide group lg:w-auto`}>
+              <div className="grid items-center grid-cols-1 gap-3 p-2 border-b sm:grid-cols-12 border-slate-300" key={index}>
                 <div className="col-span-1">
                   <div className="flex-shrink-0">
                     <img width={140} height={60} src={generateUri(item?.image_url, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={item?.title || 'cart-item'} className="object-cover object-center w-10 rounded-lg sm:w-16 image" />
