@@ -191,7 +191,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                     <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
                       <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                         <div>
-                          <h2 className="text-sm sm:text-lg text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{item?.title}</h2>
+                          <h2 className="text-sm sm:text-sm text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{item?.title}</h2>
                           <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{item?.brand}</p>
                         </div>
                         <div className="flex items-center justify-between ">
@@ -224,7 +224,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                     <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
                       <div className="space-y-4 px-2.5 sm:pt-5 pt-2 pb-2.5">
                         <div>
-                          <h2 className="text-xs sm:text-lg text-left font-semibold transition-colors sm:min-h-[60px] min-h-[40px] nc-ProductCard__title">{item?.title}</h2>
+                          <h2 className="text-xs sm:text-sm text-left font-semibold transition-colors sm:min-h-[50px] min-h-[40px] nc-ProductCard__title">{item?.title}</h2>
                           <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{item?.brand}</p>
                         </div>
                         <div className="flex items-center justify-between ">
