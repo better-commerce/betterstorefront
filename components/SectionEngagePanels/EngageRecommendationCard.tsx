@@ -154,7 +154,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
     <div className={`nc-SectionSliderProductCard`}>
       <div>
         <div className="flex justify-between gap-1 mb-5 lg:gap-3 sm:mb-10">
-          <h2 className="flex-1 pb-0 pr-4 mb-2 text-3xl font-semibold md:text-4xl">{title || campaignDetails?.campaign_title}</h2>
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl">{title || campaignDetails?.campaign_title}</h2>
         </div>
         <div className='grid grid-cols-1 mx-auto border sm:grid-cols-1 border-slate-200 rounded-2xl sm:max-w-5xl'>
           {productList?.map((item: any, index: number) => (
