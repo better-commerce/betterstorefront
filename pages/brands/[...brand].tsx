@@ -532,7 +532,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             }
           </div>
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
