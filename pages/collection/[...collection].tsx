@@ -516,7 +516,7 @@ export default function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container pt-5 sm:pb-24 mx-auto bg-transparent">
+      <div className="container pt-5 sm:pb-24 mx-auto bg-transparent header-space">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
