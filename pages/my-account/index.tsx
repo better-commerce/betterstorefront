@@ -136,7 +136,7 @@ function MyAccount({ deviceInfo }:any) {
           <div className="mt-14 sm:mt-20">
             <div className="max-w-4xl mx-auto">
               <div className="max-w-2xl">
-                <h2 className="text-3xl font-semibold xl:text-4xl">{translate('common.label.accountText')}</h2>
+                <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
                 <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
                   <span className="font-semibold text-slate-900 dark:text-slate-200">
                     {user?.firstName},
@@ -178,10 +178,10 @@ function MyAccount({ deviceInfo }:any) {
                           }}
                           className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base"
                         >
-                          <span className="inline-block text-black sm:hidden dark:text-black">
+                          <span className="inline-block text-black sm:hidden dark:text-white">
                             {isMobile ? item?.head : item?.mtext}
                           </span>
-                          <span className="hidden text-black sm:inline-block dark:text-black">
+                          <span className="hidden text-black sm:inline-block dark:text-white">
                             {isMobile ? item?.head : item?.text}
                           </span>
                         </Link>
@@ -198,7 +198,7 @@ function MyAccount({ deviceInfo }:any) {
             <div
               className="relative col-span-12 mob-tab-full"
             >
-              <div className={'orders bg-white'}>
+              <div className={'orders bg-white dark:bg-transparent'}>
                 <MyDetails handleToggleShowState={handleToggleShowState} />
               </div>
             </div>
