@@ -99,7 +99,7 @@ function MyCompany({ deviceInfo }: any) {
         text: translate('label.myAccount.myCompanyText'),
         mtext: translate('label.myAccount.myCompanyText'),
         props: 'my-company',
-        head: <BuildingOffice2Icon className="w-7 h-7 text-gray-500" />,
+        head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
         href: `/my-account/my-company`,
       })
     }
@@ -274,7 +274,7 @@ function MyCompany({ deviceInfo }: any) {
         </>
       ) : (
         <>
-          <section className="relative pb-10 text-gray-900">
+          <section className="relative pb-10 text-gray-900 header-space">
             <div className="container w-full bar">
               <div className="mt-14 sm:mt-20">
                 <div className="max-w-4xl mx-auto">

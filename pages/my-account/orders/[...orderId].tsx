@@ -281,7 +281,7 @@ function OrderDetail({ deviceInfo }: any) {
                                 key="ogdesc"
                             />
                         </NextHead>
-                        <div className="container w-full bg-white">
+                        <div className="container w-full bg-white header-space">
                             <div className='mt-14 sm:mt-20'>
                                 <div className='max-w-4xl mx-auto'>
                                 <OrderDetailHeader
