@@ -36,7 +36,6 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -70,24 +69,9 @@ interface stateInterface {
   filters: any
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-} = ACTION_TYPES
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-}
-
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -139,19 +123,9 @@ export default function CollectionPage(props: any) {
   })
   const { isCompared } = useUI()
 
-  adaptedQuery.currentPage
-    ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
-    : false
-  adaptedQuery.filters
-    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
-    : false
-
-  const initialState = {
-    ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
-    collectionId: props?.id,
-  }
-
+  adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
+  adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
+  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], collectionId: props?.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
@@ -184,7 +158,7 @@ export default function CollectionPage(props: any) {
       results: [], // current page result set
       sortList: [],
       pages: 0, // total number of pages
-      total: 0, // total numer of records
+      total: 0, // total number of records
       currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
@@ -251,9 +225,7 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    const dataToPass = IS_INFINITE_SCROLL
-      ? productListMemory?.products
-      : data?.products // productListMemory?.products
+    const dataToPass = IS_INFINITE_SCROLL ? productListMemory?.products : data?.products // productListMemory?.products
     if (dataToPass?.results?.length > 0) {
       setProductDataToPass(dataToPass)
     } else {
@@ -380,12 +352,12 @@ export default function CollectionPage(props: any) {
 
   }, [])
 
-  useEffect(()=> {
+  useEffect(() => {
     // for engage
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_collection_page_view_before({ item_id : props?.name || EmptyString}) 
+      window.ch_collection_page_view_before({ item_id: props?.name || EmptyString })
     }
-  },[])
+  }, [])
 
   const [visible, setVisible] = useState(true)
   const [appliedFilters, setAppliedFilters] = useState<any[]>([])
@@ -407,13 +379,7 @@ export default function CollectionPage(props: any) {
     setAppliedFilters(currentFilters)
   }, [state?.filters, data?.products])
 
-  const cls = visible
-    ? 'sticky w-full mx-auto bg-white top-108 sm:container'
-    : 'relative'
-  const totalResults =
-    appliedFilters?.length > 0
-      ? data?.products?.total
-      : props?.products?.total || data?.products?.results?.length
+  const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
   const handleTogglePLPSidebar = () => {
     setOpenPLPSidebar(!openPLPSidebar)
@@ -516,7 +482,7 @@ export default function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container pt-5 sm:pb-24 mx-auto bg-transparent header-space">
+      <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
@@ -539,30 +505,26 @@ export default function CollectionPage(props: any) {
           </div>
         </div>
         <hr className='border-slate-200 dark:border-slate-700' />
-        { 
-          <div className="grid grid-cols-1 gap-1 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3 mt-2 sm:mt-0">
+        {
+          <div className="grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3 sm:mt-0">
             {props?.allowFacets ? (
               <>
                 {isMobile ? (
-                  <>
-                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                  </>
+                  <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                 ) : (
                   <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
                 <div className="sm:col-span-9 p-[1px]">
                   {isMobile ? null : (
-                    <>
-                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    </>
+                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   )}
-                  {productDataToPass?.results.length>0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />}
+                  {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />}
                 </div>
               </>
             ) : (
               <div className="col-span-12">
                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                {productDataToPass?.results.length>0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />}
+                {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />}
               </div>
             )}
           </div>
@@ -570,7 +532,6 @@ export default function CollectionPage(props: any) {
         {props?.products?.total == 0 && (
           <div className="w-full py-32 mx-auto text-center">
             <h3 className="py-3 text-3xl font-semibold text-gray-200">
-              {' '}
               {translate('label.collection.noItemAvailableText')} {props?.name} {translate('label.collection.collectionsTextWithExclamationMark')}
             </h3>
             <Link href="/collection" passHref>
@@ -583,13 +544,9 @@ export default function CollectionPage(props: any) {
         )}
 
         <PLPFilterSidebar handleSortBy={handleSortBy} openSidebar={openPLPSidebar} handleTogglePLPSidebar={handleTogglePLPSidebar} plpFilterState={plpFilterState} />
-
         <CompareSelectionBar name={props?.name} showCompareProducts={showCompareProducts} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-        {/* <div className="cart-recently-viewed">
-          <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
-        </div> */}
         <div className='flex flex-col w-full'>
-          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
@@ -597,10 +554,7 @@ export default function CollectionPage(props: any) {
           <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         </div>
         {data?.products?.results?.length > 0 && (
-          <Script
-            type="application/ld+json"
-            id="schema"
-            strategy="afterInteractive"
+          <Script type="application/ld+json" id="schema" strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
               {
