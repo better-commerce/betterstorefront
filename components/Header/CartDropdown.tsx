@@ -9,14 +9,17 @@ import { getCurrentPage, isB2BUser } from "@framework/utils/app-util";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { LoadingActionType, NEXT_CREATE_BASKET , NEXT_TRANSFER_BASKET } from "@components/utils/constants";
+import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET , NEXT_TRANSFER_BASKET } from "@components/utils/constants";
 import axios from "axios";
 import { matchStrings } from "@framework/utils/parse-util";
 import { Guid } from "@commerce/types";
+import { AlertType } from '@framework/utils/enums';
+import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
-const TransferBasketModal = dynamic(() => import('@components/transferBasketModal'))
+const TransferBasketModal = dynamic(() => import('@components/TransferBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function CartDropdown() {
@@ -76,13 +79,7 @@ export default function CartDropdown() {
       href: '#',
       title: translate('label.b2b.basket.createBasketLinkText'),
       className: 'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
-      head: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-          <g id="surface1">
-            <path d="M 3.4375 5.375 L 7.417969 5.375 L 7.417969 4.5625 C 7.417969 3.308594 7.933594 2.167969 8.757812 1.339844 C 9.585938 0.515625 10.726562 0 11.984375 0 C 13.238281 0 14.382812 0.515625 15.207031 1.339844 C 16.035156 2.167969 16.546875 3.308594 16.546875 4.5625 L 16.546875 5.375 L 20.5625 5.375 C 20.804688 5.375 21.023438 5.472656 21.179688 5.632812 L 21.222656 5.679688 C 21.355469 5.835938 21.4375 6.035156 21.4375 6.25 L 21.4375 20.863281 C 21.4375 21.722656 21.085938 22.507812 20.515625 23.078125 C 19.945312 23.644531 19.160156 24 18.300781 24 L 5.699219 24 C 4.839844 24 4.054688 23.644531 3.484375 23.078125 C 2.914062 22.507812 2.5625 21.726562 2.5625 20.863281 L 2.5625 6.25 C 2.5625 6.007812 2.660156 5.789062 2.820312 5.632812 C 2.976562 5.472656 3.195312 5.375 3.4375 5.375 Z M 11.402344 12.976562 C 11.402344 12.644531 11.667969 12.375 12 12.375 C 12.332031 12.375 12.597656 12.644531 12.597656 12.976562 L 12.597656 14.910156 L 14.53125 14.910156 C 14.863281 14.910156 15.128906 15.175781 15.128906 15.507812 C 15.128906 15.835938 14.863281 16.105469 14.53125 16.105469 L 12.597656 16.105469 L 12.597656 18.039062 C 12.597656 18.371094 12.332031 18.636719 12 18.636719 C 11.667969 18.636719 11.402344 18.371094 11.402344 18.039062 L 11.402344 16.105469 L 9.46875 16.105469 C 9.136719 16.105469 8.871094 15.835938 8.871094 15.507812 C 8.871094 15.175781 9.136719 14.910156 9.46875 14.910156 L 11.402344 14.910156 Z M 8.53125 5.375 L 15.433594 5.375 L 15.433594 4.5625 C 15.433594 3.617188 15.046875 2.753906 14.421875 2.128906 C 13.796875 1.5 12.933594 1.113281 11.984375 1.113281 C 11.035156 1.113281 10.171875 1.5 9.546875 2.128906 C 8.921875 2.753906 8.53125 3.617188 8.53125 4.5625 Z M 7.417969 7.535156 L 7.417969 6.488281 L 3.675781 6.488281 L 3.675781 20.863281 C 3.675781 21.417969 3.902344 21.921875 4.269531 22.289062 C 4.636719 22.660156 5.144531 22.886719 5.699219 22.886719 L 18.300781 22.886719 C 18.855469 22.886719 19.359375 22.65625 19.726562 22.289062 C 20.09375 21.921875 20.324219 21.417969 20.324219 20.863281 L 20.324219 6.488281 L 16.546875 6.488281 L 16.546875 7.546875 C 16.960938 7.753906 17.246094 8.183594 17.246094 8.679688 C 17.246094 9.382812 16.675781 9.949219 15.972656 9.949219 C 15.269531 9.949219 14.699219 9.382812 14.699219 8.679688 C 14.699219 8.167969 15 7.730469 15.433594 7.527344 L 15.433594 6.488281 L 8.53125 6.488281 L 8.53125 7.539062 C 8.953125 7.746094 9.242188 8.179688 9.242188 8.679688 C 9.242188 9.382812 8.675781 9.949219 7.972656 9.949219 C 7.269531 9.949219 6.699219 9.382812 6.699219 8.679688 C 6.699219 8.175781 6.992188 7.738281 7.417969 7.535156 Z M 7.417969 7.535156 " />
-          </g>
-        </svg>
-      ),
+      head: <AddBasketIcon />,
       onClick: (ev: any) => {
         ev.preventDefault()
         ev.stopPropagation()
@@ -95,14 +92,7 @@ export default function CartDropdown() {
       href: '#',
       title: translate('label.b2b.basket.transferBasketLinkText'),
       className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
-      head: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 90 90" version="1.1" preserveAspectRatio="xMidYMid meet">
-        <g>
-          <path d="M 68.557 75.78 c -0.747 0 -1.501 -0.145 -2.221 -0.443 c -2.171 -0.899 -3.573 -2.998 -3.573 -5.348 v -2.334 H 35.023 c -2.209 0 -4 -1.791 -4 -4 c 0 -2.209 1.791 -4 4 -4 h 29.953 c 2.939 0 5.373 2.201 5.74 5.042 l 10.369 -10.369 L 70.716 43.958 C 70.348 46.799 67.914 49 64.975 49 H 47.074 c -2.209 0 -4 -1.791 -4 -4 s 1.791 -4 4 -4 h 15.689 v -2.334 c 0 -2.35 1.402 -4.449 3.573 -5.348 c 2.172 -0.897 4.646 -0.406 6.308 1.256 l 15.662 15.661 c 2.257 2.257 2.257 5.929 0 8.186 L 72.643 74.082 C 71.534 75.192 70.06 75.78 68.557 75.78 z" />
-          <path d="M 21.443 57.125 c -1.503 0 -2.976 -0.588 -4.086 -1.697 L 1.694 39.765 c -1.093 -1.092 -1.695 -2.546 -1.695 -4.093 s 0.603 -3.001 1.696 -4.094 l 15.661 -15.661 c 1.661 -1.661 4.139 -2.152 6.308 -1.254 c 2.171 0.899 3.573 2.998 3.573 5.348 v 2.334 h 27.741 c 2.209 0 4 1.791 4 4 s -1.791 4 -4 4 H 25.025 c -2.939 0 -5.373 -2.202 -5.74 -5.042 L 8.915 35.673 l 10.369 10.369 c 0.367 -2.84 2.801 -5.042 5.74 -5.042 h 22.049 c 2.209 0 4 1.791 4 4 s -1.791 4 -4 4 H 27.237 v 2.334 c 0 2.349 -1.402 4.448 -3.573 5.347 C 22.944 56.98 22.19 57.125 21.443 57.125 z" />
-        </g>
-      </svg>
-      ),
+      head: <TransferIcon />,
       onClick: (ev: any) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -115,22 +105,7 @@ export default function CartDropdown() {
       href: '#',
       title: translate('label.b2b.basket.deleteBasketLinkText'),
       className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
-      head: (
-        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-          width="24.000000px" height="24.000000px" viewBox="0 0 24.000000 24.000000"
-          preserveAspectRatio="xMidYMid meet">
-          <g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)"
-            fill="#000000" stroke="none">
-            <path d="M84 215 c-9 -14 -25 -25 -36 -25 -17 0 -19 -7 -16 -92 l3 -93 85 0
-          85 0 3 93 c3 85 1 92 -16 92 -11 0 -27 11 -36 25 -9 14 -25 25 -36 25 -11 0
-          -27 -11 -36 -25z m50 9 c28 -11 18 -34 -14 -34 -18 0 -30 5 -30 13 0 25 15 32
-          44 21z m16 -66 c0 -10 5 -18 10 -18 6 0 10 9 10 20 0 13 5 18 15 13 13 -4 15
-          -20 13 -82 l-3 -76 -75 0 -75 0 -3 78 c-2 64 0 77 13 77 8 0 15 -7 15 -15 0
-          -8 5 -15 10 -15 6 0 10 8 10 18 0 12 8 17 30 17 22 0 30 -5 30 -17z"/>
-            <path d="M103 83 c9 -2 25 -2 35 0 9 3 1 5 -18 5 -19 0 -27 -2 -17 -5z" />
-          </g>
-        </svg>
-      ),
+      head: <TrashIcon className='w-6 h-6' />,
       onClick: (ev: any) => {
         ev.preventDefault()
         ev.stopPropagation()
@@ -158,41 +133,44 @@ export default function CartDropdown() {
 
   const handleCreateBasket = async (basketName: string) => {
     if (basketName) {
-      const oldBasketId = JSON.parse(JSON.stringify(basketId))
       setLoadingAction(LoadingActionType.CREATE_BASKET)
-      const newBasketId = generateBasketId(true)
-      const { data: createBasketResult }: any = await axios.post(NEXT_CREATE_BASKET, { basketId: newBasketId, basketName, })
-      if (createBasketResult?.message && matchStrings(createBasketResult?.message, "Product Added Successfully", true)) {
-        closeCreateBasketModal()
 
+      const newBasketId = generateBasketId(true)
+      const { data }: any = await axios.post(NEXT_CREATE_BASKET, { basketId: newBasketId, basketName, userId: user?.userId })
+      setLoadingAction(LoadingActionType.NONE)
+      
+      if (data?.recordId !== EmptyGuid) {
+        closeCreateBasketModal()
+        setAlert({ type: AlertType.SUCCESS, msg: data?.message })
         if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
           getBaskets(user?.userId)
         }
       } else {
-        setLoadingAction(LoadingActionType.NONE)
+        setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg')})
       }
-      //console.log(createBasketResult)
     }
   }
 
-  const handleTransferBasket = async (basketId: string , transitUserId : string , currentUserId : string , companyId : string) => {
-    const data = {
-      currentUserId,
+  const handleTransferBasket = async (basketId: string, transitUserId : string) => {
+    setLoadingAction(LoadingActionType.TRANSFER_BASKET)
+    const payload = {
       basketId,
       transitUserId,
-      companyId
+      currentUserId: user?.userId,
+      companyId: user?.companyId,
     }
-    const { data: transferBasketResult }: any = await axios.post(NEXT_TRANSFER_BASKET, data)
-      if (transferBasketResult?.isValid) {
-        closeTransferBasketModal()
-        if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
-          getBaskets(user?.userId)
-        }
-        
-      } else {
-        setLoadingAction(LoadingActionType.NONE)
-        setAlert({ type: 'error', msg: transferBasketResult.message })
+    const { data }: any = await axios.post(NEXT_TRANSFER_BASKET, payload)
+    setLoadingAction(LoadingActionType.NONE)
+    
+    if (data?.recordId !== EmptyGuid) {
+      closeTransferBasketModal()
+      setAlert({ type: AlertType.SUCCESS, msg: data?.message })
+      if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
+        getBaskets(user?.userId)
       }
+    } else {
+      setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg')})
+    }
   }
   const deleteBasket = async (basketId: string) => {
     if (basketId && basketId !== Guid.empty) {
@@ -201,6 +179,7 @@ export default function CartDropdown() {
   }
   const openCreateBasketModal = () => setIsCreateBasketModalOpen(true)
   const closeCreateBasketModal = () => {
+    if (loadingAction === LoadingActionType.CREATE_BASKET) return
     setLoadingAction(LoadingActionType.NONE)
     setIsCreateBasketModalOpen(!isCreateBasketModalOpen)
   }
@@ -262,7 +241,7 @@ export default function CartDropdown() {
                             }
 
                             return (
-                              <Link key={item?.title} title={item?.id} passHref href="#" className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => {
+                              <Link key={item?.title} title={item?.id} passHref href="#" className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
                                 if (item?.onClick) {
                                   item?.onClick(ev)
                                 }
