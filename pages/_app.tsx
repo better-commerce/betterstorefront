@@ -48,6 +48,7 @@ import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
+import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
@@ -355,6 +356,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
@@ -368,7 +370,8 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
             <title>{seoInfo?.metaTitle}</title>
             {
               router.asPath.startsWith('/products/') && (
-                <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+                <link rel="canonical" href={(seoInfo?.canonicalTags != "" || seoInfo?.canonicalTags != null) ? (!hasBaseUrl(seoInfo?.canonicalTags) ? SITE_ORIGIN_URL + "/" + seoInfo?.canonicalTags : seoInfo?.canonicalTags) : SITE_ORIGIN_URL +  cleanPath} />
+                // <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
               )
             }
             <meta name="title" content={seoInfo?.metaTitle} />
@@ -532,7 +535,7 @@ MyApp.getInitialProps = async (
     const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
-        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings','PasswordProtectionSettings'].includes(x?.configType)) || [],
+        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings', 'PasswordProtectionSettings'].includes(x?.configType)) || [],
         shippingCountries,
         billingCountries,
         currencies,
