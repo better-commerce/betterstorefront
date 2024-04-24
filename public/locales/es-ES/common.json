@@ -50,7 +50,7 @@
         "selectUserToTransferText" : "Seleccionar un Usuario",
         "noCartSelectedText" : "No se ha seleccionado ningún carrito",
         "noUserSelectedText" : "No se ha seleccionado ningún usuario",
-        "UnnamedBasketText": "Canasta"
+        "unnamedBasketText": "Canasta"
       }
     },
     "basket": {

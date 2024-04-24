@@ -8,10 +8,12 @@ import Link from "next/link";
 import { useUI } from '@components/ui';
 import { Guid } from '@commerce/types';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
     const { setBasketId } = useUI()
-
+    const translate = useTranslation()
+    
     if (!baskets || (baskets && !baskets?.length)) {
         return null
     }
@@ -22,7 +24,7 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
             baskets?.map((basket: any) => {
                 let basketName = basket?.name
                 if (!basketName) {
-                    basketName = `Unnamed ${index + 1}`
+                    basketName = `${translate('label.b2b.basket.Unnamed')} ${index + 1}`
                     index = index + 1
                 }
                 return (

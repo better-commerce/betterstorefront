@@ -50,7 +50,7 @@
         "selectUserToTransferText" : "Select a User",
         "noCartSelectedText" : "No Cart Selected",
         "noUserSelectedText" : "No User Selected",
-        "UnnamedBasketText" : "Basket"
+        "unnamedBasketText" : "Basket"
       }
     },
     "basket": {
