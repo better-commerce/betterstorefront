@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
-import cn from 'classnames'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
@@ -13,20 +12,14 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, getFeaturesConfig, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
+import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
-import Link from 'next/link'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri } from '@commerce/utils/uri-util'
-import LikeButton from '@components/LikeButton'
-import Prices from '@components/Prices'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import Cookies from 'js-cookie'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -162,18 +155,6 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
-  const ch_close_pop_over = () => {
-    Cookies.set('ch_announcement_hidden', 'true', { expires: 7 }); // Save cookie for 7 days
-  };
-  const isAnnouncementHidden = Cookies.get('ch_announcement_hidden');
-
-  // CHECK TRENDING PRODUCTS FROM ENGAGE
-  let trending = []
-  let recentProduct = []
-  if (typeof window !== 'undefined') {
-    trending = window.trend_first_orders_index;
-    recentProduct = window.recent_products_index;
-  }
 
   return (
     <>
@@ -204,7 +185,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
           <div className='flex flex-col w-full'>
-            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
@@ -217,6 +198,5 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     </>
   )
 }
-
 Home.Layout = Layout
 export default withDataLayer(Home, PAGE_TYPE)
