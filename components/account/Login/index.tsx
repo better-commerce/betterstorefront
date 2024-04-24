@@ -14,6 +14,7 @@ import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import DataLayerInstance from '@components/utils/dataLayer'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -72,6 +73,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         }
         setUser(userObj)
         setIsGuestUser(false)
+        DataLayerInstance.setItemInDataLayer('visitorId', userObj?.userId)
         Router.push('/')
       }
       if (cb) cb();

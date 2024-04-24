@@ -9,7 +9,7 @@ import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
@@ -176,6 +176,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   let dataForEngage: any = null
   if (typeof window !== 'undefined') {
+    const productUrl = SITE_ORIGIN_URL + new URL(window.location.href).pathname
     // added for engage
     dataForEngage = {
       item: {
@@ -186,7 +187,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         base_category: product?.classification?.category || EmptyString,
         collection_name: product?.collections ? product?.collections[0]?.name : EmptyString,
         description: product?.fullName || EmptyString,
-        product_url: window?.location?.href || EmptyString,
+        product_url: productUrl,
         image_url: product?.image || EmptyString,
         availability: product?.seoAvailability || EmptyString,
         price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
@@ -197,7 +198,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           title: product?.name || EmptyString,
           sku: product?.productCode || EmptyString,
           image_url: product?.image || EmptyString,
-          product_url: window?.location?.href || EmptyString,
+          product_url: productUrl,
           price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.seoAvailability || EmptyString,
