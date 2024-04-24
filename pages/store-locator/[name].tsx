@@ -64,7 +64,7 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
                 <meta property="og:title" content={store?.name} key="ogtitle" />
                 <meta property="og:description" content={store?.name} key="ogdesc" />
               </NextHead>
-              <div className='flex flex-col' key={`store-detail-${storeIdx}`}>
+              <div className='flex flex-col header-space' key={`store-detail-${storeIdx}`}>
                 <div className='flex items-center justify-start gap-1 mb-4 sm:mb-6'>
                   <Link href="/store-locator" passHref>
                     <span className="flex items-end font-14">Stores</span>
