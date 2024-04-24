@@ -17472,3 +17472,11 @@ body:has(.engage-announcement-bar){
     padding-top: 4rem !important;
   }
 }
+@media screen and (max-width:640px) {
+  .m-breadcrumb {
+    overflow-x: scroll;
+    white-space: nowrap;
+    border-top: 1px gray;
+    padding: 0 10px 15px 0;
+  }
+}
