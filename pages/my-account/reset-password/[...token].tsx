@@ -132,16 +132,16 @@ export default function ResetPasswordPage() {
       </NextHead>
 
       <section>
-        <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8">
-          <div className="px-4 flex flex-col items-center justify-center sm:px-6 lg:px-0">
-            <h1 className="my-4 font-extrabold text-center tracking-tight text-gray-900">{translate('common.label.changePasswordText')}</h1>
+        <div className="py-16 sm:py-24 lg:max-w-7xl lg:mx-auto lg:py-32 lg:px-8 header-space">
+          <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+            <h1 className="my-4 font-extrabold tracking-tight text-center text-gray-900">{translate('common.label.changePasswordText')}</h1>
           </div>
-          <form onSubmit={formik.handleSubmit} className="flex-col m-auto px-5 py-5 flex items-center justify-center font-semibold w-full sm:w-1/2">
+          <form onSubmit={formik.handleSubmit} className="flex flex-col items-center justify-center w-full px-5 py-5 m-auto font-semibold sm:w-1/2">
             {config.map((field: any, Idx: any) => {
               return (
-                <div key={Idx} className="mt-6 w-full sm:w-1/2">
-                  <label className="text-gray-700 text-sm">{field.label}</label>
-                  <input className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" name={field.name} type={field.type} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values[field.name]} />
+                <div key={Idx} className="w-full mt-6 sm:w-1/2">
+                  <label className="text-sm text-gray-700">{field.label}</label>
+                  <input className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" name={field.name} type={field.type} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values[field.name]} />
                   {formik.errors[field.name] && formik.touched[field.name] && (
                     <p className="text-red-500">
                       <>{formik.errors[field.name]}</>
@@ -150,7 +150,7 @@ export default function ResetPasswordPage() {
                 </div>
               )
             })}
-            <div className="mt-10 w-full sm:w-1/2">
+            <div className="w-full mt-10 sm:w-1/2">
               <Button type="submit" className="!font-normal w-full" loading={formik.isSubmitting} disabled={!formik.isValid || formik.isSubmitting}>
                 {translate('common.label.changePasswordText')}
               </Button>

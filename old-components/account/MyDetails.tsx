@@ -72,10 +72,10 @@ export default function MyDetails({ handleToggleShowState }: any) {
   return (
     <main className="space-y-10 sm:space-y-12">
       <div className=''>
-        <h2 className="text-2xl sm:text-3xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-semibold dark:text-white">
           Account infomation
         </h2>
-        <p className="mt-2 text-sm text-black font-normal">
+        <p className="mt-2 text-sm text-black font-normal dark:text-white">
           {translate('label.myAccount.editYourDetailsText')}
         </p>
       </div>

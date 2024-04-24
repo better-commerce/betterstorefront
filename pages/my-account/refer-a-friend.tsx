@@ -168,7 +168,7 @@ function ReferralPage() {
         <meta property="og:description" content={currentOption} key="ogdesc" />
       </NextHead>
 
-      <section className="relative pb-10 text-gray-900">
+      <section className="relative pb-10 text-gray-900 header-space">
         <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
           <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
             <SideMenu
