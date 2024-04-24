@@ -50,7 +50,7 @@
         "selectUserToTransferText" : "Select a User",
         "noCartSelectedText" : "No Cart Selected",
         "noUserSelectedText" : "No User Selected",
-        "Unnamed" : "Unnamed"
+        "UnnamedBasketText" : "Basket"
       }
     },
     "basket": {
@@ -836,7 +836,7 @@
       "homeText": "Home",
       "postText": "Post",
       "reviews": "reviews",
-      "optional": "(Optional)",
+      "optionalPlaceHolderText": "(Optional)",
       "backToHomepageText": "Back to Homepage",
       "closePanelText": "Close panel",
       "otherText": "Other",

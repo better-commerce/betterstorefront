@@ -50,7 +50,7 @@
         "selectUserToTransferText" : "Seleccionar un Usuario",
         "noCartSelectedText" : "No se ha seleccionado ningún carrito",
         "noUserSelectedText" : "No se ha seleccionado ningún usuario",
-        "Unnamed" : "Sin nombre"
+        "UnnamedBasketText": "Canasta"
       }
     },
     "basket": {
@@ -832,7 +832,7 @@
     },
     "label": {
       "homeText": "Inicio",
-      "optional": "(Opcional)",
+      "optionalPlaceHolderText": "(Opcional)",
       "postText": "Publicar",
       "reviews": "reseñas",
       "backToHomepageText": "Volver a la página de inicio",
