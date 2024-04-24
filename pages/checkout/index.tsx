@@ -755,6 +755,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     setDeliveryTypeMethod,
     featureToggle,
     deliveryMethods,
+    basket,
   }
 
   const editAddressFormProps = {
@@ -796,7 +797,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     setOverlayLoaderState,
     hideOverlayLoaderState,
     generateBasketId,
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const renderCurrentStep = () => {

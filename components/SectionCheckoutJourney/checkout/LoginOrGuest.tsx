@@ -89,6 +89,13 @@ const LoginOrGuest: React.FC<any> = ({
             deliveryType={deliveryTypeMethod?.type}
             isGuest={true}
             onGuestCheckout={onGuestCheckout}
+            basket={basket}
+            deliveryTypeMethod={deliveryTypeMethod}
+            setDeliveryTypeMethod={setDeliveryTypeMethod}
+            featureToggle={featureToggle}
+            deliveryMethods={deliveryMethods}
+            billingCountries={billingCountries}
+            disableDeliveryTypeSelection={false}
           />
         )
       case DeliveryType.COLLECT:
