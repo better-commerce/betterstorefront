@@ -36,7 +36,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
 
   const flattenedItems = createBreadcrumbs(items)
   return (
-    <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 bread-mob-view" >
+    <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 m-breadcrumb" >
       <li className='flex items-center text-10-mob sm:text-sm'>
         <Link href="/" passHref>
           <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > {translate('common.label.homeText')} </span>
