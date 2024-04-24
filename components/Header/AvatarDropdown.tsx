@@ -10,9 +10,10 @@ import { useUI } from "@components/ui";
 import { Guid } from "@commerce/types";
 import Router from 'next/router'
 import { signOut } from "next-auth/react";
-import { SocialMediaType } from "@components/utils/constants";
+import { EmptyString, SocialMediaType } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline";
+import DataLayerInstance from '@components/utils/dataLayer';
 
 export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any) {
   const translate = useTranslation()
@@ -143,6 +144,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
         <ArrowLeftEndOnRectangleIcon className="w-6 h-6 text-gray-500"/>
       ),
       onClick: async () => {
+        DataLayerInstance.setItemInDataLayer('visitorId', EmptyString)
         deleteUser({ router: Router })
         if (user?.socialData?.socialMediaType) {
           await signOut()
