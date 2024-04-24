@@ -872,26 +872,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-10">
                   <div className="container mx-auto max-w-7xl p-4">
                     <div className="flex justify-end">
-                      <Button
-                        title={buttonConfig.title}
-                        action={buttonConfig.action}
-                        buttonType={buttonConfig.type || 'cart'}
-                      />
-                      <button
-                        type="button"
-                        onClick={handleWishList}
-                        className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn"
-                      >
-                        {isInWishList(selectedAttrData?.productId) ? (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                        ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                        )}
-                        <span className="sr-only">
-                          {' '}
-                          {translate('label.product.addTofavouriteText')}{' '}
-                        </span>
-                      </button>
+                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                      {isInWishList(selectedAttrData?.productId) ? (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                      ) : (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                      )}
+                      <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                    </button>
                     </div>
                   </div>
                 </div>
@@ -901,25 +890,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <div className="flex rtl:space-x-reverse">
               {!isEngravingAvailable && (
                 <div className="flex mt-6 sm:mt-4 !text-sm w-full">
-                  <Button
-                    title={buttonConfig.title}
-                    action={buttonConfig.action}
-                    buttonType={buttonConfig.type || 'cart'}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleWishList}
-                    className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn"
-                  >
+                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
                     {isInWishList(selectedAttrData?.productId) ? (
                       <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                     ) : (
                       <HeartIcon className="flex-shrink-0 w-6 h-6" />
                     )}
-                    <span className="sr-only">
-                      {' '}
-                      {translate('label.product.addTofavouriteText')}{' '}
-                    </span>
+                    <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
                   </button>
                 </div>
               )}
@@ -927,40 +905,20 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               {isEngravingAvailable && (
                 <>
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                    <Button
-                      className="block py-3 sm:hidden"
-                      title={buttonConfig.title}
-                      action={buttonConfig.action}
-                      buttonType={buttonConfig.type || 'cart'}
-                    />
+                    <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                   </div>
                   <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                    <Button
-                      className="hidden sm:block "
-                      title={buttonConfig.title}
-                      action={buttonConfig.action}
-                      buttonType={buttonConfig.type || 'cart'}
-                    />
-                    <button
-                      className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full"
-                      onClick={() => showEngravingModal(true)}
-                    >
+                    <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                    <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
                       {translate('label.product.engravingText')}
                     </button>
-                    <button
-                      type="button"
-                      onClick={handleWishList}
-                      className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink"
-                    >
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
                       {isInWishList(selectedAttrData?.productId) ? (
                         <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
                       ) : (
                         <HeartIcon className="flex-shrink-0 w-6 h-6" />
                       )}
-                      <span className="sr-only">
-                        {' '}
-                        {translate('label.product.addTofavouriteText')}{' '}
-                      </span>
+                      <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
                     </button>
                   </div>
                 </>
