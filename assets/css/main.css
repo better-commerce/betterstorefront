@@ -17299,23 +17299,23 @@ input[type=time]::-webkit-calendar-picker-indicator {
   background: #212530 !important;
 }
 @media screen and (min-width: 768px) {
-  .ch-announcement-bar-1{
+  .engage-announcement-bar{
     z-index: 20 !important;
     top: 85px !important;
   }
 }
 @media screen and (max-width: 768px) {
-  .ch-announcement-bar-1{
+  .engage-announcement-bar{
     top: 53px !important;
   }
 }
 @media screen and (max-width: 640px) {
-  .ch-announcement-bar-1{
+  .engage-announcement-bar{
     top: 65px !important;
     z-index: 20 !important;
   }
 }
-body:has(.ch-announcement-bar-1) {
+body:has(.engage-announcement-bar) {
   .container.py-4.mx-auto {
     padding-top: 70px !important;
   }
@@ -17440,18 +17440,18 @@ body:has(.ch-announcement-bar-1) {
 }
 @media screen and (min-width: 767px) {
 body:has(.flex-col.hidden.w-full.bg-white.border-t.border-slate-100){
-  .ch-announcement-bar-1{
+  .engage-announcement-bar{
     margin-top: 25px !important;
   }
 }
 }
 body:has(.px-4.pt-6.pb-10.sm\:pb-24.bg-gray-50.sm\:px-6.sm\:pt-6.lg\:px-8.lg\:py-2){
-  .ch-announcement-bar-1{
+  .engage-announcement-bar{
     margin-top: -85px !important;
   }
 }
 body:has(.px-4.pt-16.pb-24.bg-white.sm\:px-6.sm\:pt-24.lg\:px-8.lg\:py-32) {
-  .ch-announcement-bar-1{
+  .engage-announcement-bar{
     margin-top: -85px !important;
   }
 }
@@ -17468,8 +17468,11 @@ body:has(.px-4.pt-16.pb-24.bg-white.sm\:px-6.sm\:pt-24.lg\:px-8.lg\:py-32) {
   padding-top: 1.5rem !important;
 }
 body:has(.engage-announcement-bar){
-  .header-space{
+  .header-space {
     padding-top: 4rem !important;
+  }
+  .sub-menu {
+    top: 84px !important;
   }
 }
 @media screen and (max-width:640px) {
