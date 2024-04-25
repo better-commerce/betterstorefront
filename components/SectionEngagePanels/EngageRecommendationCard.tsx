@@ -37,7 +37,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
   const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
-  const [isProductRecommended, setIsProductRecommended] = useState<any>({})
+  const [isProductRecommended, setIsProductRecommended] = useState<any>(EmptyObject)
   const [isLoading, setIsLoading] = useState(false)
 
   const onToggleRecommendation = useCallback(
@@ -79,7 +79,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
       let currentCampaign = { campaign_uuid: EmptyString, component_type: EmptyString, campaign_type: EmptyString }
 
       if (campaignData) {
-        const { campaigns = [] } = campaignData?.campaigns?.find((campaign: any) => campaign?._id === type) || {}
+        const { campaigns = [] } = campaignData?.campaigns?.find((campaign: any) => campaign?._id === type) || EmptyObject
         currentCampaign = { campaign_uuid: campaigns?.[0]?.campaign_uuid, component_type: campaigns?.[0]?.component_type, campaign_type: campaigns?.[0]?.campaign_type }
         setCampaignDetails(campaigns?.[0])
       }
@@ -163,7 +163,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
       })
       if (response?.data?.items?.length > 0) {
         setProductList(response?.data?.items)
-        const productRecommendedObj: any = {}
+        const productRecommendedObj: any = EmptyObject
         response?.data?.items?.forEach((product: any) => {
           productRecommendedObj[product?._id] = product?.use_for_recommendation
         })
