@@ -83,7 +83,7 @@ const MyMembership = () => {
                         </div>
                         <div className="flex items-center gap-4 justify-normal">
                           <TagIcon className="w-6 h-6 p-1 text-white bg-black rounded-full" />
-                          <span className="font-medium text-black text-md">{benefits?.noOfVoucher} Vouchers</span>
+                          <span className="font-medium text-black text-md">{benefits?.noOfVoucher} x 20% discounts anytime</span>
                         </div>
                       </>
                     ))}
