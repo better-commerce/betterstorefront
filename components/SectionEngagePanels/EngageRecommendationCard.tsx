@@ -37,7 +37,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
   const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
-  const [isProductRecommmended, setIsProductRecommmended] = useState<any>({})
+  const [isProductRecommended, setIsProductRecommended] = useState<any>({})
   const [isLoading, setIsLoading] = useState(false)
 
   const onToggleRecommendation = useCallback(
@@ -53,7 +53,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
           },
         })
         if (res?.data?.success) {
-          setIsProductRecommmended((v: any) => ({
+          setIsProductRecommended((v: any) => ({
             ...v,
             [product?._id]: !v[product?._id] ?? false,
           }))
@@ -64,7 +64,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
         setIsLoading(false)
       }
     },
-    [user, isProductRecommmended, isLoading],
+    [user, isProductRecommended, isLoading],
   )
 
   const isComparedEnabled = useMemo(() => {
@@ -163,12 +163,11 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
       })
       if (response?.data?.items?.length > 0) {
         setProductList(response?.data?.items)
+        const productRecommendedObj: any = {}
         response?.data?.items?.forEach((product: any) => {
-          setIsProductRecommmended((v: any) => ({
-            ...v,
-            [product?._id]: product?.use_for_recommendation
-          }))
+          productRecommendedObj[product?._id] = product?.use_for_recommendation
         })
+        setIsProductRecommended((v: any) => ({ ...v, ...productRecommendedObj }))
       }
     } catch (error: any) {
       logError(error)
@@ -205,9 +204,9 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
                 </div>
                 <div className="flex items-center justify-around col-span-3 gap-2">
                   <span className="font-normal font-12 text-slate-600">Use this product for recommendation</span>
-                  <Switch checked={isProductRecommmended[item?._id]} onChange={() => onToggleRecommendation(item)} className={`${isProductRecommmended[item?._id] ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
+                  <Switch checked={isProductRecommended?.[item?._id]} onChange={() => onToggleRecommendation(item)} className={`${isProductRecommended?.[item?._id] ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
                     <span className="sr-only">is Enable</span>
-                    <span aria-hidden="true" className={`${isProductRecommmended[item?._id] ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
+                    <span aria-hidden="true" className={`${isProductRecommended?.[item?._id] ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
                   </Switch>
                 </div>
               </div>
