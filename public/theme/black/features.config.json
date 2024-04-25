@@ -8,7 +8,8 @@
     "enableCollectDeliveryOption": false,
     "enableEngage":true,
     "enablemystoreFeature": false,
-    "enableAddToBagPlp": false
+    "enableAddToBagPlp": false,
+    "enableMembership": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

@@ -182,6 +182,7 @@ export const NEXT_GET_SUBJECTS = '/api/subjects'
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
+export const NEXT_GET_ALL_MEMBERSHIP_PLANS = '/api/membership/get-all-plans'
 export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
 export const NEXT_POST_STORE_BY_POSTALCODE =
   '/api/store-locator/get-store-by-postalcode'
@@ -245,6 +246,11 @@ export const ENGAGE_QUERY_INTEREST = `${process.env.ENGAGE_QUERY_BASE_URL}/inter
 export const ENGAGE_QUERY_COUPON = `${process.env.ENGAGE_QUERY_BASE_URL}/coupon`
 export const ENGAGE_QUERY_SEARCH = `${process.env.ENGAGE_QUERY_BASE_URL}/search`
 export const ENGAGE_QUERY_ANNOUNCEMENT = `${process.env.ENGAGE_QUERY_BASE_URL}/announcement`
+
+
+// Membership API endpoints
+export const MEMBERSHIP_PLANS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership/plans`
+export const MEMBERSHIP_BENEFITS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership/benefits`
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY
