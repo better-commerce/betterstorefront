@@ -832,7 +832,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-xl sm:text-2xl font-semibold">
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
@@ -938,8 +938,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
-      <main className="container mt-5 lg:mt-11">
-        <div className='flex flex-1 mb-4'>
+      <main className="container-pdp mt-2 sm:mt-5 lg:mt-11">
+        <div className='px-4 sm:px-0 flex flex-1 mb-1 sm:mb-4'>
           {breadcrumbs && (
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
@@ -961,7 +961,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                         generateUri(product?.image, 'h=1000&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
-                      className="object-cover object-top w-full rounded-2xl"
+                      className="object-cover object-top w-full"
                       alt={product?.name}
                     />
                     {renderStatus()}
@@ -1000,18 +1000,18 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </div>
           )}
-          <div className="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
+          <div className="px-4 sm:px-0 w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
             {renderSectionContent()}
           </div>
         </div>
         {/* DETAIL AND REVIEW */}
-        <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
+        <div className='px-4 sm:px-0 flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
           <EngageProductCard productLimit={12} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
         </div>
-        <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
+        <div className='px-4 sm:px-0 flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
           <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
         </div>
-        <div className="mt-12 sm:mt-12">
+        <div className="px-4 sm:px-0 mt-12 sm:mt-12">
           {/* {renderDetailSection()} */}
           <hr className="border-slate-200 dark:border-slate-700" />
           <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container">
@@ -1021,7 +1021,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             renderReviews()
           }
         </div>
-        <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
+        <div className="px-4 sm:px-0 w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
               <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} />
