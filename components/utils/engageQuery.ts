@@ -3,7 +3,7 @@ import { EmptyGuid, EmptyString, EngageEventTypes } from './constants'
 export const getReqPayload = (rData?: any) => {
   const { type, chCookie, limit, product, currentCampaign = {}, user } = rData
   const sku = product?.variantGroupCode || product?.productCode || EmptyString
-  let payload: any = { data: { user_uuid: chCookie?.user_id } }
+  let payload: any = { data: { user_uuid: chCookie?.user_id, limit } }
 
   if (user?.userId && user?.userId !== EmptyGuid) {
     payload = { data: { ...payload.data, bc_user_id: user?.userId } }
@@ -11,15 +11,20 @@ export const getReqPayload = (rData?: any) => {
 
   // set request payload
   switch (type) {
+    case EngageEventTypes.PURCHASE_HISTORY:
+      payload = {
+        data: { ...payload.data },
+      }
+      break
     case EngageEventTypes.ALSO_BOUGHT:
     case EngageEventTypes.BOUGHT_TOGETHER:
       payload = {
-        data: { ...payload.data, current_item_ids: [sku], limit },
+        data: { ...payload.data, current_item_ids: [sku] },
       }
       break
     case EngageEventTypes.COLLAB_ITEM_VIEW:
       payload = {
-        data: { ...payload.data, item_id: sku, limit },
+        data: { ...payload.data, item_id: sku },
       }
       break
     case EngageEventTypes.COLLAB_USER_ITEMS_VIEW:
@@ -29,7 +34,7 @@ export const getReqPayload = (rData?: any) => {
       break
     case EngageEventTypes.COLLAB_ITEM_PURCHASE:
       payload = {
-        data: { ...payload.data, item_ids: [sku], limit },
+        data: { ...payload.data, item_ids: [sku] },
       }
       break
     case EngageEventTypes.TRENDING_FIRST_ORDER:
@@ -38,7 +43,6 @@ export const getReqPayload = (rData?: any) => {
         data: {
           ...payload.data,
           exclusion_item_id: 'index',
-          limit,
           source: {
             campaign_uuid: currentCampaign.campaign_uuid,
             component_type: currentCampaign.component_type,
@@ -54,7 +58,6 @@ export const getReqPayload = (rData?: any) => {
           ...payload.data,
           current_item_id: sku,
           base_category: product?.classification?.category?.toLowerCase() || EmptyString,
-          limit,
           source: {
             campaign_uuid: currentCampaign.campaign_uuid,
             component_type: currentCampaign.component_type,
@@ -70,7 +73,6 @@ export const getReqPayload = (rData?: any) => {
           primary_category_type: 'categories_1',
           secondary_category_type: EmptyString,
           retry: false,
-          limit,
         },
       }
       break
@@ -79,7 +81,6 @@ export const getReqPayload = (rData?: any) => {
         data: {
           ...payload.data,
           page_id: 'mini_dress',
-          limit,
         },
       }
       break
@@ -89,7 +90,6 @@ export const getReqPayload = (rData?: any) => {
           ...payload.data,
           page_id: EmptyString,
           category_type: EmptyString,
-          limit,
         },
       }
       break
@@ -98,7 +98,6 @@ export const getReqPayload = (rData?: any) => {
         data: {
           ...payload.data,
           term: EmptyString,
-          limit,
         },
       }
       break
@@ -109,7 +108,6 @@ export const getReqPayload = (rData?: any) => {
           campaign_uuid: currentCampaign.campaign_uuid,
           current_item_id: sku,
           cross_sell_category_type: product?.classification?.category?.toLowerCase() || EmptyString,
-          limit,
         },
       }
       break
@@ -119,7 +117,6 @@ export const getReqPayload = (rData?: any) => {
           ...payload.data,
           current_item_id: sku,
           base_category: product?.classification?.category?.toLowerCase() || EmptyString,
-          limit,
         },
       }
       break
