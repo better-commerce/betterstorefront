@@ -2,11 +2,13 @@ import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import NextHead from 'next/head'
 import { useRouter } from "next/router";
 import Layout from '@components/Layout/Layout'
-import { EmptyGuid, NEXT_GET_ALL_MEMBERSHIP_PLANS, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, NEXT_GET_ALL_MEMBERSHIP_PLANS, SITE_ORIGIN_URL } from "@components/utils/constants";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { removeQueryString } from "@commerce/utils/uri-util";
 import { GiftIcon, PlusIcon, StarIcon, TagIcon, TruckIcon } from "@heroicons/react/24/outline";
+import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 const PAGE_TYPE = PAGE_TYPES.MyMembership
 const memberBenefit = [
   { "name": "20% off whenever you want*", "description": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.", "icon": <GiftIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
@@ -15,6 +17,14 @@ const memberBenefit = [
   { "name": "Upgrade whenever you like", "description": "Pay the difference to upgrade your plan at any time to keep on saving.", "icon": <PlusIcon className="w-16 h-16 p-2 mx-auto mb-4 border-2 rounded-full text-sky-600 border-sky-600" /> }
 ]
 
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const { locale } = context
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+    },
+  }
+}
 const MyMembership = () => {
   const router = useRouter()
   const [allPlans, setAllPlans] = useState([])
