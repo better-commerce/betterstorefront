@@ -236,6 +236,7 @@ export const BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE =
   process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE
 
 // Engage API endpoints
+export const ENGAGE_QUERY_CUSTOMER = `${process.env.ENGAGE_QUERY_BASE_URL}/customer`
 export const ENGAGE_QUERY_USER_EVENTS = `${process.env.ENGAGE_QUERY_BASE_URL}/userevents`
 export const ENGAGE_QUERY_USER_ITEMS = `${process.env.ENGAGE_QUERY_BASE_URL}/item`
 export const ENGAGE_QUERY_WEB_CAMPAIGN = `${process.env.ENGAGE_QUERY_BASE_URL}/webcampaign`
@@ -623,4 +624,6 @@ export enum EngageEventTypes {
   CROSS_SELL_ITEMS_SORTED = 'cross_sell_items_sorted',
   // Homepage, PDP
   RECENTLY_VIEWED = 'recent_products',
+  // My Store
+  PURCHASE_HISTORY = 'purchase_history',
 }

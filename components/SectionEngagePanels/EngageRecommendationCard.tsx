@@ -9,7 +9,7 @@ import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Heading from '@components/Heading/Heading'
-import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_TRENDING, EngageEventTypes, EmptyString, ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_COUPON } from '@components/utils/constants'
+import { ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_TRENDING, EngageEventTypes, EmptyString, ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_COUPON, ENGAGE_QUERY_CUSTOMER } from '@components/utils/constants'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -33,18 +33,39 @@ export interface SectionSliderProductCardProps {
 const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, campaignData, subHeading, title, sku, isSlider, productPerRow }) => {
   const [productList, setProductList] = useState<any>(undefined)
   const [currentCampaign, setCurrentCampaign] = useState<any>(undefined)
-  const { isCompared } = useUI()
+  const { isCompared, user } = useUI()
   const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
   const [isProductRecommmended, setIsProductRecommmended] = useState<any>({})
+  const [isLoading, setIsLoading] = useState(false)
 
-  const onToggleRecommendation = (product: any) => {
-    setIsProductRecommmended((v: any) => ({
-      ...v,
-      [product?._id]: !isProductRecommmended?.[product?._id] ?? false
-    }))
-  }
+  const onToggleRecommendation = useCallback(
+    async (product: any) => {
+      if (isLoading) return
+      setIsLoading(true)
+      try {
+        const res = await axios.post(`${ENGAGE_QUERY_CUSTOMER}/excludeforrecommendation`, {
+          ch_data: {
+            bc_user_id: user?.userId,
+            item_id: product?.item_id,
+            exclude: product?.use_for_recommendation,
+          },
+        })
+        if (res?.data?.success) {
+          setIsProductRecommmended((v: any) => ({
+            ...v,
+            [product?._id]: !v[product?._id] ?? false,
+          }))
+        }
+      } catch (error) {
+        logError(error)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [user, isProductRecommmended, isLoading],
+  )
 
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
@@ -64,6 +85,10 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
       }
 
       switch (type) {
+        case EngageEventTypes.PURCHASE_HISTORY:
+          baseUrl = ENGAGE_QUERY_CUSTOMER
+          apiUrl = '/purchasehistory'
+          break
         case EngageEventTypes.RECENTLY_VIEWED:
           baseUrl = ENGAGE_QUERY_USER_EVENTS
           apiUrl = '/recentitems'
@@ -128,7 +153,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
           return
       }
 
-      const chDataPayload: any = getReqPayload({ type, chCookie, limit: 12, currentCampaign })
+      const chDataPayload: any = getReqPayload({ type, chCookie, limit: 12, currentCampaign, user })
 
       const response = await axios.get(baseUrl + apiUrl, {
         params: {
@@ -136,7 +161,15 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
           ch_data: chDataPayload,
         },
       })
-      setProductList(response?.data?.items)
+      if (response?.data?.items?.length > 0) {
+        setProductList(response?.data?.items)
+        response?.data?.items?.forEach((product: any) => {
+          setIsProductRecommmended((v: any) => ({
+            ...v,
+            [product?._id]: product?.use_for_recommendation
+          }))
+        })
+      }
     } catch (error: any) {
       logError(error)
     }
@@ -172,9 +205,9 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
                 </div>
                 <div className="flex items-center justify-around col-span-3 gap-2">
                   <span className="font-normal font-12 text-slate-600">Use this product for recommendation</span>
-                  <Switch checked={isProductRecommmended?.[item?._id]} onChange={() => onToggleRecommendation(item)} className={`${isProductRecommmended?.[item?._id] ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
+                  <Switch checked={isProductRecommmended[item?._id]} onChange={() => onToggleRecommendation(item)} className={`${isProductRecommmended[item?._id] ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
                     <span className="sr-only">is Enable</span>
-                    <span aria-hidden="true" className={`${isProductRecommmended?.[item?._id] ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
+                    <span aria-hidden="true" className={`${isProductRecommmended[item?._id] ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
                   </Switch>
                 </div>
               </div>
