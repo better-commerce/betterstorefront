@@ -69,7 +69,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   const [fullscreen, setFullscreen] = useState(false);
@@ -77,6 +77,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
   const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
+  const [isEngravingAvailable, setIsEngravingAvailable] = useState<any>(null)
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
@@ -558,22 +559,26 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         })
         setCartItems(newCart.data)
         showEngravingModal(false)
+        setIsLoading(false)
         openCart()
       } catch (error) {
         console.log(error, 'err')
       }
     }
+    setIsLoading(true)
     asyncHandler()
   }
 
-  const isEngravingAvailable =
-    !!relatedProducts?.relatedProducts?.filter(
-      (item: any) => item?.stockCode === ITEM_TYPE_ADDON
-    ).length ||
-    !!product?.customAttributes.filter(
-      (item: any) => item?.display == 'Is Enabled'
-    ).length
-  // const isEngravingAvailable:any = true;
+  useEffect(() => {
+    const isEngraving =
+      !!relatedProducts?.relatedProducts?.filter(
+        (item: any) => item?.stockCode === ITEM_TYPE_ADDON
+      ).length ||
+      !!product?.customAttributes.filter(
+        (item: any) => item?.display == 'Is Enabled'
+      ).length
+    setIsEngravingAvailable(isEngraving)
+  },[relatedProducts])
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -1068,7 +1073,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
-            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
+            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6">
