@@ -174,14 +174,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         ...response?.data?.product,
       })
       if (typeof window !== "undefined" && window?.ch_session) {
-        window.ch_product_view_before(generateDataForEngage(response.data.product))
+        window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
     }
   }
 
   const generateDataForEngage = (product:any) => {
     if (!product) return null;
-    const productUrl = SITE_ORIGIN_URL + new URL(window.location.href).pathname;
+    if (typeof window === 'undefined') return null
+    const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
     const dataForEngage = {
       item: {
         item_id: product?.variantGroupCode || product?.productCode || EmptyString,
@@ -372,7 +373,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             })
           }
           if (window?.ch_session && memoizedDataForEngage) {
-            window.ch_add_to_cart_before(memoizedDataForEngage)
+            window?.ch_add_to_cart_before(memoizedDataForEngage)
           }
         }
       },
@@ -717,14 +718,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       const addButton = document.getElementById('add-to-cart-button');
       if (addButton) {
         const addButtonRect = addButton.getBoundingClientRect();
-        const isAddButtonVisible = addButtonRect.top < window.innerHeight;
+        const isAddButtonVisible = addButtonRect.top < window?.innerHeight;
         setShowMobileCaseButton(isAddButtonVisible);
       }
     }
 
-    window.addEventListener('scroll', handleScroll);
+    window?.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window?.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -732,8 +733,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   let similarProduct = []
   let recentProduct = []
   if (typeof window !== 'undefined') {
-    similarProduct = window.similar_products_sorted_product;
-    recentProduct = window.recent_products_product;
+    similarProduct = window?.similar_products_sorted_product;
+    recentProduct = window?.recent_products_product;
   }
   let productDesc = product.description
   if (product?.shortDescription == "") {
