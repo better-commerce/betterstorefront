@@ -17475,17 +17475,6 @@ body:has(.engage-announcement-bar){
     top: 84px !important;
   }
 }
-@media screen and (max-width:640px) {
-  .m-breadcrumb {
-    overflow-x: scroll;
-    white-space: nowrap;
-    border-top: 1px gray;
-    padding: 0 10px 10px 0;
-  }
-  .m-breadcrumb::-webkit-scrollbar {
-    display: none;
-  }
-}
 
 .container-pdp {
   width: 100%;
