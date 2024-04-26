@@ -611,6 +611,11 @@ export enum QuoteStatus {
   QUOTE_SENT = 6,
 }
 
+export enum DeleteModalType {
+  ENGRAVING = 'engraving',
+  PRODUCT = 'product'
+}
+
 export enum EngageEventTypes {
   // Homepage
   TRENDING_FIRST_ORDER = 'trend_first_orders',

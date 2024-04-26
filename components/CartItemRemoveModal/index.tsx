@@ -8,7 +8,7 @@ import { LoadingDots, useUI } from '@components/ui'
 // Other Imports
 import { isEligibleForFreeShipping } from '@framework/utils/app-util'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { LoadingActionType } from '@components/utils/constants'
+import { DeleteModalType, LoadingActionType } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const CartItemRemoveModal = ({
@@ -24,6 +24,7 @@ const CartItemRemoveModal = ({
     const translate = useTranslation()
     const { cartItems } = useUI()
     let EligibleForFreeShipping = isEligibleForFreeShipping(config, cartItems?.grandTotal?.raw?.withTax)
+    const isEngravingRemove = itemClicked?.type === DeleteModalType.ENGRAVING
     return (
         <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -60,7 +61,7 @@ const CartItemRemoveModal = ({
                                     as="div"
                                     className="flex justify-between w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
                                 >
-                                    {EligibleForFreeShipping ? translate('label.orderSummary.loseDeliveryText') : translate('common.label.removeItemConfirmText')}
+                                    { isEngravingRemove ? translate('common.label.removePersonalisationText') :  EligibleForFreeShipping ? translate('label.orderSummary.loseDeliveryText') : translate('common.label.removeItemConfirmText')}
                                     {loadingAction === LoadingActionType.NONE && (
                                         <XMarkIcon
                                             className="w-5 h-5 text-gray-500 hover:text-gray-400"
@@ -70,13 +71,13 @@ const CartItemRemoveModal = ({
                                 </Dialog.Title>
                                 {/* <hr className="w-full my-2 shadow-md "></hr> */}
                                 <p className="p-6 text-sm font-normal text-black">
-                                    {translate('label.basket.cartItemRemoveText')}
+                                    { isEngravingRemove ? translate('label.basket.engravingRemoveDescText') : translate('label.basket.cartItemRemoveText')}
                                 </p>
                                 <div className="flex items-center justify-around w-full px-6 mt-2">
                                     <button
                                         onClick={() => {
                                             setLoadingAction(LoadingActionType.REMOVE_ITEM)
-                                            handleItem(itemClicked, 'delete')
+                                            handleItem(itemClicked?.product, 'delete')
                                         }}
                                         className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-4 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 "
                                     >

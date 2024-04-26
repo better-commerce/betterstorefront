@@ -92,6 +92,7 @@
       "kitItemsText": "Kit items",
       "offer50PercOffOnThirdItemText": "50% OFF on 3rd Item",
       "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later.",
+      "engravingRemoveDescText": "Are you sure you don't want this personalisation?",
       "youDontHaveAnyItems": "Uh-oh, you don't have any items in here",
       "priceLabelText": "RRP"
     },
@@ -964,6 +965,7 @@
       "clickHereText": "Click Here",
       "sizeText": "Size:",
       "removeItemConfirmText": "Remove this Item?",
+      "removePersonalisationText": "Remove this Personalisation?",
       "orderPlacedOnText": "Order placed on",
       "onText": "on",
       "milesText": "miles",

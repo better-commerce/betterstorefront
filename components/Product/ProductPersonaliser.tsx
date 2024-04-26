@@ -17,6 +17,7 @@ import {
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { LoadingDots } from '@components/ui'
 
 
 type ProductPersonaliserImage = {
@@ -44,6 +45,7 @@ type ProductPersonaliserProps = {
   readOnly: false
   values?: any
   product: any
+  isLoading?: any
 }
 
 SwiperCore.use([Navigation])
@@ -58,23 +60,21 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
   readOnly,
   product,
   engravingPrice,
+  isLoading,
 }: ProductPersonaliserProps) => {
   const translate = useTranslation()
   const [text, setText] = useState<any>([])
   const [isImageCLick, setIsImageCLick] = useState<any>(false)
-  const [selectedImage, setSelectedImage] = useState<any>('')
+  const [selectedImage, setSelectedImage] = useState<any>(null)
   const [counter, setCounter] = useState<any>(0)
   const [imageUrl, setImageUrl] = useState<any>('')
   const [showError, setShowError] = useState<any>(false)
   const [isFocus, setIsFocus] = useState<any>(false)
-  const [characterClicked, setCharacterClicked] = useState<any>('')
 
   useEffect(() => {
     if (readOnly) {
-      product.children?.map((val: any, key: number) => {
-        setText(val.customInfo1 || 'SAMPLE')
-        setImageUrl(val.customInfo2 || val.image)
-      })
+      setText(product?.customInfo1)
+      setImageUrl(product?.customInfo2)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +150,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
   // function to handle selected Image
   function handleImageCLick(e: any) {
     setIsImageCLick(true)
-    setSelectedImage(e.target.src)
+    setSelectedImage(e.target.alt)
   }
 
   useEffect(() => {
@@ -196,7 +196,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                     {translate('label.product.greatSelectionText')}
                   </p>
                 )}
-                <Swiper slidesPerView={1.1} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 1.1 }, 1024: { slidesPerView: 1.1 }, }} >
+                <Swiper slidesPerView={1.2} centeredSlides={true} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.2 }, 768: { slidesPerView: 1.2 }, 1024: { slidesPerView: 1.2 }, }} >
                   {product?.images?.map((val: any, valId: number) => {
                     return (
                       <SwiperSlide className={cn('py-0 border border-grey-40', isImageCLick && '')} key={valId} >
@@ -267,7 +267,6 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                     onClick={() => {
                       setCounter(counter + 1)
                       addCharacter(character)
-                      setCharacterClicked(character)
                     }}
                   >
                     {character}
@@ -295,23 +294,23 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                 </button>
               </div>
               {showError && (
-                <p className="mt-2 -mb-2 text-xs text-red-500 underline">
+                <p className="mt-2 -mb-2 text-xs text-red-500 font-medium">
                   {translate('label.product.productPersonalisation.selectImageText')}
                 </p>
               )}
               <div className="flex items-center justify-center w-full mt-5 engrav-add-btn">
                 <button
-                  disabled={text.length == 0 && !selectedImage ? true : false}
+                  disabled={text?.length < 1}
                   type="submit"
                   onClick={handleSubmit}
                   className={cn(
                     'flex-1 capitalize bg-black border border-transparent rounded-full py-3 px-8 flex items-center justify-center font-medium text-white transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-blue sm:w-full',
-                    !selectedImage && text.length == 0
-                      ? 'opacity-30'
+                    (text?.length < 1)
+                      ? 'opacity-30 cursor-not-allowed'
                       : 'hover:opacity-75'
                   )}
                 >
-                  {submitText}
+                  {isLoading ? <LoadingDots /> : submitText}
                 </button>
               </div>
             </div>
