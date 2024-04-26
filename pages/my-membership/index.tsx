@@ -134,10 +134,10 @@ const MyMembership = () => {
                   </div>
                   <div className="flex items-center justify-center gap-1 pt-6 mt-6 border-t border-purple-100">
                     <h3 className="text-xl font-semibold text-slate-900">{plan?.price?.formatted?.withTax}</h3>
-                    <span className="text-xs font-normal text-slate-500">{translate('label.membership.perYear')}</span>
+                    <span className="text-xs font-normal text-slate-500">{translate('label.membership.perYearText')}</span>
                   </div>
                   <div className="flex items-center justify-center mt-2">
-                    <h4 className="text-sm font-normal text-black">{translate('label.membership.billedAnnually')}</h4>
+                    <h4 className="text-sm font-normal text-black">{translate('label.membership.billedAnnuallyText')}</h4>
                   </div>
                   <div className="flex items-center justify-center px-6 pt-3 pb-6 mt-6">
                     <Button className={'w-full py-3 text-sm text-white !bg-black rounded-full hover:!bg-purple-900'} title={buttonConfig.title} action={() => buttonConfig.action(plan)} buttonType={buttonConfig.type || 'cart'} />
