@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
@@ -172,14 +172,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         stockCode: response?.data?.product?.stockCode,
         ...response?.data?.product,
       })
+      if (typeof window !== "undefined" && window?.ch_session) {
+        window.ch_product_view_before(generateDataForEngage(response.data.product))
+      }
     }
   }
 
-  let dataForEngage: any = null
-  if (typeof window !== 'undefined') {
-    const productUrl = SITE_ORIGIN_URL + new URL(window.location.href).pathname
-    // added for engage
-    dataForEngage = {
+  const generateDataForEngage = (product:any) => {
+    if (!product) return null;
+    const productUrl = SITE_ORIGIN_URL + new URL(window.location.href).pathname;
+    const dataForEngage = {
       item: {
         item_id: product?.variantGroupCode || product?.productCode || EmptyString,
         title: product?.name || EmptyString,
@@ -216,13 +218,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         customAttributes: product?.customAttributes || EmptyString,
       },
       item_id: product?.variantGroupCode || product?.productCode || EmptyString,
-    }
-  }
+    };
+    return dataForEngage;
+  };
+
+  const memoizedDataForEngage = useMemo(() => generateDataForEngage(product), [product]);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && dataForEngage && window?.ch_session) {
-      window.ch_product_view_before(dataForEngage)
-    }
     fetchProduct()
     setIsCompared('true')
   }, [slug, currency])
@@ -368,8 +370,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               },
             })
           }
-          if (window?.ch_session && dataForEngage) {
-            window.ch_add_to_cart_before(dataForEngage)
+          if (window?.ch_session && memoizedDataForEngage) {
+            window.ch_add_to_cart_before(memoizedDataForEngage)
           }
         }
       },
@@ -708,7 +710,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   useEffect(() => {
     function handleScroll() {
       const addButton = document.getElementById('add-to-cart-button');
-      console.log('addButton',addButton)
       if (addButton) {
         const addButtonRect = addButton.getBoundingClientRect();
         const isAddButtonVisible = addButtonRect.top < window.innerHeight;
