@@ -798,6 +798,18 @@
       "exploreText":"Explore",
       "createText":"Create"
     },
+    "membership": {
+      "alreadyMemberText": "Already a Member?",
+      "myMembershipText": "My Membership",
+      "membershipDescText": "on your order today when you join our membership",
+      "discountsAnytimeText": "discounts anytime",
+      "perYear": "per year",
+      "billedAnnually": "Billed annually",
+      "upgradeMembershipText": "you've used up all your vouchers and fancy more or like the sound of 20% off* subscription, you can upgrade your membership plan easily.",
+      "upgradeAnyTimeText": "Upgrade any time by simply paying the difference between the tiers.",
+      "sprayMoreHappinessText": "Spray some more happiness for less!",
+      "membershipBenefits": "All Benefits Membership gives you"
+    },
     "contactUs": {
       "contactSalesText": "Contact sales",
       "dummyText": "Aute magna irure deserunt veniam aliqua magna enim voluptate.",

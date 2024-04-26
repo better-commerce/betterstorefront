@@ -1,5 +1,6 @@
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import NextHead from 'next/head'
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Layout from '@components/Layout/Layout'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, NEXT_GET_ALL_MEMBERSHIP_PLANS, SITE_ORIGIN_URL } from "@components/utils/constants";
@@ -9,6 +10,11 @@ import { removeQueryString } from "@commerce/utils/uri-util";
 import { GiftIcon, PlusIcon, StarIcon, TagIcon, TruckIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import cartHandler from "@components/services/cart";
+import { useUI } from "@components/ui";
+const Button = dynamic(() => import('@components/ui/IndigoButton'))
+import Loader from "@components/Loader";
+import { useTranslation } from "@commerce/utils/use-translation";
 const PAGE_TYPE = PAGE_TYPES.MyMembership
 const memberBenefit = [
   { "name": "20% off whenever you want*", "description": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.", "icon": <GiftIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
@@ -25,13 +31,40 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     },
   }
 }
+
 const MyMembership = () => {
   const router = useRouter()
-  const [allPlans, setAllPlans] = useState([])
+  const [allPlans, setAllPlans] = useState<any>(null)
+  const { user, basketId, setCartItems } = useUI();
+  const translate = useTranslation();
 
   useEffect(() => {
     getAllPlans()
   }, [])
+
+  const buttonTitle = () => {
+    let buttonConfig: any = {
+      title: translate('label.basket.addToBagText'),
+      action: async ( plan:any ) => {
+        const item = await cartHandler()?.addToCart(
+          {
+            basketId,
+            productId: plan?.recordId,
+            qty: 1,
+            manualUnitPrice: plan?.price?.raw?.withoutTax,
+            stockCode: plan?.stockCode,
+            userId: user?.userId,
+            isAssociated: user?.isAssociated,
+          },
+          'ADD',
+          { plan }
+        )
+        setCartItems(item)
+      },
+    }
+    return buttonConfig
+  }
+  const buttonConfig = buttonTitle();
 
   const getAllPlans = async () => {
     try {
@@ -61,7 +94,7 @@ const MyMembership = () => {
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
-        <title>My Membership</title>
+        <title>{translate('label.membership.myMembershipText')}</title>
         <meta name="title" content="My Membership" />
         <meta name="description" content="My Membership" />
         <meta name="keywords" content="My Membership" />
@@ -71,14 +104,14 @@ const MyMembership = () => {
       </NextHead>
       <div className="py-6 sm:py-16 bg-gradient-to-t from-purple-100 to-white">
         <div className="container flex flex-col justify-center py-6 mx-auto text-center sm:py-10">
-          <h3 className="mx-auto my-1 text-5xl font-semibold text-black leading-extra-loose sm:max-w-xl">GET 20% OFF + FREE DELIVERY</h3>
-          <p>on your order today when you join our membership</p>
+          <h3 className="mx-auto my-1 text-5xl font-semibold text-black leading-extra-loose sm:max-w-xl">GET 20% OFF + {translate('label.product.freeDeliveryText')}</h3>
+          <p>{translate('label.membership.membershipDescText')}</p>
         </div>
-      </div>      
+      </div>
       <div className="pb-10 sm:pb-24 bg-gradient-to-b from-purple-100 to-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {allPlans?.map((plan: any, planIdx: number) => (
+            {allPlans ? allPlans?.map((plan: any, planIdx: number) => (
               <div className="flex flex-col w-full bg-transparent border-2 border-black rounded-2xl" key={`plan-${planIdx}`}>
                 <div className="items-center justify-center py-4 text-center bg-black rounded-t-xl">
                   <h2 className="text-lg font-medium text-white">{plan?.name}</h2>
@@ -93,7 +126,7 @@ const MyMembership = () => {
                         </div>
                         <div className="flex items-center gap-4 justify-normal">
                           <TagIcon className="w-6 h-6 p-1 text-white bg-black rounded-full" />
-                          <span className="font-medium text-black text-md">{benefits?.noOfVoucher} x 20% discounts anytime</span>
+                          <span className="font-medium text-black text-md">{benefits?.noOfVoucher} x 20% {translate('label.membership.discountsAnytimeText')}</span>
                         </div>
                       </>
                     ))}
@@ -101,29 +134,29 @@ const MyMembership = () => {
                   </div>
                   <div className="flex items-center justify-center gap-1 pt-6 mt-6 border-t border-purple-100">
                     <h3 className="text-xl font-semibold text-slate-900">{plan?.price?.formatted?.withTax}</h3>
-                    <span className="text-xs font-normal text-slate-500">per year</span>
+                    <span className="text-xs font-normal text-slate-500">{translate('label.membership.perYear')}</span>
                   </div>
                   <div className="flex items-center justify-center mt-2">
-                    <h4 className="text-sm font-normal text-black">Billed annually</h4>
+                    <h4 className="text-sm font-normal text-black">{translate('label.membership.billedAnnually')}</h4>
                   </div>
                   <div className="flex items-center justify-center px-6 pt-3 pb-6 mt-6">
-                    <button className="w-full py-3 text-sm text-white bg-black rounded-full hover:bg-purple-900">Add to Bag</button>
+                    <Button className={'w-full py-3 text-sm text-white !bg-black rounded-full hover:!bg-purple-900'} title={buttonConfig.title} action={() => buttonConfig.action(plan)} buttonType={buttonConfig.type || 'cart'} />
                   </div>
                 </div>
               </div>
-            ))}
+            )) : <Loader />}
           </div>
         </div>
       </div>
       <div className="container mx-auto">
         <div className="flex flex-col justify-center pb-6 mx-auto text-center sm:max-w-4xl sm:pb-10">
-          <h3 className="my-1 mb-6 text-3xl font-medium text-slate-800">Already a Member?</h3>
-          <p className="my-2 text-sm font-normal text-slate-700"> you've used up all your vouchers and fancy more or like the sound of 20% off* subscription, you can upgrade your membership plan easily.</p>
-          <p className="my-1 text-sm font-normal text-slate-700">Upgrade any time by simply paying the difference between the tiers.</p>
-          <p className="my-1 text-sm font-normal text-slate-700">Spray some more happiness for less!</p>
+          <h3 className="my-1 mb-6 text-3xl font-medium text-slate-800">{translate('label.membership.alreadyMemberText')}</h3>
+          <p className="my-2 text-sm font-normal text-slate-700">{translate('label.membership.upgradeMembershipText')}</p>
+          <p className="my-1 text-sm font-normal text-slate-700">{translate('label.membership.upgradeAnyTimeText')}</p>
+          <p className="my-1 text-sm font-normal text-slate-700">{translate('label.membership.sprayMoreHappinessText')}</p>
         </div>
         <div className="flex flex-col justify-center py-6 text-center border-t border-slate-200 sm:py-10">
-          <h3 className="my-1 text-3xl font-medium text-slate-800">All Benefits Membership gives you</h3>
+          <h3 className="my-1 text-3xl font-medium text-slate-800">{translate('label.membership.membershipBenefits')}</h3>
           <div className="grid grid-cols-1 gap-10 mt-8 sm:grid-cols-4">
             {memberBenefit?.map((benefit: any, bIdx: number) => (
               <div key={`b-${bIdx}`} className="flex flex-col justify-center w-full">
