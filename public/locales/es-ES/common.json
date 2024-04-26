@@ -794,6 +794,18 @@
       "exploreText": "Explorar",
       "createText": "Crear"
     },
+    "membership": {
+      "alreadyMemberText": "¿Ya eres miembro?",
+      "myMembershipText": "Mi membresía",
+      "membershipDescText": "en tu pedido de hoy al unirte a nuestra membresía",
+      "discountsAnytimeText": "descuentos en cualquier momento",
+      "perYear": "por año",
+      "billedAnnually": "Facturado anualmente",
+      "upgradeMembershipText": "si has utilizado todos tus cupones y quieres más o te gusta la idea de un 20% de descuento en la suscripción, puedes mejorar tu plan de membresía fácilmente.",
+      "upgradeAnyTimeText": "Mejora en cualquier momento simplemente pagando la diferencia entre los niveles.",
+      "sprayMoreHappinessText": "¡Rocía más felicidad por menos!",
+      "membershipBenefits": "Todos los beneficios que te ofrece la membresía"
+    },
     "contactUs": {
       "contactSalesText": "Contactar ventas",
       "dummyText": "Aute magna irure deserunt veniam aliqua magna enim voluptate.",
