@@ -63,7 +63,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
       ) : (
         <div></div>
       )}
-      <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />
+      {!!products.results.length && <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />}
     </section>
   )
 }

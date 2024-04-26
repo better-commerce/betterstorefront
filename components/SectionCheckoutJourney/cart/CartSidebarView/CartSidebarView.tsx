@@ -119,7 +119,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         async (resolve: any, reject: any) => {
           await getBasketPromos(basketId)
           await fetchBasketReValidate()
-          setIsGetBasketPromoRunning(!isGetBasketPromoRunning)
+          setIsGetBasketPromoRunning(false)
           resolve()
         }
       )

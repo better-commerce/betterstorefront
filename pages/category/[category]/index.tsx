@@ -289,6 +289,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       currentPage: 1,
       filters: [],
       categoryId: category.id,
+      sortBy: null,
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
@@ -311,9 +312,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
-      data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
-      data?.products?.total !== productListMemory?.products?.total
+      data.products.currentPage !== productListMemory.products.currentPage ||
+      data.products.total !== productListMemory.products.total ||
+      data.products.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
