@@ -9,7 +9,7 @@ import { useUI } from '@components/ui'
 const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
   const translate = useTranslation();
   const router = useRouter();
-  const { user, setAlert, isGuestUser } = useUI()
+  const { user } = useUI()
   const isB2B = isB2BUser(user)
   return (
     <>
