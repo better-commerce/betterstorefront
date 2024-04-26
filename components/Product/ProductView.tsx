@@ -181,6 +181,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const generateDataForEngage = (product:any) => {
     if (!product) return null;
+    if (typeof window === 'undefined') return null
     const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
     const dataForEngage = {
       item: {
