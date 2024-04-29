@@ -37,7 +37,7 @@ function SplitDeliveryOrderItems({ order }: any) {
   return (
     <div>
       {deliveryPlans?.map((plan: any, idx: number) => (
-        <div className={`${idx > 0 ? 'mt-4' : ''}`}>
+        <div key={idx} className={`${idx > 0 ? 'mt-4' : ''}`}>
           <span className="font-semibold text-black w-full flex items-center">
             <span>Delivery {idx + 1} of {deliveryPlans?.length}</span>
             <span className='ml-2 text-xs font-medium'>Expected date: {moment(new Date(plan?.deliveryDateTarget)).format(DATE_FORMAT)}</span>

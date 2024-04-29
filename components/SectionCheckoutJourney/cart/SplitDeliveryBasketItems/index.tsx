@@ -30,7 +30,7 @@ const SplitDeliveryBasketItems = ({ basket }: any) => {
   return (
     <div>
       {deliveryPlans?.map((plan: any, idx: number) => (
-        <div className={`${idx > 0 ? 'mt-4' : ''}`}>
+        <div key={idx} className={`${idx > 0 ? 'mt-4' : ''}`}>
           <Disclosure defaultOpen={idx === 0}>
             {({ open }) => (
               <>
