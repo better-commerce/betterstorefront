@@ -4,7 +4,6 @@ import { Popover, Tab, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { FC, Fragment, useCallback, useMemo } from "react";
-import { headerCurrency } from "./CurrencyDropdown";
 import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import Cookies from "js-cookie";
