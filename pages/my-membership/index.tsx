@@ -3,20 +3,21 @@ import NextHead from 'next/head'
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Layout from '@components/Layout/Layout'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, NEXT_GET_ALL_MEMBERSHIP_PLANS, SITE_ORIGIN_URL } from "@components/utils/constants";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, SITE_ORIGIN_URL } from "@components/utils/constants";
+import React from "react";
 import { removeQueryString } from "@commerce/utils/uri-util";
 import { GiftIcon, PlusIcon, StarIcon, TagIcon, TruckIcon } from "@heroicons/react/24/outline";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import cartHandler from "@components/services/cart";
 import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import Loader from "@components/Loader";
 import { useTranslation } from "@commerce/utils/use-translation";
+import commerce from "@lib/api/commerce";
+
 const PAGE_TYPE = PAGE_TYPES.MyMembership
-const memberBenefit = [
+const MEMBER_BENEFITS = [
   { "name": "20% off whenever you want*", "description": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.", "icon": <GiftIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
   { "name": "FREE unlimited* express delivery", "description": "Delivery charges? Not for our My Store members! Free delivery all year long.", "icon": <TruckIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
   { "name": "Exclusive offers & perks", "description": "Get exclusive perks tailored to you plus early access to amazing offers.", "icon": <StarIcon className="w-16 h-16 p-2 mx-auto mb-4 border-2 rounded-full text-sky-600 border-sky-600" /> },
@@ -24,23 +25,34 @@ const memberBenefit = [
 ]
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const { locale } = context
+  const { locale, req } = context
+  const data = {
+    "SearchText": null,
+    "PricingType": 0,
+    "Name": null,
+    "TermType": 0,
+    "IsActive": 1,
+    "ProductId": EmptyGuid,
+    "CategoryId": EmptyGuid,
+    "ManufacturerId": EmptyGuid,
+    "SubManufacturerId": EmptyGuid,
+    "PlanType": 0,
+    "CurrentPage": 0,
+    "PageSize": 0
+  }
+  const { result: allPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      allPlans,
     },
   }
 }
 
-const MyMembership = () => {
+const MyMembershipPage = ({ allPlans }: any) => {
   const router = useRouter()
-  const [allPlans, setAllPlans] = useState<any>(null)
   const { user, basketId, setCartItems } = useUI();
   const translate = useTranslation();
-
-  useEffect(() => {
-    getAllPlans()
-  }, [])
 
   const buttonTitle = () => {
     let buttonConfig: any = {
@@ -66,28 +78,6 @@ const MyMembership = () => {
   }
   const buttonConfig = buttonTitle();
 
-  const getAllPlans = async () => {
-    try {
-      const payload = {
-        "SearchText": null,
-        "PricingType": 0,
-        "Name": null,
-        "TermType": 0,
-        "IsActive": 1,
-        "ProductId": EmptyGuid,
-        "CategoryId": EmptyGuid,
-        "ManufacturerId": EmptyGuid,
-        "SubManufacturerId": EmptyGuid,
-        "PlanType": 0,
-        "CurrentPage": 0,
-        "PageSize": 0
-      }
-      const { data }: any = await axios.post(NEXT_GET_ALL_MEMBERSHIP_PLANS, payload)
-      setAllPlans(data)
-    } catch (error) {
-      console.error('err in fetching membership plans', error)
-    }
-  }
   const cleanPath = removeQueryString(router.asPath)
   return (
     <>
@@ -111,7 +101,7 @@ const MyMembership = () => {
       <div className="pb-10 sm:pb-24 bg-gradient-to-b from-purple-100 to-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {allPlans ? allPlans?.map((plan: any, planIdx: number) => (
+            {(allPlans?.length >= 0) ? allPlans?.map((plan: any, planIdx: number) => (
               <div className="flex flex-col w-full bg-transparent border-2 border-black rounded-2xl" key={`plan-${planIdx}`}>
                 <div className="items-center justify-center py-4 text-center bg-black rounded-t-xl">
                   <h2 className="text-lg font-medium text-white">{plan?.name}</h2>
@@ -158,7 +148,7 @@ const MyMembership = () => {
         <div className="flex flex-col justify-center py-6 text-center border-t border-slate-200 sm:py-10">
           <h3 className="my-1 text-3xl font-medium text-slate-800">{translate('label.membership.membershipBenefits')}</h3>
           <div className="grid grid-cols-1 gap-10 mt-8 sm:grid-cols-4">
-            {memberBenefit?.map((benefit: any, bIdx: number) => (
+            {MEMBER_BENEFITS?.map((benefit: any, bIdx: number) => (
               <div key={`b-${bIdx}`} className="flex flex-col justify-center w-full">
                 {benefit?.icon}
                 <h2 className="mb-4 text-lg font-semibold text-slate-800">{benefit?.name}</h2>
@@ -172,5 +162,5 @@ const MyMembership = () => {
   )
 }
 
-MyMembership.LayoutAccount = Layout
-export default withDataLayer(MyMembership, PAGE_TYPE, true, Layout)
+MyMembershipPage.LayoutAccount = Layout
+export default withDataLayer(MyMembershipPage, PAGE_TYPE, true, Layout)
