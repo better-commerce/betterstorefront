@@ -498,7 +498,7 @@ export default function OrderConfirmation({ config }: any) {
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
-                        <span className="block">{`${order?.shippingAddress.firstName} ${order?.shippingAddress.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName ? order?.shippingAddress?.lastName : ""}`}</span>
                         <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address1}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address2}`}</span>

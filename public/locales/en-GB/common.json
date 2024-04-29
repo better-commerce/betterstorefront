@@ -176,7 +176,6 @@
       "deliveryText": "Delivery",
       "continueToPaymentText": "Continue to Payment",
       "noDeliveryMethodAvailableText": "No Delivery Method Available",
-      "findStoreText": "Find Store Near You",
       "findStoresText": "Find Store",
       "checkoutWithoutLoginText": "Want to checkout without login?",
       "guestCheckoutText": "Guest Checkout",
@@ -765,7 +764,7 @@
     },
     "store": {
       "findStoresText": "Find Stores",
-      "findStoreNearYouText": "Find Store Near You",
+      "findStoreNearYouText": "Find Your Nearest Store",
       "usingLocationToShowStoresText":"We use your location to show you nearby stores",
       "seeNearbyStoreText":"See Nearby Stores"
     },
@@ -1100,7 +1099,7 @@
       "chooseShippingBillingAddressMsg": "Please choose shipping / billing address to continue.",
       "selectStoreErrorMsg": "Please select a store to continue.",
       "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
-      "noStoreFoundErrorMsg": "No store found.Try with different postcode",
+      "noStoreFoundErrorMsg": "Postcode not recognised",
       "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
       "validEmailErrorMsg": "Enter a valid email",
       "cookiesPolicyText": "Cookies Policy",
