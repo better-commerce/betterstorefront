@@ -28,7 +28,7 @@ const DeliveryTypeSelection = ({
 }: DeliveryTypeSelectionProps) => {
   const translate = useTranslation()
 
-  if (deliveryMethods?.length < 1) {
+  if (!featureToggle?.features?.enableCollectDeliveryOption || deliveryMethods?.length < 1) {
     return <></>
   }
 
