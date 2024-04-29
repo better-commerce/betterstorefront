@@ -8,6 +8,7 @@ interface Props {
   manualUnitPrice?: number
   displayOrder?: number
   stockCode?: string
+  isMembership?: boolean
   cookies?: any
 }
 
@@ -19,6 +20,7 @@ export default function useAddItem() {
     manualUnitPrice,
     displayOrder,
     stockCode,
+    isMembership = false,
     cookies,
   }: Props) {
     const data = {
@@ -28,6 +30,7 @@ export default function useAddItem() {
       //manualUnitPrice,
       displayOrder,
       stockCode,
+      isMembership,
     }
     try {
       const response: any = await fetcher({
@@ -38,6 +41,7 @@ export default function useAddItem() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
+        logRequest: true,
       })
       return { ...response.result, ...{ message: response.message } }
     } catch (error: any) {
