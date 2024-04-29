@@ -761,7 +761,7 @@
     },
     "store": {
       "findStoresText": "Buscar tiendas",
-      "findStoreNearYouText": "Encuentra una tienda cerca de ti",
+      "findStoreNearYouText": "Encuentra tu tienda más cercana",
       "usingLocationToShowStoresText": "Utilizamos tu ubicación para mostrarte tiendas cercanas",
       "seeNearbyStoreText": "Ver tiendas cercanas"
     },
@@ -1094,7 +1094,7 @@
       "chooseShippingBillingAddressMsg": "Por favor, elige la dirección de envío/facturación para continuar.",
       "selectStoreErrorMsg": "Por favor, selecciona una tienda para continuar.",
       "selectDeliveryToContinueErrorMsg": "Por favor, selecciona un método de entrega para continuar.",
-      "noStoreFoundErrorMsg": "No se encontró ninguna tienda. Inténtalo con un código postal diferente",
+      "noStoreFoundErrorMsg": "Código postal no reconocido",
       "cookiesText": "Este sitio utiliza cookies para mejorar tu experiencia. Al hacer clic, aceptas nuestra Política de privacidad.",
       "validEmailErrorMsg": "Ingresa un correo electrónico válido",
       "cookiesPolicyText": "Política de Cookies",
