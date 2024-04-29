@@ -767,7 +767,9 @@
       "findStoresText": "Find Stores",
       "findStoreNearYouText": "Find Store Near You",
       "usingLocationToShowStoresText":"We use your location to show you nearby stores",
-      "seeNearbyStoreText":"See Nearby Stores"
+      "seeNearbyStoreText":"See Nearby Stores",
+      "checkStoreStockText": "Check store stock",
+      "storeInfoText": "Store Info"
     },
     "thankyou": {
       "summaryText": "Summary",
