@@ -737,7 +737,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const onContinueAddressBook = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
     if (deliveryTypeMethod?.type === DeliveryType.COLLECT) {
-      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, false)
+      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, true)
     } else {
       await updateCheckoutAddress({ shippingAddress: selectedAddress?.shippingAddress, billingAddress: selectedAddress?.billingAddress }, true)
     }
