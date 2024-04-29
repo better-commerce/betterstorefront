@@ -59,6 +59,7 @@ export const OPERATIONS = [
   'logActivity',
   'getCountries',
   'getReviewSummary',
+  'getMembershipPlans',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -255,6 +256,7 @@ export type Operations<P extends APIProvider> = {
   logPayment: {}
   logActivity: {}
   getReviewSummary: {}
+  getMembershipPlans: {}
 }
 
 export type APIOperations<P extends APIProvider> = {
