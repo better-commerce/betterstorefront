@@ -184,7 +184,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const addressList = await fetchAddress()
       const basketRes: any = await getBasket(basketId)
       await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
-      await checkIfDefaultShippingAndBilling(addressList, basketRes)
+      if (!featureToggle?.features?.enableCollectDeliveryOption) {
+        await checkIfDefaultShippingAndBilling(addressList, basketRes)
+      } else {
+        await checkIfCNCBasketUpdated(addressList, basketRes)
+      }
       new Promise(() => {
         goToStep(CheckoutStep.ADDRESS)
       })
@@ -328,6 +332,45 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       cb()
       setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       setIsLoggedIn(false)
+    }
+  }
+
+  const checkIfCNCBasketUpdated = async (addressList: any, basket: any) => {
+    let redirectToStep: any = CheckoutStep.ADDRESS
+    const defaultDeliveryAddr = addressList?.find((address: any) => address.isDefaultDelivery)
+    const defaultBillingAddr = addressList?.find((address: any) => address.isDefaultBilling)
+    const hasShippingAddress = basket?.shippingAddress?.id > 0 || defaultDeliveryAddr?.id > 0
+    const hasBillingAddress = basket?.billingAddress?.id > 0 || defaultBillingAddr?.id > 0
+    const hasStoreId = basket?.storeId !== EmptyGuid
+
+    if (hasStoreId && hasBillingAddress && hasShippingAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS, CheckoutStep.DELIVERY]),
+      ])
+      // redirectToStep = CheckoutStep.REVIEW
+    }/** else if (hasBillingAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS]),
+      ])
+      redirectToStep = CheckoutStep.DELIVERY
+    } */
+
+    const billingAddress = !defaultBillingAddr ? defaultDeliveryAddr : defaultBillingAddr
+    // if (!basket?.billingAddress?.id && billingAddress?.id > 0) {
+    //   await updateCheckoutAddress({ billingAddress: billingAddress }, false)
+    // } else {
+    //   await updateCheckoutAddress({ billingAddress: basket?.billingAddress }, false)
+    // }
+
+    if (redirectToStep) {
+      return new Promise(() => {
+        setSelectedAddress({
+          billingAddress: billingAddress,
+          shippingAddress: defaultDeliveryAddr,
+        })
+        goToStep(redirectToStep)
+        hideOverlayLoaderState()
+      })
     }
   }
 
@@ -755,6 +798,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     setDeliveryTypeMethod,
     featureToggle,
     deliveryMethods,
+    basket,
   }
 
   const editAddressFormProps = {
@@ -796,7 +840,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     setOverlayLoaderState,
     hideOverlayLoaderState,
     generateBasketId,
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const renderCurrentStep = () => {

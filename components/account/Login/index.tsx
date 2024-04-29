@@ -50,6 +50,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         setNoAccount(false)
         setAlert({ type: 'success', msg: translate('common.message.loginSuccessMsg') })
         let userObj = { ...result.data }
+        if (userObj?.userToken) saveUserToken(userObj?.userToken)
         // get user updated details
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
