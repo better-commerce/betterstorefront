@@ -20,7 +20,8 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
   const [selectedStore, setSelectedStore] = useState<any>(null)
 
   // Function to fetch stores based on postcode
-  const handleFetchStores = async () => {
+  const handleFetchStores = async (e: any) => {
+    e.preventDefault()
     try {
       if (!postCode) return
       setLoading(true)
@@ -71,7 +72,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
       <h5 className="font-semibold uppercase font-18 dark:text-black">
         {translate('label.store.findStoreNearYouText')}
       </h5>
-      <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
+      <form onSubmit={handleFetchStores} className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
         <input
           type="text"
           className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default rounded"
@@ -79,13 +80,10 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
           value={postCode}
           onChange={handlePostCode}
         />
-        <button
-          className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4"
-          onClick={handleFetchStores}
-        >
+        <button className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4">
           {loading ? <LoadingDots /> : translate('label.store.findStoresText')}
         </button>
-      </div>
+      </form>
       {stores?.length > 0 && (
         <div>
           {stores?.map((store: any) => (

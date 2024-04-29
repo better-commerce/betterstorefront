@@ -13,6 +13,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import LoginOTPForm from '@old-components/customer/login-otp-form'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { saveUserToken } from '@framework/utils/app-util'
 
 function LoginOTPComp() {
   const translate = useTranslation()
@@ -84,6 +85,7 @@ function LoginOTPComp() {
 
         setNoAccount(false)
         const userObj = { ...result.data }
+        if (userObj?.userToken) saveUserToken(userObj?.userToken)
 
         // fetch wishlist items
         const wishlist = await getWishlist(result.data.userId, wishListItems)
