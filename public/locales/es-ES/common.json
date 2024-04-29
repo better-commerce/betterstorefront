@@ -22,6 +22,7 @@
       "updateFailedText": "¡Ups! ¡Algo salió mal!",
       "BillingAddressHeadingText": "Dirección de facturación",
       "shippingAddressHeadingText": "Dirección de envío",
+      "pickupAddressHeadingText": "Dirección de recogida en tienda",
       "savedAddressesText": "Direcciones guardadas",
       "emptyAddressBookText": "¡Oh no! Tu libro de direcciones está vacío.",
       "addNewAddress": "Agregar nueva dirección",
