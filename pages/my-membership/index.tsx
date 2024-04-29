@@ -67,6 +67,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
             stockCode: plan?.stockCode,
             userId: user?.userId,
             isAssociated: user?.isAssociated,
+            isMembership: true,
           },
           'ADD',
           { plan }
@@ -101,7 +102,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
       <div className="pb-10 sm:pb-24 bg-gradient-to-b from-purple-100 to-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {(allPlans?.length >= 0) ? allPlans?.map((plan: any, planIdx: number) => (
+            {(allPlans?.length >= 0) ? allPlans?.sort((plan1: any, plan2: any) => plan1?.displayOrder - plan2.displayOrder)?.map((plan: any, planIdx: number) => (
               <div className="flex flex-col w-full bg-transparent border-2 border-black rounded-2xl" key={`plan-${planIdx}`}>
                 <div className="items-center justify-center py-4 text-center bg-black rounded-t-xl">
                   <h2 className="text-lg font-medium text-white">{plan?.name}</h2>
