@@ -176,7 +176,6 @@
       "deliveryText": "Delivery",
       "continueToPaymentText": "Continue to Payment",
       "noDeliveryMethodAvailableText": "No Delivery Method Available",
-      "findStoreText": "Find Store Near You",
       "findStoresText": "Find Store",
       "checkoutWithoutLoginText": "Want to checkout without login?",
       "guestCheckoutText": "Guest Checkout",
@@ -751,7 +750,9 @@
       "searchForProductsText": "Search for products",
       "showFiltersText": "Show Filters",
       "noResultFoundForText": "No results found for",
-      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
+      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look.",
+      "noMatchingProductFoundText": "Sorry! We couldn't find any matching items.",
+      "noMatchingProductFoundDescText": "Don't give up - check the spelling, Filters or try less specific search terms"
     },
     "section": {
       "findTheBestText": "In this season, find the best 🔥",
@@ -766,7 +767,7 @@
     },
     "store": {
       "findStoresText": "Find Stores",
-      "findStoreNearYouText": "Find Store Near You",
+      "findStoreNearYouText": "Find Your Nearest Store",
       "usingLocationToShowStoresText":"We use your location to show you nearby stores",
       "seeNearbyStoreText":"See Nearby Stores",
       "checkStoreStockText": "Check store stock",
@@ -1107,7 +1108,7 @@
       "chooseShippingBillingAddressMsg": "Please choose shipping / billing address to continue.",
       "selectStoreErrorMsg": "Please select a store to continue.",
       "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
-      "noStoreFoundErrorMsg": "No store found.Try with different postcode",
+      "noStoreFoundErrorMsg": "Postcode not recognised",
       "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
       "validEmailErrorMsg": "Enter a valid email",
       "cookiesPolicyText": "Cookies Policy",

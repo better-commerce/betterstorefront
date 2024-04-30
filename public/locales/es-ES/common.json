@@ -746,7 +746,9 @@
       "searchForProductsText": "Buscar productos",
       "showFiltersText": "Mostrar filtros",
       "noResultFoundForText": "No se encontraron resultados para",
-      "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario."
+      "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario.",
+      "noMatchingProductFoundText": "¡Lo siento! No pudimos encontrar ningún artículo coincidente.",
+      "noMatchingProductFoundDescText": "No te rindas - verifica la ortografía, los filtros o prueba términos de búsqueda menos específicos"
     },
     "section": {
       "findTheBestText": "¡En esta temporada, encuentra lo mejor! 🔥",
@@ -761,7 +763,7 @@
     },
     "store": {
       "findStoresText": "Buscar tiendas",
-      "findStoreNearYouText": "Encuentra una tienda cerca de ti",
+      "findStoreNearYouText": "Encuentra tu tienda más cercana",
       "usingLocationToShowStoresText": "Utilizamos tu ubicación para mostrarte tiendas cercanas",
       "seeNearbyStoreText": "Ver tiendas cercanas",
       "storeInfoText": "Información de la tienda",
@@ -1100,7 +1102,7 @@
       "chooseShippingBillingAddressMsg": "Por favor, elige la dirección de envío/facturación para continuar.",
       "selectStoreErrorMsg": "Por favor, selecciona una tienda para continuar.",
       "selectDeliveryToContinueErrorMsg": "Por favor, selecciona un método de entrega para continuar.",
-      "noStoreFoundErrorMsg": "No se encontró ninguna tienda. Inténtalo con un código postal diferente",
+      "noStoreFoundErrorMsg": "Código postal no reconocido",
       "cookiesText": "Este sitio utiliza cookies para mejorar tu experiencia. Al hacer clic, aceptas nuestra Política de privacidad.",
       "validEmailErrorMsg": "Ingresa un correo electrónico válido",
       "cookiesPolicyText": "Política de Cookies",

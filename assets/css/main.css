@@ -17530,3 +17530,9 @@ body:has(.engage-announcement-bar){
 .description-text p {
   font-size: .875rem;
 }
+
+.delivery-method-desc p{
+    font-size: 12px !important;
+    font-weight: 400;
+    color: #666666;
+}

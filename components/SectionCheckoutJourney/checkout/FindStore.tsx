@@ -111,7 +111,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                         {store?.Name}
                       </h2>
                       <span className="text-gray-500 mb-1 font-semibold">
-                        {metresToMiles(store?.DistanceInMetres) < 0.1 ? <>{translate(lessThanAMileTextKey)}</> : <>{metresToMiles(store?.DistanceInMetres)}{' '}{translate('label.checkout.milesText')}</>}
+                        {store?.DistanceInMetres < 0.1 ? <>{translate(lessThanAMileTextKey)}</> : <>{store?.DistanceInMetres}{' '}{translate('label.checkout.milesText')}</>}
                       </span>
                       <br />
                       {store?.AvailableToCollectIn && <span className="text-black mr-1 text-base">
