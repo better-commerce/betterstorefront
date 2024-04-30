@@ -14,9 +14,9 @@ const AlertRibbon: FC = () => {
   const color = (type: string) => {
     switch (type) {
       case 'error':
-        return 'bg-ribbon-red capitalize'
+        return 'bg-ribbon-red'
       case 'success':
-        return 'bg-ribbon-green capitalize'
+        return 'bg-ribbon-green'
       case 'cancel':
         return 'bg-ribbon-cancel'
       default:
