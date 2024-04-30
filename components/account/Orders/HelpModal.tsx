@@ -1,4 +1,3 @@
-// import { utcDateConvert } from "@framework/utils/parse-util";
 import { Dialog, Transition } from "@headlessui/react";
 import  {XMarkIcon}  from "@heroicons/react/24/outline";
 import React, { Fragment } from "react";
@@ -78,8 +77,16 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              <p className='text-black text-medium text-14'>{translate('label.help.returnWindowClosedText1')} {returnWindow} {translate('label.help.returnWindowClosedText1')}</p>
                                           }
                                        </div>
-                                       <div className='w-full py-4'>                                          
-                                          {shouldDisplayReturnItemCTA && (
+                                       <div className='w-full py-4'>
+                                          <a
+                                             onClick={() => chooseHelpMode("Chat")}
+                                             target="_blank"
+                                             rel="noopener noreferrer"
+                                             href={`https://api.whatsapp.com/send?phone=917829966655&text=Hi, I need help with my order id ${details?.orderNo}`}
+                                             className='block w-full hover:bg-accent-1 dark:hover:bg-accent-8 px-4 py-2 mb-2 text-center text-black border btn-basic-property font-bold uppercase'>
+                                             {translate('common.label.chatWithUsText')}
+                                          </a>
+                                          { shouldDisplayReturnItemCTA && (
                                              <a
                                                 href="javascript:void(0);"
                                                 onClick={() => onReturnItem("Return")}
@@ -88,9 +95,9 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                           )}
                                           {
                                              details?.allowedToCancel && details?.paymentStatus != 0 &&
-                                                <a href="javascript:void(0);" className='block w-full px-4 py-2 mb-2 font-bold text-center text-white uppercase bg-gray-900 border hover:opacity-90 dark:hover:bg-accent-8 btn-basic-property'
+                                                <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
-                                                   {translate('common.label.cancelText')}{translate('common.label.itemSingularText')}
+                                                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                                                 </a>
                                                 
                                           }
@@ -175,4 +182,3 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
 }
 
 export default HelpModal;
-

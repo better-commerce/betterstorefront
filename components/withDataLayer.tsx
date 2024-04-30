@@ -18,6 +18,7 @@ export const PAGE_TYPES = {
   Terms: 'Terms',
   Survey: 'Survey',
   MyStore: 'my-store',
+  MyMembership: 'MyMembership',
 }
 export default function withDataLayer(
   Component: any,

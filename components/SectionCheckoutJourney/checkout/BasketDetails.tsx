@@ -8,10 +8,12 @@ import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/SectionCheckoutJourney/checkout/Summary'
-import MembershipCard from '@components/SectionCheckoutJourney/checkout/MembershipCard'
+import MembershipCard from '@components/membership/MembershipCard'
 import OptMembershipModal from '@components/membership/OptMembershipModal'
 import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
 import { useTranslation } from '@commerce/utils/use-translation'
+import SplitDeliveryBasketItems from '../cart/SplitDeliveryBasketItems'
+
 interface BasketItem {
   id: string
   name: string
@@ -19,7 +21,7 @@ interface BasketItem {
   price: number
 }
 
-const BasketDetails = ({ basket, deviceInfo }: any) => {
+const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isGuestUser} = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -174,31 +176,37 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
         <div className="h-auto card-summary right-panel-basket">
           <h3 className="mb-4 text-2xl font-semibold text-black uppercase">{translate('label.orderSummary.orderSummaryText')}</h3>
           {/* product list start */}
-          <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
-            <Disclosure defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
-                    <span className="font-semibold text-black">
-                      {basket?.lineItems?.length}{' '}
-                      {basket?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
-                    </span>
-                    <i
-                      className={`${open ? 'rotate-180 transform' : ''
-                        } sprite-icons sprite-dropdown`}
-                    />
-                  </Disclosure.Button>
-                  <Disclosure.Panel className="px-0 pt-3 pb-2">
-                    <div className="w-full max-basket-panel">
-                      <BasketItems userCartItems={basket?.lineItems} />
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
-          </div>
-          <MembershipCard basket={basket} setOpenOMM={setOpenOMM} />
-          <OptMembershipModal open={openOMM} setOpenOptMembershipModal={setOpenOMM} />
+          {basket?.deliveryPlans?.length < 1 ? (
+            <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
+              <Disclosure defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
+                      <span className="font-semibold text-black">
+                        {basket?.lineItems?.length}{' '}
+                        {basket?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
+                      </span>
+                      <i
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } sprite-icons sprite-dropdown`}
+                      />
+                    </Disclosure.Button>
+                    <Disclosure.Panel className="px-0 pt-3 pb-2">
+                      <div className="w-full max-basket-panel">
+                        <BasketItems userCartItems={basket?.lineItems} />
+                      </div>
+                    </Disclosure.Panel>
+                  </>
+                )}
+              </Disclosure>
+            </div>
+          ) : (
+            <div className="mt-4 w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
+              <SplitDeliveryBasketItems basket={basket} />
+            </div>
+          )}
+          <MembershipCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} />
+          <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} />
           {referralAvailable &&
             isGuestUser &&
             basket?.contactDetails?.emailAddress && ( //user?.userEmail && (

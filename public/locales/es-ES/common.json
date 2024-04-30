@@ -22,6 +22,7 @@
       "updateFailedText": "¡Ups! ¡Algo salió mal!",
       "BillingAddressHeadingText": "Dirección de facturación",
       "shippingAddressHeadingText": "Dirección de envío",
+      "pickupAddressHeadingText": "Dirección de recogida en tienda",
       "savedAddressesText": "Direcciones guardadas",
       "emptyAddressBookText": "¡Oh no! Tu libro de direcciones está vacío.",
       "addNewAddress": "Agregar nueva dirección",
@@ -745,7 +746,9 @@
       "searchForProductsText": "Buscar productos",
       "showFiltersText": "Mostrar filtros",
       "noResultFoundForText": "No se encontraron resultados para",
-      "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario."
+      "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario.",
+      "noMatchingProductFoundText": "¡Lo siento! No pudimos encontrar ningún artículo coincidente.",
+      "noMatchingProductFoundDescText": "No te rindas - verifica la ortografía, los filtros o prueba términos de búsqueda menos específicos"
     },
     "section": {
       "findTheBestText": "¡En esta temporada, encuentra lo mejor! 🔥",
@@ -760,7 +763,7 @@
     },
     "store": {
       "findStoresText": "Buscar tiendas",
-      "findStoreNearYouText": "Encuentra una tienda cerca de ti",
+      "findStoreNearYouText": "Encuentra tu tienda más cercana",
       "usingLocationToShowStoresText": "Utilizamos tu ubicación para mostrarte tiendas cercanas",
       "seeNearbyStoreText": "Ver tiendas cercanas"
     },
@@ -793,6 +796,18 @@
     "sectionHero": {
       "exploreText": "Explorar",
       "createText": "Crear"
+    },
+    "membership": {
+      "alreadyMemberText": "¿Ya eres miembro?",
+      "myMembershipText": "Mi membresía",
+      "membershipDescText": "en tu pedido de hoy al unirte a nuestra membresía",
+      "discountsAnytimeText": "descuentos en cualquier momento",
+      "perYearText": "por año",
+      "billedAnnuallyText": "Facturado anualmente",
+      "upgradeMembershipText": "si has utilizado todos tus cupones y quieres más o te gusta la idea de un 20% de descuento en la suscripción, puedes mejorar tu plan de membresía fácilmente.",
+      "upgradeAnyTimeText": "Mejora en cualquier momento simplemente pagando la diferencia entre los niveles.",
+      "sprayMoreHappinessText": "¡Rocía más felicidad por menos!",
+      "membershipBenefitsText": "Todos los beneficios que te ofrece la membresía"
     },
     "contactUs": {
       "contactSalesText": "Contactar ventas",
@@ -1081,7 +1096,7 @@
       "chooseShippingBillingAddressMsg": "Por favor, elige la dirección de envío/facturación para continuar.",
       "selectStoreErrorMsg": "Por favor, selecciona una tienda para continuar.",
       "selectDeliveryToContinueErrorMsg": "Por favor, selecciona un método de entrega para continuar.",
-      "noStoreFoundErrorMsg": "No se encontró ninguna tienda. Inténtalo con un código postal diferente",
+      "noStoreFoundErrorMsg": "Código postal no reconocido",
       "cookiesText": "Este sitio utiliza cookies para mejorar tu experiencia. Al hacer clic, aceptas nuestra Política de privacidad.",
       "validEmailErrorMsg": "Ingresa un correo electrónico válido",
       "cookiesPolicyText": "Política de Cookies",

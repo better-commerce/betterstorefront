@@ -17,7 +17,7 @@ import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { getEnabledSocialLogins } from '@framework/utils/app-util'
+import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
 import { AlertType } from '@framework/utils/enums'
@@ -149,6 +149,7 @@ const router = useRouter()
       } else if (result.data) {
         setAlert({ type: 'success', msg: translate('common.label.successText') })
         let userObj = { ...result.data }
+        if (userObj?.userToken) saveUserToken(userObj?.userToken)
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
         )

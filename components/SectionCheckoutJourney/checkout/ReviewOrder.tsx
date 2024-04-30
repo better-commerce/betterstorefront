@@ -7,6 +7,7 @@ import { eddDateFormat } from '@framework/utils/parse-util'
 import PaymentMethodSelection from './PaymentMethodSelection'
 import { CheckoutStep } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { DeliveryType } from '@components/utils/constants'
 
 interface ShippingMethod {
   id: string
@@ -38,6 +39,7 @@ interface ReviewOrderProps {
   hideOverlayLoaderState: any
   readonly generateBasketId: any
   goToStep: (step: string) => void
+  deliveryTypeMethod: any
 }
 
 const ReviewOrder: React.FC<ReviewOrderProps> = ({
@@ -52,7 +54,8 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
   generateBasketId,
   onPaymentMethodSelect,
   onEditAddressToggleView,
-  goToStep
+  goToStep,
+  deliveryTypeMethod,
 }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -71,33 +74,35 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
           <div className="flex flex-col w-full pb-2 border-b border-gray-200 sm:pb-4">
             <div className="flex items-center justify-between w-full">
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
-                {translate('label.addressBook.shippingAddressHeadingText')}
+                {deliveryTypeMethod?.type === DeliveryType.COLLECT ? translate('label.addressBook.pickupAddressHeadingText') : translate('label.addressBook.shippingAddressHeadingText')}
               </h5>
-              <button
-                className="justify-end font-semibold text-black font-12 hover:text-orange-600"
-                onClick={() =>
-                  onEditAddressToggleView(selectedAddress?.shippingAddress)
-                }
-              >
-                {translate('common.label.changeText')}
-              </button>
+              {deliveryTypeMethod?.type !== DeliveryType.COLLECT && (
+                <button
+                  className="justify-end font-semibold text-black font-12 hover:text-orange-600"
+                  onClick={() =>
+                    onEditAddressToggleView(selectedAddress?.shippingAddress)
+                  }
+                >
+                  {translate('common.label.changeText')}
+                </button>
+              )}
             </div>
             {selectedAddress?.shippingAddress ? (
               <div className="flex gap-1 font-normal text-black font-12 dark:text-black">
                 <span className="m-0">
-                  {selectedAddress?.shippingAddress.firstName}{' '}
-                  {selectedAddress?.shippingAddress.lastName}
+                  {selectedAddress?.shippingAddress.firstName}
+                  {selectedAddress?.shippingAddress.lastName && ` ${selectedAddress?.shippingAddress.lastName}`}
                   {', '}
-                  {selectedAddress?.shippingAddress.address1}
+                  {selectedAddress?.shippingAddress.address1?.replaceAll(',', '')}
                   {', '}
                   {selectedAddress?.shippingAddress.address2 &&
-                    `${selectedAddress?.shippingAddress.address2}, `}
+                    `${selectedAddress?.shippingAddress.address2?.replaceAll(',', '')}, `}
                   {selectedAddress?.shippingAddress.address3 &&
                     `${selectedAddress?.shippingAddress.address3}, `}
                   {selectedAddress?.shippingAddress.city &&
                     `${selectedAddress?.shippingAddress.city}, `}
                   {selectedAddress?.shippingAddress.postCode &&
-                    `${selectedAddress?.shippingAddress.postCode}`}
+                    `${selectedAddress?.shippingAddress.postCode?.replaceAll(' ', '')}`}
                 </span>
               </div>
             ) : (

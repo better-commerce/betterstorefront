@@ -24,6 +24,7 @@ import NonHeadContentSnippet from '@old-components/common/Content/NonHeadContent
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -432,7 +433,7 @@ export default function OrderConfirmation({ config }: any) {
               </h2>
 
               <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
-              {order?.items?.map((product: any) => (
+              {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
                 <>
                   <div
                     key={product.id}
@@ -484,7 +485,9 @@ export default function OrderConfirmation({ config }: any) {
                     </div>
                   </div>
                 </>
-              ))}
+              )) : (
+                <SplitDeliveryOrderItems order={order} />
+              )}
 
               <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
                 <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
@@ -498,7 +501,7 @@ export default function OrderConfirmation({ config }: any) {
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
-                        <span className="block">{`${order?.shippingAddress.firstName} ${order?.shippingAddress.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName ? order?.shippingAddress?.lastName : ""}`}</span>
                         <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address1}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address2}`}</span>
