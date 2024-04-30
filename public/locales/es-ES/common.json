@@ -746,7 +746,9 @@
       "searchForProductsText": "Buscar productos",
       "showFiltersText": "Mostrar filtros",
       "noResultFoundForText": "No se encontraron resultados para",
-      "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario."
+      "stepIntoWorldText": "Adéntrate en un mundo donde la moda se encuentra con la comodidad, con nuestra última colección diseñada para elevar tu look diario.",
+      "noMatchingProductFoundText": "¡Lo siento! No pudimos encontrar ningún artículo coincidente.",
+      "noMatchingProductFoundDescText": "No te rindas - verifica la ortografía, los filtros o prueba términos de búsqueda menos específicos"
     },
     "section": {
       "findTheBestText": "¡En esta temporada, encuentra lo mejor! 🔥",
