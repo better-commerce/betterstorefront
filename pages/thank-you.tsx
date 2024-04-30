@@ -12,7 +12,6 @@ import {
   TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
-import { } from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -25,6 +24,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
+import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -331,7 +331,7 @@ export default function OrderConfirmation({ config }: any) {
 
   useEffect(() => {
     const itemsFromArr = []
-    if( order?.items ){
+    if (order?.items) {
       const iterator = order?.items?.values();
       for (const value of iterator) {
         itemsFromArr?.push({
@@ -348,18 +348,18 @@ export default function OrderConfirmation({ config }: any) {
       item_id: "thankyou",
       order_id: order?.orderNo || EmptyString,
       order_price: order?.grandTotal?.raw?.withTax,
-      order_shipping_zip: order?.shippingAddress?.postCode || EmptyString, 
-      order_shipping_city: order?.shippingAddress?.city || EmptyString, 	
-      payment_transactions:  [{
-          amount: order?.payments ? order?.payments[0]?.orderAmount : EmptyString, 
-          gateway: order?.payments ? order?.payments[0]?.paymentGateway : EmptyString, 
-          status:"paid"
+      order_shipping_zip: order?.shippingAddress?.postCode || EmptyString,
+      order_shipping_city: order?.shippingAddress?.city || EmptyString,
+      payment_transactions: [{
+        amount: order?.payments ? order?.payments[0]?.orderAmount : EmptyString,
+        gateway: order?.payments ? order?.payments[0]?.paymentGateway : EmptyString,
+        status: "paid"
       }],
-      coupons:  [{
-          code: '',
-          discount_amt:  order?.discount?.raw?.withTax
+      coupons: [{
+        code: '',
+        discount_amt: order?.discount?.raw?.withTax
       }],
-      item_ids: order?.items?.map((x:any) =>  parseItemId(x?.stockCode)) || [],
+      item_ids: order?.items?.map((x: any) => parseItemId(x?.stockCode)) || [],
       items: itemsFromArr,
       customer: {
         id: order?.customerId || EmptyString,
@@ -369,10 +369,10 @@ export default function OrderConfirmation({ config }: any) {
         contact_no: order?.billingAddress?.phoneNo || EmptyString
       }
     }
-    if( window !== undefined && window?.ch_session && order?.orderNo){
+    if (window !== undefined && window?.ch_session && order?.orderNo) {
       window.ch_purchase_complete_before(orderData)
     }
-  },[order?.orderNo])
+  }, [order?.orderNo])
 
   if (isLoading) {
     return (
@@ -417,75 +417,19 @@ export default function OrderConfirmation({ config }: any) {
             </h1>
             {order?.orderNo ? (
               <p className="mt-2 text-black">
-                  {translate('label.checkout.yourOrderText')}{' '}
+                {translate('label.checkout.yourOrderText')}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
-                  {translate('label.thankyou.willBeWithYouSoonText')}
+                {translate('label.thankyou.willBeWithYouSoonText')}
               </p>
             ) : null}
           </div>
           {order?.orderNo ? (
-            <section
-              aria-labelledby="order-heading"
-              className="mt-10 border-t border-gray-200"
-            >
-              <h2 id="order-heading" className="sr-only">
-                {translate('label.checkout.yourOrderText')}
-              </h2>
-
+            <section aria-labelledby="order-heading" className="mt-10 border-t border-gray-200" >
+              <h2 id="order-heading" className="sr-only"> {translate('label.checkout.yourOrderText')} </h2>
               <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
-              {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
-                <>
-                  <div
-                    key={product.id}
-                    className="flex py-10 space-x-6 border-b border-gray-200"
-                  >
-                    <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                      <img
-                        style={css}
-                        src={
-                          generateUri(product.image, 'h=200&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        width={200}
-                        height={200}
-                        alt={product.name || 'thank you'}
-                        className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                      />
-                    </div>
-                    <div className="flex flex-col flex-auto">
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          <Link href={`/${product.slug}`}>{product.name}</Link>
-                        </h4>
-                        <p className="mr-1 text-sm font-medium text-gray-700">
-                          {translate('label.thankyou.sizeText')}:{' '}
-                          <span className="uppercase">{product.size}</span>
-                        </p>
-                      </div>
-                      <div className="flex items-end mt-2">
-                        <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
-                          <div className="flex">
-                            <dt className="font-medium text-gray-900">
-                              {translate('common.label.quantityText')}
-                            </dt>
-                            <dd className="ml-2 text-gray-700">
-                              {product.qty}
-                            </dd>
-                          </div>
-                          <div className="flex pl-4 sm:pl-6">
-                            <dt className="font-medium text-gray-900">
-                              {translate('common.label.priceText')}
-                            </dt>
-                            <dd className="ml-2 text-gray-700">
-                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
-                            </dd>
-                          </div>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )) : (
+              {order?.deliveryPlans?.length < 1 ? (
+                <OrderItems order={order} />
+              ) : (
                 <SplitDeliveryOrderItems order={order} />
               )}
 
@@ -496,7 +440,6 @@ export default function OrderConfirmation({ config }: any) {
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-bold text-gray-900">
-                      {/* {GENERAL_SHIPPING_ADDRESS} */}
                       {translate('label.orderDetails.deliveryAddressHeadingText')}
                     </dt>
                     <dd className="mt-2 text-gray-700">
@@ -509,20 +452,6 @@ export default function OrderConfirmation({ config }: any) {
                       </address>
                     </dd>
                   </div>
-                  {/* <div>
-                    <dt className="font-medium text-gray-900">
-                      {GENERAL_BILLING_ADDRESS}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div> */}
                 </dl>
 
                 <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
@@ -567,7 +496,7 @@ export default function OrderConfirmation({ config }: any) {
                   !isFirstOrderValid && (
                     <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
-                      {translate('label.thankyou.congratilationDiscountText')}{' '}
+                        {translate('label.thankyou.congratilationDiscountText')}{' '}
                         <span className="font-bold text-indigo-600">
                           {nextOrderPromo?.nextOrderPromoName}
                         </span>
@@ -584,7 +513,7 @@ export default function OrderConfirmation({ config }: any) {
                   !isFirstOrderValid && (
                     <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
-                      {translate('label.thankyou.congratilationDiscountText')}{' '}
+                        {translate('label.thankyou.congratilationDiscountText')}{' '}
                         <span className="font-bold text-indigo-600">
                           {nextOrderPromo?.nextOrderPromoName}
                         </span>
