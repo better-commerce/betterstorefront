@@ -187,6 +187,7 @@ export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
 export const NEXT_GET_ALL_MEMBERSHIP_PLANS = '/api/membership/get-all-plans'
 export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
+export const NEXT_GET_PRODUCT_AVAILABILITY_BY_POSTCODE = `/api/store-locator/get-product-availability-by-postalCode`
 export const NEXT_POST_STORE_BY_POSTALCODE =
   '/api/store-locator/get-store-by-postalcode'
 export const NEXT_GOOGLE_AUTOCOMPLETE_API =

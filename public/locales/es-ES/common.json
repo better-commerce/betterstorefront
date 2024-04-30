@@ -765,7 +765,13 @@
       "findStoresText": "Buscar tiendas",
       "findStoreNearYouText": "Encuentra tu tienda más cercana",
       "usingLocationToShowStoresText": "Utilizamos tu ubicación para mostrarte tiendas cercanas",
-      "seeNearbyStoreText": "Ver tiendas cercanas"
+      "seeNearbyStoreText": "Ver tiendas cercanas",
+      "storeInfoText": "Información de la tienda",
+      "findInStoreText": "Buscar en la tienda",
+      "stockCheckDescText": "¿Necesitas tu artículo hoy? Encuentra tu tienda más cercana y recoge en tiendas seleccionadas.",
+      "findStockText": "Buscar stock",
+      "checkStoreStockText": "Verificar stock de la tienda",
+      "storeNameText": "Nombre de la tienda"
     },
     "thankyou": {
       "summaryText": "Resumen",
@@ -979,6 +985,7 @@
       "orderPlacedOnText": "Pedido realizado el",
       "onText": "en",
       "milesText": "millas",
+      "mileText": "milla",
       "normalOpeningHoursHeadingText": "Horario de apertura normal",
       "serviceText": "Esta información nos ayudará a mejorar nuestro servicio",
       "helpAssistanceText": "Estaremos encantados de ayudarte. ¿Qué te preocupa?",
@@ -1078,7 +1085,8 @@
       "line3Text": "Línea 3 (opcional)",
       "addMsg3Text": "Agregar mensaje 3",
       "addMsg2Text": "Agregar mensaje 2",
-      "addMsg1Text": "Agregar mensaje 1"
+      "addMsg1Text": "Agregar mensaje 1",
+      "distanceText": "Distance"
     },
     "message": {
       "requiredTextMsg": "Requerido",
@@ -1140,6 +1148,7 @@
       "tokenExpiredErrorMsg": "¡Vaya! El token ha caducado o no es válido",
       "companyNotFoundErrorMsg": "Empresa no encontrada.",
       "cartItemMaxAddedErrorMsg": "Se ha alcanzado el límite de artículos en el carrito. Por favor, elimine algunos artículos e inténtelo de nuevo.",
+      "noStoresErrorMsg": "Pronto estaremos expandiéndonos a tu área. ¡Mantente atento!",
       "address": {
         "postCodeNotServicableMsg": "Código postal no servible",
         "postCodeNumMsg": "El código postal solo debe contener dígitos",
