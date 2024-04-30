@@ -9,11 +9,12 @@ import StockCheckSection from './StockCheckSection'
 import StoreListSection from './StoreListSection'
 
 // Other Imports
-import { logError } from '@framework/utils/app-util'
+import { cartItemsValidateAddToCart, logError } from '@framework/utils/app-util'
 import { NEXT_GET_PRODUCT_AVAILABILITY_BY_POSTCODE } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 import cartHandler from '@components/services/cart'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 
 const StockCheckModal = ({
   product,
@@ -22,13 +23,29 @@ const StockCheckModal = ({
 }: any) => {
   const [openStoreList, setOpenStoreList] = useState(false)
   const [storeList, setStoreList] = useState([])
-  const { basketId, user, setCartItems } = useUI()
-
+  const [isLoading, setIsLoading] = useState(false)
+  const { basketId, user, setCartItems, cartItems, maxBasketItemsCount, setAlert } = useUI()
   const translate = useTranslation()
 
   const buttonTitle = () => {
     let buttonConfig: any = {
       title: translate('label.basket.addToBagText'),
+      validateAction: async () => {
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
+            return o
+          }
+        })
+        if (product?.currentStock === cartLineItem?.qty && !product?.fulfilFromSupplier && !product?.flags?.sellWithoutInventory) {
+          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
+          return false
+        }
+        const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount)
+        if (!isValid) {
+          setAlert({ type: 'error', msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), })
+        }
+        return isValid
+      },
       action: async () => {
         const item = await cartHandler()?.addToCart(
           {
@@ -44,12 +61,17 @@ const StockCheckModal = ({
           { product }
         )
         setCartItems(item)
-        setOpenStockCheckModal(false)
       },
+      shortMessage: '',
+    }
+    if (!product?.currentStock && product?.preOrder?.isEnabled) {
+      buttonConfig.title = translate('label.product.preOrderText')
+      buttonConfig.isPreOrderEnabled = true
+      buttonConfig.buttonType = 'button'
+      buttonConfig.shortMessage = product?.preOrder?.shortMessage
     }
     return buttonConfig
   }
-
   const buttonConfig = buttonTitle();
 
   const fetchStoreList = async (payload: any) => {
@@ -66,13 +88,21 @@ const StockCheckModal = ({
   const onSubmit = async ({
     postCode
   }: any) => {
+    setIsLoading(true)
     const payload = {
       stockCode: product?.stockCode,
       postCode: postCode
     }
-    const res = await fetchStoreList(payload);
-    setStoreList(res)
-    setOpenStoreList(true);
+    const storeList = await fetchStoreList(payload);
+    if( storeList?.length ) {
+      setIsLoading(false)
+      setStoreList(storeList)
+      setOpenStoreList(true);
+    }
+    else {
+      setIsLoading(false)
+      setAlert({ type: 'error', msg: translate('common.message.noStoresErrorMsg'), })
+    }
   }
 
   return (
@@ -106,7 +136,7 @@ const StockCheckModal = ({
                   {openStoreList ? (
                     <StoreListSection buttonConfig={buttonConfig} product={product} storeList={storeList} deviceInfo={deviceInfo} />
                   ) : (
-                    <StockCheckSection onSubmit={onSubmit} />
+                    <StockCheckSection onSubmit={onSubmit} isLoading={isLoading} />
                   )}
                   <XMarkIcon
                     className="absolute m-4 right-0 top-0 h-4 w-4 hover:cursor-pointer"

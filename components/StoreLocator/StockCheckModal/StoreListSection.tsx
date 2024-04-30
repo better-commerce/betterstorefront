@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react'
 
 // Component Imports
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
+import MapWithMarkers from '@components/ui/Map/MultiMarker'
 
 // Other Imports
 import { useTranslation } from '@commerce/utils/use-translation'
-import MapWithMarkers from '@components/ui/Map/MultiMarker'
 
 const StoreListSection = ({
     product,
@@ -17,20 +17,19 @@ const StoreListSection = ({
 }: any) => {
     const [map, setMap] = useState<any>(null)
     const { isMobile } = deviceInfo;
-
     const translate = useTranslation();
 
     useEffect(() => {
         if (map && storeList?.length) {
             const bounds = new window.google.maps.LatLngBounds()
-            for (let i = 0; i < storeList.length; i++) {
+            for (let i = 0; i < storeList?.length; i++) {
                 const marker: any = new window.google.maps.Marker({
                     position: {
-                        lat: parseFloat(storeList[i]?.lat),
-                        lng: parseFloat(storeList[i]?.lng),
+                        lat: +(storeList[i]?.DeliveryCenterLatitude),
+                        lng: +(storeList[i]?.DeliveryCenterLongitude),
                     },
                     map: map,
-                    title: storeList[i]?.name + ' Branch',
+                    title: storeList[i]?.DeliveryCenterName + ' Branch',
                 })
                 bounds.extend(marker.getPosition())
             }
@@ -40,31 +39,31 @@ const StoreListSection = ({
                 map.setZoom(findZoom)
             }
         }
-    }, [storeList, map, isMobile])
+    }, [storeList, map])
 
     return (
-        <div className="flex flex-col text-lg max-h-96 overflow-y-auto scrollbar-hidden">
-            <h4 className="font-semibold">Find in Store</h4>
+        <div className="flex flex-col text-lg max-h-96 overflow-y-auto overflow-x-hidden custom-scroll">
+            <h4 className="font-semibold">{translate('label.store.findInStoreText')}</h4>
             <hr className="h-1 my-4"></hr>
              {/* Product Detail Section */}
-            <div className='flex flex-row p-4 gap-x-4'>
-                <img src={product?.image} alt={product?.name} height={1200} width={1200} className='w-1/2 h-96'></img>
-                <div className='flex flex-col justify-start gap-y-4 p-4 h-1/2 my-auto'>
+            <div className='flex flex-col sm:flex-row p-4 gap-x-4'>
+                <img src={product?.image} alt={product?.name} height={1200} width={1200} className='w-full sm:w-1/2 h-96'></img>
+                <div className='flex flex-col justify-start gap-y-4 mt-2 sm:mt-0 p-0 sm:p-4 h-1/2 my-auto'>
                     <h4 className='font-semibold text-4xl leading-3'>{product?.name}</h4>
                     <span className='text-2xl font-semibold text-gray-700'>{product?.brand}</span>
                     <span className='font-normal text-gray-600 text-md'>{product?.shortDescription}</span>
                     <span className='font-semibold text-gray-700 text-md'>{product?.price?.formatted?.withTax}</span>
-                    <Button className='!w-1/2' title={buttonConfig.title} action={() => buttonConfig.action()} buttonType={buttonConfig.type || 'cart'} />
+                    <Button className='w-full sm:!w-1/2' title={buttonConfig.title} action={() => buttonConfig.action()} buttonType={buttonConfig.type || 'cart'} />
                 </div>
             </div>
-            <div className="flex flex-row gap-x-10 my-2">
+            <div className="flex flex-col sm:flex-row gap-x-6 my-2">
                 {/* Google Map Section */}
-                <div className="border box-border w-1/2">
-                    {/* <MapWithMarkers locations={storeList} setMap={setMap} /> */}
+                <div className="w-full sm:w-1/2">
+                    <MapWithMarkers locations={storeList} setMap={setMap} />
                 </div>
                 {/* Store List Section */}
-                <div className="w-1/2 overflow-y-auto">
-                    <h4 className="font-semibold">Check Store Stock</h4>
+                <div className="w-full sm:w-1/2 /overflow-y-auto /overflow-x-hidden mx-2 mt-2 sm:mt-0">
+                    <h4 className="font-semibold">{translate('label.store.checkStoreStockText')}</h4>
                     <hr className="h-1 my-4"></hr>
                     {storeList?.map((store:any) => (
                         <div className="flex flex-row w-full gap-x-4 justify-between" key={store?.DeliveryCenterName}>
@@ -72,7 +71,7 @@ const StoreListSection = ({
                             <p className="text-sm font-semibold uppercase text-gray-600">
                                 {store?.Qty > 0 ? store?.Qty : 'label.basket.outOfStockText'}
                             </p>
-                            <p className="text-sm text-gray-600">{Math.ceil(store?.DistanceInMiles)} mile</p>
+                            <p className="text-sm text-gray-600">{Math.ceil(store?.DistanceInMiles) <= 1 ? `${Math.ceil(store?.DistanceInMiles)}${' '}${translate('common.label.mileText')}` : `${Math.ceil(store?.DistanceInMiles)}${' '}${translate('common.label.milesText')}` } </p>
                         </div>
                     ))}
                 </div>
