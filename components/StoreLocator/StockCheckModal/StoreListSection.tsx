@@ -42,10 +42,10 @@ const StoreListSection = ({
     }, [storeList, map])
 
     return (
-        <div className="flex flex-col text-lg max-h-96 overflow-y-auto overflow-x-hidden custom-scroll">
+        <div className="flex flex-col text-lg max-h-96 overflow-y-auto overflow-x-hidden !custom-scroll">
             <h4 className="font-semibold">{translate('label.store.findInStoreText')}</h4>
             <hr className="h-1 my-4"></hr>
-             {/* Product Detail Section */}
+            {/* Product Detail Section */}
             <div className='flex flex-col sm:flex-row p-4 gap-x-4'>
                 <img src={product?.image} alt={product?.name} height={1200} width={1200} className='w-full sm:w-1/2 h-96'></img>
                 <div className='flex flex-col justify-start gap-y-4 mt-2 sm:mt-0 p-0 sm:p-4 h-1/2 my-auto'>
@@ -62,18 +62,27 @@ const StoreListSection = ({
                     <MapWithMarkers locations={storeList} setMap={setMap} />
                 </div>
                 {/* Store List Section */}
-                <div className="w-full sm:w-1/2 /overflow-y-auto /overflow-x-hidden mx-2 mt-2 sm:mt-0">
+                <div className="w-full sm:w-1/2 mx-2 mt-2 sm:mt-0">
                     <h4 className="font-semibold">{translate('label.store.checkStoreStockText')}</h4>
                     <hr className="h-1 my-4"></hr>
-                    {storeList?.map((store:any) => (
-                        <div className="flex flex-row w-full gap-x-4 justify-between" key={store?.DeliveryCenterName}>
-                            <p className="uppercase text-sm w-1/3">{store?.DeliveryCenterName}</p>
-                            <p className="text-sm font-semibold uppercase text-gray-600">
-                                {store?.Qty > 0 ? store?.Qty : 'label.basket.outOfStockText'}
-                            </p>
-                            <p className="text-sm text-gray-600">{Math.ceil(store?.DistanceInMiles) <= 1 ? `${Math.ceil(store?.DistanceInMiles)}${' '}${translate('common.label.mileText')}` : `${Math.ceil(store?.DistanceInMiles)}${' '}${translate('common.label.milesText')}` } </p>
-                        </div>
-                    ))}
+                    <table className="w-full">
+                        <thead>
+                            <tr>
+                                <th className="text-sm font-semibold uppercase text-gray-900 w-1/3">{translate('label.store.storeNameText')}</th>
+                                <th className="text-sm font-semibold uppercase text-gray-900">{translate('common.label.quantityText')}</th>
+                                <th className="text-sm font-semibold uppercase text-gray-900">{translate('common.label.distanceText')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {storeList?.map((store: any) => (
+                                <tr key={store?.DeliveryCenterName}>
+                                    <td className="uppercase text-sm border border-gray-400 py-2 text-center">{store?.DeliveryCenterName}</td>
+                                    <td className="uppercase text-sm border border-gray-400 py-2 text-center"> {store?.Qty > 0 ? store?.Qty : translate('label.basket.outOfStockText')} </td>
+                                    <td className="text-sm border border-gray-400 py-2 text-center">{Math.ceil(store?.DistanceInMiles) <= 1 ? `${Math.ceil(store?.DistanceInMiles)} ${translate('common.label.mileText')}` : `${Math.ceil(store?.DistanceInMiles)} ${translate('common.label.milesText')}`} </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
