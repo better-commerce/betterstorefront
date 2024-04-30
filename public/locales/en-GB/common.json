@@ -222,6 +222,7 @@
       "streetAndHouseNoText": "Street and House Number",
       "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)",
       "milesText":"miles",
+      "mileText":"mile",
       "lessThanAMileText":"Less than a mile",
       "payment": {
         "debitCreditCardDetailsHeadingText": "Debit/Credit Card details",
@@ -768,7 +769,13 @@
       "findStoresText": "Find Stores",
       "findStoreNearYouText": "Find Your Nearest Store",
       "usingLocationToShowStoresText":"We use your location to show you nearby stores",
-      "seeNearbyStoreText":"See Nearby Stores"
+      "seeNearbyStoreText":"See Nearby Stores",
+      "checkStoreStockText": "Check store stock",
+      "storeInfoText": "Store Info",
+      "findInStoreText": "Find in Store",
+      "stockCheckDescText": "Need your item today? Find your nearest store and pick up in selected stores",
+      "findStockText": "Find Stock",
+      "storeNameText": "Store Name"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -983,6 +990,7 @@
       "orderPlacedOnText": "Order placed on",
       "onText": "on",
       "milesText": "miles",
+      "mileText":"mile",
       "normalOpeningHoursHeadingText": "Normal Opening Hours",
       "serviceText": "This Information will help us to improve our service",
       "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
@@ -1082,7 +1090,8 @@
       "line3Text": "Line 3 (optional)",
       "addMsg3Text": "Add message 3",
       "addMsg2Text": "Add message 2",
-      "addMsg1Text": "Add message 1"
+      "addMsg1Text": "Add message 1",
+      "distanceText": "Distance"
     },
     "message": {
       "authenticationFailedText": "Email Authentication failed",
@@ -1148,6 +1157,7 @@
       "cartItemMaxAddedErrorMsg": "Cart item limit reached. Please remove some items and try again.",
       "addressAddedSuccessfullyMsg": "New address added successfully",
       "addressUpdatedSuccessfullyMsg": "Address updated successfully",
+      "noStoresErrorMsg": "We're expanding to your area soon. Stay tuned!",
       "address": {
         "postCodeNotServicableMsg": "Postcode non-serviceable",
         "postCodeNumMsg": "Postcode should contain only digits",
