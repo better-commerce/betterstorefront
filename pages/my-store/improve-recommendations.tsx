@@ -33,7 +33,7 @@ function ImproveRecommendations({ deviceInfo, config, campaignData }: any) {
         <meta property="og:description" content="Improve Recommendations" key="ogdesc" />
       </NextHead>
       <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-12 header-space mob-padding-0">
-        <EngageRecommendationCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Improve Your Recommendation" isSlider={false} productPerRow={5} />
+        <EngageRecommendationCard type={EngageEventTypes.PURCHASE_HISTORY} campaignData={campaignData} title="Improve Your Recommendation" isSlider={false} productPerRow={5} />
       </div>
     </>
   )

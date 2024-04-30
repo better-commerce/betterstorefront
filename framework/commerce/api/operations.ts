@@ -54,11 +54,13 @@ export const OPERATIONS = [
   'getCancelReason',
   'cancelOrder',
   'getReturnReason',
+  'getPromotion',
   'resetCache',
   'logPayment',
   'logActivity',
   'getCountries',
   'getReviewSummary',
+  'getMembershipPlans',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -251,10 +253,12 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
 
+  getPromotion: {}
   resetCache: {}
   logPayment: {}
   logActivity: {}
   getReviewSummary: {}
+  getMembershipPlans: {}
 }
 
 export type APIOperations<P extends APIProvider> = {

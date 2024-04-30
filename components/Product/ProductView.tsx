@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
@@ -69,7 +69,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   const [fullscreen, setFullscreen] = useState(false);
@@ -77,6 +77,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
   const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
+  const [isEngravingAvailable, setIsEngravingAvailable] = useState<any>(null)
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
@@ -172,14 +173,17 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         stockCode: response?.data?.product?.stockCode,
         ...response?.data?.product,
       })
+      if (typeof window !== "undefined" && window?.ch_session) {
+        window?.ch_product_view_before(generateDataForEngage(response.data.product))
+      }
     }
   }
 
-  let dataForEngage: any = null
-  if (typeof window !== 'undefined') {
-    const productUrl = SITE_ORIGIN_URL + new URL(window.location.href).pathname
-    // added for engage
-    dataForEngage = {
+  const generateDataForEngage = (product:any) => {
+    if (!product) return null;
+    if (typeof window === 'undefined') return null
+    const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
+    const dataForEngage = {
       item: {
         item_id: product?.variantGroupCode || product?.productCode || EmptyString,
         title: product?.name || EmptyString,
@@ -216,13 +220,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         customAttributes: product?.customAttributes || EmptyString,
       },
       item_id: product?.variantGroupCode || product?.productCode || EmptyString,
-    }
-  }
+    };
+    return dataForEngage;
+  };
+
+  const memoizedDataForEngage = useMemo(() => generateDataForEngage(product), [product]);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && dataForEngage && window?.ch_session) {
-      window.ch_product_view_before(dataForEngage)
-    }
     fetchProduct()
     setIsCompared('true')
   }, [slug, currency])
@@ -368,8 +372,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               },
             })
           }
-          if (window?.ch_session && dataForEngage) {
-            window.ch_add_to_cart_before(dataForEngage)
+          if (window?.ch_session && memoizedDataForEngage) {
+            window?.ch_add_to_cart_before(memoizedDataForEngage)
           }
         }
       },
@@ -556,22 +560,26 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         })
         setCartItems(newCart.data)
         showEngravingModal(false)
+        setIsLoading(false)
         openCart()
       } catch (error) {
         console.log(error, 'err')
       }
     }
+    setIsLoading(true)
     asyncHandler()
   }
 
-  const isEngravingAvailable =
-    !!relatedProducts?.relatedProducts?.filter(
-      (item: any) => item?.stockCode === ITEM_TYPE_ADDON
-    ).length ||
-    !!product?.customAttributes.filter(
-      (item: any) => item?.display == 'Is Enabled'
-    ).length
-  // const isEngravingAvailable:any = true;
+  useEffect(() => {
+    const isEngraving =
+      !!relatedProducts?.relatedProducts?.filter(
+        (item: any) => item?.stockCode === ITEM_TYPE_ADDON
+      ).length ||
+      !!product?.customAttributes.filter(
+        (item: any) => item?.display == 'Is Enabled'
+      ).length
+    setIsEngravingAvailable(isEngraving)
+  },[relatedProducts])
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -708,17 +716,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   useEffect(() => {
     function handleScroll() {
       const addButton = document.getElementById('add-to-cart-button');
-      console.log('addButton',addButton)
       if (addButton) {
         const addButtonRect = addButton.getBoundingClientRect();
-        const isAddButtonVisible = addButtonRect.top < window.innerHeight;
+        const isAddButtonVisible = addButtonRect.top < window?.innerHeight;
         setShowMobileCaseButton(isAddButtonVisible);
       }
     }
 
-    window.addEventListener('scroll', handleScroll);
+    window?.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window?.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -726,8 +733,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   let similarProduct = []
   let recentProduct = []
   if (typeof window !== 'undefined') {
-    similarProduct = window.similar_products_sorted_product;
-    recentProduct = window.recent_products_product;
+    similarProduct = window?.similar_products_sorted_product;
+    recentProduct = window?.recent_products_product;
   }
   let productDesc = product.description
   if (product?.shortDescription == "") {
@@ -1067,7 +1074,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
-            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
+            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6">
