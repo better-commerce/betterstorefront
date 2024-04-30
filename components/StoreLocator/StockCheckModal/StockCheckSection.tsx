@@ -12,6 +12,7 @@ import { LoadingDots } from '@components/ui';
 
 const StockCheckSection = ({
     onSubmit,
+    isLoading
 }: any) => {
     const translate = useTranslation();
     const stockCheckSchema = useStockCheckSchema();
@@ -21,18 +22,17 @@ const StockCheckSection = ({
             postCode: EmptyString,
         },
         validationSchema: stockCheckSchema,
-        onSubmit: async (values: any, { setSubmitting }: any) => {
+        onSubmit: async (values: any) => {
             onSubmit(values)
-            setSubmitting(false)
         },
     })
 
     return (
         <div className='flex flex-col'>
-            <h4 className='font-semibold text-lg'>Check Store Stock</h4>
+            <h4 className='font-semibold text-lg'>{translate('label.store.checkStoreStockText')}</h4>
             <hr className='h-1 my-4'></hr>
-            <span className='font-extralight text-md'>Need your item today? Find your nearest store and pick up in selected stores</span>
-            <form className='flex flex-row mx-4 my-10' onSubmit={stockCheckFormik.handleSubmit}>
+            <span className='font-extralight text-md'>{translate('label.store.stockCheckDescText')}</span>
+            <form className='flex flex-row mx-4 my-10 gap-x-4' onSubmit={stockCheckFormik.handleSubmit}>
                 <input
                     name="postCode"
                     type="text"
@@ -44,9 +44,9 @@ const StockCheckSection = ({
                 <button
                   type="submit"
                   disabled={stockCheckFormik.isSubmitting}
-                  className='rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-90'
+                  className='rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80'
                 >
-                  {stockCheckFormik.isSubmitting ? <LoadingDots /> : 'Find Stock'}
+                  { isLoading ? <LoadingDots /> : translate('label.store.findStockText')}
                 </button>
             </form>
         </div>

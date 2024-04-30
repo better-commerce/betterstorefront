@@ -223,6 +223,7 @@
       "streetAndHouseNoText": "Street and House Number",
       "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)",
       "milesText":"miles",
+      "mileText":"mile",
       "lessThanAMileText":"Less than a mile",
       "payment": {
         "debitCreditCardDetailsHeadingText": "Debit/Credit Card details",
@@ -769,7 +770,10 @@
       "usingLocationToShowStoresText":"We use your location to show you nearby stores",
       "seeNearbyStoreText":"See Nearby Stores",
       "checkStoreStockText": "Check store stock",
-      "storeInfoText": "Store Info"
+      "storeInfoText": "Store Info",
+      "findInStoreText": "Find in Store",
+      "stockCheckDescText": "Need your item today? Find your nearest store and pick up in selected stores",
+      "findStockText": "Find Stock"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -984,6 +988,7 @@
       "orderPlacedOnText": "Order placed on",
       "onText": "on",
       "milesText": "miles",
+      "mileText":"mile",
       "normalOpeningHoursHeadingText": "Normal Opening Hours",
       "serviceText": "This Information will help us to improve our service",
       "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
@@ -1149,6 +1154,7 @@
       "cartItemMaxAddedErrorMsg": "Cart item limit reached. Please remove some items and try again.",
       "addressAddedSuccessfullyMsg": "New address added successfully",
       "addressUpdatedSuccessfullyMsg": "Address updated successfully",
+      "noStoresErrorMsg": "We're expanding to your area soon. Stay tuned!",
       "address": {
         "postCodeNotServicableMsg": "Postcode non-serviceable",
         "postCodeNumMsg": "Postcode should contain only digits",
