@@ -43,8 +43,8 @@ const StockCheckSection = ({
                 />
                 <button
                   type="submit"
-                  disabled={stockCheckFormik.isSubmitting}
-                  className='rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80'
+                  disabled={isLoading}
+                  className={`${isLoading && 'cursor-not-allowed'} rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80`}
                 >
                   { isLoading ? <LoadingDots /> : translate('label.store.findStockText')}
                 </button>

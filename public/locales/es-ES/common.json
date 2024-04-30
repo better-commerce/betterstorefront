@@ -770,7 +770,8 @@
       "findInStoreText": "Buscar en la tienda",
       "stockCheckDescText": "¿Necesitas tu artículo hoy? Encuentra tu tienda más cercana y recoge en tiendas seleccionadas.",
       "findStockText": "Buscar stock",
-      "checkStoreStockText": "Verificar stock de la tienda"
+      "checkStoreStockText": "Verificar stock de la tienda",
+      "storeNameText": "Nombre de la tienda"
     },
     "thankyou": {
       "summaryText": "Resumen",
@@ -1084,7 +1085,8 @@
       "line3Text": "Línea 3 (opcional)",
       "addMsg3Text": "Agregar mensaje 3",
       "addMsg2Text": "Agregar mensaje 2",
-      "addMsg1Text": "Agregar mensaje 1"
+      "addMsg1Text": "Agregar mensaje 1",
+      "distanceText": "Distance"
     },
     "message": {
       "requiredTextMsg": "Requerido",

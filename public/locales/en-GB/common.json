@@ -774,7 +774,8 @@
       "storeInfoText": "Store Info",
       "findInStoreText": "Find in Store",
       "stockCheckDescText": "Need your item today? Find your nearest store and pick up in selected stores",
-      "findStockText": "Find Stock"
+      "findStockText": "Find Stock",
+      "storeNameText": "Store Name"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -1089,7 +1090,8 @@
       "line3Text": "Line 3 (optional)",
       "addMsg3Text": "Add message 3",
       "addMsg2Text": "Add message 2",
-      "addMsg1Text": "Add message 1"
+      "addMsg1Text": "Add message 1",
+      "distanceText": "Distance"
     },
     "message": {
       "authenticationFailedText": "Email Authentication failed",
