@@ -67,7 +67,9 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
           }
           <div className="container flex justify-between mx-auto">
             {isMobile &&
-              <div className="flex items-center flex-1"> <MenuBar navItems={config} featureToggle={featureToggle} /> </div>
+              <div className="flex items-center flex-1">
+                <MenuBar navItems={config} featureToggle={featureToggle} />
+              </div>
             }
             <div className="flex items-center lg:flex-1">
               <Link href="/" passHref>

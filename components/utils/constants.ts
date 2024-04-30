@@ -5,13 +5,6 @@ import { toNumber } from 'lodash'
 export const HOMEPAGE_SLUG = `/`
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
-export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
-export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
-export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
-export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
-  '/api/basket/update-checkout2-address'
-export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY =
-  '/api/delivery/click-collect-store'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
@@ -71,10 +64,20 @@ export const REFERRAL_REFEREE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VER
 export const REFERRAL_BY_USERNAME = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-username`
 export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/search`
 export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/vouchers`
+
+// Membership API endpoints
+export const MEMBERSHIP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership`
+
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
-export const NEXT_GET_COUNTRIES = '/api/countries'
+
 //LOCAL ENDPOINTS
+export const NEXT_GET_COUNTRIES = '/api/countries'
+export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
+export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
+export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
+export const NEXT_UPDATE_CHECKOUT2_ADDRESS = '/api/basket/update-checkout2-address'
+export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY = '/api/delivery/click-collect-store'
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -248,11 +251,6 @@ export const ENGAGE_QUERY_INTEREST = `${process.env.ENGAGE_QUERY_BASE_URL}/inter
 export const ENGAGE_QUERY_COUPON = `${process.env.ENGAGE_QUERY_BASE_URL}/coupon`
 export const ENGAGE_QUERY_SEARCH = `${process.env.ENGAGE_QUERY_BASE_URL}/search`
 export const ENGAGE_QUERY_ANNOUNCEMENT = `${process.env.ENGAGE_QUERY_BASE_URL}/announcement`
-
-
-// Membership API endpoints
-export const MEMBERSHIP_PLANS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership/plans`
-export const MEMBERSHIP_BENEFITS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership/benefits`
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY

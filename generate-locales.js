@@ -65,11 +65,21 @@ const getToken = async () => {
 }
 
 const getMicrosites = () => {
-  const defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
+  let defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
 
   const microSitesHandler = async () => {
     const token = await getToken()
-    const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
+    const INFRA_URL = new URL(INFRA_ENDPOINT, BASE_URL).href
+    // const token = await getToken()
+    const { data } = await axios({
+      url: `${INFRA_URL}`,
+      method: 'get',
+      headers: {
+        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    /*const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
     const req = {
       method: 'get',
       url: url,
@@ -83,14 +93,25 @@ const getMicrosites = () => {
     if (NEXT_PUBLIC_API_CACHING_LOG_ENABLED) {
       // If global setting for logging is TURNED ON
       writeFetcherLog(req, data)
+    }*/
+
+    const regionalSettingsConfigKeys = data?.result?.configSettings?.find(x => x?.configType === "RegionalSettings")?.configKeys || []
+    if (regionalSettingsConfigKeys?.length) {
+      const defaultLanguageCode = regionalSettingsConfigKeys?.find(x => x?.key === "RegionalSettings.DefaultLanguageCode")
+      if (defaultLanguageCode) {
+        const defaultLanguageCulture = data?.result?.languages?.find(x => x?.languageCode === defaultLanguageCode)?.languageCulture || ""
+
+        if (defaultLanguageCulture) {
+          defaultLocale = defaultLanguageCulture
+        }
+      }
     }
 
     let locales = {
-      locales: data?.result?.length
-        ? [...new Set(data?.result?.map((i) => i.defaultLangCulture))]
+      locales: data?.result?.languages?.length
+        ? [...new Set(data?.result?.languages?.map((i) => i.languageCulture))]
         : [defaultLocale],
       defaultLocale: defaultLocale,
-      localizations: data?.result?.length ? data?.result?.map(x => ({ culture: x?.defaultLangCulture, countryName: x?.name, countryCode: x?.countryCode, languageCode: x?.defaultLangCode, languageName: x?.defaultLangCode, currencyCode: x?.defaultCurrencyCode, isActive: x?.isActive, })) : []
     }
     // fs.writeFileSync(__dirname.join('/'))
     fs.writeFileSync(
