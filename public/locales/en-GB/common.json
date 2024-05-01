@@ -108,7 +108,8 @@
       "bulkOrderText": "Bulk Order",
       "quickOrderText": "Quick Order",
       "lineByLineText": "Line by Line",
-      "copyPasteText": "Copy & Paste"
+      "copyPasteText": "Copy & Paste",
+      "entryFieldsTableHeaderText": "S.No|Stock Code|Quantity"
     },
     "cancelReason": {
       "cancelTitle": "Why are you cancelling this",
