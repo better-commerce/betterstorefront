@@ -67,6 +67,7 @@ export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/co
 
 // Membership API endpoints
 export const MEMBERSHIP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership`
+export const NEXT_MEMBERSHIP_BENEFITS = '/api/membership/benefits'
 
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`

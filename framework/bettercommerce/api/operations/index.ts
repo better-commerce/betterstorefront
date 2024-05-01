@@ -44,3 +44,4 @@ export { default as getCompareProductAttributes } from './get-compare-product-at
 export { default as getReviewSummary } from './get-review-summary'
 export { default as getMembershipPlans} from './get-membership-plans'
 export { default as getPromotion } from './get-promotion'
+export { default as getMembershipBenefits } from './get-membership-benifits'
