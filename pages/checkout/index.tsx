@@ -902,6 +902,16 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     }
   }, [])
 
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+      }
+    }
+  }
+
   useEffect(() => {
     if (basket?.lineItems?.length == 0) {
       router.push('/cart')
@@ -1066,7 +1076,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
       {isMobile || isIPadorTablet ? (
         <div className="justify-start w-full bar">
-          <BasketDetails basket={basket} deviceInfo={deviceInfo} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} />
+          <BasketDetails basket={basket} deviceInfo={deviceInfo} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} />
         </div>
       ) : (
         <></>
@@ -1099,7 +1109,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           <></>
         ) : (
           <div className="justify-start min-h-screen p-8 bg-gray-100 border-gray-300 border-x basket-container top-14">
-            <BasketDetails basket={basket} deviceInfo={deviceInfo} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}/>
+            <BasketDetails basket={basket} deviceInfo={deviceInfo} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} />
           </div>
         )}
       </div>

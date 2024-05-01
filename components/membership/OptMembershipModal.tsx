@@ -9,7 +9,7 @@ import { useUI } from "@components/ui";
 import Router from 'next/router'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
-const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defaultDisplayMembership }:any) => {
+const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defaultDisplayMembership , refreshBasket=() => {} }:any) => {
   if (!open) return null
   const translate = useTranslation()
   const [selectedPlan, setSelectedPlan] = useState(null)
@@ -42,8 +42,10 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           'ADD',
           { plan }
         )
+          if(refreshBasket){
+            refreshBasket()
+          }
           setOpenOMM(false)
-          Router.reload()
       },
     }
     return buttonConfig
