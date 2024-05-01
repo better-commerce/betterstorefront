@@ -107,7 +107,8 @@
       "bulkOrderText": "Pedido al por mayor",
       "quickOrderText": "Pedido rápido",
       "lineByLineText": "Línea por línea",
-      "copyPasteText": "Copiar y pegar"
+      "copyPasteText": "Copiar y pegar",
+      "entryFieldsTableHeaderText": "Número de Serie|Código de Stock|Cantidad"
     },
     "cancelReason": {
       "cancelTitle": "¿Por qué estás cancelando esto?",

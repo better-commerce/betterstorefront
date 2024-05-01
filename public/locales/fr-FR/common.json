@@ -74,7 +74,8 @@
         "bulkOrderText": "Commande en gros",
         "quickOrderText": "Commande rapide",
         "lineByLineText": "Ligne par ligne",
-        "copyPasteText": "Copier et coller"
+        "copyPasteText": "Copier et coller",
+        "entryFieldsTableHeaderText": "N°|Code d'action|Quantité"
       },
       "cancelReason": {
         "cancelTitle": "Pourquoi annulez-vous ceci",

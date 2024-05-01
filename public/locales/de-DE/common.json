@@ -108,7 +108,8 @@
         "bulkOrderText": "Großbestellung",
         "quickOrderText": "Schnellbestellung",
         "lineByLineText": "Zeile für Zeile",
-        "copyPasteText": "Kopieren & Einfügen"
+        "copyPasteText": "Kopieren & Einfügen",
+        "entryFieldsTableHeaderText": "Nr.|Artikelnummer|Menge"
       },
       "cancelReason": {
         "cancelTitle": "Warum stornieren Sie dies",
