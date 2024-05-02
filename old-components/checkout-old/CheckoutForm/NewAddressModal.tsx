@@ -287,11 +287,11 @@ export const DEFAULT_ADDRESS_VALUES = {
           //     is: (label: string) => {
           //         return matchStrings(categoryName, "Other", true);
           //     },
-          //     then: Yup.string().min(3, Messages.Validations.AddNewAddress["ADDRESS_TYPE_MIN_LENGTH"])
-          //         .required(Messages.Validations.AddNewAddress["ADDRESS_TYPE_REQUIRED"])
+          //     then: Yup.string().min(3, Messages.Validations.addNewAddressText["ADDRESS_TYPE_MIN_LENGTH"])
+          //         .required(Messages.Validations.addNewAddressText["ADDRESS_TYPE_REQUIRED"])
           //         .matches(
           //             Messages.Validations.RegularExpressions.ADDRESS_LABEL, {
-          //             message: Messages.Validations.AddNewAddress["ADDRESS_TYPE_INPUT"],
+          //             message: Messages.Validations.addNewAddressText["ADDRESS_TYPE_INPUT"],
           //         }).nullable(),
           //     otherwise: Yup.string().nullable(),
           // }),
