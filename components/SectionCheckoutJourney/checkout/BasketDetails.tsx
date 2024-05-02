@@ -1,23 +1,15 @@
-import {
-  NEXT_GET_BASKET_PROMOS,
-  NEXT_REFERRAL_ADD_USER_REFEREE,
-  NEXT_REFERRAL_BY_SLUG,
-  NEXT_REFERRAL_INFO,
-} from '@components/utils/constants'
+import { NEXT_GET_BASKET_PROMOS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
 import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import {
-  ChevronDownIcon,
-  ClipboardIcon,
-  ShoppingCartIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ClipboardIcon, ShoppingCartIcon, XMarkIcon, } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import React, { Fragment, useEffect, useState } from 'react'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/SectionCheckoutJourney/checkout/Summary'
+import MembershipOfferCard from '@components/membership/MembershipOfferCard'
+import OptMembershipModal from '@components/membership/OptMembershipModal'
 import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
 import { useTranslation } from '@commerce/utils/use-translation'
 import SplitDeliveryBasketItems from '../cart/SplitDeliveryBasketItems'
@@ -29,7 +21,7 @@ interface BasketItem {
   price: number
 }
 
-const BasketDetails = ({ basket, deviceInfo }: any) => {
+const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isGuestUser} = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -46,6 +38,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
   })
   const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
+  const [openOMM, setOpenOMM] = useState(false)
   useEffect(() => {
     const fetchReferralPromotion = async () => {
       let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
@@ -212,6 +205,13 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
               <SplitDeliveryBasketItems basket={basket} />
             </div>
           )}
+          {featureToggle?.features?.enableMembership && (
+              <>
+                <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+              </>
+            )
+          }
           {referralAvailable &&
             isGuestUser &&
             basket?.contactDetails?.emailAddress && ( //user?.userEmail && (

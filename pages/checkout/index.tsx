@@ -44,6 +44,7 @@ import cartHandler from '@components/services/cart'
 import {
   matchStrings,
   stringToBoolean,
+  stringToNumber,
   tryParseJson,
 } from '@framework/utils/parse-util'
 import Link from 'next/link'
@@ -57,6 +58,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Cookie } from '@framework/utils/constants'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import commerce from '@lib/api/commerce'
 
 export enum BasketStage {
   CREATED = 0,
@@ -78,7 +80,7 @@ const steps = [
   { key: 'review', label: 'Payment', shouldActiveOn: '' },
 ]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
   const uiContext = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
@@ -900,6 +902,25 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     }
   }, [])
 
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+      }
+    }
+  }
+
+  const basketDetailsProps = {
+    basket,
+    deviceInfo, 
+    allMembershipPlans, 
+    defaultDisplayMembership, 
+    refreshBasket,
+    featureToggle,
+  }
+
   useEffect(() => {
     if (basket?.lineItems?.length == 0) {
       router.push('/cart')
@@ -1064,7 +1085,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
       {isMobile || isIPadorTablet ? (
         <div className="justify-start w-full bar">
-          <BasketDetails basket={basket} deviceInfo={deviceInfo} />
+          <BasketDetails { ...basketDetailsProps }  />
         </div>
       ) : (
         <></>
@@ -1097,7 +1118,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           <></>
         ) : (
           <div className="justify-start min-h-screen p-8 bg-gray-100 border-gray-300 border-x basket-container top-14">
-            <BasketDetails basket={basket} deviceInfo={deviceInfo} />
+            <BasketDetails  { ...basketDetailsProps } />
           </div>
         )}
       </div>
@@ -1116,10 +1137,40 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
+
+  const data = {
+    "SearchText": null,
+    "PricingType": 0,
+    "Name": null,
+    "TermType": 0,
+    "IsActive": 1,
+    "ProductId": EmptyGuid,
+    "CategoryId": EmptyGuid,
+    "ManufacturerId": EmptyGuid,
+    "SubManufacturerId": EmptyGuid,
+    "PlanType": 0,
+    "CurrentPage": 0,
+    "PageSize": 0
+  }
+  let defaultDisplayMembership = {}
+  const { result: allMembershipPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+  if (allMembershipPlans?.length) {
+    const membershipPlan = allMembershipPlans?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership ={ membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+  
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       basketId,
+      allMembershipPlans,
+      defaultDisplayMembership,
     }
   }
 }

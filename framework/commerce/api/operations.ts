@@ -54,6 +54,7 @@ export const OPERATIONS = [
   'getCancelReason',
   'cancelOrder',
   'getReturnReason',
+  'getPromotion',
   'resetCache',
   'logPayment',
   'logActivity',
@@ -252,6 +253,7 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
 
+  getPromotion: {}
   resetCache: {}
   logPayment: {}
   logActivity: {}
