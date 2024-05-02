@@ -98,7 +98,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
                 <div className="p-6 bg-white shadow-lg rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
                   <Tab.Group>
                     <Tab.List className="flex p-1 space-x-1 bg-gray-100 rounded-full dark:bg-slate-700">
-                      {["Language", "Currency"].map((category) => (
+                      {[translateText('common.label.languageText'), translateText('label.navBar.currencyText')].map((category) => (
                         <Tab key={category} className={({ selected }) => classNames("w-full rounded-full py-2 text-sm font-medium leading-5 text-gray-700", "focus:outline-none focus:ring-0", selected ? "bg-white shadow" : "text-gray-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-900/40")} >
                           {category}
                         </Tab>

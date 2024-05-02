@@ -74,7 +74,8 @@
         "bulkOrderText": "Commande en gros",
         "quickOrderText": "Commande rapide",
         "lineByLineText": "Ligne par ligne",
-        "copyPasteText": "Copier et coller"
+        "copyPasteText": "Copier et coller",
+        "entryFieldsTableHeaderText": "N°|Code d'action|Quantité"
       },
       "cancelReason": {
         "cancelTitle": "Pourquoi annulez-vous ceci",
@@ -735,7 +736,13 @@
         "findStoresText": "Trouver des magasins",
         "findStoreNearYouText": "Trouver un magasin près de chez vous",
         "usingLocationToShowStoresText":"Nous utilisons votre emplacement pour vous montrer les magasins à proximité",
-        "seeNearbyStoreText":"Voir les magasins à proximité"
+        "seeNearbyStoreText":"Voir les magasins à proximité",
+        "checkStoreStockText": "Vérifier le stock du magasin",
+        "storeInfoText": "Informations sur le magasin",
+        "findInStoreText": "Trouver en magasin",
+        "stockCheckDescText": "Besoin de votre article aujourd'hui ? Trouvez votre magasin le plus proche et récupérez-le dans les magasins sélectionnés",
+        "findStockText": "Trouver le stock",
+        "storeNameText": "Nom du magasin"        
       },
       "thankyou": {
         "summaryText": "Résumé",
@@ -949,7 +956,8 @@
           "removePersonalisationText": "Supprimer cette personnalisation ?",
           "orderPlacedOnText": "Commande passée le",
           "onText": "sur",
-          "milesText": "miles",
+          "milesText": "milles",
+          "mileText": "mille",
           "normalOpeningHoursHeadingText": "Heures normales d'ouverture",
           "serviceText": "Cette information nous aidera à améliorer notre service",
           "helpAssistanceText": "Nous serons heureux de vous aider. Qu'est-ce qui vous tracasse ?",
@@ -1049,7 +1057,8 @@
           "line3Text": "Ligne 3 (facultatif)",
           "addMsg3Text": "Ajouter un message 3",
           "addMsg2Text": "Ajouter un message 2",
-          "addMsg1Text": "Ajouter un message 1"
+          "addMsg1Text": "Ajouter un message 1",
+          "distanceText": "Distance"
         },
         "message": {
           "authenticationFailedText": "Échec de l'authentification par e-mail",
@@ -1115,6 +1124,7 @@
           "cartItemMaxAddedErrorMsg": "Limite d'articles dans le panier atteinte. Veuillez supprimer certains articles et réessayer.",
           "addressAddedSuccessfullyMsg": "Nouvelle adresse ajoutée avec succès",
           "addressUpdatedSuccessfullyMsg": "Adresse mise à jour avec succès",
+          "noStoresErrorMsg": "Nous nous étendons bientôt à votre région. Restez à l'écoute !",
           "address": {
              "postCodeNotServicableMsg": "Code postal non desservi",
              "postCodeNumMsg": "Le code postal ne doit contenir que des chiffres",

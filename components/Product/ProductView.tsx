@@ -30,6 +30,8 @@ import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
+import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -79,6 +81,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
   const [isEngravingAvailable, setIsEngravingAvailable] = useState<any>(null)
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
+  const [openStoreLocaltorModal, setOpenStockCheckModal] = useState(false)
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
 
@@ -662,6 +665,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       createWishlist()
     } else insertToLocalWishlist()
   }
+
+  const onStoreStockCheck = () => {
+    setOpenStockCheckModal(true)
+  }
+
   const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
@@ -873,6 +881,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {promotions?.promotions?.availablePromotions?.length > 0 && (
           <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
         )}
+        {
+          openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo}/>
+        }
+        <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+          <MyLocationIcon className='h-4 w-4'/>
+          <span className='hover:underline cursor-pointer' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+        </div>
         <div id="add-to-cart-button">
           {isMobile ? (
             <>
