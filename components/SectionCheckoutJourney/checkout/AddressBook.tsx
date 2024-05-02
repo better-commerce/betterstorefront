@@ -102,7 +102,10 @@ const AddressBook: React.FC<AddressBookProps> = ({
       <DeliveryTypeSelection
         basket={basket}
         deliveryTypeMethod={deliveryTypeMethod}
-        setDeliveryTypeMethod={setDeliveryTypeMethod}
+        setDeliveryTypeMethod={(value: any) => {
+          setDeliveryTypeMethod(value)
+          setUseSameForBilling(true)
+        }}
         featureToggle={featureToggle}
         deliveryMethods={deliveryMethods}
       />
