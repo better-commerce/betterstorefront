@@ -8,7 +8,7 @@ import { useUI } from '@components/ui/context'
 import { Guid } from '@commerce/types'
 import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
 
-const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, basketPromos, getBasketPromos, refreshBasket, }: any) => {
+const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, refreshBasket, }: any) => {
 
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
@@ -68,7 +68,6 @@ const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, bas
       try {
         const { data }: any = await axios.post(NEXT_APPLY_PROMOTION, { basketId :basket?.id, promoCode, method, })
         if (data?.result) { if (refreshBasket) { refreshBasket() } } 
-        getBasketPromos(data?.result?.basket?.id)
         return data?.result?.isVaild ?? false
       } catch (error) {
         console.log(error)
@@ -84,7 +83,6 @@ const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, bas
     <ApplyMembershipCard
       basket={basket}
       currencySymbol={currencySymbol}
-      getBasketPromos={getBasketPromos}
       refreshBasket={refreshBasket}
       voucherCount={voucherCount}
       membership = {membership}

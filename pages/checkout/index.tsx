@@ -918,6 +918,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     allMembershipPlans, 
     defaultDisplayMembership, 
     refreshBasket,
+    featureToggle,
   }
 
   useEffect(() => {
