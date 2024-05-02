@@ -9,13 +9,15 @@ import { useUI } from "@components/ui";
 import Router from 'next/router'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
+const FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT = true
+
 const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defaultDisplayMembership , refreshBasket=() => {} }:any) => {
   if (!open) return null
   const translate = useTranslation()
-  const [selectedPlan, setSelectedPlan] = useState(null)
   const { user } = useUI();
   const membershipPlans = allMembershipPlans.sort((a:any, b:any) => a?.displayOrder - b?.displayOrder)
   const currencySymbol = basket?.grandTotal?.currencySymbol
+  const [selectedPlan, setSelectedPlan] = useState(FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT? membershipPlans[0] : null)
 
   let grandTotal =  basket?.grandTotal?.raw?.withTax;
   grandTotal = (grandTotal * defaultDisplayMembership?.membershipPromoDiscountPerc * 1.0 / 100.00)
@@ -68,9 +70,6 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
         <p className="mb-6 text-gray-600">
           {`That's currently a saving of ${moneySaved} on your order today when you become a`}
         </p>
-        <div className="flex justify-center mb-8">
-          <img src="/theme/blue/image/logo.png?fm=webp&h=200" width="60" height="60" alt="Store" className="brand-logo" />
-        </div>
         <h3 className="text-lg font-semibold mb-4">What you get as a member</h3>
         <BenefitItems defaultDisplayMembership={defaultDisplayMembership} />
         <MembershipPlanList
@@ -78,9 +77,10 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           defaultDisplayMembership={defaultDisplayMembership}
           selectedPlan={selectedPlan}
           handlePlanSelection={handlePlanSelection}
+          firstMembershipSelectedAsDefault={FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT}
         />
         <div className="flex justify-between mt-8">
-        <Button className={'w-full py-3 text-sm text-white !bg-black rounded-full hover:!bg-purple-900'} title={buttonConfig.title} action={() => buttonConfig.action(selectedPlan)} buttonType={buttonConfig.type || 'cart'} />
+        <Button className={'flex items-center justify-center btn btn-secondary w-full !font-medium'} title={buttonConfig.title} action={() => buttonConfig.action(selectedPlan)} buttonType={buttonConfig.type || 'cart'} />
         </div>
       </div>
     </div>
