@@ -172,7 +172,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <div className="relative overflow-hidden nc-PageHome">
+      <div className="relative overflow-hidden nc-PageHome homepage-main">
         <SectionHero2 data={pageContents?.banner} />
         <div className="mt-14 sm:mt-24 lg:mt-32">
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
@@ -184,7 +184,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
           <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
-          <div className='flex flex-col w-full'>
+          <div className='flex flex-col w-full engage-product-card-section'>
             <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

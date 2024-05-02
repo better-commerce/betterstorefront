@@ -46,7 +46,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     const translate = useTranslation()
     return (
       <>
-        <div className="fixed inset-x-0 top-0 z-20 w-full py-2 border-b sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90">
+        <div className="fixed inset-x-0 top-0 z-20 w-full py-2 border-b sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 header-main-section">
           {!isMobile &&
             <div className="container justify-between hidden mx-auto sm:flex">
               <div className="promotion-banner mob-marquee"></div>
@@ -56,7 +56,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                   <>
                     <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
                     <div className="flow-root w-10 px-2 sm:w-12">
-                      <div className="flex justify-center flex-1 mx-auto">
+                      <div className="flex justify-center flex-1 mx-auto toggle-switch-section">
                         <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
                       </div>
                     </div>
@@ -67,21 +67,21 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
           }
           <div className="container flex justify-between mx-auto">
             {isMobile &&
-              <div className="flex items-center flex-1">
+              <div className="flex items-center flex-1 menubar-section">
                 <MenuBar navItems={config} featureToggle={featureToggle} />
               </div>
             }
-            <div className="flex items-center lg:flex-1">
+            <div className="flex items-center lg:flex-1 header-logo-section">
               <Link href="/" passHref>
                 <Logo className="flex-shrink-0" />
               </Link>
             </div>
             {!isMobile &&
-              <div className="flex-[2] justify-center mx-4 lg:flex">
+              <div className="flex-[2] justify-center mx-4 lg:flex desktop-header-navigation">
                 <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
               </div>
             }
-            <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
+            <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100 header-icons-section">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
