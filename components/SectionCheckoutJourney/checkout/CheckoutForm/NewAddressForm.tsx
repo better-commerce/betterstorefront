@@ -17,7 +17,7 @@ import {
 } from '@framework/utils/app-util'
 import { AddressPageAction } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
-import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
+import { useNewAddressFormFields } from './NewAddressModal'
 import { IFormProps } from 'framework/contracts/IFormProps'
 import { INewAddressFormProps } from 'framework/contracts/address/INewAddressFormProps'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -43,6 +43,8 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
       ? defaultValues
       : initialValues
     : initialValues
+  
+  const NEW_ADDRESS_FORM_FIELDS = useNewAddressFormFields()
 
   const onLookup = async (target: any) => {
     //const target: any = ev?.target;
