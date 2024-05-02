@@ -21,7 +21,7 @@ interface BasketItem {
   price: number
 }
 
-const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket }: any) => {
+const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isGuestUser} = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -205,8 +205,13 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
               <SplitDeliveryBasketItems basket={basket} />
             </div>
           )}
-          <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} basketPromos={basketPromos} getBasketPromos={getBasketPromos} refreshBasket={refreshBasket} />
-          <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+          {featureToggle?.features?.enableMembership && (
+              <>
+                <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+              </>
+            )
+          }
           {referralAvailable &&
             isGuestUser &&
             basket?.contactDetails?.emailAddress && ( //user?.userEmail && (
