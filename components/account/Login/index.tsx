@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
-import Link from 'next/link'
-
 import Form from '@old-components/customer'
 import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
@@ -110,9 +108,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
                   <SocialSignInLinks isLoginSidebarOpen={isLoginSidebarOpen} containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full'}`} redirectUrl={redirectUrl} pluginSettings={pluginConfig} />
                 </div>
                 <div className="relative text-center">
-                  <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-                    OR
-                  </span>
+                  <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900"> OR </span>
                   <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
                 </div>
               </>

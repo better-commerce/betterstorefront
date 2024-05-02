@@ -21,7 +21,7 @@ export const GridForm: FC<IGridFormProps> = ({
   type = 'bulkAddViaGrid',
 }: IGridFormProps) => {
   const { headerValues, schema, initialValues, config } = VALUES_MAP[type]
-  const translate = useTranslation();
+  const translate = useTranslation()
   const onAddMoreOrderPads = (
     e: any,
     field: any,
@@ -48,6 +48,8 @@ export const GridForm: FC<IGridFormProps> = ({
     // call formik onChange method
     field.onChange(e)
   }
+
+  const entryFieldsTableHeaderText = translate('label.bulkAdd.entryFieldsTableHeaderText')
 
   return (
     <Formik
@@ -86,11 +88,17 @@ export const GridForm: FC<IGridFormProps> = ({
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-100">
                 <tr key={'header'}>
-                  {headerValues.map((x: any, idx: number) => (
-                    <th key={`th-${idx}`} scope="col" className={x.className}>
-                      {x.text}
-                    </th>
-                  ))}
+                  {headerValues.map((x: any, idx: number) => {
+                    let text = x?.text
+                    if (type === 'bulkAddViaGrid') {
+                      text = entryFieldsTableHeaderText?.split('|')[idx]
+                    }
+                    return (
+                      <th key={`th-${idx}`} scope="col" className={x.className}>
+                        {text}
+                      </th>
+                    )
+                  })}
                 </tr>
               </thead>
               <tbody className="bg-white">
@@ -112,7 +120,10 @@ export const GridForm: FC<IGridFormProps> = ({
                             {i + 1}
                           </td>
                           {config?.map((x: any, idx: number) => (
-                            <td key={`inner-${idx}`} className="px-3 py-4 text-sm text-gray-500 border-b border-slate-200 whitespace-nowrap" >
+                            <td
+                              key={`inner-${idx}`}
+                              className="px-3 py-4 text-sm text-gray-500 border-b border-slate-200 whitespace-nowrap"
+                            >
                               <Field
                                 key={`field_${i}_${x.key}`}
                                 name={`orderPads.${i}.${x.key}`}

@@ -122,7 +122,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
             </Link>
           </Disclosure>
         }
-        {!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature &&
+        {!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature &&
           <Disclosure as="li" className="py-4 text-black border bg-slate-50 dark:text-white border-slate-200 rounded-xl">
             <div className="flex w-full items-center pb-2.5 px-4 font-semibold tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" >
               My Fashion Store

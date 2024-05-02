@@ -33,7 +33,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   let classTop = 'top-full'
-  if (!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature) {
+  if (!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature) {
     classTop = 'top-[82px]'
   }
   const renderMagnifyingGlassIcon = () => {

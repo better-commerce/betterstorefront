@@ -6,6 +6,7 @@ import { Formik, Form, ErrorMessage, Field } from 'formik'
 
 // Other Imports
 import { VALUES_MAP } from '.'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ICSVFormProps {
   readonly onCSVSubmit: any
@@ -18,6 +19,7 @@ export const CSVForm: FC<ICSVFormProps> = ({
   addToBasketBtn,
   type = 'bulkAddViaCSV',
 }: ICSVFormProps) => {
+  const translate = useTranslation()
   const { schema, initialValues } = VALUES_MAP[type]
 
   return (
@@ -30,15 +32,14 @@ export const CSVForm: FC<ICSVFormProps> = ({
       {({ errors, values, touched, setValues }) => (
         <Form>
           <label className="font-bold text-sm leading-light">
-            Copy and paste your file in following format:
-            STOCKCODE[comma]Quantity
+            {translate('label.bulkAdd.csvUsageText')}
           </label>
           <Field
             name="data"
             component="textarea"
             rows={6}
             cols={12}
-            placeholder="Copy and paste your file in following format: STOCKCODE[comma]Quantity"
+            placeholder={translate('label.bulkAdd.csvUsageText')}
             className="p-4 rounded-md bg-white border text-sm w-full border-gray-300"
           />
           <ErrorMessage
