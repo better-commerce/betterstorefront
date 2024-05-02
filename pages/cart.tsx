@@ -625,7 +625,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config , allMembershipPla
                                   }
                                 </div>
                                 <div className="relative flex items-center justify-between w-full mt-3 sm:hidden">
-                                  {product?.price?.raw?.withTax > 0 ?
+                                  {!product?.isMembership && product?.price?.raw?.withTax > 0 ?
                                     <div className='relative block text-left'>
                                       <div className='inline-block'>
                                         <div className="flex items-center justify-around text-gray-900">
@@ -645,7 +645,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config , allMembershipPla
                                   <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} />
                                 </div>
                               </div>
-                              {product?.price?.raw?.withTax !== 0 &&
+                              {!product?.isMembership && product?.price?.raw?.withTax !== 0 &&
                                 <div className="relative justify-center hidden text-center sm:flex">
                                   <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
                                   <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">

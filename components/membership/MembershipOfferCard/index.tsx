@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useUI } from '@components/ui/context'
 import { Guid } from '@commerce/types'
 import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
+import { logError } from '@framework/utils/app-util'
 
 const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, refreshBasket, }: any) => {
 
@@ -37,7 +38,7 @@ const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, ref
             })
           }
         } catch (error) {
-          console.error('Error fetching membership benefits:', error)
+          logError(error)
         }
       }
       fetchMemberShip()
@@ -70,7 +71,7 @@ const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, ref
         if (data?.result) { if (refreshBasket) { refreshBasket() } } 
         return data?.result?.isVaild ?? false
       } catch (error) {
-        console.log(error)
+        logError(error)
       }
       return false
     }
