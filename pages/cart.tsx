@@ -10,6 +10,9 @@ import { GetServerSideProps } from 'next'
 import cookie from 'cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import commerce from '@lib/api/commerce'
+import MembershipOfferCard from '@components/membership/MembershipOfferCard'
+import OptMembershipModal from '@components/membership/OptMembershipModal'
 
 // Component Imports
 import Layout from '@components/Layout/Layout'
@@ -21,10 +24,10 @@ import cartHandler from '@components/services/cart'
 import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
-import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { vatIncluded } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
+import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -34,7 +37,8 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
-function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
+
+function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
@@ -49,24 +53,21 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       )?.value || ''
   )
 
-  const {
-    setCartItems,
-    cartItems,
-    basketId,
-    setIsSplitDelivery,
-    isSplitDelivery,
-  } = useUI()
-  const { addToCart } = cartHandler()
+  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, } = useUI()
+  const { addToCart , getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
   const [relatedProducts, setRelatedProducts] = useState<any>()
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
   const [splitDeliveryItems, setSplitDeliveryItems] = useState<any>(null)
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
+  const [basket, setBasket] = useState(cart)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
+  const [openOMM, setOpenOMM] = useState(false)
   const [basketPromos, setBasketPromos] = useState<Array<any> | undefined>(
     undefined
   )
@@ -164,6 +165,26 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       }
     )
     setAltRelatedProducts(altRelatedProducts)
+  }
+
+
+  const getBasket = async (basketId: string) => {
+    const basketResult: any = await getCart({
+      basketId,
+    })
+    const isLoggedIn = (user?.userId && user?.userId !== EmptyGuid && !isGuestUser) || false
+    setIsLoggedIn(isLoggedIn)
+    return basketResult
+  }
+
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+      }
+    }
   }
 
   useEffect(() => {
@@ -441,10 +462,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     const asyncHandleItem = async () => {
       let data: any = {
         basketId,
-        productId: product.id,
-        stockCode: product.stockCode,
-        manualUnitPrice: product.manualUnitPrice,
-        displayOrder: product.displayOrderta,
+        productId: product?.id,
+        stockCode: product?.stockCode,
+        manualUnitPrice: product?.manualUnitPrice,
+        displayOrder: product?.displayOrderta,
         qty: -1,
       }
       if (type === 'increase') {
@@ -561,6 +582,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                 <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
+                {featureToggle?.features?.enableMembership && (
+                    <>
+                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                      <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                    </>
+                  )
+                }
                 <div className="mt-2 sm:mt-6">
                   <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
                 </div>
@@ -688,11 +716,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                     </p>
                                   )}
                                   <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
+                                    {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
                                     <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                       {product.qty}
                                     </span>
-                                    <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                    {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
                                   </div>
                                 </div>
 
@@ -850,11 +878,40 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     cookies: context.req.cookies,
   })
 
+  const data = {
+    "SearchText": null,
+    "PricingType": 0,
+    "Name": null,
+    "TermType": 0,
+    "IsActive": 1,
+    "ProductId": EmptyGuid,
+    "CategoryId": EmptyGuid,
+    "ManufacturerId": EmptyGuid,
+    "SubManufacturerId": EmptyGuid,
+    "PlanType": 0,
+    "CurrentPage": 0,
+    "PageSize": 0
+  }
+  let defaultDisplayMembership = {}
+  const { result: allMembershipPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+  if (allMembershipPlans?.length) {
+    const membershipPlan = allMembershipPlans?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership ={ membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],
+      allMembershipPlans,
+      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }
