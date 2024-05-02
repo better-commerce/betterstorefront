@@ -134,7 +134,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
       head: (
         <BuildingStorefrontIcon className="w-6 h-6 text-gray-500"/>
       ),
-      isEnable: featureToggle?.features?.enablemystoreFeature
+      isEnable: featureToggle?.features?.enableMyStoreFeature
     },
     {
       href: '/',

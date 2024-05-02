@@ -57,7 +57,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
     setNextPageTitle(title);
   }, [router]);
   let classTop = 'top-full'
-  if (!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature) {
+  if (!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature) {
     classTop = 'top-[82px]'
   }
   const renderMagnifyingGlassIcon = () => {
@@ -114,7 +114,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               <CartDropdown />
             </div>
           </div>
-          {!isGuestUser && user.userId && featureToggle?.features?.enablemystoreFeature ? (
+          {!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature ? (
             <>
               <div className="flex-col hidden w-full bg-white border-t border-slate-100 sm:block">
                 <ul className="container flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-6">
