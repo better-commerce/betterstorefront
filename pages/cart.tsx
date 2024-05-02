@@ -716,11 +716,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                     </p>
                                   )}
                                   <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
+                                    {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
                                     <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                       {product.qty}
                                     </span>
-                                    <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                    {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
                                   </div>
                                 </div>
 
