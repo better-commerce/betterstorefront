@@ -43,7 +43,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
   const MyCollectionCard = cardStyle === "style1" ? CollectionCard : CollectionCard2;
 
   return (
-    <div className={`nc-SectionSliderLargeProduct ${className}`}>
+    <div className={`nc-SectionSliderLargeProduct large-product-slider ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {heading?.map((h: any, hIdx: number) => (
           <div key={hIdx}>
@@ -54,7 +54,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
             {data?.map((product: any, index: number) => (
-              <li className={`glide__slide`} key={index}>
+              <li className={`glide__slide collection-card-section`} key={index}>
                 <MyCollectionCard
                   name={product?.newlookbook_name}
                   price={product?.newlookbook_price}
