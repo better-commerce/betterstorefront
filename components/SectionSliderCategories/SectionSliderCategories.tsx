@@ -58,7 +58,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
   }, [sliderRef]);
 
   return (
-    <div className={`nc-SectionSliderCategories ${className}`}>
+    <div className={`nc-SectionSliderCategories category-slider-section ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {heading?.map((h: any, hIdx: number) => (
           <div key={hIdx}>
@@ -70,7 +70,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
-              <li key={index} className={`glide__slide ${itemClassName}`}>
+              <li key={index} className={`glide__slide category-card ${itemClassName}`}>
                 <CardCategory2 featuredImage={item.departments_image} name={item?.departments_name} desc={item?.departments_subtitle} link={item?.departments_link} bgClass={item?.color} />
               </li>
             ))}

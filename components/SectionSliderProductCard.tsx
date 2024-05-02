@@ -31,7 +31,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
   }, [sliderRef]);
 
   return (
-    <div className={`nc-SectionSliderProductCard ${className}`}>
+    <div className={`nc-SectionSliderProductCard product-card-slider ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {heading?.map((h: any, iIdx: number) => (
           <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText={h?.newarrivalheading_subtitle} hasNextPrev >
@@ -41,7 +41,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
-              <li key={index} className={`glide__slide ${itemClassName}`}>
+              <li key={index} className={`glide__slide product-card-item ${itemClassName}`}>
                 <ProductCard data={item} />
               </li>
             ))}

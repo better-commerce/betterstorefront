@@ -455,7 +455,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                   onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="p-4 font-semibold text-center cursor-pointer text-orange button uppercase"
                 >
-                  {translate('label.addressBook.addNewAddress')}{' '}
+                  {translate('label.addressBook.addNewAddressText')}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
                     <i className="sprite-icon icon-location-orange"></i>
                   </span>
@@ -508,10 +508,10 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
                       className="w-full p-4 font-semibold text-center text-black border border-gray-200 cursor-pointer"
                     >
                       <span className="hidden sm:inline-block">
-                        {translate('label.addressBook.addNewAddress')}{' '}
+                        {translate('label.addressBook.addNewAddressText')}{' '}
                       </span>
                       <span className="inline-block text-sm sm:hidden">
-                        {translate('label.addressBook.addNewAddress')} {' '}
+                        {translate('label.addressBook.addNewAddressText')} {' '}
                       </span>
                       <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                         <i className="sprite-icon icon-location-orange"></i>
@@ -535,7 +535,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
             }}
             onCloseModal={closeNewAddressModal}
             isRegisterAsGuestUser={isRegisterAsGuestUser()}
-            btnTitle="Save Address"
+            btnTitle={translate('label.addressBook.saveAddressBtnText')}
           />
         </main>
       )}

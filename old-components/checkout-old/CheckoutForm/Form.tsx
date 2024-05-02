@@ -350,7 +350,7 @@ export default function AddressForm({
                   onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-2 text-sm font-medium text-black uppercase border border-black rounded-md hover:bg-black hover:text-white sm:w-full"
                 >
-                  {translate('label.addressBook.addNewAddress')}
+                  {translate('label.addressBook.addNewAddressText')}
                 </button>
                 {/* {!!closeEditMode && (
                 <button
