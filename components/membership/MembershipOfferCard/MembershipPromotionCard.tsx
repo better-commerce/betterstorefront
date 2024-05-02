@@ -21,7 +21,7 @@ const MembershipPromotionCard = ({ moneySaved, defaultDisplayMembership, lowestM
         </p>
       </div>
       <div className="flex justify-center mt-6">
-        <button onClick={handleOptMembershipModal} className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
+        <button onClick={handleOptMembershipModal} className="flex items-center justify-center btn btn-secondary w-full !font-medium">
           Join now
         </button>
       </div>
