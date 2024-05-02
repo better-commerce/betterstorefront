@@ -10,7 +10,7 @@ import { useUI } from '@components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
 // import MyOrders from '@old-components/account/MyOrders'
-import MyOrders from '@components/account/Orders/MyOrders'
+import MyMembership from '@components/membership/MyMembership'
 import { matchStrings } from '@framework/utils/parse-util'
 import axios from 'axios'
 import {
@@ -19,13 +19,13 @@ import {
   NEXT_GET_ORDER_DETAILS,
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
-import SideMenu from '@old-components/account/MyAccountMenu'
+import SideMenu from '@components/account/MyAccountMenu'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 const PAGE_SIZE = 10
 
-function MyAccount({ deviceInfo, featureToggle }: any) {
+function Membership({ deviceInfo , featureToggle }: any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
@@ -41,7 +41,7 @@ function MyAccount({ deviceInfo, featureToggle }: any) {
   const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
   const [active, setActive] = useState(false)
   const [pageNumber, setPageNumber] = useState<number>(1)
-  const currentOption = translate('label.order.myOrdersText')
+  const currentOption = translate('label.membership.membershipText')
 
   useEffect(() => {
     if (allOrdersFetched) {
@@ -192,15 +192,9 @@ function MyAccount({ deviceInfo, featureToggle }: any) {
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>
           <div className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
-            <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.order.orderHistory')}</h2>
+            <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.membership.myMembershipText')}</h2>
             <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
-              <MyOrders
-                allOrders={allOrders}
-                handleInfiniteScroll={handleInfiniteScroll}
-                deviceInfo={deviceInfo}
-                isShowDetailedOrder={isShowDetailedOrder}
-                setIsShowDetailedOrder={setIsShowDetailedOrder}
-              />
+                <MyMembership/>
             </div>
           </div>
         </div>
@@ -209,7 +203,7 @@ function MyAccount({ deviceInfo, featureToggle }: any) {
   )
 }
 
-MyAccount.LayoutAccount = LayoutAccount
+Membership.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.Page
 
@@ -222,4 +216,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(withAuth(Membership), PAGE_TYPE, true, LayoutAccount)
