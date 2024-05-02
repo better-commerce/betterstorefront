@@ -1497,7 +1497,7 @@ p {
 }
 
 .bg-banner{
-  background-color: #ecfccb;
+  background-color: #a2abcd;
 }
 
 .comma:last-child .s-icon{
@@ -1570,13 +1570,6 @@ p {
   }
 }
 
-.container {
-  max-width: 1562px;
-  width: 100%;
-  margin: 0 auto;
-  padding-left: 15px;
-  padding-right: 15px;
-}
 .checkout-input-field {
   display: block;
   height: 3rem;
@@ -1666,9 +1659,183 @@ p {
       font-size: 135px !important;
   }
 }
+
 .border-r{
   border-right-width: 1px;
 }
+
 .icon-text-black .text-gray-500{
   color: #000 !important;
+}
+
+
+/*==================== UPDATE SITE THEME CSS =======================*/
+
+@media screen and (min-width:1250px) { 
+  .container {
+    max-width: 100% !important;
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 65px !important;
+    padding-right: 65px !important;
   }
+}
+.container {
+  max-width: 1562px;
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.theme-container .sub-menu > div {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.theme-container .sub-menu > div .container {
+  background: #FFFFFF !important;
+  min-height: 400px;
+}
+
+.theme-search-bar {
+  background: #f4f6f9;
+  border: 1px solid #f4f6f9;
+  width: 100% !important;
+  min-width: 500px !important;
+  min-height: 52px !important;
+  justify-content: end !important;
+  padding: 0px 15px !important;
+}
+
+.theme-search-bar.theme-search-bar-icon{
+  justify-content: end !important;
+  position: relative;
+}
+
+.theme-search-bar.theme-search-bar-icon::before{
+  position: absolute;
+  left: 5px;
+  top: 14px;
+  content: "Search items...";
+  color: #959595;
+  font-size: 16px;
+}
+
+.theme-pt-3 {
+  padding-top: 1.5rem;
+}
+
+.theme-top {
+  padding-top: 9.5rem !important;
+}
+
+.theme-top .nc-Navigation{
+  display: flex;
+  gap: 30px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.theme-top .nc-Navigation .lg\:text-\[15px\]{
+  font-size: 17px !important;
+  color: #000000 !important;
+}
+
+
+.theme-container .sub-menu {
+  max-width: 90% !important;
+  margin: 0 auto !important;
+}
+.theme-top .nc-SectionHero2Item__left{
+  float: left;
+}
+.theme-top .banner-image-container{
+    max-width: 30rem;
+    background: #606988;
+    right: 5rem;
+    bottom: -3rem;
+    top: 4rem;
+    border-radius: 30px;
+}
+
+.theme-top .banner-image-container img{
+    border-radius: 30px;
+}
+
+.theme-top .nc-SectionHero2Item__subheading,
+.theme-top .nc-SectionHero2Item__heading{
+  color: #FFFFFF !important;
+}
+
+@media screen and (min-width:1580px) {  
+  .theme-top .nc-SectionSliderProductCard{
+    background-color: #e7e7e7 !important;
+    padding: 50px !important;
+    margin: 0 -65px !important;
+  }
+
+  .theme-container .sub-menu {
+    max-width: 80% !important;
+  }
+
+  .theme-top .banner-image-container{
+      max-width: 40rem !important;
+      background: #606988;
+      right: 5rem;
+      bottom: -5rem;
+      top: 6rem;
+      border-radius: 30px;
+  }
+}
+
+.td-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: top 0.5s;
+  z-index: 1000;
+}
+
+.td-visible {
+  top: -170px !important;
+}
+
+.theme-top .nc-SectionSliderProductCard{
+  background-color: #e7e7e7 !important;
+  padding: 50px 115px !important;
+  margin: 0 -65px !important;
+}
+
+.theme-top:has(.td-visible){
+  padding-top: 0rem !important;
+}
+
+.nc-SectionHero2Item__image{
+  object-fit: cover !important;
+  object-position: top center !important;
+  border-radius: 20px !important;
+}
+
+.banner-prev {
+  inset-inline-start: -0.4rem !important;
+}
+
+.banner-next {
+  inset-inline-end: -0.4rem !important;
+}
+
+.banner-prev button, .banner-next button {
+  background-color: #ffffff !important;
+  height: 120px !important;
+  width: 60px !important;
+  border-radius: 10px !important;
+  left: 0;
+  right: 0;
+  inset-inline-start: 0rem !important;
+  inset-inline-end: 0rem !important;
+}
+
+.hero-container{
+  max-width: calc(100% - 125px) !important;
+}

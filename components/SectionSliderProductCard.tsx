@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Heading from "@components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
+import { CURRENT_THEME } from "./utils/constants";
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 export interface SectionSliderProductCardProps {
   className?: string;
@@ -17,9 +18,14 @@ export interface SectionSliderProductCardProps {
 const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
+  let dataPerRow = 4
+  let dataGap = 32
+  if (CURRENT_THEME == "green") {
+    dataPerRow = 5.5
+  }
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+      perView: dataPerRow, gap: 32, bound: true, breakpoints: { 1280: { perView: dataPerRow - 1, }, 1024: { gap: 20, perView: dataPerRow - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
     };
     if (!sliderRef.current) return;
     let slider = new Glide(sliderRef.current, OPTIONS);
