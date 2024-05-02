@@ -30,7 +30,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 
-function ReferralPage() {
+function ReferralPage({featureToggle}:any) {
   const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
   const router = useRouter()
   const [isShow, setShow] = useState(true)
@@ -175,6 +175,7 @@ function ReferralPage() {
               handleClick={handleClick}
               setShow={setShow}
               currentOption={currentOption}
+              featureToggle={featureToggle}
             />
 
             {isLoading ? (

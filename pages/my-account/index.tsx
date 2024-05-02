@@ -17,7 +17,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
-function MyAccount({ deviceInfo }:any) {
+function MyAccount({ deviceInfo, featureToggle }:any) {
   const [isShow, setShow] = useState(true)
   const config = useConfig();
   const { user, deleteUser, isGuestUser, referralProgramActive } = useUI()
@@ -76,6 +76,19 @@ function MyAccount({ deviceInfo }:any) {
         href: '/my-account/my-company',
       })
     }
+    
+    if (featureToggle?.features?.enableMembership) {
+      if (user?.hasMembership) {
+        output.push({
+            type: 'tab',
+            text: translate('label.membership.membershipText'),
+            mtext: translate('label.membership.membershipText'),
+            props: 'membership',
+            href: '/my-account/membership',
+        })
+      }
+    }
+    
     return output
   }, [config])
 

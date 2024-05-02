@@ -71,7 +71,7 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           {`That's currently a saving of ${moneySaved} on your order today when you become a`}
         </p>
         <h3 className="text-lg font-semibold mb-4">What you get as a member</h3>
-        <BenefitItems defaultDisplayMembership={defaultDisplayMembership} />
+        <BenefitItems discountPerc={defaultDisplayMembership?.membershipPromoDiscountPerc} />
         <MembershipPlanList
           membershipPlans={membershipPlans}
           defaultDisplayMembership={defaultDisplayMembership}
