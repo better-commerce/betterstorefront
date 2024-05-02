@@ -119,7 +119,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
               onClick={onAddNewAddress}
             >
-              {translate('label.addressBook.addNewAddress')}
+              {translate('label.addressBook.addNewAddressText')}
             </button>
           </div>
           {noAddressesFound && (

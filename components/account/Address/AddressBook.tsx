@@ -494,10 +494,10 @@ export default function AddressBook({ deviceInfo }: any) {
                     className="w-full p-4 font-semibold text-center text-black border border-gray-200 cursor-pointer"
                   >
                     <span className="hidden sm:inline-block">
-                      {translate('label.addressBook.addNewAddress')}{' '}
+                      {translate('label.addressBook.addNewAddressText')}{' '}
                     </span>
                     <span className="inline-block text-sm sm:hidden">
-                      {translate('label.addressBook.addNewAddress')} {' '}
+                      {translate('label.addressBook.addNewAddressText')} {' '}
                     </span>
                     <span className="hidden ml-2 leading-none align-middle sm:inline-block">
                       <i className="sprite-icon icon-location-orange"></i>
@@ -513,7 +513,7 @@ export default function AddressBook({ deviceInfo }: any) {
                   onClick={(ev: any) => handleOpenNewAddressModal()}
                   className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                 >
-                  {translate('label.addressBook.addNewAddress')}{' '}
+                  {translate('label.addressBook.addNewAddressText')}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
                     <i className="sprite-icon icon-location-orange"></i>
                   </span>
@@ -535,7 +535,7 @@ export default function AddressBook({ deviceInfo }: any) {
           }}
           onCloseModal={closeNewAddressModal}
           isRegisterAsGuestUser={isRegisterAsGuestUser()}
-          btnTitle="Save Address"
+          btnTitle={translate('label.addressBook.saveAddressBtnText')}
         />
       </main>
     </>

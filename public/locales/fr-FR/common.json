@@ -14,6 +14,40 @@
         "freeNextDayDeliveryMethod": "Pour continuer vos achats avec une livraison gratuite le lendemain.",
         "internal-server-error": "Erreur Interne du Serveur"
       },
+      "addressBook": {
+        "deleteAddressConfirmText": "Êtes-vous sûr de vouloir supprimer cette adresse ?",
+        "deleteAddressBtnText": "Supprimer l'adresse",
+        "addressBookTitleText": "Carnet d'adresses",
+        "detailsUpdatedText": "Succès ! Vos détails ont été mis à jour !",
+        "updateFailedText": "Oups ! Quelque chose s'est mal passé !",
+        "BillingAddressHeadingText": "Adresse de facturation",
+        "shippingAddressHeadingText": "Adresse de livraison",
+        "pickupAddressHeadingText": "Adresse de retrait en magasin",
+        "savedAddressesText": "Adresses enregistrées",
+        "emptyAddressBookText": "Oh non ! Votre carnet d'adresses est vide.",
+        "addNewAddressText": "Ajouter une nouvelle adresse",
+        "saveAddressBtnText": "Enregistrer l'adresse",
+        "firstNameText": "Prénom",
+        "lastNameText": "Nom de famille",
+        "emailText": "Adresse e-mail",
+        "townCityText": "Ville",
+        "selectCountryText": "Sélectionnez un pays",
+        "enterPostcodeText": "Entrez le code postal",
+        "addressFinderText": "Outil de recherche d'adresse"
+      },
+      "b2b": {
+        "requestTradingAccountText": "Demander un compte commercial",
+        "companyNameText": "Nom de l'entreprise",
+        "registeredNumberText": "Numéro d'enregistrement",
+        "phoneNumberText": "Numéro de téléphone",
+        "basket": {
+          "createBasketLinkText": "Créer un panier",
+          "deleteBasketLinkText": "Supprimer le panier",
+          "listBasketsHeadingText": "Liste des paniers",
+          "removeBasketHeadingText": "Supprimer ce panier ?",
+          "removeBasketConfirmText": "Êtes-vous sûr de ne pas vouloir ce panier ?"
+        }
+      },      
       "basket": {
         "addToBasketText": "Ajouter au panier",
         "addTocartText": "Ajouter au panier",

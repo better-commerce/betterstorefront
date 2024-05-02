@@ -860,7 +860,7 @@ export default function CheckoutForm({
                 }}
                 onCloseModal={closeNewAddressModal}
                 isRegisterAsGuestUser={isRegisterAsGuestUser()}
-                btnTitle={translate('label.addressBook.saveAddressBtn')}
+                btnTitle={translate('label.addressBook.saveAddressBtnText')}
               />
 
               {/* Payment */}
