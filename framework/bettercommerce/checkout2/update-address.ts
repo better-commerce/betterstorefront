@@ -51,7 +51,7 @@ export default function updateShippingMethod() {
             shippingMethodCode: shippingMethod?.shippingCode,
             orgId: process.env.NEXT_PUBLIC_ORG_ID,
             domainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-            deliveryItems: basket?.lineItems?.length ? basket?.lineItems.map((item: any) => ({
+            deliveryItems: basket?.lineItems?.length ? basket?.lineItems?.filter((item: any) => !item?.isMembership)?.map((item: any) => ({
               basketLineId: item.id,
               productId: item?.productId || item?.recordId,
               parentProductId: Guid.empty,
@@ -112,7 +112,7 @@ export default function updateShippingMethod() {
             shippingMethodId: '',
             shippingMethodName: '',
             shippingMethodCode: '',
-            deliveryItems: basket?.lineItems?.map((item: any) => {
+            deliveryItems: basket?.lineItems?.filter((item: any) => !item?.isMembership)?.map((item: any) => {
               return {
                 basketLineId: Number(item.id),
                 productId: item?.productId,

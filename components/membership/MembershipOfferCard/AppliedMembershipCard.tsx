@@ -1,6 +1,6 @@
 const AppliedMembershipCard = ({ promo, currencySymbol, moneySaved }:any) => {
   return (
-    <div className="bg-indigo-800 p-6 rounded-lg mt-2 text-center">
+    <div className="bg-gray-200 p-6 rounded-lg mt-2 text-center">
       <div className="flex items-center justify-center text-white text-2xl font-bold mb-4">
         <img src="/theme/blue/image/logo.png?fm=webp&h=200" width="60" height="60" alt="Store" className="brand-logo" />
       </div>

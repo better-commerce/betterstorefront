@@ -442,10 +442,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     const asyncHandleItem = async () => {
       let data: any = {
         basketId,
-        productId: product.id,
-        stockCode: product.stockCode,
-        manualUnitPrice: product.manualUnitPrice,
-        displayOrder: product.displayOrderta,
+        productId: product?.id,
+        stockCode: product?.stockCode,
+        manualUnitPrice: product?.manualUnitPrice,
+        displayOrder: product?.displayOrderta,
         qty: -1,
       }
       if (type === 'increase') {
