@@ -38,7 +38,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Prices from '@components/Prices'
 import NcInputNumber from '@components/NcInputNumber'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
-function Cart({ cart, deviceInfo, maxBasketItemsCount, config , allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
+function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
