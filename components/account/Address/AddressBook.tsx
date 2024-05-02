@@ -535,7 +535,7 @@ export default function AddressBook({ deviceInfo }: any) {
           }}
           onCloseModal={closeNewAddressModal}
           isRegisterAsGuestUser={isRegisterAsGuestUser()}
-          btnTitle="Save Address"
+          btnTitle={translate('label.addressBook.saveAddressBtn')}
         />
       </main>
     </>
