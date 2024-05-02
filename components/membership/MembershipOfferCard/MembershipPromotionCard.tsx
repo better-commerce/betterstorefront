@@ -11,10 +11,10 @@ const MembershipPromotionCard = ({ moneySaved, defaultDisplayMembership, lowestM
       <div className="mt-4">
         <p className="font-bold text-lg">
           <span className="text-red-700"> {!!moneySaved && `SAVE ${moneySaved}`} </span>
-          <span className="text-indigo-900"> OFF THIS ORDER</span>
+          <span className="text-indigo-900"> {defaultDisplayMembership?.membershipPromoDiscountPerc}% OFF ON THIS ORDER</span>
         </p>
         <p className="text-gray-600 mt-2">
-          {!!defaultDisplayMembership?.membershipPromoDiscountPerc && `Get 20% OFF, unlimited FREE delivery and unique offers all year round!*`}
+          {`Get ${defaultDisplayMembership?.membershipPromoDiscountPerc}% OFF, unlimited FREE delivery and unique offers all year round!*`}
         </p>
         <p className="text-gray-600 mt-2">
           {!!(lowestMemberShipPrice >= 0) && `Membership starts from ${currencySymbol}${lowestMemberShipPrice} per annum `}

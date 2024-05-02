@@ -8,7 +8,7 @@ import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/SectionCheckoutJourney/checkout/Summary'
-import MembershipCard from '@components/membership/MembershipCard'
+import MembershipOfferCard from '@components/membership/MembershipOfferCard'
 import OptMembershipModal from '@components/membership/OptMembershipModal'
 import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -205,7 +205,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
               <SplitDeliveryBasketItems basket={basket} />
             </div>
           )}
-          <MembershipCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} basketPromos={basketPromos} getBasketPromos={getBasketPromos} refreshBasket={refreshBasket} />
+          <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} basketPromos={basketPromos} getBasketPromos={getBasketPromos} refreshBasket={refreshBasket} />
           <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
           {referralAvailable &&
             isGuestUser &&
