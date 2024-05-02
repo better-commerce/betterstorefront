@@ -1053,7 +1053,7 @@
       "addToCartText": "¡Añadido al carrito!",
       "initiatingOrderText": "Iniciando pedido...",
       "pleaseWaitText": "Por favor, espera...",
-      "validatingAccountText" : "Validando cuenta...",
+      "validatingAccountText": "Validando cuenta...",
       "authorizingPaymentText": "Autorizando el pago...",
       "initiatingPaymentText": "iniciando el pago...",
       "capturingPaymentText": "capturando el pago...",
