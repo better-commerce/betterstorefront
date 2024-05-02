@@ -8,7 +8,7 @@ import { useUI } from '@components/ui/context'
 import { Guid } from '@commerce/types'
 import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
 
-const MembershipCard = ({ basket, setOpenOMM, defaultDisplayMembership, basketPromos, getBasketPromos, refreshBasket, }: any) => {
+const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, basketPromos, getBasketPromos, refreshBasket, }: any) => {
 
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
@@ -103,4 +103,4 @@ const MembershipCard = ({ basket, setOpenOMM, defaultDisplayMembership, basketPr
   ))
 }
 
-export default MembershipCard
+export default MembershipOfferCard

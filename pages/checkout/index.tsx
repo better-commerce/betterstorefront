@@ -844,7 +844,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     generateBasketId,
     goToStep,
     deliveryTypeMethod,
-  }
+  }  
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -910,6 +910,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         setBasket(basketResult)
       }
     }
+  }
+
+  const basketDetailsProps = {
+    basket,
+    deviceInfo, 
+    allMembershipPlans, 
+    defaultDisplayMembership, 
+    refreshBasket,
   }
 
   useEffect(() => {
@@ -1076,7 +1084,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
       {isMobile || isIPadorTablet ? (
         <div className="justify-start w-full bar">
-          <BasketDetails basket={basket} deviceInfo={deviceInfo} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} />
+          <BasketDetails { ...basketDetailsProps }  />
         </div>
       ) : (
         <></>
@@ -1109,7 +1117,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           <></>
         ) : (
           <div className="justify-start min-h-screen p-8 bg-gray-100 border-gray-300 border-x basket-container top-14">
-            <BasketDetails basket={basket} deviceInfo={deviceInfo} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} />
+            <BasketDetails  { ...basketDetailsProps } />
           </div>
         )}
       </div>
