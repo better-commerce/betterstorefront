@@ -10,7 +10,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/constants'
 import ProductView from '@components/Product/ProductView'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 
@@ -144,14 +144,14 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      data: productSlugUIDData,
+      data: productSlugUIDData || EmptyObject,
       slug: slug,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: productSlugUIDData?.snippets ?? [],
-      relatedProducts: relatedProductUIDData,
-      availabelPromotions: availablePromoUIDData,
+      relatedProducts: relatedProductUIDData || EmptyObject,
+      availabelPromotions: availablePromoUIDData || EmptyObject,
       allProductsByCategory: productCategoryUIDData ?? [],
-      reviews: productReviewUIDData,
+      reviews: productReviewUIDData || EmptyObject,
       pdpCachedImages: pdpCacheImageUIDData?.images
         ? JSON.parse(pdpCacheImageUIDData?.images)
         : [],
