@@ -15,6 +15,8 @@ import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import Router from 'next/router'
 import { SITE_NAME } from '@components/utils/constants'
 
+declare const window: any
+
 function PasswordProtectionPage({ config }: any) {
   let configSettings: any
   if (config) {
@@ -36,6 +38,7 @@ function PasswordProtectionPage({ config }: any) {
       if (values?.password === passwordProtectionSetting?.livePassword) {
         Cookies.set(Cookie.Key.PASSWORD_PROTECTION_AUTH, 'true', {
           expires: getExpiry(getMinutesInDays(30)),
+          domain: window.location.hostname
         })
         setPasswordMatched(true)
       } else {
