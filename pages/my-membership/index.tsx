@@ -15,6 +15,9 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import Loader from "@components/Loader";
 import { useTranslation } from "@commerce/utils/use-translation";
 import commerce from "@lib/api/commerce";
+import { Redis } from "@framework/utils/redis-constants";
+import { getDataByUID, parseDataValue, setData } from "@framework/utils/redis-util";
+import { Guid } from "@commerce/types";
 
 const PAGE_TYPE = PAGE_TYPES.MyMembership
 const MEMBER_BENEFITS = [
@@ -26,25 +29,38 @@ const MEMBER_BENEFITS = [
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale, req } = context
-  const data = {
-    "SearchText": null,
-    "PricingType": 0,
-    "Name": null,
-    "TermType": 0,
-    "IsActive": 1,
-    "ProductId": EmptyGuid,
-    "CategoryId": EmptyGuid,
-    "ManufacturerId": EmptyGuid,
-    "SubManufacturerId": EmptyGuid,
-    "PlanType": 0,
-    "CurrentPage": 0,
-    "PageSize": 0
+
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
   }
-  const { result: allPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+  
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      allPlans,
+      allPlans: allMembershipsUIDData?.result,
     },
   }
 }
