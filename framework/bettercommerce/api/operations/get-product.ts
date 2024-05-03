@@ -21,8 +21,8 @@ export default function getProductOperation({
       cookies,
     })
     return {
-      product: response.result,
-      snippets: response.snippets,
+      product: response?.result,
+      snippets: response?.snippets,
       status: response?.status
     }
   }
