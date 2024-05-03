@@ -35,9 +35,10 @@ export interface ProductCardProps {
   compareProductsAttributes?: any
   active?: any
   hideWishlistCTA?: any
+  featureToggle?: any
 }
 
-const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA }) => {
+const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA, featureToggle }) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -318,7 +319,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
       </div>
       {/* QUICKVIEW */}
-      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
     </>
   );
 };
