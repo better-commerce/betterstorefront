@@ -2,11 +2,12 @@
 import React from 'react';
 import moment from 'moment';
 
-const PurchaseDetails = ({ lastPurchase, discount, savedAmount } :any) => {
+const PurchaseDetails = ({ lastPurchase } :any) => {
 
-    const formatDate = (dateString: string) => {
-        return moment(dateString).format('MMMM Do YYYY, h:mm:ss a');
-    };
+  const formatDate = (dateString: string) => {
+    return moment(dateString).format('MMMM Do YYYY');
+  };
+
   return (
     <div className="bg-gray-200 p-6 rounded-lg shadow-md flex flex-col h-50  justify-between">
       <h2 className="text-xl font-bold mb-4">My Membership Purchases</h2>

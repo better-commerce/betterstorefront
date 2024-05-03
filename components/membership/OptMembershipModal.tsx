@@ -6,7 +6,6 @@ import cartHandler from "@components/services/cart";
 import MembershipPlanList from './MembershipPlanList'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util';
 import { useUI } from "@components/ui";
-import Router from 'next/router'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 const FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT = true
