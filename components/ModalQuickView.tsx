@@ -7,12 +7,13 @@ import { usePathname } from "next/navigation";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
 
 export interface ModalQuickViewProps {
-  show: boolean;
-  productData: any;
-  deviceInfo?: any;
-  maxBasketItemsCount?: any;
+  readonly show: boolean;
+  readonly productData: any;
+  readonly deviceInfo?: any;
+  readonly maxBasketItemsCount?: any;
   onCloseModalQuickView: () => void;
-  featureToggle: any;
+  readonly featureToggle: any;
+  readonly defaultDisplayMembership?: any;
 }
 
 const ModalQuickView: FC<ModalQuickViewProps> = ({
@@ -22,6 +23,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
   maxBasketItemsCount,
   onCloseModalQuickView,
   featureToggle,
+  defaultDisplayMembership,
 }) => {
   const pathname = usePathname();
 
@@ -67,7 +69,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
                 </span>
 
                 <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} featureToggle={featureToggle} />
+                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 </div>
               </div>
             </div>
