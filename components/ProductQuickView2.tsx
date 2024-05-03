@@ -25,9 +25,10 @@ import { PRODUCTS } from "./Product/data";
 export interface ProductQuickView2Props {
   className?: string;
   featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", featureToggle }) => {
+const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", featureToggle, defaultDisplayMembership }) => {
   const translate = useTranslation()
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
@@ -210,6 +211,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", feature
               price={112}
               listPrice={122}
               featureToggle={featureToggle}
+              defaultDisplayMembership={defaultDisplayMembership}
             />
 
             <div className="h-6 border-l border-slate-300 dark:border-slate-700"></div>

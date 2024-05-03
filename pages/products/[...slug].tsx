@@ -7,17 +7,19 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constan
 import { logError, notFoundRedirect } from '@framework/utils/app-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/constants'
 import ProductView from '@components/Product/ProductView'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import { Guid } from '@commerce/types'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
   const cachedDataUID = {
-    infraUID : Redis.Key.INFRA_CONFIG,
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+    infraUID: Redis.Key.INFRA_CONFIG,
     productSlugUID: Redis.Key.PDP.Products + '_' + slug,
     productReviewUID: Redis.Key.PDP.ProductReviewData + '_' + slug,
     relatedProductUID: Redis.Key.PDP.RelatedProduct + '_' + slug,
@@ -27,6 +29,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
     productCategoryUID: Redis.Key.PDP.ProductsByCat + '_' + slug,
   }
   const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
     cachedDataUID.infraUID,
     cachedDataUID.productSlugUID,
     cachedDataUID.productReviewUID,
@@ -36,6 +39,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
     cachedDataUID.availablePromoUID,
     cachedDataUID.productCategoryUID,
   ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
   let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
   let productSlugUIDData: any = parseDataValue(cachedData, cachedDataUID.productSlugUID)
   let productReviewUIDData: any = parseDataValue(cachedData, cachedDataUID.productReviewUID)
@@ -141,6 +145,39 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
     infraUIDData = await infraPromise
     await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
   }
+
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
@@ -155,6 +192,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
       pdpCachedImages: pdpCacheImageUIDData?.images
         ? JSON.parse(pdpCacheImageUIDData?.images)
         : [],
+      defaultDisplayMembership,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
@@ -172,7 +210,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
-function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, featureToggle }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const translate = useTranslation()
 
@@ -192,6 +230,7 @@ function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabel
     config,
     campaignData,
     featureToggle,
+    defaultDisplayMembership,
   }
 
   return router.isFallback ? (
