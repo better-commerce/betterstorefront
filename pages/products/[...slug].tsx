@@ -172,43 +172,33 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
-function Slug({
-  data,
-  setEntities,
-  recordEvent,
-  slug,
-  relatedProducts,
-  availabelPromotions,
-  allProductsByCategory,
-  pdpLookbookProducts,
-  pdpCachedImages,
-  reviews,
-  deviceInfo,
-  config,
-  campaignData,
-}: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, featureToggle }: any) {
   const router = useRouter()
   const translate = useTranslation()
+
+  const productViewProps = {
+    recordEvent,
+    setEntities,
+    data: data.product,
+    slug,
+    snippets: data?.snippets || [],
+    relatedProducts,
+    promotions: availabelPromotions,
+    allProductsByCategory,
+    pdpLookbookProducts,
+    pdpCachedImages,
+    reviews,
+    deviceInfo,
+    config,
+    campaignData,
+    featureToggle,
+  }
+
   return router.isFallback ? (
     <h1>{translate('common.message.loaderLoadingText')}</h1>
   ) : (
     data && (
-      <ProductView
-        recordEvent={recordEvent}
-        setEntities={setEntities}
-        data={data.product}
-        slug={slug}
-        snippets={data.snippets}
-        relatedProducts={relatedProducts}
-        promotions={availabelPromotions}
-        allProductsByCategory={allProductsByCategory}
-        pdpLookbookProducts={pdpLookbookProducts}
-        pdpCachedImages={pdpCachedImages}
-        reviews={reviews}
-        deviceInfo={deviceInfo}
-        config={config}
-        campaignData={campaignData}
-      />
+      <ProductView {...productViewProps} />
     )
   )
 }

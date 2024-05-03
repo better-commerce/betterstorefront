@@ -90,7 +90,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, }: any) {
   const router = useRouter()
   const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -178,7 +178,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
         <div className="container relative my-16 space-y-16 sm:my-24 sm:space-y-24 lg:space-y-32 lg:my-32">
-          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
+          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} />
           <div className="relative py-10 sm:py-16 lg:py-20">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />

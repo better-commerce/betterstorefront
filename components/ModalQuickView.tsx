@@ -12,6 +12,7 @@ export interface ModalQuickViewProps {
   deviceInfo?: any;
   maxBasketItemsCount?: any;
   onCloseModalQuickView: () => void;
+  featureToggle: any;
 }
 
 const ModalQuickView: FC<ModalQuickViewProps> = ({
@@ -20,6 +21,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
   deviceInfo,
   maxBasketItemsCount,
   onCloseModalQuickView,
+  featureToggle,
 }) => {
   const pathname = usePathname();
 
@@ -65,7 +67,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
                 </span>
 
                 <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} />
+                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} featureToggle={featureToggle} />
                 </div>
               </div>
             </div>

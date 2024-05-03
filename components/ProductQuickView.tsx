@@ -32,9 +32,10 @@ export interface ProductQuickViewProps {
   product?: any;
   maxBasketItemsCount?: any
   onCloseModalQuickView?: any
+  featureToggle: any
 }
 
-const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView }) => {
+const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView, featureToggle }) => {
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
   const { openNotifyUser, basketId, cartItems, setCartItems, user, openCart, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
@@ -537,7 +538,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView}>{product?.name}</Link>
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
+            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} />
             {product?.reviewCount > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>

@@ -8,14 +8,15 @@ import Glide from "@glidejs/glide/dist/glide.esm";
 import { CURRENT_THEME } from "./utils/constants";
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 export interface SectionSliderProductCardProps {
-  className?: string;
-  itemClassName?: string;
-  heading?: any;
-  subHeading?: string;
-  data?: any;
+  readonly className?: string;
+  readonly itemClassName?: string;
+  readonly heading?: any;
+  readonly subHeading?: string;
+  readonly data?: any;
+  readonly featureToggle: any;
 }
 
-const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data }) => {
+const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   let dataPerRow = 4
@@ -48,7 +49,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide product-card-item ${itemClassName}`}>
-                <ProductCard data={item} />
+                <ProductCard data={item} featureToggle={featureToggle} />
               </li>
             ))}
           </ul>
