@@ -13,7 +13,7 @@ interface Props {
   handlePageChange?: any
   handleInfiniteScroll: any
   readonly isCompared: any
-  readonly featureToggle: any
+  readonly featureToggle?: any
 }
 
 export default function CategoryGrid({
