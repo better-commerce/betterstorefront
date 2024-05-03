@@ -4,6 +4,7 @@ import { AlertType } from '@framework/utils/enums'
 import axios from 'axios'
 import { NEXT_CLICK_AND_COLLECT } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { metresToMiles } from '@framework/utils/parse-util'
 
 interface FindStoreProps {
   readonly basket: any
@@ -110,7 +111,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                         {store?.Name}
                       </h2>
                       <span className="text-gray-500 mb-1 font-semibold">
-                        {(store?.Distance || store?.DistanceInMetres) < 0.1 ? <>{translate(lessThanAMileTextKey)}</> : <>{store?.Distance || store?.DistanceInMetres}{' '}{translate('label.checkout.milesText')}</>}
+                        {store?.DistanceInMetres < 0.1 ? <>{translate(lessThanAMileTextKey)}</> : <>{store?.DistanceInMetres}{' '}{translate('label.checkout.milesText')}</>}
                       </span>
                       <br />
                       {store?.AvailableToCollectIn && <span className="text-black mr-1 text-base">

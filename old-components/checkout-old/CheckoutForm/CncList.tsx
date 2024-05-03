@@ -72,7 +72,7 @@ export default function CncList({
                   {location.availableToCollectIn}
                 </p>
                 <p className="text-sm py-2">
-                  {(location.distance || location.distanceInMetres)} {translate('common.label.milesText')}
+                  {location.distanceInMetres} {translate('common.label.milesText')}
                 </p>
               </div>
               <div className="flex flex-row justify-center items-center">
