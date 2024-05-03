@@ -21,6 +21,9 @@ import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
+import SectionBrandCard from '@components/SectionBrandCard'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -212,13 +215,44 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         <div className="mt-14 sm:mt-24 lg:mt-32">
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
-        <div className="container relative my-16 space-y-16 sm:my-24 sm:space-y-24 lg:space-y-32 lg:my-32">
-          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          <div className="relative py-10 sm:py-16 lg:py-20">
+        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} container relative my-16 sm:my-24 lg:my-32 product-collections`}>
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
+              {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.newarrivals?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
-          <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+          {pageContents?.newlookbook?.length > 0 &&
+            <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+          }
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
+              {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.nevermisssale?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
+              {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.popular?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
           <div className='flex flex-col w-full engage-product-card-section'>
             <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

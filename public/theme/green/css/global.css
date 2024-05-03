@@ -1500,6 +1500,10 @@ p {
   background-color: #a2abcd;
 }
 
+.bg-banner img {
+  opacity: 0 !important;
+}
+
 .comma:last-child .s-icon{
   display: none;
 }
@@ -1680,6 +1684,7 @@ p {
     padding-right: 65px !important;
   }
 }
+
 .container {
   max-width: 1562px;
   width: 100%;
@@ -1687,6 +1692,7 @@ p {
   padding-left: 15px;
   padding-right: 15px;
 }
+
 .theme-container .sub-menu > div {
   background: transparent !important;
   background-color: transparent !important;
@@ -1741,14 +1747,15 @@ p {
   color: #000000 !important;
 }
 
-
 .theme-container .sub-menu {
   max-width: 90% !important;
   margin: 0 auto !important;
 }
+
 .theme-top .nc-SectionHero2Item__left{
   float: left;
 }
+
 .theme-top .banner-image-container{
     max-width: 30rem;
     background: #606988;
@@ -1765,27 +1772,7 @@ p {
 .theme-top .nc-SectionHero2Item__subheading,
 .theme-top .nc-SectionHero2Item__heading{
   color: #FFFFFF !important;
-}
-
-@media screen and (min-width:1580px) {  
-  .theme-top .nc-SectionSliderProductCard{
-    background-color: #e7e7e7 !important;
-    padding: 50px !important;
-    margin: 0 -65px !important;
-  }
-
-  .theme-container .sub-menu {
-    max-width: 80% !important;
-  }
-
-  .theme-top .banner-image-container{
-      max-width: 40rem !important;
-      background: #606988;
-      right: 5rem;
-      bottom: -5rem;
-      top: 6rem;
-      border-radius: 30px;
-  }
+  max-width: 80% !important;
 }
 
 .td-header {
@@ -1801,10 +1788,27 @@ p {
   top: -170px !important;
 }
 
-.theme-top .nc-SectionSliderProductCard{
-  background-color: #e7e7e7 !important;
-  padding: 50px 115px !important;
+.product-collections .nc-brandCard {
+    padding: 50px 4.5rem !important;
+    margin: 0 -65px !important;
+    width: calc(100% + 130px) !important;
+}
+
+.product-collections .nc-SectionSliderProductCard{
+  padding: 50px 10px !important;
   margin: 0 -65px !important;
+}
+
+.product-collections .nc-SectionSliderProductCard:nth-child(2){
+  background-color: #98baa9 !important;
+}
+
+.product-collections .nc-SectionSliderProductCard:nth-child(6){
+  background-color: #c7c184 !important;
+}
+
+.product-collections .nc-SectionSliderProductCard:nth-child(9){
+  background-color: #a2c4eb !important;
 }
 
 .theme-top:has(.td-visible){
@@ -1837,5 +1841,54 @@ p {
 }
 
 .hero-container{
-  max-width: calc(100% - 125px) !important;
+  max-width: calc(100% - 1px) !important;
+}
+
+.bg-section-hide{
+  display: none;
+}
+
+.nc-SectionSliderLargeProduct{
+  padding: 50px 0 !important;
+}
+
+.heading-px-4{
+  padding: 0px 3.5rem !important;
+}
+
+@media screen and (min-width:1580px) {  
+  .theme-top .nc-SectionHero2Item__subheading,
+  .theme-top .nc-SectionHero2Item__heading{
+    max-width: 100% !important;
+  }
+
+  .product-collections .nc-brandCard {
+    padding: 50px 20rem !important;
+  }
+
+  .heading-px-4{
+    padding: 0px 4rem !important;
+  }
+
+  .theme-top .nc-SectionSliderProductCard{
+    background-color: #e7e7e7 !important;
+  }
+
+  .theme-container .sub-menu {
+    max-width: 80% !important;
+  }
+
+  .theme-top .banner-image-container{
+      max-width: 40rem !important;
+      background: #606988;
+      right: 5rem;
+      bottom: -5rem;
+      top: 6rem;
+      border-radius: 30px;
+  }
+
+  .hero-container {
+      max-width: calc(100% - 125px) !important;
+  }
+
 }

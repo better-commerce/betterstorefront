@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
+import Link from 'next/link'
 import Form from '@old-components/customer'
 import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
@@ -117,17 +118,17 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
           <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
           <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
-            <a href="/my-account/forgot-password">
+            <Link passHref href="/my-account/forgot-password">
               <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
                 {translate('label.login.forgotPasswordBtnText')}
               </span>
-            </a>
+            </Link>
           </div>
           <span className="block text-center text-neutral-700 dark:text-neutral-300">
             {translate('label.login.newUserText')}{` `}
-            <a className="text-green-600" href="/my-account/register">
+            <Link passHref className="text-green-600" href="/my-account/register">
               {translate('label.login.createAccountText')}
-            </a>
+            </Link>
           </span>
         </div>
       </div>

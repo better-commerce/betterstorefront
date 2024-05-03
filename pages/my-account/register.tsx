@@ -3,6 +3,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
+import Link from 'next/link'
 import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
@@ -301,9 +302,9 @@ const router = useRouter()
 
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
               {translate('label.myAccount.alreadyAccountText')} {` `}
-              <a className="text-green-600" href="/my-account/login">
+              <Link passHref className="text-green-600" href="/my-account/login">
                 {translate('label.login.loginBtnText')}
-              </a>
+              </Link>
             </span>
           </div>
         </div>

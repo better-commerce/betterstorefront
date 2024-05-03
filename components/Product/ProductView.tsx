@@ -11,7 +11,7 @@ import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -32,6 +32,7 @@ import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyV
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
 import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
+import ProductSocialProof from './ProductSocialProof'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -84,6 +85,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [openStoreLocaltorModal, setOpenStockCheckModal] = useState(false)
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
+  const [analyticsData, setAnalyticsData] = useState(null)
 
 
   useEffect(() => {
@@ -720,8 +722,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setFullscreen(!fullscreen);
   };
 
-//
   useEffect(() => {
+    function handleSetAnalyticsData({ detail: analyticsData }: any) {
+      setAnalyticsData(analyticsData)
+    }
+
     function handleScroll() {
       const addButton = document.getElementById('add-to-cart-button');
       if (addButton) {
@@ -732,8 +737,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
 
     window?.addEventListener('scroll', handleScroll);
+    window.addEventListener(CUSTOM_EVENTS.ProductViewed, handleSetAnalyticsData)
     return () => {
       window?.removeEventListener('scroll', handleScroll);
+      window?.removeEventListener(CUSTOM_EVENTS.ProductViewed, handleSetAnalyticsData);
     };
   }, []);
 
@@ -960,6 +967,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
+      <ProductSocialProof data={analyticsData} />
       <main className="container-pdp mt-2 sm:mt-5 lg:mt-11">
         <div className='px-4 sm:px-0 flex flex-1 mb-1 sm:mb-4 product-breadcrumbs'>
           {breadcrumbs && (
