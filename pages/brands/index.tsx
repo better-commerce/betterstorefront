@@ -71,6 +71,7 @@ function BrandsPage({ brands }: any) {
   useEffect(() => { }, [])
 
   function handleScrollView(letter: any) {
+    letter?.preventDefault()
     window.location.href = `#${letter.target.text?.toUpperCase()}`
     window.scrollBy(0, -100)
   }

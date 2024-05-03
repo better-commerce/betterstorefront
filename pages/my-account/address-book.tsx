@@ -15,7 +15,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 
-function MyAccount({ deviceInfo }:any) {
+function MyAccount({ deviceInfo , featureToggle }:any) {
   const [isShow, setShow] = useState(true)
   const { user, deleteUser, isGuestUser } = useUI()
   const router = useRouter()
@@ -94,6 +94,7 @@ function MyAccount({ deviceInfo }:any) {
               setShow={setShow}
               currentOption={currentOption}
               deviceInfo={deviceInfo}
+              featureToggle={featureToggle}
             />
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>
