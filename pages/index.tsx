@@ -7,19 +7,20 @@ import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, matchStrings, stringToNumber } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { Guid } from '@commerce/types'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -30,7 +31,8 @@ const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 declare const window: any
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
+  const cachedData = await getDataByUID([Redis.Key.ALL_MEMBERSHIPS, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, Redis.Key.ALL_MEMBERSHIPS)
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
   const infraPromise = commerce.getInfra()
@@ -75,6 +77,38 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const slugsPromise = commerce.getSlugs({ slug: Page_Slug });
   const slugs = await slugsPromise;
   const hostName = os.hostname()
+
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: Redis.Key.ALL_MEMBERSHIPS, value: allMembershipsUIDData }])
+  }
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
@@ -83,6 +117,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
       pageContentsWeb: pageContentWebUIDData,
       pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
+      defaultDisplayMembership,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
@@ -90,7 +125,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -178,7 +213,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
         <div className="container relative my-16 space-y-16 sm:my-24 sm:space-y-24 lg:space-y-32 lg:my-32">
-          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} />
+          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           <div className="relative py-10 sm:py-16 lg:py-20">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />

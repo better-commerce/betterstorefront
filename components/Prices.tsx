@@ -1,7 +1,7 @@
 import { useTranslation } from "@commerce/utils/use-translation";
 import { vatIncluded } from "@framework/utils/app-util";
 import { roundToDecimalPlaces } from "@framework/utils/parse-util";
-import React, { FC, useMemo } from "react";
+import React, { FC, useMemo, useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 export interface PricesProps {
   readonly className?: string;
@@ -13,9 +13,10 @@ export interface PricesProps {
 }
 
 const Prices: FC<PricesProps> = ({ className = "w-full", price, listPrice, contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium", featureToggle, defaultDisplayMembership, }) => {
-  const discountPerc = 20
+  const discountPerc = defaultDisplayMembership?.membershipPromoDiscountPerc || 0
   const isIncludeVAT = vatIncluded()
   const translate = useTranslation()
+
   const memberPriceWithTax = useMemo(() => {
     const discountedPrice = (price?.raw?.withTax * ((100.0 - discountPerc) * 1.0 / 100.0))
     return `${price?.currencySymbol}${roundToDecimalPlaces(discountedPrice)}`
@@ -37,7 +38,8 @@ const Prices: FC<PricesProps> = ({ className = "w-full", price, listPrice, conte
               <a href="#" onClick={(ev: any) => { 
                 ev.preventDefault()
                 ev.stopPropagation()
-              }} className="inline-block align-middle -mt-1"><InformationCircleIcon className="w-4 h-4 text-black"/></a>
+                window.dispatchEvent(new CustomEvent('MemberProductPriceInfoViewed', { detail: { defaultDisplayMembership, price, isIncludeVAT } }))
+              }} className="inline-block align-middle -mt-1"><InformationCircleIcon className="w-4 h-4 text-black ml-1"/></a>
             </span>
           </div>
         )}
