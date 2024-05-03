@@ -21,13 +21,16 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   let dataPerRow = 4
+  let dataPerRowMed = 4
   let dataGap = 32
   if (CURRENT_THEME == "green") {
-    dataPerRow = 5.5
+    dataPerRow = 6
+    dataPerRowMed = 5
+    dataGap = 20
   }
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: dataPerRow, gap: 32, bound: true, breakpoints: { 1280: { perView: dataPerRow - 1, }, 1024: { gap: 20, perView: dataPerRow - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRowMed - 1, }, 1024: { gap: 20, perView: dataPerRowMed - 1, }, 768: { gap: 20, perView: dataPerRowMed - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
     };
     if (!sliderRef.current) return;
     let slider = new Glide(sliderRef.current, OPTIONS);
@@ -42,8 +45,8 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
     <div className={`nc-SectionSliderProductCard product-card-slider ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {heading?.map((h: any, iIdx: number) => (
-          <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText={h?.newarrivalheading_subtitle} hasNextPrev >
-            {h?.newarrivalheading_title}
+          <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
+            {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title}
           </Heading>
         ))}
         <div className="glide__track" data-glide-el="track">

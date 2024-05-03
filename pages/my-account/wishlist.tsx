@@ -102,6 +102,7 @@ function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any
               setShow={setShow}
               currentOption={currentOption}
               deviceInfo={deviceInfo}
+              featureToggle={featureToggle}
             />
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>

@@ -6,7 +6,7 @@ import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import React from 'react'
 
-function SideMenu({ handleClick, setShow, currentOption, deviceInfo }: any) {
+function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureToggle}: any) {
   const config = useConfig();
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -67,6 +67,17 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo }: any) {
         head: <BuildingOffice2Icon className="w-7 h-7 text-gray-500" />,
         href: '/my-account/my-company',
       })
+    }
+    if (featureToggle?.features?.enableMembership) {
+      if (user?.hasMembership) {
+        newConfig.push({
+            type: 'tab',
+            text: translate('label.membership.membershipText'),
+            mtext: translate('label.membership.membershipText'),
+            props: 'membership',
+            href: '/my-account/membership',
+        })
+      }
     }
   }
   return (
