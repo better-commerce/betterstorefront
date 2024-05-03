@@ -85,7 +85,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [openStoreLocaltorModal, setOpenStockCheckModal] = useState(false)
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
-  const [analyticsData, setanalyticsData] = useState(null)
+  const [analyticsData, setAnalyticsData] = useState(null)
 
 
   useEffect(() => {
@@ -724,7 +724,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   useEffect(() => {
     function handleSetAnalyticsData({ detail: analyticsData }: any) {
-      setanalyticsData(analyticsData)
+      setAnalyticsData(analyticsData)
     }
 
     function handleScroll() {
