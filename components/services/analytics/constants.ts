@@ -50,3 +50,7 @@ export const EVENTS_MAP: any = {
   ],
   CHANNEL_TYPES: ['Web', 'Mobile', 'App', 'Phone', 'Store'],
 }
+
+export enum CUSTOM_EVENTS {
+  ProductViewed = 'ProductViewedData',
+}
