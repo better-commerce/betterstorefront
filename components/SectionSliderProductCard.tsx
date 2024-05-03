@@ -14,9 +14,10 @@ export interface SectionSliderProductCardProps {
   readonly subHeading?: string;
   readonly data?: any;
   readonly featureToggle: any;
+  readonly defaultDisplayMembership: any;
 }
 
-const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle }) => {
+const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   let dataPerRow = 4
@@ -49,7 +50,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide product-card-item ${itemClassName}`}>
-                <ProductCard data={item} featureToggle={featureToggle} />
+                <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               </li>
             ))}
           </ul>
