@@ -12,7 +12,7 @@ interface Props {
   handlePageChange?: any
   handleInfiniteScroll: any
   readonly isCompared: any
-  readonly featureToggle: any
+  readonly featureToggle?: any
 }
 
 export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll,
