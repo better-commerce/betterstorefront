@@ -19,14 +19,16 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   let dataPerRow = 4
+  let dataPerRowMed = 4
   let dataGap = 32
   if (CURRENT_THEME == "green") {
     dataPerRow = 6
+    dataPerRowMed = 5
     dataGap = 20
   }
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRow - 1, }, 1024: { gap: 20, perView: dataPerRow - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRowMed - 1, }, 1024: { gap: 20, perView: dataPerRowMed - 1, }, 768: { gap: 20, perView: dataPerRowMed - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
     };
     if (!sliderRef.current) return;
     let slider = new Glide(sliderRef.current, OPTIONS);

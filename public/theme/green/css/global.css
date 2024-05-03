@@ -1500,6 +1500,10 @@ p {
   background-color: #a2abcd;
 }
 
+.bg-banner img {
+  opacity: 0 !important;
+}
+
 .comma:last-child .s-icon{
   display: none;
 }
@@ -1765,9 +1769,20 @@ p {
 .theme-top .nc-SectionHero2Item__subheading,
 .theme-top .nc-SectionHero2Item__heading{
   color: #FFFFFF !important;
+  max-width: 80% !important;
 }
 
 @media screen and (min-width:1580px) {  
+  .theme-top .nc-SectionHero2Item__subheading,
+  .theme-top .nc-SectionHero2Item__heading{
+    max-width: 70% !important;
+  }
+  .product-collections .nc-brandCard {
+    padding: 50px 15rem !important;
+  }
+  .heading-px-4{
+    padding: 0px 8rem !important;
+  }
   .theme-top .nc-SectionSliderProductCard{
     background-color: #e7e7e7 !important;
     padding: 50px !important;
@@ -1786,6 +1801,9 @@ p {
       top: 6rem;
       border-radius: 30px;
   }
+  .hero-container {
+      max-width: calc(100% - 125px) !important;
+  }
 }
 
 .td-header {
@@ -1800,8 +1818,9 @@ p {
 .td-visible {
   top: -170px !important;
 }
+
 .product-collections .nc-brandCard {
-    padding: 50px 15rem !important;
+    padding: 50px 4.5rem !important;
     margin: 0 -65px !important;
     width: calc(100% + 130px) !important;
 }
@@ -1853,7 +1872,7 @@ p {
 }
 
 .hero-container{
-  max-width: calc(100% - 125px) !important;
+  max-width: calc(100% - 1px) !important;
 }
 
 .bg-section-hide{
@@ -1865,5 +1884,5 @@ p {
 }
 
 .heading-px-4{
-  padding: 0px 8rem !important;
+  padding: 0px 4.5rem !important;
 }
