@@ -6,7 +6,6 @@ import cartHandler from "@components/services/cart";
 import MembershipPlanList from './MembershipPlanList'
 import { roundToDecimalPlaces } from '@framework/utils/parse-util';
 import { useUI } from "@components/ui";
-import Router from 'next/router'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 const FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT = true
@@ -71,7 +70,7 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           {`That's currently a saving of ${moneySaved} on your order today when you become a`}
         </p>
         <h3 className="text-lg font-semibold mb-4">What you get as a member</h3>
-        <BenefitItems defaultDisplayMembership={defaultDisplayMembership} />
+        <BenefitItems discountPerc={defaultDisplayMembership?.membershipPromoDiscountPerc} />
         <MembershipPlanList
           membershipPlans={membershipPlans}
           defaultDisplayMembership={defaultDisplayMembership}
