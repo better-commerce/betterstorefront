@@ -9,8 +9,8 @@ import { Guid } from '@commerce/types'
 import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 
-const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, refreshBasket, }: any) => {
-
+const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, refreshBasket, }: any) => {
+  const { cartItems: basket } = useUI()
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
   const currencySymbol = basket?.grandTotal?.currencySymbol
@@ -23,6 +23,7 @@ const MembershipOfferCard = ({ basket, setOpenOMM, defaultDisplayMembership, ref
 
   const fetchMemberShipBenefits = async () => {
     setOverlayLoaderState({ visible: true, message: 'loading...', })
+    setAppliedBenefit(false)
     const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
     const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
     const data = { userId, basketId: basket?.id, membershipPlanId: null }

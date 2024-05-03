@@ -14,6 +14,8 @@ export interface CollectionCard2Props {
   name?: string;
   price?: number;
   description?: string;
+  featureToggle?: any;
+  defaultDisplayMembership?: any;
 }
 
 const CollectionCard2: FC<CollectionCard2Props> = ({
@@ -22,6 +24,8 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
   name = "Product Name",
   description = "Product Description",
   price,
+  featureToggle,
+  defaultDisplayMembership,
 }) => {
   const translate = useTranslation();
   return (
@@ -75,7 +79,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
             </span>
           </div>
         </div>
-        <Prices className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} />
+        <Prices className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
       </div>
       <Link href={"/product-detail-2"} className="absolute inset-0 "></Link>
     </div>
