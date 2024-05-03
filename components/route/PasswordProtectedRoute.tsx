@@ -12,6 +12,8 @@ import { stringToBoolean } from '@framework/utils/parse-util'
 import Cookies from 'js-cookie'
 import { Cookie } from '@framework/utils/constants'
 
+declare const window: any
+
 const PasswordProtectedRoute = ({ config, children }: any) => {
   let configSettings: any
   let isPasswordProtectionEnabled: boolean = false
@@ -48,7 +50,7 @@ const PasswordProtectedRoute = ({ config, children }: any) => {
         )?.value || 'False'
       )
 
-      const authenticated = Cookies.get(Cookie.Key.PASSWORD_PROTECTION_AUTH)
+      const authenticated = Cookies.withAttributes({ domain: window.location.hostname }).get(Cookie.Key.PASSWORD_PROTECTION_AUTH)
       const isAuthenticated = stringToBoolean(authenticated)
       if (isPasswordProtectionEnabled && !isAuthenticated) {
         Router.push('/password-protection').then(() => {
