@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BenefitItems = ({ defaultDisplayMembership }:any) => {
+const BenefitItems = ({ discountPerc }:any) => {
   const benefitItems = [
     {
       icon: (
@@ -42,7 +42,7 @@ const BenefitItems = ({ defaultDisplayMembership }:any) => {
     },
   ];
 
-  if (defaultDisplayMembership?.membershipPromoDiscountPerc) {
+  if (discountPerc) {
     benefitItems.push({
       icon: (
         <svg
@@ -60,12 +60,12 @@ const BenefitItems = ({ defaultDisplayMembership }:any) => {
           />
         </svg>
       ),
-      description: `${defaultDisplayMembership?.membershipPromoDiscountPerc}% off whenever you want*`,
+      description: `${discountPerc}% off whenever you want*`,
     });
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4 mb-8">
+    <div className="grid grid-cols-3 gap-4 my-8">
       {benefitItems.map((item, index) => (
         <div key={index} className="flex flex-col items-center">
           {item.icon}

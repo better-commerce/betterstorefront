@@ -818,7 +818,9 @@
       "upgradeMembershipText": "you've used up all your vouchers and fancy more or like the sound of 20% off* subscription, you can upgrade your membership plan easily.",
       "upgradeAnyTimeText": "Upgrade any time by simply paying the difference between the tiers.",
       "sprayMoreHappinessText": "Spray some more happiness for less!",
-      "membershipBenefitsText": "All Benefits Membership gives you"
+      "membershipBenefitsText": "All Benefits Membership gives you",
+      "membershipText": "Membership",
+      "myMembershipText": "My Membership"
     },
     "contactUs": {
       "contactSalesText": "Contact sales",
