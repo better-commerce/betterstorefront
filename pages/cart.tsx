@@ -183,6 +183,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       const basketResult = await getBasket(basketId)
       if (basketResult) {
         setBasket(basketResult)
+        setCartItems(basketResult)
       }
     }
   }
