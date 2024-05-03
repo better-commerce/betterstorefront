@@ -35,6 +35,7 @@ function PasswordProtectionPage({ config }: any) {
       password: yup.string().required('Password is required.'),
     }),
     onSubmit: (values, { setSubmitting }) => {
+      debugger
       if (values?.password === passwordProtectionSetting?.livePassword) {
         Cookies.set(Cookie.Key.PASSWORD_PROTECTION_AUTH, 'true', {
           expires: getExpiry(getMinutesInDays(30)),
