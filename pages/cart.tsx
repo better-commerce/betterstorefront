@@ -1,5 +1,5 @@
 // Base Imports
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Package Imports
 import dynamic from 'next/dynamic'
@@ -553,6 +553,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       </div>
     );
   };
+
+  const isMembershipItemOnly = useMemo(() => {
+    const membershipItemsCount = basket?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+    return (membershipItemsCount === basket?.lineItems?.length)
+  }, [basket])
+
   return (
     <>
       <NextHead>
@@ -585,7 +591,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                 <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
-                {featureToggle?.features?.enableMembership && (
+                {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
                     <>
                       <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
                       <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />

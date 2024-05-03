@@ -25,6 +25,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import RelatedProducts from '@components/Product/RelatedProducts'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import Engraving from '@components/Product/Engraving'
+import Router from 'next/router'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -130,6 +131,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     if (!isGetBasketPromoRunning) {
       setIsGetBasketPromoRunning(true)
       handleAsync()
+    }
+
+    if (window.location.pathname.startsWith('/cart')) {
+      const membershipItemsCount = cartItems?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+      if (membershipItemsCount === cartItems?.lineItems?.length) {
+        Router.reload()
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

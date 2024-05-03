@@ -3,7 +3,7 @@ import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, ClipboardIcon, ShoppingCartIcon, XMarkIcon, } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
@@ -117,6 +117,11 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
     return basketPromos
   }
 
+  const isMembershipItemOnly = useMemo(() => {
+    const membershipItemsCount = basket?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+    return (membershipItemsCount === basket?.lineItems?.length)
+  }, [basket])
+
   return (
     <>
       {isMobile || isIPadorTablet ? (
@@ -205,7 +210,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
               <SplitDeliveryBasketItems basket={basket} />
             </div>
           )}
-          {featureToggle?.features?.enableMembership && (
+          {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
               <>
                 <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
                 <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
