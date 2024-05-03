@@ -8,11 +8,12 @@ import { IExtraProps } from '@components/Layout/Layout'
 import Pagination from '../Pagination'
 
 interface Props {
-  products: any
-  currentPage: number | string
+  readonly products: any
+  readonly currentPage: number | string
   handlePageChange?: any
   handleInfiniteScroll: any
-  isCompared: any
+  readonly isCompared: any
+  readonly featureToggle?: any
 }
 
 export default function CategoryGrid({
@@ -23,6 +24,7 @@ export default function CategoryGrid({
   deviceInfo,
   maxBasketItemsCount,
   isCompared,
+  featureToggle,
 }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function CategoryGrid({
                 </div>
               ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} />
               ))}
             </div>
           }
@@ -77,7 +79,7 @@ export default function CategoryGrid({
               </div>
             ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} featureToggle={featureToggle} />
             ))}
           </div>
 

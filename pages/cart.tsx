@@ -26,8 +26,8 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
+import { vatIncluded, } from '@framework/utils/app-util'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -37,6 +37,8 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -183,6 +185,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       const basketResult = await getBasket(basketId)
       if (basketResult) {
         setBasket(basketResult)
+        setCartItems(basketResult)
       }
     }
   }
@@ -878,24 +881,36 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     cookies: context.req.cookies,
   })
 
-  const data = {
-    "SearchText": null,
-    "PricingType": 0,
-    "Name": null,
-    "TermType": 0,
-    "IsActive": 1,
-    "ProductId": EmptyGuid,
-    "CategoryId": EmptyGuid,
-    "ManufacturerId": EmptyGuid,
-    "SubManufacturerId": EmptyGuid,
-    "PlanType": 0,
-    "CurrentPage": 0,
-    "PageSize": 0
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
   }
-  let defaultDisplayMembership = {}
-  const { result: allMembershipPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
-  if (allMembershipPlans?.length) {
-    const membershipPlan = allMembershipPlans?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
@@ -910,7 +925,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],
-      allMembershipPlans,
+      allMembershipPlans: allMembershipsUIDData?.result,
       defaultDisplayMembership,
     }, // will be passed to the page component as props
   }

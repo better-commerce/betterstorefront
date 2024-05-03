@@ -7,15 +7,16 @@ import Pagination from '../Pagination'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 interface Props {
-  products: any
-  currentPage: number | string
+  readonly products: any
+  readonly currentPage: number | string
   handlePageChange?: any
   handleInfiniteScroll: any
-  isCompared: any
+  readonly isCompared: any
+  readonly featureToggle?: any
 }
 
 export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll,
-  deviceInfo, maxBasketItemsCount, isCompared }: Props & IExtraProps) {
+  deviceInfo, maxBasketItemsCount, isCompared, featureToggle }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
     Router.events.on('routeChangeComplete', () => {
@@ -50,7 +51,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
                 </div>
               ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} />
               ))}
             </div>
           }
@@ -69,7 +70,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
               </div>
             ))}
             {products.results.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} />
             ))}
           </div>
           {products.pages > 1 && (

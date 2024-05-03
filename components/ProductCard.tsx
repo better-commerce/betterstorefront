@@ -26,15 +26,17 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import { CURRENT_THEME } from "@components/utils/constants";
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 export interface ProductCardProps {
-  className?: string;
-  data?: any;
-  isLiked?: boolean;
-  deviceInfo?: any;
-  maxBasketItemsCount?: any;
-  key?: any;
+  readonly className?: string;
+  readonly data?: any;
+  readonly isLiked?: boolean;
+  readonly deviceInfo?: any;
+  readonly maxBasketItemsCount?: any;
+  readonly key?: any;
+  readonly featureToggle?: any;
+  readonly defaultDisplayMembership?: any;
 }
 
-const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key }) => {
+const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
 
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -262,7 +264,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
             </div>
             <div className="flex items-center justify-between ">
-              <Prices price={data?.price} listPrice={data?.listPrice} />
+              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               {data?.reviewCount > 0 &&
                 <div className="flex items-center mb-0.5">
                   <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
@@ -286,7 +288,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
       </div>
       {/* QUICKVIEW */}
-      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
     </>
   );
 };

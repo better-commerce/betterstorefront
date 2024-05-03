@@ -59,6 +59,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Cookie } from '@framework/utils/constants'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import commerce from '@lib/api/commerce'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 
 export enum BasketStage {
   CREATED = 0,
@@ -1138,24 +1140,36 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
 
-  const data = {
-    "SearchText": null,
-    "PricingType": 0,
-    "Name": null,
-    "TermType": 0,
-    "IsActive": 1,
-    "ProductId": EmptyGuid,
-    "CategoryId": EmptyGuid,
-    "ManufacturerId": EmptyGuid,
-    "SubManufacturerId": EmptyGuid,
-    "PlanType": 0,
-    "CurrentPage": 0,
-    "PageSize": 0
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
   }
-  let defaultDisplayMembership = {}
-  const { result: allMembershipPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
-  if (allMembershipPlans?.length) {
-    const membershipPlan = allMembershipPlans?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
@@ -1169,7 +1183,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       basketId,
-      allMembershipPlans,
+      allMembershipPlans: allMembershipsUIDData?.result,
       defaultDisplayMembership,
     }
   }

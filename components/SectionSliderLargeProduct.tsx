@@ -15,9 +15,11 @@ export interface SectionSliderLargeProductProps {
   cardStyle?: "style1" | "style2";
   data?: any;
   heading?: any;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ className = "", cardStyle = "style2", data, heading }) => {
+const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ className = "", cardStyle = "style2", data, heading, featureToggle, defaultDisplayMembership, }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   const translate = useTranslation()
@@ -62,6 +64,8 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
                   primaryImage={product?.newlookbook_primaryimage}
                   description={product?.newlookbook_category}
                   link={product?.newlookbook_link}
+                  featureToggle={featureToggle}
+                  defaultDisplayMembership={defaultDisplayMembership}
                 />
               </li>
             ))}
