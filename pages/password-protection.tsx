@@ -10,8 +10,8 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Logo } from '@components/ui'
 import { Cookie } from '@framework/utils/constants'
-import Cookies from 'js-cookie'
-import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
+//import Cookies from 'js-cookie'
+//import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import Router from 'next/router'
 import { SITE_NAME } from '@components/utils/constants'
 
@@ -36,9 +36,10 @@ function PasswordProtectionPage({ config }: any) {
     }),
     onSubmit: (values, { setSubmitting }) => {
       if (values?.password === passwordProtectionSetting?.livePassword) {
-        Cookies.set(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`, 'true', {
+        /*Cookies.set(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`, 'true', {
           expires: getExpiry(getMinutesInDays(30)),
-        })
+        })*/
+        localStorage.setItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`, 'true')
         setPasswordMatched(true)
       } else {
         setPasswordMatched(false)
