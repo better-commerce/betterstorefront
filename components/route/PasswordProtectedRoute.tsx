@@ -50,7 +50,7 @@ const PasswordProtectedRoute = ({ config, children }: any) => {
         )?.value || 'False'
       )
 
-      const authenticated = Cookies.withAttributes({ domain: window.location.hostname }).get(Cookie.Key.PASSWORD_PROTECTION_AUTH)
+      const authenticated = Cookies.get(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)
       const isAuthenticated = stringToBoolean(authenticated)
       if (isPasswordProtectionEnabled && !isAuthenticated) {
         Router.push('/password-protection').then(() => {
