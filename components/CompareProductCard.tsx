@@ -35,10 +35,11 @@ export interface ProductCardProps {
   compareProductsAttributes?: any
   active?: any
   hideWishlistCTA?: any
-  featureToggle?: any
+  featureToggle: any
+  defaultDisplayMembership: any
 }
 
-const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA, featureToggle }) => {
+const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA, featureToggle, defaultDisplayMembership, }) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -296,7 +297,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
             </div>
             <div className="flex items-center justify-between ">
-              <Prices price={data?.price} listPrice={data?.listPrice} />
+              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               <div className="flex items-center mb-0.5">
                 <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
                 <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
@@ -319,7 +320,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
       </div>
       {/* QUICKVIEW */}
-      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
     </>
   );
 };

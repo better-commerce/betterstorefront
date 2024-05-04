@@ -32,8 +32,8 @@ export interface ProductCardProps {
   readonly deviceInfo?: any;
   readonly maxBasketItemsCount?: any;
   readonly key?: any;
-  readonly featureToggle?: any;
-  readonly defaultDisplayMembership?: any;
+  readonly featureToggle: any;
+  readonly defaultDisplayMembership: any;
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {

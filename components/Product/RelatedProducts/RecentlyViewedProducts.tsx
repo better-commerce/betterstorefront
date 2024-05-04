@@ -20,7 +20,7 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
+const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow, featureToggle, defaultDisplayMembership, }: any) => {
   const translate = useTranslation()
   const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
   const swiperRefBasket: any = useRef(null)
@@ -97,7 +97,7 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow }: any) => {
               <Swiper slidesPerView={1} spaceBetween={10} ref={swiperRefBasket} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 1.3, spaceBetween: 4 }, 768: { slidesPerView: productPerRow, spaceBetween: 10 }, 1024: { slidesPerView: productPerRow, spaceBetween: 10 }, }} className="mySwiper" >
                 {recentlyViewedState?.map((product: any, pid: number) => (
                   <SwiperSlide key={pid} className="height-equal">
-                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </SwiperSlide>
                 ))}
               </Swiper>

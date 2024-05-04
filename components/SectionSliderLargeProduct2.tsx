@@ -31,6 +31,8 @@ export interface SectionSliderLargeProduct2Props {
   className?: string;
   itemClassName?: string;
   cardStyle?: "style1" | "style2";
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 
@@ -38,6 +40,8 @@ export interface SectionSliderLargeProduct2Props {
 const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
   className = "",
   cardStyle = "style1",
+  featureToggle, 
+  defaultDisplayMembership,
 }) => {
   const translate = useTranslation()
   const [tabActive, setTabActive] = useState("Last 24 hours");
@@ -181,7 +185,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
             {DEMO_LARGE_PRODUCTS?.map((item, index) => {
               return (
                 <li key={index} className={`glide__slide`}>
-                  <MyCollectionCard imgs={item.images} />
+                  <MyCollectionCard imgs={item.images} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 </li>
               );
             })}

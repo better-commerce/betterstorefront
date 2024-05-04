@@ -20,7 +20,7 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const BrowsingHistoryProducts = ({ deviceInfo, config, productPerRow }: any) => {
+const BrowsingHistoryProducts = ({ deviceInfo, config, productPerRow, featureToggle, defaultDisplayMembership, }: any) => {
   const translate = useTranslation()
   const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
   const swiperRefBasket: any = useRef(null)
@@ -83,7 +83,7 @@ const BrowsingHistoryProducts = ({ deviceInfo, config, productPerRow }: any) => 
               <div className='grid grid-cols-5 gap-6'>
                 {recentlyViewedState?.map((product: any, pid: number) => (
                   <div key={`product-${pid}`}>
-                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
                 ))}
               </div>

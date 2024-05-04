@@ -7,7 +7,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
-const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemClicked }: any) => {
+const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemClicked, featureToggle, defaultDisplayMembership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   return (
@@ -76,7 +76,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
                             </div>
                           </div>
                           : <div></div>}
-                        <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} />
+                        <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                       </div>
                     </div>
                     {!product?.isMembership && product?.price?.raw?.withTax !== 0 &&
@@ -89,7 +89,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
                       </div>
                     }
                     <div className="justify-end flex-1 hidden sm:flex">
-                      <Prices price={product?.price} listPrice={product?.listPrice} className="mt-0.5" />
+                      <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} className="mt-0.5" />
                     </div>
                   </div>
                 </div>

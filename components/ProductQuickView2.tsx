@@ -46,6 +46,8 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", feature
           show={t.visible}
           sizeSelected={sizeSelected}
           variantActive={variantActive}
+          featureToggle={featureToggle}
+          defaultDisplayMembership={defaultDisplayMembership}
         />
       ),
       { position: "top-right", id: "nc-product-notify", duration: 3000 }

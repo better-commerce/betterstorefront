@@ -32,8 +32,8 @@ export interface ProductQuickViewProps {
   product?: any;
   maxBasketItemsCount?: any
   onCloseModalQuickView?: any
-  featureToggle?: any
-  defaultDisplayMembership?: any
+  featureToggle: any
+  defaultDisplayMembership: any
 }
 
 const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView, featureToggle, defaultDisplayMembership }) => {
