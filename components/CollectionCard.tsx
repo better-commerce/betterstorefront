@@ -14,8 +14,8 @@ export interface CollectionCard2Props {
   name?: string;
   price?: number;
   description?: string;
-  featureToggle?: any;
-  defaultDisplayMembership?: any;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 const CollectionCard2: FC<CollectionCard2Props> = ({

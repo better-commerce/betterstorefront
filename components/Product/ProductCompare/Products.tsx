@@ -32,6 +32,7 @@ interface Props {
   product: any
   hideWishlistCTA?: any
   attributesCount?: number
+  defaultDisplayMembership: any
 }
 
 interface Attribute {
@@ -53,6 +54,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
   attributesCount = 0,
+  featureToggle, 
+  defaultDisplayMembership,
 }) => {
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
@@ -342,7 +345,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
-            <Prices price={product?.price} listPrice={product?.listPrice} />
+            <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         </Link>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col">

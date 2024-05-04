@@ -12,6 +12,8 @@ interface Props {
   variantActive: number;
   sizeSelected: string;
   qualitySelected: number;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 const NotifyAddTocart: FC<Props> = ({
@@ -20,6 +22,8 @@ const NotifyAddTocart: FC<Props> = ({
   variantActive,
   qualitySelected,
   sizeSelected,
+  featureToggle, 
+  defaultDisplayMembership,
 }) => {
   const translate = useTranslation()
   const { name, price, variants } = PRODUCTS[0];
@@ -50,7 +54,7 @@ const NotifyAddTocart: FC<Props> = ({
                   <span>{sizeSelected || "XL"}</span>
                 </p>
               </div>
-              <Prices price={price} listPrice={price} className="mt-0.5" />
+              <Prices price={price} listPrice={price} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} className="mt-0.5" />
             </div>
           </div>
           <div className="flex items-end justify-between flex-1 text-sm">

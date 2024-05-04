@@ -16,8 +16,8 @@ export interface CollectionCard2Props {
   description?: any;
   primaryImage?: any;
   link?: any;
-  featureToggle?: any;
-  defaultDisplayMembership?: any;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, description, price, primaryImage, link, featureToggle, defaultDisplayMembership, }) => {

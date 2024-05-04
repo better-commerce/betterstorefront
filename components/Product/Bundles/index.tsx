@@ -4,7 +4,7 @@ import BundleCard from './BundleCard'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductCard from '@components/ProductCard'
 
-export default function Bundles({ onClose = () => {}, price = '', products = [], productBundleUpdate = () => {}, deviceInfo, onBundleAddToCart = () => {} }: any) {
+export default function Bundles({ onClose = () => {}, price = '', products = [], productBundleUpdate = () => {}, deviceInfo, onBundleAddToCart = () => {}, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
@@ -91,6 +91,8 @@ export default function Bundles({ onClose = () => {}, price = '', products = [],
               data={product}
               deviceInfo={deviceInfo}
               maxBasketItemsCount={0}
+              featureToggle={featureToggle} 
+              defaultDisplayMembership={defaultDisplayMembership}
             />
           </div>
         ))}

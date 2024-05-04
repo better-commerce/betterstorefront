@@ -12,10 +12,11 @@ interface Props {
   handlePageChange?: any
   handleInfiniteScroll: any
   isCompared: any
+  defaultDisplayMembership: any
 }
 
 export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll,
-  deviceInfo, maxBasketItemsCount, isCompared }: Props & IExtraProps) {
+  deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership, }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
     Router.events.on('routeChangeComplete', () => {
@@ -50,7 +51,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
                 </div>
               ))}
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               ))}
             </div>
           }
@@ -69,7 +70,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
               </div>
             ))}
             {products.results.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             ))}
           </div>
           {products.pages > 1 && (

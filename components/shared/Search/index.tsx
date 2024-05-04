@@ -19,7 +19,7 @@ import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
 
 export default function Search(props: any) {
-  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo } = props;
+  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
@@ -132,7 +132,7 @@ export default function Search(props: any) {
                     <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{product?.classification?.mainCategoryName}</p>
                   </div>
                   <div className="flex items-end justify-between ">
-                    <Prices price={product?.price} listPrice={product?.listPrice} />
+                    <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     {product?.reviewCount > 0 &&
                       <div className="flex items-center mb-0.5">
                         <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />

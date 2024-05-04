@@ -8,10 +8,14 @@ import { PRODUCTS, Product } from "./Product/data";
 //
 export interface SectionGridFeatureItemsProps {
   data?: Product[];
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 const SectionGridFeatureItems: FC<SectionGridFeatureItemsProps> = ({
   data = PRODUCTS,
+  featureToggle, 
+  defaultDisplayMembership,
 }) => {
   const translate = useTranslation()
   return (
@@ -21,7 +25,7 @@ const SectionGridFeatureItems: FC<SectionGridFeatureItemsProps> = ({
         className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 `}
       >
         {data?.map((item, index) => (
-          <ProductCard data={item} key={index} />
+          <ProductCard data={item} key={index} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         ))}
       </div>
       <div className="flex items-center justify-center mt-16">

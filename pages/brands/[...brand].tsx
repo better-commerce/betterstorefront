@@ -16,7 +16,7 @@ import { sanitizeHtmlContent } from 'framework/utils/app-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { tryParseJson } from '@framework/utils/parse-util'
+import { stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getCollectionById from '@framework/api/content/getCollectionById'
@@ -43,6 +43,7 @@ import BrandDisclosure from '@components/SectionBrands/Disclosure'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { Guid } from '@commerce/types'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
@@ -88,7 +89,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData }: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const faq = useFaqData();
   const adaptedQuery = { ...query }
@@ -456,7 +457,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             </div>
             <div className="mt-10">
               <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
                   <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
                     {translate('label.product.recommendedProductText')}
                   </Heading>
@@ -464,7 +465,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                     <ul className="glide__slides">
                       {productCollectionRes?.map((item: any, index: number) => (
                         <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} />
+                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         </li>
                       ))}
                     </ul>
@@ -498,7 +499,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                     <ul className="glide__slides">
                       {saleProductCollectionRes?.map((item: any, index: number) => (
                         <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} />
+                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         </li>
                       ))}
                     </ul>
@@ -542,8 +543,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           <div className="flex justify-end w-full pt-6">
             <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
           </div>
-          <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
-          <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+          <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           {/* <div className="cart-recently-viewed">
             <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
           </div> */}
@@ -573,11 +574,13 @@ export async function getStaticProps({
   }
   const slug = `brands/${brandSlug}`
   const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
     infraUID: Redis.Key.INFRA_CONFIG,
     brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
     collectionUID: Redis.Key.Brands.Collection + '_' + slug
   }
   const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
     cachedDataUID.infraUID,
     cachedDataUID.brandSlugUID,
     cachedDataUID.collectionUID,
@@ -706,6 +709,40 @@ export async function getStaticProps({
   } catch (error: any) {
     // return console.error(error)
   }
+
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
@@ -716,6 +753,7 @@ export async function getStaticProps({
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: brandBySlugUIDData?.snippets ?? [],
       collections,
+      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }

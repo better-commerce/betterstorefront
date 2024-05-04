@@ -13,7 +13,7 @@ export interface ModalQuickViewProps {
   readonly maxBasketItemsCount?: any;
   onCloseModalQuickView: () => void;
   readonly featureToggle: any;
-  readonly defaultDisplayMembership?: any;
+  readonly defaultDisplayMembership: any;
 }
 
 const ModalQuickView: FC<ModalQuickViewProps> = ({

@@ -9,7 +9,7 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
-export default function Wishlist({ deviceInfo }: any) {
+export default function Wishlist({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -49,7 +49,7 @@ export default function Wishlist({ deviceInfo }: any) {
       <div className="grid grid-cols-1 sm:gap-5 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-3">
         {data?.map((product: any, wid: number) => (
           <div key={`wishlist-${wid}`}>
-            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         ))}
       </div>

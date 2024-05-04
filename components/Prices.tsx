@@ -8,8 +8,8 @@ export interface PricesProps {
   readonly price?: any;
   readonly listPrice?: any;
   readonly contentClass?: string;
-  readonly featureToggle?: any;
-  readonly defaultDisplayMembership?: any;
+  readonly featureToggle: any;
+  readonly defaultDisplayMembership: any;
 }
 
 const Prices: FC<PricesProps> = ({ className = "w-full", price, listPrice, contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium", featureToggle, defaultDisplayMembership, }) => {

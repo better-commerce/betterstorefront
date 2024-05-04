@@ -14,7 +14,7 @@ interface Props {
   handleInfiniteScroll: any
   readonly isCompared: any
   readonly featureToggle?: any
-  readonly defaultDisplayMembership?: any
+  readonly defaultDisplayMembership: any
 }
 
 export default function CategoryGrid({
@@ -81,7 +81,7 @@ export default function CategoryGrid({
               </div>
             ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} featureToggle={featureToggle} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             ))}
           </div>
 

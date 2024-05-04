@@ -13,6 +13,8 @@ export default function ProductCompare({
   closeCompareProducts,
   deviceInfo,
   maxBasketItemsCount,
+  featureToggle, 
+  defaultDisplayMembership,
 }: any) {
   const [attributeNames, setAttributeNames] = useState([])
   const translate = useTranslation()
@@ -121,6 +123,8 @@ export default function ProductCompare({
                                   deviceInfo={deviceInfo}
                                   maxBasketItemsCount={maxBasketItemsCount}
                                   attributesCount={attributeNames?.length || 0}
+                                  featureToggle={featureToggle} 
+                                  defaultDisplayMembership={defaultDisplayMembership}
                                 />
                               </SwiperSlide>
                             </div>
