@@ -8,8 +8,10 @@ import VoucherDetails from './VoucherDetails'
 import PurchaseDetails from './PurchaseDetails'
 import MembershipDetails from './MembershipDetails'
 import ManageMembership from '../ManageMembership'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export default function MyMembership({defaultDisplayMembership, allMembershipPlans}:any) {
+  const translate = useTranslation()
   const { user } = useUI()
   const [discount, setDiscount] = useState(0)
   const [voucherCount, setVoucherCount] = useState(0)
@@ -19,7 +21,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
   const [latestMembershipOrder, setLatestMembershipOrder] = useState({})
   const [savedAmount, setSavedAmount] = useState(null)
   const [manageComponentShow, setManageComponentShow] = useState(false)
-  const [ButtonText , setButtonText] = useState(manageComponentShow ? 'Back to My Membership' : 'Manage Membership')
+  const [ButtonText , setButtonText] = useState(manageComponentShow ? translate('label.membership.manageMembership.backToMyMembershipText') : translate('label.membership.manageMembership.manageMyMembershipText'))
 
   useEffect(() => {
     const fetchMemberShip = async () => {
@@ -81,7 +83,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
   }, [])
 
   useEffect (() => {
-    manageComponentShow ?  setButtonText('Back to My Membership') : setButtonText('Manage Membership')
+    manageComponentShow ?  setButtonText(translate('label.membership.manageMembership.backToMyMembershipText')) : setButtonText(translate('label.membership.manageMembership.manageMyMembershipText'))
   }, [manageComponentShow])
 
   const onButtonClick = () => {
@@ -99,12 +101,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
               <PurchaseDetails lastPurchase={latestMembershipOrder} />
             </div>
             <div className="w-full md:w-1/2 flex-1 flex">
-              <VoucherDetails
-                voucherUsed={voucherUsed}
-                savedAmount={savedAmount}
-                voucherLeft={voucherLeft}
-                voucherCount={voucherCount}
-              />
+              <VoucherDetails voucherUsed={voucherUsed} currencySymbol={""} savedAmount={savedAmount} voucherLeft={voucherLeft} voucherCount={voucherCount} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
           </div>
         </>

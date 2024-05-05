@@ -8,8 +8,10 @@ import { useUI } from '@components/ui/context'
 import { Guid } from '@commerce/types'
 import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, refreshBasket, }: any) => {
+  const translate = useTranslation()
   const { cartItems: basket } = useUI()
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
@@ -22,7 +24,7 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, refreshBask
   const { user, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
 
   const fetchMemberShipBenefits = async () => {
-    setOverlayLoaderState({ visible: true, message: 'loading...', })
+    setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
     setAppliedBenefit(false)
     const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
     const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
@@ -72,7 +74,7 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, refreshBask
   }, [membership])
 
   const handleApplyDiscount = () => {
-    setOverlayLoaderState({ visible: true, message: 'loading...', })
+    setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
     const value = membership?.benefits?.find((x:any)=> x?.status === 0)?.voucher;
     const handleSubmit = async ( method: string = 'apply', promoCode: string = value ) => {
       try {

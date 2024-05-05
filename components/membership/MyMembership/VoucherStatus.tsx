@@ -1,4 +1,8 @@
+import { useTranslation } from '@commerce/utils/use-translation';
+import { stringFormat } from "@framework/utils/parse-util";
+
 const VoucherStatus = ({ voucherLeft, voucherCount }: any) => {
+  const translate = useTranslation()
   const renderCircles = () => {
     return Array.from({ length: voucherCount }, (_, i) => {
       const isAvailable = i < voucherLeft;
@@ -20,7 +24,7 @@ const VoucherStatus = ({ voucherLeft, voucherCount }: any) => {
 
   return (
     <div>
-      <p className="mb-2">{voucherLeft} of {voucherCount} vouchers available</p>
+      <p className="mb-2">{stringFormat(translate('label.membership.vouchersAvailableText'), { voucherLeft, voucherCount })}</p>
       <div className="flex items-center mb-4">
         {renderCircles()}
       </div>

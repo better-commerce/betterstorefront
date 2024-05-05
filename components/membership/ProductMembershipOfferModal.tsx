@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
-import { roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
 
 const ProductMembershipOfferModal = ({ open, defaultDisplayMembership, price, isIncludeVAT, closeCallback }: any) => {
     if (!open) return null
 
+    const translate = useTranslation()
     const discountPerc = defaultDisplayMembership?.membershipPromoDiscountPerc || 0
     const discountedPrice = useMemo(() => {
         if (isIncludeVAT) {
@@ -30,10 +32,10 @@ const ProductMembershipOfferModal = ({ open, defaultDisplayMembership, price, is
                     </div>
                     <div className="mt-4">
                         <p className="font-bold text-lg">
-                            <span className="justify-center">{`Get ${defaultDisplayMembership?.membershipPromoDiscountPerc}% OFF, unlimited FREE delivery and unique offers all year round!*`}</span>
+                            <span className="justify-center">{stringFormat(translate('label.membership.membershipPromotionOfferDiscountText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc })}</span>
                         </p>
                         <p className="text-gray-600 mt-2">
-                        {`That's a saving of ${discountedPrice} if you order today and become a My TFS member.`}
+                            {stringFormat(translate('label.membership.membershipPromotionMemberDiscountText'), { discountedPrice })}
                         </p>
                     </div>
                 </div>

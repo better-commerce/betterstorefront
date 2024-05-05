@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import BenefitItems from './BenefitItems'
 import cartHandler from "@components/services/cart";
 import MembershipPlanList from './MembershipPlanList'
-import { roundToDecimalPlaces } from '@framework/utils/parse-util';
+import { roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util';
 import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
@@ -64,12 +64,12 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           </button>
         </div>
         <h2 className="text-2xl font-bold mb-4">
-          {defaultDisplayMembership?.membershipPromoDiscountPerc && `GET ${defaultDisplayMembership?.membershipPromoDiscountPerc}% OFF + FREE DELIVERY`}
+          {defaultDisplayMembership?.membershipPromoDiscountPerc && stringFormat(translate('label.membership.optMembershipPromotionOfferDiscountText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc })}
         </h2>
         <p className="mb-6 text-gray-600">
-          {`That's currently a saving of ${moneySaved} on your order today when you become a`}
+          {stringFormat(translate('label.membership.optMembershipPromotionOfferDiscountText'), { moneySaved } )}
         </p>
-        <h3 className="text-lg font-semibold mb-4">What you get as a member</h3>
+        <h3 className="text-lg font-semibold mb-4">{translate('label.membership.optMembershipWhatYouGetHeadingText')}</h3>
         <BenefitItems discountPerc={defaultDisplayMembership?.membershipPromoDiscountPerc} />
         <MembershipPlanList
           membershipPlans={membershipPlans}

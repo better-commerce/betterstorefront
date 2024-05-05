@@ -1,9 +1,12 @@
 import React from 'react';
 import moment from 'moment';
+import { DATE_FORMAT } from '@components/utils/constants';
+import { useTranslation } from '@commerce/utils/use-translation';
 
 const MembershipDetails = ({ membership, ButtonText, onButtonClick}: any) => {
+  const translate = useTranslation()
     const formatDate = (dateString: string) => {
-        return moment(dateString).format('MMMM Do YYYY');
+        return moment(dateString).format(DATE_FORMAT);
     };
 
     const handleButtonClick = () => {
@@ -13,14 +16,14 @@ const MembershipDetails = ({ membership, ButtonText, onButtonClick}: any) => {
   return (
     <div className="bg-gray-700 text-white py-4 px-6 rounded-md shadow-md my-4">
       <div className='my-4'>
-        <p className="text-2xl font-semibold">Current Plan: {membership?.membershipName}</p>
+        <p className="text-2xl font-semibold">{translate('label.membership.currentPlanText')} {membership?.membershipName}</p>
       </div>
       <div className="mt-2">
-        <span>Your next billing date will be : </span>
+        <span>{translate('label.membership.nextBillingDateText')}</span>
         <span>{formatDate(membership?.endDate)}</span>
       </div>
       <div className="mt-2">
-        <span>You've been a member since : </span>
+        <span>{translate('label.membership.memberSinceText')}</span>
         <span className="text-sm">{formatDate(membership?.startDate)}</span>
       </div>
       <div className="mt-6 mb-4 lg:w-3/ md:w-1/2">
