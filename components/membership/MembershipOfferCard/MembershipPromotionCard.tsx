@@ -14,8 +14,8 @@ const MembershipPromotionCard = ({ moneySaved, defaultDisplayMembership, lowestM
       </div>
       <div className="mt-4">
         <p className="font-bold text-lg">
-          <span className="text-red-700"> {!!moneySaved && stringFormat(translate('label.membership.membershipPromotionMoneySavedText'), { moneySaved })} </span>
-          <span className="text-indigo-900">{stringFormat(translate('label.membership.membershipPromotionDiscountOnThisOrderText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc })}</span>
+          <span className="text-red-700"> {!!moneySaved && stringFormat(translate('label.membership.membershipPromotionMoneySavedText'), { moneySaved: `${currencySymbol}${moneySaved}` })} </span>
+          <span className="text-indigo-900">{translate('label.membership.membershipPromotionDiscountOnThisOrderText')}</span>
         </p>
         <p className="text-gray-600 mt-2">
           {stringFormat(translate('label.membership.membershipPromotionOfferDiscountText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc })}
