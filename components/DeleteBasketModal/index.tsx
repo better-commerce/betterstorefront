@@ -43,15 +43,15 @@ const DeleteBasketModal = ({ isOpen, closeModal, loadingAction, handleDeleteBask
                             leaveFrom="transform scale-100 opacity-100"
                             leaveTo="transform scale-95 opacity-0"
                         >
-                            <Dialog.Panel className="w-full max-w-md pb-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
+                            <Dialog.Panel className="w-full max-w-md pb-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                                 <Dialog.Title
                                     as="div"
-                                    className="flex justify-between w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
+                                    className="flex justify-between items-center w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
                                 >
                                     {translate('label.b2b.basket.removeBasketHeadingText')}
                                     {loadingAction === LoadingActionType.NONE && (
                                         <XMarkIcon
-                                            className="w-5 h-5 text-gray-500 hover:text-gray-400"
+                                            className="w-5 h-5 text-gray-500 hover:text-gray-400 cursor-pointer"
                                             onClick={closeModal}
                                         ></XMarkIcon>
                                     )}

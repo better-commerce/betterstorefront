@@ -42,10 +42,16 @@
       "phoneNumberText": "Numéro de téléphone",
       "basket": {
         "createBasketLinkText": "Créer un panier",
+        "transferBasketLinkText": "Transférer le panier",
         "deleteBasketLinkText": "Supprimer le panier",
         "listBasketsHeadingText": "Liste des paniers",
         "removeBasketHeadingText": "Supprimer ce panier ?",
-        "removeBasketConfirmText": "Êtes-vous sûr de ne pas vouloir ce panier ?"
+        "removeBasketConfirmText": "Êtes-vous sûr de ne pas vouloir ce panier ?",
+        "selectBasketToTransferText": "Sélectionner un panier",
+        "selectUserToTransferText": "Sélectionner un utilisateur",
+        "noCartSelectedText": "Aucun panier sélectionné",
+        "noUserSelectedText": "Aucun utilisateur sélectionné",
+        "unnamedBasketText": "Panier"
       }
     },
     "basket": {

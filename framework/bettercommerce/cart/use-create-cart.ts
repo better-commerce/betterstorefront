@@ -1,26 +1,32 @@
-import { BASKET_ENDPOINT } from '@components/utils/constants'
+import { BASKET_ENDPOINT, EmptyGuid, EmptyObject } from '@components/utils/constants'
 import fetcher from '../fetcher'
-import { Guid } from '@commerce/types'
 import { logError } from '@framework/utils/app-util'
+
 interface Props {
     basketId: string
     basketName: string
+    userId: string
     cookies?: any
 }
 
 export default function useCreateCart() {
-    return async function handler({ basketId, basketName, cookies, }: Props) {
+    return async function handler({ basketId, basketName, userId, cookies }: Props) {
         try {
             const response: any = await fetcher({
-                url: `${BASKET_ENDPOINT}/${basketId}/items/add`,
-                method: 'put',
-                data: { basketId, basketName, productId: Guid.empty },
+                url: `${BASKET_ENDPOINT}/create`,
+                method: 'POST',
+                data: {
+                    basketId,
+                    basketName,
+                    userId,
+                    companyId: EmptyGuid,
+                },
                 cookies,
                 headers: {
                     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
                 },
             })
-            return { ...response.result, ...{ message: response.message } }
+            return response
         } catch (error: any) {
             logError(error)
             // throw new Error(error.message)
