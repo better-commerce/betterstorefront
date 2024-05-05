@@ -1,8 +1,11 @@
+import { useTranslation } from "@commerce/utils/use-translation";
+import { stringFormat } from "@framework/utils/parse-util";
 
 const ManageMembership = ({
   defaultDisplayMembership,
   allMembershipPlans,
 }: any) => {
+  const translate = useTranslation()
   const membershipPlan = allMembershipPlans?.sort(
     (a: any, b: any) => a?.displayOrder - b?.displayOrder
   )
@@ -15,20 +18,19 @@ const ManageMembership = ({
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 p-8">
-      <h2 className="text-2xl font-bold mb-4"> Upgrade your membership today! </h2>
+      <h2 className="text-2xl font-bold mb-4">{translate('label.membership.manageMembership.manageMembershipHeadingText')}</h2>
       <p className="text-gray-600 mb-6">
-        Get more {defaultDisplayMembership?.membershipPromoDiscountPerc}% off
-        vouchers to use up to your next billing date
+        {stringFormat(translate('label.membership.manageMembership.manageMembershipText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc})}
       </p>
 
       <div className="grid grid-cols-1 gap-4 w-full max-w-md">
         {membershipPlan?.map((membershipPlan: any) => (
           <div key={membershipPlan?.recordId} className="bg-white rounded-lg shadow-md p-4">
             <h3 className="text-lg font-semibold mb-2"> {membershipPlan?.name} </h3>
-            <p className="text-gray-600 mb-2">{membershipPlan?.noOfVouchers} X 20% discounts anytime</p>
-            <p className="text-gray-800 font-bold">{membershipPlan?.price?.formatted?.withTax } per year</p>
+            <p className="text-gray-600 mb-2">{membershipPlan?.noOfVouchers} X {`${defaultDisplayMembership?.membershipPromoDiscountPerc}%`} {translate('label.membership.discountsAnytimeText')}</p>
+            <p className="text-gray-800 font-bold">{membershipPlan?.price?.formatted?.withTax }{translate('label.membership.perYearText')}</p>
             <button className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded mt-2">
-              Upgrade from {formattedCurrentDate} until next billing date
+              {stringFormat(translate('label.membership.manageMembership.upgradeUntilBillingDateText'), { formattedCurrentDate })}
             </button>
           </div>
         ))}

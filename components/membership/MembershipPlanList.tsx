@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useTranslation } from '@commerce/utils/use-translation';
 
 interface Plan {
   recordId: string;
@@ -22,7 +22,7 @@ interface MembershipPlanListProps {
 }
 
 const MembershipPlanList: React.FC<MembershipPlanListProps> = ({ membershipPlans, defaultDisplayMembership, selectedPlan, handlePlanSelection, firstMembershipSelectedAsDefault = false }) => {
-
+  const translate = useTranslation()
   return (
     <div className="grid grid-cols-1 gap-4 mb-4">
       {membershipPlans?.map((membershipPlan: any, index: number) => (
@@ -39,8 +39,8 @@ const MembershipPlanList: React.FC<MembershipPlanListProps> = ({ membershipPlans
           />
           <label htmlFor={`plan-${membershipPlan.recordId}`} className="ml-3 block text-sm font-medium text-gray-700">
             <h4 className="text-lg font-semibold mb-2">{membershipPlan?.name}</h4>
-            <p className="text-gray-600 mb-2">{`${membershipPlan?.noOfVouchers} x ${defaultDisplayMembership?.membershipPromoDiscountPerc}% discounts anytime`}</p>
-            <p className="text-gray-800 font-bold">{`${membershipPlan?.price?.formatted?.withTax} per year`}</p>
+            <p className="text-gray-600 mb-2">{`${membershipPlan?.noOfVouchers} x ${defaultDisplayMembership?.membershipPromoDiscountPerc}% ${translate('label.membership.discountsAnytimeText')}`}</p>
+            <p className="text-gray-800 font-bold">{`${membershipPlan?.price?.formatted?.withTax} ${translate('label.membership.perYearText')}`}</p>
           </label>
         </div>
       ))}
