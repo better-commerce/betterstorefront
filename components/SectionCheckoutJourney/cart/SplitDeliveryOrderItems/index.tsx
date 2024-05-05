@@ -36,7 +36,7 @@ function SplitDeliveryOrderItems({ order }: any) {
 
   return (
     <div>
-      {deliveryPlans?.map((plan: any, idx: number) => (
+      {deliveryPlans?.concat(order?.items?.filter((x: any) => x?.isMembership))?.map((plan: any, idx: number) => (
         <div key={idx} className={`${idx > 0 ? 'mt-4' : ''}`}>
           <span className="font-semibold text-black w-full flex items-center">
             <span>Delivery {idx + 1} of {deliveryPlans?.length}</span>

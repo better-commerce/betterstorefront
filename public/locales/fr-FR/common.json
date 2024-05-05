@@ -833,7 +833,7 @@
       "applyDiscountText": "APPLIQUER LA REMISE",
       "discountsRemainingText": "Vous avez {voucherCount} remises restantes",
       "membershipPromotionMoneySavedText": "ÉCONOMISEZ {moneySaved}",
-      "membershipPromotionDiscountOnThisOrderText": "{membershipPromoDiscountPerc}% DE REMISE SUR CETTE COMMANDE",
+      "membershipPromotionDiscountOnThisOrderText": "DE REMISE SUR CETTE COMMANDE",
       "membershipPromotionOfferDiscountText": "Obtenez {membershipPromoDiscountPerc}% DE REMISE, livraison GRATUITE illimitée et offres uniques toute l'année* !",
       "membershipPromotionStartsFromText": "L'adhésion commence à partir de {lowestMemberShipPrice} par an",
       "membershipPromotionJoinNowText": "Rejoignez maintenant",

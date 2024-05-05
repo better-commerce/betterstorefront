@@ -13,7 +13,7 @@ const ApplyMembershipCard = ({ currencySymbol, membership, moneySaved, handleApp
       <button onClick={handleApplyDiscount} className="bg-white text-black font-semibold py-2 px-4 rounded-md mb-4">
         {translate('label.membership.applyDiscountText')}
       </button>
-      <p className="text-black">{voucherCount && stringFormat(translate('label.membership.applyDiscountText'), { voucherCount })}</p>
+      {/*<p className="text-black">{voucherCount && stringFormat(translate('label.membership.applyDiscountText'), { voucherCount })}</p>*/}
     </div>
   );
 };

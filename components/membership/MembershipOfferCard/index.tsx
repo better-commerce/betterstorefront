@@ -10,9 +10,8 @@ import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/util
 import { logError } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, refreshBasket, }: any) => {
+const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, refreshBasket, }: any) => {
   const translate = useTranslation()
-  const { cartItems: basket } = useUI()
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
   const currencySymbol = basket?.grandTotal?.currencySymbol

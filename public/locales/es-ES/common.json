@@ -833,7 +833,7 @@
       "applyDiscountText": "APLICAR DESCUENTO",
       "discountsRemainingText": "Tienes {voucherCount} descuentos restantes",
       "membershipPromotionMoneySavedText": "AHORRA {moneySaved}",
-      "membershipPromotionDiscountOnThisOrderText": "{membershipPromoDiscountPerc}% DE DESCUENTO EN ESTE PEDIDO",
+      "membershipPromotionDiscountOnThisOrderText": "DE DESCUENTO EN ESTE PEDIDO",
       "membershipPromotionOfferDiscountText": "¡Obtén {membershipPromoDiscountPerc}% DE DESCUENTO, envío GRATIS ilimitado y ofertas únicas durante todo el año!*",
       "membershipPromotionStartsFromText": "La membresía comienza desde {lowestMemberShipPrice} por año",
       "membershipPromotionJoinNowText": "Únete ahora",
