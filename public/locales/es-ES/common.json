@@ -41,11 +41,17 @@
       "registeredNumberText": "Número de registro",
       "phoneNumberText": "Número de teléfono",
       "basket": {
-        "createBasketLinkText": "Crear Cesta",
-        "deleteBasketLinkText": "Eliminar Cesta",
-        "listBasketsHeadingText": "Lista de Cestas",
-        "removeBasketHeadingText": "¿Eliminar esta cesta?",
-        "removeBasketConfirmText": "¿Estás seguro de que no quieres esta cesta?"
+        "createBasketLinkText": "Crear Canasta",
+        "transferBasketLinkText": "Transferir Canasta",
+        "deleteBasketLinkText": "Eliminar Canasta",
+        "listBasketsHeadingText": "Lista de Canastas",
+        "removeBasketHeadingText": "¿Eliminar esta canasta?",
+        "removeBasketConfirmText": "¿Estás seguro de que no quieres esta canasta?",
+        "selectBasketToTransferText": "Seleccionar una Canasta",
+        "selectUserToTransferText": "Seleccionar un Usuario",
+        "noCartSelectedText": "Ningún Carrito Seleccionado",
+        "noUserSelectedText": "Ningún Usuario Seleccionado",
+        "unnamedBasketText": "Canasta"
       }
     },
     "basket": {
@@ -856,6 +862,7 @@
     },
     "label": {
       "homeText": "Inicio",
+      "optionalPlaceHolderText": "(Opcional)",
       "postText": "Publicar",
       "reviews": "opiniones",
       "backToHomepageText": "Volver a la página de inicio",

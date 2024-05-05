@@ -42,10 +42,16 @@
       "phoneNumberText": "Telefonnummer",
       "basket": {
         "createBasketLinkText": "Warenkorb erstellen",
+        "transferBasketLinkText": "Warenkorb übertragen",
         "deleteBasketLinkText": "Warenkorb löschen",
         "listBasketsHeadingText": "Warenkorbliste",
         "removeBasketHeadingText": "Diesen Warenkorb entfernen?",
-        "removeBasketConfirmText": "Sind Sie sicher, dass Sie diesen Warenkorb nicht wollen?"
+        "removeBasketConfirmText": "Bist du sicher, dass du diesen Warenkorb nicht möchtest?",
+        "selectBasketToTransferText": "Wähle einen Warenkorb aus",
+        "selectUserToTransferText": "Benutzer auswählen",
+        "noCartSelectedText": "Kein Warenkorb ausgewählt",
+        "noUserSelectedText": "Kein Benutzer ausgewählt",
+        "unnamedBasketText": "Warenkorb"
       }
     },
     "basket": {
@@ -464,7 +470,7 @@
     "orderDetails": {
       "myOrderHeadingText": "Überprüfen Sie den Status Ihrer letzten Bestellungen, verwalten Sie Rücksendungen und laden Sie Rechnungen herunter.",
       "packageText": "Paket",
-      "trackPackageBtnText":"Paket verfolgen",
+      "trackPackageBtnText": "Paket verfolgen",
       "trackingDetailsBtnText": "Tracking-Details →",
       "returnTrackingDetailHeadingText": "Rücksendungs-Tracking-Detail",
       "rateItemText": "Artikel bewerten:",
