@@ -5,13 +5,6 @@ import { toNumber } from 'lodash'
 export const HOMEPAGE_SLUG = `/`
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
-export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
-export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
-export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
-export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
-  '/api/basket/update-checkout2-address'
-export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY =
-  '/api/delivery/click-collect-store'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
@@ -72,10 +65,21 @@ export const REFERRAL_REFEREE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VER
 export const REFERRAL_BY_USERNAME = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/by-username`
 export const REFERRAL_SEARCH = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/search`
 export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/referral/referrer/vouchers`
+
+// Membership API endpoints
+export const MEMBERSHIP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership`
+export const NEXT_MEMBERSHIP_BENEFITS = '/api/membership/benefits'
+
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
-export const NEXT_GET_COUNTRIES = '/api/countries'
+
 //LOCAL ENDPOINTS
+export const NEXT_GET_COUNTRIES = '/api/countries'
+export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
+export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
+export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
+export const NEXT_UPDATE_CHECKOUT2_ADDRESS = '/api/basket/update-checkout2-address'
+export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY = '/api/delivery/click-collect-store'
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -184,7 +188,9 @@ export const NEXT_GET_SUBJECTS = '/api/subjects'
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
+export const NEXT_GET_ALL_MEMBERSHIP_PLANS = '/api/membership/get-all-plans'
 export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
+export const NEXT_GET_PRODUCT_AVAILABILITY_BY_POSTCODE = `/api/store-locator/get-product-availability-by-postalCode`
 export const NEXT_POST_STORE_BY_POSTALCODE =
   '/api/store-locator/get-store-by-postalcode'
 export const NEXT_GOOGLE_AUTOCOMPLETE_API =
@@ -238,11 +244,16 @@ export const BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE =
   process.env.BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE
 
 // Engage API endpoints
+export const ENGAGE_QUERY_CUSTOMER = `${process.env.ENGAGE_QUERY_BASE_URL}/customer`
 export const ENGAGE_QUERY_USER_EVENTS = `${process.env.ENGAGE_QUERY_BASE_URL}/userevents`
 export const ENGAGE_QUERY_USER_ITEMS = `${process.env.ENGAGE_QUERY_BASE_URL}/item`
-export const ENGAGE_WEB_CAMPAIGN = `${process.env.ENGAGE_QUERY_BASE_URL}/webcampaign`
-export const ENGAGE_TRENDING = `${process.env.ENGAGE_QUERY_BASE_URL}/trending`
-export const NEXT_ENGAGE_PRODUCT_CAMPAIGNS = `/api/product-campaigns`
+export const ENGAGE_QUERY_WEB_CAMPAIGN = `${process.env.ENGAGE_QUERY_BASE_URL}/webcampaign`
+export const ENGAGE_QUERY_TRENDING = `${process.env.ENGAGE_QUERY_BASE_URL}/trending`
+export const ENGAGE_QUERY_COLLABORATIVE = `${process.env.ENGAGE_QUERY_BASE_URL}/collaborative`
+export const ENGAGE_QUERY_INTEREST = `${process.env.ENGAGE_QUERY_BASE_URL}/interest`
+export const ENGAGE_QUERY_COUPON = `${process.env.ENGAGE_QUERY_BASE_URL}/coupon`
+export const ENGAGE_QUERY_SEARCH = `${process.env.ENGAGE_QUERY_BASE_URL}/search`
+export const ENGAGE_QUERY_ANNOUNCEMENT = `${process.env.ENGAGE_QUERY_BASE_URL}/announcement`
 
 // Override currency, language & country settings ONLY FOR specific storefronts WHEREVER REQUIRED.
 export const BETTERCOMMERCE_CURRENCY = process.env.BETTERCOMMERCE_CURRENCY
@@ -603,12 +614,30 @@ export enum QuoteStatus {
   QUOTE_SENT = 6,
 }
 
+export enum DeleteModalType {
+  ENGRAVING = 'engraving',
+  PRODUCT = 'product'
+}
+
 export enum EngageEventTypes {
+  // Homepage
   TRENDING_FIRST_ORDER = 'trend_first_orders',
-  RECENTLY_VIEWED = 'recent_products',
+  INTEREST_USER_ITEMS = 'user_interest',
+  TRENDING_COLLECTION = 'trending_collection',
+  COUPON_COLLECTION = 'coupon_collection',
+  SEARCH = 'search',
+  // PDP
   ALSO_BOUGHT = 'also_bought',
-  RECOMMENDED = 'recommendation_products',
-  TOP_VIEWED = 'top_viewed_products',
-  SIMILAR_PRODUCTS = 'similar_products_sorted',
+  SIMILAR_PRODUCTS = 'similar_products',
+  SIMILAR_PRODUCTS_SORTED = 'similar_products_sorted',
   BOUGHT_TOGETHER = 'bought_together',
+  COLLAB_ITEM_VIEW = 'item_view',
+  COLLAB_USER_ITEMS_VIEW = 'user_items_view',
+  COLLAB_ITEM_PURCHASE = 'item_purchase',
+  CROSS_SELL_BY_CATEGORIES = 'cross_sell_by_categories',
+  CROSS_SELL_ITEMS_SORTED = 'cross_sell_items_sorted',
+  // Homepage, PDP
+  RECENTLY_VIEWED = 'recent_products',
+  // My Store
+  PURCHASE_HISTORY = 'purchase_history',
 }

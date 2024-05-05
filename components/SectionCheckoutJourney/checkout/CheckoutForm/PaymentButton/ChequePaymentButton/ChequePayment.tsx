@@ -17,7 +17,7 @@ const CHEQUE_PAYMENT_FORM_FIELDS = [
   {
     type: 'text',
     name: 'chequeNo',
-    placeholder: translate('label.checkoutForm.chequeNoText'),
+    placeholder: translate('label.checkout.payment.chequeNoText'),
     label: 'Cheque Number',
     className:
       'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',

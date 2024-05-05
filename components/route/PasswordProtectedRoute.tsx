@@ -9,8 +9,10 @@ import Loader from '@components/Loader'
 
 // Other Imports
 import { stringToBoolean } from '@framework/utils/parse-util'
-import Cookies from 'js-cookie'
+//import Cookies from 'js-cookie'
 import { Cookie } from '@framework/utils/constants'
+
+declare const window: any
 
 const PasswordProtectedRoute = ({ config, children }: any) => {
   let configSettings: any
@@ -48,7 +50,8 @@ const PasswordProtectedRoute = ({ config, children }: any) => {
         )?.value || 'False'
       )
 
-      const authenticated = Cookies.get(Cookie.Key.PASSWORD_PROTECTION_AUTH)
+      //const authenticated = Cookies.get(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)
+      const authenticated = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)!
       const isAuthenticated = stringToBoolean(authenticated)
       if (isPasswordProtectionEnabled && !isAuthenticated) {
         Router.push('/password-protection').then(() => {

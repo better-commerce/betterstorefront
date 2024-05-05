@@ -3,6 +3,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
+import Link from 'next/link'
 import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
@@ -17,7 +18,7 @@ import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { getEnabledSocialLogins } from '@framework/utils/app-util'
+import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
 import { AlertType } from '@framework/utils/enums'
@@ -64,7 +65,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       </div> */}
 
       <div className="flex flex-col items-center justify-center w-full">
-        <div className="w-full px-5 font-semibold sm:px-0">
+        <div className="w-full px-10 font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
           <input
             className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
@@ -75,7 +76,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
           />
         </div>
         {error ? <span className="text-red-500 capitalize">{error}</span> : null}
-        <div className="flex items-center justify-center w-full my-5">
+        <div className="flex items-center justify-center w-full my-5 px-10 sm:px-0">
           <Button
             className="w-full border border-black btn btn-c btn-primary rounded-2xl"
             buttonType="default"
@@ -149,6 +150,7 @@ const router = useRouter()
       } else if (result.data) {
         setAlert({ type: 'success', msg: translate('common.label.successText') })
         let userObj = { ...result.data }
+        if (userObj?.userToken) saveUserToken(userObj?.userToken)
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
         )
@@ -300,9 +302,9 @@ const router = useRouter()
 
             <span className="block text-center text-neutral-700 dark:text-neutral-300">
               {translate('label.myAccount.alreadyAccountText')} {` `}
-              <a className="text-green-600" href="/my-account/login">
+              <Link passHref className="text-green-600" href="/my-account/login">
                 {translate('label.login.loginBtnText')}
-              </a>
+              </Link>
             </span>
           </div>
         </div>

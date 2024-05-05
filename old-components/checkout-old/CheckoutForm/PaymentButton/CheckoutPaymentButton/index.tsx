@@ -159,7 +159,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               currency: orderResult?.currencyCode,
               payment_type: CheckoutPaymentType.Regular,
               reference: getOrderId(orderInfo?.order),
-              description: `${translate('label.checkoutForm.itemsForOrderText')}: ${orderId}; ${translate('label.basket.basketText')}: ${orderResult?.basketId}`,
+              description: `Items for order: ${orderId}; Basket: ${orderResult?.basketId}`,
               capture: true,
               capture_on: new Date().toISOString(),
 
@@ -325,7 +325,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
         {that.state?.scriptLoaded && (
           <div className="checkout-frame-container">
             <h5 className="mb-6 font-semibold text-black font-18">
-              Debit/Credit Card details
+              {translate('label.checkout.payment.debitCreditCardDetailsHeadingText')}
             </h5>
             <Frames
               config={config}
@@ -363,7 +363,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
               cardBinChanged={(ev: any) => that.onCardBinChanged(ev)}
             >
               <div className='mb-5'>
-                <label className="text-black font-14">Card number*</label>
+                <label className="text-black font-14">{translate('label.checkout.payment.cardNumberLabelText')}</label>
                 <CardNumber />
 
                 {that.state.validations.length > 0 &&
@@ -373,7 +373,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                   that.state.validations.find(
                     (x: any) => x?.element === ELEM_CARD_NUMBER
                   )?.isEmpty ? (
-                  <span className="text-red-600">Card number is required</span>
+                  <span className="text-red-600">{translate('label.checkout.payment.cardNumberRequiredText')}</span>
                 ) : (
                   <>
                     {that.state.validations.length > 0 &&
@@ -384,14 +384,14 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                         (x: any) => x?.element === ELEM_CARD_NUMBER
                       )?.isValid && (
                         <span className="text-red-600">
-                          Card number is invalid
+                          {translate('label.checkout.payment.cardNumberInvalidText')}
                         </span>
                       )}
                   </>
                 )}
               </div>
               <div className="mb-5 date-and-code">
-                <label className="text-black font-14">Expiry date*</label>
+                <label className="text-black font-14">{translate('label.checkout.payment.expiryDateLabelText')}</label>
                 <div className="w-auto mb-5 w-200-md">
                   <ExpiryDate />
 
@@ -403,7 +403,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                       (x: any) => x?.element === ELEM_EXPIRY_DATE
                     )?.isEmpty ? (
                     <span className="text-red-600">
-                      Expiry date is required
+                      {translate('label.checkout.payment.expiryDateRequiredText')}
                     </span>
                   ) : (
                     <>
@@ -415,7 +415,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                           (x: any) => x?.element === ELEM_EXPIRY_DATE
                         )?.isValid && (
                           <span className="text-red-600">
-                            Expiry date is invalid
+                            {translate('label.checkout.payment.expiryDateInvalidText')}
                           </span>
                         )}
                     </>
@@ -435,7 +435,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                     that.state.validations.find(
                       (x: any) => x?.element === ELEM_CVV
                     )?.isEmpty ? (
-                    <span className="text-red-600">CVV is required</span>
+                    <span className="text-red-600">{translate('label.checkout.payment.cvvRequiredText')}</span>
                   ) : (
                     <>
                       {that.state.validations.length > 0 &&
@@ -445,7 +445,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
                         !that.state.validations.find(
                           (x: any) => x?.element === ELEM_CVV
                         )?.isValid && (
-                          <span className="text-red-600">CVV is invalid</span>
+                          <span className="text-red-600">{translate('label.checkout.payment.cvvInvalidText')}</span>
                         )}
                     </>
                   )}

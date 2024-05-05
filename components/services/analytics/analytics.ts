@@ -1,7 +1,8 @@
 import { Cookie } from '@framework/utils/constants'
-import { EVENTS_MAP } from './constants'
+import { CUSTOM_EVENTS, EVENTS_MAP } from './constants'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
 
 const endpoint = 'https://omnilytics.bettercommerce.io/data'
 
@@ -78,6 +79,7 @@ const publisher = async (data: any, event: string) => {
     }
   }
 
+  const pageUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
   let dataToPublish = {
     dataLayer: {
       ...windowDataLayer,
@@ -86,7 +88,7 @@ const publisher = async (data: any, event: string) => {
       utmSource: getQueryStringValue('utm_source'),
       utmContent: getQueryStringValue('utm_content'),
       utmTerm: getQueryStringValue('utm_term'),
-      pageUrl: window.location.href,
+      pageUrl: pageUrl,
       urlReferrer: document.referrer,
       currency: Cookies.get(Cookie.Key.CURRENCY),
       visitorEmail: visitorData.email,
@@ -106,11 +108,14 @@ const publisher = async (data: any, event: string) => {
     event,
     session: windowDataLayer.sessionId,
     trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
-    url: window.location.href,
+    url: pageUrl,
   }
 
   try {
-    await axios.post(endpoint, { ...dataToPublish })
+    const { data: analyticsData } = await axios.post(endpoint, { ...dataToPublish })
+    if (data?.eventType === EVENTS_MAP.EVENT_TYPES.ProductViewed) {
+      window.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.ProductViewed, { detail: analyticsData }))
+    }
   } catch (error) {
     console.log(error)
   }

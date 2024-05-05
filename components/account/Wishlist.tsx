@@ -9,7 +9,7 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
-export default function Wishlist({ deviceInfo }: any) {
+export default function Wishlist({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -36,7 +36,7 @@ export default function Wishlist({ deviceInfo }: any) {
     <section aria-labelledby="recent-heading" className="max-w-4xl">
       {!data.length && !isLoading && (
         <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
-          <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24">{translate('label.wishlist.emptyWishlistText')}</div>
+          <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24 dark:text-white">{translate('label.wishlist.emptyWishlistText')}</div>
           <p className="text-xs sm:text-sm text-primary opacity-60 mt-3">{translate('label.wishlist.saveItemsText')}.{' '}</p>
           <div className="flex w-full mt-5 sm:flex-col">
             <Link legacyBehavior passHref href="/search" className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary">
@@ -49,7 +49,7 @@ export default function Wishlist({ deviceInfo }: any) {
       <div className="grid grid-cols-1 sm:gap-5 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-3">
         {data?.map((product: any, wid: number) => (
           <div key={`wishlist-${wid}`}>
-            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         ))}
       </div>

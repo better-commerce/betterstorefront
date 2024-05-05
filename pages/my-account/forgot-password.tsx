@@ -99,7 +99,7 @@ function ForgotPasswordPage() {
       </NextHead>
 
       <section>
-        <div className="pt-16 pb-10 sm:pt-24 sm:pb-10 lg:max-w-7xl lg:mx-auto lg:px-8">
+        <div className="pt-16 pb-10 sm:pt-24 sm:pb-10 lg:max-w-7xl lg:mx-auto lg:px-8 header-space">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
             <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
               <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">

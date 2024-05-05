@@ -49,6 +49,11 @@ const getIpAddress = async () => {
 
 const DataLayerSingleton = function () {
   const windowObject: any = window
+  const visitorData: any = JSON.parse(
+    windowObject.localStorage.getItem('user')
+  ) || {
+    email: '',
+  }
   const navigator: any = windowObject.navigator
   const isTablet =
     /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(
@@ -185,7 +190,7 @@ const DataLayerSingleton = function () {
       visitorAffiliate: '',
       visitorEmail: null,
       visitorExistingCustomer: false,
-      visitorId: '',
+      visitorId: visitorData.userId || '',
       visitorLoggedIn: false,
       visitorSegment: '',
     }

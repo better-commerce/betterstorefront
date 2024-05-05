@@ -60,7 +60,7 @@ const AccordionInfo: FC<Props> = ({
   data = DEMO_DATA,
 }) => {
   return (
-    <div className="w-full rounded-2xl space-y-2.5">
+    <div className="w-full rounded-2xl sm:space-y-2.5">
       {/* ============ */}
       {data.map((item, index) => {
         return (
@@ -77,7 +77,7 @@ const AccordionInfo: FC<Props> = ({
                   )}
                 </Disclosure.Button>
                 <Disclosure.Panel
-                  className={panelClassName}
+                  className={`${panelClassName} description-text`}
                   as="div"
                   dangerouslySetInnerHTML={{ __html: item.content }}
                 ></Disclosure.Panel>

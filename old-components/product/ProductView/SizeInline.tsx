@@ -100,7 +100,7 @@ export default function SizeInline({ componentIdx, items = [], onChange = () => 
    return (
       <>
          <div className="flex items-center justify-between my-2" id="productSize">
-            <h4 className="text-gray-700 font-14">
+            <h4 className="text-gray-700 font-14 dark:text-white">
                {label}:
                <span className="pl-1 font-semibold text-gray-700 uppercase text-ms dark:text-gray-700">{currentAttribute}</span>
                <span className="pl-1 text-xs font-bold text-black sm:text-sm">

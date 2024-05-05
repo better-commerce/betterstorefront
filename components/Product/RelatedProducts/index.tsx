@@ -29,7 +29,9 @@ export default function RelatedProducts({
   handleQuickAddToBag,
   deviceInfo,
   maxBasketItemsCount,
-  config
+  config,
+  featureToggle, 
+  defaultDisplayMembership,
 }: any) {
   const { basketId, setCartItems, user } = useUI()
   const [quickViewProduct, setQuickViewProduct] = useState<any>(undefined)
@@ -195,7 +197,7 @@ export default function RelatedProducts({
                       {values?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid}>
-                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </SwiperSlide>
                         )
                       })}

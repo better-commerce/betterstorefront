@@ -20,6 +20,7 @@ import {
   EmptyGuid,
   EmptyObject,
   EmptyString,
+  EngageEventTypes,
   LOQATE_ADDRESS,
   Messages,
   NEXT_AUTHENTICATE,
@@ -43,6 +44,7 @@ import cartHandler from '@components/services/cart'
 import {
   matchStrings,
   stringToBoolean,
+  stringToNumber,
   tryParseJson,
 } from '@framework/utils/parse-util'
 import Link from 'next/link'
@@ -55,6 +57,11 @@ import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Cookie } from '@framework/utils/constants'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import commerce from '@lib/api/commerce'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+
 export enum BasketStage {
   CREATED = 0,
   ANONYMOUS = 1,
@@ -75,7 +82,7 @@ const steps = [
   { key: 'review', label: 'Payment', shouldActiveOn: '' },
 ]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
   const uiContext = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
@@ -181,7 +188,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const addressList = await fetchAddress()
       const basketRes: any = await getBasket(basketId)
       await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
-      await checkIfDefaultShippingAndBilling(addressList, basketRes)
+      if (!featureToggle?.features?.enableCollectDeliveryOption) {
+        await checkIfDefaultShippingAndBilling(addressList, basketRes)
+      } else {
+        await checkIfCNCBasketUpdated(addressList, basketRes)
+      }
       new Promise(() => {
         goToStep(CheckoutStep.ADDRESS)
       })
@@ -325,6 +336,45 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       cb()
       setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       setIsLoggedIn(false)
+    }
+  }
+
+  const checkIfCNCBasketUpdated = async (addressList: any, basket: any) => {
+    let redirectToStep: any = CheckoutStep.ADDRESS
+    const defaultDeliveryAddr = addressList?.find((address: any) => address.isDefaultDelivery)
+    const defaultBillingAddr = addressList?.find((address: any) => address.isDefaultBilling)
+    const hasShippingAddress = basket?.shippingAddress?.id > 0 || defaultDeliveryAddr?.id > 0
+    const hasBillingAddress = basket?.billingAddress?.id > 0 || defaultBillingAddr?.id > 0
+    const hasStoreId = basket?.storeId !== EmptyGuid
+
+    if (hasStoreId && hasBillingAddress && hasShippingAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS, CheckoutStep.DELIVERY]),
+      ])
+      // redirectToStep = CheckoutStep.REVIEW
+    }/** else if (hasBillingAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS]),
+      ])
+      redirectToStep = CheckoutStep.DELIVERY
+    } */
+
+    const billingAddress = !defaultBillingAddr ? defaultDeliveryAddr : defaultBillingAddr
+    // if (!basket?.billingAddress?.id && billingAddress?.id > 0) {
+    //   await updateCheckoutAddress({ billingAddress: billingAddress }, false)
+    // } else {
+    //   await updateCheckoutAddress({ billingAddress: basket?.billingAddress }, false)
+    // }
+
+    if (redirectToStep) {
+      return new Promise(() => {
+        setSelectedAddress({
+          billingAddress: billingAddress,
+          shippingAddress: defaultDeliveryAddr,
+        })
+        goToStep(redirectToStep)
+        hideOverlayLoaderState()
+      })
     }
   }
 
@@ -691,7 +741,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const onContinueAddressBook = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
     if (deliveryTypeMethod?.type === DeliveryType.COLLECT) {
-      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, false)
+      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, true)
     } else {
       await updateCheckoutAddress({ shippingAddress: selectedAddress?.shippingAddress, billingAddress: selectedAddress?.billingAddress }, true)
     }
@@ -752,6 +802,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     setDeliveryTypeMethod,
     featureToggle,
     deliveryMethods,
+    basket,
   }
 
   const editAddressFormProps = {
@@ -793,7 +844,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     setOverlayLoaderState,
     hideOverlayLoaderState,
     generateBasketId,
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const renderCurrentStep = () => {
@@ -851,6 +903,25 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       logError(error)
     }
   }, [])
+
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+      }
+    }
+  }
+
+  const basketDetailsProps = {
+    basket,
+    deviceInfo, 
+    allMembershipPlans, 
+    defaultDisplayMembership, 
+    refreshBasket,
+    featureToggle,
+  }
 
   useEffect(() => {
     if (basket?.lineItems?.length == 0) {
@@ -1000,7 +1071,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-4 bg-gray-100 border-b border-gray-300 checkout-header">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 sm:py-4 bg-gray-100 border-b border-gray-300 checkout-header">
         <div className="flex justify-between container-storefront small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88">
             <Logo />
@@ -1015,8 +1086,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       </div>
 
       {isMobile || isIPadorTablet ? (
-        <div className="justify-start w-full">
-          <BasketDetails basket={basket} deviceInfo={deviceInfo} />
+        <div className="justify-start w-full bar">
+          <BasketDetails { ...basketDetailsProps }  />
         </div>
       ) : (
         <></>
@@ -1049,9 +1120,17 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           <></>
         ) : (
           <div className="justify-start min-h-screen p-8 bg-gray-100 border-gray-300 border-x basket-container top-14">
-            <BasketDetails basket={basket} deviceInfo={deviceInfo} />
+            <BasketDetails  { ...basketDetailsProps } />
           </div>
         )}
+      </div>
+      <div className='flex flex-col w-full'>
+        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+        <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
       </div>
     </>
   )
@@ -1060,10 +1139,52 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
+
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership ={ membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+  
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       basketId,
+      allMembershipPlans: allMembershipsUIDData?.result,
+      defaultDisplayMembership,
     }
   }
 }

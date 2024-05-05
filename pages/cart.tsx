@@ -1,5 +1,5 @@
 // Base Imports
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Package Imports
 import dynamic from 'next/dynamic'
@@ -10,6 +10,9 @@ import { GetServerSideProps } from 'next'
 import cookie from 'cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import commerce from '@lib/api/commerce'
+import MembershipOfferCard from '@components/membership/MembershipOfferCard'
+import OptMembershipModal from '@components/membership/OptMembershipModal'
 
 // Component Imports
 import Layout from '@components/Layout/Layout'
@@ -21,10 +24,10 @@ import cartHandler from '@components/services/cart'
 import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
-import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
+import { vatIncluded, } from '@framework/utils/app-util'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -32,10 +35,12 @@ import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Prices from '@components/Prices'
-import NcInputNumber from '@components/NcInputNumber'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
-function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
+import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+
+function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
@@ -50,24 +55,21 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       )?.value || ''
   )
 
-  const {
-    setCartItems,
-    cartItems,
-    basketId,
-    setIsSplitDelivery,
-    isSplitDelivery,
-  } = useUI()
-  const { addToCart } = cartHandler()
+  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, } = useUI()
+  const { addToCart , getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
   const [relatedProducts, setRelatedProducts] = useState<any>()
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
   const [splitDeliveryItems, setSplitDeliveryItems] = useState<any>(null)
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
+  const [basket, setBasket] = useState(cart)
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
+  const [openOMM, setOpenOMM] = useState(false)
   const [basketPromos, setBasketPromos] = useState<Array<any> | undefined>(
     undefined
   )
@@ -165,6 +167,27 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       }
     )
     setAltRelatedProducts(altRelatedProducts)
+  }
+
+
+  const getBasket = async (basketId: string) => {
+    const basketResult: any = await getCart({
+      basketId,
+    })
+    const isLoggedIn = (user?.userId && user?.userId !== EmptyGuid && !isGuestUser) || false
+    setIsLoggedIn(isLoggedIn)
+    return basketResult
+  }
+
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+        setCartItems(basketResult)
+      }
+    }
   }
 
   useEffect(() => {
@@ -399,7 +422,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     const itemsFromArr = []
     for (const value of iterator) {
       itemsFromArr?.push({
-        id: value?.stockCode || EmptyString,
+        id: parseItemId(value?.stockCode) || EmptyString,
         name: value?.name || EmptyString,
         quantity: value?.qty || 1,
         price: value?.totalPrice?.raw?.withTax || 1,
@@ -410,7 +433,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     
     const cardData = {
       item_id: "cart",
-      item_ids: cart?.lineItems?.map((x:any) =>  x?.stockCode) || [],
+      item_ids: cart?.lineItems?.map((x:any) =>  parseItemId(x?.stockCode)) || [],
       items: itemsFromArr,
       total_value: cart?.grandTotal?.raw?.withTax || EmptyString
     }
@@ -442,10 +465,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     const asyncHandleItem = async () => {
       let data: any = {
         basketId,
-        productId: product.id,
-        stockCode: product.stockCode,
-        manualUnitPrice: product.manualUnitPrice,
-        displayOrder: product.displayOrderta,
+        productId: product?.id,
+        stockCode: product?.stockCode,
+        manualUnitPrice: product?.manualUnitPrice,
+        displayOrder: product?.displayOrderta,
         qty: -1,
       }
       if (type === 'increase') {
@@ -530,6 +553,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       </div>
     );
   };
+
+  const isMembershipItemOnly = useMemo(() => {
+    const membershipItemsCount = basket?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+    return (membershipItemsCount === basket?.lineItems?.length)
+  }, [basket])
+
   return (
     <>
       <NextHead>
@@ -557,135 +586,18 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         {!isEmpty && !isSplitDelivery && (
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
-              <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-                  {userCart.lineItems?.map((product: any, productIdx: number) => {
-                    const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
-                    return (
-                      <div key={`cart-${productIdx}`} className={`relative flex last:pb-0 ${product?.price?.raw?.withTax > 0 ? 'py-4 sm:py-6 xl:py-8' : 'bg-green-100 items-center mb-2 py-2 sm:py-2 xl:py-2 px-4'}`} >
-                        <div className={`${product?.price?.raw?.withTax > 0 ? 'w-24 overflow-hidden h-36 sm:w-32' : 'w-16 overflow-hidden h-20 sm:w-16'} relative flex-shrink-0 rounded-xl bg-slate-100`}>
-                          <img src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product?.name} className="object-contain object-center w-full h-full p-2" />
-                          <Link href={`/${product?.slug}`} className="absolute inset-0"></Link>
-                        </div>
-
-                        <div className="flex flex-col flex-1 ml-3 sm:ml-6">
-                          <div>
-                            <div className="flex justify-between ">
-                              <div className="flex-[1.5] ">
-                                <h3 className="text-base font-semibold">
-                                  <Link href={`/${product?.slug}`}>{product?.name}</Link>
-                                </h3>
-
-                                <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
-                                  {product?.colorName != "" &&
-                                    <div className="flex items-center space-x-1.5">
-                                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                        <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                      </svg>
-                                      <span>{product?.colorName}</span>
-                                    </div>
-                                  }
-                                  {product?.size != "" &&
-                                    <>
-                                      <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
-                                      <div className="flex items-center space-x-1.5">
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                          <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                          <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                          <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                          <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        <span className='uppercase'>{product?.size}</span>
-                                      </div>
-                                    </>
-                                  }
-                                </div>
-                                <div className="relative flex items-center justify-between w-full mt-3 sm:hidden">
-                                  {product?.price?.raw?.withTax > 0 ?
-                                    <div className='relative block text-left'>
-                                      <div className='inline-block'>
-                                        <div className="flex items-center justify-around text-gray-900">
-                                          <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
-                                            <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer " />
-                                          </div>
-                                          <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
-                                            {product.qty}
-                                          </span>
-                                          <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
-                                            <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    : <div></div>}
-                                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} />
-                                </div>
-                              </div>
-                              {product?.price?.raw?.withTax !== 0 &&
-                                <div className="relative justify-center hidden text-center sm:flex">
-                                  <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
-                                  <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
-                                    {product.qty}
-                                  </span>
-                                  <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
-                                </div>
-                              }
-                              <div className="justify-end flex-1 hidden sm:flex">
-                                <Prices price={product?.price} listPrice={product?.listPrice} className="mt-0.5" />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-between pt-2 mt-auto text-sm">
-                            <div></div>
-                            {product?.price?.raw?.withTax != 0 &&
-                              <div className="flex items-end justify-end text-sm">
-                                <button type="button" onClick={() => { openModal(); setItemClicked(product); }} className="relative flex items-center text-sm font-medium text-primary-6000 hover:text-primary-500 " >
-                                  <span>{translate('common.label.removeText')}</span>
-                                </button>
-                              </div>
-                            }
-                          </div>
-                        </div>
-                        {product.children?.map((child: any, idx: number) => (
-                          <div className="flex mt-10" key={'child' + idx}>
-                            <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                              <img src={child?.image} alt={child?.name || 'cart-image'} className="object-cover object-center w-full h-full" />
-                            </div>
-                            <div className="flex justify-between ml-5 font-medium text-gray-900">
-                              <Link href={`/${child?.slug}`}>{child?.name}</Link>
-                              <p className="ml-4">
-                                {child?.price?.formatted?.withTax > 0 ? isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax : ''}
-                              </p>
-                            </div>
-                            {!child?.parentProductId ? (
-                              <div className="flex items-center justify-end flex-1 text-sm">
-                                <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
-                                  <span className="sr-only"> {translate('common.label.removeText')} </span>
-                                  <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9"> {child.qty} </div>
-                            )}
-                          </div>
-                        ))}
-                        <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                          {product?.shippingPlan?.shippingSpeed}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </section>
+              <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} setItemClicked={setItemClicked} />
               <section aria-labelledby="summary-heading" className="p-4 mt-10 border sm:p-6 rounded-2xl bg-slate-50 border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0" >
                 <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
+                {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
+                    <>
+                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                      <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                    </>
+                  )
+                }
                 <div className="mt-2 sm:mt-6">
                   <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
                 </div>
@@ -813,11 +725,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                     </p>
                                   )}
                                   <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
+                                    {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
                                     <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                       {product.qty}
                                     </span>
-                                    <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                    {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
                                   </div>
                                 </div>
 
@@ -975,11 +887,52 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     cookies: context.req.cookies,
   })
 
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership ={ membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],
+      allMembershipPlans: allMembershipsUIDData?.result,
+      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }

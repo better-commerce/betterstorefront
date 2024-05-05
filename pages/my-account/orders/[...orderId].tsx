@@ -1,34 +1,32 @@
 // Base Imports
 import React, { useEffect, useState } from 'react'
 import NextHead from 'next/head'
+
 // Package Imports
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import { Disclosure } from '@headlessui/react'
+import axios from 'axios'
 
 // Component Imports
-import OrderStatusMapping from '@old-components/account/Orders/OrderStatusMapping'
+import OrderStatusMapping from '@components/account/Orders/OrderStatusMapping'
+import OrderLog from '@components/account/Orders/OrderLog'
+import OrderDetailHeader from '@components/account/Orders/OrderDetailHeader'
+import OrderItems from '@components/account/Orders/OrderItems'
+import OrderSummary from '@components/account/Orders/OrderSummary'
+import HelpModal from '@components/account/Orders/HelpModal'
+import OrderReviewModal from '@components/account/Orders/OrderReviewModal'
+import OrderDeliveryPlanItems from '@components/account/Orders/OrderDeliveryPlanItems'
+import { Disclosure } from '@headlessui/react'
 import { useTranslation } from '@commerce/utils/use-translation'
+import Spinner from '@components/ui/Spinner'
+
 // Other Imports
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { PaymentStatus } from '@components/utils/payment-constants'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, DATE_FORMAT, NEXT_GET_ORDER, NEXT_GET_ORDER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
-// import getCustomerOrderDetail from '@framework/checkout/customer-order-orderData'
 import { useUI } from '@components/ui'
-
-// import { recordGA4Event } from '@components/services/analytics/ga4';
-import OrderLog from '@old-components/account/Orders/OrderLog'
-// import CartFreeGift from '@old-components/cart/CartSidebarView/FreeGift';
-import OrderDetailHeader from '@old-components/account/Orders/OrderDetailHeader'
-import OrderItems from '@old-components/account/Orders/OrderItems'
-import OrderSummary from '@old-components/account/Orders/OrderSummary'
-import HelpModal from '@old-components/account/Orders/HelpModal'
-import OrderReviewModal from '@old-components/account/Orders/OrderReviewModal'
-import OrderDeliveryPlanItems from '@old-components/account/Orders/OrderDeliveryPlanItems'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { isB2BUser, notFoundRedirect, vatIncluded } from '@framework/utils/app-util'
-import axios from 'axios'
-import Spinner from '@components/ui/Spinner'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import withAuth from '@components/utils/withAuth'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -281,7 +279,7 @@ function OrderDetail({ deviceInfo }: any) {
                                 key="ogdesc"
                             />
                         </NextHead>
-                        <div className="container w-full bg-white">
+                        <div className="container w-full bg-white header-space">
                             <div className='mt-14 sm:mt-20'>
                                 <div className='max-w-4xl mx-auto'>
                                 <OrderDetailHeader

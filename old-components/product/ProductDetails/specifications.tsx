@@ -122,7 +122,7 @@ export default function ProductSpecifications({
                       {attrGroup['product.fabric']?.map(
                         (fabric: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fabric.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -143,7 +143,7 @@ export default function ProductSpecifications({
                       {attrGroup['clothing.size']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -164,7 +164,7 @@ export default function ProductSpecifications({
                       {attrGroup['dress.style']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               <span className="s-icon">,</span>
                             </span>
@@ -185,7 +185,7 @@ export default function ProductSpecifications({
                       {attrGroup['clothing.type']?.map(
                         (fit: any, fdx: number) => (
                           <div className="flex justify-start comma" key={fdx}>
-                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-black">
+                            <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               <span className="s-icon">,</span>
                             </span>

@@ -20,9 +20,9 @@ function RenderRadioOptions({ label, items, itemsCount, selectedValue, selected,
    }
    return (
       <>
-         <h4 className="text-gray-700 font-14">
+         <h4 className="text-gray-700 font-14 dark:text-white">
                {label}:
-               <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700">{selectedVal?.includes('#') ? '' : (selectedVal || currentAttribute)}</span>
+               <span className="pl-1 font-light text-gray-700 text-ms dark:text-white">{selectedVal?.includes('#') ? '' : (selectedVal || currentAttribute)}</span>
             </h4>
          <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-2.5">
             {items?.map((item: any, idx: any) => (isString(item?.fieldValue) && (

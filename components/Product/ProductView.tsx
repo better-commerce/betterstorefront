@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
@@ -9,9 +9,9 @@ import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -30,6 +30,9 @@ import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
+import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
+import ProductSocialProof from './ProductSocialProof'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -59,17 +62,17 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData }: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [sizeInit, setSizeInit] = useState('')
   const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   const [fullscreen, setFullscreen] = useState(false);
@@ -77,8 +80,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [allProductsByCategory, setAllProductsByCategory] = useState<any>(allProductsByCategoryProp)
   const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
+  const [isEngravingAvailable, setIsEngravingAvailable] = useState<any>(null)
+  const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
+  const [openStoreLocaltorModal, setOpenStockCheckModal] = useState(false)
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
+  const [analyticsData, setAnalyticsData] = useState(null)
 
 
   useEffect(() => {
@@ -144,6 +151,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         LocalStorage.Key.RECENTLY_VIEWED,
         encrypt(JSON.stringify(viewedProductsList))
       )
+      setProductInfo({
+        recordId: response?.data?.product?.recordId,
+        variantGroupCode: response?.data?.product?.variantGroupCode,
+        productCode: response?.data?.product?.productCode,
+      })
     }
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
@@ -166,36 +178,40 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         stockCode: response?.data?.product?.stockCode,
         ...response?.data?.product,
       })
+      if (typeof window !== "undefined" && window?.ch_session) {
+        window?.ch_product_view_before(generateDataForEngage(response.data.product))
+      }
     }
   }
 
-  let dataForEngage: any = null
-  if (typeof window !== 'undefined') {
-    // added for engage
-    dataForEngage = {
+  const generateDataForEngage = (product:any) => {
+    if (!product) return null;
+    if (typeof window === 'undefined') return null
+    const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
+    const dataForEngage = {
       item: {
-        item_id: product?.stockCode || EmptyString,
+        item_id: product?.variantGroupCode || product?.productCode || EmptyString,
         title: product?.name || EmptyString,
         sku: product?.productCode || EmptyString,
         categories: product?.classification?.category || [],
         base_category: product?.classification?.category || EmptyString,
         collection_name: product?.collections ? product?.collections[0]?.name : EmptyString,
         description: product?.fullName || EmptyString,
-        product_url: window?.location?.href || EmptyString,
+        product_url: productUrl,
         image_url: product?.image || EmptyString,
-        availability: product?.availability || EmptyString,
+        availability: product?.seoAvailability || EmptyString,
         price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
         sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
         brand: product?.brand || EmptyString,
         variant: {
-          id: product?.stockCode || EmptyString,
+          id: product?.variantGroupCode || product?.productCode || EmptyString,
           title: product?.name || EmptyString,
           sku: product?.productCode || EmptyString,
           image_url: product?.image || EmptyString,
-          product_url: window?.location?.href || EmptyString,
+          product_url: productUrl,
           price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
-          availability: product?.availability || EmptyString,
+          availability: product?.seoAvailability || EmptyString,
           metadata: {
             color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
             size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
@@ -208,14 +224,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         },
         customAttributes: product?.customAttributes || EmptyString,
       },
-      item_id: product?.stockCode || EmptyString,
-    }
-  }
+      item_id: product?.variantGroupCode || product?.productCode || EmptyString,
+    };
+    return dataForEngage;
+  };
+
+  const memoizedDataForEngage = useMemo(() => generateDataForEngage(product), [product]);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && dataForEngage && window?.ch_session) {
-      window.ch_product_view_before(dataForEngage)
-    }
     fetchProduct()
     setIsCompared('true')
   }, [slug, currency])
@@ -243,8 +259,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           .getElementsByName(snippet.name)
           .forEach((node: any) => node.remove())
       })
+      setProductInfo(undefined)
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -361,8 +377,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               },
             })
           }
-          if (window?.ch_session && dataForEngage) {
-            window.ch_add_to_cart_before(dataForEngage)
+          if (window?.ch_session && memoizedDataForEngage) {
+            window?.ch_add_to_cart_before(memoizedDataForEngage)
           }
         }
       },
@@ -549,22 +565,26 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         })
         setCartItems(newCart.data)
         showEngravingModal(false)
+        setIsLoading(false)
         openCart()
       } catch (error) {
         console.log(error, 'err')
       }
     }
+    setIsLoading(true)
     asyncHandler()
   }
 
-  const isEngravingAvailable =
-    !!relatedProducts?.relatedProducts?.filter(
-      (item: any) => item?.stockCode === ITEM_TYPE_ADDON
-    ).length ||
-    !!product?.customAttributes.filter(
-      (item: any) => item?.display == 'Is Enabled'
-    ).length
-  // const isEngravingAvailable:any = true;
+  useEffect(() => {
+    const isEngraving =
+      !!relatedProducts?.relatedProducts?.filter(
+        (item: any) => item?.stockCode === ITEM_TYPE_ADDON
+      ).length ||
+      !!product?.customAttributes.filter(
+        (item: any) => item?.display == 'Is Enabled'
+      ).length
+    setIsEngravingAvailable(isEngraving)
+  },[relatedProducts])
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -647,6 +667,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       createWishlist()
     } else insertToLocalWishlist()
   }
+
+  const onStoreStockCheck = () => {
+    setOpenStockCheckModal(true)
+  }
+
   const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
@@ -697,13 +722,34 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setFullscreen(!fullscreen);
   };
 
+  useEffect(() => {
+    function handleSetAnalyticsData({ detail: analyticsData }: any) {
+      setAnalyticsData(analyticsData)
+    }
+
+    function handleScroll() {
+      const addButton = document.getElementById('add-to-cart-button');
+      if (addButton) {
+        const addButtonRect = addButton.getBoundingClientRect();
+        const isAddButtonVisible = addButtonRect.top < window?.innerHeight;
+        setShowMobileCaseButton(isAddButtonVisible);
+      }
+    }
+
+    window?.addEventListener('scroll', handleScroll);
+    window.addEventListener(CUSTOM_EVENTS.ProductViewed, handleSetAnalyticsData)
+    return () => {
+      window?.removeEventListener('scroll', handleScroll);
+      window?.removeEventListener(CUSTOM_EVENTS.ProductViewed, handleSetAnalyticsData);
+    };
+  }, []);
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
   let recentProduct = []
   if (typeof window !== 'undefined') {
-    similarProduct = window.similar_products_sorted_product;
-    recentProduct = window.recent_products_product;
+    similarProduct = window?.similar_products_sorted_product;
+    recentProduct = window?.recent_products_product;
   }
   let productDesc = product.description
   if (product?.shortDescription == "") {
@@ -808,11 +854,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-xl sm:text-2xl font-semibold">
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
+            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
 
             {reviews?.review?.totalRecord > 0 &&
               <>
@@ -842,46 +888,77 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {promotions?.promotions?.availablePromotions?.length > 0 && (
           <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
         )}
-        <div className="flex rtl:space-x-reverse">
-          {!isEngravingAvailable && (
-            <div className="flex mt-6 sm:mt-4 !text-sm w-full">
-              <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
-                {isInWishList(selectedAttrData?.productId) ? (
-                  <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                ) : (
-                  <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                )}
-                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
-              </button>
+        {
+          openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo}/>
+        }
+        <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+          <MyLocationIcon className='h-4 w-4'/>
+          <span className='hover:underline cursor-pointer' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+        </div>
+        <div id="add-to-cart-button">
+          {isMobile ? (
+            <>
+              {showMobileCaseButton && (
+                <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-10">
+                  <div className="container mx-auto max-w-7xl p-4">
+                    <div className="flex justify-end">
+                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                      {isInWishList(selectedAttrData?.productId) ? (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                      ) : (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                      )}
+                      <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                    </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex rtl:space-x-reverse">
+              {!isEngravingAvailable && (
+                <div className="flex mt-6 sm:mt-4 !text-sm w-full">
+                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                    {isInWishList(selectedAttrData?.productId) ? (
+                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                    ) : (
+                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                    )}
+                    <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                  </button>
+                </div>
+              )}
+
+              {isEngravingAvailable && (
+                <>
+                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                    <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  </div>
+                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
+                    <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                    <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                      {translate('label.product.engravingText')}
+                    </button>
+                    <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                      {isInWishList(selectedAttrData?.productId) ? (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
+                      ) : (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                      )}
+                      <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           )}
-
-          {isEngravingAvailable && (
-            <>
-              <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              </div>
-              <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                  {translate('label.product.engravingText')}
-                </button>
-                <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                  {isInWishList(selectedAttrData?.productId) ? (
-                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                  ) : (
-                    <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                  )}
-                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+        </div>  
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
         {product && <AccordionInfo data={detailsConfig} />}
-        <div className="flex-1 order-6 w-full sm:order-5">
+        <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
           <DeliveryInfo product={product} grpData={attrGroup} config={config} />
         </div>
       </div>
@@ -890,13 +967,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
-      <main className="container mt-5 lg:mt-11">
-        <div className='flex flex-1 mb-4'>
+      <ProductSocialProof data={analyticsData} />
+      <main className="container-pdp mt-2 sm:mt-5 lg:mt-11">
+        <div className='px-4 sm:px-0 flex flex-1 mb-1 sm:mb-4 product-breadcrumbs'>
           {breadcrumbs && (
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="lg:flex">
+        <div className="lg:flex product-detail-section">
           {isMobile ? (
             <div className="w-full lg:w-[55%]">
               <Swiper
@@ -913,7 +991,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                         generateUri(product?.image, 'h=1000&fm=webp') ||
                         IMG_PLACEHOLDER
                       }
-                      className="object-cover object-top w-full rounded-2xl"
+                      className="object-cover object-top w-full"
                       alt={product?.name}
                     />
                     {renderStatus()}
@@ -952,57 +1030,77 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </div>
           )}
-          <div className="w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
+          <div className="px-4 sm:px-0 w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
             {renderSectionContent()}
           </div>
         </div>
         {/* DETAIL AND REVIEW */}
-
-        <div className="mt-12 sm:mt-12">
+        <div className='px-4 sm:px-0 flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+          <EngageProductCard productLimit={12} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+        </div>
+        <div className='px-4 sm:px-0 flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+          <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+        </div>
+        <div className="px-4 sm:px-0 mt-12 sm:mt-12">
           {/* {renderDetailSection()} */}
           <hr className="border-slate-200 dark:border-slate-700" />
-          <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container">
+          <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
             <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
           </div>
           {reviews?.review?.productReviews?.length > 0 &&
             renderReviews()
           }
         </div>
-        <div className="w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
+        <div className="px-4 sm:px-0 w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
-              <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} />
+              <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </>
           )}
           {alternativeProducts?.length > 0 && (
-            <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto">
-              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} />
+            <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto pdp-compare-section">
+              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
           )}
-          {/* <div className="cart-recently-viewed">
-            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
-          </div> */}
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="container flex flex-col w-full px-4 py-10 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4">
+              <div className="container flex flex-col w-full px-4 py-10 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
                 <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>
           )}
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
-            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Recently Viewed" />
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
           </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10'>
-            <EngageProductCard type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} title="Similar Products" sku={product?.stockCode} />
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_USER_ITEMS_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_BY_CATEGORIES} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+          </div>
+          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_ITEMS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
           </div>
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
-            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
+            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
           <div className="flex flex-col w-full">
-            <div className="px-4 mx-auto sm:container page-container sm:px-6">
+            <div className="px-4 mx-auto sm:container page-container sm:px-6 pdp-description-section">
               <ProductDescription seoInfo={attrGroup} />
             </div>
           </div>

@@ -31,7 +31,7 @@ const DiscoverMoreSlider = ({ heading, data }: any) => {
   }, [sliderRef]);
 
   return (
-    <div ref={sliderRef} className={`nc-DiscoverMoreSlider nc-p-l-container ${isShow ? "" : "invisible"}`} >
+    <div ref={sliderRef} className={`nc-DiscoverMoreSlider more-slider-list-section nc-p-l-container ${isShow ? "" : "invisible"}`} >
       {heading?.map((h: any, iIdx: number) => (
         <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 nc-p-r-container " desc="" rightDescText={h?.categoryheading_subtitle} hasNextPrev >
           {h?.categoryheading_title}

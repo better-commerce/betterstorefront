@@ -23,9 +23,11 @@ interface Props {
   attributeNames?: any
   products?: any
   compareProductsAttributes?: any
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceInfo, maxBasketItemsCount, activeProduct, attributeNames, products, compareProductsAttributes}) => {
+const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceInfo, maxBasketItemsCount, activeProduct, attributeNames, products, compareProductsAttributes, featureToggle, defaultDisplayMembership,}) => {
   const translate = useTranslation()
   const swiperRef: any = useRef(null)
   return (
@@ -44,12 +46,12 @@ const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceI
       <Swiper className="px-4 pb-5 mb-4 bg-white sm:mb-8 sm:px-0 min-cls-h" slidesPerView={1.1} spaceBetween={10} navigation={false} ref={swiperRef}
         breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 4.01 }, 1024: { slidesPerView: 4.01 }, }}>
         <SwiperSlide className="relative inline-flex flex-col w-64 h-auto pb-5 text-left border border-orange-500 rounded-md cursor-pointer height-auto-slide group lg:w-auto">
-          <CompareProductCard active={true} compareProductsAttributes={compareProductsAttributes} attributeNames={attributeNames} data={activeProduct} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+          <CompareProductCard active={true} compareProductsAttributes={compareProductsAttributes} attributeNames={attributeNames} data={activeProduct} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </SwiperSlide>
         {products?.map((product?: any, productIdx?: number) => (
           activeProduct?.stockCode != product?.stockCode &&
           <SwiperSlide key={`pdp-compare-product-${productIdx}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
-            <CompareProductCard active={false} compareProductsAttributes={compareProductsAttributes} attributeNames={attributeNames} data={product} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+            <CompareProductCard active={false} compareProductsAttributes={compareProductsAttributes} attributeNames={attributeNames} data={product} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </SwiperSlide>
         ))}
       </Swiper>

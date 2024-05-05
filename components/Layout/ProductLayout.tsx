@@ -25,6 +25,7 @@ import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
+import ProductMembershipOfferModal from '@components/membership/ProductMembershipOfferModal'
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
@@ -111,6 +112,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
+  const [productMembershipModalData, setProductMembershipModalData] = useState<any>()
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
@@ -123,9 +125,17 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       document.title = document.location.host
     }
 
+    const closeMemberProductPriceInfo = () => {
+      setProductMembershipModalData({ open: false })
+    }
+    const handleMemberProductPriceInfoViewed = ({ detail: { defaultDisplayMembership, price, isIncludeVAT, } }: any) => {
+      setProductMembershipModalData({ open: (price !== null), defaultDisplayMembership, price, isIncludeVAT, closeCallback: closeMemberProductPriceInfo })
+    }
+    window.addEventListener('MemberProductPriceInfoViewed', handleMemberProductPriceInfoViewed)
     return () => {
       Router.events.off('routeChangeStart', () => { })
       Router.events.off('routeChangeComplete', () => { })
+      window?.removeEventListener('MemberProductPriceInfoViewed', handleMemberProductPriceInfoViewed);
     }
   }, [])
 
@@ -164,6 +174,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+        <ProductMembershipOfferModal {...productMembershipModalData} />
           <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           {children}

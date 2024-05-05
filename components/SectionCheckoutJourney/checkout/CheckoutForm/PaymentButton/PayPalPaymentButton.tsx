@@ -153,7 +153,7 @@ class PayPalPaymentButton extends BasePaymentButton {
       const purchaseUnits = [
         {
           reference_id: orderId, //orderResult?.basketId,
-          description: `${translate('label.checkoutForm.orderText')} ${orderId} ${translate('label.checkoutForm.forBasketText')} ${orderResult?.basketId} ${translate('label.checkoutForm.orderPaymentIdText')} ${getOrderId(orderInfo?.order)}`,
+          description: `Order ${orderId} for basket ${orderResult?.basketId} OrderPaymentId ${getOrderId(orderInfo?.order)}`,
           //custom_id: EmptyString,
           items: items,
           amount: {

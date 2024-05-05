@@ -12,18 +12,19 @@ import {
   TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
-import { } from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
-import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import NonHeadContentSnippet from '@old-components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
+import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -330,11 +331,11 @@ export default function OrderConfirmation({ config }: any) {
 
   useEffect(() => {
     const itemsFromArr = []
-    if( order?.items ){
+    if (order?.items) {
       const iterator = order?.items?.values();
       for (const value of iterator) {
         itemsFromArr?.push({
-          id: value?.stockCode || EmptyString,
+          id: parseItemId(value?.stockCode) || EmptyString,
           name: value?.name || EmptyString,
           quantity: value?.qty || 1,
           price: value?.totalPrice?.raw?.withTax || 1,
@@ -347,18 +348,18 @@ export default function OrderConfirmation({ config }: any) {
       item_id: "thankyou",
       order_id: order?.orderNo || EmptyString,
       order_price: order?.grandTotal?.raw?.withTax,
-      order_shipping_zip: order?.shippingAddress?.postCode || EmptyString, 
-      order_shipping_city: order?.shippingAddress?.city || EmptyString, 	
-      payment_transactions:  [{
-          amount: order?.payments ? order?.payments[0]?.orderAmount : EmptyString, 
-          gateway: order?.payments ? order?.payments[0]?.paymentGateway : EmptyString, 
-          status:"paid"
+      order_shipping_zip: order?.shippingAddress?.postCode || EmptyString,
+      order_shipping_city: order?.shippingAddress?.city || EmptyString,
+      payment_transactions: [{
+        amount: order?.payments ? order?.payments[0]?.orderAmount : EmptyString,
+        gateway: order?.payments ? order?.payments[0]?.paymentGateway : EmptyString,
+        status: "paid"
       }],
-      coupons:  [{
-          code: '',
-          discount_amt:  order?.discount?.raw?.withTax
+      coupons: [{
+        code: '',
+        discount_amt: order?.discount?.raw?.withTax
       }],
-      item_ids: order?.items?.map((x:any) =>  x?.stockCode) || [],
+      item_ids: order?.items?.map((x: any) => parseItemId(x?.stockCode)) || [],
       items: itemsFromArr,
       customer: {
         id: order?.customerId || EmptyString,
@@ -368,10 +369,10 @@ export default function OrderConfirmation({ config }: any) {
         contact_no: order?.billingAddress?.phoneNo || EmptyString
       }
     }
-    if( window !== undefined && window?.ch_session && order?.orderNo){
+    if (window !== undefined && window?.ch_session && order?.orderNo) {
       window.ch_purchase_complete_before(orderData)
     }
-  },[order?.orderNo])
+  }, [order?.orderNo])
 
   if (isLoading) {
     return (
@@ -405,7 +406,7 @@ export default function OrderConfirmation({ config }: any) {
         ref={bodyStartScrCntrRef}
         className={`${ELEM_ATTR}body-start-script-cntr-pc`}
       ></div>
-      <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+      <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
             <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
@@ -416,23 +417,17 @@ export default function OrderConfirmation({ config }: any) {
             </h1>
             {order?.orderNo ? (
               <p className="mt-2 text-black">
-                  {translate('label.checkout.yourOrderText')}{' '}
+                {translate('label.checkout.yourOrderText')}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
-                  {translate('label.thankyou.willBeWithYouSoonText')}
+                {translate('label.thankyou.willBeWithYouSoonText')}
               </p>
             ) : null}
           </div>
           {order?.orderNo ? (
-            <section
-              aria-labelledby="order-heading"
-              className="mt-10 border-t border-gray-200"
-            >
-              <h2 id="order-heading" className="sr-only">
-                {translate('label.checkout.yourOrderText')}
-              </h2>
-
+            <section aria-labelledby="order-heading" className="mt-10 border-t border-gray-200" >
+              <h2 id="order-heading" className="sr-only"> {translate('label.checkout.yourOrderText')} </h2>
               <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
-              {order?.items?.map((product: any) => (
+              {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
                 <>
                   <div
                     key={product.id}
@@ -484,7 +479,9 @@ export default function OrderConfirmation({ config }: any) {
                     </div>
                   </div>
                 </>
-              ))}
+              )) : (
+                <SplitDeliveryOrderItems order={order} />
+              )}
 
               <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
                 <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
@@ -493,12 +490,11 @@ export default function OrderConfirmation({ config }: any) {
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-bold text-gray-900">
-                      {/* {GENERAL_SHIPPING_ADDRESS} */}
                       {translate('label.orderDetails.deliveryAddressHeadingText')}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
-                        <span className="block">{`${order?.shippingAddress.firstName} ${order?.shippingAddress.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName ? order?.shippingAddress?.lastName : ""}`}</span>
                         <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address1}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address2}`}</span>
@@ -506,20 +502,6 @@ export default function OrderConfirmation({ config }: any) {
                       </address>
                     </dd>
                   </div>
-                  {/* <div>
-                    <dt className="font-medium text-gray-900">
-                      {GENERAL_BILLING_ADDRESS}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div> */}
                 </dl>
 
                 <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
@@ -564,7 +546,7 @@ export default function OrderConfirmation({ config }: any) {
                   !isFirstOrderValid && (
                     <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
-                      {translate('label.thankyou.congratilationDiscountText')}{' '}
+                        {translate('label.thankyou.congratilationDiscountText')}{' '}
                         <span className="font-bold text-indigo-600">
                           {nextOrderPromo?.nextOrderPromoName}
                         </span>
@@ -581,7 +563,7 @@ export default function OrderConfirmation({ config }: any) {
                   !isFirstOrderValid && (
                     <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
                       <p className="">
-                      {translate('label.thankyou.congratilationDiscountText')}{' '}
+                        {translate('label.thankyou.congratilationDiscountText')}{' '}
                         <span className="font-bold text-indigo-600">
                           {nextOrderPromo?.nextOrderPromoName}
                         </span>

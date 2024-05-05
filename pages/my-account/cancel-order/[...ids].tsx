@@ -150,7 +150,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
 
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
+                <h4 className="mr-2 text-xl font-semibold leading-none text-gray-900 uppercase flex items-center">
                 <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.order.cancelOrderText')}
                 </h4>

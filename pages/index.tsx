@@ -1,31 +1,29 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
-import cn from 'classnames'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, getFeaturesConfig, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings, stringToBoolean } from '@framework/utils/parse-util'
+import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
+import { getSecondsInMinutes, matchStrings, stringToNumber } from '@framework/utils/parse-util'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
-import Link from 'next/link'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { Guid } from '@commerce/types'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import LikeButton from '@components/LikeButton'
-import Prices from '@components/Prices'
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import SectionBrandCard from '@components/SectionBrandCard'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -36,7 +34,8 @@ const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 declare const window: any
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
+  const cachedData = await getDataByUID([Redis.Key.ALL_MEMBERSHIPS, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, Redis.Key.ALL_MEMBERSHIPS)
   const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
   const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
   const infraPromise = commerce.getInfra()
@@ -81,6 +80,38 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const slugsPromise = commerce.getSlugs({ slug: Page_Slug });
   const slugs = await slugsPromise;
   const hostName = os.hostname()
+
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: Redis.Key.ALL_MEMBERSHIPS, value: allMembershipsUIDData }])
+  }
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
@@ -89,6 +120,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
       pageContentsWeb: pageContentWebUIDData,
       pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
+      defaultDisplayMembership,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
@@ -96,7 +128,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -162,14 +194,6 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     )
   }
 
-  // CHECK TRENDING PRODUCTS FROM ENGAGE
-  let trending = []
-  let recentProduct = []
-  if (typeof window !== 'undefined') {
-    trending = window.trend_first_orders_index;
-    recentProduct = window.recent_products_index;
-  }
-
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -186,21 +210,56 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <div className="relative overflow-hidden nc-PageHome">
+      <div className="relative overflow-hidden nc-PageHome homepage-main">
         <SectionHero2 data={pageContents?.banner} />
-        <div className="mt-24 lg:mt-32">
+        <div className="mt-14 sm:mt-24 lg:mt-32">
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
         </div>
-        <div className="container relative my-24 space-y-24 lg:space-y-32 lg:my-32">
-          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
-          <div className="relative py-16 lg:py-20">
+        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} container relative my-16 sm:my-24 lg:my-32 product-collections`}>
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
+              {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.newarrivals?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
-          <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
-          <div className='flex flex-col w-full'>
-            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Trending Products" />
-            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData}  title="Recently Viewed"/>
+          {pageContents?.newlookbook?.length > 0 &&
+            <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+          }
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
+              {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.nevermisssale?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
+              {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.popular?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          <div className='flex flex-col w-full engage-product-card-section'>
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
@@ -208,6 +267,5 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     </>
   )
 }
-
 Home.Layout = Layout
 export default withDataLayer(Home, PAGE_TYPE)

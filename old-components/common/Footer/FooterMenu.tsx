@@ -47,7 +47,7 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
                             <>
                               {navBlock?.contentBody != '' && (
                                 <li
-                                  className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight"
+                                  className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight dark:text-white"
                                   key={`li${fdx}`}
                                   dangerouslySetInnerHTML={{
                                     __html: sanitizeHtmlContent(navBlock?.contentBody),
@@ -61,7 +61,7 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
                                       return (
                                         <li
                                           key={navItemIdx + 'navItem'}
-                                          className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight"
+                                          className="mb-4 text-sm font-medium text-gray-900 dark:text-white text-footer-clr f-footer-weight"
                                         >
                                           <Link
                                             passHref
@@ -69,7 +69,7 @@ const FooterMenu: FC<Props> = ({ config }: any) => {
                                           >
                                             <a
                                               href={`/men/${navItem?.itemLink}`}
-                                              className="text-xs"
+                                              className="text-xs dark:text-white"
                                             >
                                               {navItem?.caption}
                                             </a>

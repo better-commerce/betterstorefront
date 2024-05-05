@@ -23,6 +23,7 @@ interface CartItem {
   stockCode?: string
   userId?: string
   isAssociated?: boolean
+  isMembership?: boolean
   CustomInfo4?: string
   CustomInfo5?: string
   CustomInfo4Formatted?: string
@@ -48,6 +49,7 @@ export default function cartHandler() {
         stockCode,
         userId,
         isAssociated = true,
+        isMembership = false,
       }: CartItem,
       type = 'ADD',
       data: any = {}
@@ -60,6 +62,7 @@ export default function cartHandler() {
         manualUnitPrice,
         displayOrder,
         stockCode,
+        isMembership,
       } // Set default post data
 
       const isBundledProduct =

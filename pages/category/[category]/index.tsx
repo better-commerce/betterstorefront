@@ -11,7 +11,7 @@ import 'swiper/css/navigation'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { Redis } from '@framework/utils/redis-constants'
-import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
@@ -28,7 +28,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -38,6 +38,9 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { Guid } from '@commerce/types'
+
 const PAGE_TYPE = PAGE_TYPES.Category
 declare const window: any
 
@@ -47,11 +50,13 @@ export async function getStaticProps(context: any) {
   const slug = slugName + '/' + context.params[slugName]
 
   const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
     infraUID: Redis.Key.INFRA_CONFIG,
     categorySlugUID: Redis.Key.Category.Slug + '_' + slug,
     categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug,
   }
   const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
     cachedDataUID.infraUID,
     cachedDataUID.categorySlugUID,
     cachedDataUID.categoryProductUID,
@@ -89,6 +94,39 @@ export async function getStaticProps(context: any) {
     }
   }
 
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     if (categorySlugUIDData?.status === "NotFound") {
       return notFoundRedirect()
@@ -108,6 +146,7 @@ export async function getStaticProps(context: any) {
           products: categoryProductUIDData,
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
+          defaultDisplayMembership,
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -120,6 +159,7 @@ export async function getStaticProps(context: any) {
           products: categoryProductUIDData,
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
+          defaultDisplayMembership,
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -133,6 +173,7 @@ export async function getStaticProps(context: any) {
         products: null,
         globalSnippets: infraUIDData?.snippets ?? [],
         snippets: categorySlugUIDData?.snippets ?? [],
+        defaultDisplayMembership,
       },
       revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
@@ -232,7 +273,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, }: any) {
+function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const translate = useTranslation()
@@ -287,6 +328,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       currentPage: 1,
       filters: [],
       categoryId: category.id,
+      sortBy: null,
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
@@ -309,9 +351,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
-      data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
-      data?.products?.total !== productListMemory?.products?.total
+      data.products.currentPage !== productListMemory.products.currentPage ||
+      data.products.total !== productListMemory.products.total ||
+      data.products.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
@@ -486,7 +528,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             }
           </div>
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {products?.total} results</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white"> {products?.total} results</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -590,7 +632,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                       <SwiperSlide key={cdx}>
                         <div className="relative group">
                           <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <ProductCard data={product.results || []} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                          <ProductCard data={product.results || []} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         </div>
                       </SwiperSlide>
                     ))}
@@ -696,18 +738,26 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                         {isMobile ? null : (
                           <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                         )}
-                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                       </div>
                     </>
                   ) : (
                     <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
                       <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     </div>
                   ))}
                   <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-                  <div className="col-span-12 cart-recently-viewed">
+                  {/* <div className="col-span-12 cart-recently-viewed">
                     <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+                  </div> */}
+                  <div className='flex flex-col w-full'>
+                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+                    <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                   </div>
                 </div>
               ) : (

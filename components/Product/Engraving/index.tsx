@@ -4,7 +4,7 @@ import LoadingDots from '@components/ui/LoadingDots'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { ProductPersonaliser } from '../ProductPersonaliser'
 import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
-export default function Engraving({ engravingPrice = '5.99', show = false, handleToggleDialog, submitForm, product, isPersonalizeLoading, readOnly = false }: any) {
+export default function Engraving({ engravingPrice = '5.99', show = false, handleToggleDialog, submitForm, product, isPersonalizeLoading, readOnly = false, isLoading }: any) {
   const [data, setData] = useState<any>(null)
   const translate = useTranslation();
   const getData = async () => {
@@ -59,6 +59,7 @@ export default function Engraving({ engravingPrice = '5.99', show = false, handl
                       product={product}
                       images={[]}
                       engravingPrice={engravingPrice}
+                      isLoading={isLoading}
                     />
                   </div>
                 </div>
