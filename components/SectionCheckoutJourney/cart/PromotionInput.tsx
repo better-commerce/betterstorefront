@@ -170,9 +170,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
     (x: any) => x?.promoType != 22
   )
 
-  const PromotionsCount =
-    basketPromos?.applicablePromotions?.length +
-    basketPromos?.availablePromotions?.length
+  const PromotionsCount = basketPromos?.applicablePromotions?.length +  basketPromos?.availablePromotions?.length
   return (
     <>
       <div
@@ -190,8 +188,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
       </div>
 
       <div className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
-        {cartItems.promotionsApplied?.length
-          ? cartItems.promotionsApplied.map((promo: any, key: number) => {
+        {(cartItems?.promotionsApplied?.length > 0) ? cartItems?.promotionsApplied?.map((promo: any, key: number) => {
               return (
                 <div
                   className="pt-2 mt-2"

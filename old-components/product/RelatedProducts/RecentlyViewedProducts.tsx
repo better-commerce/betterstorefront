@@ -27,7 +27,7 @@ import {
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
 
-export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
+export default function RecentlyViewedProduct({ deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
@@ -177,6 +177,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config }: any) {
                               data={product}
                               deviceInfo={deviceInfo}
                               maxBasketItemsCount={maxBasketItemsCount(config)}
+                              featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}
                             />
                           </SwiperSlide>
                         )

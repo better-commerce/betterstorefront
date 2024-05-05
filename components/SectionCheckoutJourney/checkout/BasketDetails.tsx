@@ -1,25 +1,19 @@
-import {
-  NEXT_GET_BASKET_PROMOS,
-  NEXT_REFERRAL_ADD_USER_REFEREE,
-  NEXT_REFERRAL_BY_SLUG,
-  NEXT_REFERRAL_INFO,
-} from '@components/utils/constants'
+import { NEXT_GET_BASKET_PROMOS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
 import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import {
-  ChevronDownIcon,
-  ClipboardIcon,
-  ShoppingCartIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ClipboardIcon, ShoppingCartIcon, XMarkIcon, } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import Summary from '@components/SectionCheckoutJourney/checkout/Summary'
+import MembershipOfferCard from '@components/membership/MembershipOfferCard'
+import OptMembershipModal from '@components/membership/OptMembershipModal'
 import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
 import { useTranslation } from '@commerce/utils/use-translation'
+import SplitDeliveryBasketItems from '../cart/SplitDeliveryBasketItems'
+
 interface BasketItem {
   id: string
   name: string
@@ -27,7 +21,7 @@ interface BasketItem {
   price: number
 }
 
-const BasketDetails = ({ basket, deviceInfo }: any) => {
+const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isGuestUser} = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -44,6 +38,7 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
   })
   const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
+  const [openOMM, setOpenOMM] = useState(false)
   useEffect(() => {
     const fetchReferralPromotion = async () => {
       let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
@@ -122,6 +117,11 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
     return basketPromos
   }
 
+  const isMembershipItemOnly = useMemo(() => {
+    const membershipItemsCount = basket?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+    return (membershipItemsCount === basket?.lineItems?.length)
+  }, [basket])
+
   return (
     <>
       {isMobile || isIPadorTablet ? (
@@ -129,10 +129,10 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
           <Disclosure>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-gray-50">
+                <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-white">
                   <span className="font-medium text-orange-700 font-12">
                     <ShoppingCartIcon className="inline-block w-4 h-4 text-orange-700" />{' '}
-                    {open ? translate('common.label.hideText') : translate('common.label.showText')}{translate('label.orderSummary.orderSummaryText')}{' '}
+                    {open ? translate('label.orderSummary.orderHideSummaryText') : translate('label.orderSummary.orderSummaryText')}{' '}
                     <ChevronDownIcon className={`inline-block w-4 h-4 text-orange-700 ${open ? 'rotate-180 transform' : ''}`} />
                   </span>
                   <span className="font-semibold text-black">
@@ -181,29 +181,42 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
         <div className="h-auto card-summary right-panel-basket">
           <h3 className="mb-4 text-2xl font-semibold text-black uppercase">{translate('label.orderSummary.orderSummaryText')}</h3>
           {/* product list start */}
-          <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
-            <Disclosure defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
-                    <span className="font-semibold text-black">
-                      {basket?.lineItems?.length}{' '}
-                      {basket?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
-                    </span>
-                    <i
-                      className={`${open ? 'rotate-180 transform' : ''
-                        } sprite-icons sprite-dropdown`}
-                    />
-                  </Disclosure.Button>
-                  <Disclosure.Panel className="px-0 pt-3 pb-2">
-                    <div className="w-full max-basket-panel">
-                      <BasketItems userCartItems={basket?.lineItems} />
-                    </div>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
-          </div>
+          {basket?.deliveryPlans?.length < 1 ? (
+            <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
+              <Disclosure defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
+                      <span className="font-semibold text-black">
+                        {basket?.lineItems?.length}{' '}
+                        {basket?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
+                      </span>
+                      <i
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } sprite-icons sprite-dropdown`}
+                      />
+                    </Disclosure.Button>
+                    <Disclosure.Panel className="px-0 pt-3 pb-2">
+                      <div className="w-full max-basket-panel">
+                        <BasketItems userCartItems={basket?.lineItems} />
+                      </div>
+                    </Disclosure.Panel>
+                  </>
+                )}
+              </Disclosure>
+            </div>
+          ) : (
+            <div className="mt-4 w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
+              <SplitDeliveryBasketItems basket={basket} />
+            </div>
+          )}
+          {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
+              <>
+                <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+              </>
+            )
+          }
           {referralAvailable &&
             isGuestUser &&
             basket?.contactDetails?.emailAddress && ( //user?.userEmail && (

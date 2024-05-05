@@ -31,7 +31,7 @@ import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory, ENGAGE_WEB_CAMPAIGN } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory, ENGAGE_QUERY_WEB_CAMPAIGN } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
@@ -47,7 +47,8 @@ import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
-import useGetEngageCampaigns from '@framework/api/endpoints/engage-campaign/get-campaings-by-page';
+import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
+import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
@@ -147,7 +148,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   useEffect(() => {
     setNavTree()
-    productCampaigns()
     setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
@@ -170,36 +170,14 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }
 
-  const productCampaigns = useCallback(
-    async () => {
-      try {
-        const chCookie: any = tryParseJson(Cookies.get(Cookie.Key.ENGAGE_SESSION))
-        let apiUrl = ENGAGE_WEB_CAMPAIGN
-        // generate respective API url
-        if (router.asPath?.startsWith('/products')) {
-          // for PDP
-          apiUrl += `/productpage/all/`
-        } else if (router.asPath === '/') {
-          // for homepage
-          apiUrl += `/indexpage/all/`
-        } else {
-          return
-        }
-        const res = await axios({
-          url: apiUrl,
-          method: 'GET',
-          params: {
-            ch_guid: chCookie?.user_id,
-            ch_data: JSON.stringify({ data: {} }),
-          },
-        })
-        setCampaignData(res?.data)
-      } catch (error: any) {
-        logError(error)
-      }
-    },
-    [router],
-  )
+  const fetchEngageCampaigns = useCallback(async () => {
+    try {
+      const campaignRes = await fetchCampaignsByPagePath(router.asPath)
+      setCampaignData(campaignRes)
+    } catch (error: any) {
+      logError(error)
+    }
+  }, [router.asPath])
 
   useEffect(() => {
     // Listener for snippet injector reset.
@@ -314,6 +292,12 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }, [])
 
+  useEffect(() => {
+    if (!OMNILYTICS_DISABLED) {
+      fetchEngageCampaigns()
+    }
+  }, [router.asPath])
+
   const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
     let scripts = new Array<IScriptSnippet>()
     if (typeof document !== undefined) {
@@ -372,6 +356,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
@@ -385,7 +370,8 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
             <title>{seoInfo?.metaTitle}</title>
             {
               router.asPath.startsWith('/products/') && (
-                <link rel="canonical" href={seoInfo?.canonicalTags || SITE_ORIGIN_URL + router.asPath} />
+                <link rel="canonical" href={(seoInfo?.canonicalTags != "" || seoInfo?.canonicalTags != null) ? (!hasBaseUrl(seoInfo?.canonicalTags) ? SITE_ORIGIN_URL + "/" + seoInfo?.canonicalTags : seoInfo?.canonicalTags) : SITE_ORIGIN_URL +  cleanPath} />
+                // <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
               )
             }
             <meta name="title" content={seoInfo?.metaTitle} />
@@ -549,7 +535,7 @@ MyApp.getInitialProps = async (
     const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
     const appConfigObj = {
       ...{
-        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings','PasswordProtectionSettings'].includes(x?.configType)) || [],
+        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings', 'PasswordProtectionSettings'].includes(x?.configType)) || [],
         shippingCountries,
         billingCountries,
         currencies,

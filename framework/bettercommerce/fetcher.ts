@@ -1,5 +1,5 @@
 import { Fetcher } from '@commerce/utils/types'
-import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET } from './utils/constants'
+import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET, Cookie } from './utils/constants'
 import axios from 'axios'
 import store from 'store'
 import { writeFetcherLog } from './utils'
@@ -15,6 +15,7 @@ import {
 } from '@components/utils/constants'
 import { Guid } from '@commerce/types'
 import { IFetcherProps } from 'framework/contracts/api/IFetcherProps'
+import { decrypt } from './utils/cipher'
 
 const SingletonFactory = (function () {
   let accessToken = ''
@@ -127,6 +128,7 @@ const fetcher = async (props: IFetcherProps | any) => {
         ? cookies?.CompanyId
         : Guid.empty,
     ClientIP: cookies?.ClientIP ?? null,
+    UserToken: cookies[Cookie.Key.USER_TOKEN] ? decrypt(cookies[Cookie.Key.USER_TOKEN]) : null,
   }
 
   const config: any = {

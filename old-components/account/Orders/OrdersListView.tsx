@@ -135,7 +135,7 @@ function OrdersListView({
                     ) : (
                       <>
                         <div className="flex flex-col w-full px-4 py-12 max-acc-container sm:px-0">
-                          <h1 className="my-2 text-2xl font-semibold text-black">
+                          <h1 className="my-2 text-2xl font-semibold text-black dark:text-white">
                             {translate('label.orderDetails.noOrderFoundHeadingText')} </h1>
                           <div className="flex mt-5 w-60 sm:flex-col">
                             <Link legacyBehavior passHref href="/">

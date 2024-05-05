@@ -37,7 +37,7 @@ export default function SaveB2BQuote({ basket }: SaveB2BQuoteProps) {
         e.preventDefault()
         if (!basket?.id || basket?.id === EmptyGuid) return
 
-        setOverlayLoaderState({ visible: true, message: translate('label.checkoutForm.pleaseWaitText') })
+        setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText') })
         setIsQuoteSaving(true)
 
         // generate formatted date for 'quoteName'

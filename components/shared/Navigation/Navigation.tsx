@@ -6,7 +6,7 @@ import { removePrecedingSlash } from "@framework/utils/app-util";
 function Navigation({ navItems, featureToggle, subMenuPosition }: any) {
   return (
     <>
-      <ul className="flex items-center nc-Navigation">
+      <ul className="flex items-center nc-Navigation navigation-ul">
         {navItems.map((item: any, itemIdx: number) => (
           <li className="flex-shrink-0 mt-0 menu-item menu-megamenu menu-megamenu--large group" key={`to-nav-${itemIdx}`}>
             <div className="flex items-center flex-shrink-0 h-20">

@@ -8,6 +8,7 @@ import { EmptyString } from '@components/utils/constants'
 export module Redis {
   // Redis data keys
   export module Key {
+    export const ALL_MEMBERSHIPS = 'AllMemberships'
     export const NavTree = 'NavTree'
     export const HomepageWeb = 'HomepageWeb'
     export const CookiepageWeb = 'CookiepageWeb'

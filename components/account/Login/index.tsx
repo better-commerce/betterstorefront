@@ -2,7 +2,6 @@ import { useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
 import Link from 'next/link'
-
 import Form from '@old-components/customer'
 import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
@@ -14,6 +13,7 @@ import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import DataLayerInstance from '@components/utils/dataLayer'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -49,6 +49,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         setNoAccount(false)
         setAlert({ type: 'success', msg: translate('common.message.loginSuccessMsg') })
         let userObj = { ...result.data }
+        if (userObj?.userToken) saveUserToken(userObj?.userToken)
         // get user updated details
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
@@ -72,6 +73,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         }
         setUser(userObj)
         setIsGuestUser(false)
+        DataLayerInstance.setItemInDataLayer('visitorId', userObj?.userId)
         Router.push('/')
       }
       if (cb) cb();
@@ -107,9 +109,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
                   <SocialSignInLinks isLoginSidebarOpen={isLoginSidebarOpen} containerCss={`flex justify-center gap-2 mx-auto ${isLoginSidebarOpen ? 'sm:w-full width-md-full !px-0' : 'width-md-full'}`} redirectUrl={redirectUrl} pluginSettings={pluginConfig} />
                 </div>
                 <div className="relative text-center">
-                  <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900">
-                    OR
-                  </span>
+                  <span className="relative z-10 inline-block px-4 text-sm font-medium bg-white dark:text-neutral-400 dark:bg-neutral-900"> OR </span>
                   <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
                 </div>
               </>
@@ -118,17 +118,17 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
           <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
           <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
-            <a href="/my-account/forgot-password">
+            <Link passHref href="/my-account/forgot-password">
               <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
                 {translate('label.login.forgotPasswordBtnText')}
               </span>
-            </a>
+            </Link>
           </div>
           <span className="block text-center text-neutral-700 dark:text-neutral-300">
             {translate('label.login.newUserText')}{` `}
-            <a className="text-green-600" href="/my-account/register">
+            <Link passHref className="text-green-600" href="/my-account/register">
               {translate('label.login.createAccountText')}
-            </a>
+            </Link>
           </span>
         </div>
       </div>

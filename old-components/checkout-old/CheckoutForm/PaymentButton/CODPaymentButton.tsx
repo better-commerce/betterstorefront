@@ -36,7 +36,7 @@ export class CODPaymentButton extends BasePaymentButton {
   ) {
     uiContext?.setOverlayLoaderState({
       visible: true,
-      message: 'Please wait...',
+      message: translate('common.label.pleaseWaitText'),
     })
     const { state, result: orderResult } = await super.confirmOrder(
       paymentMethod,

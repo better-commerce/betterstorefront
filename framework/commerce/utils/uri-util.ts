@@ -43,3 +43,11 @@ export const removeQueryString = (path: any) => {
    }
    return path
 }
+
+
+export const hasBaseUrl = (uri: string) => {
+   if (!uri) {
+      return false
+   }
+   return (uri?.startsWith('http://') || uri?.startsWith('https://'))
+}

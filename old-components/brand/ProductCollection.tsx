@@ -80,6 +80,8 @@ export default function ProductCollection({
   brandDetails,
   deviceInfo,
   maxBasketItemsCount,
+  featureToggle, 
+  defaultDisplayMembership,
   ...props
 }: any) {
   const adaptedQuery = { ...query }
@@ -222,6 +224,8 @@ export default function ProductCollection({
           deviceInfo={deviceInfo}
           maxBasketItemsCount={maxBasketItemsCount}
           isCompared={isCompared}
+          featureToggle={featureToggle} 
+          defaultDisplayMembership={defaultDisplayMembership}
         />
         {isCompared === 'true' && (
           <CompareSelectionBar

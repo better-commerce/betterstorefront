@@ -98,7 +98,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              details?.allowedToCancel && details?.paymentStatus != 0 &&
                                                 <a href="javascript:void(0);" className='block w-full hover:opacity-90 dark:hover:bg-accent-8 px-4 py-2 mb-2 bg-gray-900 font-bold uppercase text-center text-white border btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
-                                                   {translate('common.label.cancelText')}{translate('common.label.itemSingularText')}
+                                                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                                                 </a>
                                                 
                                           }

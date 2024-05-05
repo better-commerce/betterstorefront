@@ -1,4 +1,4 @@
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes, SITE_ORIGIN_URL } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -6,6 +6,7 @@ import NextHead from 'next/head'
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import BrowsingHistoryProducts from "@components/Product/RelatedProducts/BrowsingHistory";
+import EngageProductCard from "@components/SectionEngagePanels/ProductCard";
 
 const PAGE_TYPE = PAGE_TYPES.MyStore
 
@@ -18,23 +19,26 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 }
 
-function Recommendations({ deviceInfo, config }: any) {
+function Recommendations({ deviceInfo, config, campaignData }: any) {
   const router = useRouter()
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>Your Store</title>
-        <meta name="title" content="Your Store" />
-        <meta name="description" content="Your Store" />
-        <meta name="keywords" content="Your Store" />
-        <meta property="og:image" content="Your Store" />
-        <meta property="og:title" content="Your Store" key="ogtitle" />
-        <meta property="og:description" content="Your Store" key="ogdesc" />
+        <title>Your Recommendations</title>
+        <meta name="title" content="Your Recommendations" />
+        <meta name="description" content="Your Recommendations" />
+        <meta name="keywords" content="Your Recommendations" />
+        <meta property="og:image" content="Your Recommendations" />
+        <meta property="og:title" content="Your Recommendations" key="ogtitle" />
+        <meta property="og:description" content="Your Recommendations" key="ogdesc" />
       </NextHead>
-      <div className="container py-6 mx-auto cart-recently-viewed sm:py-10">
-        <BrowsingHistoryProducts deviceInfo={deviceInfo} config={config} productPerRow={4} />
+      <div className="container py-6 mx-auto mt-6 cart-recently-viewed sm:py-10 sm:mt-12 mob-padding-0 header-space">
+        <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Top picks for you" isSlider={false} productPerRow={5} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} title="Style Spotlight: Editor's Choice" isSlider={true} productPerRow={5} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} title="Buy it again" isSlider={false} productPerRow={5} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Your browsing history" isSlider={true} productPerRow={5} forceDisplay={true} />
       </div>
     </>
   )

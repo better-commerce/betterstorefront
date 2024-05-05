@@ -13,13 +13,17 @@ import React from 'react'
 import Wishlist from '@components/account/Wishlist'
 import { vatIncluded } from '@framework/utils/app-util'
 import SideMenu from '@components/account/MyAccountMenu'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-function MyAccount({
-  deviceInfo,
-}: any) {
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Guid } from '@commerce/types'
+import commerce from '@lib/api/commerce'
+import { stringToNumber } from '@framework/utils/parse-util'
+
+function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const [isShow, setShow] = useState(true)
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
@@ -80,11 +84,11 @@ function MyAccount({
         <meta property="og:title" content={translate('label.wishlist.wishlistText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.wishlist.wishlistText')} key="ogdesc" />
       </NextHead>
-      <section className="container w-full">
+      <section className="container w-full bar header-space">
         <div className="mt-14 sm:mt-20">
           <div className='max-w-4xl mx-auto'>
             <div className="max-w-2xl">
-              <h2 className="text-3xl font-semibold xl:text-4xl">{translate('common.label.accountText')}</h2>
+              <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
               <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
                 <span className="font-semibold text-slate-900 dark:text-slate-200">
                   {user?.firstName},
@@ -98,13 +102,14 @@ function MyAccount({
               setShow={setShow}
               currentOption={currentOption}
               deviceInfo={deviceInfo}
+              featureToggle={featureToggle}
             />
             <hr className="border-slate-200 dark:border-slate-700"></hr>
           </div>
           <div className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
             <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.wishlist.wishlistText')}</h2>
-            <div className={'orders bg-white my-2 sm:my-6'}>
-              <Wishlist deviceInfo={deviceInfo} />
+            <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
+              <Wishlist deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
           </div>
         </div>
@@ -119,9 +124,49 @@ const PAGE_TYPE = PAGE_TYPES.Page
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }

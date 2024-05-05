@@ -22,10 +22,11 @@
       "updateFailedText": "Woops! Something went wrong!",
       "BillingAddressHeadingText": "Billing Address",
       "shippingAddressHeadingText": "Shipping Address",
+      "pickupAddressHeadingText": "Pickup Address",
       "savedAddressesText": "Saved Addresses",
       "emptyAddressBookText": "Oh-no! Your address book is empty is empty.",
-      "addNewAddress": "Add new address",
-      "saveAddressBtn": "Save Address",
+      "addNewAddressText": "Add new address",
+      "saveAddressBtnText": "Save Address",
       "firstNameText": "First name",
       "lastNameText": "Last name",
       "emailText": "Email",
@@ -98,6 +99,7 @@
       "kitItemsText": "Kit items",
       "offer50PercOffOnThirdItemText": "50% OFF on 3rd Item",
       "cartItemRemoveText": "Are you sure you don't want this product? You may move it to Wishlist and buy later.",
+      "engravingRemoveDescText": "Are you sure you don't want this personalisation?",
       "youDontHaveAnyItems": "Uh-oh, you don't have any items in here",
       "priceLabelText": "RRP"
     },
@@ -112,7 +114,8 @@
       "bulkOrderText": "Bulk Order",
       "quickOrderText": "Quick Order",
       "lineByLineText": "Line by Line",
-      "copyPasteText": "Copy & Paste"
+      "copyPasteText": "Copy & Paste",
+      "entryFieldsTableHeaderText": "S.No|Stock Code|Quantity"
     },
     "cancelReason": {
       "cancelTitle": "Why are you cancelling this",
@@ -160,7 +163,7 @@
       "offerValidForText": "This offer is valid for",
       "deafultCountryDropdownText": "Hong Kong",
       "checkoutTitleText": "checkout",
-      "debitCreditDetailsText" : "Debit/Credit Card details",
+      "debitCreditDetailsText": "Debit/Credit Card details",
       "secureCheckoutText": "Secure Checkout",
       "checkoutSecurelyText": "Checkout securely",
       "backToBasketText": "Back to basket",
@@ -180,7 +183,6 @@
       "deliveryText": "Delivery",
       "continueToPaymentText": "Continue to Payment",
       "noDeliveryMethodAvailableText": "No Delivery Method Available",
-      "findStoreText": "Find Store Near You",
       "findStoresText": "Find Store",
       "checkoutWithoutLoginText": "Want to checkout without login?",
       "guestCheckoutText": "Guest Checkout",
@@ -226,8 +228,22 @@
       "cardCVCText": "CVC",
       "streetAndHouseNoText": "Street and House Number",
       "appartmentSuiteEtcText": "Apartment, Suite, Etc. (Optional)",
-      "milesText":"miles",
-      "lessThanAMileText":"Less than a mile"
+      "milesText": "miles",
+      "mileText": "mile",
+      "lessThanAMileText": "Less than a mile",
+      "payment": {
+        "debitCreditCardDetailsHeadingText": "Debit/Credit Card details",
+        "cardNumberLabelText": "Card number*",
+        "cardNumberRequiredText": "Card number is required",
+        "cardNumberInvalidText": "Card number is invalid",
+        "expiryDateLabelText": "Expiry date*",
+        "expiryDateRequiredText": "Expiry date is required",
+        "expiryDateInvalidText": "Expiry date is invalid",
+        "cvvRequiredText": "CVV is required",
+        "cvvInvalidText": "CVV is invalid",
+        "chequeNoText": "Cheque Number",
+        "chequeNumberLabelText": "Cheque Number"
+      }
     },
     "collection": {
       "topListCollectionText": "Top List Collections.",
@@ -487,6 +503,7 @@
     },
     "orderSummary": {
       "orderSummaryText": "Order Summary",
+      "orderHideSummaryText": "Hide Summary",
       "basketSummaryText": "Basket Summary",
       "paymentDetailsBtnText": "Payment Details",
       "priceTaxInclusiveText": "Prices are inclusive of all taxes",
@@ -666,19 +683,19 @@
         "leftText": "LEFT",
         "preOrderText": "PRE-ORDER"
       },
-      "priceFilterSlider":{
+      "priceFilterSlider": {
         "maxText": "Max",
         "minText": "Min",
         "noLimitText": "No limit"
       },
-      "priceMatchWebsiteNameText" : "Name of website you have found cheaper to*",
-      "priceMatchDirectLinkText" : "Full direct link to product (copy/paste website URL)*",
-      "priceMatchCostText" : "Cost of product*",
+      "priceMatchWebsiteNameText": "Name of website you have found cheaper to*",
+      "priceMatchDirectLinkText": "Full direct link to product (copy/paste website URL)*",
+      "priceMatchCostText": "Cost of product*",
       "priceMatchDeliveryCostText": "Delivery Cost*",
       "priceMatchTotalCostText": "Total cost",
-      "priceMatchUserName" : "Name*",
-      "priceMatchUserEmail" : "Email*",
-      "priceMatchUserTelephone" : "Telephone*",
+      "priceMatchUserName": "Name*",
+      "priceMatchUserEmail": "Email*",
+      "priceMatchUserTelephone": "Telephone*",
       "freeDeliveryText": "Free Delivery",
       "daysEasyReturn": "Days Easy Return",
       "daysEasyExchange": "Days Easy Exchange",
@@ -740,11 +757,13 @@
       "searchForProductsText": "Search for products",
       "showFiltersText": "Show Filters",
       "noResultFoundForText": "No results found for",
-      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look."
+      "stepIntoWorldText": "Step into a world where fashion meets comfort, with our latest range designed to elevate your everyday look.",
+      "noMatchingProductFoundText": "Sorry! We couldn't find any matching items.",
+      "noMatchingProductFoundDescText": "Don't give up - check the spelling, Filters or try less specific search terms"
     },
     "section": {
       "findTheBestText": "In this season, find the best 🔥",
-      "moreCollectionsText":"More collections"
+      "moreCollectionsText": "More collections"
     },
     "social": {
       "generalText": "Join the community",
@@ -755,9 +774,15 @@
     },
     "store": {
       "findStoresText": "Find Stores",
-      "findStoreNearYouText": "Find Store Near You",
-      "usingLocationToShowStoresText":"We use your location to show you nearby stores",
-      "seeNearbyStoreText":"See Nearby Stores"
+      "findStoreNearYouText": "Find Your Nearest Store",
+      "usingLocationToShowStoresText": "We use your location to show you nearby stores",
+      "seeNearbyStoreText": "See Nearby Stores",
+      "checkStoreStockText": "Check store stock",
+      "storeInfoText": "Store Info",
+      "findInStoreText": "Find in Store",
+      "stockCheckDescText": "Need your item today? Find your nearest store and pick up in selected stores",
+      "findStockText": "Find Stock",
+      "storeNameText": "Store Name"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -781,22 +806,27 @@
       "myStore": "My Store"
     },
     "modalEdit": {
-      "ethText":"ETH",
-      "btcText":"BTC",
-      "bthText":"BTH"
+      "ethText": "ETH",
+      "btcText": "BTC",
+      "bthText": "BTH"
     },
-    "sectionHero":{
-      "exploreText":"Explore",
-      "createText":"Create"
+    "sectionHero": {
+      "exploreText": "Explore",
+      "createText": "Create"
     },
-    "checkoutForm":{
-      "itemsForOrderText":"Items for order",
-      "chequeNoText": "Cheque Number",
-      "pleaseWaitText" :"Please wait...",
-      "validatingAccountText" : "Validating account...",
-      "orderText" : "Order",
-      "forBasketText" : "For basket",
-      "orderPaymentIdText" : "OrderPaymentId"
+    "membership": {
+      "alreadyMemberText": "Already a Member?",
+      "myMembershipText": "My Membership",
+      "membershipDescText": "on your order today when you join our membership",
+      "discountsAnytimeText": "discounts anytime",
+      "perYearText": "per year",
+      "billedAnnuallyText": "Billed annually",
+      "upgradeMembershipText": "you've used up all your vouchers and fancy more or like the sound of 20% off* subscription, you can upgrade your membership plan easily.",
+      "upgradeAnyTimeText": "Upgrade any time by simply paying the difference between the tiers.",
+      "sprayMoreHappinessText": "Spray some more happiness for less!",
+      "membershipBenefitsText": "All Benefits Membership gives you",
+      "membershipText": "Membership",
+      "myMembershipText": "My Membership"
     },
     "contactUs": {
       "contactSalesText": "Contact sales",
@@ -818,7 +848,7 @@
       "dummyAns1": "If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.",
       "dummyFaq2": "Can I request Weekend deliveries?",
       "dummyFaq3": "Are your products brand new and in original packaging?"
-    }      
+    }
   },
   "common": {
     "color": {
@@ -966,9 +996,11 @@
       "clickHereText": "Click Here",
       "sizeText": "Size:",
       "removeItemConfirmText": "Remove this Item?",
+      "removePersonalisationText": "Remove this Personalisation?",
       "orderPlacedOnText": "Order placed on",
       "onText": "on",
       "milesText": "miles",
+      "mileText": "mile",
       "normalOpeningHoursHeadingText": "Normal Opening Hours",
       "serviceText": "This Information will help us to improve our service",
       "helpAssistanceText": "We will be glad to assist you. What seems to be bothering you?",
@@ -1035,6 +1067,7 @@
       "addToCartText": "Added to cart!",
       "initiatingOrderText": "Initiating order...",
       "pleaseWaitText": "Please wait...",
+      "validatingAccountText": "Validating account...",
       "authorizingPaymentText": "Authorizing payment...",
       "initiatingPaymentText": "initiating payment...",
       "capturingPaymentText": "capturing payment...",
@@ -1067,11 +1100,12 @@
       "line3Text": "Line 3 (optional)",
       "addMsg3Text": "Add message 3",
       "addMsg2Text": "Add message 2",
-      "addMsg1Text": "Add message 1"
+      "addMsg1Text": "Add message 1",
+      "distanceText": "Distance"
     },
     "message": {
       "authenticationFailedText": "Email Authentication failed",
-      "requiredTextMsg" : "Required",
+      "requiredTextMsg": "Required",
       "invalidAccountMsg": "No account has been found with this email/password",
       "alreadyLoggedInMsg": "You're already logged in",
       "registerSuccessMsg": "Registration Successful",
@@ -1086,7 +1120,7 @@
       "chooseShippingBillingAddressMsg": "Please choose shipping / billing address to continue.",
       "selectStoreErrorMsg": "Please select a store to continue.",
       "selectDeliveryToContinueErrorMsg": "Please select a delivery method to continue.",
-      "noStoreFoundErrorMsg": "No store found.Try with different postcode",
+      "noStoreFoundErrorMsg": "Postcode not recognised",
       "cookiesText": "This site uses cookies to improve your experience. By clicking, you agree to our Privacy Policy.",
       "validEmailErrorMsg": "Enter a valid email",
       "cookiesPolicyText": "Cookies Policy",
@@ -1125,12 +1159,15 @@
       "invalidRequestErrorMsg": "The information provided is incomplete. Please try again.",
       "requestCouldNotProcessErrorMsg": "Your request could not be processed. Please try again after sometime.",
       "noAddressFoundErrorMsg": "No address found for the given postcode",
-      "addressAlreadyExistsErrorMsg" : "Address already exists",
+      "addressAlreadyExistsErrorMsg": "Address already exists",
       "userAlreadyExistsErrorMsg": "User already exists",
       "tokenInvalidErrorMsg": "Woops! Token is invalid",
       "tokenExpiredErrorMsg": "Woops! Token is expired or invalid",
       "companyNotFoundErrorMsg": "Company not found.",
-      "cartItemMaxAddedErrorMsg" : "Cart item limit reached. Please remove some items and try again.",
+      "cartItemMaxAddedErrorMsg": "Cart item limit reached. Please remove some items and try again.",
+      "addressAddedSuccessfullyMsg": "New address added successfully",
+      "addressUpdatedSuccessfullyMsg": "Address updated successfully",
+      "noStoresErrorMsg": "We're expanding to your area soon. Stay tuned!",
       "address": {
         "postCodeNotServicableMsg": "Postcode non-serviceable",
         "postCodeNumMsg": "Postcode should contain only digits",
@@ -1146,7 +1183,7 @@
         "addressMinLengthMsg": "Address Field should be more than 3 characters",
         "addressInputMsg": "Address should only contain alpha-numerics"
       },
-      "basket":{
+      "basket": {
         "emptyCartErrorMsg": "Your cart is empty",
         "maxBasketItemsCountErrorMsg": "Max allowed quantity is {maxBasketItemsCount}.",
         "basketValidationErrorMsg": "Basket validation failed"
@@ -1176,7 +1213,7 @@
         "upiNotSupportedErrorMsg": "UPI payment is unsupported.",
         "paymentAlreadyCompletedErrorMsg": "Payment for your basket is already completed.",
         "notEnoughCreditErrorMsg": "Not enough credit available.",
-        "paymentMethodNotSupportedErrorMsg" : "Payment method is not supported."
+        "paymentMethodNotSupportedErrorMsg": "Payment method is not supported."
       },
       "password": {
         "passwordValidationMsg": "Password should have a minimum of 8 characters and at least 1 uppercase letter.",
@@ -1202,9 +1239,9 @@
       "returnSuccessMsg": "Return success",
       "exchangeSuccessMsg": "Exchange successful",
       "resetPasswordSuccessMsg": "Success! You will be redirected to login page",
-      "enterCorrectUrlMsg" : "Enter correct url!",
-      "enterProductLinkMsg" : "Please enter a product link",
-      "enterWebsiteLinkMsg" : "Please enter a website link"
+      "enterCorrectUrlMsg": "Enter correct url!",
+      "enterProductLinkMsg": "Please enter a product link",
+      "enterWebsiteLinkMsg": "Please enter a website link"
     },
     "numberText": {
       "one": "1"

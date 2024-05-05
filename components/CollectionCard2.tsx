@@ -15,10 +15,12 @@ export interface CollectionCard2Props {
   price?: any;
   description?: any;
   primaryImage?: any;
-  link?: any
+  link?: any;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, description, price, primaryImage, link }) => {
+const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, description, price, primaryImage, link, featureToggle, defaultDisplayMembership, }) => {
   return (
     <div className={`CollectionCard2 group relative ${className}`}>
       <div className="relative flex flex-col">

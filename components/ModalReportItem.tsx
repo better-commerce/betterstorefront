@@ -113,7 +113,7 @@ const ModalReportItem: FC<ModalReportItemProps> = ({
 
         {/* TEXAREA MESSAGER */}
         <div className="mt-4">
-          <h4 className="text-lg font-semibold text-neutral-700 dark:text-neutral-200">
+          <h4 className="text-lg font-semibold text-neutral-700 dark:text-white">
           {translate('label.product.messageText')}
           </h4>
           <span className="text-sm text-neutral-6000 dark:text-neutral-400">

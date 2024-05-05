@@ -103,7 +103,7 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
           />
         </div>
         <br />
-        <p className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label">
+        <p className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-white">
           {translate('label.product.priceFilterSlider.minText')}: {selectedRange[0]}
           <br />
           {translate('label.product.priceFilterSlider.maxText')}:{' '}

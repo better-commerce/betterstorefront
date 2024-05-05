@@ -6,7 +6,7 @@ import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import React from 'react'
 
-function SideMenu({ handleClick, setShow, currentOption, deviceInfo }: any) {
+function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureToggle}: any) {
   const config = useConfig();
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
@@ -68,6 +68,17 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo }: any) {
         href: '/my-account/my-company',
       })
     }
+    if (featureToggle?.features?.enableMembership) {
+      if (user?.hasMembership) {
+        newConfig.push({
+            type: 'tab',
+            text: translate('label.membership.membershipText'),
+            mtext: translate('label.membership.membershipText'),
+            props: 'membership',
+            href: '/my-account/membership',
+        })
+      }
+    }
   }
   return (
     <>
@@ -104,11 +115,11 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo }: any) {
                   }}
                   className="block py-3 md:py-8  flex-shrink-0 text-sm sm:text-base"
                 >
-                  <span className="inline-block text-black sm:hidden dark:text-black">
+                  <span className="inline-block text-black sm:hidden dark:text-white">
                     {isMobile ? item?.head : item?.mtext}
                   </span>
                   <span
-                    className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Company' && 'font-display'
+                    className={`hidden sm:inline-block text-black dark:text-white ${item.text == 'My Company' && 'font-display'
                       }`}
                   >
                     {isMobile ? item?.head : item?.text}

@@ -16,13 +16,19 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
+const NoProductFound = dynamic(() => import('@components/noProductFound'))
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Guid } from '@commerce/types'
+import { stringToNumber } from '@framework/utils/parse-util'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -69,7 +75,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle }: any) {
+function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
@@ -349,20 +355,30 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <hr className="border-slate-200 dark:border-slate-700" />
-
-        <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
-          {isMobile ? (
-            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-          ) : (
-            <div className='sm:col-span-3 md:col-span-3 lg:col-span-3'>
-              <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+        { !!data?.products?.results?.length ? (
+          <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+            {isMobile ? (
+              <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+            ) : (
+              <div className='sm:col-span-3 md:col-span-3 lg:col-span-3'>
+                <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+              </div>
+            )}
+            <div className={`sm:col-span-9 lg:col-span-9 md:col-span-9`}>
+              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+              <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
-          )}
-          <div className={`sm:col-span-9 lg:col-span-9 md:col-span-9`}>
-            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
-          </div>
-          <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+            <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+          </div>)
+        :<NoProductFound/>}
+
+        <div className='flex flex-col w-full'>
+          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+          <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         </div>
       </div>
       <Script
@@ -392,11 +408,52 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
   const allProducts = await commerce.getAllProducts({ ...DEFAULT_STATE })
+
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+  ])
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
       snippets: allProducts?.snippets ?? [],
+      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }
