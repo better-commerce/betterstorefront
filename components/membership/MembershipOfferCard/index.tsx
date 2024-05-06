@@ -10,7 +10,7 @@ import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/util
 import { logError } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, refreshBasket, }: any) => {
+const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, setBasket = () => {}, }: any) => {
   const translate = useTranslation()
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
@@ -20,7 +20,7 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, ref
   const [discount, setDiscount] = useState(0)
   const [membership, setMembership] = useState<any>([])
   const [appliedBenefit, setAppliedBenefit] = useState<any>()
-  const { user, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
+  const { user, setOverlayLoaderState, hideOverlayLoaderState, setCartItems } = useUI()
 
   const fetchMemberShipBenefits = async () => {
     setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
@@ -80,9 +80,8 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, ref
       try {
         const { data }: any = await axios.post(NEXT_APPLY_PROMOTION, { basketId :basket?.id, promoCode, method, })
         if (data?.result) { 
-          if (refreshBasket) { 
-            refreshBasket() 
-          } 
+          setBasket(data?.result?.basket)
+          setCartItems(data?.result?.basket)
         } 
         hideOverlayLoaderState()
         return data?.result?.isVaild ?? false
@@ -101,7 +100,6 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, ref
     <ApplyMembershipCard
       basket={basket}
       currencySymbol={currencySymbol}
-      refreshBasket={refreshBasket}
       voucherCount={voucherCount}
       membership={membership}
       discount={discount}

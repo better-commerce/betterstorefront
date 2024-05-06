@@ -84,7 +84,7 @@ const steps = [
 
 const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
-  const uiContext = useUI()
+  const uiContext: any = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
   const [appConfigData, setAppConfigData] = useState<any>()
@@ -910,12 +910,14 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const basketResult = await getBasket(basketId)
       if (basketResult) {
         setBasket(basketResult)
+        uiContext?.setCartItems(basketResult)
       }
     }
   }
 
   const basketDetailsProps = {
     basket,
+    setBasket,
     deviceInfo, 
     allMembershipPlans, 
     defaultDisplayMembership, 
@@ -1002,10 +1004,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
             router.push('/cart')
           } else {
             setBasket(basketResult)
+            uiContext?.setCartItems(basketResult)
           }
         } else {
           if (basketResult?.id === basket?.id) {
             setBasket(basketResult)
+            uiContext?.setCartItems(basketResult)
           }
         }
       }
