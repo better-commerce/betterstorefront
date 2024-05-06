@@ -12,10 +12,10 @@ const AppliedMembershipCard = ({ promo, currencySymbol, moneySaved, membership, 
   }, [promo, membership])
 
   return (
-    <div className="bg-gray-200 p-6 rounded-lg mt-2 text-center">
-      <p className="text-black font-semibold mb-4">{`${promo?.discountPct}% ${translate('label.membership.discountAppliedText')}`}</p>
-      <p className="text-black font-semibold mb-6">{`${translate('label.membership.youSavedText')} ${currencySymbol}${moneySaved}`}</p>
-      <p className="text-black font-semibold mb-6">{noOfDiscounts && `${stringFormat(translate('label.membership.noOfDiscountsRemainingText'), { noOfDiscounts })}`}</p>
+    <div className="p-6 mt-2 text-center border-2 border-dashed rounded-lg bg-sky-50 border-sky-300">
+      <p className="mb-4 font-semibold text-black">{`${promo?.discountPct}% ${translate('label.membership.discountAppliedText')}`}</p>
+      <p className="mb-6 font-semibold text-black">{`${translate('label.membership.youSavedText')} ${currencySymbol}${moneySaved}`}</p>
+      <p className="mb-6 font-semibold text-black">{noOfDiscounts && `${stringFormat(translate('label.membership.noOfDiscountsRemainingText'), { noOfDiscounts })}`}</p>
     </div>
   )
 }
