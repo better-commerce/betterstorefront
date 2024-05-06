@@ -22,7 +22,7 @@ import { Guid } from "@commerce/types";
 const PAGE_TYPE = PAGE_TYPES.MyMembership
 const MEMBER_BENEFITS = [
   { "name": "20% off whenever you want*", "description": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.", "icon": <GiftIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
-  { "name": "FREE unlimited* express delivery", "description": "Delivery charges? Not for our My Store members! Free delivery all year long.", "icon": <TruckIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
+  { "name": "FREE unlimited* standard delivery", "description": "Delivery charges? Not for our My Store members! Free delivery all year long.", "icon": <TruckIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
   { "name": "Exclusive offers & perks", "description": "Get exclusive perks tailored to you plus early access to amazing offers.", "icon": <StarIcon className="w-16 h-16 p-2 mx-auto mb-4 border-2 rounded-full text-sky-600 border-sky-600" /> },
   { "name": "Upgrade whenever you like", "description": "Pay the difference to upgrade your plan at any time to keep on saving.", "icon": <PlusIcon className="w-16 h-16 p-2 mx-auto mb-4 border-2 rounded-full text-sky-600 border-sky-600" /> }
 ]

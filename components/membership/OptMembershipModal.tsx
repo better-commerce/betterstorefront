@@ -66,7 +66,7 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           {defaultDisplayMembership?.membershipPromoDiscountPerc && stringFormat(translate('label.membership.optMembershipPromotionOfferDiscountText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc })}
         </h2>
         <p className="mb-6 text-gray-600">
-          {stringFormat(translate('label.membership.optMembershipPromotionOfferDiscountText'), { moneySaved } )}
+          {stringFormat(translate('label.membership.optMembershipPromotionOfferDiscountText'), { membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc } )}
         </p>
         <h3 className="text-lg font-semibold mb-4">{translate('label.membership.optMembershipWhatYouGetHeadingText')}</h3>
         <BenefitItems discountPerc={defaultDisplayMembership?.membershipPromoDiscountPerc} />

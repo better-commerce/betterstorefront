@@ -694,9 +694,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                               )}
                                               {product?.price?.raw?.withTax > 0 &&
                                                 <div className="flex flex-row items-center px-4 text-gray-900 border">
-                                                  <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
+                                                  {!product?.isMembership && <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
                                                   <span className="px-2 py-2 text-md"> {product.qty} </span>
-                                                  <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                                  {!product?.isMembership && <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
                                                 </div>
                                               }
                                               <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
