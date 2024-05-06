@@ -8,6 +8,7 @@ import CollectionCard from "./CollectionCard";
 import CollectionCard2 from "./CollectionCard2";
 import Link from "next/link";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionSliderLargeProductProps {
   className?: string;
@@ -63,7 +64,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
                   images={product?.newlookbook_looksimage}
                   primaryImage={product?.newlookbook_primaryimage}
                   description={product?.newlookbook_category}
-                  link={product?.newlookbook_link}
+                  link={sanitizeRelativeUrl(product?.newlookbook_link)}
                   featureToggle={featureToggle}
                   defaultDisplayMembership={defaultDisplayMembership}
                 />

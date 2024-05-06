@@ -4,7 +4,7 @@ import ButtonSecondary from "../shared/Button/ButtonSecondary";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { removePrecedingSlash } from "@framework/utils/app-util";
+import { removePrecedingSlash, sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface CardCategory3Props {
   className?: string;
@@ -18,7 +18,7 @@ export interface CardCategory3Props {
 const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name, desc, color, link }) => {
   const translate = useTranslation()
   return (
-    <Link href={`${removePrecedingSlash(link)}`} className={`nc-CardCategory3 block ${className}`} >
+    <Link href={`${sanitizeRelativeUrl(link)}`} className={`nc-CardCategory3 block ${className}`} >
       <div className={`relative w-full aspect-w-16 aspect-h-11 sm:aspect-h-9 rounded-2xl overflow-hidden group ${color}`} >
         <div>
           <div className="absolute inset-5 sm:inset-8">
