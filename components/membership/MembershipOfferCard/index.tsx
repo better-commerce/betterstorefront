@@ -10,7 +10,7 @@ import { NEXT_APPLY_PROMOTION, NEXT_MEMBERSHIP_BENEFITS } from '@components/util
 import { logError } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, setBasket = () => {}, }: any) => {
+const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, membership, basket, setBasket = () => {}, }: any) => {
   const translate = useTranslation()
   const lowestMemberShipPrice = defaultDisplayMembership?.membershipPrice
 
@@ -18,42 +18,35 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, set
   const [moneySaved, setMoneySaved] = useState(0)
   const [voucherCount, setVoucherCount] = useState(0)
   const [discount, setDiscount] = useState(0)
-  const [membership, setMembership] = useState<any>([])
   const [appliedBenefit, setAppliedBenefit] = useState<any>()
-  const { user, setOverlayLoaderState, hideOverlayLoaderState, setCartItems } = useUI()
+  const { setOverlayLoaderState, hideOverlayLoaderState, setCartItems } = useUI()
 
   const fetchMemberShipBenefits = async () => {
-    setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
-    setAppliedBenefit(false)
-    const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
-    const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
-    const data = { userId, basketId: basket?.id, membershipPlanId: null }
-    try {
-      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
-      if (membershipBenefitsResult?.result) {
-        const membershipPlans = membershipBenefitsResult?.result
-        setMembership(membershipPlans)
-        const membershipVouchers: Array<string> = membershipPlans?.benefits?.map((plan: any) => plan?.voucher)
+    if(!!membership?.benefits?.length) {
+      setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
+      setAppliedBenefit(false)
+      try {
+        const membershipVouchers: Array<string> = membership?.benefits?.map((plan: any) => plan?.voucher)
         if (membershipVouchers?.length) {
           const findAppliedVouchersInBasket = basket?.promotionsApplied?.find((promo:any)=> membershipVouchers?.includes(promo?.promoCode))
           if (findAppliedVouchersInBasket) {
-            setAppliedBenefit(membershipPlans?.benefits?.find((plan: any) => plan?.voucher === findAppliedVouchersInBasket?.promoCode))
+            setAppliedBenefit(membership?.benefits?.find((plan: any) => plan?.voucher === findAppliedVouchersInBasket?.promoCode))
           }
         }
+        
+        hideOverlayLoaderState()
+      } catch (error) {
+        logError(error)
+        hideOverlayLoaderState()
       }
-      hideOverlayLoaderState()
-    } catch (error) {
-      logError(error)
-      hideOverlayLoaderState()
     }
   }
-
   useEffect(() => {
 
     if (basket?.lineItems?.length) {
       fetchMemberShipBenefits()
     }
-  }, [ basket, basket?.id, basket?.lineItems])
+  }, [ membership, basket, basket?.id, basket?.lineItems])
 
   useEffect(() => {
     let discount = defaultDisplayMembership?.membershipPromoDiscountPerc

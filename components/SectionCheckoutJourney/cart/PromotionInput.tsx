@@ -18,6 +18,8 @@ import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'
 import BasketPromo from './BasketPromo'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { logError } from '@framework/utils/app-util'
+import { Guid } from '@commerce/types'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -29,17 +31,21 @@ interface IPromotionInputProps {
   readonly getBasketPromoses?: any
   readonly deviceInfo?: any
   readonly setBasket?: any
+  readonly membership?: any
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {
+  const { user } = useUI()
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = useDevice()
+  const [appliedBenefit, setAppliedBenefit] = useState(false)
   const {
     basketPromos,
     // paymentOffers,
     items,
     getBasketPromoses = () => {},
     setBasket = () => {},
+    membership = [],
   } = props
   const [error, setError] = useState(false)
   const { basketId, setCartItems, cartItems } = useUI()
@@ -76,6 +82,31 @@ const PromotionInput = (props: IPromotionInputProps) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath])
+
+  const fetchMemberShipBenefits = async () => {
+    if(!!membership?.benefits?.length){
+      if (!cartItems?.lineItems?.length) return
+      setAppliedBenefit(false)
+      try {
+        const membershipVouchers: Array<string> = membership?.benefits?.map((plan: any) => plan?.voucher)
+        if (membershipVouchers?.length) {
+          const findAppliedVouchersInBasket = cartItems?.promotionsApplied?.find((promo:any)=> membershipVouchers?.includes(promo?.promoCode))
+          if (findAppliedVouchersInBasket) {
+            setAppliedBenefit(membership?.benefits?.find((plan: any) => plan?.voucher === findAppliedVouchersInBasket?.promoCode))
+          }
+        }
+      } catch (error) {
+        logError(error)
+      }
+    }
+  }
+
+  useEffect(() => {
+
+    if (cartItems?.lineItems?.length) {
+      fetchMemberShipBenefits()
+    }
+  }, [ membership, cartItems, cartItems?.id, cartItems?.lineItems])
 
   useEffect(() => {
     if (error) {
@@ -204,7 +235,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     <div className="flex">
                       <h5 className="text-sm text-gray-600">
                         {' '}
-                        {promo.promoCode}
+                        { appliedBenefit ? promo?.name : promo?.promoCode }
                       </h5>
                     </div>
                     <div className="flex justify-end">
