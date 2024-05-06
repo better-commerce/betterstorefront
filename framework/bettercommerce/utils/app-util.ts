@@ -373,6 +373,13 @@ export const removePrecedingSlash = (value: string) => {
   return value
 }
 
+export const sanitizeRelativeUrl = (value: string) => {
+  if (value && !value.startsWith('/')) {
+    return `/${value}`
+  }
+  return value
+}
+
 export const parseFullName = (
   fullName: string
 ): { firstName: string | ' '; lastName: string | ' ' } => {
