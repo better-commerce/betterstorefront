@@ -9,6 +9,7 @@ import PurchaseDetails from './PurchaseDetails'
 import MembershipDetails from './MembershipDetails'
 import ManageMembership from '../ManageMembership'
 import { useTranslation } from '@commerce/utils/use-translation'
+import VoucherDetailsExpanded from './VoucherDetailsExpanded'
 
 export default function MyMembership({defaultDisplayMembership, allMembershipPlans}:any) {
   const translate = useTranslation()
@@ -21,6 +22,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
   const [latestMembershipOrder, setLatestMembershipOrder] = useState({})
   const [savedAmount, setSavedAmount] = useState(null)
   const [manageComponentShow, setManageComponentShow] = useState(false)
+  const [expandVoucher, setExpandVoucher] = useState(false)
   const [ButtonText , setButtonText] = useState(manageComponentShow ? translate('label.membership.manageMembership.backToMyMembershipText') : translate('label.membership.manageMembership.manageMyMembershipText'))
 
   useEffect(() => {
@@ -90,22 +92,27 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
     setManageComponentShow(!manageComponentShow)
   }
 
-  return (
-    <div>
-      <MembershipDetails membership={membership} ButtonText={ButtonText} onButtonClick={onButtonClick} />
-      {manageComponentShow ? ( <ManageMembership defaultDisplayMembership={defaultDisplayMembership} allMembershipPlans={allMembershipPlans}/> ) : (
-        <>
-          <BenefitItems discountPerc={discount} />
-          <div className="flex flex-col md:flex-row gap-6 p-6">
-            <div className="w-full md:w-1/2 flex-1 flex">
-              <PurchaseDetails lastPurchase={latestMembershipOrder} />
+  if(expandVoucher){
+    return <VoucherDetailsExpanded discountPerc={discount} membership={membership} manageMembership={onButtonClick} voucherUsed={voucherUsed} voucherLeft={voucherLeft} voucherCount={voucherCount} setExpandVoucher={setExpandVoucher} />
+  }
+  else{
+    return (
+      <div>
+        <MembershipDetails membership={membership} ButtonText={ButtonText} onButtonClick={onButtonClick} />
+        {manageComponentShow ? ( <ManageMembership defaultDisplayMembership={defaultDisplayMembership} allMembershipPlans={allMembershipPlans}/> ) : (
+          <>
+            <BenefitItems discountPerc={discount} />
+            <div className="flex flex-col md:flex-row gap-6 p-6">
+              <div className="w-full md:w-1/2 flex-1 flex">
+                <PurchaseDetails lastPurchase={latestMembershipOrder} />
+              </div>
+              <div className="w-full md:w-1/2 flex-1 flex">
+                <VoucherDetails voucherUsed={voucherUsed} currencySymbol={""} savedAmount={savedAmount} voucherLeft={voucherLeft} voucherCount={voucherCount} defaultDisplayMembership={defaultDisplayMembership} setExpandVoucher={setExpandVoucher} />
+              </div>
             </div>
-            <div className="w-full md:w-1/2 flex-1 flex">
-              <VoucherDetails voucherUsed={voucherUsed} currencySymbol={""} savedAmount={savedAmount} voucherLeft={voucherLeft} voucherCount={voucherCount} defaultDisplayMembership={defaultDisplayMembership} />
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  )
+          </>
+        )}
+      </div>
+    )
+  }
 }
