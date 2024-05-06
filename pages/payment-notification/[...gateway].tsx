@@ -21,7 +21,7 @@ import { CARD_PAYMENT_3DS_ENABLED } from '@components/SectionCheckoutJourney/che
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const GatewayPage = (props: IGatewayPageProps) => {
-  const { gateway, isCancelled } = props
+  const { gateway, isCancelled, config } = props
   let { params } = props
 
   if (gateway === PaymentMethodType.CHECKOUT && CARD_PAYMENT_3DS_ENABLED) {
@@ -45,6 +45,7 @@ const GatewayPage = (props: IGatewayPageProps) => {
     <>
       <Spinner />
       <PaymentGatewayNotification
+        config={config}
         gateway={gateway}
         params={params}
         isCancelled={isCancelled}
