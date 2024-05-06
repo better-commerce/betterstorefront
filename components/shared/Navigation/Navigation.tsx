@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { removePrecedingSlash } from "@framework/utils/app-util";
+import { removePrecedingSlash, sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 function Navigation({ navItems, featureToggle, subMenuPosition }: any) {
   return (
@@ -30,7 +30,7 @@ function Navigation({ navItems, featureToggle, subMenuPosition }: any) {
                               <ul className="grid grid-cols-5 mt-4 space-4">
                                 {navItem?.navItems?.map((child: any, cIdx: number) => (
                                   <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                                    <Link className="font-normal capitalize text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white " href={navItem?.navBlockType == 9 ? `/collection/${removePrecedingSlash(child?.itemLink)}` : `/${removePrecedingSlash(child?.itemLink)}`} >
+                                    <Link className="font-normal capitalize text-slate-600 hover:text-black dark:text-slate-400 dark:hover:text-white " href={navItem?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(child?.itemLink)}` : `/${sanitizeRelativeUrl(child?.itemLink)}`} >
                                       {child?.caption.toLowerCase()}
                                     </Link>
                                   </li>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { StaticImageData } from "next/image";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface CardCategory2Props {
   className?: string;
@@ -25,7 +26,7 @@ const CardCategory2: FC<CardCategory2Props> = ({
   link
 }) => {
   return (
-    <Link href={`/${link}`} className={`nc-CardCategory2 ${className}`} data-nc-id="CardCategory2" >
+    <Link href={`${sanitizeRelativeUrl(link)}`} className={`nc-CardCategory2 ${className}`} data-nc-id="CardCategory2" >
       <div className={`flex-1 relative w-full h-0 rounded-2xl overflow-hidden group ${ratioClass} ${bgClass}`} >
         <div className="pt-0">
           <img alt={name} src={generateUri(featuredImage, 'h=350&fm=webp') || IMG_PLACEHOLDER} className="flex justify-center object-cover object-top w-full h-full rounded-2xl" sizes="400px" />
