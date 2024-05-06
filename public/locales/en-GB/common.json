@@ -831,7 +831,7 @@
       "noOfDiscountsRemainingText": "You have {noOfDiscounts} discounts remaining",
       "applyMembershipText": "Apply {discountPct}% discount to save {moneySaved} on your order",
       "applyDiscountText": "APPLY DISCOUNT",
-      "discountsRemainingText": "You have {voucherCount} discounts remaining`",
+      "discountsRemainingText": "You have {voucherCount} discounts remaining",
       "membershipPromotionMoneySavedText": "SAVE {moneySaved}",
       "membershipPromotionDiscountOnThisOrderText": "ON THIS ORDER",
       "membershipPromotionOfferDiscountText": "Get {membershipPromoDiscountPerc}% OFF, unlimited FREE delivery and unique offers all year round!*",
