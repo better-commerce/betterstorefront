@@ -130,7 +130,6 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
     setShow(!isShow)
   }
 
-  // return(<h1>helow wprdls</h1>)
   return (
     <>
       <NextHead>
