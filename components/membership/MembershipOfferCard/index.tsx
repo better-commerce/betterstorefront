@@ -19,7 +19,7 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, ref
   const [voucherCount, setVoucherCount] = useState(0)
   const [discount, setDiscount] = useState(0)
   const [membership, setMembership] = useState<any>([])
-  const [appliedBenefit, setAppliedBenefit] = useState(false)
+  const [appliedBenefit, setAppliedBenefit] = useState<any>()
   const { user, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
 
   const fetchMemberShipBenefits = async () => {
@@ -29,16 +29,17 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, ref
     const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
     const data = { userId, basketId: basket?.id, membershipPlanId: null }
     try {
-      const { data: response } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
-      if (!!response?.result) {
-        const membershipPlans = response?.result
+      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
+      if (membershipBenefitsResult?.result) {
+        const membershipPlans = membershipBenefitsResult?.result
         setMembership(membershipPlans)
-        membershipPlans?.benefits?.forEach((plan:any)=>{
-          if (!!basket?.promotionsApplied?.find((promo:any)=>promo?.promoCode === plan?.voucher)) { 
-            setAppliedBenefit(plan) 
-            return
+        const membershipVouchers: Array<string> = membershipPlans?.benefits?.map((plan: any) => plan?.voucher)
+        if (membershipVouchers?.length) {
+          const findAppliedVouchersInBasket = basket?.promotionsApplied?.find((promo:any)=> membershipVouchers?.includes(promo?.promoCode))
+          if (findAppliedVouchersInBasket) {
+            setAppliedBenefit(membershipPlans?.benefits?.find((plan: any) => plan?.voucher === findAppliedVouchersInBasket?.promoCode))
           }
-        })
+        }
       }
       hideOverlayLoaderState()
     } catch (error) {
@@ -49,7 +50,7 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, basket, ref
 
   useEffect(() => {
 
-    if(!!basket?.lineItems) {
+    if (basket?.lineItems?.length) {
       fetchMemberShipBenefits()
     }
   }, [ basket, basket?.id, basket?.lineItems])
