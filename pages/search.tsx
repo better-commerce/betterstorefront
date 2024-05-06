@@ -16,7 +16,7 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid'))
@@ -137,7 +137,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     }
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_page_view_before({ item_id :`search_for ${router.query.freeText || ''} `}) 
+      window.ch_page_view_before({ item_id: `search_for ${router.query.freeText || ''} ` })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -338,12 +338,12 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
       <div className="container pt-10 pb-24 mx-auto">
-        <div className="max-w-screen-sm">
-          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+          <h1 className={`block text-2xl font-semibold  ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
             {translate('label.basket.catalogText')}
           </h1>
           <div className='flex justify-between w-full align-bottom'>
-            <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
+            <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
               {translate('label.search.stepIntoWorldText')}
             </span>
           </div>
@@ -355,25 +355,25 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <hr className="border-slate-200 dark:border-slate-700" />
-        { !!data?.products?.results?.length ? (
+        {!!data?.products?.results?.length ? (
           <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
             {isMobile ? (
               <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
             ) : (
-              <div className='sm:col-span-3 md:col-span-3 lg:col-span-3'>
+              <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
                 <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
               </div>
             )}
-            <div className={`sm:col-span-9 lg:col-span-9 md:col-span-9`}>
+            <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
               <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
               <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
             <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
           </div>)
-        :<NoProductFound/>}
+          : <NoProductFound />}
 
         <div className='flex flex-col w-full'>
-          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
@@ -416,7 +416,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     cachedDataUID.allMembershipsUID,
   ])
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
+  if (!allMembershipsUIDData) {
     const data = {
       "SearchText": null,
       "PricingType": 0,
@@ -431,7 +431,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -442,8 +442,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
   }
