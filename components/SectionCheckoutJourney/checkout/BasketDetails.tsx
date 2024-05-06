@@ -1,4 +1,4 @@
-import { NEXT_GET_BASKET_PROMOS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
+import { NEXT_GET_BASKET_PROMOS, NEXT_MEMBERSHIP_BENEFITS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
 import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, ClipboardIcon, ShoppingCartIcon, XMarkIcon, } from '@heroicons/react/24/outline'
@@ -7,6 +7,7 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
+import { Guid } from '@commerce/types'
 import Summary from '@components/SectionCheckoutJourney/checkout/Summary'
 import MembershipOfferCard from '@components/membership/MembershipOfferCard'
 import OptMembershipModal from '@components/membership/OptMembershipModal'
@@ -23,7 +24,7 @@ interface BasketItem {
 
 const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, setBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { isGuestUser} = useUI()
+  const { isGuestUser , user } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
   const [referralInfo, setReferralInfo] = useState<any>(null)
@@ -32,6 +33,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
   const [refCodeInput, setRefCodeInput] = useState('')
   const [error, setError] = useState<any>('')
   const [referralEmail, setReferralEmail] = useState<any>('')
+  const [membership, setMembership] = useState([])
   const [groupedPromotions, setGroupedPromotions] = useState<any>({
     appliedPromos: null,
     autoAppliedPromos: null,
@@ -99,6 +101,20 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
       console.error('Failed to copy link:', error)
     }
   }
+
+  useEffect(()=>{
+    async function fetchMembership(){
+      const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
+      const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
+      const data = { userId, basketId: basket?.id, membershipPlanId: null }
+
+      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
+      if (membershipBenefitsResult?.result) {
+        const membership = membershipBenefitsResult?.result
+        setMembership(membership)}
+    }
+    fetchMembership()
+  },[basket,basket?.id,basket?.lineItems])
 
   useEffect(() => {
     const fetchReferralPromotion = async () => {
@@ -213,7 +229,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
           )}
           {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
             <>
-              <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+              <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
               <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
             </>
             )
@@ -237,6 +253,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
             basketPromos={basketPromos}
             getBasketPromos={getBasketPromos}
             setBasket={setBasket}
+            membership={membership}
           />
         </div>
       )}

@@ -40,6 +40,7 @@ export default function Summary({
   getBasketPromos,
   isShippingDisabled,
   isPaymentLink = false,
+  membership
 }: any) {
   const translate = useTranslation()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
@@ -373,6 +374,7 @@ export default function Summary({
                                       basketPromos={basketPromos}
                                       items={cartItems}
                                       getBasketPromoses={getBasketPromos}
+                                      membership={membership}
                                     />
                                   </Disclosure.Panel>
                                 </Transition>
@@ -628,6 +630,7 @@ export default function Summary({
                             basketPromos={basketPromos}
                             items={cartItems}
                             getBasketPromoses={getBasketPromos}
+                            membership={membership}
                           />
                         </Disclosure.Panel>
                       </Transition>
