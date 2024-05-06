@@ -1,5 +1,5 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-import {EnvelopeIcon,BookOpenIcon,HeartIcon,ArrowPathRoundedSquareIcon,UserIcon, ClipboardDocumentListIcon, BuildingOffice2Icon} from '@heroicons/react/24/outline'
+import { EnvelopeIcon, BookOpenIcon, HeartIcon, ArrowPathRoundedSquareIcon, UserIcon, ClipboardDocumentListIcon, BuildingOffice2Icon } from '@heroicons/react/24/outline'
 export const useConfig: any = () => {
   const translate = useTranslation()
   return [
@@ -8,7 +8,7 @@ export const useConfig: any = () => {
       text: translate('label.myAccount.myDetailsHeadingText'),
       mtext: translate('label.myAccount.myDetailsHeadingText'),
       props: 'details',
-      head: <UserIcon className="w-7 h-7 text-gray-500" />,
+      head: <UserIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account',
     },
     {
@@ -16,7 +16,7 @@ export const useConfig: any = () => {
       text: translate('label.order.myOrdersText'),
       mtext: translate('label.order.myOrdersText'),
       props: 'orders',
-      head: <ClipboardDocumentListIcon className="w-7 h-7 text-gray-500" />,
+      head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/orders',
     },
     {
@@ -24,7 +24,7 @@ export const useConfig: any = () => {
       text: translate('label.myAccount.myReturnsText'),
       mtext: translate('label.myAccount.myReturnsText'),
       props: 'returns',
-      head: <ArrowPathRoundedSquareIcon className="w-7 h-7 text-gray-500" />,
+      head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/MyReturns',
     },
     {
@@ -32,7 +32,7 @@ export const useConfig: any = () => {
       text: translate('label.wishlist.wishlistText'),
       mtext: translate('label.wishlist.wishlistText'),
       props: 'wishlist',
-      head: <HeartIcon className="w-7 h-7 text-gray-500" />,
+      head: <HeartIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/wishlist',
     },
     {
@@ -40,7 +40,7 @@ export const useConfig: any = () => {
       text: translate('label.myAccount.mySavedAddressText'),
       mtext: translate('label.myAccount.mySavedAddressText'),
       props: 'address-book',
-      head: <BookOpenIcon className="w-7 h-7 text-gray-500" />,
+      head: <BookOpenIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/address-book',
     },
     {
@@ -48,8 +48,16 @@ export const useConfig: any = () => {
       text: translate('label.contactPreferences.contactPreferencesText'),
       mtext: translate('label.contactPreferences.contactPreferencesText'),
       props: 'contact',
-      head: <EnvelopeIcon className="w-7 h-7 text-gray-500" />,
+      head: <EnvelopeIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/contact',
+    },
+    {
+      type: 'tab',
+      text: "My Store",
+      mtext: "My Store",
+      props: 'my-store',
+      head: <EnvelopeIcon className="text-gray-500 w-7 h-7" />,
+      href: '/my-store/recommendations',
     },
   ]
 }
