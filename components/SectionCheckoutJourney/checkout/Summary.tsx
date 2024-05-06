@@ -10,6 +10,7 @@ const Summary = ({
   basketPromos,
   getBasketPromos,
   setBasket = () => {},
+  membership,
 }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -23,6 +24,7 @@ const Summary = ({
             items={basket}
             getBasketPromoses={getBasketPromos}
             setBasket={setBasket}
+            membership={membership}
           />
         </div>
         <dl className="space-y-2 sm:space-y-2">
