@@ -170,6 +170,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                       deviceInfo={deviceInfo}
                       basketPromos={basketPromos}
                       getBasketPromos={getBasketPromos}
+                      refreshBasket={refreshBasket}
                     />
                   </div>
                 </Disclosure.Panel>
@@ -235,6 +236,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
             deviceInfo={deviceInfo}
             basketPromos={basketPromos}
             getBasketPromos={getBasketPromos}
+            refreshBasket={refreshBasket}
           />
         </div>
       )}

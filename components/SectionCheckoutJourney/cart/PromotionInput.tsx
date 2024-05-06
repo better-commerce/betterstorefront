@@ -28,6 +28,7 @@ interface IPromotionInputProps {
   readonly items: any
   readonly getBasketPromoses?: any
   readonly deviceInfo?: any
+  readonly refreshBasket?: any
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {
@@ -38,6 +39,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
     // paymentOffers,
     items,
     getBasketPromoses = () => {},
+    refreshBasket = () => {},
   } = props
   const [error, setError] = useState(false)
   const { basketId, setCartItems, cartItems } = useUI()
@@ -99,6 +101,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
       })
       if (data?.result) {
         //setError(data?.result?.isVaild);
+        refreshBasket()
         setCartItems(data?.result?.basket)
         setValue('')
       } else {
