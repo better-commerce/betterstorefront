@@ -917,6 +917,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
   const basketDetailsProps = {
     basket,
+    setBasket,
     deviceInfo, 
     allMembershipPlans, 
     defaultDisplayMembership, 
