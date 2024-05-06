@@ -152,7 +152,7 @@ function MyStore({ deviceInfo, campaignData, featureToggle }: any) {
               {isMobile ? item?.head : item?.text}
             </Link>
           ) : (
-            <Link shallow={true} href={item?.href} passHref onClick={() => { handleClick() }} className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base" >
+            <Link key={`my-acc-${idx}`} shallow={true} href={item?.href} passHref onClick={() => { handleClick() }} className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base" >
               <span className="inline-block text-black sm:hidden dark:text-white"> {isMobile ? item?.head : item?.mtext} </span>
               <span className="hidden text-black sm:inline-block dark:text-white"> {isMobile ? item?.head : item?.text} </span>
             </Link>
