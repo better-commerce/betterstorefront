@@ -77,7 +77,7 @@ const CartItemRemoveModal = ({
                                     <button
                                         onClick={() => {
                                             setLoadingAction(LoadingActionType.REMOVE_ITEM)
-                                            handleItem(itemClicked, 'delete')
+                                            handleItem(itemClicked?.product, 'delete')
                                         }}
                                         className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-4 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 "
                                     >
