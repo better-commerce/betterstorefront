@@ -163,7 +163,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
           <p className="my-1 text-sm font-normal text-slate-700">{translate('label.membership.sprayMoreHappinessText')}</p>
         </div>
         <div className="flex flex-col justify-center py-6 text-center border-t border-slate-200 sm:py-10">
-          <h3 className="my-1 text-3xl font-medium text-slate-800">{translate('label.membership.membershipBenefits')}</h3>
+          <h3 className="my-1 text-3xl font-medium text-slate-800">{translate('label.membership.membershipBenefitsText')}</h3>
           <div className="grid grid-cols-1 gap-10 mt-8 sm:grid-cols-4">
             {MEMBER_BENEFITS?.map((benefit: any, bIdx: number) => (
               <div key={`b-${bIdx}`} className="flex flex-col justify-center w-full">
