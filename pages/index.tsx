@@ -21,8 +21,6 @@ import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri } from '@commerce/utils/uri-util'
 import SectionBrandCard from '@components/SectionBrandCard'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
