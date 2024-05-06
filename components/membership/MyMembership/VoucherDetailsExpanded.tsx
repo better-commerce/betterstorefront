@@ -109,7 +109,6 @@ export default function VoucherDetailsExpanded({
             <div className="m-4 bg-white ">
             <h3 className="text-lg font-semibold mb-2"> Redeemed Voucher(s) ({voucherUsed})</h3>
             {benefitsUsed?.map((benefits: any) =>{ 
-                console.log("benefits",benefits)
                 return(
                     <div className="border border-gray-300 p-4 rounded-md">
                         <div className="flex items-center justify-between">
