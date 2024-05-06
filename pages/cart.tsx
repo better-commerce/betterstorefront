@@ -491,7 +491,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       }
       if (type === 'delete') {
         data.qty = 0
-        userCart.lineItems = userCart?.lineItems?.filter(
+        userCart.lineItems = userCart.lineItems.filter(
           (item: { id: any }) => item.id !== product.id
         )
       }
