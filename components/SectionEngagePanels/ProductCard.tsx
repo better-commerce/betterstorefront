@@ -3,18 +3,16 @@ import axios from 'axios'
 import Link from 'next/link'
 import cn from 'classnames'
 import Cookies from 'js-cookie'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import 'swiper/css'
+import 'swiper/css/navigation'
 import { getCurrencySymbol, getFeaturesConfig, logError } from '@framework/utils/app-util'
-import { priceFormat, roundToDecimalPlaces, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
+import { roundToDecimalPlaces, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import Heading from '@components/Heading/Heading'
 import { ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_COUPON, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_TRENDING, EmptyString, EngageEventTypes } from '@components/utils/constants'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import SwiperCore, { Navigation } from 'swiper'
-import { ArrowLeftIcon, ArrowRightCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Cookie } from '@framework/utils/constants'
 import withOmnilytics from '@components/shared/withOmnilytics'
 import { getReqPayload } from '@components/utils/engageQuery'
@@ -33,7 +31,7 @@ export interface SectionSliderProductCardProps {
 }
 
 const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit, forceDisplay = false }) => {
-  
+
   /**
    * Do not render if campaigns were not found for this page.
    */
