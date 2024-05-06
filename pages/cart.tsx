@@ -27,7 +27,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -67,6 +67,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
   const [basket, setBasket] = useState(cart)
+  const [membership, setMembership] = useState([])
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
   const [openOMM, setOpenOMM] = useState(false)
@@ -389,6 +390,20 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     return reValidate?.result
   }
 
+  useEffect(()=>{
+    async function fetchMembership(){
+      const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
+      const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
+      const data = { userId, basketId: basket?.id, membershipPlanId: null }
+
+      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
+      if (membershipBenefitsResult?.result) {
+        const membershipPlans = membershipBenefitsResult?.result
+        setMembership(membershipPlans)}
+    }
+    fetchMembership()
+  },[basket,basket?.id,basket?.lineItems])
+
   useEffect(() => {
     const handleAsync = async () => {
       const promise = await new Promise<any>(
@@ -593,13 +608,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                 </h4>
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
                     <>
-                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
                       <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
                     </>
                   )
                 }
                 <div className="mt-2 sm:mt-6">
-                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} setBasket={setBasket} />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} membership={membership} setBasket={setBasket} />
                 </div>
                 <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                   <div className="flex items-center justify-between py-4">
@@ -785,7 +800,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
                 <div className="mt-2 sm:mt-6">
-                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} setBasket={setBasket} />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} membership={membership} setBasket={setBasket} />
                 </div>
                 <dl className="mt-6 space-y-2 sm:space-y-2">
                   <div className="flex items-center justify-between">
