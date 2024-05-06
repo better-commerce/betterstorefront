@@ -815,6 +815,7 @@
       "createText": "Create"
     },
     "membership": {
+      "unlimitedDeliveryText": "FREE unlimited* standard delivery",
       "alreadyMemberText": "Already a Member?",
       "myMembershipText": "My Membership",
       "membershipDescText": "on your order today when you join our membership",

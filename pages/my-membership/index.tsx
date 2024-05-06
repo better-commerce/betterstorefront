@@ -6,7 +6,7 @@ import Layout from '@components/Layout/Layout'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, SITE_ORIGIN_URL } from "@components/utils/constants";
 import React from "react";
 import { removeQueryString } from "@commerce/utils/uri-util";
-import { GiftIcon, PlusIcon, StarIcon, TagIcon, TruckIcon } from "@heroicons/react/24/outline";
+import { RocketLaunchIcon, GiftIcon, PlusIcon, StarIcon, TagIcon, TruckIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps, } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import cartHandler from "@components/services/cart";
@@ -128,12 +128,12 @@ const MyMembershipPage = ({ allPlans }: any) => {
                     {plan?.membershipBenefits?.map((benefits: any, bIdx: number) => (
                       <>
                         <div className="flex items-center gap-4 justify-normal">
-                          <GiftIcon className="w-6 h-6 p-1 text-white bg-black rounded-full" />
-                          <span className="font-medium text-black text-md">{benefits?.code}</span>
-                        </div>
-                        <div className="flex items-center gap-4 justify-normal">
                           <TagIcon className="w-6 h-6 p-1 text-white bg-black rounded-full" />
                           <span className="font-medium text-black text-md">{benefits?.noOfVoucher} x 20% {translate('label.membership.discountsAnytimeText')}</span>
+                        </div>
+                        <div className="flex items-center gap-4 justify-normal">
+                          <RocketLaunchIcon className="w-6 h-6 p-1 text-white bg-black rounded-full" />
+                          <span className="font-medium text-black text-md">{translate('label.membership.unlimitedDeliveryText')}</span>
                         </div>
                       </>
                     ))}
