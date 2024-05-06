@@ -10,10 +10,10 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 const FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT = true
 
-const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defaultDisplayMembership , refreshBasket=() => {} }:any) => {
+const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defaultDisplayMembership , setBasket = () => {} }:any) => {
   if (!open) return null
   const translate = useTranslation()
-  const { user } = useUI();
+  const { user, setCartItems } = useUI();
   const membershipPlans = allMembershipPlans.sort((a:any, b:any) => a?.displayOrder - b?.displayOrder)
   const currencySymbol = basket?.grandTotal?.currencySymbol
   const [selectedPlan, setSelectedPlan] = useState(FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT? membershipPlans[0] : null)
@@ -43,9 +43,8 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           'ADD',
           { plan }
         )
-          if(refreshBasket){
-            refreshBasket()
-          }
+          setBasket(item)
+          setCartItems(item)
           setOpenOMM(false)
       },
     }

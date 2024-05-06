@@ -593,13 +593,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                 </h4>
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
                     <>
-                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
-                      <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+                      <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
                     </>
                   )
                 }
                 <div className="mt-2 sm:mt-6">
-                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} setBasket={setBasket} />
                 </div>
                 <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                   <div className="flex items-center justify-between py-4">
@@ -785,7 +785,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
                 <div className="mt-2 sm:mt-6">
-                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} setBasket={setBasket} />
                 </div>
                 <dl className="mt-6 space-y-2 sm:space-y-2">
                   <div className="flex items-center justify-between">
