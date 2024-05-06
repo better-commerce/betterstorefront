@@ -801,3 +801,13 @@ export const getFeaturesConfig = () => {
     return {}
   }
 };
+
+export const getRedirectionLocale = (defaultCulture: string): string => {
+  const currentLocale = Cookies.get(Cookie.Key.LANGUAGE)
+  if (defaultCulture && currentLocale) {
+    if (!matchStrings(defaultCulture, currentLocale, true)) {
+      return `/${currentLocale}`
+    }
+  }
+  return EmptyString
+}
