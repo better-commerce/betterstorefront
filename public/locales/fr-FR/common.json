@@ -815,6 +815,7 @@
       "createText": "Créer"
     },
     "membership": {
+      "unlimitedDeliveryText": "Livraison standard GRATUITE illimitée*",
       "alreadyMemberText": "Déjà membre ?",
       "myMembershipText": "Mon adhésion",
       "membershipDescText": "sur votre commande aujourd'hui lorsque vous adhérez à notre adhésion",

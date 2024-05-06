@@ -815,6 +815,7 @@
       "createText": "Crear"
     },
     "membership": {
+      "unlimitedDeliveryText": "Envío estándar GRATIS ilimitado*",
       "alreadyMemberText": "¿Ya eres miembro?",
       "myMembershipText": "Mi Membresía",
       "membershipDescText": "en tu pedido de hoy cuando te unas a nuestra membresía",
