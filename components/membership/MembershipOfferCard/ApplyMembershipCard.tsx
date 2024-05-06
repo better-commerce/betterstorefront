@@ -5,15 +5,14 @@ const ApplyMembershipCard = ({ currencySymbol, membership, moneySaved, handleApp
   const translate = useTranslation()
   const applyMembershipText = translate('label.membership.applyMembershipText')
   return (
-    <div className="bg-gray-200 p-6 rounded-lg mt-2 text-center">
-      <p className="text-white font-semibold mb-4">{membership?.name}</p>
-      <p className="text-black font-semibold mb-6">
+    <div className="p-6 mt-2 text-center border-2 border-dashed rounded-lg bg-sky-50 border-sky-300">
+      <p className="mb-4 font-semibold text-white">{membership?.name}</p>
+      <p className="mb-6 font-medium text-black">
         {!!moneySaved && (membership?.benefits?.length > 0) && <>{stringFormat(applyMembershipText, { discountPct: membership?.benefits?.[0]?.discountPct, moneySaved: `${currencySymbol}${moneySaved}` })}</>}
       </p>
-      <button onClick={handleApplyDiscount} className="bg-white text-black font-semibold py-2 px-4 rounded-md mb-4">
+      <button onClick={handleApplyDiscount} className="px-6 py-2 mb-4 font-semibold text-black bg-white border rounded-md hover:bg-slate-100 border-slate-400">
         {translate('label.membership.applyDiscountText')}
       </button>
-      {/*<p className="text-black">{voucherCount && stringFormat(translate('label.membership.applyDiscountText'), { voucherCount })}</p>*/}
     </div>
   );
 };
