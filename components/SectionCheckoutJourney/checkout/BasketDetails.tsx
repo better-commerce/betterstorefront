@@ -21,7 +21,7 @@ interface BasketItem {
   price: number
 }
 
-const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, featureToggle }: any) => {
+const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, setBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isGuestUser} = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -170,7 +170,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                       deviceInfo={deviceInfo}
                       basketPromos={basketPromos}
                       getBasketPromos={getBasketPromos}
-                      refreshBasket={refreshBasket}
+                      setBasket={setBasket}
                     />
                   </div>
                 </Disclosure.Panel>
@@ -213,8 +213,8 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
           )}
           {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
             <>
-              <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
-              <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership}  refreshBasket={refreshBasket} />
+              <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+              <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
             </>
             )
           }
@@ -236,7 +236,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
             deviceInfo={deviceInfo}
             basketPromos={basketPromos}
             getBasketPromos={getBasketPromos}
-            refreshBasket={refreshBasket}
+            setBasket={setBasket}
           />
         </div>
       )}
