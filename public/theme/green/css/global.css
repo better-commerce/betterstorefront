@@ -1916,6 +1916,9 @@ p {
 .basket-panel .basket-item-price .price{
   font-size: 16px !important;
   color: #37b679 !important;
+  flex-direction: column !important;
+  display: flex;
+  justify-content: end !important;
 }
 
 .basket-panel .basket-item-brand{
