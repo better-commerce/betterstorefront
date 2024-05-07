@@ -30,17 +30,21 @@ const MemberBenefits = (props: any) => {
     },
   ]
 
-  return MEMBER_BENEFITS?.map((benefit: any, bIdx: number) => (
-    <div key={`b-${bIdx}`} className="flex flex-col justify-center w-full">
-      {benefit?.icon}
-      <h2 className="mb-4 text-lg font-semibold text-slate-800">
-        {benefit?.name}
-      </h2>
-      <h5 className="text-sm font-normal text-slate-600">
-        {benefit?.description}
-      </h5>
-    </div>
-  ))
+  return (
+    <>
+      {MEMBER_BENEFITS?.map((benefit: any, bIdx: number) => (
+        <div key={`b-${bIdx}`} className="flex flex-col justify-center w-full">
+          {benefit?.icon}
+          <h2 className="mb-4 text-lg font-semibold text-slate-800">
+            {benefit?.name}
+          </h2>
+          <h5 className="text-sm font-normal text-slate-600">
+            {benefit?.description}
+          </h5>
+        </div>
+      ))}
+    </>
+  )
 }
 
 export default MemberBenefits
