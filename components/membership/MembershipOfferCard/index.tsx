@@ -87,13 +87,13 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, membership,
     handleSubmit()
   };
 
-  const basketContainsMembershipProduct = useMemo(() => {
+  /*const basketContainsMembershipProduct = useMemo(() => {
     return basket?.lineItems?.some((x: any) => x?.isMembership)
-  }, [basket, basket?.lineItems])
+  }, [basket, basket?.lineItems])*/
 
-  return( basket?.hasMembership && appliedBenefit ? (
+  return( basket?.hasMembership && !!appliedBenefit ? (
     <AppliedMembershipCard promo={appliedBenefit} currencySymbol={currencySymbol} moneySaved={moneySaved} membership={membership} />
-  ) : basket?.hasMembership && basketContainsMembershipProduct ? (
+  ) : basket?.hasMembership /*&& basketContainsMembershipProduct*/ ? (
     <ApplyMembershipCard
       basket={basket}
       currencySymbol={currencySymbol}
