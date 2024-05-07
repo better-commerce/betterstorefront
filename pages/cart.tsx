@@ -602,7 +602,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
               <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} setItemClicked={setItemClicked} />
-              <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded' : 'bg-slate-50 rounded-2xl'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0`} >
+              <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded-md shadow-md top-2' : 'bg-slate-50 rounded-2xl top-24'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky lg:col-span-5 sm:mt-0`} >
                 <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
