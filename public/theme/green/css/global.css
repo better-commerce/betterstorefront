@@ -1,5 +1,4 @@
 @tailwind base;
-
 /* base css start */
 :root {
   --primary: #ffffff;
@@ -70,7 +69,7 @@
   /* primary color variable */
   --brand-red: #FF3600;
   --web-red: #DF340C;
-  --barnd-blue: #212530;
+  --brand-blue: #212530;
   --web-blue: #252E47;
   --brand-white: #fff;
   --web-white: #F8F8F8;
@@ -601,7 +600,7 @@ p {
 
 /* bg color css */
 .bg-blue-web {
-  background: var(--barnd-blue);
+  background: var(--brand-blue);
 }
 
 /* bg color css */
@@ -910,7 +909,7 @@ p {
   padding: 12px 16px;
   display: inline-block;
   width: 180px;
-  background: var(--barnd-blue);
+  background: var(--brand-blue);
   color: var(--brand-white);
   clip-path: polygon(100% 0, 75% 52%, 100% 100%, 0% 100%, 0 48%, 0% 0%);
 }
@@ -920,7 +919,7 @@ p {
   display: inline-block;
   width: 180px;
   background: var(--tan-clr);
-  color: var(--barnd-blue);
+  color: var(--brand-blue);
   clip-path: polygon(100% 0, 75% 52%, 100% 100%, 0% 100%, 0 48%, 0% 0%);
 }
 

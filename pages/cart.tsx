@@ -497,11 +497,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       }
       try {
         const item = await addToCart(data)
+        setCartItems(item)
+        setBasket(item)
         if (isSplitDelivery) {
-          setCartItems(item)
           fetchShippingPlans(item)
-        } else {
-          setCartItems(item)
         }
       } catch (error) {
         console.log(error)

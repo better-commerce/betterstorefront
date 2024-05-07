@@ -23,7 +23,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -487,7 +487,7 @@ export default function CollectionPage(props: any) {
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        <div className="max-w-screen-sm">
+        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
           <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
             {props?.name.toLowerCase()}
           </h1>
@@ -507,7 +507,7 @@ export default function CollectionPage(props: any) {
         </div>
         <hr className='border-slate-200 dark:border-slate-700' />
         {
-          <div className="grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3 sm:mt-0">
+          <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
             {props?.allowFacets ? (
               <>
                 {isMobile ? (
@@ -515,7 +515,7 @@ export default function CollectionPage(props: any) {
                 ) : (
                   <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
-                <div className="sm:col-span-9 p-[1px]">
+                <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10' : 'sm:col-span-9'}`}>
                   {isMobile ? null : (
                     <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   )}
@@ -638,7 +638,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
     }
   }
 
-  if(!allMembershipsUIDData){
+  if (!allMembershipsUIDData) {
     const data = {
       "SearchText": null,
       "PricingType": 0,
@@ -653,7 +653,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -664,8 +664,8 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
   }
