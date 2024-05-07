@@ -815,6 +815,16 @@
       "createText": "Erstellen"
     },
     "membership": {
+      "benefits": {
+        "name1": "20% Rabatt, wann immer Sie möchten*",
+        "desc1": "Beginnen Sie noch heute mit dem Sparen und wählen Sie, wie viele 20% Rabatt-Gutscheine Sie je nach gewähltem Tarif wünschen.",
+        "name2": "Kostenlose unbegrenzte* Standardlieferung",
+        "desc2": "Lieferkosten? Nicht für unsere My Store Mitglieder! Kostenlose Lieferung das ganze Jahr über.",
+        "name3": "Exklusive Angebote und Vorteile",
+        "desc3": "Erhalten Sie exklusive Vorteile, die auf Sie zugeschnitten sind, sowie frühzeitigen Zugang zu erstaunlichen Angeboten.",
+        "name4": "Upgrade, wann immer Sie möchten",
+        "desc4": "Zahlen Sie den Unterschied, um Ihren Plan jederzeit zu aktualisieren und weiterhin zu sparen."
+      },
       "unlimitedDeliveryText": "Kostenlose unbegrenzte* Standardlieferung",
       "alreadyMemberText": "Bereits Mitglied?",
       "myMembershipText": "Meine Mitgliedschaft",

@@ -815,6 +815,16 @@
       "createText": "Créer"
     },
     "membership": {
+      "benefits": {
+        "name1": "20% de réduction à tout moment*",
+        "desc1": "Commencez à économiser dès aujourd'hui et choisissez autant de bons de réduction de 20% que vous le souhaitez en fonction du niveau que vous choisissez.",
+        "name2": "Livraison standard GRATUITE illimitée*",
+        "desc2": "Frais de livraison ? Pas pour nos membres My Store ! Livraison gratuite toute l'année.",
+        "name3": "Offres exclusives & avantages",
+        "desc3": "Profitez d'avantages exclusifs conçus pour vous, ainsi que d'un accès anticipé à des offres incroyables.",
+        "name4": "Mise à niveau quand vous le souhaitez",
+        "desc4": "Payez la différence pour mettre à niveau votre plan à tout moment et continuer à économiser."
+      },
       "unlimitedDeliveryText": "Livraison standard GRATUITE illimitée*",
       "alreadyMemberText": "Déjà membre ?",
       "myMembershipText": "Mon adhésion",

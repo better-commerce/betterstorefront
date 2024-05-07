@@ -815,6 +815,16 @@
       "createText": "Crear"
     },
     "membership": {
+      "benefits": {
+        "name1": "¡20% de descuento cuando quieras*!",
+        "desc1": "¡Empieza a ahorrar hoy mismo y elige cuántos cupones de descuento del 20% deseas según el nivel que elijas!",
+        "name2": "¡Envío estándar GRATIS e ilimitado*!",
+        "desc2": "¿Gastos de envío? ¡No para nuestros miembros de My Store! ¡Envío gratuito durante todo el año!",
+        "name3": "Ofertas exclusivas y ventajas",
+        "desc3": "¡Obtén ventajas exclusivas adaptadas para ti y acceso temprano a increíbles ofertas!",
+        "name4": "Actualiza cuando quieras",
+        "desc4": "¡Paga la diferencia para actualizar tu plan en cualquier momento y seguir ahorrando!"
+      },
       "unlimitedDeliveryText": "Envío estándar GRATIS ilimitado*",
       "alreadyMemberText": "¿Ya eres miembro?",
       "myMembershipText": "Mi Membresía",
