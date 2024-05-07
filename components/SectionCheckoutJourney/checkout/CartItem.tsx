@@ -11,7 +11,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   return (
-    <section aria-labelledby="cart-heading" className="lg:col-span-7">
+    <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
       <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
         {userCart.lineItems?.map((product: any, productIdx: number) => {
           const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
@@ -26,6 +26,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
                 <div>
                   <div className="flex justify-between ">
                     <div className="flex-[1.5] ">
+                      <h2 className="mb-1 text-sm font-semibold text-gray-500 basket-item-brand"> {product?.brand} </h2>
                       <h3 className="text-base font-semibold">
                         <Link href={`/${product?.slug}`}>{product?.name}</Link>
                       </h3>
@@ -88,7 +89,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
                         <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
                       </div>
                     }
-                    <div className="justify-end flex-1 hidden sm:flex">
+                    <div className="justify-end flex-1 hidden sm:flex basket-item-price">
                       <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} className="mt-0.5" />
                     </div>
                   </div>
