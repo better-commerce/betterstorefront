@@ -147,13 +147,13 @@ function ImproveRecommendations({ deviceInfo, campaignData, featureToggle }: any
           </span>
         </div>
         <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-        <div className="flex space-x-8 overflow-x-auto md:space-x-13 hiddenScrollbar">
+        <div className="flex space-x-4 md:space-x-4 tabScroll">
           {newConfig?.map((item: any, idx: number) => (item?.text == 'My Store' ? (
-            <Link key={`my-acc-${idx}`} shallow={true} href={item?.href} passHref onClick={() => { handleClick(); handleToggleShowState(); }} className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item?.text == 'My Store' ? "border-primary-500 font-medium icon-text-black dark:text-slate-200" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"}`} >
+            <Link key={`my-acc-${idx}`} shallow={true} href={item?.href} passHref onClick={() => { handleClick(); handleToggleShowState(); }} className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base font-text-sm ${item?.text == 'My Store' ? "border-primary-500 font-medium icon-text-black dark:text-slate-200" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"}`} >
               {isMobile ? item?.head : item?.text}
             </Link>
           ) : (
-            <Link key={`my-acc-${idx}`} shallow={true} href={item?.href} passHref onClick={() => { handleClick() }} className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base" >
+            <Link key={`my-acc-${idx}`} shallow={true} href={item?.href} passHref onClick={() => { handleClick() }} className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base font-text-sm" >
               <span className="inline-block text-black sm:hidden dark:text-white"> {isMobile ? item?.head : item?.mtext} </span>
               <span className="hidden text-black sm:inline-block dark:text-white"> {isMobile ? item?.head : item?.text} </span>
             </Link>

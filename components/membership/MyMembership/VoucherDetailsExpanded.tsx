@@ -1,6 +1,10 @@
 import moment from 'moment';
-import { DATE_FORMAT } from '@components/utils/constants';
+import { DATE_FORMAT, NEXT_DOWNLOAD_VOUCHERS } from '@components/utils/constants';
 import VoucherStatus from './VoucherStatus';
+import axios from 'axios';
+import { LoadingDots, useUI } from '@components/ui';
+import { useEffect, useState } from 'react';
+
 
 export default function VoucherDetailsExpanded({
   membership,
@@ -10,16 +14,12 @@ export default function VoucherDetailsExpanded({
   voucherLeft,
   voucherUsed
 }: any) {
-    const benefitsAvailable: any[] = membership?.benefits?.filter((x: any) => {
-        return x?.status === 0;
-    });
-    const benefitsUsed: any[] = membership?.benefits?.filter((x: any) => {
-        return x?.status === 1;
-    });
 
-    const formatDate = (dateString: string) => {
-        return moment(dateString).format(DATE_FORMAT);
-    };
+    const { user } = useUI()
+    const benefitsAvailable: any[] = membership?.benefits?.filter((x: any) => { return x?.status === 0; });
+    const benefitsUsed: any[] = membership?.benefits?.filter((x: any) => { return x?.status === 1; });
+    const formatDate = (dateString: string) => { return moment(dateString).format(DATE_FORMAT); };
+    const [Download, setDownload] = useState(null)
     
   const handleManageMembership = () => {
     setExpandVoucher(false)
@@ -29,6 +29,18 @@ export default function VoucherDetailsExpanded({
   const handleGoBackButton = () => {
     setExpandVoucher(false)
   }
+
+  const handleDownloadVoucher = () => {
+    const downloadVoucher = async () =>{
+      const data =  { userId: user?.userId , voucherCode : benefitsAvailable?.[0]?.voucher }
+      const {data : response} = await axios.post(NEXT_DOWNLOAD_VOUCHERS, data )
+      setDownload(response?.result?.url)
+    }
+    downloadVoucher()
+  }
+
+  useEffect(()=>{handleDownloadVoucher()},[])
+
 
   return (
     <div className="bg-gray-100 p-4 rounded-md">
@@ -85,9 +97,9 @@ export default function VoucherDetailsExpanded({
                   <p className="text-sm text-gray-600"> ExpiryDate : {formatDate(benefitsAvailable?.[0]?.validityEnd)} </p>
                 </div>
               </div>
-              <button className="bg-emerald-500 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded">
-                Download for in-store use
-              </button>
+              { Download ?
+              (<a href={Download} target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:text-emerald-700  font-semibold py-2 px-4 rounded">Download for in-store use</a> )
+              : <LoadingDots/> }
             </div>
           </div>
         </div>
@@ -105,31 +117,30 @@ export default function VoucherDetailsExpanded({
                 ))}
         </div>
       )}
-        {benefitsUsed?.length &&
-            <div className="m-4 bg-white ">
-            <h3 className="text-lg font-semibold mb-2"> Redeemed Voucher(s) ({voucherUsed})</h3>
-            {benefitsUsed?.map((benefitUsed: any) =>{ 
-                return(
-                    <div key={benefitUsed?.id} className="border border-gray-300 p-4 rounded-md">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <img src={benefitUsed?.voucherBarCodeUrl} alt="Barcode" className="h-8 mr-4" />
-                                <div>
-                                    <p className="text-sm font-semibold"> {benefitUsed?.promoName} </p>
-                                    <p className="text-sm text-gray-600"> Promotional Code : {benefitUsed?.voucher} </p>
-                                    <p className="text-sm text-gray-600"> Claimed Date : {formatDate(benefitUsed?.claimDate)} </p>
-                                </div>
-                            </div>
-                            <div className="text-emerald-500 hover:text-emerald-700 font-semibold py-2 px-4 rounded cursor-pointer">
-                            View Order
-                            </div>
-                        </div>
+      {benefitsUsed?.length &&
+        <div className="m-4">
+          <h3 className="text-lg font-semibold mb-2"> Redeemed Voucher(s) ({voucherUsed})</h3>
+          {benefitsUsed?.map((benefits: any) =>{ 
+            return(
+              <div key={benefits?.voucher} className="border border-gray-300 p-4 rounded-md opacity-65">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <img src={benefits?.voucherBarCodeUrl} alt="Barcode" className="h-8 mr-4" />
+                    <div>
+                      <p className="text-sm font-semibold"> {benefits?.promoName} </p>
+                      <p className="text-sm text-gray-600"> Promotional Code : {benefits?.voucher} </p>
+                      <p className="text-sm text-gray-600"> Claimed Date : {formatDate(benefits?.claimDate)} </p>
                     </div>
-                )
-            })}
-
-            </div>
-        }
+                  </div>
+                  {/* <div className="text-emerald-500 hover:text-emerald-700 font-semibold py-2 px-4 rounded cursor-pointer">
+                  View Order
+                  </div> */}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      }
     </div>
   )
 }

@@ -82,7 +82,7 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureTogg
   }
   return (
     <>
-    <div className='flex space-x-8 md:space-x-13 overflow-x-auto hiddenScrollbar'>
+    <div className='flex space-x-4 md:space-x-6 tabScroll'>
     {newConfig.map((item: any, idx: number) => (
         <>
            {item.text == currentOption ? (
