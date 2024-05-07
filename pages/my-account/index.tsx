@@ -10,6 +10,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import React from 'react'
 import MyDetails from '@components/account/MyDetails'
+import { StarIcon } from "@heroicons/react/24/outline";
 import { Guid } from '@commerce/types'
 import NextHead from 'next/head'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
@@ -84,6 +85,7 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
             text: translate('label.membership.membershipText'),
             mtext: translate('label.membership.membershipText'),
             props: 'membership',
+            head: <StarIcon className="w-7 h-7 text-gray-500 dark:invert" title="Membership" />,
             href: '/my-account/membership',
         })
       }

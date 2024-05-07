@@ -14,6 +14,7 @@ import { BuildingOffice2Icon } from "@heroicons/react/24/outline";
 import { useTranslation } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import { isMobile } from "react-device-detect";
+import { StarIcon } from "@heroicons/react/24/outline";
 
 const PAGE_TYPE = PAGE_TYPES.MyStore
 
@@ -115,6 +116,7 @@ function MyStore({ deviceInfo, campaignData, featureToggle }: any) {
           text: translate('label.membership.membershipText'),
           mtext: translate('label.membership.membershipText'),
           props: 'membership',
+          head: <StarIcon className="w-7 h-7 text-gray-500 dark:invert" title="Membership" />,
           href: '/my-account/membership',
         })
       }
