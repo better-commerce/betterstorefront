@@ -2,7 +2,7 @@ import { roundToDecimalPlaces } from '@framework/utils/parse-util'
 import ApplyMembershipCard from './ApplyMembershipCard'
 import MembershipPromotionCard from './MembershipPromotionCard'
 import AppliedMembershipCard from './AppliedMembershipCard'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
 import { Guid } from '@commerce/types'
@@ -87,9 +87,13 @@ const MembershipOfferCard = ({ setOpenOMM, defaultDisplayMembership, membership,
     handleSubmit()
   };
 
-  return( basket?.hasMembership && !!appliedBenefit ? (
+  const basketContainsMembershipProduct = useMemo(() => {
+    return basket?.lineItems?.some((x: any) => x?.isMembership)
+  }, [basket, basket?.lineItems])
+
+  return( basket?.hasMembership && appliedBenefit ? (
     <AppliedMembershipCard promo={appliedBenefit} currencySymbol={currencySymbol} moneySaved={moneySaved} membership={membership} />
-  ) : basket?.hasMembership ? (
+  ) : basket?.hasMembership && basketContainsMembershipProduct ? (
     <ApplyMembershipCard
       basket={basket}
       currencySymbol={currencySymbol}

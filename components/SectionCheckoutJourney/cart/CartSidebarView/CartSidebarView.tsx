@@ -377,6 +377,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }
 
   const handleItem = (product: any, type = 'increase') => {
+    if (!product?.id) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
     }
