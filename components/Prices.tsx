@@ -12,7 +12,7 @@ export interface PricesProps {
   readonly defaultDisplayMembership: any;
 }
 
-const Prices: FC<PricesProps> = ({ className = "w-full", price, listPrice, contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium", featureToggle, defaultDisplayMembership, }) => {
+const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPrice, contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium", featureToggle, defaultDisplayMembership, }) => {
   const discountPerc = defaultDisplayMembership?.membershipPromoDiscountPerc || 0
   const isIncludeVAT = vatIncluded()
   const translate = useTranslation()
@@ -55,7 +55,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full", price, listPrice, conte
               )
           )}
           <span className="text-xs font-normal text-gray-400">{featureToggle?.features?.enableMembership && '(Non-Member Price)'}</span>
-          <span className="pl-1 font-light text-right text-gray-400 font-10">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
+          <span className="pl-1 font-light text-right text-gray-400 ex-vat-text font-10">{isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}</span>
           </div>
       ) : (
           <div className="font-semibold text-green">{translate('label.orderSummary.freeText')}</div>

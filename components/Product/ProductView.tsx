@@ -6,6 +6,7 @@ import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import ImageGallery from 'react-image-gallery'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
@@ -184,7 +185,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   }
 
-  const generateDataForEngage = (product:any) => {
+  const generateDataForEngage = (product: any) => {
     if (!product) return null;
     if (typeof window === 'undefined') return null
     const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
@@ -584,7 +585,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         (item: any) => item?.display == 'Is Enabled'
       ).length
     setIsEngravingAvailable(isEngraving)
-  },[relatedProducts])
+  }, [relatedProducts])
 
   const insertToLocalWishlist = () => {
     addToWishlist(product)
@@ -854,11 +855,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-xl sm:text-2xl font-semibold">
+          <h2 className="text-xl sm:text-2xl font-semibold product-name-h2">
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
 
             {reviews?.review?.totalRecord > 0 &&
               <>
@@ -889,10 +890,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
         )}
         {
-          openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo}/>
+          openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
         }
         <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-          <MyLocationIcon className='h-4 w-4'/>
+          <MyLocationIcon className='h-4 w-4' />
           <span className='hover:underline cursor-pointer' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
         </div>
         <div id="add-to-cart-button">
@@ -903,14 +904,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="container mx-auto max-w-7xl p-4">
                     <div className="flex justify-end">
                       <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
-                      {isInWishList(selectedAttrData?.productId) ? (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                      ) : (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                      )}
-                      <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
-                    </button>
+                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                        {isInWishList(selectedAttrData?.productId) ? (
+                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                        ) : (
+                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                        )}
+                        <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -919,7 +920,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <div className="flex rtl:space-x-reverse">
               {!isEngravingAvailable && (
-                <div className="flex mt-6 sm:mt-4 !text-sm w-full">
+                <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                   <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
                     {isInWishList(selectedAttrData?.productId) ? (
@@ -955,7 +956,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               )}
             </div>
           )}
-        </div>  
+        </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
         {product && <AccordionInfo data={detailsConfig} />}
         <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
@@ -1014,23 +1015,46 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </Swiper>
             </div>
           ) : (
-            <div className="w-full lg:w-[55%]">
-              <div className="relative">
-                <div className="relative aspect-w-16 aspect-h-16">
-                  <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
-                </div>
-                {renderStatus()}
-              </div>
-              <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                {product?.images?.map((item: any, index: number) => (
-                  <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                    <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+            <>
+              {featureToggle?.features?.isImageGallery ? (
+                <>
+                  <ImageGallery
+                    thumbnailAlt={product?.name}
+                    thumbnailTitle={product?.name}
+                    originalAlt={product?.name}
+                    items={images ?? []}
+                    thumbnailPosition="left"
+                    showPlayButton={false}
+                    additionalClass={`app-image-gallery ${fullscreen ? 'fullscreen' : ''}`}
+                    onScreenChange={toggleFullscreen}
+                    disableThumbnailScroll={false}
+                    renderCustomControls={renderCustomControls}
+                    renderItem={customRenderItem}
+                    renderThumbInner={customRenderThumbInner}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="w-full lg:w-[55%]">
+                    <div className="relative">
+                      <div className="relative aspect-w-16 aspect-h-16">
+                        <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                      {renderStatus()}
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
+                      {product?.images?.map((item: any, index: number) => (
+                        <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                          <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
+                </>
+              )}
+            </>
           )}
-          <div className="px-4 sm:px-0 w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10">
+          <div className="px-4 sm:px-0 w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section">
             {renderSectionContent()}
           </div>
         </div>
@@ -1059,7 +1083,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
           {alternativeProducts?.length > 0 && (
             <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto pdp-compare-section">
-              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
           )}
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
