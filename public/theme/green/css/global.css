@@ -2083,30 +2083,46 @@ p {
   }
   .glider-pos {
     display: none !important;
+  }    
+  .theme-search-bar {
+      background: transparent;
+      border: 0px solid #f4f6f9;
+      width: 100% !important;
+      min-width: 48px;
+      min-height: 48px !important;
+      justify-content: end !important;
+      padding: 0px 11px !important;
   }
-
-  
-.theme-search-bar {
-    background: transparent;
-    border: 0px solid #f4f6f9;
-    width: 100% !important;
-    min-width: 48px;
-    min-height: 48px !important;
+  .theme-search-bar.theme-search-bar-icon{
     justify-content: end !important;
-    padding: 0px 11px !important;
-}
-
-.theme-search-bar.theme-search-bar-icon{
-  justify-content: end !important;
-  position: relative;
-}
-
-.theme-search-bar.theme-search-bar-icon::before{
-  position: absolute;
-  left: 5px;
-  top: 14px;
-  content: "";
-  color: #959595;
-  font-size: 16px;
-}
+    position: relative;
+  }
+  .theme-search-bar.theme-search-bar-icon::before{
+    position: absolute;
+    left: 5px;
+    top: 14px;
+    content: "";
+    color: #959595;
+    font-size: 16px;
+  }
+  .theme-top .banner-image-container{
+      max-width: 100%;
+      background: transparent;
+      right: 0rem;
+      bottom: -10rem;
+      top: 0rem;
+      border-radius: 10px;
+  }
+  .theme-top .banner-image-container img{
+      border-radius: 10px;
+      margin-top: 2rem !important;
+      margin-bottom: 2rem !important;
+  }
+  .theme-top .nc-SectionHero2Item__left {
+    float: none !important;
+  }
+  .banner-prev,
+  .banner-next {
+    display: none !important;
+  }
 }
