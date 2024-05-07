@@ -27,7 +27,7 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject, NEXT_MEMBERSHIP_BENEFITS } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -56,7 +56,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   )
 
   const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, } = useUI()
-  const { addToCart , getCart } = cartHandler()
+  const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
@@ -390,19 +390,20 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     return reValidate?.result
   }
 
-  useEffect(()=>{
-    async function fetchMembership(){
-      const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
+  useEffect(() => {
+    async function fetchMembership() {
+      const membershipItem = basket?.lineItems?.find((x: any) => x?.isMembership)
       const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
       const data = { userId, basketId: basket?.id, membershipPlanId: null }
 
-      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
+      const { data: membershipBenefitsResult } = await axios.post(NEXT_MEMBERSHIP_BENEFITS, data)
       if (membershipBenefitsResult?.result) {
         const membershipPlans = membershipBenefitsResult?.result
-        setMembership(membershipPlans)}
+        setMembership(membershipPlans)
+      }
     }
     fetchMembership()
-  },[basket,basket?.id,basket?.lineItems])
+  }, [basket, basket?.id, basket?.lineItems])
 
   useEffect(() => {
     const handleAsync = async () => {
@@ -432,7 +433,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketId, cartItems])
 
-  const recordEventInEngage= () => {
+  const recordEventInEngage = () => {
     const iterator = cart?.lineItems?.values();
     const itemsFromArr = []
     for (const value of iterator) {
@@ -445,18 +446,18 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         sku: value?.sku || EmptyString
       })
     }
-    
+
     const cardData = {
       item_id: "cart",
-      item_ids: cart?.lineItems?.map((x:any) =>  parseItemId(x?.stockCode)) || [],
+      item_ids: cart?.lineItems?.map((x: any) => parseItemId(x?.stockCode)) || [],
       items: itemsFromArr,
       total_value: cart?.grandTotal?.raw?.withTax || EmptyString
     }
-  
+
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_checkout_initiate_before(cardData) 
+      window.ch_checkout_initiate_before(cardData)
     }
-   }
+  }
 
   useEffect(() => {
     async function loadShippingPlans() {
@@ -588,35 +589,34 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div className="container w-full py-4 pt-10 bg-white lg:pb-28 lg:pt-20">
-        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16">
-          {translate('label.basket.shoppingCartText')}{' '}
+      <div className={`container w-full py-4 pt-10  lg:pb-28 lg:pt-20 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
+        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16 basket-h1">
+          <span>{translate('label.basket.shoppingCartText')}{' '}</span>
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
-        <hr className='my-2 border-slate-200 dark:border-slate-700 xl:my-12' />
+        <hr className={`${CURRENT_THEME != 'green' ? 'my-2 xl:my-12 border-slate-200 dark:border-slate-700' : 'my-0 xl:my-0'} border-[#EEEEEE] dark:border-slate-700`} />
         {!isEmpty && !isSplitDelivery && (
           <>
-            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
+            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
               <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} setItemClicked={setItemClicked} />
-              <section aria-labelledby="summary-heading" className="p-4 mt-10 border sm:p-6 rounded-2xl bg-slate-50 border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0" >
+              <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded' : 'bg-slate-50 rounded-2xl'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0`} >
                 <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
-                    <>
-                      <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
-                      <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
-                    </>
-                  )
-                }
+                  <>
+                    <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
+                    <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+                  </>
+                )}
                 <div className="mt-2 sm:mt-6">
                   <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} membership={membership} setBasket={setBasket} />
                 </div>
-                <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
-                  <div className="flex items-center justify-between py-4">
+                <dl className={`text-sm mt-7 text-slate-500 dark:text-slate-400  ${CURRENT_THEME != 'green' ? 'divide-y divide-slate-200/70 dark:divide-slate-700/80' : ''}`}>
+                  <div className="flex items-center justify-between py-4 basket-summary-price">
                     <dt className="text-sm text-gray-600">
                       {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
@@ -624,7 +624,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {isIncludeVAT ? cartItems?.subTotal?.formatted?.withTax : cartItems?.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between py-4">
+                  <div className="flex items-center justify-between py-4 basket-summary-price">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>{translate('label.orderSummary.shippingText')}</span>
                     </dt>
@@ -633,7 +633,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                     </dd>
                   </div>
                   {userCart.promotionsApplied?.length > 0 && (
-                    <div className="flex items-center justify-between py-4">
+                    <div className="flex items-center justify-between py-4 basket-summary-price">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>
                       </dt>
@@ -642,7 +642,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       </dd>
                     </div>
                   )}
-                  <div className="flex items-center justify-between py-4">
+                  <div className="flex items-center justify-between py-4 basket-summary-price">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>{translate('label.orderSummary.taxText')}</span>
                     </dt>
@@ -650,7 +650,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {cartItems?.grandTotal?.formatted?.tax}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
+                  <div className="flex items-center justify-between pt-2 text-gray-900 border-t basket-summary-price-total">
                     <dt className="text-lg font-semibold text-black">
                       {translate('label.orderSummary.totalText')}
                     </dt>
@@ -660,7 +660,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 " >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
@@ -678,8 +678,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         )}
         {!isEmpty && isSplitDelivery && splitBasketProducts && (
           <>
-            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
-              <section aria-labelledby="cart-heading" className="lg:col-span-7">
+            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
+              <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
                 <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
                   {Object.keys(splitBasketProducts)?.map(
                     (deliveryDate: any, Idx: any) => (
@@ -794,7 +794,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   )}
                 </div>
               </section>
-              <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5" >
+              <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded' : 'bg-slate-50 rounded-2xl'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0`} >
                 <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-3xl" >
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
@@ -850,7 +850,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 " >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
@@ -908,7 +908,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     cachedDataUID.allMembershipsUID,
   ])
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
+  if (!allMembershipsUIDData) {
     const data = {
       "SearchText": null,
       "PricingType": 0,
@@ -923,7 +923,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: context?.req?.cookies })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -934,8 +934,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership ={ membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
   }
