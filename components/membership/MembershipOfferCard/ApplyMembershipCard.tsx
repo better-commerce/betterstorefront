@@ -1,9 +1,14 @@
 import { useTranslation } from "@commerce/utils/use-translation";
 import { stringFormat } from "@framework/utils/parse-util"
 
-const ApplyMembershipCard = ({ currencySymbol, membership, moneySaved, handleApplyDiscount, voucherCount }:any) => {
+const ApplyMembershipCard = ({ currencySymbol, membership, moneySaved, handleApplyDiscount, voucherCount = 0 }:any) => {
   const translate = useTranslation()
   const applyMembershipText = translate('label.membership.applyMembershipText')
+
+  if (voucherCount < 1) {
+    return <></>
+  }
+
   return (
     <div className="p-6 mt-2 text-center border-2 border-dashed rounded-lg bg-sky-50 border-sky-300">
       <p className="mb-4 font-semibold text-white">{membership?.name}</p>

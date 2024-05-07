@@ -475,6 +475,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
+    if (!product?.id) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
     }
@@ -493,7 +494,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       if (type === 'delete') {
         data.qty = 0
         userCart.lineItems = userCart.lineItems.filter(
-          (item: { id: any }) => item.id !== product.id
+          (item: { id: any }) => item.id !== product?.id
         )
       }
       try {
@@ -609,7 +610,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
                   <>
                     <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
-                    <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+                    <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} setBasket={setBasket} />
                   </>
                 )}
                 <div className="mt-2 sm:mt-6">
