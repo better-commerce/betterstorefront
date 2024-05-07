@@ -8,7 +8,6 @@ export default function getOrders() {
         method: 'get',
         data: query,
         cookies,
-        logRequest : true
       })
       return response.result
     } catch (error: any) {
