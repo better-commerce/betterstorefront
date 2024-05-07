@@ -157,7 +157,7 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
                 </span>
               </div>
               <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-              <div className="flex space-x-8 overflow-x-auto md:space-x-13 hiddenScrollbar">
+              <div className="flex space-x-4 md:space-x-4 tabScroll">
                 {newConfig?.map((item: any, idx: number) => (
                   <>
                     {item.text == 'My Details' ? (
@@ -171,7 +171,7 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
                             handleClick()
                             handleToggleShowState()
                           }}
-                          className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == 'My Details'
+                          className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base font-text-sm ${item.text == 'My Details'
                             ? "border-primary-500 font-medium icon-text-black dark:text-slate-200"
                             : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                             }`}
@@ -188,7 +188,7 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
                           onClick={() => {
                             handleClick()
                           }}
-                          className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base"
+                          className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base font-text-sm"
                         >
                           <span className="inline-block text-black sm:hidden dark:text-white">
                             {isMobile ? item?.head : item?.mtext}

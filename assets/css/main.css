@@ -17542,3 +17542,28 @@ body:has(.engage-announcement-bar){
   -moz-box-shadow: 2px 3px 20px 6px rgba(207,207,207,1);
   box-shadow: 2px 3px 20px 6px rgba(207,207,207,1);
 }
+
+  .font-text-sm{
+    font-size: 14.5px;
+  }
+
+  .tabScroll {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  .tabScroll::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  .tabScroll::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  .tabScroll::-webkit-scrollbar-thumb {
+    background-color: #5279c7;
+    border-radius: 0px;
+    border: 0px solid #ffffff;
+  }
