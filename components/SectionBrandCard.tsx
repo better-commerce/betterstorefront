@@ -5,7 +5,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline"
 
 const SectionBrandCard = ({ data, key }: any) => {
   return (
-    <div className='flex items-center justify-between' key={key}>
+    <div className='flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-0' key={key}>
       <div>
         <h2 className='mb-4 text-3xl font-semibold md:text-4xl'>{data?.brand_brandname}</h2>
         <div className='max-w-full mb-3 text-sm font-normal leading-relaxed text-gray-600 sm:max-w-96' dangerouslySetInnerHTML={{ __html: data?.brand_branddescription }}></div>
