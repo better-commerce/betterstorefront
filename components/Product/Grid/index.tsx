@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { IExtraProps } from '@components/Layout/Layout'
 import rangeMap from '@lib/range-map'
 import Pagination from '../Pagination'
+import { CURRENT_THEME } from '@components/utils/constants'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 interface Props {
@@ -32,6 +33,11 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
     }
   }, [Router.events])
 
+  let gridClass = 'lg:grid-cols-3'
+  if (CURRENT_THEME == 'green') {
+    gridClass = 'lg:grid-cols-4'
+  }
+
   return (
     <>
       {IS_INFINITE_SCROLL && (
@@ -41,7 +47,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
           total={products.total}
           currentNumber={products.results.length}
           component={
-            <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 4 ? `lg:grid-cols-3` : 'lg:grid-cols-3'}`} >
+            <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 4 ? `${gridClass}` : gridClass}`} >
               {!products.results.length && rangeMap(12, (i) => (
                 <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                   <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -60,7 +66,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? `lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3` : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'}`} >
+          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? gridClass : gridClass}`} >
             {!products?.results?.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
