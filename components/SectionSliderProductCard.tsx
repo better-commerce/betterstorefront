@@ -6,6 +6,7 @@ import Heading from "@components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import { CURRENT_THEME } from "./utils/constants";
+import GliderNextPrev from "./Heading/GliderNextPrev";
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 export interface SectionSliderProductCardProps {
   readonly className?: string;
@@ -42,13 +43,22 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
   }, [sliderRef]);
 
   return (
-    <div className={`nc-SectionSliderProductCard product-card-slider ${className}`}>
+    <div className={`nc-SectionSliderProductCard product-card-slider relative ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
-        {heading?.map((h: any, iIdx: number) => (
-          <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
-            {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title}
-          </Heading>
-        ))}
+        {CURRENT_THEME != 'green' ? (<>
+          {heading?.map((h: any, iIdx: number) => (
+            <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title}
+            </Heading>
+          ))}
+        </>) : (<>
+          {heading?.map((h: any, iIdx: number) => (
+            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title}
+            </GliderNextPrev>
+          ))}
+        </>)}
+
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (

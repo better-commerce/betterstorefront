@@ -1776,7 +1776,7 @@ p {
 }
 
 .product-collections .nc-SectionSliderProductCard{
-  padding: 50px 10px !important;
+  padding: 50px 20px !important;
   margin: 0 -65px !important;
 }
 
@@ -1936,11 +1936,26 @@ p {
   font-weight: 700;
   color: #00b18a;
 }
+
 .price-div .text-gray-400.ex-vat-text{
   font-size: 16px !important;
   font-weight: 500;
   color: #000;
 }
+
+.product-card-panel .price-div .text-gray-400{
+  font-size: 16px !important;
+  font-weight: 600;
+  color: #00b18a;
+}
+
+.product-card-panel .price-div .text-gray-400.ex-vat-text{
+  font-size: 12px !important;
+  font-weight: 500;
+  color: #000;
+}
+
+
 .attr-box{
   transition: all .2s;
   background-color: #efefef !important;
@@ -2014,4 +2029,43 @@ p {
 .product-card-item {
   background-color: #FFFFFF !important;
   border-radius: 10px !important;
+}
+
+.glider-pos{
+    position: absolute;
+    top: 45%;
+    left: 0;
+    width: 100%;
+    z-index: 9;
+    margin: 0 !important;
+}
+
+.glider-pos .next-prev-panel{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.glider-pos .only-next{
+    background-color: #ffffff !important;
+    height: 120px !important;
+    width: 60px !important;
+    border-radius: 10px !important;
+    left: -10px !important;
+    right: 0;
+    inset-inline-start: 0rem !important;
+    inset-inline-end: 0rem !important;
+    margin-left: -10px !important;
+}
+
+.glider-pos .only-prev{
+    margin-right: -10px !important;
+    background-color: #ffffff !important;
+    height: 120px !important;
+    width: 60px !important;
+    border-radius: 10px !important;
+    left: 0;
+    right: -10px !important;
+    inset-inline-start: 0rem !important;
+    inset-inline-end: 0rem !important;
 }
