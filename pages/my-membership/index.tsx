@@ -155,7 +155,6 @@ const MyMembershipPage = ({ allPlans }: any) => {
           <h3 className="my-1 mb-6 text-3xl font-medium text-slate-800">{translate('label.membership.alreadyMemberText')}</h3>
           <p className="my-2 text-sm font-normal text-slate-700">{translate('label.membership.upgradeMembershipText')}</p>
           <p className="my-1 text-sm font-normal text-slate-700">{translate('label.membership.upgradeAnyTimeText')}</p>
-          <p className="my-1 text-sm font-normal text-slate-700">{translate('label.membership.sprayMoreHappinessText')}</p>
         </div>
         <div className="flex flex-col justify-center py-6 text-center border-t border-slate-200 sm:py-10">
           <h3 className="my-1 text-3xl font-medium text-slate-800">{translate('label.membership.membershipBenefitsText')}</h3>
