@@ -1891,3 +1891,52 @@ p {
   }
 
 }
+
+.basket-h1{
+  justify-content: center !important;
+  text-align: center !important;
+  margin: 0 auto;
+  display: flex !important;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.basket-panel {
+  max-width: 1240px !important;
+  margin: 0 auto !important;
+  column-gap: 2rem !important;
+}
+
+.basket-panel .basket-cart-items{
+  background-color: #FFFFFF !important;
+  border-radius: 4px !important;
+  padding: 1rem 2rem !important;
+}
+
+.basket-panel .basket-item-price .price{
+  font-size: 16px !important;
+  color: #37b679 !important;
+}
+
+.basket-panel .basket-item-brand{
+  display: block;
+}
+
+.basket-summary-price{
+  padding-top: 0px !important;
+}
+
+.basket-summary-price-total{
+  justify-content: end !important;
+  gap: 1rem !important; 
+  align-items: baseline !important;
+}
+
+.basket-summary-price-total dt {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+}
+
+.basket-summary-price-total dd {
+  font-size: 28px !important;
+}

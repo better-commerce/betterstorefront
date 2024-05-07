@@ -44,7 +44,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full", price, listPrice, conte
           </div>
         )}
         {price?.raw?.withTax != 0 ? (
-          <div className="font-semibold text-gray-400 font-12">
+          <div className="font-semibold text-gray-400 font-12 price">
             {isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax}
             {isIncludeVAT ? (listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
               <span className="px-1 font-normal text-gray-400 line-through font-12">{listPrice?.formatted?.withTax}</span>

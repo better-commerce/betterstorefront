@@ -1679,3 +1679,8 @@ p {
 .icon-text-black .text-gray-500{
 color: #000 !important;
 }
+
+
+.basket-panel .basket-item-brand{
+  display: none;
+}
