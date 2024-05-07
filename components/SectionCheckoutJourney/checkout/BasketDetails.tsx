@@ -22,7 +22,7 @@ interface BasketItem {
   price: number
 }
 
-const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, setBasket, featureToggle }: any) => {
+const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, setBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isGuestUser , user } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -230,7 +230,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
           {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
             <>
               <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
-              <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} setBasket={setBasket} />
+              <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} setBasket={setBasket} />
             </>
             )
           }
