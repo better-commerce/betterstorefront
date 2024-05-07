@@ -108,16 +108,16 @@ export default function VoucherDetailsExpanded({
         {benefitsUsed?.length &&
             <div className="m-4 bg-white ">
             <h3 className="text-lg font-semibold mb-2"> Redeemed Voucher(s) ({voucherUsed})</h3>
-            {benefitsUsed?.map((benefits: any) =>{ 
+            {benefitsUsed?.map((benefitUsed: any) =>{ 
                 return(
-                    <div className="border border-gray-300 p-4 rounded-md">
+                    <div key={benefitUsed?.id} className="border border-gray-300 p-4 rounded-md">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
-                                <img src={benefits?.voucherBarCodeUrl} alt="Barcode" className="h-8 mr-4" />
+                                <img src={benefitUsed?.voucherBarCodeUrl} alt="Barcode" className="h-8 mr-4" />
                                 <div>
-                                    <p className="text-sm font-semibold"> {benefits?.promoName} </p>
-                                    <p className="text-sm text-gray-600"> Promotional Code : {benefits?.voucher} </p>
-                                    <p className="text-sm text-gray-600"> Claimed Date : {formatDate(benefits?.claimDate)} </p>
+                                    <p className="text-sm font-semibold"> {benefitUsed?.promoName} </p>
+                                    <p className="text-sm text-gray-600"> Promotional Code : {benefitUsed?.voucher} </p>
+                                    <p className="text-sm text-gray-600"> Claimed Date : {formatDate(benefitUsed?.claimDate)} </p>
                                 </div>
                             </div>
                             <div className="text-emerald-500 hover:text-emerald-700 font-semibold py-2 px-4 rounded cursor-pointer">
