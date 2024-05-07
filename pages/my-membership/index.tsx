@@ -3,10 +3,10 @@ import NextHead from 'next/head'
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Layout from '@components/Layout/Layout'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from "@components/utils/constants";
 import React from "react";
 import { removeQueryString } from "@commerce/utils/uri-util";
-import { RocketLaunchIcon, GiftIcon, PlusIcon, StarIcon, TagIcon, TruckIcon } from "@heroicons/react/24/outline";
+import { RocketLaunchIcon, TagIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps, } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import cartHandler from "@components/services/cart";
@@ -18,14 +18,9 @@ import commerce from "@lib/api/commerce";
 import { Redis } from "@framework/utils/redis-constants";
 import { getDataByUID, parseDataValue, setData } from "@framework/utils/redis-util";
 import { Guid } from "@commerce/types";
+import MemberBenefits from "@components/membership/MemberBenefits";
 
 const PAGE_TYPE = PAGE_TYPES.MyMembership
-const MEMBER_BENEFITS = [
-  { "name": "20% off whenever you want*", "description": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.", "icon": <GiftIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
-  { "name": "FREE unlimited* standard delivery", "description": "Delivery charges? Not for our My Store members! Free delivery all year long.", "icon": <TruckIcon className="w-16 h-16 mx-auto mb-4 text-sky-600" /> },
-  { "name": "Exclusive offers & perks", "description": "Get exclusive perks tailored to you plus early access to amazing offers.", "icon": <StarIcon className="w-16 h-16 p-2 mx-auto mb-4 border-2 rounded-full text-sky-600 border-sky-600" /> },
-  { "name": "Upgrade whenever you like", "description": "Pay the difference to upgrade your plan at any time to keep on saving.", "icon": <PlusIcon className="w-16 h-16 p-2 mx-auto mb-4 border-2 rounded-full text-sky-600 border-sky-600" /> }
-]
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale, req } = context
@@ -165,13 +160,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
         <div className="flex flex-col justify-center py-6 text-center border-t border-slate-200 sm:py-10">
           <h3 className="my-1 text-3xl font-medium text-slate-800">{translate('label.membership.membershipBenefitsText')}</h3>
           <div className="grid grid-cols-1 gap-10 mt-8 sm:grid-cols-4">
-            {MEMBER_BENEFITS?.map((benefit: any, bIdx: number) => (
-              <div key={`b-${bIdx}`} className="flex flex-col justify-center w-full">
-                {benefit?.icon}
-                <h2 className="mb-4 text-lg font-semibold text-slate-800">{benefit?.name}</h2>
-                <h5 className="text-sm font-normal text-slate-600">{benefit?.description}</h5>
-              </div>
-            ))}
+            <MemberBenefits />
           </div>
         </div>
       </div>

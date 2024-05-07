@@ -815,6 +815,16 @@
       "createText": "Create"
     },
     "membership": {
+      "benefits": {
+        "name1": "20% off whenever you want*",
+        "desc1": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.",
+        "name2": "FREE unlimited* standard delivery",
+        "desc2": "Delivery charges? Not for our My Store members! Free delivery all year long.",
+        "name3": "Exclusive offers & perks",
+        "desc3": "Get exclusive perks tailored to you plus early access to amazing offers.",
+        "name4": "Upgrade whenever you like",
+        "desc4": "Pay the difference to upgrade your plan at any time to keep on saving."
+      },
       "unlimitedDeliveryText": "FREE unlimited* standard delivery",
       "alreadyMemberText": "Already a Member?",
       "myMembershipText": "My Membership",
