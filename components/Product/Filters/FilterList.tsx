@@ -35,7 +35,12 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 
   const generateOptionName = () => {
     if (sectionKey === FILTER_KEYS.PRICE)
-      return <><span>{currencySymbol != undefined ? currencySymbol : ''}{option?.from}</span>-<span>{currencySymbol != undefined ? option?.to != null ? currencySymbol : '' : ''}{option?.to != null ? option?.to : 'Max'}</span></>
+      return <>
+        <span className='text-sm font-semibold text-black'>{currencySymbol != undefined ? currencySymbol : ''}{option?.from}</span>
+        -<span className='text-sm font-semibold text-black'>{currencySymbol != undefined ? option?.to != null ? currencySymbol : '' : ''}
+          {option?.to != null ? option?.to : 'Max'}
+        </span>
+      </>
     if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1].toLowerCase()
     if (sectionKey === FILTER_KEYS.RATING) {
       // Check if the option name contains a decimal point
@@ -95,7 +100,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
               background: checkboxBgColor,
               border: '1px solid #cccccc',
               position: 'relative',
-              marginRight: '6px',
+              marginRight: mr,
             }}
           />
         )}
@@ -111,7 +116,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
               background: checkboxBgColor,
               border: '1px solid #cccccc',
               position: 'relative',
-              marginRight: mr,
+              marginRight: '6px',
             }}
           />
         )}
