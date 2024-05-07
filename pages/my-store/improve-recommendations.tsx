@@ -9,6 +9,7 @@ import EngageProductCard from "@components/SectionEngagePanels/ProductCard";
 import { useConfig } from "@components/utils/myAccount";
 import { useEffect, useMemo, useState } from "react";
 import { useUI } from "@components/ui";
+import { StarIcon } from "@heroicons/react/24/outline";
 import { Guid } from "@commerce/types";
 import { BuildingOffice2Icon } from "@heroicons/react/24/outline";
 import { useTranslation } from "@commerce/utils/use-translation";
@@ -116,6 +117,7 @@ function ImproveRecommendations({ deviceInfo, campaignData, featureToggle }: any
           text: translate('label.membership.membershipText'),
           mtext: translate('label.membership.membershipText'),
           props: 'membership',
+          head: <StarIcon className="w-7 h-7 text-gray-500 dark:invert" title="Membership" />,
           href: '/my-account/membership',
         })
       }

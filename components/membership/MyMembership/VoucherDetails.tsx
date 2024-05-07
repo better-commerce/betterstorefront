@@ -8,7 +8,7 @@ const VoucherDetails = ({ voucherUsed, currencySymbol, savedAmount, voucherLeft,
     setExpandVoucher(true)
   }
   return (
-    <div className="bg-gray-200 p-6 rounded-lg shadow-md flex flex-col  justify-between">
+    <div className="bg-gray-200 p-6 rounded-lg shadow-md flex flex-col w-full justify-between">
       <h2 className="text-2xl font-semibold sm:text-3xl">{stringFormat(translate('label.membership.voucherUsedHeadingText'), { voucherUsed, membershipPromoDiscountPerc: defaultDisplayMembership?.membershipPromoDiscountPerc })}</h2>
       <p className="text-lg font-semibold mb-4">{stringFormat(translate('label.membership.usedVoucherSavingYouText'), { currencySymbol, savedAmount })}</p>
       <p className="mb-2">{stringFormat(translate('label.membership.vouchersAvailableText'), { voucherLeft, voucherCount })}</p>

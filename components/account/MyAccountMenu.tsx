@@ -3,6 +3,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
 import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
+import { StarIcon } from "@heroicons/react/24/outline";
 import Link from 'next/link'
 import React from 'react'
 
@@ -75,6 +76,7 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureTogg
             text: translate('label.membership.membershipText'),
             mtext: translate('label.membership.membershipText'),
             props: 'membership',
+            head: <StarIcon className="w-7 h-7 text-gray-500 dark:invert" title="Membership" />,
             href: '/my-account/membership',
         })
       }
