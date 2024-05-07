@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ACTION_TYPES } from 'pages/search'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getCurrencySymbol } from '@framework/utils/app-util'
+import { CURRENT_THEME } from '@components/utils/constants'
 
 const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
@@ -35,7 +36,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
   const generateOptionName = () => {
     if (sectionKey === FILTER_KEYS.PRICE)
       return <><span>{currencySymbol != undefined ? currencySymbol : ''}{option?.from}</span>-<span>{currencySymbol != undefined ? option?.to != null ? currencySymbol : '' : ''}{option?.to != null ? option?.to : 'Max'}</span></>
-    if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]
+    if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1].toLowerCase()
     if (sectionKey === FILTER_KEYS.RATING) {
       // Check if the option name contains a decimal point
       if (option.name.includes('.')) {
@@ -46,15 +47,24 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
         return option.name;
       }
     }
-    
+
     else return option.name
+  }
+
+  let bw = '20px'
+  let mr = '6px'
+  if (sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green') {
+    bw = '40px'
+    mr = '0px'
   }
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-4" >
-      <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
-      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-white" >
+    <div key={`option-right-value-${option.value}-${optionIdx}`} className={`flex items-center pt-4 ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'flex-col' : ''}`} >
+      <span>
+        <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
+      </span>
+      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className={`relative ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-white ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'flex flex-col-reverse gap-1 justify-center items-center align-middle' : ''}`} >
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
@@ -72,16 +82,16 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
             }}
           />
         )}
-        <span className="long-f-name dark:text-white">{generateOptionName()}</span>
+        <span className={`long-f-name capitalize text-black dark:text-white ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'text-xs font-medium' : ''}`}>{generateOptionName()}</span>
         {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{
               content: '',
               top: '2px',
               float: 'left',
-              height: '20px',
-              width: '20px',
-              borderRadius: '10px',
+              height: bw,
+              width: bw,
+              borderRadius: bw,
               background: checkboxBgColor,
               border: '1px solid #cccccc',
               position: 'relative',
@@ -101,14 +111,16 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
               background: checkboxBgColor,
               border: '1px solid #cccccc',
               position: 'relative',
-              marginRight: '6px',
+              marginRight: mr,
             }}
           />
         )}
       </label>
-      <span className="px-1 text-xs font-semibold text-black dark:text-white">
-        ({option.count})
-      </span>
+      {sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME != 'green' &&
+        <span className="px-1 text-xs font-semibold text-black dark:text-white">
+          ({option.count})
+        </span>
+      }
     </div>
   )
 }
@@ -183,7 +195,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className="pb-5 mt-1 max-panel">
+      <div className={`pb-5 mt-1 max-panel ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'grid grid-cols-4' : ''}`}>
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
