@@ -53,10 +53,10 @@ function Recommendations({  campaignData, featureToggle }: any) {
     <>
       <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">Your Recommendations</h2>
       <div className="mx-auto cart-recently-viewed mob-padding-0">
-        <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Top picks for you" isSlider={false} productPerRow={5} forceDisplay={true} />
-        <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} title="Style Spotlight: Editor's Choice" isSlider={true} productPerRow={5} forceDisplay={true} />
-        <EngageProductCard productLimit={15} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} title="Buy it again" isSlider={false} productPerRow={5} forceDisplay={true} />
-        <EngageProductCard productLimit={15} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Your browsing history" isSlider={true} productPerRow={5} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Top picks for you" isSlider={false} productPerRow={4} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} title="Style Spotlight: Editor's Choice" isSlider={true} productPerRow={4} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} title="Buy it again" isSlider={false} productPerRow={4} forceDisplay={true} />
+        <EngageProductCard productLimit={15} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Your browsing history" isSlider={true} productPerRow={4} forceDisplay={true} />
       </div>
     </>
   )
