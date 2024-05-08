@@ -971,7 +971,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       {featureToggle?.features?.enableEngage &&
         <ProductSocialProof data={analyticsData} />
       }
-      <main className="mt-2 container-pdp sm:mt-5 lg:mt-11">
+      <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 product-breadcrumb">
         <div className='flex flex-1 px-4 mb-1 sm:px-0 sm:mb-4 product-breadcrumbs'>
           {breadcrumbs && (
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
