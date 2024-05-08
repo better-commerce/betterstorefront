@@ -23,14 +23,14 @@ const ProductSocialProof = ({ data = [] }: any) => {
         {data?.map((item: any, index: any) => (
           <SwiperSlide key={index}>
             <div className="bg-white px-6 py-2 flex items-center gap-3">
-              {item.ImageUrl && (
+              {item?.ImageUrl && (
                 <div className="h-14 w-14 rounded-full overflow-hidden">
-                  <img src={item.ImageUrl} alt={item.Subtitle} className="w-full h-full !object-fill" />
+                  <img src={item?.ImageUrl} alt={item?.Subtitle} className="w-full h-full !object-fill" />
                 </div>
               )}
               <div className="text-left">
-                <div className="text-sm font-semibold">{item.Title}</div>
-                <div className="text-xs text-gray-500 leading-6">{item.Time}</div>
+                <div className="text-sm font-semibold">{item?.Title}</div>
+                <div className="text-xs text-gray-500 leading-6">{item?.Time}</div>
               </div>
             </div>
           </SwiperSlide>

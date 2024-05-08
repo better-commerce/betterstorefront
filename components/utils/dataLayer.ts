@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
-import { EmptyGuid, EmptyObject, EmptyString, SessionIdCookieKey } from '@components/utils/constants'
-import { Cookie, DeviceType, OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import { EmptyGuid, EmptyObject, EmptyString } from '@components/utils/constants'
+import { Cookie, OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import { getItem } from './localStorage'
+import { detectDeviceType } from '@framework/utils'
 
 export const ACTIONS = {
   DynamicPage: 'DynamicPage',
@@ -43,29 +44,6 @@ export const KEYS_MAP = {
 const DataLayerSingleton = function () {
   const windowObject: any = typeof window !== 'undefined' ? window : {}
   const visitorData: any = getItem('user') || EmptyObject
-
-  const detectDeviceType = (userAgent = navigator.userAgent) => {
-    // RegExp for device types
-    const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i;
-    const iosRegex = /iPhone|iPod/i;
-    const androidRegex = /Android/i;
-    const windowsPhoneRegex = /Windows Phone/i;
-    const tabletRegex = /iPad|Android(?!.+(?:mobile|mobi)).*?(?:Tablet|Tab)/i;
-  
-    if (iosRegex.test(userAgent)) {
-      return DeviceType.IOS;
-    } else if (androidRegex.test(userAgent)) {
-      return DeviceType.ANDROID;
-    } else if (windowsPhoneRegex.test(userAgent)) {
-      return DeviceType.WINDOWS_PHONE;
-    } else if (tabletRegex.test(userAgent)) {
-      return DeviceType.TABLET;
-    } else if (mobileRegex.test(userAgent)) {
-      return DeviceType.MOBILE;
-    } else {
-      return DeviceType.DESKTOP;
-    }
-  }
 
   const setDataLayer = () => {
     if (OMNILYTICS_DISABLED) return
