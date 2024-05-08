@@ -28,11 +28,6 @@ import { CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
 
-const Loading = () => (
-  <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
-    <LoadingDots />
-  </div>
-)
 const primaryButtonStyle = { backgroundColor: 'black' }
 const secondaryButtonStyle = { backgroundColor: 'gray' }
 const Content = () => {
@@ -149,11 +144,6 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
       setIsIncludeVATState(value)
     }, 50)
   }
-
-  // const handleClick = (text:any) => {
-  //   console.log(text)
-  //   setmyAccountActiveTab(text)
-  // }
 
   return (
     <>
