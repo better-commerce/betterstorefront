@@ -51,28 +51,7 @@ function MyStore({ campaignData, featureToggle }: any) {
 
   return (
     <>
-      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
-      {!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature &&
-        <div className="flex-col hidden w-full px-4 mb-6 border-t bg-gradient-to-b from-slate-100 to-white sm:mb-10 border-slate-200 sm:block ">
-          <ul className="flex items-center justify-start pl-0 mx-auto gap-x-4 sm:gap-x-8">
-            <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-sky-500 hover:text-sky-700 ${nextPageTitle === 'Your Recommendations' ? 'border-sky-500 text-sky-700 font-medium' : 'border-white text-black font-normal'}`}>
-              <Link href={`/my-store/recommendations`} passHref>
-                <span>Recommended For You</span>
-              </Link>
-            </li>
-            <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-sky-500 hover:text-sky-700 ${nextPageTitle === 'My Store' ? 'border-sky-500 text-sky-700 font-medium' : 'border-white text-black font-normal'}`}>
-              <Link href={`/my-store`} passHref>
-                <span>Browsing History</span>
-              </Link>
-            </li>
-            <li className={`pt-1 mt-0 border-b-2 font-12 hover:border-sky-500 hover:text-sky-700 ${nextPageTitle === 'Improve Recommendations' ? 'border-sky-500 text-sky-700 font-medium' : 'border-white text-black font-normal'}`}>
-              <Link href={`/my-store/improve-recommendations`} passHref>
-                <span>Improve Your Recommendation</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      }
+      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">My Store</h2>
       <EngageProductCard productLimit={40} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Your Browsing History" isSlider={false} productPerRow={5} />
     </>
   )
