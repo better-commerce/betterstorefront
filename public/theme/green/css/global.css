@@ -2286,3 +2286,18 @@ p {
           max-width: 100% !important;
         }
       }
+
+.menu-font-size{
+  font-size: 18px !important;
+}
+
+.result-count-text{
+  font-size: 16px !important;
+  color: #000 !important;
+}
+
+@media screen  and (min-width:1024px){
+  .product-breadcrumb{
+    margin-top: 6rem !important;
+  }
+}
