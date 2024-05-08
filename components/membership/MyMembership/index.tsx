@@ -24,7 +24,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
   const [manageComponentShow, setManageComponentShow] = useState(false)
   const [expandVoucher, setExpandVoucher] = useState(false)
   const [ButtonText , setButtonText] = useState(manageComponentShow ? translate('label.membership.manageMembership.backToMyMembershipText') : translate('label.membership.manageMembership.manageMyMembershipText'))
-
+  const [currencySymbol, setCurrencySymbol] = useState(allMembershipPlans?.[0]?.price?.currencySymbol)
   useEffect(() => {
     const fetchMemberShip = async () => {
       const userId = user?.userId
@@ -107,7 +107,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
                 <PurchaseDetails lastPurchase={latestMembershipOrder} />
               </div>
               <div className="w-full md:w-1/2 flex-1 flex">
-                <VoucherDetails voucherUsed={voucherUsed} currencySymbol={""} savedAmount={savedAmount} voucherLeft={voucherLeft} voucherCount={voucherCount} defaultDisplayMembership={defaultDisplayMembership} setExpandVoucher={setExpandVoucher} />
+                <VoucherDetails voucherUsed={voucherUsed} currencySymbol={currencySymbol} savedAmount={savedAmount} voucherLeft={voucherLeft} voucherCount={voucherCount} defaultDisplayMembership={defaultDisplayMembership} setExpandVoucher={setExpandVoucher} />
               </div>
             </div>
           </>
