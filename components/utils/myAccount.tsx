@@ -50,14 +50,6 @@ export const useConfig: any = () => {
       props: 'contact',
       head: <EnvelopeIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/contact',
-    },
-    {
-      type: 'tab',
-      text: "My Store",
-      mtext: "My Store",
-      props: 'my-store',
-      head: <EnvelopeIcon className="text-gray-500 w-7 h-7" />,
-      href: '/my-store/recommendations',
-    },
+    }
   ]
 }

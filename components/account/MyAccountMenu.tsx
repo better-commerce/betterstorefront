@@ -2,16 +2,15 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
-import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
+import { BuildingOffice2Icon, EnvelopeIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
 import Link from 'next/link'
-import React from 'react'
 
-function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureToggle}: any) {
+function SideMenu({ deviceInfo, featureToggle}: any) {
   const config = useConfig();
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { user, referralProgramActive } = useUI()
+  const { user, referralProgramActive , myAccountActiveTab } = useUI()
   let isB2B = user?.companyId !== Guid.empty
   let newConfig: any = []
   if (config && typeof window !== 'undefined') {
@@ -69,12 +68,24 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureTogg
         href: '/my-account/my-company',
       })
     }
+    if (featureToggle?.features?.enableMyStoreFeature) {
+      if (user?.hasMembership) {
+        newConfig.push(    {
+          type: 'tab',
+          text: translate('label.wishlist.myStore'),
+          mtext: translate('label.wishlist.myStore'),
+          props: 'my-store',
+          head: <EnvelopeIcon className="text-gray-500 w-7 h-7" />,
+          href: '/my-store/recommendations',
+        })
+      }
+    }
     if (featureToggle?.features?.enableMembership) {
       if (user?.hasMembership) {
         newConfig.push({
             type: 'tab',
-            text: translate('label.membership.membershipText'),
-            mtext: translate('label.membership.membershipText'),
+            text: translate('label.membership.myMembershipText'),
+            mtext: translate('label.membership.myMembershipText'),
             props: 'membership',
             head: <StarIcon className="w-7 h-7 text-gray-500 dark:invert" title="Membership" />,
             href: '/my-account/membership',
@@ -87,7 +98,7 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureTogg
     <div className='flex space-x-4 md:space-x-6 tabScroll'>
     {newConfig.map((item: any, idx: number) => (
         <>
-           {item.text == currentOption ? (
+           {item.text == myAccountActiveTab ? (
               <>
                 <Link
                  key={`my-acc-${idx}`}
@@ -95,10 +106,9 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureTogg
                     href={item.href}
                     passHref
                     onClick={() => {
-                      handleClick
-                      setShow(false)
+                      // handleClick(item?.text)
                     }}
-                    className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == currentOption
+                    className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
                     ? "border-primary-500 font-medium dark:text-slate-200 icon-text-black"
                     : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                     }`}
@@ -113,7 +123,7 @@ function SideMenu({ handleClick, setShow, currentOption, deviceInfo, featureTogg
                   href={item.href}
                   passHref
                   onClick={() => {
-                    handleClick
+                    // handleClick(item?.text)
                   }}
                   className="block py-3 md:py-8  flex-shrink-0 text-sm sm:text-base"
                 >
