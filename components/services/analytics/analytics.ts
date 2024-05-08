@@ -2,12 +2,13 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 //
-import { Cookie, DeviceType, OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import { Cookie, OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import { CUSTOM_EVENTS, EVENTS_MAP } from './constants'
 import { EmptyGuid, EmptyObject, EmptyString, OMNILYTICS_ASSETS_DATA, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
 import setSessionIdCookie, { setGeoDataCookie } from '@components/utils/setSessionId'
 import { getItem } from '@components/utils/localStorage'
+import { detectDeviceType } from '@framework/utils'
 
 const publisher = async (data: any, event: string) => {
   if (OMNILYTICS_DISABLED) return
@@ -81,29 +82,6 @@ const publisher = async (data: any, event: string) => {
       },
       navigator: _cloneNavigator(),
       timing: window.performance.timing,
-    }
-  }
-
-  const detectDeviceType = (userAgent = navigator.userAgent) => {
-    // RegExp for device types
-    const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i;
-    const iosRegex = /iPhone|iPod/i;
-    const androidRegex = /Android/i;
-    const windowsPhoneRegex = /Windows Phone/i;
-    const tabletRegex = /iPad|Android(?!.+(?:mobile|mobi)).*?(?:Tablet|Tab)/i;
-  
-    if (iosRegex.test(userAgent)) {
-      return DeviceType.IOS;
-    } else if (androidRegex.test(userAgent)) {
-      return DeviceType.ANDROID;
-    } else if (windowsPhoneRegex.test(userAgent)) {
-      return DeviceType.WINDOWS_PHONE;
-    } else if (tabletRegex.test(userAgent)) {
-      return DeviceType.TABLET;
-    } else if (mobileRegex.test(userAgent)) {
-      return DeviceType.MOBILE;
-    } else {
-      return DeviceType.DESKTOP;
     }
   }
 
