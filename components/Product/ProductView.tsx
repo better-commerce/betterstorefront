@@ -1007,7 +1007,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     items={images ?? []}
                     thumbnailPosition="left"
                     showPlayButton={false}
-                    additionalClass={`app-image-gallery w-full lg:w-[55%] ${fullscreen ? 'fullscreen' : ''}`}
+                    additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
                     onScreenChange={toggleFullscreen}
                     disableThumbnailScroll={false}
                     renderCustomControls={renderCustomControls}
