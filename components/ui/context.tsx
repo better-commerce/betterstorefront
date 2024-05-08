@@ -130,33 +130,99 @@ const initialState = {
 }
 
 type Action =
-  | { type: 'OPEN_SIDEBAR' }
-  | { type: 'CLOSE_SIDEBAR' }
-  | { type: 'OPEN_DROPDOWN' }
-  | { type: 'CLOSE_DROPDOWN' }
-  | { type: 'OPEN_MODAL' }
-  | { type: 'SHOW_ALERT' }
-  | { type: 'HIDE_ALERT' }
-  | { type: 'USE_ALERT', payload: any }
-  | { type: 'OPEN_NOTIFY_USER_POPUP', payload: string }
-  | { type: 'CLOSE_NOTIFY_USER_POPUP' }
-  | { type: 'CLOSE_MODAL' }
-  | { type: 'SET_MODAL_VIEW', view: MODAL_VIEWS }
-  | { type: 'SET_SIDEBAR_VIEW', view: SIDEBAR_VIEWS }
-  | { type: 'SHOW_DETAILED_ORDER' }
-  | { type: 'HIDE_DETAILED_ORDER' }
-  | { type: 'SET_USER_AVATAR', value: string }
-  | { type: 'ADD_TO_WISHLIST', payload: any }
-  | { type: 'REMOVE_FROM_WISHLIST', payload: any }
-  | { type: 'ADD_TO_CART', payload: any }
-  | { type: 'REMOVE_FROM_CART', payload: any }
-  | { type: 'SET_CART_ITEMS'; payload: any }
-  | { type: 'SET_USER', payload: any } 
-  | { type: 'SET_GUEST_USER', payload: any }
-  | { type: 'SET_IS_GUEST_USER', payload: boolean }
-  | { type: 'SET_IS_PAYMENT_LINK', payload: boolean }
-  | { type: 'SET_IS_SPLIT_DELIVERY', payload: boolean } 
-  | { type: 'SET_REFERRAL_PROGRAM_ACTIVE', payload: boolean }
+| {
+  type: 'OPEN_SIDEBAR'
+}
+| {
+  type: 'CLOSE_SIDEBAR'
+}
+| {
+  type: 'OPEN_DROPDOWN'
+}
+| {
+  type: 'CLOSE_DROPDOWN'
+}
+| {
+  type: 'OPEN_MODAL'
+}
+| {
+  type: 'SHOW_ALERT'
+}
+| {
+  type: 'HIDE_ALERT'
+}
+| {
+  type: 'USE_ALERT'
+  payload: any
+}
+| {
+  type: 'OPEN_NOTIFY_USER_POPUP'
+  payload: string
+}
+| {
+  type: 'CLOSE_NOTIFY_USER_POPUP'
+}
+| {
+  type: 'CLOSE_MODAL'
+}
+| {
+  type: 'SET_MODAL_VIEW'
+  view: MODAL_VIEWS
+}
+| {
+  type: 'SET_SIDEBAR_VIEW'
+  view: SIDEBAR_VIEWS
+}
+| {
+  type: 'SHOW_DETAILED_ORDER'
+}
+| {
+  type: 'HIDE_DETAILED_ORDER'
+}
+| {
+  type: 'SET_USER_AVATAR'
+  value: string
+}
+| {
+  type: 'ADD_TO_WISHLIST'
+  payload: any
+}
+| {
+  type: 'REMOVE_FROM_WISHLIST'
+  payload: any
+}
+| {
+  type: 'ADD_TO_CART'
+  payload: any
+}
+| {
+  type: 'REMOVE_FROM_CART'
+  payload: any
+}
+| { type: 'SET_CART_ITEMS'; payload: any }
+| {
+  type: 'SET_USER'
+  payload: any
+}
+| {
+  type: 'SET_GUEST_USER'
+  payload: any
+}
+| {
+  type: 'SET_IS_GUEST_USER'
+  payload: boolean
+}
+| {
+  type: 'SET_IS_PAYMENT_LINK'
+  payload: boolean
+}
+| {
+  type: 'SET_IS_SPLIT_DELIVERY'
+  payload: boolean
+} | {
+  type: 'SET_REFERRAL_PROGRAM_ACTIVE'
+  payload: boolean
+}
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -173,7 +239,7 @@ type Action =
   | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'SET_CURRENCY'; payload: any }
   | { type: 'SET_PRODUCT_INFO'; payload: any }
-  | { type: 'CHANGE_TAB', payload: string}
+  | { type: 'CHANGE_TAB'; payload: string}
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
