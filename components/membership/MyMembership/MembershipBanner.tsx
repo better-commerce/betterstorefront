@@ -81,7 +81,15 @@ const MembershipBanner = ({ user }: any) => {
   ).length
 
   if (!membership?.membershipName) {
-    return <></>
+    return <>
+      <div className='w-full mx-auto mb-4 theme-account-container mt-14 sm:mt-20 sm:mb-6'>
+        <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
+        <span className="block mt-2 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
+          <span className="font-semibold text-slate-900 dark:text-slate-200"> {user?.firstName}, </span>{" "} {user?.email}
+        </span>
+        <hr className="mt-6 border-slate-200 dark:border-slate-700"></hr>
+      </div>
+    </>
   }
 
   return (
@@ -116,7 +124,7 @@ const MembershipBanner = ({ user }: any) => {
               </p>
             </div>
             <div>
-              <p className={`font-bold text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white' } text-xs`} >
+              <p className={`font-bold text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'} text-xs`} >
                 Balance voucher
               </p>
               <p
