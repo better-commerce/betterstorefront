@@ -37,7 +37,7 @@ import { CompanyTabs, companyMenuTabs } from '@components/account/configs/compan
 import { matchStrings } from '@framework/utils/parse-util'
 
 function MyCompany({ deviceInfo }: any) {
-  const { user, deleteUser, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
+  const { user, changeMyAccountTab, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
@@ -51,60 +51,6 @@ function MyCompany({ deviceInfo }: any) {
   const config = useConfig();
   const [isAdmin, setIsAdmin] = useState(false)
 
-  const currentOption = translate('label.myAccount.myCompanyText')
-
-  const newConfig: any = useMemo(() => {
-    let output: any = []
-    let isB2B = user?.companyId !== Guid.empty
-    const hasMyCompany = config?.some((item: any) => item?.props === 'my-company')
-    const hasReferral = config?.some((item: any) => item?.props === 'refer-a-friend')
-    output = [...config]
-    if (isB2B) {
-      let i = output.length
-      if (referralProgramActive) {
-        if (!hasReferral) {
-          output.push({
-            type: 'tab',
-            text: translate('label.myAccount.referAFriendText'),
-            mtext: translate('label.myAccount.referAFriendText'),
-            props: 'refer-a-friend',
-            href: "/my-account/refer-a-friend"
-          })
-        }
-      }
-      while (i--) {
-        if (output[i]?.props === 'address-book' || output[i]?.props === 'orders') {
-          output.splice(i, 1)
-        }
-      }
-    }
-    if (!isB2B) {
-      if (referralProgramActive) {
-        if (!hasReferral) {
-          output = [...config]
-          output.push({
-            type: 'tab',
-            text: translate('label.myAccount.referAFriendText'),
-            mtext: translate('label.myAccount.referAFriendText'),
-            props: 'refer-a-friend',
-            href: "/my-account/refer-a-friend"
-          })
-        }
-      } else {
-        output = [...config]
-      }
-    } else if (!hasMyCompany) {
-      output.push({
-        type: 'tab',
-        text: translate('label.myAccount.myCompanyText'),
-        mtext: translate('label.myAccount.myCompanyText'),
-        props: 'my-company',
-        head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
-        href: `/my-account/my-company`,
-      })
-    }
-    return output
-  }, [config])
 
   const optionsConfig = useMemo(() => {
     const options: any = []
@@ -202,6 +148,10 @@ function MyCompany({ deviceInfo }: any) {
     //api logic
   }
 
+  useEffect(()=>{
+    changeMyAccountTab(translate('label.myAccount.myCompanyText'))
+  },[])
+
   useEffect(() => {
     const { tab: selectedTab } = router.query
     if (selectedTab) {
@@ -257,17 +207,6 @@ function MyCompany({ deviceInfo }: any) {
 
   return (
     <>
-      <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{currentOption}</title>
-        <meta name="title" content={currentOption} />
-        <meta name="description" content={currentOption} />
-        <meta name="keywords" content={currentOption} />
-        <meta property="og:image" content="" />
-        <meta property="og:title" content={currentOption} key="ogtitle" />
-        <meta property="og:description" content={currentOption} key="ogdesc" />
-      </NextHead>
       {!isB2BUser(user) ? (
         <>
           <Spinner />
@@ -276,67 +215,6 @@ function MyCompany({ deviceInfo }: any) {
         <>
           <section className="relative pb-10 text-gray-900 header-space">
             <div className="container w-full bar">
-              <div className="mt-14 sm:mt-20">
-                <div className="max-w-4xl mx-auto">
-                  <div className="max-w-2xl">
-                    <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">My Company</h2>
-                    <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
-                      <span className="font-semibold text-slate-900 dark:text-slate-200">
-                        {user?.firstName},
-                      </span>{" "}
-                      {user.email}
-                    </span>
-                  </div>
-                  <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-                  <div className="flex space-x-4 md:space-x-4 tabScroll">
-                    {newConfig?.map((item: any, idx: number) => (
-                      <>
-                        {item.text == 'My Company' ? (
-                          <>
-                            <Link
-                              key={`my-acc-${idx}`}
-                              shallow={true}
-                              href={item.href}
-                              passHref
-                              onClick={() => {
-                                handleClick()
-                                handleToggleShowState()
-                              }}
-                              className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base font-text-sm ${item.text == 'My Company'
-                                ? "border-primary-500 font-medium icon-text-black dark:text-slate-200"
-                                : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-                                }`}
-                            >
-                              {isMobile ? item?.head : item?.text}
-                            </Link>
-                          </>
-                        ) : (
-                          <>
-                            <Link
-                              shallow={true}
-                              href={item.href}
-                              passHref
-                              onClick={() => {
-                                handleClick()
-                              }}
-                              className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base font-text-sm"
-                            >
-                              <span className="inline-block text-black sm:hidden dark:text-white">
-                                {isMobile ? item?.head : item?.mtext}
-                              </span>
-                              <span className="hidden text-black sm:inline-block dark:text-white">
-                                {isMobile ? item?.head : item?.text}
-                              </span>
-                            </Link>
-                          </>
-                        )}
-
-                      </>
-                    ))}
-                  </div>
-                  <hr className="border-slate-200 dark:border-slate-700"></hr>
-                </div>
-              </div>
               <div className="max-w-4xl pt-4 pb-24 mx-auto sm:pt-6 lg:pb-32">
                 <div className="relative col-span-12 mob-tab-full" >
                   <div className={'orders bg-white dark:bg-transparent'}>

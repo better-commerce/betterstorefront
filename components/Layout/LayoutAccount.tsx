@@ -9,6 +9,8 @@ import { stringToBoolean } from '@framework/utils/parse-util'
 import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
+import NextHead from 'next/head'
+import SideMenu from '@components/account/MyAccountMenu'
 
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const MainNav2Logged = dynamic(() => import('@components/Header/MainNav2Logged'))
@@ -22,7 +24,7 @@ const LoginSideBarView = dynamic(() => import('@components/shared/Login/LoginSid
 const Footer = dynamic(() => import('@components/shared/Footer/Footer'))
 import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import { IDeviceInfo, useUI } from '@components/ui/context'
-import { CURRENT_THEME } from '@components/utils/constants'
+import { CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
 
@@ -108,10 +110,15 @@ export interface IExtraProps {
 
 const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, featureToggle = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { setIsCompared } = useUI()
+  const { setIsCompared , myAccountActiveTab } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
+  // const [isShow, setShow] = useState(true)
+  const translate = useTranslation()
+  const { user } = useUI()
+  const router = useRouter()
+  // const [myAccountActiveTab, setmyAccountActiveTab ]= useState(translate('label.myAccount.myDetailsHeadingText'))
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
@@ -143,6 +150,11 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
     }, 50)
   }
 
+  // const handleClick = (text:any) => {
+  //   console.log(text)
+  //   setmyAccountActiveTab(text)
+  // }
+
   return (
     <>
       <Head>
@@ -166,7 +178,46 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
         <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 theme-top`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
-          {children}
+          <>
+            <NextHead>
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1, maximum-scale=1"
+              />
+              <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+              <title>{myAccountActiveTab}</title>
+              <meta name="title" content={myAccountActiveTab} />
+              <meta name="description" content={myAccountActiveTab} />
+              <meta name="keywords" content={myAccountActiveTab} />
+              <meta property="og:image" content="" />
+              <meta property="og:title" content={myAccountActiveTab} key="ogtitle" />
+              <meta property="og:description" content={myAccountActiveTab} key="ogdesc" />
+            </NextHead>
+            <section className="container w-full bar header-space">
+              <div className="mt-14 sm:mt-20">
+                <div className='max-w-4xl mx-auto'>
+                  <div className="max-w-2xl">
+                    <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
+                    <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
+                      <span className="font-semibold text-slate-900 dark:text-slate-200">
+                        {user?.firstName},
+                      </span>{" "}
+                      {user?.email}
+                    </span>
+                  </div>
+                  <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>            
+                  <SideMenu
+                    deviceInfo={deviceInfo}
+                    featureToggle={featureToggle}
+                  />
+                  <hr className="border-slate-200 dark:border-slate-700"></hr>
+                </div>
+                <div className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
+                  {children}
+                </div>
+              </div>
+            </section>
+          </>
           <Footer navItems={navTree?.footer} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />

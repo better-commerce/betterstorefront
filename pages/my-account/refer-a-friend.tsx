@@ -1,6 +1,5 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -24,14 +23,12 @@ import {
   ChevronUpIcon,
 } from '@heroicons/react/24/outline'
 import Spinner from '@components/ui/Spinner'
-import SideMenu from '@old-components/account/MyAccountMenu'
-import NextHead from 'next/head'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 
-function ReferralPage({featureToggle}:any) {
-  const { user, deleteUser, isGuestUser, displayDetailedOrder } = useUI()
+function ReferralPage() {
+  const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
   const [isShow, setShow] = useState(true)
   const translate = useTranslation()
@@ -51,7 +48,6 @@ function ReferralPage({featureToggle}:any) {
     clickOnInvites: 0,
     successfulInvites: 0,
   })
-  const currentOption = translate('label.myAccount.referAFriendText')
   const REFERRAL_CODE_INSTRUCTIONS = <><p className="px-5">
     Just tell your friends to mention your Referral Code
   </p></>
@@ -125,6 +121,10 @@ function ReferralPage({featureToggle}:any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(()=>{
+    changeMyAccountTab(translate('label.myAccount.referAFriendText'))
+  },[])
+
   let loggedInEventData: any = {
     eventType: CustomerProfileViewed,
   }
@@ -153,30 +153,6 @@ function ReferralPage({featureToggle}:any) {
 
   return (
     <>
-      <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{currentOption}</title>
-        <meta name="title" content={currentOption} />
-        <meta name="description" content={currentOption} />
-        <meta name="keywords" content={currentOption} />
-        <meta property="og:image" content="" />
-        <meta property="og:title" content={currentOption} key="ogtitle" />
-        <meta property="og:description" content={currentOption} key="ogdesc" />
-      </NextHead>
-
-      <section className="relative pb-10 text-gray-900 header-space">
-        <div className="w-full px-0 mx-auto sm:container sm:px-0 lg:px-0">
-          <div className="grid w-full grid-cols-12 px-4 sm:px-2 sm:pr-0 main-account-grid">
-            <SideMenu
-              handleClick={handleClick}
-              setShow={setShow}
-              currentOption={currentOption}
-              featureToggle={featureToggle}
-            />
 
             {isLoading ? (
               <Spinner />
@@ -393,9 +369,6 @@ function ReferralPage({featureToggle}:any) {
                 </div>
               </div>
             )}
-          </div>
-        </div>
-      </section>
     </>
   )
 }
