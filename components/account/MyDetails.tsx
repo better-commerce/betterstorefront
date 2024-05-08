@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import { useDetailsFormConfig, useSchema } from './configs/details'
 import { useUI } from '@components/ui/context'
@@ -6,19 +6,18 @@ import { useHandleSubmit } from './common'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Button } from '@components/ui'
-import Link from 'next/link'
 import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-export default function MyDetails({ handleToggleShowState }: any) {
+export default function MyDetails() {
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
   const schema = useSchema();
   const formConfig = useDetailsFormConfig();
   const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
-  const { user, setUser } = useUI()
+  const { user, setUser, changeMyAccountTab } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const ContactNumberLenCheck: any = 10
@@ -68,6 +67,10 @@ export default function MyDetails({ handleToggleShowState }: any) {
       eventType: CustomerUpdated,
     })
   }
+
+  useEffect(()=>{
+    changeMyAccountTab(translate('label.myAccount.myDetailsHeadingText'))
+  },[])
 
   return (
     <main className="space-y-10 sm:space-y-12">
