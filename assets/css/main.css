@@ -17573,18 +17573,18 @@ body:has(.engage-announcement-bar){
       , #dedede, #ffffff 16%, #dedede 37%, #ffffff 24%, #454545 27%, #dedede 36%, #ffffff 45%, #ffffff 60%, #dedede 72%, #ffffff 80%, #dedede 94%, #a1a1a1);
     }
     .gradient-golden {
-      background:linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+      background:linear-gradient(to right, #BF953F, #BF953F, #B38728, #b28420, #FBF5B7);
     }
-    .gradiant-platinum {
-      background: rgb(209,209,240);
-      background: linear-gradient(90deg, rgba(209,209,240,1) 5%, rgba(255,255,255,1) 16%, rgba(209,209,240,1) 25%, rgba(209,209,240,1) 42%, rgba(255,255,255,1) 51%, rgba(209,209,240,1) 70%, rgba(255,255,255,1) 87%, rgba(209,209,240,1) 96%);
+    .gradient-platinum {
+      background: rgb(194 194 208);
+      background: linear-gradient(90deg, rgb(194 194 208) 5%, rgb(194 194 208) 16%, rgb(194 194 208) 25%, rgb(194 194 208) 42%, rgb(194 194 208) 51%, rgb(194 194 208) 70%, rgb(237 237 250) 87%, rgb(237 237 250) 96%);
     }
     .back-silver {
       background-color: #a9a9a9;
     }
     .back-golden{
-      background-color: #c19844;
+      background-color: #bd8c2a;
     }
     .back-platinum {
-      background-color: #d1d1f0;
+      background-color: rgb(237 237 250);
     }

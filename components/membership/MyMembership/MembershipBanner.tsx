@@ -9,6 +9,7 @@ import {
 } from '@components/utils/constants'
 import axios from 'axios'
 import { logError } from '@framework/utils/app-util'
+import Link from 'next/link'
 
 const MembershipBanner = ({ user }: any) => {
   const [membership, setMembership] = useState<any>([])
@@ -58,7 +59,7 @@ const MembershipBanner = ({ user }: any) => {
       case 'Gold':
         return 'gradient-golden'
       case 'Platinum':
-        return 'gradiant-platinum'
+        return 'gradient-platinum'
       default:
         return 'gray-500'
     }
@@ -85,69 +86,42 @@ const MembershipBanner = ({ user }: any) => {
 
   return (
     <>
-      <div className={`${getBackgroundColor(membership?.membershipName)} p-5`}>
-        <div className="flex container">
+      <div className={`${getBackgroundColor(membership?.membershipName)} p-5 header-space`}>
+        <div className="container flex">
           <div className="w-2/4">
             <h2
-              className={`text-xl sm:text-3xl text-${
-                membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-              }`}
+              className={`text-xl sm:text-3xl text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
+                }`}
             >
               Hello, {user?.firstName}
             </h2>
             {membership && (
               <div className="flex">
-                <p
-                  className={`text-${
-                    membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                  } text-lg mt-2`}
-                >
-                  See {membership?.membershipName} Banefits{' '}
-                </p>
-                <p
-                  className={`text-${
-                    membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                  } mt-4 ml-2`}
-                >
-                  <a href="/my-membership">
-                    <ChevronDownIcon
-                      className="w-4 h-4 transform -rotate-90"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </p>
+                <Link href="/my-membership">
+                  <span className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'} text-lg mt-2`} >
+                    See {membership?.membershipName} Banefits{' '}
+                    <ChevronDownIcon className="inline w-4 h-4 transform -rotate-90" aria-hidden="true" />
+                  </span>
+                </Link>
               </div>
             )}
           </div>
-          <div className="w-2/4 flex gap-x-5 mt-5">
+          <div className="flex w-2/4 mt-5 gap-x-5">
             <div>
-              <p
-                className={`font-bold text-${
-                  membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                } text-xs`}
-              >
+              <p className={`font-bold text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'} text-xs`} >
                 Membership no
               </p>
-              <p
-                className={`text-${
-                  membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                }`}
-              >
+              <p className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'}`} >
                 {membership?.membershipNo}
               </p>
             </div>
             <div>
-              <p
-                className={`font-bold text-${
-                  membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                } text-xs`}
-              >
+              <p className={`font-bold text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white' } text-xs`} >
                 Balance voucher
               </p>
               <p
-                className={`text-${
-                  membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                } ml-1`}
+                className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
+                  } ml-1`}
               >
                 {balanceVoucher}
               </p>
@@ -155,22 +129,20 @@ const MembershipBanner = ({ user }: any) => {
           </div>
         </div>
       </div>
-      <div className={`${getVoucherColor(membership?.membershipName)} p-2`}>
-        <div className="flex container">
+      <div className={`${getVoucherColor(membership?.membershipName)} py-2 px-5`}>
+        <div className="container flex">
           <div className="w-2/4">
             <p
-              className={`text-${
-                membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-              }`}
+              className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
+                }`}
             >
               {membership?.membershipName} member
             </p>
           </div>
           <div className="w-2/4">
             <p
-              className={`text-${
-                membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-              } ml-20`}
+              className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
+                }`}
             >
               Since {formatDate(membership?.startDate)}
             </p>
