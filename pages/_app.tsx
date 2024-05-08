@@ -52,8 +52,6 @@ import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
-declare const window: any
-
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -277,7 +275,9 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     } else {
       setAppIsLoading(false)
     }
-    setGeoData()
+    if (!OMNILYTICS_DISABLED) {
+      setGeoData()
+    }
     let analyticsCb = analytics()
     setAnalyticsEnabled(true)
     setSessionIdCookie()

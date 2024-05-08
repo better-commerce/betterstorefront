@@ -2,7 +2,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 //
-import { Cookie, DeviceType } from '@framework/utils/constants'
+import { Cookie, DeviceType, OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import { CUSTOM_EVENTS, EVENTS_MAP } from './constants'
 import { EmptyGuid, EmptyObject, EmptyString, OMNILYTICS_ASSETS_DATA, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -10,6 +10,7 @@ import setSessionIdCookie, { setGeoDataCookie } from '@components/utils/setSessi
 import { getItem } from '@components/utils/localStorage'
 
 const publisher = async (data: any, event: string) => {
+  if (OMNILYTICS_DISABLED) return
   const windowClone: any = typeof window !== 'undefined' ? window : {}
   const navigator: any = windowClone.navigator
   const windowDataLayer = windowClone.dataLayer && windowClone.dataLayer[0]

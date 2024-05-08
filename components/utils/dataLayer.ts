@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 import { EmptyGuid, EmptyObject, EmptyString, SessionIdCookieKey } from '@components/utils/constants'
-import { Cookie, DeviceType } from '@framework/utils/constants'
+import { Cookie, DeviceType, OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import { getItem } from './localStorage'
 
 export const ACTIONS = {
@@ -68,6 +68,7 @@ const DataLayerSingleton = function () {
   }
 
   const setDataLayer = () => {
+    if (OMNILYTICS_DISABLED) return
     const dataLayer = {
       sessionId: Cookies.get(Cookie.Key.SESSION_ID),
       browserInfo: navigator.userAgent,
@@ -94,11 +95,13 @@ const DataLayerSingleton = function () {
   const getItemFromDataLayer = (item: any) => windowObject.dataLayer[0][item]
 
   const setItemInDataLayer = (item: any, value: any) => {
+    if (OMNILYTICS_DISABLED) return
     setDataLayer()
     windowObject.dataLayer[0][item] = value
   }
 
   const setEntities = (entities: any) => {
+    if (OMNILYTICS_DISABLED) return
     setDataLayer()
     Object.keys(entities).forEach((item: string) => {
       windowObject.dataLayer[0][item] = entities[item]
