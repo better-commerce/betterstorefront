@@ -242,10 +242,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
-        <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
+      <div key={key} className={cn(`nc-ProductCard product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
+        <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
-            <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
+            <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
               <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
             </div>
           </ButtonLink>
@@ -257,12 +257,12 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         </div>
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
-          <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+          <div className="space-y-4 px-2.5 pt-5 pb-2.5 product-card__information">
             <div>
-              <h2 className="text-base text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
-              <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
+              <h2 className="text-base text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
+              <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
             </div>
-            <div className="flex items-center justify-between product-card-panel">
+            <div className="flex items-center justify-between product-card-panel product-card__prices">
               <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               {data?.reviewCount > 0 &&
                 <div className="flex items-center mb-0.5">
