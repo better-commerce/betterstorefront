@@ -58,9 +58,15 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 
   let bw = '20px'
   let mr = '6px'
+  let bg_Color = '#ffffff'
   if (sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green') {
     bw = '40px'
     mr = '0px'
+  }
+  if (sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME == 'green') {
+    bw = '20px'
+    mr = '6px'
+    bg_Color="#EEEEEE"
   }
 
   const checkboxBgColor = bgColor(option) || 'transparent'
@@ -108,13 +114,13 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
           <div
             style={{
               content: '',
-              top: '2px',
+              top: '0px',
               float: 'left',
-              height: '20px',
-              width: '20px',
-              borderRadius: '2px',
-              background: checkboxBgColor,
-              border: '1px solid #cccccc',
+              height: bw,
+              width: bw,
+              borderRadius: '6px',
+              background: bg_Color,
+              border: '1px solid #eeeeee',
               position: 'relative',
               marginRight: '6px',
             }}

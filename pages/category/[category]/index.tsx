@@ -28,7 +28,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -95,7 +95,7 @@ export async function getStaticProps(context: any) {
   }
 
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
+  if (!allMembershipsUIDData) {
     const data = {
       "SearchText": null,
       "PricingType": 0,
@@ -110,7 +110,7 @@ export async function getStaticProps(context: any) {
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -121,8 +121,8 @@ export async function getStaticProps(context: any) {
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
   }
@@ -344,7 +344,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_page_view_before({ item_id : category?.name || EmptyString}) 
+      window.ch_page_view_before({ item_id: category?.name || EmptyString })
     }
   }, [category.id])
 
@@ -517,18 +517,21 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           )}
         </div>
         <div className="container">
-          <div className='flex flex-col'>
-            <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
-              <div className='flex justify-between w-full align-bottom'>
-                <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+              <div className='w-full'>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
+                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+                </span>
               </div>
             }
           </div>
+          
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white"> {products?.total} results</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {products?.total} items</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -752,7 +755,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                     <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
                   </div> */}
                   <div className='flex flex-col w-full'>
-                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                     <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                     <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                     <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

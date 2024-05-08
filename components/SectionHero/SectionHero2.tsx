@@ -72,14 +72,14 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
       return null;
     }
     return (
-      <div className="group">
+      <div className="group home-banner-group-mob">
         <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative sm:!pt-0 ${className}`} key={index} >
           <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
             {data?.map((_: any, index: number) => {
               const isActive = indexActive === index;
               return (
                 <div key={index} onClick={() => { setIndexActive(index); handleAfterClick(); }} className={`relative px-1 py-1.5 cursor-pointer`} >
-                  <div className={`${isActive ? 'w-20':'w-4'} relative h-1 shadow-sm rounded-md bg-white`} >
+                  <div className={`${isActive ? 'w-20':'w-4'} relative h-1 shadow-sm rounded-md bg-gray-400 sm:bg-white `} >
                     {isActive && (
                       <div className={`nc-SectionHero2Item__dot absolute inset-0 bg-black rounded-md`} ></div>
                     )}
@@ -92,13 +92,14 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Prev className="absolute start-1 sm:start-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700 banner-prev opacity-0 group-hover:opacity-100 transition-opacity ease-in	" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
           <Next className="absolute end-1 sm:end-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700 banner-next opacity-0 group-hover:opacity-100 ease-in	" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
-          <div className="absolute inset-0 bg-banner">
+          <div className="absolute inset-0 bg-banner mob-bg-banner-height">
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
 
-          <div className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container">
-            <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left`} >
-              <div className="space-y-5 sm:space-y-6">
+          <div className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container mob-hero-container">
+            <div className="w-full mob-heroinner-container">
+            <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
+              <div className="space-y-5 sm:space-y-6 text-info-inner">
                 <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
                   {item?.subTitle}
                 </span>
@@ -119,6 +120,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
             </div>
             <div className="top-0 bottom-0 w-full z-[1] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl banner-image-container">
               <img className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image" src={generateUri(item?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={item?.name} />
+            </div>
             </div>
           </div>
         </div>

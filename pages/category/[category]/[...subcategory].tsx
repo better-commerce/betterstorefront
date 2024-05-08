@@ -26,7 +26,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
@@ -468,18 +468,20 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         </div>
 
         <div className="container mx-auto my-6 mt-4 bg-transparent">
-          <div className='flex flex-col'>
-            <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
-              <div className='flex justify-between w-full align-bottom'>
-                <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+              <div className='w-full'>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
+                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+                </span>
               </div>
             }
           </div>
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white"> {products?.total} results</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {products?.total} items</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
