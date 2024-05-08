@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie'
 import { SessionIdCookieKey } from '@components/utils/constants'
-import geoData from '@components/utils/geographicService'
 export const ACTIONS = {
   DynamicPage: 'DynamicPage',
   SearchFull: 'SearchFull',
@@ -36,15 +35,6 @@ export const KEYS_MAP = {
   entityType: 'entityType',
   entity: 'entity',
   eventType: 'eventType',
-}
-
-const getIpAddress = async () => {
-  try {
-    const response = await geoData()
-    return response.Ip
-  } catch (error) {
-    return '81.196.3.222'
-  }
 }
 
 const DataLayerSingleton = function () {
