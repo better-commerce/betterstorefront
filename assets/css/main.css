@@ -17567,3 +17567,24 @@ body:has(.engage-announcement-bar){
     border-radius: 0px;
     border: 0px solid #ffffff;
   }
+    .gradient-silver {
+      background: linear-gradient(
+      -72deg
+      , #dedede, #ffffff 16%, #dedede 37%, #ffffff 24%, #454545 27%, #dedede 36%, #ffffff 45%, #ffffff 60%, #dedede 72%, #ffffff 80%, #dedede 94%, #a1a1a1);
+    }
+    .gradient-golden {
+      background:linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+    }
+    .gradiant-platinum {
+      background: rgb(209,209,240);
+      background: linear-gradient(90deg, rgba(209,209,240,1) 5%, rgba(255,255,255,1) 16%, rgba(209,209,240,1) 25%, rgba(209,209,240,1) 42%, rgba(255,255,255,1) 51%, rgba(209,209,240,1) 70%, rgba(255,255,255,1) 87%, rgba(209,209,240,1) 96%);
+    }
+    .back-silver {
+      background-color: #a9a9a9;
+    }
+    .back-golden{
+      background-color: #c19844;
+    }
+    .back-platinum {
+      background-color: #d1d1f0;
+    }

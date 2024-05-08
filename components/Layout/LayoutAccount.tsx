@@ -27,6 +27,7 @@ import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
+import MembershipBanner from '@components/membership/MyMembership/MembershipBanner'
 
 const primaryButtonStyle = { backgroundColor: 'black' }
 const secondaryButtonStyle = { backgroundColor: 'gray' }
@@ -183,6 +184,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
               <meta property="og:title" content={myAccountActiveTab} key="ogtitle" />
               <meta property="og:description" content={myAccountActiveTab} key="ogdesc" />
             </NextHead>
+            <MembershipBanner user={user} />
             <section className="container w-full bar header-space">
               <div className="mt-14 sm:mt-20">
                 <div className='max-w-4xl mx-auto'>
