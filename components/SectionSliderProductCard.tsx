@@ -62,7 +62,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
-              <li key={index} className={`glide__slide product-card-item ${itemClassName}`}>
+              <li key={index} className={`glide__slide product-card-item home-product-card ${itemClassName}`}>
                 <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               </li>
             ))}

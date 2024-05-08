@@ -8,9 +8,9 @@ import { vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
-import { useRouter } from "next/router";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
-import { StarIcon } from "@heroicons/react/24/outline";
+import { CURRENT_THEME } from "@components/utils/constants";
+import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -19,8 +19,6 @@ const MenuBar = dynamic(() => import('@components/shared/MenuBar/MenuBar'))
 const Navigation = dynamic(() => import('@components/shared/Navigation/Navigation'))
 const ToggleSwitch = dynamic(() => import('@components/shared/ToggleSwitch/ToggleSwitch'))
 const BulkAddTopNav = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/TopNav'))
-
-export interface MainNav2LoggedProps { }
 interface Props {
   config: []
   currencies: []
@@ -29,34 +27,32 @@ interface Props {
   keywords?: any
   defaultLanguage: string
   defaultCountry: string
-  href?: any
 }
 
-const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle, href }) => {
+const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
-  const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
+  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
-  const router = useRouter();
-  const [nextPageTitle, setNextPageTitle] = useState('');
-  const getPageTitle = (path: any) => {
-    // Logic to get page title based on path (e.g., from a database or a predefined mapping)
-    // For demonstration, let's just return hardcoded titles
-    const titleMap: any = {
-      '/my-store': 'My Store',
-      '/my-store/recommendations': 'Your Recommendations',
-      '/my-store/improve-recommendations': 'Improve Recommendations',
-      '/my-account': 'My Account'
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const [delayEffect, setDelayEffect] = useState(false)
+  useEffect(() => {
+    setDelayEffect(true)
+  }, [])
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentPosition = window.pageYOffset;
+      setVisible(currentPosition < scrollPosition);
+      setScrollPosition(currentPosition);
     };
 
-    return titleMap[path] || '';
-  };
-  // useEffect to update nextPageTitle whenever route changes
-  useEffect(() => {
-    const { pathname } = router;
-    const title = getPageTitle(pathname);
-    setNextPageTitle(title);
-  }, [router]);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollPosition]);
   let classTop = 'top-full'
   if (!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature) {
     classTop = 'top-[82px]'
@@ -71,7 +67,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
     const translate = useTranslation()
     return (
       <>
-        <div className="fixed inset-x-0 top-0 z-20 w-full py-2 border-b sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90">
+        <div className={`${visible ? 'top-0' : 'td-visible top-0'} td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90`}>
           {!isMobile &&
             <div className="container justify-between hidden mx-auto sm:flex">
               <div className="promotion-banner mob-marquee"></div>
@@ -90,27 +86,55 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               </div>
             </div>
           }
-          <div className="container flex justify-between mx-auto">
+          <div className="container flex justify-between mx-auto theme-pt-3">
             {isMobile &&
-              <div className="flex items-center flex-1"> <MenuBar navItems={config} featureToggle={featureToggle} /> </div>
+              <div className="flex items-center flex-1">
+                <MenuBar navItems={config} featureToggle={featureToggle} />
+              </div>
             }
             <div className="flex items-center lg:flex-1">
               <Link href="/" passHref>
                 <Logo className="flex-shrink-0" />
               </Link>
             </div>
-            {!isMobile &&
+            {!isMobile && CURRENT_THEME != "green" &&
               <div className="flex-[2] justify-center mx-4 lg:flex">
                 <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+              </div>
+            }
+            {!isMobile && CURRENT_THEME == "green" &&
+              <div className="flex-[2] justify-center mx-4 lg:flex">
+                <button className="items-center justify-center w-10 h-10 rounded-full theme-search-bar lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                  {renderMagnifyingGlassIcon()}
+                </button>
               </div>
             }
             <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
-              <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                {renderMagnifyingGlassIcon()}
-              </button>
+              {CURRENT_THEME != "green" &&
+                <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                  {renderMagnifyingGlassIcon()}
+                </button>
+              }
+              {isMobile && CURRENT_THEME == "green" &&
+                <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                  {renderMagnifyingGlassIcon()}
+                </button>
+              }
+              {featureToggle?.features?.enableHeaderWishlist &&
+                <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
+                  <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                    <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                    {wishListItems?.length > 0 && delayEffect && (
+                      <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
+                        {wishListItems?.length}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              }
               <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
               <CartDropdown />
               {featureToggle?.features?.enableMembership &&
@@ -119,7 +143,16 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                 </Link>
               }
             </div>
-          </div>          
+          </div>
+          {CURRENT_THEME == "green" &&
+            <div className="container mx-auto">
+              {!isMobile &&
+                <div className="flex-[2] justify-center mx-4 lg:flex">
+                  <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                </div>
+              }
+            </div>
+          }
           <EngagePromoBar />
         </div>
       </>

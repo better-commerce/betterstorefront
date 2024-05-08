@@ -262,7 +262,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               <h2 className="text-base text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
               <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
             </div>
-            <div className="flex items-center justify-between product-card-panel product-card__prices">
+            <div className="flex items-center justify-between product-card-panel ">
               <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               {data?.reviewCount > 0 &&
                 <div className="flex items-center mb-0.5">

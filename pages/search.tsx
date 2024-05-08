@@ -342,7 +342,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           <h1 className={`block text-2xl font-semibold  ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
             {translate('label.basket.catalogText')}
           </h1>
-          <div className='flex justify-between w-full align-bottom'>
+          <div className='w-full'>
             <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
               {translate('label.search.stepIntoWorldText')}
             </span>

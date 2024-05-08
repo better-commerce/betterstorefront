@@ -1,26 +1,19 @@
 import { useState, useEffect, useMemo } from 'react'
-import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import React from 'react'
 import MyDetails from '@components/account/MyDetails'
-import { StarIcon } from "@heroicons/react/24/outline";
-import { Guid } from '@commerce/types'
-import NextHead from 'next/head'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
+
 function MyAccount() {
   const [isShow, setShow] = useState(true)
-  const config = useConfig();
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
   const translate = useTranslation()

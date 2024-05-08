@@ -24,7 +24,7 @@ import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { postData } from '@components/utils/clientFetcher'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
@@ -44,6 +44,7 @@ import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
@@ -520,20 +521,38 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       ) : (
         <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
           <div className="max-w-screen-sm">
-            <Link href="/brands" passHref>
-              <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
-            </Link>
-            <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+            <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+              <li className='flex items-center text-10-mob sm:text-sm'>
+                <Link href="/brands" passHref>
+                  <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
+                </Link>
+              </li>
+              <li className='flex items-center text-10-mob sm:text-sm'>
+                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                </span>
+              </li>
+              <li className='flex items-center text-10-mob sm:text-sm'>
+                <Link href="#" passHref>
+                  <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
+                </Link>
+              </li>
+            </ol>
+          </div>
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {brandDetails?.name}
             </h1>
             {sanitizedDescription &&
-              <div className='flex justify-between w-full align-bottom'>
-                <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" />
+              <div className='w-full'>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
+                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                </span>
               </div>
             }
           </div>
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -549,7 +568,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
           </div> */}
           <div className='flex flex-col w-full'>
-            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
@@ -711,7 +730,7 @@ export async function getStaticProps({
   }
 
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
+  if (!allMembershipsUIDData) {
     const data = {
       "SearchText": null,
       "PricingType": 0,
@@ -726,7 +745,7 @@ export async function getStaticProps({
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -737,8 +756,8 @@ export async function getStaticProps({
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
   }
