@@ -1,7 +1,9 @@
 import Cookies from 'js-cookie'
-import { DefaultSessionCookieKey, SessionIdCookieKey } from '@components/utils/constants'
+import { DefaultSessionCookieKey, EmptyString, SessionIdCookieKey } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { v4 as uuid_v4 } from 'uuid'
+import geoData from './geographicService';
+import { Cookie } from '@framework/utils/constants';
 
 /**
  * Environment constant for default time out value.
@@ -44,6 +46,23 @@ const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
       setSessionIdCookie(true)
     }, 1800000)
   }
+}
+
+export const setGeoDataCookie = async (geoDataInfo: any) => {
+  if (!geoDataInfo) {
+    const geoResult: any = await geoData(EmptyString)
+    setGeoDataCookie(geoResult)
+    return
+  }
+  if (!Cookies.get(Cookie.Key.GEO_ENDPOINT_DATA_CACHED) || geoDataInfo) {
+    Cookies.set(Cookie.Key.GEO_ENDPOINT_DATA_CACHED, JSON.stringify(geoDataInfo), {
+      expires: getExpiry(3),
+    })
+    DataLayerInstance.setItemInDataLayer('ipAddress', geoDataInfo?.Ip || EmptyString)
+    DataLayerInstance.setItemInDataLayer('city', geoDataInfo?.City || EmptyString)
+    DataLayerInstance.setItemInDataLayer('country', geoDataInfo?.Country || EmptyString)
+  }
+  return geoDataInfo
 }
 
 /**

@@ -15,6 +15,7 @@ import { useRouter } from 'next/router'
 import { AppContext, AppInitialProps } from 'next/app'
 import uniqBy from 'lodash/uniqBy'
 import { SessionProvider } from 'next-auth/react'
+import os from 'os'
 
 import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
 import qs from 'querystring'
@@ -35,7 +36,7 @@ import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDP
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, } from '@components/utils/setSessionId'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, setGeoDataCookie, } from '@components/utils/setSessionId'
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import Head from '@components/shared/Head/Head';
@@ -50,6 +51,8 @@ import { CURRENT_THEME } from "@components/utils/constants";
 import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
+
+declare const window: any
 
 const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
@@ -180,6 +183,14 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }, [router.asPath])
 
   useEffect(() => {
+    let urlReferrer = pageProps?.urlReferrer || document.referrer
+    if (urlReferrer) {
+      urlReferrer = SITE_ORIGIN_URL + new URL(pageProps?.urlReferrer || document.referrer).pathname;
+      DataLayerInstance.setItemInDataLayer('urlReferrer', urlReferrer)
+    }
+  }, [pageProps?.urlReferrer])
+
+  useEffect(() => {
     // Listener for snippet injector reset.
     router.events.on('routeChangeStart', () => {
       setClientIPAddress(pageProps)
@@ -254,34 +265,19 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   useEffect(() => {
     setTopHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'TopHead' && x?.type === SnippetContentType.JAVASCRIPT))
     setHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'Head' && x?.type === SnippetContentType.JAVASCRIPT))
-    DataLayerInstance.setDataLayer()
+  }, [])
 
+  useEffect(() => {
+    DataLayerInstance.setDataLayer()
+    DataLayerInstance.setItemInDataLayer('server', pageProps?.serverHost || EmptyString)
     // If browser session is not yet started.
     if (!isValidSession()) {
       // Initiate a new browser session.
       createSession()
-
-      if (!process.env.NEXT_PUBLIC_DEVELOPMENT) {
-        geoData()
-          .then((response) => {
-            DataLayerInstance.setItemInDataLayer('ipAddress', response.Ip)
-            DataLayerInstance.setItemInDataLayer('city', response.City)
-            DataLayerInstance.setItemInDataLayer('country', response.Country)
-            setUserLocation(response)
-            setAppIsLoading(false)
-          })
-          .catch((err) => {
-            DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-          })
-      } else {
-        DataLayerInstance.setItemInDataLayer('ipAddress', '8.8.8.8')
-        DataLayerInstance.setItemInDataLayer('ipAddress', TEST_GEO_DATA.Ip)
-        setUserLocation(TEST_GEO_DATA)
-        setAppIsLoading(false)
-      }
     } else {
       setAppIsLoading(false)
     }
+    setGeoData()
     let analyticsCb = analytics()
     setAnalyticsEnabled(true)
     setSessionIdCookie()
@@ -291,6 +287,19 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       Cookies.remove(SessionIdCookieKey)
     }
   }, [])
+
+  const setGeoData = async () => {
+    try {
+      const geoResult: any = await geoData(EmptyString)
+      if (geoResult) {
+        setGeoDataCookie(geoResult)
+        setUserLocation(geoResult)
+        setAppIsLoading(false)
+      }
+    } catch (error) {
+      setAppIsLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (!OMNILYTICS_DISABLED) {
@@ -571,8 +580,13 @@ MyApp.getInitialProps = async (
     logError(error)
   }
 
+  const serverHost = os.hostname()
+  const urlReferrer = req?.headers?.referer
+
   return {
     pageProps: {
+      serverHost,
+      urlReferrer,
       appConfig: appConfig,
       pluginConfig: encrypt(JSON.stringify(pluginConfig)),
       navTree: navTreeResult,
