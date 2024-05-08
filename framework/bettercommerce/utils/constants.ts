@@ -84,5 +84,15 @@ export module Cookie {
     export const DISABLE_USER_LOCATION_POPUP = 'dulp'
     export const PASSWORD_PROTECTION_AUTH = 'ppa'
     export const ENGAGE_SESSION = 'ch_cookie'
+    export const GEO_ENDPOINT_DATA_CACHED = 'gedc'
   }
+}
+
+export enum DeviceType {
+  IOS = 1,
+  ANDROID = 2,
+  WINDOWS_PHONE = 3,
+  DESKTOP = 4,
+  TABLET = 5,
+  MOBILE = 6,
 }

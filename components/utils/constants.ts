@@ -223,9 +223,6 @@ export const SHIPPING_ACTION_TYPES_MAP = {
   ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
 }
 
-export const NEXT_GEO_ENDPOINT =
-  process.env.NEXT_PUBLIC_GEO_ENDPOINT ||
-  'https://omnilytics.bettercommerce.io/api/v1/IpInfo?ipAddress='
 export const UPDATE_ORDER_STATUS = '/api/update-order-status'
 
 export const NEXT_PUBLIC_DEFAULT_CACHE_TIME =
@@ -279,9 +276,11 @@ export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
 
 export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
 export const CURRENT_THEME = process.env.CURRENT_THEME
-export const OMNILYTICS_DISABLED = stringToBoolean(
-  process.env.OMNILYTICS_DISABLED
-)
+
+export const OMNILYTICS_DISABLED = stringToBoolean(process.env.OMNILYTICS_DISABLED)
+export const OMNILYTICS_ASSETS_DATA = `${process.env.OMNILYTICS_BASE_URL}/data`
+export const OMNILYTICS_IP_INFO = `${process.env.OMNILYTICS_BASE_URL}/api/v1/IpInfo`
+
 export const PDP_SIZE_OPTIONS_COUNT = parseInt(
   process.env.PDP_SIZE_OPTIONS_COUNT || '0'
 )

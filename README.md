@@ -153,7 +153,7 @@ Next.js Commerce integrates out-of-the-box with BigCommerce, Shopify, Swell, Sal
 |NEXT_PUBLIC_API_VERSION|version of the API used|v2|
 |NEXT_PUBLIC_ENABLE_INFINITE_SCROLL|Should the infinite scroll be enabled on PLPs or standard paging|TRUE|
 |NEXT_PUBLIC_OMNILYTICS_ID|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
-|NEXT_PUBLIC_GEO_ENDPOINT|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
+|OMNILYTICS_BASE_URL|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
 |OMS_BASE_URL|OMS API Url which is used for fetching basket delivery plan, split shipment, inventory|https://omsapi20.bettercommerce.io/|
 
 That's it!
