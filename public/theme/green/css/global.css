@@ -1984,12 +1984,12 @@ p {
 }
 .image-gallery-thumbnail{
   box-sizing: border-box !important;
-  border: none;
+  border: 1px solid #ddd;
   border-bottom: 6px solid transparent !important;
   outline: 1px solid #ddd !important;
 }
 .image-gallery-thumbnail:hover, .image-gallery-thumbnail.active, .image-gallery-thumbnail:focus{
-  border: none;
+  border: 1px solid #ddd;
   border-bottom: 6px solid #00b18a !important;
 }
 .image-gallery-icon.image-gallery-left-nav, .image-gallery-icon.image-gallery-right-nav {
