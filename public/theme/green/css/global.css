@@ -1720,7 +1720,7 @@ p {
   display: flex;
   gap: 30px !important;
   padding-top: 5px !important;
-  padding-bottom: 5px !important;
+  padding-bottom: 0px !important;
 }
 
 .theme-top .nc-Navigation .lg\:text-\[15px\]{
@@ -2300,4 +2300,9 @@ p {
   .product-breadcrumb{
     margin-top: 6rem !important;
   }
+}
+
+.menu__subheading{
+  font-size: 24px !important;
+  font-weight: 600 !important;
 }
