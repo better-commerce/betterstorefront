@@ -18,7 +18,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
-function MyAccount({ deviceInfo, featureToggle }:any) {
+function MyAccount({ deviceInfo, featureToggle }: any) {
   const [isShow, setShow] = useState(true)
   const config = useConfig();
   const { user, deleteUser, isGuestUser, referralProgramActive } = useUI()
@@ -77,20 +77,20 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
         href: '/my-account/my-company',
       })
     }
-    
+
     if (featureToggle?.features?.enableMembership) {
       if (user?.hasMembership) {
         output.push({
-            type: 'tab',
-            text: translate('label.membership.membershipText'),
-            mtext: translate('label.membership.membershipText'),
-            props: 'membership',
-            head: <StarIcon className="w-7 h-7 text-gray-500 dark:invert" title="Membership" />,
-            href: '/my-account/membership',
+          type: 'tab',
+          text: translate('label.membership.membershipText'),
+          mtext: translate('label.membership.membershipText'),
+          props: 'membership',
+          head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="Membership" />,
+          href: '/my-account/membership',
         })
       }
     }
-    
+
     return output
   }, [config])
 
@@ -152,66 +152,32 @@ function MyAccount({ deviceInfo, featureToggle }:any) {
               <div className="max-w-2xl">
                 <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
                 <span className="block mt-4 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
-                  <span className="font-semibold text-slate-900 dark:text-slate-200">
-                    {user?.firstName},
-                  </span>{" "}
-                  {user.email}
+                  <span className="font-semibold text-slate-900 dark:text-slate-200"> {user?.firstName}, </span>{" "}{user.email}
                 </span>
               </div>
               <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
               <div className="flex space-x-4 md:space-x-4 tabScroll">
                 {newConfig?.map((item: any, idx: number) => (
-                  <>
-                    {item.text == 'My Details' ? (
-                      <>
-                        <Link
-                          key={`my-acc-${idx}`}
-                          shallow={true}
-                          href={item.href}
-                          passHref
-                          onClick={() => {
-                            handleClick()
-                            handleToggleShowState()
-                          }}
-                          className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base font-text-sm ${item.text == 'My Details'
-                            ? "border-primary-500 font-medium icon-text-black dark:text-slate-200"
-                            : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-                            }`}
-                        >
-                          {isMobile ? item?.head : item?.text}
-                        </Link>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          shallow={true}
-                          href={item.href}
-                          passHref
-                          onClick={() => {
-                            handleClick()
-                          }}
-                          className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base font-text-sm"
-                        >
-                          <span className="inline-block text-black sm:hidden dark:text-white">
-                            {isMobile ? item?.head : item?.mtext}
-                          </span>
-                          <span className="hidden text-black sm:inline-block dark:text-white">
-                            {isMobile ? item?.head : item?.text}
-                          </span>
-                        </Link>
-                      </>
-                    )}
-
-                  </>
-                ))}
+                  item.text == 'My Details' ? (
+                    <Link key={`my-acc-${idx}`} shallow={true} href={item.href} passHref onClick={() => { handleClick(); handleToggleShowState(); }} className={`block py-3 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base font-text-sm ${item.text == 'My Details' ? "border-primary-500 font-medium icon-text-black dark:text-slate-200" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"}`} >
+                      {isMobile ? item?.head : item?.text}
+                    </Link>
+                  ) : (
+                    <Link shallow={true} href={item.href} passHref onClick={() => { handleClick() }} className="flex-shrink-0 block py-3 text-sm md:py-8 sm:text-base font-text-sm" >
+                      <span className="inline-block text-black sm:hidden dark:text-white">
+                        {isMobile ? item?.head : item?.mtext}
+                      </span>
+                      <span className="hidden text-black sm:inline-block dark:text-white">
+                        {isMobile ? item?.head : item?.text}
+                      </span>
+                    </Link>
+                  )))}
               </div>
               <hr className="border-slate-200 dark:border-slate-700"></hr>
             </div>
           </div>
           <div className="max-w-4xl pb-24 mx-auto pt-14 sm:pt-26 lg:pb-32">
-            <div
-              className="relative col-span-12 mob-tab-full"
-            >
+            <div className="relative col-span-12 mob-tab-full" >
               <div className={'orders bg-white dark:bg-transparent'}>
                 <MyDetails handleToggleShowState={handleToggleShowState} />
               </div>
