@@ -20,11 +20,11 @@ function Navigation({ navItems, featureToggle, subMenuPosition }: any) {
                 <div className={`absolute inset-x-0 z-50 invisible transform group-hover:visible sub-menu ${subMenuPosition}`}>
                   <div className="bg-white shadow-lg dark:bg-neutral-900">
                     <div className="container">
-                      <div className="flex py-6 text-sm border-t border-slate-200 dark:border-slate-700">
+                      <div className="flex py-6 text-sm border-b border-slate-200 dark:border-slate-700">
                         <div className="grid flex-1 grid-cols-1 gap-6 pr-6 xl:gap-8 xl:pr-8">
                           {item?.navBlocks.map((navItem: any, navIndex: number) => (
                             <div key={`child-${navIndex}`}>
-                              <p className="font-medium capitalize text-slate-900 dark:text-neutral-200">
+                              <p className="font-medium capitalize text-slate-900 dark:text-neutral-200 menu__subheading">
                                 {navItem?.boxTitle.toLowerCase()}
                               </p>
                               <ul className="grid grid-cols-5 mt-4 space-4">
