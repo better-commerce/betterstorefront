@@ -855,7 +855,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-xl sm:text-2xl font-semibold product-name-h2">
+          <h2 className="text-xl font-semibold sm:text-2xl product-name-h2">
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
@@ -893,15 +893,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
         }
         <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-          <MyLocationIcon className='h-4 w-4' />
-          <span className='hover:underline cursor-pointer' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+          <MyLocationIcon className='w-4 h-4' />
+          <span className='cursor-pointer hover:underline' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
         </div>
         <div id="add-to-cart-button">
           {isMobile ? (
             <>
               {showMobileCaseButton && (
-                <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-10">
-                  <div className="container mx-auto max-w-7xl p-4">
+                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                  <div className="container p-4 mx-auto max-w-7xl">
                     <div className="flex justify-end">
                       <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                       <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
@@ -968,9 +968,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
-      <ProductSocialProof data={analyticsData} />
-      <main className="container-pdp mt-2 sm:mt-5 lg:mt-11">
-        <div className='px-4 sm:px-0 flex flex-1 mb-1 sm:mb-4 product-breadcrumbs'>
+      {featureToggle?.features?.enableEngage &&
+        <ProductSocialProof data={analyticsData} />
+      }
+      <main className="mt-2 container-pdp sm:mt-5 lg:mt-11">
+        <div className='flex flex-1 px-4 mb-1 sm:px-0 sm:mb-4 product-breadcrumbs'>
           {breadcrumbs && (
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
@@ -978,37 +980,17 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <div className="lg:flex product-detail-section">
           {isMobile ? (
             <div className="w-full lg:w-[55%]">
-              <Swiper
-                slidesPerView={1}
-                spaceBetween={30}
-                navigation
-                loop
-                className="mySwiper"
-              >
+              <Swiper slidesPerView={1} spaceBetween={30} navigation loop className="mySwiper" >
                 <SwiperSlide>
                   <div className="relative">
-                    <img
-                      src={
-                        generateUri(product?.image, 'h=1000&fm=webp') ||
-                        IMG_PLACEHOLDER
-                      }
-                      className="object-cover object-top w-full"
-                      alt={product?.name}
-                    />
+                    <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
                     {renderStatus()}
                   </div>
                 </SwiperSlide>
                 {product?.images?.map((item: any, index: number) => (
                   <SwiperSlide key={index}>
                     <div className="relative">
-                      <img
-                        src={
-                          generateUri(item?.image, 'h=500&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        className="object-cover w-full rounded-2xl"
-                        alt={product?.name}
-                      />
+                      <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
                     </div>
                   </SwiperSlide>
                 ))}
@@ -1017,7 +999,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <>
               {featureToggle?.features?.isImageGallery ? (
-                <>
+                <div className="w-full lg:w-[55%]">
                   <ImageGallery
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
@@ -1032,25 +1014,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     renderItem={customRenderItem}
                     renderThumbInner={customRenderThumbInner}
                   />
-                </>
+                </div>
               ) : (
-                <>
-                  <div className="w-full lg:w-[55%]">
-                    <div className="relative">
-                      <div className="relative aspect-w-16 aspect-h-16">
-                        <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
-                      </div>
-                      {renderStatus()}
+                <div className="w-full lg:w-[55%]">
+                  <div className="relative">
+                    <div className="relative aspect-w-16 aspect-h-16">
+                      <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
                     </div>
-                    <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                      {product?.images?.map((item: any, index: number) => (
-                        <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                          <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
-                        </div>
-                      ))}
-                    </div>
+                    {renderStatus()}
                   </div>
-                </>
+                  <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
+                    {product?.images?.map((item: any, index: number) => (
+                      <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </>
           )}
@@ -1059,13 +1039,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {/* DETAIL AND REVIEW */}
-        <div className='px-4 sm:px-0 flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+        <div className='flex flex-col w-full px-4 pt-4 sm:px-0 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
           <EngageProductCard productLimit={12} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
         </div>
-        <div className='px-4 sm:px-0 flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
+        <div className='flex flex-col w-full px-4 pt-4 sm:px-0 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
           <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
         </div>
-        <div className="px-4 sm:px-0 mt-12 sm:mt-12">
+        <div className="px-4 mt-12 sm:px-0 sm:mt-12">
           {/* {renderDetailSection()} */}
           <hr className="border-slate-200 dark:border-slate-700" />
           <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
@@ -1075,7 +1055,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             renderReviews()
           }
         </div>
-        <div className="px-4 sm:px-0 w-full pt-6 mx-auto lg:max-w-none sm:pt-8">
+        <div className="w-full px-4 pt-6 mx-auto sm:px-0 lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
               <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
