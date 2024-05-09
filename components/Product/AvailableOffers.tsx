@@ -7,6 +7,7 @@ import SwiperCore, { Navigation } from 'swiper'
 import ProductSaleCountdown from './SaleCountDown'
 import { priceFormat } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import BankOfferIcon from '@components/BankOfferIcon'
 declare const window: any
 SwiperCore.use([Navigation])
 export default function AvailableOffers({ currency, offers, key }: any) {
@@ -97,30 +98,38 @@ export default function AvailableOffers({ currency, offers, key }: any) {
             return (
               saving?.additionalInfo8 == 'False' && (
                 <SwiperSlide
-                  className="h-auto px-1 z-1"
+                  className="h-auto px-1 z-1 !w-48"
                   key={`promo-${sid}-best-available-${saving?.code}`}
                 >
-                  <div key={`promotions-${sid}-best-available-${saving?.code}`} className="relative inline-flex flex-col w-full h-24 text-left cursor-pointer rounded-xl group" onClick={() => setOfferData(saving)} >
+                  <div key={`promotions-${sid}-best-available-${saving?.code}`} className="relative inline-flex flex-col w-full h-28 text-left cursor-pointer rounded-xl group" onClick={() => setOfferData(saving)} >
                     <div className="box-border h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
-                      <h3 className="font-semibold text-center text-black uppercase font-12 break-word-text">
-                        {saving.name}
-                      </h3>
-                      {saving?.promoType == 1 && (
-                        <span>
-                          {saving.additionalInfo2 == 'False' || saving.additionalInfo2 == 'false' ? (
-                            <p className="mt-1 text-xs font-medium text-center text-black break-word-text">
-                              {saving?.code}
-                            </p>
-                          ) : (
-                            <p className="mt-1 font-medium text-center text-black font-12 break-word-text">
-                              {saving?.code}
-                            </p>
+                      <div className="flex">
+                        <BankOfferIcon />
+                        <div className="pl-2">
+                          <p className="font-semibold text-md">{translate('label.basket.bankOffersText')}</p>
+
+                          <p className="font-semibold text-left text-black uppercase font-10 break-word-text">
+                            {saving.name}
+                          </p>
+                          {saving?.promoType == 1 && (
+                            <span>
+                              {saving.additionalInfo2 == 'False' ||
+                              saving.additionalInfo2 == 'false' ? (
+                                <p className="text-xs font-medium text-center text-black break-word-text">
+                                  {saving?.code}
+                                </p>
+                              ) : (
+                                <p className="mfont-medium text-letf text-black font-12 break-word-text">
+                                  {saving?.code}
+                                </p>
+                              )}
+                            </span>
                           )}
-                        </span>
-                      )}
-                      <p className="mt-1 text-sm font-medium text-center text-gray-700 font-12 break-word-text">
-                        {saving?.additionalInfo6}
-                      </p>
+                          <p className="mt-1 text-sm font-medium text-gray-700 font-10 break-word-text">
+                            {saving?.additionalInfo6}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </SwiperSlide>
