@@ -896,17 +896,6 @@ body {
   margin: 10px 0;
 }
 
-.promo-bg {
-    background: #f4f7fa !important;
-    border: 1px solid #f4f7fa;
-    border-radius: 22px !important;
-}
-
-.promo-bg:hover {
-  background: #f4f7fa;
-  border: 1px solid #e8ebef;
-}
-
 .coupon-panel {
   width: auto;
   background: #f4f7fa;
@@ -17596,4 +17585,14 @@ body:has(.engage-announcement-bar){
     }
     .bg-Silver .text-member-name{
       color: #a9a9a9 !important;
+    }
+    @media (max-width: 640px) {
+      .glob-icon-height {
+        width: 28px !important;
+        height: 28px !important;
+      }
+      .lang-width {
+        width: 18.5rem !important;
+        right: -6rem !important;
+      }
     }

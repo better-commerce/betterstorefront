@@ -34,7 +34,7 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
   }, [defaultLanguage, defaultCountry, router.asPath])
   const isActiveLocale = useMemo(() => (language: any) => language?.languageCulture === router?.locale, [router?.locale])
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
+    <div className="grid gap-8 grid-cols-2">
       {languages?.map((language: any, index: number) => (
         <Link key={index} legacyBehavior href={getLocaleUrl(language)} locale={language?.languageCulture}>
           <a key={index} href={getLocaleUrl(language)} onClick={() => {
@@ -68,7 +68,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
 
   const Currencies = ({ close }: any) => {
     return (
-      <div className="grid gap-7 lg:grid-cols-2">
+      <div className="grid gap-7 grid-cols-2">
         {currencies?.map((currency, index) => {
           return (
             <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-gray-100 cursor-not-allowed select-none' : ''} `}>
@@ -84,18 +84,18 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
   };
 
   return (
-    <div className="hidden LangDropdown md:block">
+    <div className="LangDropdown">
       <Popover className="relative">
         {({ open, close }) => (
           <>
             <Popover.Button className={` ${open ? "" : "text-opacity-80"} group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-neutral-200 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`} >
-              <GlobeAltIcon className="w-[18px] h-[18px] opacity-80" />
-              <span className="ml-2">{translateText('common.label.languageText')}</span>
+              <GlobeAltIcon className="glob-icon-height w-[18px] h-[18px] opacity-80" />
+              <span className="ml-2 hidden md:block">{translateText('common.label.languageText')}</span>
               <ChevronDownIcon className={`${open ? "-rotate-180" : "text-opacity-70"} ml-1 h-4 w-4  group-hover:text-opacity-80 transition ease-in-out duration-150`} aria-hidden="true" />
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
-              <Popover.Panel className={`absolute z-20 w-96 mt-3.5 right-0 ${panelClassName}`} >
-                <div className="p-6 bg-white shadow-lg rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
+              <Popover.Panel className={`absolute z-20 w-96 mt-3.5 lang-width right-0 ${panelClassName}`} >
+                <div className="p-3 sm:p-6 bg-white shadow-lg rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
                   <Tab.Group>
                     <Tab.List className="flex p-1 space-x-1 bg-gray-100 rounded-full dark:bg-slate-700">
                       {[translateText('common.label.languageText'), translateText('label.navBar.currencyText')].map((category) => (

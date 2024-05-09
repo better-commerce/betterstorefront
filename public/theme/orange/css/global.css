@@ -1682,3 +1682,19 @@ p {
 .basket-panel .basket-item-brand{
   display: none;
 }
+
+.promo-bg {
+  background: #f4f7fa !important;
+  border: 1px solid #f4f7fa;
+  border: 1px dashed #a300b6;
+  border-radius: 22px !important;
+}
+
+.promo-bg:hover {
+  background: #f4f7fa;
+  border: 1px solid #e8ebef;
+  border: 1px dashed #a300b6;
+}
+.bank-offer svg {
+  fill: #a300b6;
+}
