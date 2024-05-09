@@ -381,6 +381,9 @@
       "emailAddressplaceholderText": "ejemplo@ejemplo.com",
       "referAFriendText": "Referir a un amigo",
       "myCompanyText": "Mi Empresa",
+      "recommendedForYouText": "Recomendado para ti",
+      "browsingHistoryText": "Historial de navegación",
+      "improveRecommendationText": "Mejora tu recomendación",
       "myCompanyMenus": {
         "user": "Usuarios",
         "order": "Órdenes",
@@ -783,7 +786,10 @@
       "findInStoreText": "Buscar en la Tienda",
       "stockCheckDescText": "¿Necesitas tu artículo hoy? Encuentra tu tienda más cercana y recoge en tiendas seleccionadas",
       "findStockText": "Buscar Stock",
-      "storeNameText": "Nombre de la Tienda"
+      "storeNameText": "Nombre de la Tienda",
+      "myStoreText": "Mi Tienda",
+      "yourRecommendationsText": "Tus Recomendaciones",
+      "improveRecommendationsText": "Mejorar Recomendaciones"
     },
     "thankyou": {
       "summaryText": "Resumen",
@@ -829,6 +835,12 @@
       "unlimitedDeliveryText": "Envío estándar GRATIS ilimitado*",
       "alreadyMemberText": "¿Ya eres miembro?",
       "myMembershipText": "Mi Membresía",
+      "seeText": "Ver",
+      "benefitsText": "Beneficios",
+      "membershipNoText": "Número de membresía",
+      "balanceVoucherText": "Vale de saldo",
+      "memberText": "miembro",
+      "sinceText": "Desde",
       "membershipDescText": "en tu pedido de hoy cuando te unas a nuestra membresía",
       "discountsAnytimeText": "descuentos en cualquier momento",
       "perYearText": "por año",
@@ -917,6 +929,7 @@
       "backToHomepageText": "Volver a la página de inicio",
       "closePanelText": "Cerrar panel",
       "otherText": "Otro",
+      "helloText": "Hola,",
       "saveChangesText": "Guardar cambios",
       "seeAllText": "Ver todo",
       "cancelText": "Cancelar",

@@ -641,3 +641,10 @@ export enum EngageEventTypes {
   // My Store
   PURCHASE_HISTORY = 'purchase_history',
 }
+
+export enum MembershipType {
+  SILVER = 'Silver',
+  GOLD = 'Gold',
+  PLATINUM = 'Platinum',
+  DEFAULT = 'Default',
+}
