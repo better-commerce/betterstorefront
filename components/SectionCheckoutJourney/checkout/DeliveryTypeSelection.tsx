@@ -28,10 +28,6 @@ const DeliveryTypeSelection = ({
 }: DeliveryTypeSelectionProps) => {
   const translate = useTranslation()
 
-  if (!featureToggle?.features?.enableCollectDeliveryOption || deliveryMethods?.length < 1) {
-    return <></>
-  }
-
   return (
     <>
       <h5 className="mt-4 mb-2 font-medium text-black font-18 sm:mt-6 sm:mb-4">
