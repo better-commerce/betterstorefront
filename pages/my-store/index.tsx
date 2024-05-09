@@ -51,7 +51,7 @@ function MyStore({ campaignData, featureToggle }: any) {
 
   return (
     <>
-      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">My Store</h2>
+      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('label.store.myStoreText')}</h2>
       <EngageProductCard productLimit={40} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} title="Your Browsing History" isSlider={false} productPerRow={4} />
     </>
   )
