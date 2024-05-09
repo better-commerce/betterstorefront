@@ -50,7 +50,7 @@ function Navigation({ navItems, featureToggle, subMenuPosition }: any) {
         {featureToggle?.features?.enableStoreLocator &&
           <li className="flex-shrink-0 mt-0 menu-item menu-megamenu menu-megamenu--large group" >
             <div className="flex items-center flex-shrink-0 h-20">
-              <Link className="inline-flex items-center capitalize text-sm lg:text-[18px] menu-font-size font-semibold text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200" href={`/store-locator`} >
+              <Link className="inline-flex items-center capitalize text-sm lg:text-[15px] menu-font-size font-semibold text-slate-700 dark:text-slate-300 py-2.5 px-4 xl:px-5 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200" href={`/store-locator`} >
                 Stores
               </Link>
             </div>
