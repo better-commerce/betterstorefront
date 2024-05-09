@@ -892,10 +892,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {
           openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
         }
-        <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-          <MyLocationIcon className='w-4 h-4' />
-          <span className='cursor-pointer hover:underline' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-        </div>
+        {featureToggle?.features?.enableStoreLocator &&
+          <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+            <MyLocationIcon className='w-4 h-4' />
+            <span className='cursor-pointer hover:underline' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+          </div>
+        }
         <div id="add-to-cart-button">
           {isMobile ? (
             <>
@@ -1047,10 +1049,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
         <div className="px-4 mt-12 sm:px-0 sm:mt-12">
           {/* {renderDetailSection()} */}
-          <hr className="border-slate-200 dark:border-slate-700" />
-          <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
-            <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
-          </div>
+          {featureToggle?.features?.enableProductSpecification &&
+            <>
+              <hr className="border-slate-200 dark:border-slate-700" />
+              <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
+                <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+              </div>
+            </>
+          }
           {reviews?.review?.productReviews?.length > 0 &&
             renderReviews()
           }

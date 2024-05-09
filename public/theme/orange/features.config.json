@@ -10,7 +10,8 @@
     "enableMyStoreFeature": true,
     "enableAddToBagPlp": false,
     "enableMembership": true,
-    "enableHeaderWishlist": false
+    "enableHeaderWishlist": false,
+    "enableProductSpecification": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
