@@ -523,7 +523,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
                   ) : (
                     <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                   )}
-                  <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                  <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                     {isMobile ? null : (
                       <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     )}

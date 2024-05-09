@@ -559,7 +559,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </div>
           <hr className='border-slate-200 dark:border-slate-700' />
 
-          <div className="flex justify-end w-full pt-6">
+          <div className="flex justify-end w-full py-4">
             <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
           </div>
           <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
