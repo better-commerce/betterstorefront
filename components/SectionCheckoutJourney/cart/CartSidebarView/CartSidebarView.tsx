@@ -643,7 +643,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                                     </span>
                                                   </div>
                                                   <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
-                                                  <h3 className='flex m-auto justify-between'>
+                                                  <h3 className='flex justify-between m-auto'>
                                                     <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
                                                     <span className="mt-0 ml-4 text-xs text-green"> {' '}{isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax}{' '} </span>
                                                   </h3>
@@ -798,7 +798,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {!isEmpty && (
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                         <div className="flex justify-between py-2 text-sm text-gray-900">
-                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalVATExText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
                           <p className='text-sm'> {' '} {cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between py-2 text-sm text-gray-900">

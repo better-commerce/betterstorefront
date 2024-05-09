@@ -1656,7 +1656,7 @@ p {
 
 /*==================== UPDATE SITE THEME CSS =======================*/
 
-@media screen and (min-width:1250px) { 
+@media screen and (min-width:1580px) { 
   .container {
     max-width: 100% !important;
     width: 100%;
@@ -2307,4 +2307,11 @@ p {
 }
 .bank-offer svg {
   fill: #00b18a;
+}
+
+@media screen and (max-width:1580px) {
+  .theme-top .nc-Navigation{
+    display: flex;
+    gap: 5px !important;
+  }
 }
