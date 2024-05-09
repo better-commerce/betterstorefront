@@ -529,7 +529,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
               </div>
             }
           </div>
-          
+
           <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
             <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {products?.total} items</span>
             <div className="flex justify-end align-bottom">
@@ -728,16 +728,16 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                   </Swiper>
                 </div>
               }
-              {products?.total > 0 ? (
+              {productDataToPass?.results?.length > 0 ? (
                 <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
-                  {!!products && (products?.filters?.length > 0 ? (
+                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                     <>
                       {isMobile ? (
                         <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
                         <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                       )}
-                      <div className="sm:col-span-10 p-[1px]">
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                         {isMobile ? null : (
                           <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                         )}

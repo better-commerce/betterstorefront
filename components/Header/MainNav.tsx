@@ -68,7 +68,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     const translate = useTranslation()
     return (
       <>
-        <div className={`${visible ? 'top-0' : 'td-visible top-0'} td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90`}>
+        <div className={`top-0 td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90`}>
           {!isMobile &&
             <div className="container justify-between hidden mx-auto sm:flex">
               <div className="promotion-banner mob-marquee"></div>
@@ -87,7 +87,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
             </div>
           }
-          <div className="container flex justify-between mx-auto theme-pt-3">
+          <div className="container flex justify-between mx-auto">
             {isMobile &&
               <div className="flex items-center flex-1">
                 <MenuBar navItems={config} featureToggle={featureToggle} />
@@ -98,32 +98,20 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                 <Logo className="flex-shrink-0" />
               </Link>
             </div>
-            {!isMobile && CURRENT_THEME != "green" &&
+            {!isMobile &&
               <div className="flex-[2] justify-center mx-4 lg:flex">
                 <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
               </div>
             }
-            {!isMobile && CURRENT_THEME == "green" &&
-              <div className="flex-[2] justify-center mx-4 lg:flex">
-                <button className="items-center justify-center w-10 h-10 rounded-full theme-search-bar lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  {renderMagnifyingGlassIcon()}
-                </button>
-              </div>
-            }
+
             <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
-              {CURRENT_THEME != "green" &&
-                <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  {renderMagnifyingGlassIcon()}
-                </button>
-              }
-              {isMobile && CURRENT_THEME == "green" &&
-                <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  {renderMagnifyingGlassIcon()}
-                </button>
-              }
+              <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                {renderMagnifyingGlassIcon()}
+              </button>
+
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
                   <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
@@ -145,15 +133,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               }
             </div>
           </div>
-          {CURRENT_THEME == "green" &&
-            <div className="container mx-auto">
-              {!isMobile &&
-                <div className="flex-[2] justify-center mx-4 lg:flex">
-                  <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
-                </div>
-              }
-            </div>
-          }
+
           <EngagePromoBar />
         </div>
       </>

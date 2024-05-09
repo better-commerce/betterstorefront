@@ -67,7 +67,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
     const translate = useTranslation()
     return (
       <>
-        <div className={`${visible ? 'top-0' : 'td-visible top-0'} td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90`}>
+        <div className={`top-0 td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90`}>
           {!isMobile &&
             <div className="container justify-between hidden mx-auto sm:flex">
               <div className="promotion-banner mob-marquee"></div>
