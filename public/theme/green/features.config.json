@@ -11,7 +11,8 @@
     "enableAddToBagPlp": false,
     "enableMembership": false,
     "isImageGallery": true,
-    "enableHeaderWishlist": true
+    "enableHeaderWishlist": true,
+    "enableProductSpecification": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

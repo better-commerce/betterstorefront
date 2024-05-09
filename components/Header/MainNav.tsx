@@ -11,6 +11,7 @@ import { IExtraProps } from "@components/Layout/Layout";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -37,6 +38,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
   const [delayEffect, setDelayEffect] = useState(false)
+  const router = useRouter()
   useEffect(() => {
     setDelayEffect(true)
   }, [])
@@ -52,7 +54,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollPosition]);
+  }, [scrollPosition, router.asPath]);
   let classTop = 'top-full'
   if (!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature) {
     classTop = 'top-[82px]'
