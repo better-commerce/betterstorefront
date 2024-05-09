@@ -1937,6 +1937,12 @@ p {
   color: #00b18a;
 }
 
+.price-div .text-gray-400.list-price{
+  font-size: 18px !important;
+  font-weight: 500;
+  color: #848484;
+}
+
 .price-div .text-gray-400.ex-vat-text{
   font-size: 16px !important;
   font-weight: 500;
