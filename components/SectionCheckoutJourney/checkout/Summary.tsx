@@ -88,7 +88,7 @@ const Summary = ({
           </div>
           <div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
-              <span>{translate('label.orderSummary.subTotalVATExText')}</span>
+              <span>{isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
               {basket?.subTotal?.formatted?.withoutTax}
