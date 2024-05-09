@@ -1041,26 +1041,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {/* DETAIL AND REVIEW */}
-        <div className='flex flex-col w-full px-4 pt-4 sm:px-0 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-          <EngageProductCard productLimit={12} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
-        </div>
-        <div className='flex flex-col w-full px-4 pt-4 sm:px-0 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-          <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
-        </div>
-        <div className="px-4 mt-12 sm:px-0 sm:mt-12">
-          {/* {renderDetailSection()} */}
-          {featureToggle?.features?.enableProductSpecification &&
-            <>
-              <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
-                <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
-              </div>
-            </>
-          }
-          {reviews?.review?.productReviews?.length > 0 &&
-            renderReviews()
-          }
-        </div>
+        {featureToggle?.features?.enableEngage &&
+          <>
+            <EngageProductCard productLimit={12} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+            <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+          </>
+        }
+        {featureToggle?.features?.enableProductSpecification &&
+          <div className="px-4 mt-12 sm:px-0 sm:mt-12">
+            <hr className="border-slate-200 dark:border-slate-700" />
+            <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
+              <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+            </div>
+          </div>
+        }
+        {reviews?.review?.productReviews?.length > 0 &&
+          renderReviews()
+        }
         <div className="w-full px-4 pt-6 mx-auto sm:px-0 lg:max-w-none sm:pt-8">
           {product?.componentProducts && (
             <>
@@ -1081,30 +1078,18 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </>
           )}
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_USER_ITEMS_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_BY_CATEGORIES} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-          </div>
-          <div className='flex flex-col w-full pt-4 cart-recently-viewed sm:pt-10 pdp-engage-product-card'>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_ITEMS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-          </div>
+          {featureToggle?.features?.enableEngage &&
+            <>
+              <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_USER_ITEMS_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_BY_CATEGORIES} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_ITEMS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+            </>
+          }
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
