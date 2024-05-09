@@ -1921,6 +1921,7 @@ p {
   font-size: 30px !important;
   font-weight: 700;
   color: #00b18a;
+  align-items: baseline;
 }
 
 .price-div .text-gray-400.list-price{
@@ -1939,6 +1940,7 @@ p {
   font-size: 16px !important;
   font-weight: 600;
   color: #00b18a;
+  align-items: baseline;
 }
 
 .product-card-panel .price-div .text-gray-400.ex-vat-text{
