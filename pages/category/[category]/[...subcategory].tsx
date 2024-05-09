@@ -99,7 +99,7 @@ export async function getStaticProps(context: any) {
   }
 
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
+  if (!allMembershipsUIDData) {
     const data = {
       "SearchText": null,
       "PricingType": 0,
@@ -114,7 +114,7 @@ export async function getStaticProps(context: any) {
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -125,8 +125,8 @@ export async function getStaticProps(context: any) {
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
   }
@@ -317,7 +317,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
       dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_page_view_before({ item_id : category?.name || EmptyString}) 
+      window.ch_page_view_before({ item_id: category?.name || EmptyString })
     }
   }, [category?.id])
 
@@ -490,46 +490,42 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         </div>
 
 
-        <div className="w-full py-4">
-          {category && category?.images && category?.images.length ? (
-            <>
-              {category?.images.map((cat: any, idx: number) => (
-                <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
-                  <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
-                    <div className="w-full h-full">
-                      <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                        <div className="sm:w-2/4 sm:pr-20">
-                          <h2 className="text-white uppercase">{cat?.name}</h2>
-                          <p className="mt-5 font-light text-white">
-                            {cat?.description}
-                          </p>
-                        </div>
+        {category && category?.images && category?.images.length ? (
+          <div className="w-full py-4">
+            {category?.images.map((cat: any, idx: number) => (
+              <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
+                <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
+                  <div className="w-full h-full">
+                    <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
+                      <div className="sm:w-2/4 sm:pr-20">
+                        <h2 className="text-white uppercase">{cat?.name}</h2>
+                        <p className="mt-5 font-light text-white">
+                          {cat?.description}
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <div className="order-1 sm:order-2">
-                    <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'category'} width={700} height={700} />
-                  </div>
                 </div>
-              ))}
-            </>
-          ) : null}
-        </div>
+                <div className="order-1 sm:order-2">
+                  <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'category'} width={700} height={700} />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
         <div className={`container mx-auto ${products?.total > 0 ? ' py-0' : 'py-6'}`}>
-          {products?.total > 0 ? (
-            <div className="grid w-full grid-cols-1 sm:grid-cols-12">
-              {!!products && (products?.filters?.length > 0 ? (
+          {productDataToPass?.results?.length > 0 ? (
+            <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
+              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                 <>
                   {isMobile ? (
                     <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   ) : (
-                    <>
-                      <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                    </>
+                    <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                   )}
-                  <div className="sm:col-span-10 p-[1px]">
+                  <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                     {isMobile ? null : (
-                      <ProductFiltersTopBar products={products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     )}
                     <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
@@ -542,10 +538,10 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
               ))}
               <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
               {/* <div className="col-span-12 cart-recently-viewed">
-                <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
-              </div> */}
+                    <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+                  </div> */}
               <div className='flex flex-col w-full'>
-                <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+                <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                 <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                 <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                 <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
