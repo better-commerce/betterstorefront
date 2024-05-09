@@ -2315,3 +2315,18 @@ p {
     gap: 5px !important;
   }
 }
+
+@media screen and (max-width:1580px) and (min-width:980px) {
+  .lg\:grid-cols-4.product-card-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .lg\:grid-cols-5.product-card-4{
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .sm\:col-span-2.filter-panel-3 {
+      grid-column: span 3 / span 3 !important;
+  }
+    .lg\:col-span-10.product-grid-9 {
+      grid-column: span 9 / span 9 !important;
+  }
+}

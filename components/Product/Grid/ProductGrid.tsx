@@ -45,7 +45,7 @@ export default function CategoryGrid({
 
   let gridClass = 'lg:grid-cols-4'
   if (CURRENT_THEME == 'green') {
-    gridClass = 'lg:grid-cols-5'
+    gridClass = 'lg:grid-cols-5 product-card-4'
   }
 
 

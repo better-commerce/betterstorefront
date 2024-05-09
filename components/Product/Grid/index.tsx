@@ -35,7 +35,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
 
   let gridClass = 'lg:grid-cols-3'
   if (CURRENT_THEME == 'green') {
-    gridClass = 'lg:grid-cols-4'
+    gridClass = 'lg:grid-cols-4 product-card-3'
   }
 
   return (
