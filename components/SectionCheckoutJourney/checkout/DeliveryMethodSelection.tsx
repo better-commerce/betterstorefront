@@ -61,7 +61,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
       errorMessage = translate('common.message.selectStoreErrorMsg');
     } else {
       isValid =
-        selectedShippingMethod?.type === DeliveryType.DELIVER && selectedDeliveryMethod?.type === DeliveryType.DELIVER;
+        (selectedShippingMethod?.type === DeliveryType.STANDARD_DELIVERY && selectedDeliveryMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY)) || (selectedShippingMethod?.type === DeliveryType.EXPRESS_DELIVERY && selectedDeliveryMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY));
       errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg');
     }
 
@@ -98,7 +98,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
 
   useEffect(() => {
     const isDeliveryTypeCollect =
-      selectedDeliveryMethod?.type === DeliveryType.COLLECT &&
+      selectedDeliveryMethod?.type?.includes(DeliveryType.COLLECT) &&
       selectedDeliveryMethod?.children?.some((x: any) => x?.id === selectedShippingMethodId);
 
     setShowFindStore(isDeliveryTypeCollect);
@@ -111,10 +111,14 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
 
   const shouldContinueBtnEnabled = useMemo(() => {
     let isEnabled = false
-    if (deliveryTypeMethod?.type === DeliveryType.DELIVER) isEnabled = !selectedShippingMethodId
-    if (deliveryTypeMethod?.type === DeliveryType.COLLECT) isEnabled = !selectedStore?.Id
+    if (deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY)) isEnabled = !selectedShippingMethodId
+    if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) isEnabled = !selectedStore?.Id
     return isEnabled
   }, [deliveryTypeMethod, selectedStore, selectedShippingMethodId])
+
+  const isDeliverTypeSelected = useMemo(() => {
+    return (method: any)  => method?.type === DeliveryType.STANDARD_DELIVERY
+  }, [])
 
   return (
     <>
@@ -140,7 +144,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
                             <span className="font-bold">
-                              {method?.type === DeliveryType.DELIVER ? eddDateFormat(basket?.estimatedDeliveryDate) : eddDateFormat(method?.expectedDeliveryDate)}{' '}
+                              {isDeliverTypeSelected(method) ? eddDateFormat(basket?.estimatedDeliveryDate) : eddDateFormat(method?.expectedDeliveryDate)}{' '}
                             </span>
                           </span>
                         )}

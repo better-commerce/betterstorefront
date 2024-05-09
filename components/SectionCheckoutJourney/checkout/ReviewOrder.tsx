@@ -74,9 +74,9 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
           <div className="flex flex-col w-full pb-2 border-b border-gray-200 sm:pb-4">
             <div className="flex items-center justify-between w-full">
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
-                {deliveryTypeMethod?.type === DeliveryType.COLLECT ? translate('label.addressBook.pickupAddressHeadingText') : translate('label.addressBook.shippingAddressHeadingText')}
+                {deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) ? translate('label.addressBook.pickupAddressHeadingText') : translate('label.addressBook.shippingAddressHeadingText')}
               </h5>
-              {deliveryTypeMethod?.type !== DeliveryType.COLLECT && (
+              {!deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
                 <button
                   className="justify-end font-semibold text-black font-12 hover:text-orange-600"
                   onClick={() =>

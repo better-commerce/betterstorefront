@@ -52,7 +52,6 @@ import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
 import { Logo } from '@components/ui'
 import compact from 'lodash/compact'
-import groupBy from 'lodash/groupBy'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -113,11 +112,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       title: 'Deliver',
       content: translate('label.checkout.toChoiceAddressText'),
       children: [],
-      type: DeliveryType.DELIVER,
+      type: [ DeliveryType.STANDARD_DELIVERY, DeliveryType.EXPRESS_DELIVERY ],
     },
     {
       id: 1,
-      type: DeliveryType.COLLECT,
+      type: [ DeliveryType.COLLECT ],
       title: 'Collect',
       content: translate('common.label.inStoreUsingCollectPlusText'),
       children: [],
@@ -689,7 +688,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       cdp,
       basket,
       postCode: basket?.postCode,
-      isCNC: (deliveryTypeMethod?.type === DeliveryType.COLLECT),
+      isCNC: deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT),
     })
     return response
   }
@@ -740,7 +739,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
   const onContinueAddressBook = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
-    if (deliveryTypeMethod?.type === DeliveryType.COLLECT) {
+    if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
       await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, true)
     } else {
       await updateCheckoutAddress({ shippingAddress: selectedAddress?.shippingAddress, billingAddress: selectedAddress?.billingAddress }, true)
@@ -876,21 +875,17 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         countryCode: shippingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_DEFAULT_COUNTRY,
       })
       if (deliveryMethods?.length) {
-        const output = new Array<any>()
-        const tempArrNew = groupBy(deliveryMethods, 'type')
-        Object.entries(tempArrNew)?.forEach(([key, value]) => {
-          const data: any = DELIVERY_METHODS_TYPE?.find(
-            (o: any) => o.type === parseInt(key)
-          )
-
-          if (data?.children) {
-            data.children = value
-
-            if (data.type === DeliveryType.COLLECT && !featureToggle?.features?.enableCollectDeliveryOption) {
-              return
+        const output: any = DELIVERY_METHODS_TYPE?.map((method: any) => {
+          const foundMethods: any = deliveryMethods?.filter((o: any) => method?.type?.includes(o?.type))
+          if (foundMethods?.length) {
+            method.children = foundMethods
+            // check if feature 'enableCollectDeliveryOption' is disabled
+            if (method?.type?.includes(DeliveryType.COLLECT) && !featureToggle?.features?.enableCollectDeliveryOption) {
+              // then set empty shipping methods' data
+              method.children = []
             }
-            output.push(data)
           }
+          return method
         })
         setDeliveryMethods(output)
         if (deliveryTypeMethod) {
