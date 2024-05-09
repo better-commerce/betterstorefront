@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useFormik } from 'formik'
 import {
   addressFinderSchema,
@@ -136,6 +136,9 @@ const ShippingAddressForm: React.FC<any> = ({
       formik.handleSubmit()
     }
   }
+
+  const isDeliverTypeSelected = useMemo(() => deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY), [deliveryTypeMethod])
+
   return (
     <>
       {!isGuest && (
@@ -154,7 +157,7 @@ const ShippingAddressForm: React.FC<any> = ({
           deliveryMethods={deliveryMethods}
         />
       )}
-      {deliveryTypeMethod?.type === DeliveryType.DELIVER && (
+      {isDeliverTypeSelected && (
         <div
           className={`flex flex-col gap-2 sm:mt-4 mt-3 sm:rounded-md sm:border ${
             isGuest
@@ -477,7 +480,7 @@ const ShippingAddressForm: React.FC<any> = ({
           </div>
         </div>
       )}
-      {deliveryTypeMethod?.type === DeliveryType.COLLECT && (
+      {deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
         <div className="mt-4">
           <BillingAddressForm
             editAddressValues={editAddressValues}

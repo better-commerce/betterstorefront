@@ -600,7 +600,8 @@ export enum QuantityBreakRule {
 }
 
 export enum DeliveryType {
-  DELIVER = 1,
+  STANDARD_DELIVERY = 1,
+  EXPRESS_DELIVERY = 2,
   COLLECT = 4,
 }
 
