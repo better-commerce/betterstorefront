@@ -17588,3 +17588,12 @@ body:has(.engage-announcement-bar){
     .back-platinum {
       background-color: rgb(237 237 250);
     }
+    .bg-Platinum .text-member-name{
+      color: #a9a9a9 !important;
+    }
+    .bg-Gold .text-member-name{
+      color: #bd8c2a !important;
+    }
+    .bg-Silver .text-member-name{
+      color: #a9a9a9 !important;
+    }

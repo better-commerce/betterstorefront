@@ -3,7 +3,7 @@ const VoucherStatus = ({ voucherLeft, voucherCount = voucherLeft }: any) => {
   const renderCircles = () => {
     return Array.from({ length: voucherCount }, (_, i) => {
       const isAvailable = i < voucherLeft;
-      const circleColor = isAvailable ? 'bg-emerald-500' : 'bg-gray-400';
+      const circleColor = isAvailable ? 'bg-emerald-500' : 'bg-red-400';
 
       return (
         <div key={i} className={`relative flex items-center justify-center w-6 h-6 rounded-full ${circleColor} m-1`}>

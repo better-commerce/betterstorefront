@@ -11,7 +11,7 @@ const PurchaseDetails = ({ lastPurchase } :any) => {
   };
 
   return (
-    <div className="bg-gray-200 p-6 rounded-lg shadow-md flex flex-col w-full h-50  justify-between">
+    <div className="bg-white border p-6 rounded-lg shadow-md flex flex-col w-full h-50  justify-between">
       <h2 className="text-xl font-bold mb-4">{translate('label.membership.myMembershipPurchasesHeadingText')}</h2>
       <p className="mb-2">
         <span className="font-semibold text-slate-900 dark:text-slate-200">{translate('label.membership.myMembershipPurchaseOnText')}</span> {formatDate(lastPurchase?.orderDate)}

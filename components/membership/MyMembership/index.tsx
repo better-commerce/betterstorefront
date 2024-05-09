@@ -102,7 +102,7 @@ export default function MyMembership({defaultDisplayMembership, allMembershipPla
         {manageComponentShow ? ( <ManageMembership defaultDisplayMembership={defaultDisplayMembership} allMembershipPlans={allMembershipPlans}/> ) : (
           <>
             <BenefitItems discountPerc={discount} />
-            <div className="flex flex-col md:flex-row gap-6 p-6">
+            <div className="flex flex-col md:flex-row gap-6 py-6 px-0">
               <div className="w-full md:w-1/2 flex-1 flex">
                 <PurchaseDetails lastPurchase={latestMembershipOrder} />
               </div>
