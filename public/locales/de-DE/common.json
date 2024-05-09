@@ -380,6 +380,9 @@
       "emailAddressplaceholderText": "beispiel@example.com",
       "referAFriendText": "Empfehle einen Freund",
       "myCompanyText": "Mein Unternehmen",
+      "recommendedForYouText": "Empfohlen für dich",
+      "browsingHistoryText": "Browserverlauf",
+      "improveRecommendationText": "Verbessere deine Empfehlung",
       "myCompanyMenus": {
         "user": "Benutzer",
         "order": "Bestellungen",
@@ -782,7 +785,10 @@
       "findInStoreText": "Im Geschäft finden",
       "stockCheckDescText": "Benötigen Sie Ihren Artikel heute? Finden Sie Ihr nächstgelegenes Geschäft und holen Sie Ihre Bestellung dort ab",
       "findStockText": "Bestand finden",
-      "storeNameText": "Name des Geschäfts"
+      "storeNameText": "Name des Geschäfts",
+      "myStoreText": "Mein Geschäft",
+      "yourRecommendationsText": "Deine Empfehlungen",
+      "improveRecommendationsText": "Empfehlungen verbessern"
     },
     "thankyou": {
       "summaryText": "Zusammenfassung",
@@ -828,6 +834,12 @@
       "unlimitedDeliveryText": "Kostenlose unbegrenzte* Standardlieferung",
       "alreadyMemberText": "Bereits Mitglied?",
       "myMembershipText": "Meine Mitgliedschaft",
+      "seeText": "Sehen",
+      "benefitsText": "Vorteile",
+      "membershipNoText": "Mitgliedsnummer",
+      "balanceVoucherText": "Guthabengutschein",
+      "memberText": "Mitglied",
+      "sinceText": "Seit",
       "membershipDescText": "bei Ihrer Bestellung heute, wenn Sie unserer Mitgliedschaft beitreten",
       "discountsAnytimeText": "jederzeit Rabatte",
       "perYearText": "pro Jahr",
@@ -915,6 +927,7 @@
       "backToHomepageText": "Zurück zur Startseite",
       "closePanelText": "Panel schließen",
       "otherText": "Andere",
+      "helloText": "Hallo,",
       "saveChangesText": "Änderungen speichern",
       "seeAllText": "Alle anzeigen",
       "cancelText": "Abbrechen",

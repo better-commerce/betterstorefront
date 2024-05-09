@@ -1,11 +1,11 @@
-// PurchaseDetails.jsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import moment from 'moment'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import {
   DATE_FORMAT,
   NEXT_MEMBERSHIP_BENEFITS,
+  MembershipType,
 } from '@components/utils/constants'
 import axios from 'axios'
 import { logError } from '@framework/utils/app-util'
@@ -52,25 +52,25 @@ const MembershipBanner = ({ user }: any) => {
     fetchMemberShip()
   }, [user?.userId])
 
-  const getBackgroundColor = (membershipName: any) => {
+  const getBackgroundColor = (membershipName: MembershipType): string => {
     switch (membershipName) {
-      case 'Silver':
-        return 'gradient-silver'
-      case 'Gold':
-        return 'gradient-golden'
-      case 'Platinum':
-        return 'gradient-platinum'
+      case MembershipType.SILVER:
+        return 'gradient-silver';
+      case MembershipType.GOLD:
+        return 'gradient-golden';
+      case MembershipType.PLATINUM:
+        return 'gradient-platinum';
       default:
-        return 'gray-500'
+        return 'gray-500';
     }
   }
-  const getVoucherColor = (membershipName: any) => {
+  const getVoucherColor = (membershipName: MembershipType): string => {
     switch (membershipName) {
-      case 'Silver':
+      case MembershipType.SILVER:
         return 'back-silver'
-      case 'Gold':
+        case MembershipType.GOLD:
         return 'back-golden'
-      case 'Platinum':
+        case MembershipType.PLATINUM:
         return 'back-platinum'
       default:
         return 'gray-500'
@@ -80,9 +80,17 @@ const MembershipBanner = ({ user }: any) => {
     (benefit: any) => benefit?.status === 0
   ).length
 
+  const membershipColor = useMemo(() => {
+    if (membership?.membershipName === MembershipType.SILVER || membership?.membershipName === MembershipType.PLATINUM) {
+      return 'text-black';
+    } else {
+      return 'text-white';
+    }
+  }, [membership]);
+
   if (!membership?.membershipName) {
     return <>
-      <div className='w-full mx-auto mb-4 theme-account-container mt-14 sm:mt-20 sm:mb-6'>
+      <div className='w-full mx-auto mb-4 container mt-14 sm:mt-20 sm:mb-6'>
         <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
         <span className="block mt-2 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
           <span className="font-semibold text-slate-900 dark:text-slate-200"> {user?.firstName}, </span>{" "} {user?.email}
@@ -98,16 +106,15 @@ const MembershipBanner = ({ user }: any) => {
         <div className="container flex">
           <div className="w-2/4">
             <h2
-              className={`text-xl sm:text-3xl text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                }`}
+              className={`text-xl sm:text-3xl ${membershipColor}`}
             >
-              Hello, {user?.firstName}
+              {translate('common.label.helloText')} {user?.firstName}
             </h2>
             {membership && (
               <div className="flex">
                 <Link href="/my-membership">
-                  <span className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'} text-lg mt-2`} >
-                    See {membership?.membershipName} Banefits{' '}
+                  <span className={`${membershipColor} text-lg mt-2`} >
+                  {translate('label.membership.seeText')} {membership?.membershipName} {translate('label.membership.benefitsText')}{' '}
                     <ChevronDownIcon className="inline w-4 h-4 transform -rotate-90" aria-hidden="true" />
                   </span>
                 </Link>
@@ -116,20 +123,19 @@ const MembershipBanner = ({ user }: any) => {
           </div>
           <div className="flex w-2/4 mt-5 gap-x-5">
             <div>
-              <p className={`font-bold text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'} text-xs`} >
-                Membership no
+              <p className={`font-bold ${membershipColor} text-xs`} >
+              {translate('label.membership.membershipNoText')}
               </p>
-              <p className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'}`} >
+              <p className={`${membershipColor}`} >
                 {membership?.membershipNo}
               </p>
             </div>
             <div>
-              <p className={`font-bold text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'} text-xs`} >
-                Balance voucher
+              <p className={`font-bold ${membershipColor} text-xs`} >
+              {translate('label.membership.balanceVoucherText')}
               </p>
               <p
-                className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                  } ml-1`}
+                className={`${membershipColor} ml-1`}
               >
                 {balanceVoucher}
               </p>
@@ -141,18 +147,16 @@ const MembershipBanner = ({ user }: any) => {
         <div className="container flex">
           <div className="w-2/4">
             <p
-              className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                }`}
+              className={`${membershipColor}`}
             >
-              {membership?.membershipName} member
+              {membership?.membershipName} {translate('label.membership.memberText')}
             </p>
           </div>
           <div className="w-2/4">
             <p
-              className={`text-${membership?.membershipName === 'Silver' || membership?.membershipName === 'Platinum' ? 'black' : 'white'
-                }`}
+              className={`${membershipColor}`}
             >
-              Since {formatDate(membership?.startDate)}
+              {translate('label.membership.sinceText')} {formatDate(membership?.startDate)}
             </p>
           </div>
         </div>
