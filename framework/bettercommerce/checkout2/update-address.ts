@@ -45,7 +45,7 @@ export default function updateShippingMethod() {
             basketId,
             orderId: Guid.empty,
             postCode: addr?.postCode || postCode,
-            shippingMethodType: DeliveryType.DELIVER,
+            shippingMethodType: shippingMethod?.type || DeliveryType.STANDARD_DELIVERY,
             shippingMethodId: basket?.shippingMethodId,
             shippingMethodName: shippingMethod?.displayName,
             shippingMethodCode: shippingMethod?.shippingCode,

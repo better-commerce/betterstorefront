@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { LoadingDots, useUI } from '@components/ui'
 import { isB2BUser } from '@framework/utils/app-util'
 import { AlertType, UserRoleType } from '@framework/utils/enums'
@@ -87,6 +87,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
 
   const isB2BUserLoggedIn = isB2BUser(user)
   const noAddressesFound = mappedAddressList?.length < 1
+  const isDeliverTypeSelected = useMemo(() => deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY), [deliveryTypeMethod])
 
   if (mappedAddressList === undefined) {
     return <LoadingDots />
@@ -209,7 +210,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               ))}
           </div>
 
-          {deliveryTypeMethod?.type === DeliveryType.DELIVER && !noAddressesFound && (
+          {isDeliverTypeSelected && !noAddressesFound && (
             <div className="px-3 mt-4">
               <input
                 id="useSameForBilling"
@@ -235,7 +236,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               </label>
             </div>
           )}
-          {deliveryTypeMethod?.type === DeliveryType.DELIVER && !useSameForBilling && (
+          {isDeliverTypeSelected && !useSameForBilling && (
             <div className="mt-4 border-t border-gray-300">
               <BillingAddressForm
                 editAddressValues={editAddressValues}
