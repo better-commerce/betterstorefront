@@ -3,14 +3,14 @@ import { useTranslation } from '@commerce/utils/use-translation'
 export default function NoProductFound() {
   const translate = useTranslation()
   return (
-    <div className="flex flex-col items-center mt-10 justify-">
-      <div className="bg-gray-400 w-12 h-12 flex items-center justify-center transform rotate-45">
-        <span className="text-white font-bold -rotate-45">!</span>
+    <div className="flex flex-col items-center mt-10 justify-center min-h-[600px]">
+      <div className="flex items-center justify-center w-12 h-12 transform rotate-45 bg-gray-400">
+        <span className="font-bold text-white -rotate-45">!</span>
       </div>
-      <p className="text-gray-600 font-medium text-center text-lg mt-6">
+      <p className="mt-6 text-lg font-medium text-center text-gray-600">
         {translate('label.search.noMatchingProductFoundText')}
       </p>
-      <p className="text-gray-500 text-center text-sm mt-4">
+      <p className="mt-4 text-sm text-center text-gray-500">
         {translate('label.search.noMatchingProductFoundDescText')}
       </p>
     </div>

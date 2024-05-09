@@ -153,7 +153,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
   }
 
   return (
-    <div className={`nc-SectionSliderProductCard`}>
+    <div className={`nc-SectionSliderProductCard flex flex-col w-full pt-0 cart-recently-viewed sm:pt-10 pdp-engage-product-card`}>
       <div>
         <div className="flex justify-between gap-1 mb-5 lg:gap-3 sm:mb-10">
           <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl">{title || campaignDetails?.campaign_title}</h2>

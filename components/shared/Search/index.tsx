@@ -36,12 +36,12 @@ export default function Search(props: any) {
         const response: any = await axios.post(NEXT_SEARCH_PRODUCTS, {
           value: inputValue,
         })
-        setProducts(response?.data?.products)
+        setProducts(response?.data?.results)
         setIsLoading(false)
         eventDispatcher(SearchEvent, {
           entity: JSON.stringify({
             FreeText: inputValue,
-            ResultCount: response?.data?.products?.length || 0,
+            ResultCount: response?.data?.results?.length || 0,
           }),
           entityId: inputValue,
           entityName: inputValue,
@@ -129,9 +129,9 @@ export default function Search(props: any) {
                 <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                   <div>
                     <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] nc-ProductCard__title">{product?.name}</h2>
-                    <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{product?.classification?.mainCategoryName}</p>
+                    <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
                   </div>
-                  <div className="flex items-end justify-between ">
+                  <div className="flex items-end justify-between product-card-panel">
                     <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     {product?.reviewCount > 0 &&
                       <div className="flex items-center mb-0.5">
