@@ -34,12 +34,13 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [scrollPosition, setScrollPosition] = useState(0); // Initialize to 0
   const [delayEffect, setDelayEffect] = useState(false)
   useEffect(() => {
     setDelayEffect(true)
   }, [])
+
   useEffect(() => {
     const handleScroll = () => {
       const currentPosition = window.pageYOffset;
