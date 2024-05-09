@@ -170,6 +170,8 @@ export default function FilterList({
 }: any) {
   const [filterItems, setFilterItems] = useState(items)
 
+  useEffect(()=>{setFilterItems(items)},[items?.length])
+
   const handleSearch = (value: string) => {
     const itemsClone = [...items]
     const filteredItems = itemsClone.filter((item: any) =>
