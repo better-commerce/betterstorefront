@@ -51,7 +51,7 @@ function Recommendations({  campaignData, featureToggle }: any) {
   }, [router]);
   return (
     <>
-      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">Your Recommendations</h2>
+      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('label.store.yourRecommendationsText')}</h2>
       <div className="mx-auto cart-recently-viewed mob-padding-0">
         <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Top picks for you" isSlider={false} productPerRow={4} forceDisplay={true} />
         <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} title="Style Spotlight: Editor's Choice" isSlider={true} productPerRow={4} forceDisplay={true} />

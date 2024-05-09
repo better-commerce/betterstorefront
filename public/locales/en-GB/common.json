@@ -381,6 +381,9 @@
       "emailAddressplaceholderText": "example@example.com",
       "referAFriendText": "Refer a Friend",
       "myCompanyText": "My Company",
+      "recommendedForYouText": "Recommended For You",
+      "browsingHistoryText": "Browsing History",
+      "improveRecommendationText": "Improve Your Recommendation",
       "myCompanyMenus": {
         "user": "Users",
         "order": "Orders",
@@ -783,7 +786,10 @@
       "findInStoreText": "Find in Store",
       "stockCheckDescText": "Need your item today? Find your nearest store and pick up in selected stores",
       "findStockText": "Find Stock",
-      "storeNameText": "Store Name"
+      "storeNameText": "Store Name",
+      "myStoreText": "My Store",
+      "yourRecommendationsText": "Your Recommendations",
+      "improveRecommendationsText": "Improve Recommendations"
     },
     "thankyou": {
       "summaryText": "Summary",
@@ -829,6 +835,12 @@
       "unlimitedDeliveryText": "FREE unlimited* standard delivery",
       "alreadyMemberText": "Already a Member?",
       "myMembershipText": "My Membership",
+      "seeText": "See",
+      "benefitsText": "Benefits",
+      "membershipNoText": "Membership no",
+      "balanceVoucherText": "Balance voucher",
+      "memberText": "member",
+      "sinceText": "Since",
       "membershipDescText": "on your order today when you join our membership",
       "discountsAnytimeText": "discounts anytime",
       "perYearText": "per year",
@@ -917,6 +929,7 @@
       "backToHomepageText": "Back to Homepage",
       "closePanelText": "Close panel",
       "otherText": "Other",
+      "helloText": "Hello,",
       "saveChangesText": "Save changes",
       "seeAllText": "See All",
       "cancelText": "Cancel",
