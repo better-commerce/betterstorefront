@@ -43,7 +43,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   useEffect(() => {
     const handleScroll = () => {
       const currentPosition = window.pageYOffset;
-      setVisible(currentPosition < scrollPosition);
+      setVisible(currentPosition <= scrollPosition);
       setScrollPosition(currentPosition);
     };
 
