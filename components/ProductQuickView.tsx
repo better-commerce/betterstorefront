@@ -536,21 +536,21 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       <div className="space-y-8">
         <div>
           <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000">
-            <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView}>{product?.name}</Link>
+            <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView}>{selectedAttrData?.name}</Link>
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            {product?.reviewCount > 0 &&
+            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={selectedAttrData?.price} listPrice={selectedAttrData?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            {selectedAttrData?.reviewCount > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
                 <div className="flex items-center">
                   <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
-                      <span>{product?.rating}</span>
+                      <span>{selectedAttrData?.rating}</span>
                       <span className="block mx-2">·</span>
                       <span className="underline text-slate-600 dark:text-slate-400">
-                        {product?.reviewCount} {translate('common.label.reviews')}
+                        {selectedAttrData?.reviewCount} {translate('common.label.reviews')}
                       </span>
                     </div>
                   </Link>
@@ -599,7 +599,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: quickViewData?.description }]} />}
+        {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: selectedAttrData?.description }]} />}
       </div>
     );
   };
@@ -610,22 +610,22 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         <div className="w-full lg:w-[50%] ">
           <div className="relative">
             <div className="aspect-w-16 aspect-h-16">
-              <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
+              <img src={generateUri(selectedAttrData?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={selectedAttrData?.name} />
             </div>
             {renderStatus()}            
           </div>
           <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
-            {product?.images?.slice(0, 2).map((item: any, index: number) => {
+            {selectedAttrData?.images?.slice(0, 2).map((item: any, index: number) => {
               return (
                 <div key={index} className="aspect-w-3 aspect-h-4">
-                  <img src={generateUri(item?.url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
+                  <img src={generateUri(item?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={item?.name} />
                 </div>
               );
             })}
           </div>
         </div>
         {isEngravingAvailable && (
-            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} />
+            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
           )}
         <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0">
           {renderSectionContent()}

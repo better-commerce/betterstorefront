@@ -38,7 +38,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
                 let secondValue = appliedFilter?.Value;
                 if (appliedFilter?.Value) {
                   const parts = appliedFilter.Value.split('|');
-                  if (parts.length > 1) {
+                  if (parts?.length > 1) {
                     secondValue = parts[1];
                   }
                 }
@@ -63,7 +63,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
       ) : (
         <div></div>
       )}
-      {!!products.results.length && <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />}
+      {!!products?.results?.length && <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />}
     </section>
   )
 }

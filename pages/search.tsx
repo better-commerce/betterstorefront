@@ -29,6 +29,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Guid } from '@commerce/types'
 import { stringToNumber } from '@framework/utils/parse-util'
+import Loader from '@components/Loader'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -104,6 +105,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [fetchedData, setFetchedData] = useState<any>({})
+  const [isLoading, setIsLoading] = useState(true)
+
   const {
     data = {
       products: {
@@ -122,10 +126,14 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
+      onSuccess: (data) => {
+        setFetchedData(data);
+        setIsLoading(false)
+      },
     }
   )
 
-  const [isLoading, setIsLoading] = useState(true)
+
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
@@ -184,6 +192,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         { shallow: true }
       )
     }
+    setIsLoading(true)
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -309,7 +318,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory?.products
-    : data?.products
+    : fetchedData?.products
 
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -355,7 +364,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <hr className="border-slate-200 dark:border-slate-700" />
-        {!!data?.products?.results?.length ? (
+        {!!productDataToPass?.results?.length ? (
           <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
             {isMobile ? (
               <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
@@ -366,7 +375,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
             )}
             <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
               <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-              <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              {isLoading && !IS_INFINITE_SCROLL ?  <Loader/> :<ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
             </div>
             <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
           </div>)
