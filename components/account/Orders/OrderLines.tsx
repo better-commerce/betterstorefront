@@ -76,8 +76,8 @@ const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
             </div>
 
             {order.allowedToTrack &&
-               <div className='w-full acc-btn-sec'>
-                  <a onClick={() => trackPackage(order)} target="_blank" rel="noopener noreferrer" href={`https://track.damensch.com/?waybill=${order.trackingNo}`} className='inline-block px-8 py-4 text-sm font-semibold text-center text-white bg-black border link-btn'>Track Package {idx + 1}</a>
+               <div className='w-full mt-2 acc-btn-sec'>
+                  <a onClick={() => trackPackage(order)} target="_blank" rel="noopener noreferrer" href={`https://track.damensch.com/?waybill=${order.trackingNo}`} className='inline-block px-8 py-1 text-sm font-semibold text-center text-white bg-black border rounded-2xl link-btn'>Track Package {idx + 1}</a>
                </div>
             }
          </div>
