@@ -67,7 +67,7 @@ function MyAccount() {
 
 MyAccount.LayoutAccount = LayoutAccount
 
-const PAGE_TYPE = PAGE_TYPES.Page
+const PAGE_TYPE = PAGE_TYPES.MyAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context

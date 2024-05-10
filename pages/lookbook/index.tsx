@@ -19,13 +19,12 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 SwiperCore.use([Navigation])
 
 function LookbookPage({ data }: any) {
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-  const {} = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
 
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-    pageCategory: 'Lookbook',
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.LookbookList,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
     omniImg: (data?.length) ? data[0]?.image : IMG_PLACEHOLDER,
   })
 
@@ -109,8 +108,6 @@ function LookbookPage({ data }: any) {
 
 LookbookPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES['Page']
-
 export async function getStaticProps({
   params,
   locale,
@@ -133,4 +130,4 @@ export async function getStaticProps({
   }
 }
 
-export default withDataLayer(LookbookPage, PAGE_TYPE)
+export default withDataLayer(LookbookPage, PAGE_TYPES.Lookbook)
