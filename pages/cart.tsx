@@ -21,13 +21,13 @@ import { useCart as getCart } from '@framework/cart'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -39,6 +39,7 @@ import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInp
 import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import wishlistHandler from '@components/services/wishlist'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -55,7 +56,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       )?.value || ''
   )
 
-  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, } = useUI()
+  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
   const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
@@ -65,6 +66,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
   const [splitDeliveryItems, setSplitDeliveryItems] = useState<any>(null)
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
+  const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
   const [basket, setBasket] = useState(cart)
   const [membership, setMembership] = useState([])
@@ -78,6 +80,86 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   const [isOpen, setIsOpen] = useState(false)
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
+  const { isInWishList } = wishlistHandler()
+  const getUserId = () => {
+    return user?.userId && user?.userId != Guid.empty ? user?.userId : cartItems?.userId
+  }
+  const enableHtmlScroll = () => {
+    const element: any = document.getElementsByTagName('html')[0]
+    element.classList.add('overlow-y-auto-p')
+  }
+  const insertToLocalWishlist = (product: any) => {
+    const userId = getUserId()
+    if (isGuestUser || (userId && matchStrings(userId, Guid.empty, true))) {
+      openLoginSideBar()
+      return
+    }
+    const createWishlist = async () => {
+      try {
+        await axios.post(NEXT_CREATE_WISHLIST, {
+          id: user?.userId,
+          productId: (product?.productId).toLowerCase(),
+          flag: true,
+        })
+
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
+    createWishlist()
+    setIsWishlistClicked(true)
+    addToWishlist(product)
+    handleItem(product, 'delete')
+    openWishlistAfter()
+  }
+  const openWishlistAfter = () => {
+    setTimeout(() => openWishlist(), 1000)
+  }
+
+  const handleWishList = async (product: any | Array<any>) => {
+    closeModal()
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLoginSideBar()
+      return
+    }
+    if (objUser) {
+      const createWishlist = async (product: any) => {
+        try {
+          await axios.post(NEXT_CREATE_WISHLIST, {
+            id: getUserId(),
+            productId: itemClicked?.length
+              ? product?.productId.toLowerCase()
+              : itemClicked?.productId.toLowerCase(),
+            flag: true,
+          })
+          insertToLocalWishlist(product)
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+
+      if (itemClicked && itemClicked?.length) {
+        itemClicked?.forEach((product: any) => {
+          createWishlist(product)
+        })
+      } else if (itemClicked?.productId) {
+        createWishlist(product)
+      }
+    } else {
+      closeSidebar()
+      setSidebarView('LOGIN_VIEW')
+      enableHtmlScroll()
+    }
+
+    let productAvailability = 'Yes'
+    if (product?.currentStock > 0) {
+      productAvailability = 'Yes'
+    } else {
+      productAvailability = 'No'
+    }
+  }
   const getBasketPromos = async (basketId: string) => {
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
@@ -651,12 +733,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {cartItems?.grandTotal?.formatted?.tax}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between pt-2 text-gray-900 border-t basket-summary-price-total">
-                    <dt className="text-lg font-semibold text-black">
-                      {translate('label.orderSummary.totalText')}
-                    </dt>
-                    <dd className="text-xl font-semibold text-black"> {isIncludeVAT ? cartItems?.grandTotal?.formatted?.withTax : cartItems?.grandTotal?.formatted?.withTax} </dd>
-                  </div>
+                  {cartItems?.grandTotal?.raw?.withTax > 0 &&
+                    <div className="flex items-center justify-between pt-2 text-gray-900 border-t basket-summary-price-total">
+                      <dt className="text-lg font-semibold text-black">
+                        {translate('label.orderSummary.totalText')}
+                      </dt>
+                      <dd className="text-xl font-semibold text-black"> {cartItems?.grandTotal?.formatted?.withTax} </dd>
+                    </div>
+                  }
                 </dl>
 
                 <div className="mt-1 mb-6 sm:mb-0">
@@ -762,6 +846,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                       </div>
                                       {!child.parentProductId ? (
                                         <div className="flex items-center justify-end flex-1 text-sm">
+                                          <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                                            {isInWishList(product?.productId) ? (
+                                              <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                                            ) : (
+                                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                            )
+                                            }
+                                          </button>
                                           <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
                                             <span className="sr-only"> {translate('common.label.removeText')} </span>
                                             <TrashIcon className="w-5 h-5" aria-hidden="true" />
@@ -776,6 +868,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                   )
                                 )}
                                 <div className="absolute top-0 right-0">
+                                  <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                                    {isInWishList(product?.productId) ? (
+                                      <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                                    ) : (
+                                      <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                    )
+                                    }
+                                  </button>
                                   <button type="button" onClick={() => handleItem(product, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
                                     <span className="sr-only">
                                       {translate('common.label.removeText')}
@@ -831,14 +931,16 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       </dd>
                     </div>
                   )}
-                  <div className="flex items-center justify-between pt-2 sm:pt-1">
-                    <dt className="flex items-center text-sm text-gray-600">
-                      <span>{translate('label.orderSummary.taxText')}</span>
-                    </dt>
-                    <dd className="font-semibold text-black text-md">
-                      {cartItems.grandTotal?.formatted?.tax}
-                    </dd>
-                  </div>
+                  {cartItems?.grandTotal?.raw?.withTax > 0 &&
+                    <div className="flex items-center justify-between pt-2 sm:pt-1">
+                      <dt className="flex items-center text-sm text-gray-600">
+                        <span>{translate('label.orderSummary.taxText')}</span>
+                      </dt>
+                      <dd className="font-semibold text-black text-md">
+                        {cartItems.grandTotal?.formatted?.tax}
+                      </dd>
+                    </div>
+                  }
                   <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
                     <dt className="text-lg font-bold text-black">
                       {translate('label.orderSummary.totalText')}

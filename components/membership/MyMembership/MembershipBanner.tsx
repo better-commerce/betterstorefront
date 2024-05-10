@@ -90,7 +90,7 @@ const MembershipBanner = ({ user }: any) => {
 
   if (!membership?.membershipName) {
     return <>
-      <div className='w-full mx-auto mb-4 container mt-14 sm:mt-20 sm:mb-6'>
+      <div className='container w-full mx-auto mb-4 mt-14 sm:mt-20 sm:mb-6 theme-account-container'>
         <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('common.label.accountText')}</h2>
         <span className="block mt-2 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
           <span className="font-semibold text-slate-900 dark:text-slate-200"> {user?.firstName}, </span>{" "} {user?.email}

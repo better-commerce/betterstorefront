@@ -4,13 +4,15 @@ import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Logo, useUI } from "@components/ui";
-import { vatIncluded } from "@framework/utils/app-util";
+import { getCurrentPage, vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
+import { recordGA4Event } from "@components/services/analytics/ga4";
+import { useRouter } from "next/router";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -32,9 +34,11 @@ interface Props {
 const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
-  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems } = useUI()
+  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems, openLoginSideBar } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [visible, setVisible] = useState(true);
+  const router = useRouter()
+  let currentPage = getCurrentPage()
   const [scrollPosition, setScrollPosition] = useState(0); // Initialize to 0
   const [delayEffect, setDelayEffect] = useState(false)
   useEffect(() => {
@@ -63,6 +67,33 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
       <SearchBar onClick={setShowSearchBar} keywords={keywords} />
     );
   };
+  function handleWishlist() {
+    try {
+      const viewWishlist = () => {
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            recordGA4Event(window, 'wishlist', {
+              ecommerce: {
+                header: 'Menu Bar',
+                current_page: currentPage,
+              },
+            })
+          }
+        }
+      }
+      const objUser = localStorage.getItem('user')
+      if (!objUser || isGuestUser) {
+        //  setAlert({ type: 'success', msg:" Please Login "})
+        openLoginSideBar()
+        return
+      }
+      if (objUser) {
+        router.push('/my-account/wishlist')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const renderContent = () => {
     const translate = useTranslation()
@@ -114,14 +145,14 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
 
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
-                  <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                  <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
                     <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (
                       <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
                         {wishListItems?.length}
                       </span>
                     )}
-                  </Link>
+                  </button>
                 </div>
               }
               <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
