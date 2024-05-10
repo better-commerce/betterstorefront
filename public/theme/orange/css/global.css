@@ -1698,3 +1698,10 @@ p {
 .bank-offer svg {
   fill: #a300b6;
 }
+
+@media screen and (max-width:1580px) and (min-width:980px) {
+  .login-panel-my{
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
