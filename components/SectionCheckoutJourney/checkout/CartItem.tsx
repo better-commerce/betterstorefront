@@ -1,15 +1,108 @@
+import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@components/Prices'
+import wishlistHandler from '@components/services/wishlist'
+import { useUI } from '@components/ui'
+import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { getCartValidateMessages, vatIncluded } from '@framework/utils/app-util'
-import { tryParseJson } from '@framework/utils/parse-util'
-import { MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
+import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
 import Link from 'next/link'
+import { useState } from 'react'
 
-const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemClicked, featureToggle, defaultDisplayMembership, }: any) => {
+const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
+  const [itemClicked, setItemClicked] = useState<any | Array<any>>()
+  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const [isWishlistClicked, setIsWishlistClicked] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const { isInWishList } = wishlistHandler()
+  const getUserId = () => {
+    return user?.userId && user?.userId != Guid.empty ? user?.userId : cartItems?.userId
+  }
+  const enableHtmlScroll = () => {
+    const element: any = document.getElementsByTagName('html')[0]
+    element.classList.add('overlow-y-auto-p')
+  }
+  const insertToLocalWishlist = (product: any) => {
+    const userId = getUserId()
+    if (isGuestUser || (userId && matchStrings(userId, Guid.empty, true))) {
+      openLoginSideBar()
+      return
+    }
+    const createWishlist = async () => {
+      try {
+        await axios.post(NEXT_CREATE_WISHLIST, {
+          id: user?.userId,
+          productId: (product?.productId).toLowerCase(),
+          flag: true,
+        })
+
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
+    createWishlist()
+    setIsWishlistClicked(true)
+    addToWishlist(product)
+    handleItem(product, 'delete')
+    openWishlistAfter()
+  }
+  const openWishlistAfter = () => {
+    setTimeout(() => openWishlist(), 1000)
+  }
+
+  const handleWishList = async (product: any | Array<any>) => {
+    closeModal()
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLoginSideBar()
+      return
+    }
+    if (objUser) {
+      const createWishlist = async (product: any) => {
+        try {
+          await axios.post(NEXT_CREATE_WISHLIST, {
+            id: getUserId(),
+            productId: itemClicked?.length
+              ? product?.productId.toLowerCase()
+              : itemClicked?.productId.toLowerCase(),
+            flag: true,
+          })
+          insertToLocalWishlist(product)
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+
+      if (itemClicked && itemClicked?.length) {
+        itemClicked?.forEach((product: any) => {
+          createWishlist(product)
+        })
+      } else if (itemClicked?.productId) {
+        createWishlist(product)
+      }
+    } else {
+      closeSidebar()
+      setSidebarView('LOGIN_VIEW')
+      enableHtmlScroll()
+    }
+
+    let productAvailability = 'Yes'
+    if (product?.currentStock > 0) {
+      productAvailability = 'Yes'
+    } else {
+      productAvailability = 'No'
+    }
+  }
+  const closeModal = () => {
+    setIsOpen(false)
+  }
   return (
     <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
       <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
@@ -83,7 +176,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
                     {!product?.isMembership && product?.price?.raw?.withTax !== 0 &&
                       <div className="relative justify-center hidden text-center sm:flex">
                         <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
-                        <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
+                        <span className="w-10 h-8 px-4 py-1 text-md sm:py-1">
                           {product.qty}
                         </span>
                         <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
@@ -96,13 +189,20 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, setItemCli
                 </div>
 
                 <div className="flex items-center justify-between pt-2 mt-auto text-sm">
-                  <div></div>
                   {product?.price?.raw?.withTax != 0 &&
-                    <div className="flex items-end justify-end text-sm">
+                    <>
+                      <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                        {isInWishList(product?.productId) ? (
+                          <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                        ) : (
+                          <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                        )
+                        }
+                      </button>
                       <button type="button" onClick={() => { openModal(); setItemClicked(product); }} className="relative flex items-center text-sm font-medium text-primary-6000 hover:text-primary-500 " >
                         <span>{translate('common.label.removeText')}</span>
                       </button>
-                    </div>
+                    </>
                   }
                 </div>
               </div>

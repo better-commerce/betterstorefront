@@ -9,7 +9,7 @@ const Summary = ({
   deviceInfo,
   basketPromos,
   getBasketPromos,
-  setBasket = () => {},
+  setBasket = () => { },
   membership,
 }: any) => {
   const translate = useTranslation()
@@ -114,14 +114,16 @@ const Summary = ({
               </dd>
             </div>
           )}
-          <div className="flex items-center justify-between pt-2 sm:pt-1">
-            <dt className="flex items-center text-black font-14">
-              <span>{translate('label.orderSummary.totalVATText')}</span>
-            </dt>
-            <dd className="font-semibold text-black text-md">
-              {basket?.grandTotal?.formatted?.tax}
-            </dd>
-          </div>
+          {basket?.grandTotal?.raw?.tax > 0 &&
+            <div className="flex items-center justify-between pt-2 sm:pt-1">
+              <dt className="flex items-center text-black font-14">
+                <span>{translate('label.orderSummary.totalVATText')}</span>
+              </dt>
+              <dd className="font-semibold text-black text-md">
+                {basket?.grandTotal?.formatted?.tax}
+              </dd>
+            </div>
+          }
           {
             <div className="flex items-center justify-between pt-2 sm:pt-1">
               <dt className="flex items-center text-black font-14">
@@ -139,8 +141,8 @@ const Summary = ({
               {basket?.grandTotal?.formatted?.withTax}
             </dd>
           </div>
-        </dl>
-      </div>
+        </dl >
+      </div >
     </>
   )
 }

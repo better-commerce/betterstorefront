@@ -4,13 +4,15 @@ import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Logo, useUI } from "@components/ui";
-import { vatIncluded } from "@framework/utils/app-util";
+import { getCurrentPage, vatIncluded } from "@framework/utils/app-util";
 import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import { recordGA4Event } from "@components/services/analytics/ga4";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -32,10 +34,12 @@ interface Props {
 const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
-  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems } = useUI()
+  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems, openLoginSideBar } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
+  const router = useRouter()
+  let currentPage = getCurrentPage()
   const [delayEffect, setDelayEffect] = useState(false)
   useEffect(() => {
     setDelayEffect(true)
@@ -62,7 +66,33 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
       <SearchBar onClick={setShowSearchBar} keywords={keywords} />
     );
   };
-
+function handleWishlist() {
+    try {
+      const viewWishlist = () => {
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            recordGA4Event(window, 'wishlist', {
+              ecommerce: {
+                header: 'Menu Bar',
+                current_page: currentPage,
+              },
+            })
+          }
+        }
+      }
+      const objUser = localStorage.getItem('user')
+      if (!objUser || isGuestUser) {
+        //  setAlert({ type: 'success', msg:" Please Login "})
+        openLoginSideBar()
+        return
+      }
+      if (objUser) {
+        router.push('/my-account/wishlist')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const renderContent = () => {
     const translate = useTranslation()
     return (
@@ -86,7 +116,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               </div>
             </div>
           }
-          <div className="container flex justify-between mx-auto theme-pt-3">
+          <div className="container flex justify-between mx-auto">
             {isMobile &&
               <div className="flex items-center flex-1">
                 <MenuBar navItems={config} featureToggle={featureToggle} />
@@ -97,32 +127,20 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                 <Logo className="flex-shrink-0" />
               </Link>
             </div>
-            {!isMobile && CURRENT_THEME != "green" &&
+            {!isMobile &&
               <div className="flex-[2] justify-center mx-4 lg:flex">
                 <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
               </div>
             }
-            {!isMobile && CURRENT_THEME == "green" &&
-              <div className="flex-[2] justify-center mx-4 lg:flex">
-                <button className="items-center justify-center w-10 h-10 rounded-full theme-search-bar lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  {renderMagnifyingGlassIcon()}
-                </button>
-              </div>
-            }
+
             <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
-              {CURRENT_THEME != "green" &&
-                <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  {renderMagnifyingGlassIcon()}
-                </button>
-              }
-              {isMobile && CURRENT_THEME == "green" &&
-                <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  {renderMagnifyingGlassIcon()}
-                </button>
-              }
+              <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                {renderMagnifyingGlassIcon()}
+              </button>
+
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
                   <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
@@ -144,15 +162,6 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               }
             </div>
           </div>
-          {CURRENT_THEME == "green" &&
-            <div className="container mx-auto">
-              {!isMobile &&
-                <div className="flex-[2] justify-center mx-4 lg:flex">
-                  <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
-                </div>
-              }
-            </div>
-          }
           <EngagePromoBar />
         </div>
       </>
