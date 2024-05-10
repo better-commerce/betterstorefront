@@ -38,7 +38,7 @@ export default function CategoryList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="container w-full pt-6 mx-auto sm:pt-10">
+      <main className="container w-full pt-6 mx-auto sm:pt-10 theme-account-container">
         <section aria-labelledby="products-heading ">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {translate('label.category.shopByCategoryText')}

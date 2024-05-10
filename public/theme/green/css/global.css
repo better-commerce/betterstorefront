@@ -2071,38 +2071,7 @@ p {
     inset-inline-end: 0rem !important;
 }
 
-@media screen and (max-width:767px) {
-  .theme-pt-3 {
-    padding-top: 0rem;
-  }
-  .product-collections .nc-SectionSliderProductCard {
-      padding: 50px 20px !important;
-      margin:0px -36px 0px -16px !important;
-  }
-  .glider-pos {
-    display: none !important;
-  }  
-  .theme-top .banner-image-container{
-      max-width: 100%;
-      background: transparent;
-      right: 0rem;
-      bottom: -10rem;
-      top: 0rem;
-      border-radius: 10px;
-  }
-  .theme-top .banner-image-container img{
-      border-radius: 10px;
-      margin-top: 2rem !important;
-      margin-bottom: 2rem !important;
-  }
-  .theme-top .nc-SectionHero2Item__left {
-    float: none !important;
-  }
-  .banner-prev,
-  .banner-next {
-    display: none !important;
-  }
-}
+
 
 /* Product Card Css */
 
@@ -2338,5 +2307,52 @@ p {
   .login-panel-my{
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
+  }
+  .theme-account-container {
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+@media screen and (max-width:767px) {
+  .theme-pt-3 {
+    padding-top: 0rem;
+  }
+  .product-collections .nc-SectionSliderProductCard {
+      padding: 50px 20px !important;
+      margin:0px -36px 0px -16px !important;
+  }
+  .glider-pos {
+    display: none !important;
+  }  
+  .theme-top .banner-image-container{
+      max-width: 100%;
+      background: transparent;
+      right: 0rem;
+      bottom: -10rem;
+      top: 0rem;
+      border-radius: 10px;
+  }
+  .theme-top .banner-image-container img{
+      border-radius: 10px;
+      margin-top: 2rem !important;
+      margin-bottom: 2rem !important;
+  }
+  .theme-top .nc-SectionHero2Item__left {
+    float: none !important;
+  }
+  .banner-prev,
+  .banner-next {
+    display: none !important;
+  }
+  .theme-account-container {
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
   }
 }
