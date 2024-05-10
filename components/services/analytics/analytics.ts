@@ -15,11 +15,10 @@ const publisher = async (data: any, event: string) => {
   const windowClone: any = typeof window !== 'undefined' ? window : {}
   const navigator: any = windowClone.navigator
   const windowDataLayer = windowClone.dataLayer && windowClone.dataLayer[0]
-  let geoData: any = tryParseJson(Cookies.get(Cookie.Key.GEO_ENDPOINT_DATA_CACHED))
+  const geoData: any = tryParseJson(Cookies.get(Cookie.Key.GEO_ENDPOINT_DATA_CACHED))
   const pageUrl = SITE_ORIGIN_URL + new URL(windowClone?.location.href).pathname;
 
   setSessionIdCookie()
-  geoData = await setGeoDataCookie(geoData)
 
   const getQueryStringValue = function (n: string) {
     return decodeURIComponent(
@@ -85,53 +84,57 @@ const publisher = async (data: any, event: string) => {
     }
   }
 
-  let dataToPublish = {
-    dataLayer: {
-      ...windowDataLayer,
-      ...data,
-      utmCampaign: getQueryStringValue('utm_campaign'),
-      utmMedium: getQueryStringValue('utm_medium'),
-      utmSource: getQueryStringValue('utm_source'),
-      utmContent: getQueryStringValue('utm_content'),
-      utmTerm: getQueryStringValue('utm_term'),
-      pageUrl,
-      urlReferrer: windowDataLayer?.urlReferrer || document.referrer,
-      currency: Cookies.get(Cookie.Key.CURRENCY),
-      visitorEmail: visitorData?.email || EmptyString,
-      visitorExistingCustomer: Boolean(visitorData?.username),
-      visitorId: visitorData?.userId || EmptyGuid,
-      visitorLoggedIn: Boolean(visitorData?.email),
-      dataLayer: JSON.stringify({
-        ...JSON.parse(data?.entity || '{}'),
-        omniImg: data?.omniImg || _getOmniImage(),
-      }),
-      data: JSON.stringify(getBrowserData()),
-      pageTitle: document.title,
-      sessionId: Cookies.get(Cookie.Key.SESSION_ID),
-      orgId: process.env.NEXT_PUBLIC_ORG_ID,
-      appId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-      domainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+  const sendEventData = async (geoData?: any) => {
+    const dataToPublish = {
+      dataLayer: {
+        ...windowDataLayer,
+        ...data,
+        utmCampaign: getQueryStringValue('utm_campaign'),
+        utmMedium: getQueryStringValue('utm_medium'),
+        utmSource: getQueryStringValue('utm_source'),
+        utmContent: getQueryStringValue('utm_content'),
+        utmTerm: getQueryStringValue('utm_term'),
+        pageUrl,
+        urlReferrer: windowDataLayer?.urlReferrer || document.referrer,
+        currency: Cookies.get(Cookie.Key.CURRENCY),
+        visitorEmail: visitorData?.email || EmptyString,
+        visitorExistingCustomer: Boolean(visitorData?.username),
+        visitorId: visitorData?.userId || EmptyGuid,
+        visitorLoggedIn: Boolean(visitorData?.email),
+        dataLayer: JSON.stringify({
+          ...JSON.parse(data?.entity || '{}'),
+          omniImg: data?.omniImg || _getOmniImage(),
+        }),
+        data: JSON.stringify(getBrowserData()),
+        pageTitle: document.title,
+        sessionId: Cookies.get(Cookie.Key.SESSION_ID),
+        orgId: process.env.NEXT_PUBLIC_ORG_ID,
+        appId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        domainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        deviceType: detectDeviceType(),
+        channel: 'Web',
+        lang: Cookies.get(Cookie.Key.LANGUAGE),
+        browserInfo: navigator.userAgent,
+        city: geoData?.City || EmptyString,
+        country: geoData?.Country || EmptyString,
+        ipAddress: geoData?.Ip || EmptyString,
+      },
       deviceType: detectDeviceType(),
-      channel: 'Web',
-      lang: Cookies.get(Cookie.Key.LANGUAGE),
-      browserInfo: navigator.userAgent,
-      city: geoData?.City || EmptyString,
-      country: geoData?.Country || EmptyString,
       ipAddress: geoData?.Ip || EmptyString,
-    },
-    deviceType: detectDeviceType(),
-    ipAddress: geoData?.Ip || EmptyString,
-    event,
-    session: Cookies.get(Cookie.Key.SESSION_ID),
-    trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
-    url: pageUrl,
-  }
-
-  try {
+      event,
+      session: Cookies.get(Cookie.Key.SESSION_ID),
+      trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
+      url: pageUrl,
+    }
     const { data: analyticsData } = await axios.post(OMNILYTICS_ASSETS_DATA, { ...dataToPublish })
     if (data?.eventType === EVENTS_MAP.EVENT_TYPES.ProductViewed) {
       window.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.ProductViewed, { detail: analyticsData }))
     }
+  }
+
+  try {
+    if (!geoData) setGeoDataCookie(geoData).then(sendEventData)
+    else sendEventData(geoData)
   } catch (error) {
     console.log(error)
   }
@@ -201,6 +204,9 @@ export default function AnalyticsService() {
   const search = (payload: any) => {
     publisher(payload, 'search')
   }
+  const passwordProtection = (payload: any) => {
+    publisher(payload, 'passwordProtection')
+  }
 
   const defaultAction = (payload?: any) => {
     return null
@@ -225,6 +231,7 @@ export default function AnalyticsService() {
     PageViewed,
     ProductViewed,
     Search,
+    PasswordProtection,
   } = EVENTS_MAP.EVENT_TYPES
 
   const eventHandler = function (event: any) {
@@ -298,6 +305,10 @@ export default function AnalyticsService() {
       case ProductViewed:
         productViewed(payload)
         break
+      
+      case PasswordProtection:
+        passwordProtection(payload)
+        break
 
       case Search:
         search(payload)
@@ -310,14 +321,16 @@ export default function AnalyticsService() {
   }
   Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
     console.log('event listener', eventType)
-    window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], eventHandler)
+    const eventTypes: any = EVENTS_MAP.EVENT_TYPES
+    window.addEventListener(eventTypes[eventType], eventHandler)
   })
   return {
     removeListeners: () =>
       Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
         console.log(eventType, '=======remove')
+        const eventTypes: any = EVENTS_MAP.EVENT_TYPES
         window.removeEventListener(
-          EVENTS_MAP.EVENT_TYPES[eventType],
+          eventTypes[eventType],
           eventHandler
         )
       }),

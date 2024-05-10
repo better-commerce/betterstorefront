@@ -108,8 +108,10 @@ const router = useRouter()
       )?.configKeys || []
   }
 
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.Register,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
   })
 
   useEffect(() => {
@@ -316,8 +318,7 @@ const router = useRouter()
 
 RegisterPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(RegisterPage, PAGE_TYPE)
+export default withDataLayer(RegisterPage, PAGE_TYPES.Register)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context

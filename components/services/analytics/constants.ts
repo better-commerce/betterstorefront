@@ -1,4 +1,4 @@
-export const EVENTS_MAP: any = {
+export const EVENTS_MAP = {
   EVENT_TYPES: {
     BasketItemAdded: 'BasketItemAdded',
     BasketItemRemoved: 'BasketItemRemoved',
@@ -16,8 +16,11 @@ export const EVENTS_MAP: any = {
     FaqViewed: 'FaqViewed',
     FreeText: 'FreeText',
     PageViewed: 'PageViewed',
+    OrderPageViewed: 'OrderPageViewed',
     ProductViewed: 'ProductViewed',
     Search: 'Search',
+    PasswordProtection: 'PasswordProtection',
+    Wishlist: 'Wishlist',
   },
   ENTITY_TYPES: {
     Basket: 'Basket',

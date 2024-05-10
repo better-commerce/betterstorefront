@@ -12,6 +12,8 @@ import { Messages, EmptyString } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 function ForgotPasswordPage() {
   const { setAlert } = useUI()
   const translate = useTranslation()
@@ -34,6 +36,12 @@ function ForgotPasswordPage() {
     const emailRegex = Messages.Validations.RegularExpressions.EMAIL
     return emailRegex.test(email)
   }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.ForgotPassword,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   useEffect(() => {
     if (
@@ -130,8 +138,8 @@ function ForgotPasswordPage() {
 }
 
 ForgotPasswordPage.Layout = Layout
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(ForgotPasswordPage, PAGE_TYPE)
+
+export default withDataLayer(ForgotPasswordPage, PAGE_TYPES.ForgotPassword)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context

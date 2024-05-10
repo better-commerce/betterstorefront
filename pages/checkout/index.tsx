@@ -60,6 +60,8 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import commerce from '@lib/api/commerce'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export enum BasketStage {
   CREATED = 0,
@@ -86,6 +88,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const uiContext: any = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
+  const [isCheckoutStarted, setCheckoutStarted] = useState(false)
   const [appConfigData, setAppConfigData] = useState<any>()
   const { isMobile, isIPadorTablet } = deviceInfo
   const translate = useTranslation()
@@ -919,6 +922,64 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     refreshBasket,
     featureToggle,
   }
+
+  useEffect(() => {
+    if (basket?.id && basket?.lineItems) {
+      if (basket?.lineItems?.length == 0) {
+        router.push('/cart')
+      } else {
+        if (!isCheckoutStarted) {
+          const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
+          const { Basket } = EVENTS_MAP.ENTITY_TYPES
+          setCheckoutStarted(true)
+          eventDispatcher(CheckoutStarted, {
+            entity: JSON.stringify({
+              id: basket?.id,
+              basketId,
+              customerId: basket?.userId,
+              grandTotal: basket?.grandTotal?.raw?.withTax,
+              tax: basket?.grandTotal?.raw?.tax,
+              taxPercent: basket?.taxPercent,
+              shipCharge: basket?.shippingCharge?.raw?.withoutTax,
+              shipTax: basket?.shippingCharge?.raw?.tax,
+              subTotal: basket?.subTotal?.raw?.withoutTax,
+              discount: basket?.discount?.raw?.withoutTax,
+              lineitems: basket?.lineItems?.map((lineitem: any) => ({
+                id: lineitem?.id,
+                manufacturer: lineitem?.manufacturer,
+                subManufacturer: lineitem?.subManufacturer,
+                productId: lineitem?.productId,
+                stockCode: lineitem?.stockCode,
+                name: lineitem?.name,
+                discountAmt: lineitem?.discountAmt?.raw?.withoutTax || lineitem?.discount?.raw?.withoutTax || 0,
+                isSubscription: lineitem?.isSubscription,
+                itemType: lineitem?.itemType,
+                qty: lineitem?.qty,
+                price: lineitem?.price?.raw?.withoutTax,
+                tax: lineitem?.price?.raw?.tax,
+                categories: lineitem?.categoryItems?.map((category: any) => ({
+                  categoryId: category?.categoryId,
+                  categoryName: category?.categoryName,
+                  parentCategoryName: category?.parentCategoryName,
+                })),
+                img: lineitem?.img || lineitem?.image,
+                rootManufacturer: lineitem?.categoryItems?.find((category: any) => !category?.parentCategoryName)?.categoryName,
+              })) || new Array(),
+              promoCode: basket?.promotionsApplied || new Array(),
+              paidAmount: basket?.grandTotal?.raw?.withTax,
+              shippingAddress: basket?.shippingAddress,
+              billingAddress: basket?.billingAddress,
+            }),
+            promoCodes: JSON.stringify(basket?.promotionsApplied),
+            entityId: basket?.id,
+            entityName: PAGE_TYPE,
+            entityType: Basket,
+            eventType: CheckoutStarted,
+          })
+        }
+      }
+    }
+  }, [basket])
 
   useEffect(() => {
     if (basket?.lineItems?.length == 0) {

@@ -23,7 +23,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -46,6 +46,9 @@ const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -99,7 +102,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-export default function CollectionPage(props: any) {
+function CollectionPage(props: any) {
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
@@ -123,6 +126,17 @@ export default function CollectionPage(props: any) {
     loading: false,
   })
   const { isCompared } = useUI()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
+    entity: JSON.stringify({
+      id: props?.id || EmptyGuid,
+      name: props?.name || EmptyString,
+    }),
+    entityId: props?.id || EmptyGuid,
+    entityName: props?.name || EmptyString,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
+    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
+  })
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
@@ -702,3 +716,5 @@ export async function getStaticPaths() {
     fallback: 'blocking',
   }
 }
+
+export default withDataLayer(CollectionPage, PAGE_TYPES.CollectionList)

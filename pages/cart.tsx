@@ -40,6 +40,8 @@ import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import wishlistHandler from '@components/services/wishlist'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -272,6 +274,23 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       }
     }
   }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.BasketViewed, {
+    entity: JSON.stringify({
+      id: basketId,
+      grandTotal: cartItems?.grandTotal?.raw.withTax,
+      lineItems: cartItems?.lineItems,
+      promoCode: cartItems?.promotionsApplied,
+      shipCharge: cartItems?.shippingCharge?.raw?.withTax,
+      shipTax: cartItems?.shippingCharge?.raw?.tax,
+      taxPercent: cartItems?.taxPercent,
+      tax: cartItems?.grandTotal?.raw?.tax,
+    }),
+    entityName: PAGE_TYPES.Cart,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Basket,
+    eventType: EVENTS_MAP.EVENT_TYPES.BasketViewed,
+    promoCodes: cartItems.promotionsApplied,
+  })
 
   useEffect(() => {
     let splitProducts = groupItemsByDeliveryDate(cartItems?.lineItems)
@@ -988,7 +1007,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 }
 Cart.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES['Checkout']
+const PAGE_TYPE = PAGE_TYPES.Cart
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
