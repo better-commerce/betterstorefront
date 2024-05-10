@@ -2335,4 +2335,8 @@ p {
     padding: 50px 40px !important;
     margin: 0 -40px !important;
   }
+  .login-panel-my{
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
 }
