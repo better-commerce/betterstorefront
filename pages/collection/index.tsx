@@ -32,13 +32,13 @@ export default function CollectionList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
       </NextHead>
-      <main className="container w-full mx-auto">
+      <main className="container w-full mx-auto theme-account-container">
         <section aria-labelledby="products-heading" className="mt-12">
           <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
             {translate('label.collection.shopByCollectionText')}
           </h1>
           {props?.data.length > 0 && (
-            <div className="grid grid-cols-2 py-10 sm:gap-y-10 gap-y-6 sm:grid-cols-5 gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+            <div className="grid grid-cols-2 py-10 sm:gap-y-3 gap-y-3 sm:grid-cols-5 gap-x-3 lg:grid-cols-4 xl:gap-x-3">
               {props.data.map((collection: any, key: any) => (
                 <Link key={key} passHref href={`/collection/${collection.slug}`}>
                   <span key={collection.id} className="group">
