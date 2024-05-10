@@ -8,6 +8,9 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutError from '@components/Layout/LayoutError'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export async function getStaticProps({
   preview,
@@ -28,10 +31,17 @@ export async function getStaticProps({
   }
 }
 
-export default function NotFound({ deviceInfo }: any) {
+function NotFound({ deviceInfo }: any) {
   const translate = useTranslation()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.NotFound,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
+
   return (
     <>
       {!isMobile && (
@@ -97,3 +107,5 @@ export default function NotFound({ deviceInfo }: any) {
 }
 
 NotFound.Layout = LayoutError
+
+export default withDataLayer(NotFound, PAGE_TYPES.NotFound)

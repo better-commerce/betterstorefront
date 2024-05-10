@@ -51,8 +51,6 @@ function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
 
 Membership.LayoutAccount = LayoutAccount
 
-const PAGE_TYPE = PAGE_TYPES.Page
-
 export async function getServerSideProps(context: any) {
   const { locale } = context
   const data = {
@@ -90,4 +88,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(Membership), PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(withAuth(Membership), PAGE_TYPES.Membership, true, LayoutAccount)

@@ -13,6 +13,9 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
@@ -23,7 +26,7 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default function ResetPasswordPage() {
+function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [token, setToken] = useState(null)
   const translate = useTranslation()
@@ -86,6 +89,12 @@ export default function ResetPasswordPage() {
       router.push('/my-account/forgot-password')
     }
   }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.ResetPassword,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   useEffect(() => {
     if (router?.query?.token) {
@@ -163,3 +172,5 @@ export default function ResetPasswordPage() {
 }
 
 ResetPasswordPage.Layout = Layout
+
+export default withDataLayer(ResetPasswordPage, PAGE_TYPES.ResetPassword)

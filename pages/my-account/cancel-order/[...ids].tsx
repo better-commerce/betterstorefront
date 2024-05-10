@@ -27,9 +27,12 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 declare const window: any
 
-export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
+function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
@@ -97,6 +100,12 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
       setCancelLoading(false)
     }
   }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+    entityName: PAGE_TYPES.OrderCancel,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
+    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+  })
 
   useEffect(() => {
     const handleAsync = async () => {
@@ -283,3 +292,5 @@ export async function getServerSideProps(context: any) {
 }
 
 OrderCancel.LayoutAccount = LayoutAccount
+
+export default withDataLayer(OrderCancel, PAGE_TYPES.OrderCancel)

@@ -375,8 +375,6 @@ function ReferralPage() {
 
 ReferralPage.LayoutAccount = LayoutAccount
 
-const PAGE_TYPE = PAGE_TYPES.Page
-
 export async function getServerSideProps(context: any) {
   const { locale } = context
   return {
@@ -386,4 +384,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(ReferralPage), PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(withAuth(ReferralPage), PAGE_TYPES.ReferFriend, true, LayoutAccount)

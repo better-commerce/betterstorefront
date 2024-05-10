@@ -28,8 +28,11 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
-export default function ReturnOrder({
+function ReturnOrder({
   orderId = Guid.empty,
   itemId = Guid.empty,
   deviceInfo,
@@ -146,6 +149,13 @@ export default function ReturnOrder({
   const hideReturnReasons = () => {
     setShowReturnReasons(!showReturnReasons)
   }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+    entityName: PAGE_TYPES.OrderReturn,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
+    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+  })
+
   useEffect(() => {
     const handleAsync = async () => {
       const orderDetails = await handleFetchOrderDetails(orderId)
@@ -346,3 +356,5 @@ export async function getServerSideProps(context: any) {
 }
 
 ReturnOrder.LayoutAccount = LayoutAccount
+
+export default withDataLayer(ReturnOrder, PAGE_TYPES.OrderReturn)

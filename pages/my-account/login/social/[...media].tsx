@@ -22,6 +22,9 @@ import {
   SocialMediaType,
 } from '@components/utils/constants'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 interface ISocialLoginPageProps {
   readonly medium: SocialMediaType
@@ -45,6 +48,12 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
     cartItems,
     basketId,
   } = useUI()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.SocialLogin,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   useEffect(() => {
     const asyncLoginHandler = async (media: string) => {
@@ -147,4 +156,4 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 }
 
-export default SocialLoginPage
+export default withDataLayer(SocialLoginPage, PAGE_TYPES.SocialLogin)

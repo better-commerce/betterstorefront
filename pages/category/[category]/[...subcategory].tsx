@@ -26,7 +26,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
@@ -37,8 +37,10 @@ const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid')
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
-const PAGE_TYPE = PAGE_TYPES.Category
+const PAGE_TYPE = PAGE_TYPES.SubCategoryList
 declare const window: any
 
 export async function getStaticProps(context: any) {
@@ -311,6 +313,17 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
+    entity: JSON.stringify({
+      id: category?.id,
+      name: category?.name || EmptyString,
+    }),
+    entityId: category?.id || EmptyGuid,
+    entityName: PAGE_TYPE,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
+    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
+  })
 
   useEffect(() => {
     if (category?.id !== state.categoryId)

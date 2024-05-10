@@ -9,8 +9,8 @@ import { useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import EngageRecommendationCard from "@components/SectionEngagePanels/EngageRecommendationCard";
-
-const PAGE_TYPE = PAGE_TYPES.MyStore
+import useAnalytics from '@components/services/analytics/useAnalytics';
+import { EVENTS_MAP } from '@components/services/analytics/constants';
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
@@ -39,6 +39,12 @@ function ImproveRecommendations({ campaignData, featureToggle }: any) {
     return titleMap[path] || '';
   };
 
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.MyStoreImproveRecommends,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
+
   useEffect(()=>{
     changeMyAccountTab(translate('label.wishlist.myStore'))
   },[])
@@ -60,4 +66,4 @@ function ImproveRecommendations({ campaignData, featureToggle }: any) {
 }
 
 ImproveRecommendations.LayoutAccount = LayoutAccount
-export default withDataLayer(ImproveRecommendations, PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(ImproveRecommendations, PAGE_TYPES.MyStoreImproveRecommends, true, LayoutAccount)

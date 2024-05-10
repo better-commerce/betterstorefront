@@ -14,14 +14,24 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
-export default function CategoryList(props: any) {
+function CategoryPage(props: any) {
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
   const router = useRouter()
   const translate = useTranslation()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
+    entityName: PAGE_TYPE,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
+    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
+  })
+
   return (
     <>
       <NextHead>
@@ -89,7 +99,7 @@ export default function CategoryList(props: any) {
   )
 }
 
-CategoryList.Layout = Layout
+CategoryPage.Layout = Layout
 
 export async function getStaticProps({
   params,
@@ -131,3 +141,7 @@ export async function getStaticProps({
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
+
+const PAGE_TYPE = PAGE_TYPES.Category
+
+export default withDataLayer(CategoryPage, PAGE_TYPE)

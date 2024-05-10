@@ -279,8 +279,6 @@ function MyCompany({ deviceInfo }: any) {
 
 MyCompany.LayoutAccount = LayoutAccount
 
-const PAGE_TYPE = PAGE_TYPES.Page
-
 export async function getServerSideProps(context: any) {
   const { locale } = context
   return {
@@ -290,4 +288,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(MyCompany), PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(withAuth(MyCompany), PAGE_TYPES.MyCompany, true, LayoutAccount)

@@ -13,13 +13,22 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MapWithMarker from '@components/ui/Map/Marker';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer';
-const PAGE_TYPE = PAGE_TYPES.MyStore
+import useAnalytics from '@components/services/analytics/useAnalytics';
+import { EVENTS_MAP } from '@components/services/analytics/constants';
+
 interface Props {
   data: any
 }
 
-export default function StoreLocatorDetailsPage({ data }: Props) {
+function StoreLocatorDetailsPage({ data }: Props) {
   const router = useRouter()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.StoreLocatorDetail,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
+
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -144,3 +153,4 @@ export async function getStaticProps({ params, locale }: GetStaticPropsContext) 
 }
 
 StoreLocatorDetailsPage.Layout = Layout
+export default withDataLayer(StoreLocatorDetailsPage, PAGE_TYPES.StoreLocatorDetail, true)

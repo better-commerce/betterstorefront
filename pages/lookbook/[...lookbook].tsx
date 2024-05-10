@@ -41,12 +41,10 @@ function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, def
     setProducts(response?.data?.products)
   }
 
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-    pageCategory: 'Lookbook',
-    omniImg: data.mainImage,
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.Lookbook,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
   })
 
   useEffect(() => {
@@ -221,7 +219,7 @@ export async function getStaticProps({
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
-const PAGE_TYPE = PAGE_TYPES['Page']
+
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const data = await getLookbooks()
   let paths = data?.map((lookbook: any) => {
@@ -234,4 +232,4 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 }
 
 LookbookDetailPage.Layout = Layout
-export default withDataLayer(LookbookDetailPage, PAGE_TYPE)
+export default withDataLayer(LookbookDetailPage, PAGE_TYPES.LookbookList)
