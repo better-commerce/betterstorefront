@@ -69,7 +69,7 @@ function OrderDetail({ deviceInfo }: any) {
             router.push('/404')
         }
     }
-    
+
     useEffect(() => {
         const orderId = router.query?.orderId[0]
         fetchOrderDetailById(orderId)
@@ -244,149 +244,73 @@ function OrderDetail({ deviceInfo }: any) {
     return (
         <>
             {
-                !orderData
-                    ?
-                    <> <Spinner /> </>
+                !orderData ? <> <Spinner /> </>
                     : <>
                         <NextHead>
-                            <meta
-                                name="viewport"
-                                content="width=device-width, initial-scale=1, maximum-scale=1"
-                            />
+                            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
                             <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
                             <title>Order Detail : {orderData?.orderNo}</title>
-                            <meta
-                                name="title"
-                                content={`Order Detail : ${orderData?.orderNo}`}
-                            />
-                            <meta
-                                name="description"
-                                content={`Order Detail : ${orderData?.orderNo}`}
-                            />
-                            <meta
-                                name="keywords"
-                                content={`Order Detail : ${orderData?.orderNo}`}
-                            />
+                            <meta name="title" content={`Order Detail : ${orderData?.orderNo}`} />
+                            <meta name="description" content={`Order Detail : ${orderData?.orderNo}`} />
+                            <meta name="keywords" content={`Order Detail : ${orderData?.orderNo}`} />
                             <meta property="og:image" content="" />
-                            <meta
-                                property="og:title"
-                                content={`Order Detail : ${orderData?.orderNo}`}
-                                key="ogtitle"
-                            />
-                            <meta
-                                property="og:description"
-                                content={`Order Detail : ${orderData?.orderNo}`}
-                                key="ogdesc"
-                            />
+                            <meta property="og:title" content={`Order Detail : ${orderData?.orderNo}`} key="ogtitle" />
+                            <meta property="og:description" content={`Order Detail : ${orderData?.orderNo}`} key="ogdesc" />
                         </NextHead>
-                        <div className="container w-full bg-white header-space">
-                            <div className='mt-14 sm:mt-20'>
-                                <div className='max-w-4xl mx-auto'>
-                                <OrderDetailHeader
-                                details={orderData}
-                                showDetailedOrder={true}
-                            />
-
-                            <div className="w-full py-6">
-                                {orderData?.deliveryPlans?.length > 0 ? (
-                                    <OrderDeliveryPlanItems
-                                        items={orderData?.deliveryPlans}
-                                        details={orderData}
-                                        trackPackage={trackPackage}
-                                        ifCancelled={ifCancelled}
-                                        openHelpModal={openHelpModal}
-                                        setReview={setReview}
-                                    />
-                                ) : (
-                                    <>
-                                        <div className="flex items-center justify-end w-full pb-4 border-b border-gray-300 border-dashed">
-                                            <OrderStatusMapping
-                                                orderStatusDisplay={orderData?.orderStatusDisplay}
-                                                orderStatusRag={orderData?.orderStatusRag}
-                                            />
-                                        </div>
-                                        <div className="px-4 order-track sm:px-16">
-                                            <Disclosure defaultOpen>
-                                                {({ open }) => (
-                                                    <>
-                                                        {orderData?.showETA && (
-                                                            <Disclosure.Button className="flex items-center justify-between w-full py-3">
-                                                                <p className="text-sm font-medium text-black">
-                                                                    <span>
-                                                                        {translate('label.orderSummary.generalETAText')}{' '}
-                                                                        {moment(new Date(orderData?.dueDate)).format(
-                                                                            DATE_FORMAT
-                                                                        )}
-                                                                    </span>
-                                                                </p>
-                                                                <button className="border border-gray-900 rounded-full">
-                                                                    <ChevronDownIcon
-                                                                        className={`w-4 h-4 ${open && 'rotate-180 transform'
-                                                                            }`}
-                                                                    />
-                                                                </button>
-                                                            </Disclosure.Button>
-                                                        )}
-                                                        <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                                            <OrderLog
-                                                                orderLog={orderData?.orderLog}
-                                                                orderJourney={orderData?.orderJourney}
-                                                            />
-                                                        </Disclosure.Panel>
-                                                    </>
-                                                )}
-                                            </Disclosure>
-                                        </div>
-                                        {orderData?.allowedToTrack && (
-                                            <div className="w-full px-4 py-4 mb-4 border-b border-gray-300 border-dashed sm:px-16">
-                                                <div className="flex flex-col w-full">
-                                                    <span
-                                                        onClick={() => trackPackage(orderData)}
-                                                        className="font-semibold text-orange-500 cursor-pointer text-14"
-                                                    >
-                                                        {translate('label.orderDetails.trackingDetailsBtnText')} </span>
-                                                </div>
+                        <div className='w-full bg-white'>
+                            <div className=''> <OrderDetailHeader details={orderData} showDetailedOrder={true} />
+                                <div className="w-full">
+                                    {orderData?.deliveryPlans?.length > 0 ? (
+                                        <OrderDeliveryPlanItems items={orderData?.deliveryPlans} details={orderData} trackPackage={trackPackage} ifCancelled={ifCancelled} openHelpModal={openHelpModal} setReview={setReview} />
+                                    ) : (
+                                        <>
+                                            <div className="flex items-center justify-end w-full pb-2 border-b border-gray-300 border-dashed">
+                                                <OrderStatusMapping orderStatusDisplay={orderData?.orderStatusDisplay} orderStatusRag={orderData?.orderStatusRag} />
                                             </div>
-                                        )}
-                                        <OrderItems
-                                            items={orderData?.items}
-                                            details={orderData}
-                                            ifCancelled={ifCancelled}
-                                            openHelpModal={openHelpModal}
-                                            setReview={setReview}
-                                        />
-                                    </>
-                                )}
-                            </div>
-                            <OrderSummary
-                                details={orderData}
-                                subTotalAmount={subTotalAmount}
-                                openOrderHelpModal={openOrderHelpModal}
-                            />
+                                            <div className="w-full px-0 border-b border-gray-300 border-dashed order-track">
+                                                <Disclosure defaultOpen>
+                                                    {({ open }) => (
+                                                        <>
+                                                            {orderData?.showETA && (
+                                                                <Disclosure.Button className="flex items-center justify-between w-full py-3">
+                                                                    <p className="text-sm font-medium text-black">
+                                                                        <span>
+                                                                            {translate('label.orderSummary.generalETAText')}{' '}
+                                                                            {moment(new Date(orderData?.dueDate)).format(DATE_FORMAT)}
+                                                                        </span>
+                                                                    </p>
+                                                                    <button className="border border-gray-900 rounded-full">
+                                                                        <ChevronDownIcon className={`w-4 h-4 ${open && 'rotate-180 transform'}`} />
+                                                                    </button>
+                                                                </Disclosure.Button>
+                                                            )}
+                                                            <Disclosure.Panel className="px-0 pt-4 pb-2 text-sm text-gray-500">
+                                                                <OrderLog orderLog={orderData?.orderLog} orderJourney={orderData?.orderJourney} />
+                                                            </Disclosure.Panel>
+                                                        </>
+                                                    )}
+                                                </Disclosure>
+                                            </div>
+                                            {orderData?.allowedToTrack && (
+                                                <div className="w-full px-0 py-4 mb-4 border-b border-gray-300 border-dashed">
+                                                    <div className="flex flex-col w-full">
+                                                        <span
+                                                            onClick={() => trackPackage(orderData)}
+                                                            className="font-semibold text-orange-500 cursor-pointer text-14"
+                                                        >
+                                                            {translate('label.orderDetails.trackingDetailsBtnText')} </span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <OrderItems items={orderData?.items} details={orderData} ifCancelled={ifCancelled} openHelpModal={openHelpModal} setReview={setReview} />
+                                        </>
+                                    )}
                                 </div>
-                            </div>                      
+                                <OrderSummary details={orderData} subTotalAmount={subTotalAmount} openOrderHelpModal={openOrderHelpModal} />
+                            </div>
                         </div>
-
-                        <HelpModal
-                            details={orderData}
-                            isHelpOpen={isHelpOpen}
-                            closeHelpModal={closeHelpModal}
-                            isHelpStatus={isHelpStatus}
-                            chooseHelpMode={chooseHelpMode}
-                            onExchangeItem={onExchangeItem}
-                            onReturnItem={onReturnItem}
-                            onCancelItem={onCancelItem}
-                            onCancelOrder={onCancelOrder}
-                            isHelpOrderOpen={isHelpOrderOpen}
-                            closeOrderHelpModal={closeOrderHelpModal}
-                            returnRequestedItems={returnRequestedItems}
-                        />
-
-                        <OrderReviewModal
-                            isSubmitReview={isSubmitReview}
-                            setSubmitReview={setSubmitReview}
-                            isReviewdata={isReviewdata}
-                        />
+                        <HelpModal details={orderData} isHelpOpen={isHelpOpen} closeHelpModal={closeHelpModal} isHelpStatus={isHelpStatus} chooseHelpMode={chooseHelpMode} onExchangeItem={onExchangeItem} onReturnItem={onReturnItem} onCancelItem={onCancelItem} onCancelOrder={onCancelOrder} isHelpOrderOpen={isHelpOrderOpen} closeOrderHelpModal={closeOrderHelpModal} returnRequestedItems={returnRequestedItems} />
+                        <OrderReviewModal isSubmitReview={isSubmitReview} setSubmitReview={setSubmitReview} isReviewdata={isReviewdata} />
                     </>
             }
         </>
