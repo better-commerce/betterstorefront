@@ -71,25 +71,19 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                   }
                </div>
                <div className='flex items-center justify-end pb-2'>
-                  <OrderStatusMapping
-                     orderStatusDisplay={item?.orderStatusDisplay || order?.orderStatusDisplay}
-                     orderStatusRag={item?.orderStatusRag || order?.orderStatusRag}
-                  />
+                  <OrderStatusMapping orderStatusDisplay={item?.orderStatusDisplay || order?.orderStatusDisplay} orderStatusRag={item?.orderStatusRag || order?.orderStatusRag} />
                </div>
             </div>
             <div className='grid w-full grid-cols-6 gap-2 py-2 order-image-sec'>
-               {
-                  getProductItems()?.map((productItem: any, pId: number) => (
-                     <a href={`/${productItem?.slug}`} className='inline-block p-2 border border-gray-200 bg-slate-100 rounded-2xl order-image-nonslider' key={pId}>
-                        <img src={generateUri(productItem?.image, 'h=720&fm=webp') || productItem?.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
-                     </a>
-                  ))
-               }
+               {getProductItems()?.map((productItem: any, pId: number) => (
+                  <a href={`/${productItem?.slug}`} className='inline-block p-2 border border-gray-200 bg-slate-100 rounded-2xl order-image-nonslider' key={pId}>
+                     <img src={generateUri(productItem?.image, 'h=720&fm=webp') || productItem?.image || IMG_PLACEHOLDER} alt="product-image" width={40} height={72} className='object-cover object-center w-full h-full radius-xs sm:h-full' />
+                  </a>
+               ))}
             </div>
-            {item?.trackingLink && (
-               order?.allowedToTrack
-               && <div className='w-full acc-btn-sec'>
-                  <a onClick={() => trackPackage(order)} href={item?.trackingLink} target="_blank" rel="noopener noreferrer" className='inline-block px-8 py-4 text-sm font-semibold text-center text-white bg-black border link-btn'>Track Package {idx + 1}</a>
+            {item?.trackingLink && (order?.allowedToTrack &&
+               <div className='w-full mt-2 acc-btn-sec'>
+                  <a onClick={() => trackPackage(order)} href={item?.trackingLink} target="_blank" rel="noopener noreferrer" className='inline-block px-8 py-1 text-sm font-semibold text-center text-white bg-black border rounded-2xl link-btn'>Track Package {idx + 1}</a>
                </div>
             )}
          </div>
