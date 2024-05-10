@@ -110,6 +110,7 @@ export module JusPay {
 
 export module LocalStorage {
   export module Key {
+    export const USER = 'user'
     export const ORDER_RESPONSE = 'orderResponse'
     export const ORDER_PAYMENT = 'orderModelPayment'
     export const CONVERTED_ORDER = 'convertedOrder'
