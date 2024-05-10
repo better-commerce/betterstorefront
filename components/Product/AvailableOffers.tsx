@@ -115,7 +115,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                             <span>
                               {saving.additionalInfo2 == 'False' ||
                               saving.additionalInfo2 == 'false' ? (
-                                <p className="text-xs font-medium text-center text-black break-word-text">
+                                <p className="text-xs font-medium text-black break-word-text">
                                   {saving?.code}
                                 </p>
                               ) : (
