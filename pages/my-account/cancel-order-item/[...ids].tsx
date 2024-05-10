@@ -132,8 +132,8 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         const itemsDatasNew =
           orderDetails?.order?.items?.length > 0
             ? orderDetails?.order?.items?.filter((x: any) =>
-                matchStrings(x?.productId, itemId, true)
-              )
+              matchStrings(x?.productId, itemId, true)
+            )
             : []
         setItemDatas(itemsDatasNew)
         setItemData(
@@ -161,16 +161,16 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
-                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
+                <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-semibold leading-none text-gray-900 uppercase flex items-center">
-                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
+                <h4 className="flex items-center mr-2 text-xl font-semibold leading-none text-gray-900 uppercase">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                 </h4>
               </Link>
@@ -181,14 +181,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                       <li className="px-0 pb-2 my-4">
                         <div className="flex gap-3 py-6 sm:gap-6 max-w-fit">
                           <div className="flex-shrink-0">
-                            <Image
-                              width={72}
-                              height={128}
-                              layout="fixed"
-                              src={itemData?.image}
-                              alt="image"
-                              className="basket-image"
-                            />
+                            <Image width={72} height={128} layout="fixed" src={itemData?.image} alt="image" className="basket-image" />
                           </div>
                           <div className="flex flex-col flex-1">
                             <div>
@@ -205,9 +198,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                                   </Link>
                                 </h3>
                                 <p className="mt-2 text-xs font-semibold text-secondary-full-opacity">
-                                  {isIncludeVAT
-                                    ? itemData?.price?.formatted?.withTax
-                                    : itemData?.price?.formatted?.withoutTax}
+                                  {isIncludeVAT ? itemData?.price?.formatted?.withTax : itemData?.price?.formatted?.withoutTax}
                                 </p>
                                 <div className="flex mt-3">
                                   <div className="w-24">
@@ -236,23 +227,16 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                           </div>
                           <div className="py-2">
                             <div className="flex flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
-                              <label className="text-xs text-primary mt-2 mr-2">
-                               {translate('common.label.qtyText')}{' '}
+                              <label className="mt-2 mr-2 text-xs text-primary">
+                                {translate('common.label.qtyText')}{' '}
                               </label>
-                              <select
-                                className="text-xs bg-white sm:w-22 text-primary"
-                                required
-                                value={value}
-                                onChange={handleChange}
-                              >
+                              <select className="text-xs bg-white sm:w-22 text-primary" required value={value} onChange={handleChange} >
                                 <option value="0">Select</option>
-                                {Array.from(Array(itemData?.qty).keys())
-                                  ?.map((x: number) => x + 1)
-                                  ?.map((qty: any, idx: number) => (
-                                    <option key={idx} value={qty}>
-                                      {qty}
-                                    </option>
-                                  ))}
+                                {Array.from(Array(itemData?.qty).keys())?.map((x: number) => x + 1)?.map((qty: any, idx: number) => (
+                                  <option key={idx} value={qty}>
+                                    {qty}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>

@@ -185,12 +185,12 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
               <meta property="og:description" content={myAccountActiveTab} key="ogdesc" />
             </NextHead>
             <MembershipBanner user={user} />
-            <section className="container w-full mt-4 bar header-space sm:my-4 theme-account-container">              
-              <div className='grid w-full grid-cols-12 gap-6 mx-auto sm:gap-10'>
-                <div className='sticky top-0 col-span-3'>
+            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container">              
+              <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
+                <div className='sticky top-0 pt-6 border-r sm:col-span-3 border-slate-200'>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
-                <div className='col-span-9'>
+                <div className='pt-0 sm:col-span-9 sm:pt-8'>
                   {children}
                 </div>
               </div>
