@@ -95,7 +95,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const translate = useTranslation()
-  const { isGuestUser, setIsGuestUser, user, basketId, setAlert, setUser } = useUI()
+  const { isGuestUser, setIsGuestUser, user, basketId, setAlert, setUser, deleteUser } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { associateCart } = cartHandler()
@@ -227,6 +227,7 @@ const router = useRouter()
 
     // If registration is SUCCESS
     if (userCreated) {
+      deleteUser({ isSilentLogout: true })
       eventDispatcher(CustomerCreated, {
         entity: JSON.stringify({
           id: recordId,
