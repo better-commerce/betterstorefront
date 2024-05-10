@@ -2294,10 +2294,12 @@ p {
   .lg\:grid-cols-5.product-card-4{
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
-  .sm\:col-span-2.filter-panel-3 {
+  .sm\:col-span-2.filter-panel-3,
+  .lg\:col-span-2.filter-panel-3 {
       grid-column: span 3 / span 3 !important;
   }
-    .lg\:col-span-10.product-grid-9 {
+    .lg\:col-span-10.product-grid-9,
+    .sm\:col-span-10.product-grid-9 {
       grid-column: span 9 / span 9 !important;
   }
   .product-collections .nc-SectionSliderProductCard{
