@@ -82,12 +82,12 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                              <a
                                                 href="javascript:void(0);"
                                                 onClick={() => onReturnItem("Return")}
-                                                className='block w-full px-4 py-2 mb-2 font-bold text-center text-white uppercase bg-gray-900 border hover:opacity-90 dark:hover:bg-accent-8 btn-basic-property'>
+                                                className='block w-full px-4 py-2 mb-2 font-bold text-center text-white uppercase bg-gray-900 border rounded-full hover:opacity-90 dark:hover:bg-accent-8 btn-basic-property'>
                                                 {translate('label.help.returnItemText')} </a>
                                           )}
                                           {
                                              details?.allowedToCancel && details?.paymentStatus != 0 &&
-                                                <a href="javascript:void(0);" className='block w-full px-4 py-2 mb-2 font-bold text-center text-white uppercase bg-gray-900 border hover:opacity-90 dark:hover:bg-accent-8 btn-basic-property'
+                                                <a href="javascript:void(0);" className='block w-full px-4 py-2 mb-2 font-bold text-center text-white uppercase bg-gray-900 border rounded-full hover:opacity-90 dark:hover:bg-accent-8 btn-basic-property'
                                                    onClick={() => onCancelItem("Cancel")}>
                                                    {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                                                 </a>
@@ -146,7 +146,7 @@ const HelpModal = ({ details, isHelpOpen, closeHelpModal, isHelpStatus, chooseHe
                                        </div>
                                        <div className='w-full py-4'>                                          
                                           {details?.allowedToCancel && details?.paymentStatus != 0 &&
-                                                <a href="javascript:void(0);" className='w-full mb-2 border dark:hover:bg-accent-8 btn-primary btn'
+                                                <a href="javascript:void(0);" className='w-full mb-2 border rounded-full dark:hover:bg-accent-8 btn-primary btn'
                                                    onClick={() => onCancelOrder("Cancel")}>
                                                    {translate('label.order.cancelOrderText')}
                                                 </a>
