@@ -84,10 +84,7 @@ function BrandsPage({ brands }: any) {
   return (
     <>
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
         <title>{translate('common.label.brandsText')}</title>
         <meta name="title" content={translate('common.label.brandsText')} />
@@ -99,12 +96,12 @@ function BrandsPage({ brands }: any) {
       </NextHead>
       <div className="bg-white">
         {/* Mobile menu */}
-        <main className="container pb-24 mx-auto overflow-hidden">
-          <div className="px-4 py-6 text-center sm:py-16 sm:px-6 lg:px-6">
+        <main className="container pb-24 mx-auto overflow-hidden theme-account-container">
+          <div className="py-6 text-center sm:py-16">
             <h1 className="text-2xl font-semibold text-gray-900 sm:text-5xl">
               {translate('common.label.brandsText')}
             </h1>
-            <div className="flex flex-wrap items-center justify-center w-full py-5 mx-auto sm:w-4/5">
+            <div className="flex flex-wrap items-center justify-center w-full py-5">
               {ALPHABET.split('').map((letter: any, key: number) => {
                 const brandExists = !!normalizedBrands.find((brand: any) => brand.title.toUpperCase() === letter.toUpperCase())
                 if (brandExists) {
@@ -124,7 +121,7 @@ function BrandsPage({ brands }: any) {
               })}
             </div>
             <div className="flex items-center justify-center w-full py-5">
-              <div className="flex flex-row w-1/3 px-4 py-2 border border-gray-300 rounded-md shadow-sm min-w-searchbar ">
+              <div className="flex flex-row w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm sm:w-1/3 min-w-searchbar ">
                 <label className="hidden" htmlFor={'search-bar'}>
                   {translate('label.search.searchText')}
                 </label>
@@ -135,7 +132,7 @@ function BrandsPage({ brands }: any) {
               </div>
             </div>
           </div>
-          <div className='grid grid-cols-1 gap-10 mx-auto sm:grid-cols-3 sm:w-4/5'>
+          <div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
             {normalizedBrands.map((brand: any, idx: number) => (
               <div key={`brands-${idx}`} className="flex flex-col mb-6 sm:mb-6">
                 <h2 id={brand.title.toUpperCase()} className="pb-3 mb-3 text-2xl font-semibold text-gray-900 border-b-2 sm:text-5xl border-sky-700">

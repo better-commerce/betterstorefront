@@ -106,7 +106,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                       <div className="flex">
                         <BankOfferIcon />
                         <div className="pl-2">
-                          <p className="font-semibold text-md">{translate('label.basket.bankOffersText')}</p>
+                          <p className="font-semibold text-md">{translate('label.basket.moreOffersText')}</p>
 
                           <p className="font-semibold text-left text-black uppercase font-10 break-word-text">
                             {saving.name}
@@ -115,7 +115,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                             <span>
                               {saving.additionalInfo2 == 'False' ||
                               saving.additionalInfo2 == 'false' ? (
-                                <p className="text-xs font-medium text-center text-black break-word-text">
+                                <p className="text-xs font-medium text-black break-word-text">
                                   {saving?.code}
                                 </p>
                               ) : (

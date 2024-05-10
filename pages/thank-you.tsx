@@ -402,10 +402,7 @@ export default function OrderConfirmation({ config }: any) {
 
   return (
     <>
-      <div
-        ref={bodyStartScrCntrRef}
-        className={`${ELEM_ATTR}body-start-script-cntr-pc`}
-      ></div>
+      <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr-pc`} ></div>
       <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
@@ -429,22 +426,9 @@ export default function OrderConfirmation({ config }: any) {
               <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
               {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
                 <>
-                  <div
-                    key={product.id}
-                    className="flex py-10 space-x-6 border-b border-gray-200"
-                  >
+                  <div key={product.id} className="flex py-10 space-x-6 border-b border-gray-200" >
                     <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                      <img
-                        style={css}
-                        src={
-                          generateUri(product.image, 'h=200&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        width={200}
-                        height={200}
-                        alt={product.name || 'thank you'}
-                        className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                      />
+                      <img style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
                     </div>
                     <div className="flex flex-col flex-auto">
                       <div>
@@ -471,7 +455,7 @@ export default function OrderConfirmation({ config }: any) {
                               {translate('common.label.priceText')}
                             </dt>
                             <dd className="ml-2 text-gray-700">
-                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
+                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
                             </dd>
                           </div>
                         </dl>
@@ -482,7 +466,6 @@ export default function OrderConfirmation({ config }: any) {
               )) : (
                 <SplitDeliveryOrderItems order={order} />
               )}
-
               <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
                 <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
 
@@ -541,52 +524,44 @@ export default function OrderConfirmation({ config }: any) {
                     </dd>
                   </div>
                 </dl>
-                {isNextorderPromo &&
-                  nextOrderPromo?.firstOrderSetting &&
-                  !isFirstOrderValid && (
-                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
-                      <p className="">
-                        {translate('label.thankyou.congratilationDiscountText')}{' '}
-                        <span className="font-bold text-indigo-600">
-                          {nextOrderPromo?.nextOrderPromoName}
-                        </span>
-                      </p>
-                      <p>
-                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
-                          days: nextOrderPromo?.nextOrderPromoValidity,
-                        })}
-                      </p>
-                    </div>
-                  )}
-                {isNextorderPromo &&
-                  nextOrderPromo?.everyOrderSetting &&
-                  !isFirstOrderValid && (
-                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
-                      <p className="">
-                        {translate('label.thankyou.congratilationDiscountText')}{' '}
-                        <span className="font-bold text-indigo-600">
-                          {nextOrderPromo?.nextOrderPromoName}
-                        </span>
-                      </p>
-                      <p>
-                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
-                          days: nextOrderPromo?.nextOrderPromoValidity,
-                        })}
-                      </p>
-                    </div>
-                  )}
+                {isNextorderPromo && nextOrderPromo?.firstOrderSetting && !isFirstOrderValid && (
+                  <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
+                    <p className="">
+                      {translate('label.thankyou.congratilationDiscountText')}{' '}
+                      <span className="font-bold text-indigo-600">
+                        {nextOrderPromo?.nextOrderPromoName}
+                      </span>
+                    </p>
+                    <p>
+                      {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
+                        days: nextOrderPromo?.nextOrderPromoValidity,
+                      })}
+                    </p>
+                  </div>
+                )}
+                {isNextorderPromo && nextOrderPromo?.everyOrderSetting && !isFirstOrderValid && (
+                  <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
+                    <p className="">
+                      {translate('label.thankyou.congratilationDiscountText')}{' '}
+                      <span className="font-bold text-indigo-600">
+                        {nextOrderPromo?.nextOrderPromoName}
+                      </span>
+                    </p>
+                    <p>
+                      {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
+                        days: nextOrderPromo?.nextOrderPromoValidity,
+                      })}
+                    </p>
+                  </div>
+                )}
                 <h3 className="sr-only">{translate('label.thankyou.summaryText')}</h3>
                 <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
-                      {isIncludeVAT
-                        ? translate('label.orderSummary.subTotalVATIncText')
-                        : translate('label.orderSummary.subTotalVATExText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="text-gray-700">
-                      {isIncludeVAT
-                        ? order?.subTotal?.formatted?.withTax
-                        : order?.subTotal?.formatted?.withoutTax}
+                      {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
                   <div className="flex justify-between">
@@ -594,25 +569,23 @@ export default function OrderConfirmation({ config }: any) {
                       {translate('label.orderSummary.shippingText')}
                     </dt>
                     <dd className="text-gray-700">
-                      {isIncludeVAT
-                        ? order?.shippingCharge.formatted?.withTax
-                        : order?.shippingCharge.formatted?.withoutTax}
+                      {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax}
                     </dd>
                   </div>
-                  <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
-                    <dd className="text-gray-700">
-                      {order?.grandTotal.formatted?.tax}
-                    </dd>
-                  </div>
+                  {order?.grandTotal.raw?.tax > 0 &&
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
+                      <dd className="text-gray-700">
+                        {order?.grandTotal.formatted?.tax}
+                      </dd>
+                    </div>
+                  }
                   <div className="flex justify-between">
                     <dt className="text-lg font-bold text-gray-900">
                       {translate('label.orderSummary.totalText')}
                     </dt>
                     <dd className="text-lg font-bold text-gray-900">
-                      {isIncludeVAT
-                        ? order?.grandTotal?.formatted?.withTax
-                        : order?.grandTotal?.formatted?.withTax}
+                      {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax}
                     </dd>
                   </div>
                 </dl>
@@ -709,15 +682,7 @@ export default function OrderConfirmation({ config }: any) {
                                   )
                                 }
                               )}
-                              {/* <span className="w-5 h-5 mx-2 my-2 text-black">
-                                <ChatBubbleLeftEllipsisIcon />
-                              </span>
-                              <span className="w-5 h-5 mx-2 my-2 text-black">
-                                <EnvelopeIcon />
-                              </span>
-                              <span className="w-5 h-5 mx-2 my-2 text-black">
-                                <LinkIcon />
-                              </span> */}
+
                             </div>
                             <p className="px-5 text-center">
                               {translate('label.checkout.enterReferalfriendText')}

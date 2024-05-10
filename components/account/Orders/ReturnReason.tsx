@@ -4,7 +4,7 @@ import React, { Fragment, useState } from 'react'
 // Package Imports
 import Image from 'next/image'
 import { Dialog, Transition } from '@headlessui/react'
-import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CheckIcon } from '@heroicons/react/24/outline'
 
 // Other Imports
@@ -80,8 +80,8 @@ const ReturnReason = ({
       <div className="w-full">
         <div className="mx-auto cancel-continer">
           <Link href="/my-account/orders" className="mobile-view">
-            <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
-              <i className="sprite-icon sprite-left-arrow mr-2"></i> {translate('label.help.returnItemText')}
+            <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
+               <ArrowLeftIcon className='inline-block w-4 h-4 mr-2 text-black' /> {translate('label.help.returnItemText')}
             </h4>
           </Link>
           <div className="w-full py-4">
@@ -128,7 +128,7 @@ const ReturnReason = ({
                 {translate('label.exchangeReason.picturesUploadLimitText')}s{' '}
               </h4>
               {/* <p>(Images exceeding {formatBytes(PDP_REVIEW_IMAGE_SIZE_IN_BYTES)} will be ignored)</p> */}
-              <p className="text-sm mb-1 text-gray-700">
+              <p className="mb-1 text-sm text-gray-700">
                 {translate('label.exchangeReason.identifyProblemText')} </p>
               <p className="text-sm text-gray-700">
                 <InformationCircleIcon className="inline-block w-4 h-4 mb-1" />{' '}
@@ -166,7 +166,7 @@ const ReturnReason = ({
                 ))}
             </div>
             <div className="py-0">
-              <p className="relative info-text py-4 text-gray-600">
+              <p className="relative py-4 text-gray-600 info-text">
                 <InformationCircleIcon className="inline-block w-4 h-4 mb-1" />
                 <span className="text-sm font-normal">
                   {' '}
