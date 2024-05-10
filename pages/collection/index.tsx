@@ -3,7 +3,7 @@ import getCollections from '@framework/api/content/getCollections'
 import Layout from '@components/Layout/Layout'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -14,9 +14,24 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-export default function CollectionList(props: any) {
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+function CollectionList(props: any) {
   const router =useRouter();
   const translate = useTranslation()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
+    entity: JSON.stringify({
+      id: props?.id || EmptyGuid,
+      name: props?.name || EmptyString,
+    }),
+    entityId: props?.id || EmptyGuid,
+    entityName: props?.name || EmptyString,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
+    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
+  })
+
   return (
     <>
       <NextHead>
@@ -123,3 +138,5 @@ export async function getStaticProps({
     }
   }
 }
+
+export default withDataLayer(CollectionList, PAGE_TYPES.Collection)

@@ -14,6 +14,9 @@ import { Cookie } from '@framework/utils/constants'
 //import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import Router from 'next/router'
 import { SITE_NAME } from '@components/utils/constants'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 declare const window: any
 
@@ -130,6 +133,12 @@ function PasswordProtectionPage({ config }: any) {
     })
   }, [configSettings])
 
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PasswordProtection, {
+    entityName: PAGE_TYPES.PasswordProtection,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PasswordProtection,
+  })
+
   useEffect(() => {
     setPasswordProtectionConfig()
   }, [configSettings])
@@ -193,4 +202,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default PasswordProtectionPage
+export default withDataLayer(PasswordProtectionPage, PAGE_TYPES.PasswordProtection, false)

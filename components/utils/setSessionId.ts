@@ -48,11 +48,11 @@ const setSessionIdCookie = (isCalledByTimeout: boolean = false) => {
   }
 }
 
-export const setGeoDataCookie = async (geoDataInfo: any) => {
+export const setGeoDataCookie: any = async (geoDataInfo: any) => {
   if (!geoDataInfo) {
     const geoResult: any = await geoData(EmptyString)
-    setGeoDataCookie(geoResult)
-    return
+    if (!geoResult) return geoDataInfo
+    return setGeoDataCookie(geoResult)
   }
   if (!Cookies.get(Cookie.Key.GEO_ENDPOINT_DATA_CACHED) || geoDataInfo) {
     Cookies.set(Cookie.Key.GEO_ENDPOINT_DATA_CACHED, JSON.stringify(geoDataInfo), {

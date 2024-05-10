@@ -11,6 +11,8 @@ import { decrypt } from '@framework/utils/cipher'
 import { matchStrings } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 function LoginPage({ appConfig, pluginConfig = [] }: any) {
   const router = useRouter()
   const translate = useTranslation()
@@ -32,6 +34,12 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
   }
 
   const { isGuestUser, user } = useUI()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.Login,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   if (!isGuestUser && user.userId) {
     Router.push('/')
@@ -58,8 +66,7 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
 
 LoginPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(LoginPage, PAGE_TYPE)
+export default withDataLayer(LoginPage, PAGE_TYPES.Login)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context

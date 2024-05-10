@@ -33,6 +33,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetServerSideProps } from 'next'
 import { matchStrings } from '@framework/utils/parse-util'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 function OrderDetail({ deviceInfo }: any) {
     const router: any = useRouter();
@@ -70,6 +72,12 @@ function OrderDetail({ deviceInfo }: any) {
         }
     }
 
+    useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+        entityName: PAGE_TYPES.OrderDetail,
+        entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+        eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+    })
+    
     useEffect(() => {
         const orderId = router.query?.orderId[0]
         fetchOrderDetailById(orderId)
@@ -330,5 +338,5 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 }
 
 OrderDetail.LayoutAccount = LayoutAccount
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(withAuth(OrderDetail), PAGE_TYPE, true, LayoutAccount)
+
+export default withDataLayer(withAuth(OrderDetail), PAGE_TYPES.OrderDetail, true, LayoutAccount)

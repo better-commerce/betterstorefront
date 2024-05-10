@@ -21,7 +21,9 @@ import { removeQueryString } from '@commerce/utils/uri-util';
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-const PAGE_TYPE = PAGE_TYPES.MyStore
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
 const DEBOUNCE_TIMER = 300
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
@@ -51,6 +53,12 @@ function StoreLocatorPage({ deviceInfo }: any) {
   const searchPincodeRef = useRef(null)
   const [map, setMap]: any = useState(null)
   const { isMobile } = deviceInfo
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.StoreLocator,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   useEffect(() => {
     getAllStores()
@@ -333,4 +341,4 @@ function StoreLocatorPage({ deviceInfo }: any) {
 }
 
 StoreLocatorPage.LayoutAccount = Layout
-export default withDataLayer(StoreLocatorPage, PAGE_TYPE, true)
+export default withDataLayer(StoreLocatorPage, PAGE_TYPES.StoreLocator, true)
