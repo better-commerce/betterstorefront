@@ -529,7 +529,7 @@ function CollectionPage(props: any) {
                 ) : (
                   <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
-                <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10' : 'sm:col-span-9'}`}>
+                <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
                   {isMobile ? null : (
                     <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   )}
