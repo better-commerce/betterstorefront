@@ -2331,4 +2331,8 @@ p {
     .lg\:col-span-10.product-grid-9 {
       grid-column: span 9 / span 9 !important;
   }
+  .product-collections .nc-SectionSliderProductCard{
+    padding: 50px 40px !important;
+    margin: 0 -40px !important;
+  }
 }
