@@ -31,6 +31,8 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
 function ReturnOrder({
   orderId = Guid.empty,
@@ -164,8 +166,8 @@ function ReturnOrder({
         setItemData(
           orderDetails?.order?.items?.length > 0
             ? orderDetails?.order?.items?.find((x: any) =>
-                matchStrings(x?.productId, itemId, true)
-              )
+              matchStrings(x?.productId, itemId, true)
+            )
             : []
         )
       }
@@ -194,17 +196,17 @@ function ReturnOrder({
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
-                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>
+                <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />
                   {translate('label.help.returnItemText')}
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-semibold leading-none text-gray-900 uppercase flex items-center">
-                 <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>
-                 {translate('label.help.returnItemText')}
+                <h4 className="flex items-center mr-2 text-xl font-semibold leading-none text-gray-900 uppercase">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />
+                  {translate('label.help.returnItemText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -214,11 +216,10 @@ function ReturnOrder({
                       <li className="px-0 pb-2 my-4">
                         <div className="flex gap-3 py-6 sm:gap-6 max-w-fit">
                           <div className="flex-shrink-0">
-                            <Image
+                            <img
                               width={100}
-                              height={228}
-                              layout="fixed"
-                              src={itemData?.image}
+                              height={120}
+                              src={generateUri(itemData?.image, 'h=120&fm=webp') || IMG_PLACEHOLDER}
                               alt="image"
                               className="basket-image"
                             />
@@ -269,7 +270,7 @@ function ReturnOrder({
                           </div>
                           <div className="py-2">
                             <div className="flex flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
-                              <label className="text-xs text-primary mt-2 mr-2">
+                              <label className="mt-2 mr-2 text-xs text-primary">
                                 {translate('common.label.qtyText')}{' '}
                               </label>
                               <select
