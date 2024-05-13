@@ -96,3 +96,10 @@ export enum DeviceType {
   TABLET = 5,
   MOBILE = 6,
 }
+
+export module UserAuthType {
+  export const DEFAULT = 0
+  export const PASSWORD = 1
+  export const OTP = 2
+  export const LOGIN_TOKEN = 3
+}
