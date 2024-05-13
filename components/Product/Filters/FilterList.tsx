@@ -59,6 +59,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
   let bw = '20px'
   let mr = '6px'
   let bg_Color = '#ffffff'
+  let border_Color = '#cccccc'
   if (sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green') {
     bw = '40px'
     mr = '0px'
@@ -66,16 +67,17 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
   if (sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME == 'green') {
     bw = '20px'
     mr = '6px'
-    bg_Color="#EEEEEE"
+    bg_Color = "#EEEEEE"
+    border_Color = '#EEEEEE'
   }
 
   const checkboxBgColor = bgColor(option) || 'transparent'
   return (
-    <div key={`option-right-value-${option.value}-${optionIdx}`} className={`flex items-center pt-4 ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'flex-col' : ''}`} >
-      <span>
-        <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
-      </span>
+    <div key={`option-right-value-${option.value}-${optionIdx}`} className={`flex items-center pt-4 ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'flex-col' : sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'justify-between' : ''}`} >
       <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className={`relative ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-white ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'flex flex-col-reverse gap-1 justify-center items-center align-middle' : ''}`} >
+        <span>
+          <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
+        </span>
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
@@ -120,7 +122,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
               width: bw,
               borderRadius: '6px',
               background: bg_Color,
-              border: '1px solid #eeeeee',
+              border: `1px solid ${border_Color}`,
               position: 'relative',
               marginRight: '6px',
             }}
@@ -130,6 +132,11 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
       {sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME != 'green' &&
         <span className="px-1 text-xs font-semibold text-black dark:text-white">
           ({option.count})
+        </span>
+      }
+      {sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME === 'green' &&
+        <span className="justify-end float-right pl-1 pr-2 text-sm font-semibold text-right text-slate-400 dark:text-white">
+          {option.count}
         </span>
       }
     </div>
@@ -170,7 +177,7 @@ export default function FilterList({
 }: any) {
   const [filterItems, setFilterItems] = useState(items)
 
-  useEffect(()=>{setFilterItems(items)},[items?.length])
+  useEffect(() => { setFilterItems(items) }, [items?.length])
 
   const handleSearch = (value: string) => {
     const itemsClone = [...items]
