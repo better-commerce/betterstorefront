@@ -2,12 +2,13 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import Layout from '@components/Layout/Layout'
-import { PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { notFoundRedirect } from '@framework/utils/app-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Company
@@ -57,6 +58,8 @@ function CompanyPages({ slug, pageContents, deviceInfo, config, hostName }: any)
 
 export async function getServerSideProps(context: any) {
   const slug = context.query.slug
+  const { locale } = context;
+
   const { result: pageContents } = await fetcher({
     url: `${PAGE_PREVIEW_CONTENT_ENDPOINT}`,
     method: 'get',
@@ -75,6 +78,14 @@ export async function getServerSideProps(context: any) {
   if (pageContents?.slug === 'contact-us') {
     return notFoundRedirect();
   }
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      slug: slug,
+      pageContents: pageContents || {},
+    },
+  };
 
   return {
     props: {
