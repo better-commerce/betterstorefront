@@ -17,7 +17,7 @@ const OrderLog = ({ orderLog, orderJourney, deliveryPlanId }: any) => {
       return (
          <div className={`w-full order-track-step ${cssClass}`}>
             <div className="order-track-status">
-               <span className="order-track-status-dot !mt-2">
+               <span className="order-track-status-dot">
                   <span className='leading-none check-s-icon'>
                      {cssClass === 'cancelled' ? <XMarkIcon className="inline-block w-4 h-4 text-white" /> : <CheckIcon className="inline-block w-4 h-4 text-white" />}
                   </span>
@@ -25,10 +25,10 @@ const OrderLog = ({ orderLog, orderJourney, deliveryPlanId }: any) => {
                <span className="order-track-status-line"></span>
             </div>
             <div className="order-track-text">
-               <p className="order-track-text-stat text-black font-semibold">
+               <p className="font-semibold text-black order-track-text-stat">
                   <label>{label}</label>
                </p>
-               <p className="text-black order-track-text-stat font-normal">
+               <p className="font-normal text-black order-track-text-stat">
                   {timestamp != "0001-01-01T00:00:00" ? moment(utcToLocalDate(new Date(timestamp))).format(DATE_TIME_FORMAT) : "-"}                 
                </p>
             </div>

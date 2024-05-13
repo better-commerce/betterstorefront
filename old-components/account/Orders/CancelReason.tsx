@@ -34,7 +34,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
               hideCancellationReasons()
             }}>
               <h4 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 dark:text-black">
-                <i className="sprite-icon sprite-left-arrow mr-2"></i> {translate('label.cancelReason.cancelReasonHeadingText')}
+                <i className="mr-2 sprite-icon sprite-left-arrow"></i> {translate('label.cancelReason.cancelReasonHeadingText')}
               </h4>
           </a>
           <div className='w-full py-4'>
@@ -78,7 +78,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                   </div>
                   <div className='py-0'>
                     <p
-                      className='relative info-text py-4 text-gray-600'>
+                      className='relative py-4 text-gray-600 info-text'>
                       <InformationCircleIcon className='inline-block w-4 h-4 mb-1' />
                       <span className='text-sm font-normal dark:text-black'>
                         {translate('label.orderDetails.orderRefundInfo')}
@@ -148,11 +148,11 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                         <div className='w-full'>
                           <p className='text-sm text-black'>{translate('label.cancelReason.cancelConfirmationText')} {cancelTitle} {translate('common.label.questionMark')}</p>
                         </div>
-                        <div className='w-full py-4'>
+                        <div className='flex justify-between w-full mt-4'>
                           <Button
                             variant='slim'
                             onClick={closeModal}
-                            className='mb-3 !py-3 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
+                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
                           >
                            {translate('common.label.donotCancelText')}
                           </Button>
@@ -160,8 +160,8 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                             variant='slim'
                             onClick={async () => await onItemCancellation(reason)}
                             className={cn('!font-bold', {
-                              '!py-3': !cancelLoadingState,
-                              '!py-4': cancelLoadingState,
+                              '!py-2': !cancelLoadingState,
+                              '!py-3': cancelLoadingState,
                             })}
                             disabled={cancelLoadingState}
                           >

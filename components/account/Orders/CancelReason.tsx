@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 // Package Imports
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon, InformationCircleIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { Button, LoadingDots } from '@components/ui';
 import Spinner from '@components/ui/Spinner';
@@ -34,7 +34,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
               hideCancellationReasons()
             }}>
               <h4 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 dark:text-black">
-                 <ArrowLeftIcon className='inline-block w-4 h-4 mr-2 text-black' /> {translate('label.cancelReason.cancelReasonHeadingText')}
+                <i className="mr-2 sprite-icon sprite-left-arrow"></i> {translate('label.cancelReason.cancelReasonHeadingText')}
               </h4>
           </a>
           <div className='w-full py-4'>
@@ -148,11 +148,11 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                         <div className='w-full'>
                           <p className='text-sm text-black'>{translate('label.cancelReason.cancelConfirmationText')} {cancelTitle} {translate('common.label.questionMark')}</p>
                         </div>
-                        <div className='w-full py-4'>
+                        <div className='flex justify-between w-full mt-4'>
                           <Button
                             variant='slim'
                             onClick={closeModal}
-                            className='mb-3 !py-3 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
+                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
                           >
                            {translate('common.label.donotCancelText')}
                           </Button>
@@ -160,8 +160,8 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                             variant='slim'
                             onClick={async () => await onItemCancellation(reason)}
                             className={cn('!font-bold', {
-                              '!py-3': !cancelLoadingState,
-                              '!py-4': cancelLoadingState,
+                              '!py-2': !cancelLoadingState,
+                              '!py-3': cancelLoadingState,
                             })}
                             disabled={cancelLoadingState}
                           >
