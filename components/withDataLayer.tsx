@@ -33,6 +33,7 @@ export const PAGE_TYPES = {
   MyCompany: 'my-company',
   ReferFriend: 'refer-friend',
   Wishlist: 'wishlist',
+  Company: 'Company',
   BrandList: 'brand-list',
   CategoryList: 'category-list',
   SubCategoryList: 'sub-category-list',
