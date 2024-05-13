@@ -73,34 +73,34 @@ export default function MyDetails() {
   },[])
 
   return (
-    <main className="space-y-10 sm:space-y-12">
+    <main className="pb-6 space-y-10 sm:space-y-12 sm:pb-10">
       <div className=''>
-        <h2 className="text-2xl sm:text-3xl font-semibold dark:text-white">
+        <h2 className="text-2xl font-semibold sm:text-3xl dark:text-white">
           Account infomation
         </h2>
-        <p className="mt-2 text-sm text-black font-normal dark:text-white">
+        <p className="mt-2 text-sm font-normal text-black dark:text-white">
           {translate('label.myAccount.editYourDetailsText')}
         </p>
       </div>
       <div className="mx-2">
         <div className="max-w-4xl lg:mx-12 xs:ml-6">
-          <div className="lg:px-0 sm:px-0 pt-5">
+          <div className="pt-5 lg:px-0 sm:px-0">
           </div>
         </div>
         <div className='flex flex-col md:flex-row'>
-          <div className="flex-shrink-0 flex items-start">
+          <div className="flex items-start flex-shrink-0">
             {/* AVATAR */}
-            <div className="relative border rounded-full overflow-hidden flex">
+            <div className="relative flex overflow-hidden border rounded-full">
               <img
                 src="/assets/user-avatar.png"
                 alt="avatar"
                 width={128}
                 height={128}
-                className="w-32 h-32 rounded-full object-cover z-0"
+                className="z-0 object-cover w-32 h-32 rounded-full"
               />
             </div>
           </div>
-          <div className='flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6'>
+          <div className='flex-grow max-w-3xl mt-10 space-y-6 md:mt-0 md:pl-16'>
             <Formik
               enableReinitialize={true}
               validationSchema={schema}
@@ -117,12 +117,12 @@ export default function MyDetails() {
                   isSubmitting,
                 }: any = context
                 return (
-                  <Form className="font-normal w-full flex-grow mt-10 md:mt-0 max-w-3xl space-y-6">
+                  <Form className="flex-grow w-full max-w-3xl mt-10 space-y-6 font-normal md:mt-0">
                     {formConfig?.map((formItem: any, idx: number) => {
                       return (
                         formItem.type !== 'singleSelectButtonGroup' && (
                           <div key={`${formItem.label}_${idx}`}>
-                            <label className="nc-Label text-base font-medium text-neutral-900 dark:text-neutral-200 ">
+                            <label className="text-base font-medium nc-Label text-neutral-900 dark:text-neutral-200 ">
                               {formItem.label}
                             </label>
                             <div className="mt-1.5 flex icon-input-form">
@@ -143,7 +143,7 @@ export default function MyDetails() {
                               />
 
                               {errors[formItem.name] && touched[formItem.name] && (
-                                <div className="text-red-400 text-xs mb-2">
+                                <div className="mb-2 text-xs text-red-400">
                                   {errors[formItem.name]}
                                 </div>
                               )}
@@ -165,7 +165,7 @@ export default function MyDetails() {
                         {<FormField context={context} item={item} />}
                       </div>
                     ))}
-                    <div className="mt-10 flex sm:flex-col1 w-60">
+                    <div className="flex mt-10 sm:flex-col1 w-60">
                       <Button
                         type="submit"
                         onClick={handleSubmit}
