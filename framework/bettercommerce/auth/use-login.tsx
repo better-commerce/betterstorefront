@@ -2,18 +2,21 @@ import { AUTHENTICATE_CUSTOMER } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
 import { logError } from '@framework/utils/app-util'
+import { UserAuthType } from '@framework/utils/constants'
 
 interface Props {
   email: string
   cookies?: any
   password: string
+  authType?: number
 }
 
 export default function useLogin() {
-  return async function handler({ email, password, cookies }: Props) {
+  return async function handler({ email, password, authType = UserAuthType.DEFAULT, cookies }: Props) {
     const data = {
       username: email,
       password,
+      authType,
     }
 
     try {
