@@ -233,10 +233,10 @@ function Cookie({
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <div className="container">
+      <div className="container mb-10">
         {pageContents?.heading?.map((head: any, Idx: any) => (
           <div key={Idx}>
-            <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold">
+            <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold text-green-align">
               {head?.heading_herotitle}
             </h1>
             <div
