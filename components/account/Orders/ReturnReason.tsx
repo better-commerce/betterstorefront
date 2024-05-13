@@ -178,7 +178,7 @@ const ReturnReason = ({
               <Button
                 type="button"
                 className="!py-3 !font-bold !w-auto"
-                disabled={!(!isDisabled && reason)}
+                disabled={!(reason)}
                 onClick={openModal}
               >
                 {translate('label.returnReason.requestReturnBtnText')} </Button>
@@ -247,11 +247,11 @@ const ReturnReason = ({
                           </div>
                           <div className="w-full"></div>
 
-                          <div className="w-full py-4">
+                          <div className="flex justify-between w-full py-4 mb-3">
                             <Button
                               type="button"
                               onClick={closeModal}
-                              className="mb-3 !py-3 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200"
+                              className="!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200"
                             >
                               {translate('label.returnReason.dontReturnBtnText')} </Button>
                             <Button
@@ -260,8 +260,8 @@ const ReturnReason = ({
                                 await onItemReturn(reason, selectedImages)
                               }}
                               className={classNames('!font-bold', {
-                                '!py-3': !itemReturnLoadingState,
-                                '!py-5': itemReturnLoadingState,
+                                '!py-2': !itemReturnLoadingState,
+                                '!py-3': itemReturnLoadingState,
                               })}
                               disabled={itemReturnLoadingState}
                             >
