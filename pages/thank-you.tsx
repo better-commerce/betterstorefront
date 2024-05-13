@@ -564,6 +564,16 @@ export default function OrderConfirmation({ config }: any) {
                       {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
+                  {order?.discount.raw?.withTax > 0 &&
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-900">
+                        {translate('label.orderSummary.discountText')}
+                      </dt>
+                      <dd className="text-gray-700">
+                        {isIncludeVAT ? order?.discount.formatted?.withTax : order?.discount.formatted?.withoutTax}
+                      </dd>
+                    </div>
+                  }
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
                       {translate('label.orderSummary.shippingText')}

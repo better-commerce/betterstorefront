@@ -229,7 +229,7 @@ const OrderDeliveryPlanItems = ({
                                           </a>
                                         </h3>
                                       </div>
-                                      <p className="mt-2 text-sm font-normal text-secondary-full-opacity">
+                                      <p className="mt-2 text-lg font-bold text-secondary-full-opacity">
                                         {productItem?.price?.raw?.withTax > 0 ? priceFormat(
                                           productItem?.price?.raw?.withTax,
                                           undefined,
