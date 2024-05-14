@@ -57,7 +57,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
     // let shouldEnabled = false
     let mappedAttribs: any = []
     attributes.forEach((attrib: any) => {
-      if (attrib.compareAtPLP) {
+      if (attrib?.compareAtPLP) {
         // shouldEnabled = true
         mappedAttribs.push(attrib)
       }
@@ -69,7 +69,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   }, [data])
   useEffect(() => {
     const compared = Boolean(
-      compareProductList && compareProductList[data.recordId]
+      compareProductList && compareProductList[data?.recordId]
     )
     setProduct({
       ...data,
@@ -141,7 +141,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
-          if (matchStrings(o.productId, data?.recordId, true) || matchStrings(o.productId, data?.productId, true)) {
+          if (matchStrings(o?.productId, data?.recordId, true) || matchStrings(o?.productId, data?.productId, true)) {
             return o
           }
         })
@@ -227,7 +227,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           <>
             <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
               {featureToggle?.features?.enableAddToBagPlp &&
-                <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                <Button size="small" className="block" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
               }
               <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
@@ -242,9 +242,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product?.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
-          <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+          <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug || data?.link)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
               <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
             </div>
@@ -256,7 +256,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           {!isComparedEnabled && renderGroupButtons()}
         </div>
 
-        <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+        <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug || data?.link)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
           <div className="space-y-4 px-2.5 pt-5 pb-2.5 product-card__information">
             <div>
               <h2 className="text-base text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>

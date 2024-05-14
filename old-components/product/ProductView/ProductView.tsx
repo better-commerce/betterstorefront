@@ -810,7 +810,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
               </button>
             </div>
           )}
@@ -831,7 +831,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                 </button>
               </div>
             </>

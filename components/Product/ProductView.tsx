@@ -408,7 +408,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         buttonConfig = {
           title: translate('label.basket.addToBagText'),
           validateAction: async () => {
-            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o.productId === selectedAttrData?.productId?.toUpperCase())
+            const cartLineItem: any = cartItems?.lineItems?.find((o: any) => o?.productId === selectedAttrData?.productId?.toUpperCase())
             if (selectedAttrData?.currentStock === cartLineItem?.qty) {
               setAlert({
                 type: 'error',
@@ -912,7 +912,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                         ) : (
                           <HeartIcon className="flex-shrink-0 w-6 h-6" />
                         )}
-                        <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                        <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                       </button>
                     </div>
                   </div>
@@ -930,7 +930,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     ) : (
                       <HeartIcon className="flex-shrink-0 w-6 h-6" />
                     )}
-                    <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                   </button>
                 </div>
               )}
@@ -951,7 +951,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       ) : (
                         <HeartIcon className="flex-shrink-0 w-6 h-6" />
                       )}
-                      <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                      <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                     </button>
                   </div>
                 </>
@@ -1047,6 +1047,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
           </>
         }
+        {product?.componentProducts && (
+          <>
+            <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
+            <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          </>
+        )}
         {featureToggle?.features?.enableProductSpecification &&
           <div className="px-4 mt-12 sm:px-0 sm:mt-12">
             <hr className="border-slate-200 dark:border-slate-700" />
@@ -1059,11 +1065,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           renderReviews()
         }
         <div className="w-full px-4 pt-6 mx-auto sm:px-0 lg:max-w-none sm:pt-8">
-          {product?.componentProducts && (
-            <>
-              <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            </>
-          )}
           {alternativeProducts?.length > 0 && (
             <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto pdp-compare-section">
               <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
