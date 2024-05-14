@@ -13,9 +13,10 @@ export interface CardCategory3Props {
   desc?: string;
   color?: string;
   link?: any
+  buttonText?: string
 }
 
-const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name, desc, color, link }) => {
+const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name, desc, color, link, buttonText }) => {
   const translate = useTranslation()
   return (
     <Link href={`${sanitizeRelativeUrl(link)}`} className={`nc-CardCategory3 block ${className}`} >
@@ -36,7 +37,7 @@ const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name,
               )}
             </div>
             <div className="mt-auto">
-              <ButtonSecondary sizeClass="py-3 px-4 sm:py-3.5 sm:px-6" fontSize="text-sm font-medium" className="nc-shadow-lg" href={`/${link}`} > {translate('common.label.showMeAllText')} </ButtonSecondary>
+              <ButtonSecondary sizeClass="py-3 px-4 sm:py-3.5 sm:px-6" fontSize="text-sm font-medium" className="nc-shadow-lg" href={`/${link}`} > {buttonText} </ButtonSecondary>
             </div>
           </div>
         </div>

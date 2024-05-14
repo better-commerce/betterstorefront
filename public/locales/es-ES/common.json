@@ -146,6 +146,7 @@
       "dummyName3Text": "Colección de Ofertas"
     },
     "checkout": {
+      "informationText":"Información",
       "availableCreditText": "Crédito disponible",
       "creditLimitText": "Límite de crédito",
       "quickOrderText": "Pedido rápido",
@@ -182,6 +183,7 @@
       "saveAndContinueToDeliveryText": "Guardar y continuar a entrega",
       "saveAndContinueToBillingText": "Guardar y continuar a facturación",
       "deliveryText": "Entrega",
+      "expectedDateText": "Fecha esperada",
       "continueToPaymentText": "Continuar a pago",
       "noDeliveryMethodAvailableText": "No hay método de entrega disponible",
       "findStoresText": "Buscar tiendas",

@@ -193,7 +193,7 @@ export default function CustomerForm({
               })}
               <div className={`flex items-center justify-center !w-full my-5 ${!isLoginSidebarOpen && `md:w-1/2`}`} >
                 <Button type="submit" className="w-full border border-black btn btn-c btn-primary rounded-2xl" loading={isSubmitting} disabled={isSubmitting} >
-                  {!isSubmitting && btnText}
+                  {!isSubmitting && translate(`common.label.registerText`)}
                 </Button>
               </div>
             </Form>

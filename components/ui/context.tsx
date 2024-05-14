@@ -12,6 +12,7 @@ import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 
@@ -568,7 +569,8 @@ type UIProviderProps = {
 
 export const UIProvider: React.FC<any> = (props) => {
   const Router = useRouter()
-
+  const translate = useTranslation()
+ 
   const [state, dispatch] = React.useReducer<React.Reducer<any, any>>(
     uiReducer,
     initialState
@@ -895,7 +897,7 @@ export const UIProvider: React.FC<any> = (props) => {
         Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
 
         if (!isSilentLogout) {
-          setAlert({ type: 'success', msg: 'Logout Successful' })
+          setAlert({ type: 'success', msg: translate('common.message.logoutSuccessfulText') })
         }
       }
 
