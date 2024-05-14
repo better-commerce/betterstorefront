@@ -7,10 +7,9 @@ import { useTranslation } from '@commerce/utils/use-translation';
 
 interface LoginSideBarViewProps {
   pluginConfig: any;
-  closeSideBar?: any;
 }
 
-const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = [], closeSideBar = () =>{}}) => {
+const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) => {
   const { closeSidebar, displaySidebar } = useUI()
   const [openSidebar, setOpenSidebar] = useState(false)
   const translate = useTranslation()
