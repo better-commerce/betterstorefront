@@ -7,9 +7,10 @@ import { useTranslation } from '@commerce/utils/use-translation';
 
 interface LoginSideBarViewProps {
   pluginConfig: any;
+  closeSideBar?: any;
 }
 
-const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) => {
+const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = [], closeSideBar = () =>{}}) => {
   const { closeSidebar, displaySidebar } = useUI()
   const [openSidebar, setOpenSidebar] = useState(false)
   const translate = useTranslation()
@@ -39,7 +40,7 @@ const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) 
           <XMarkIcon className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>
-      <Login isLoginSidebarOpen={true} pluginConfig={pluginConfig}/>
+      <Login isLoginSidebarOpen={true} pluginConfig={pluginConfig} closeSideBar={closeSidebar}/>
     </section>
   )
 }
