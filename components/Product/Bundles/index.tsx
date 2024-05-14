@@ -62,16 +62,12 @@ export default function Bundles({ onClose = () => { }, price = '', products = []
   return (
     <section aria-labelledby="bundle" className="container px-4 mx-auto sm:px-0" >
       <div className="flex items-center justify-between w-full p-0 mb-6 sm:mb-10">
-        <h2 id="bundle" className="flex items-center pb-2 text-2xl font-semibold md:text-3xl sm:pb-2 h2-heading-text">
+        <h2 id="bundle" className="flex items-center text-2xl font-semibold md:text-3xl h2-heading-text">
           {translate('label.product.bundles.buyTogetherText')}
         </h2>
         <div className="flex gap-2">
-          <p className="flex-col font-semibold text-right text-black text-md align-right item-right">
-            {translate('label.orderSummary.totalText')}
-          </p>
-          <p className="flex flex-col pb-2 text-3xl font-bold text-right text-gray-900 align-right item-right">
-            {price}
-          </p>
+          <span className="flex-col font-semibold text-right text-black text-md align-right item-right"> {translate('label.orderSummary.totalText')} </span>
+          <span className="text-3xl font-bold text-right text-gray-900 align-right item-right"> {price} </span>
           <button className="flex items-center justify-center flex-1 px-4 py-2 ml-2 font-medium text-white uppercase bg-black border rounded-full sm:px-6 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black sm:w-full btn-c btn-primary button" onClick={onBundleAddToCart} >
             {translate('label.product.bundles.addBundleText')}
           </button>
@@ -81,22 +77,13 @@ export default function Bundles({ onClose = () => { }, price = '', products = []
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {products.map((product: any, productIdx: number) => (
           <div key={productIdx}>
-            <ProductCard
-              data={product}
-              deviceInfo={deviceInfo}
-              maxBasketItemsCount={0}
-              featureToggle={featureToggle}
-              defaultDisplayMembership={defaultDisplayMembership}
-            />
+            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={0} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         ))}
       </div>
 
       {productData && (
-        <BundleCard
-          closeModal={() => handleProduct(null)}
-          productData={productData}
-        />
+        <BundleCard closeModal={() => handleProduct(null)} productData={productData} />
       )}
     </section>
   )
