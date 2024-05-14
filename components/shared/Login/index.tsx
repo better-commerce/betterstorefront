@@ -19,9 +19,10 @@ interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
   pluginConfig: any;
+  closeSideBar?: any;
 }
 
-export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], }: LoginProps) {
+export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], closeSideBar = () => {} }: LoginProps) {
   const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -60,6 +61,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
       } else if (result.data) {
         setNoAccount(false)
+        closeSideBar()
         setAlert({ type: 'success', msg: translate('common.message.loginSuccessMsg') })
         let userObj = { ...result.data }
         if (userObj?.userToken) saveUserToken(userObj?.userToken)

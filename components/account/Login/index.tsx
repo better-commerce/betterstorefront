@@ -58,7 +58,6 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
 
         const wishlist = await getWishlist(result.data.userId, wishListItems)
         setWishlist(wishlist)
-        getWishlist(result.data.userId, wishListItems)
         const cart: any = await getCartByUser({
           userId: result.data.userId,
           cart: cartItems,
