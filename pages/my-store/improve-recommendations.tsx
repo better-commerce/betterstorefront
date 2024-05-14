@@ -9,13 +9,21 @@ import { useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import EngageRecommendationCard from "@components/SectionEngagePanels/EngageRecommendationCard";
+import { IPagePropsProvider } from "@framework/contracts/page-props/IPagePropsProvider";
+import { getPagePropType, PagePropType } from "@framework/page-props";
+
+const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics';
 import { EVENTS_MAP } from '@components/services/analytics/constants';
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
   }

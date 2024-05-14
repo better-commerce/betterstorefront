@@ -6,22 +6,21 @@ import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import commerce from '@lib/api/commerce'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings, stringToNumber } from '@framework/utils/parse-util'
-import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
+import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import { Guid } from '@commerce/types'
 import SectionBrandCard from '@components/SectionBrandCard'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { PagePropType, getPagePropType } from '@framework/page-props'
+
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -30,95 +29,27 @@ const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSlide
 const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
 const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+
 declare const window: any
+
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([Redis.Key.ALL_MEMBERSHIPS, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
-  let allMembershipsUIDData: any = parseDataValue(cachedData, Redis.Key.ALL_MEMBERSHIPS)
-  const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
-  const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-  const promises = new Array<Promise<any>>()
-  let Page_Slug = HOME_PAGE_SLUG;
-  if (CURRENT_THEME == "black") {
-    Page_Slug = HOME_PAGE_NEW_SLUG
-  } else if (CURRENT_THEME == "orange") {
-    Page_Slug = HOME_PAGE_SLUG
-  } else {
-    Page_Slug = HOME_PAGE_SLUG;
-  }
-  const fetchData = async (pageContentUIDData: any[], pageContentUIDKey: string, channel: 'Web' | 'MobileWeb') => {
-    if (!containsArrayData(pageContentUIDData)) {
-      infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
-        promises.push(new Promise(async (resolve: any, reject: any) => {
-          try {
-            const pageContentsPromise = commerce.getPagePreviewContent({
-              id: '',
-              slug: Page_Slug,
-              workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-              channel: channel,
-              currency: currencyCode,
-              cachedCopy: true,
-            })
-            const pageContent = await pageContentsPromise
-            pageContentUIDData.push({ key: currencyCode, value: pageContent })
-            await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
-            resolve()
-          } catch (error: any) {
-            resolve()
-          }
-        }))
-      })
-    }
-  };
-  fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web');
-  fetchData(pageContentMobileWebUIDData, Redis.Key.HomepageMobileWeb, 'MobileWeb');
-
-  await Promise.all(promises)
-  const slugsPromise = commerce.getSlugs({ slug: Page_Slug });
-  const slugs = await slugsPromise;
   const hostName = os.hostname()
-
-  if(!allMembershipsUIDData){
-    const data = {
-      "SearchText": null,
-      "PricingType": 0,
-      "Name": null,
-      "TermType": 0,
-      "IsActive": 1,
-      "ProductId": Guid.empty,
-      "CategoryId": Guid.empty,
-      "ManufacturerId": Guid.empty,
-      "SubManufacturerId": Guid.empty,
-      "PlanType": 0,
-      "CurrentPage": 0,
-      "PageSize": 0
-    }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
-    allMembershipsUIDData = await membershipPlansPromise
-    await setData([{ key: Redis.Key.ALL_MEMBERSHIPS, value: allMembershipsUIDData }])
+  let slug = HOME_PAGE_SLUG;
+  if (CURRENT_THEME == "black") {
+      slug = HOME_PAGE_NEW_SLUG
+  } else if (CURRENT_THEME == "orange") {
+      slug = HOME_PAGE_SLUG
+  } else {
+      slug = HOME_PAGE_SLUG;
   }
-  let defaultDisplayMembership = EmptyObject
-  if (allMembershipsUIDData?.result?.length) {
-    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
-    if (membershipPlan) {
-      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
-      if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
-      }
-    }
-  }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.HOME })
+  const pageProps = await props.getPageProps({ slug, cookies: {} })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      globalSnippets: infra?.snippets ?? [],
-      snippets: slugs?.snippets ?? [],
-      pageContentsWeb: pageContentWebUIDData,
-      pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
-      defaultDisplayMembership,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }

@@ -23,6 +23,8 @@ import {
 } from '@framework/content/use-content-snippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 const PaymentFailedPage = ({
   //orderId: guidOrderId,
@@ -208,8 +210,12 @@ const PaymentFailedPage = ({
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const params: any = context?.query
   const hostName = os.hostname()
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       hostName: obfuscateHostName(hostName),
       //orderId: params?.order_id,
     }, // will be passed to the page component as props

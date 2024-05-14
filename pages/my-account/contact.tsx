@@ -11,7 +11,9 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-function MyAccount() {
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+function ContactPage() {
   const router = useRouter()
   const { changeMyAccountTab } = useUI()
   const translate = useTranslation()
@@ -62,15 +64,19 @@ function MyAccount() {
   )
 }
 
-MyAccount.LayoutAccount = LayoutAccount
+ContactPage.LayoutAccount = LayoutAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPES.ContactDetail, true, LayoutAccount)
+export default withDataLayer(withAuth(ContactPage), PAGE_TYPES.ContactDetail, true, LayoutAccount)

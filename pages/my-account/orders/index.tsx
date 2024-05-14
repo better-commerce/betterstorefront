@@ -14,9 +14,11 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_ORDERS, NEXT_GET_ORDER_DETAIL
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 const PAGE_SIZE = 10
 
-function MyAccount({ deviceInfo }: any) {
+function MyOrdersPage({ deviceInfo }: any) {
   const { user, isGuestUser, displayDetailedOrder, changeMyAccountTab } = useUI()
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
@@ -155,15 +157,19 @@ function MyAccount({ deviceInfo }: any) {
   )
 }
 
-MyAccount.LayoutAccount = LayoutAccount
+MyOrdersPage.LayoutAccount = LayoutAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPES.OrderList, true, LayoutAccount)
+export default withDataLayer(withAuth(MyOrdersPage), PAGE_TYPES.OrderList, true, LayoutAccount)

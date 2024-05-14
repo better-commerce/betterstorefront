@@ -14,6 +14,8 @@ import { Cookie } from '@framework/utils/constants'
 //import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import Router from 'next/router'
 import { SITE_NAME } from '@components/utils/constants'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -196,9 +198,13 @@ function PasswordProtectionPage({ config }: any) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
   return {
-    props: {},
+    props: {
+      ...pageProps,
+    },
   }
 }
 

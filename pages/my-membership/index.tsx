@@ -14,48 +14,22 @@ import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 import Loader from "@components/Loader";
 import { useTranslation } from "@commerce/utils/use-translation";
-import commerce from "@lib/api/commerce";
-import { Redis } from "@framework/utils/redis-constants";
-import { getDataByUID, parseDataValue, setData } from "@framework/utils/redis-util";
-import { Guid } from "@commerce/types";
 import MemberBenefits from "@components/membership/MemberBenefits";
+import { IPagePropsProvider } from "@framework/contracts/page-props/IPagePropsProvider";
+import { getPagePropType, PagePropType } from "@framework/page-props";
 
 const PAGE_TYPE = PAGE_TYPES.MyMembership
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale, req } = context
-
-  const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.allMembershipsUID,
-  ])
-  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
-    const data = {
-      "SearchText": null,
-      "PricingType": 0,
-      "Name": null,
-      "TermType": 0,
-      "IsActive": 1,
-      "ProductId": Guid.empty,
-      "CategoryId": Guid.empty,
-      "ManufacturerId": Guid.empty,
-      "SubManufacturerId": Guid.empty,
-      "PlanType": 0,
-      "CurrentPage": 0,
-      "PageSize": 0
-    }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
-    allMembershipsUIDData = await membershipPlansPromise
-    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
-  }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.MEMBERSHIP })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
   
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      allPlans: allMembershipsUIDData?.result,
+      
     },
   }
 }

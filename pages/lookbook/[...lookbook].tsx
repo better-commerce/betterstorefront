@@ -164,15 +164,22 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const slug: any = params!.lookbook
   const response = await getSingleLookbook(slug[0])
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+    infraUID: Redis.Key.INFRA_CONFIG,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.allMembershipsUID,
+    cachedDataUID.infraUID,
   ])
+
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  if (!infraUIDData) {
+    const infraPromise = commerce.getInfra()
+    infraUIDData = await infraPromise
+    await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+  }
 
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
   if(!allMembershipsUIDData){
@@ -212,7 +219,7 @@ export async function getStaticProps({
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: response,
       slug: slug[0],
-      globalSnippets: infra?.snippets ?? [],
+      globalSnippets: infraUIDData?.snippets ?? [],
       snippets: response?.snippets ?? [],
       defaultDisplayMembership,
     },

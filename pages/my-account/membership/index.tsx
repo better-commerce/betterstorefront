@@ -4,13 +4,13 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import MyMembership from '@components/membership/MyMembership'
-import { stringToNumber } from '@framework/utils/parse-util'
-import commerce from '@lib/api/commerce'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid } from '@components/utils/constants'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { useEffect } from 'react'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
   const { user , changeMyAccountTab } = useUI()
@@ -53,37 +53,13 @@ Membership.LayoutAccount = LayoutAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const data = {
-    "SearchText": null,
-    "PricingType": 0,
-    "Name": null,
-    "TermType": 0,
-    "IsActive": 1,
-    "ProductId": EmptyGuid,
-    "CategoryId": EmptyGuid,
-    "ManufacturerId": EmptyGuid,
-    "SubManufacturerId": EmptyGuid,
-    "PlanType": 0,
-    "CurrentPage": 0,
-    "PageSize": 0
-  }
-  let defaultDisplayMembership = {}
-  const { result: allMembershipPlans } = await commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
-  if (allMembershipPlans?.length) {
-   const MembershipPlans = allMembershipPlans?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
-    if (MembershipPlans) {
-      const promoCode = MembershipPlans?.membershipBenefits?.[0]?.code
-      if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership ={ membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : MembershipPlans?.price?.raw?.withTax}
-      }
-    }
-  }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.ACCOUNT_MEMBERSHIP })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultDisplayMembership,
-      allMembershipPlans
     }, // will be passed to the page component as props
   }
 }
