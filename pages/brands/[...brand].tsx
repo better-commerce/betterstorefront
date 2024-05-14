@@ -455,7 +455,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <div className="mt-10">
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
-                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText={translate('label.category.newArrivalsText')} hasNextPrev >
+                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
                     {translate('label.product.recommendedProductText')}
                   </Heading>
                   <div className="glide__track" data-glide-el="track">
