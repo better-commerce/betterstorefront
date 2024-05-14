@@ -39,7 +39,7 @@ const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) 
           <XMarkIcon className="w-5 h-5" aria-hidden="true" />
         </button>
       </div>
-      <Login isLoginSidebarOpen={true} pluginConfig={pluginConfig}/>
+      <Login isLoginSidebarOpen={true} pluginConfig={pluginConfig} closeSideBar={closeSidebar}/>
     </section>
   )
 }
