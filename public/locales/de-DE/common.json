@@ -146,6 +146,7 @@
       "dummyName3Text": "Verkaufskollektion"
     },
     "checkout": {
+      "informationText":"Information",
       "availableCreditText": "Verfügbares Guthaben",
       "creditLimitText": "Kreditlimit",
       "quickOrderText": "Schnellbestellung",
@@ -182,6 +183,7 @@
       "saveAndContinueToDeliveryText": "Speichern und mit der Lieferung fortfahren",
       "saveAndContinueToBillingText": "Speichern und mit der Rechnungsstellung fortfahren",
       "deliveryText": "Lieferung",
+      "expectedDateText": "Voraussichtliches Datum",
       "continueToPaymentText": "Weiter zur Zahlung",
       "noDeliveryMethodAvailableText": "Keine Liefermethode verfügbar",
       "findStoresText": "Geschäft finden",

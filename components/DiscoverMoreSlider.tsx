@@ -42,7 +42,7 @@ const DiscoverMoreSlider = ({ heading, data }: any) => {
         <ul className="glide__slides">
           {data?.map((item: any, index: number) => (
             <li key={index} className={`glide__slide`}>
-              <CardCategory3 name={item?.category_subtitle} desc={item?.category_title} featuredImage={item?.category_image} color={item?.category_categorycolor} link={item?.category_link} />
+              <CardCategory3 name={item?.category_subtitle} desc={item?.category_title} featuredImage={item?.category_image} color={item?.category_categorycolor} link={item?.category_link} buttonText={item?.category_buttontext} />
             </li>
           ))}
         </ul>

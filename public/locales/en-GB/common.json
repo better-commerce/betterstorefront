@@ -146,6 +146,7 @@
       "dummyName3Text": "Sale Collection"
     },
     "checkout": {
+      "informationText":"Information",
       "availableCreditText": "Available Credit",
       "creditLimitText": "Credit Limit",
       "quickOrderText": "Quick Order",
@@ -182,6 +183,7 @@
       "saveAndContinueToDeliveryText": "Save And Continue to Delivery",
       "saveAndContinueToBillingText": "Save And Continue to Billing",
       "deliveryText": "Delivery",
+      "expectedDateText" : "Expected date",
       "continueToPaymentText": "Continue to Payment",
       "noDeliveryMethodAvailableText": "No Delivery Method Available",
       "findStoresText": "Find Store",

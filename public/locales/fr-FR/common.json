@@ -146,6 +146,7 @@
       "dummyName3Text": "Collection en solde"
     },
     "checkout": {
+      "informationText":"Information",
       "availableCreditText": "Crédit disponible",
       "creditLimitText": "Limite de crédit",
       "quickOrderText": "Commande rapide",
@@ -182,6 +183,7 @@
       "saveAndContinueToDeliveryText": "Enregistrer et continuer vers la livraison",
       "saveAndContinueToBillingText": "Enregistrer et continuer vers la facturation",
       "deliveryText": "Livraison",
+      "expectedDateText": "Date prévue",
       "continueToPaymentText": "Continuer vers le paiement",
       "noDeliveryMethodAvailableText": "Aucune méthode de livraison disponible",
       "findStoresText": "Trouver un magasin",

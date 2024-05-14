@@ -48,15 +48,6 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
           currentNumber={products.results.length}
           component={
             <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 search-results__products ${products.results.length < 4 ? `${gridClass}` : gridClass}`} >
-              {!products.results.length && rangeMap(12, (i) => (
-                <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
-                  <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
-                    <div className="flex flex-col space-y-3">
-                      <div className="w-full h-48 bg-gray-100 rounded-md "></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
               {products?.results?.map((product: any, productIdx: number) => (
                 <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               ))}

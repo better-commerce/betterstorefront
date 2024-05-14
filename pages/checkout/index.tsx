@@ -75,15 +75,6 @@ export enum BasketStage {
   PLACED = 5,
 }
 
-const steps = [
-  {
-    key: 'address',
-    label: 'Information',
-    shouldActiveOn: 'login,new-address,edit-address,billing-address',
-  },
-  { key: 'delivery', label: 'Delivery', shouldActiveOn: '' },
-  { key: 'review', label: 'Payment', shouldActiveOn: '' },
-]
 
 const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
@@ -110,6 +101,16 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     useState<boolean>(false)
   const [editAddressValues, setEditAddressValues] = useState<any>(undefined)
   const [deliveryMethods, setDeliveryMethods] = useState(new Array<any>())
+
+  const steps = [
+    {
+      key: 'address',
+      label: translate('label.checkout.informationText'),
+      shouldActiveOn: 'login,new-address,edit-address,billing-address',
+    },
+    { key: 'delivery', label: translate('label.checkout.deliveryText'), shouldActiveOn: '' },
+    { key: 'review', label: translate('label.checkout.paymentHeadingText'), shouldActiveOn: '' },
+  ]
 
   const DELIVERY_METHODS_TYPE = [
     {
