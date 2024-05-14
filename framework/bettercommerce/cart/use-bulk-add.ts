@@ -20,7 +20,7 @@ export default function useBulkAdd() {
         },
         cookies,
       })
-      return response.result
+      return { ...response?.result, ...{ message: response?.message, messageCode: response?.messageCode } }
     } catch (error: any) {
       logError(error)
       //throw new Error(error)

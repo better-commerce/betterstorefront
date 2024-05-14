@@ -42,7 +42,7 @@ export default function useAddItem() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      return { ...response.result, ...{ message: response.message } }
+      return { ...response.result, ...{ message: response?.message, messageCode: response?.messageCode } }
     } catch (error: any) {
       logError(error)
       // throw new Error(error.message)
