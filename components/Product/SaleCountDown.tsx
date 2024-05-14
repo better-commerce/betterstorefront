@@ -47,8 +47,9 @@ function ProductSaleCountdown({ startDate, endDate }: any) {
 
   return (
     <div className="flex mt-1 fh-28">
-      <h4 className="w-auto px-3 py-1 text-xs font-medium text-white bg-black sm:text-xs bg-brown text-md-scrn">
-       {translate('label.product.offerEndsInText')}        <span className='pl-1'>
+      <h4 className="w-auto px-3 py-1 text-xs font-medium text-white bg-red-700 rounded-full sm:text-[11px]">
+        {translate('label.product.offerEndsInText')}
+        <span className='pl-1'>
           {timeLeft?.hours || timeLeft?.minutes || timeLeft?.seconds ? (
             <span>{timeLeft?.days}d{' '}:{' '}{timeLeft?.hours}h{' '}:{' '}{timeLeft?.minutes}m{' '}:{' '}{timeLeft?.seconds}s</span>
           ) : (
