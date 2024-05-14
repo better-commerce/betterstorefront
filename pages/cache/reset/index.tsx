@@ -5,6 +5,9 @@ import { GetServerSideProps } from 'next';
 import commerce from '@lib/api/commerce';
 import { resetRedisCache } from '@framework/utils/redis-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider';
+import { getPagePropType, PagePropType } from '@framework/page-props';
+
 export default function ResetCachePage() {
     return (
         <></>
@@ -23,8 +26,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (LOG_ENABLED) {
         console.log(status);
     }
+    const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+    const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
     return {
         props: {
+            ...pageProps,
             ...(await serverSideTranslations(context?.locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         },
     }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { sanitizeHtmlContent } from "framework/utils/app-util";
 
 
-const Footer = ({navItems}:any) => {
+const Footer = ({ navItems = [] }: any) => {
   const renderWidgetMenuItem = (item: any, index: number) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => (
@@ -47,7 +47,7 @@ const Footer = ({navItems}:any) => {
             <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
           </div>
         </div>
-        {navItems.map(renderWidgetMenuItem)}
+        {navItems?.map(renderWidgetMenuItem)}
       </div>
     </div>
   );
