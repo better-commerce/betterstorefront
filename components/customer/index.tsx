@@ -94,7 +94,7 @@ export default function CustomerForm({
   
     postCode: Yup.string().when('isRequestTradingAccount', {
       is: (val: boolean) => val == true,
-      then: Yup.string().required(translate('common.message.profile.postcodeRequiredMsg')),
+      then: Yup.string().required(translate('common.message.profile.postCodeRequiredMsg')),
     }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
   })
   

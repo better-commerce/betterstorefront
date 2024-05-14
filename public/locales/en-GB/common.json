@@ -1305,7 +1305,7 @@
         "cityRequiredMsg" : "City is a required field",
         "stateRequiredMsg" : "State is a required field",
         "countryRequiredMsg" : "Country is a required field",
-        "postcodeRequiredMsg" : "Postcode is a required field",
+        "postCodeRequiredMsg" : "Postcode is a required field",
         "passwordMinLenghtMsg": "Password must be at least 8 characters",
         "passwordMaxLengthMsg" : "Password must be at most 24 characters",
         "maxEmailLengthMsg" : "Email must be at most 255 characters",
