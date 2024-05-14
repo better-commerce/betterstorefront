@@ -188,7 +188,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const generateDataForEngage = (product: any) => {
     if (!product) return null;
     if (typeof window === 'undefined') return null
-    const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
+    const isProduction = (process.env.NODE_ENV === 'production')
+    const productUrl = isProduction ? window?.location.href : SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
     const dataForEngage = {
       item: {
         item_id: product?.variantGroupCode || product?.productCode || EmptyString,
@@ -201,8 +202,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         product_url: productUrl,
         image_url: product?.image || EmptyString,
         availability: product?.seoAvailability || EmptyString,
-        price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
-        sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
+        price: product?.price?.raw?.withTax?.toFixed(2)?.toString() || EmptyString,
+        sale_price: product?.price?.raw?.withTax?.toFixed(2)?.toString() || EmptyString,
         brand: product?.brand || EmptyString,
         variant: {
           id: product?.variantGroupCode || product?.productCode || EmptyString,
