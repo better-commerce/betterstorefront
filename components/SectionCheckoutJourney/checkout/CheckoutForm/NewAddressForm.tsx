@@ -15,7 +15,7 @@ import {
   pincodeLookup,
   submittingClassName,
 } from '@framework/utils/app-util'
-import { AddressPageAction } from '@components/utils/constants'
+import { AddressPageAction, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { useNewAddressFormFields } from './NewAddressModal'
 import { IFormProps } from 'framework/contracts/IFormProps'
@@ -163,7 +163,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
               {
                 <AddressFormField context={context} item={findByFieldName(formFields, 'mobileNumber')} />
               }
-                {
+                {OTP_LOGIN_ENABLED &&
                   <AddressFormField
                     context={context}
                     item={findByFieldName(formFields, 'whtsappUpdated')}

@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
+import NextHead from 'next/head'
 import axios from 'axios'
 import { Transition, Dialog } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL, SITE_NAME
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
@@ -401,9 +402,26 @@ export default function OrderConfirmation({ config }: any) {
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
 
-
+  let absPath = ''
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href
+  }
   return (
     <>
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.thankyou.thankyouText')}</title>
+        <meta name="title" content={translate('label.thankyou.thankyouText')} />
+        <meta name="title" content={translate('label.thankyou.thankyouText')} />
+        <meta name="description" content={translate('label.thankyou.thankyouText')} />
+        <meta name="keywords" content={translate('label.thankyou.thankyouText')} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={translate('label.thankyou.thankyouText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.thankyou.thankyouText')} key="ogdesc" />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+      </NextHead>
       <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr-pc`} ></div>
       <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">

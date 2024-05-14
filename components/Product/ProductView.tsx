@@ -715,6 +715,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       'ADD',
       { product }
     )
+    if (item?.message && item?.messageCode && item?.messageCode !== "C001") {
+      setAlert({ type: 'error', msg: item?.message})
+    }
     setCartItems(item)
     openCart()
   }
