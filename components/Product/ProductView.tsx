@@ -190,7 +190,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     if (typeof window === 'undefined') return null
     const isProduction = (process.env.NODE_ENV === 'production')
     const productUrl = isProduction ? window?.location.href : SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
-    const productPrice = roundToDecimalPlaces(product?.price?.raw?.withTax)?.toString() || EmptyString
     const dataForEngage = {
       item: {
         item_id: product?.variantGroupCode || product?.productCode || EmptyString,
@@ -203,8 +202,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         product_url: productUrl,
         image_url: product?.image || EmptyString,
         availability: product?.seoAvailability || EmptyString,
-        price: productPrice,
-        sale_price: productPrice,
+        price: roundToDecimalPlaces(product?.price?.raw?.withTax)?.toString() || EmptyString,
+        sale_price: roundToDecimalPlaces(product?.listPrice?.raw?.withTax)?.toString() || EmptyString,
         brand: product?.brand || EmptyString,
         variant: {
           id: product?.variantGroupCode || product?.productCode || EmptyString,
