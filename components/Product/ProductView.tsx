@@ -17,7 +17,7 @@ import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNA
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
-import { matchStrings, stringFormat } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
@@ -188,7 +188,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const generateDataForEngage = (product: any) => {
     if (!product) return null;
     if (typeof window === 'undefined') return null
-    const productUrl = SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
+    const isProduction = (process.env.NODE_ENV === 'production')
+    const productUrl = isProduction ? window?.location.href : SITE_ORIGIN_URL + new URL(window?.location.href).pathname;
     const dataForEngage = {
       item: {
         item_id: product?.variantGroupCode || product?.productCode || EmptyString,
@@ -201,8 +202,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         product_url: productUrl,
         image_url: product?.image || EmptyString,
         availability: product?.seoAvailability || EmptyString,
-        price: product?.price?.maxPrice?.toFixed(2)?.toString() || EmptyString,
-        sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
+        price: roundToDecimalPlaces(product?.price?.raw?.withTax)?.toString() || EmptyString,
+        sale_price: roundToDecimalPlaces(product?.listPrice?.raw?.withTax)?.toString() || EmptyString,
         brand: product?.brand || EmptyString,
         variant: {
           id: product?.variantGroupCode || product?.productCode || EmptyString,
