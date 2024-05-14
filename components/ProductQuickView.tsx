@@ -571,7 +571,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 ) : (
                   <HeartIcon className="flex-shrink-0 w-6 h-6" />
                 )}
-                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
               </button>
             </div>
           )}
@@ -592,7 +592,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                 </button>
               </div>
             </>
