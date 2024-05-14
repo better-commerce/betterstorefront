@@ -10,7 +10,7 @@ const Footer = ({navItems}:any) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => (
         <div key={index} className="text-sm footer-menu-links">
-          <h2 className="font-semibold text-neutral-700 dark:text-white"> {menu?.boxTitle} </h2>
+          <h2 className="font-bold text-[16px] text-black dark:text-white"> {menu?.boxTitle} </h2>
           <ul role="list" className="mt-0 space-y-6">
             <>
               {menu?.contentBody != '' && (
