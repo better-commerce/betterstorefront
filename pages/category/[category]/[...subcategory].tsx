@@ -37,6 +37,8 @@ const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid')
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
@@ -53,6 +55,9 @@ export async function getStaticProps(context: any) {
     context.params[slugName] +
     '/' +
     context.params[childSlugName].join('/')
+
+    const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+    const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
@@ -144,6 +149,7 @@ export async function getStaticProps(context: any) {
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
         props: {
+          ...pageProps,
           ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
@@ -158,6 +164,7 @@ export async function getStaticProps(context: any) {
     else {
       return {
         props: {
+          ...pageProps,
           ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
@@ -172,6 +179,7 @@ export async function getStaticProps(context: any) {
   } else
     return {
       props: {
+        ...pageProps,
         ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         category: categorySlugUIDData,
         slug,

@@ -1,5 +1,4 @@
 import type { GetStaticPropsContext } from 'next'
-import commerce from '@lib/api/commerce'
 import { Heart } from '@components/shared/icons'
 import Layout from '@components/Layout/Layout'
 import { Text, Container, Skeleton } from '@components/ui'
@@ -10,6 +9,8 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { WishlistCard } from 'old-components/wishlist'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { PagePropType, getPagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
@@ -28,16 +29,13 @@ export async function getStaticProps({
   }
 
   const config = { locale, locales }
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { pages } = await pagesPromise
-  const { categories } = await siteInfoPromise
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      pages,
-      categories,
     },
   }
 }

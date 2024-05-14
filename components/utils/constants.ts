@@ -556,6 +556,7 @@ export const OTP_TIMER = 45
 
 export enum PluginCategory {
   SOCIAL_LOGIN = 'SocialLogin',
+  MARKETING = 'Marketing',
 }
 
 export enum SocialMediaType {

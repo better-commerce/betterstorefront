@@ -11,6 +11,8 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 function MyAccount() {
   const [isShow, setShow] = useState(true)
@@ -71,8 +73,12 @@ const PAGE_TYPE = PAGE_TYPES.MyAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }

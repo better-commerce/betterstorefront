@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
@@ -11,11 +11,8 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-import { Redis } from '@framework/utils/redis-constants'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Guid } from '@commerce/types'
-import commerce from '@lib/api/commerce'
-import { stringToNumber } from '@framework/utils/parse-util'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const router = useRouter()
@@ -73,49 +70,13 @@ MyAccount.LayoutAccount = LayoutAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
-  const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.allMembershipsUID,
-  ])
-  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if(!allMembershipsUIDData){
-    const data = {
-      "SearchText": null,
-      "PricingType": 0,
-      "Name": null,
-      "TermType": 0,
-      "IsActive": 1,
-      "ProductId": Guid.empty,
-      "CategoryId": Guid.empty,
-      "ManufacturerId": Guid.empty,
-      "SubManufacturerId": Guid.empty,
-      "PlanType": 0,
-      "CurrentPage": 0,
-      "PageSize": 0
-    }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: context?.req?.cookies})
-    allMembershipsUIDData = await membershipPlansPromise
-    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
-  }
-
-  let defaultDisplayMembership = EmptyObject
-  if (allMembershipsUIDData?.result?.length) {
-    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
-    if (membershipPlan) {
-      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
-      if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
-      }
-    }
-  }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.WISHLIST })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }

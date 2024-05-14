@@ -17,6 +17,8 @@ import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-ut
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -176,8 +178,12 @@ export async function getStaticProps({
     await setData([{ key: cachedDataUID.brandsUID, value: brandsUIDData }])
   }
 
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       brands: brandsUIDData?.result || { results: new Array<any>() },
       snippets: brandsUIDData?.snippets ?? [],
@@ -185,18 +191,6 @@ export async function getStaticProps({
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
-/*
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await getBrands({})
-    //CAN WE PUT SOME CODE HERE TO EXEC AFTER GETBRANDS ???
-  return {
-    props: {
-      brands: response.result,
-      snippets: response.snippets,
-    }, // will be passed to the page component as props
-  }
-}
-*/
 BrandsPage.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES['Brand']

@@ -16,6 +16,10 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
 SwiperCore.use([Navigation])
 
 function LookbookPage({ data }: any) {
@@ -116,14 +120,29 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const lookbookData = await getLookbooks()
 
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
+  const cachedDataUID = {
+    infraUID: Redis.Key.INFRA_CONFIG,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+  ])
+
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  if (!infraUIDData) {
+    const infraPromise = commerce.getInfra()
+    infraUIDData = await infraPromise
+    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+  }
+
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: lookbookData,
-      globalSnippets: infra?.snippets ?? [],
+      globalSnippets: infraUIDData?.snippets ?? [],
       snippets: [],
     },
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS

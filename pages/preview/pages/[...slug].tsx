@@ -15,6 +15,8 @@ const PromotionBanner = dynamic(
 import BestSellerProduct from '@old-components/product/BestSellerProduct'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 const Heading = dynamic(() => import('@old-components/home/Heading'))
 const Categories = dynamic(() => import('@old-components/home/Categories'))
 const Collections = dynamic(() => import('@old-components/home/Collections'))
@@ -111,9 +113,12 @@ export async function getServerSideProps(context: any) {
       dealOfTheWeekProductPromoDetails = await commerce.getProductPromos({ query: dealOfTheWeekProducts[0]?.recordId, cookies: {} })
     }
   }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       slug: slug,
       pageContents: pageContents || {},

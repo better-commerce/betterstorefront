@@ -33,6 +33,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetServerSideProps } from 'next'
 import { matchStrings } from '@framework/utils/parse-util'
 import LayoutAccount from '@components/Layout/LayoutAccount'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
@@ -330,8 +332,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (matchStrings(locale, context?.query?.orderId[0])) {
         return notFoundRedirect();
     }
+    const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+    const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
     return {
         props: {
+            ...pageProps,
             ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         }
     }

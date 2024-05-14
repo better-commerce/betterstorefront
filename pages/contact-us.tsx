@@ -36,6 +36,8 @@ import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import ContactForm from '@components/contact/ContactForm'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 // import ContactUsForm from '@old-components/contact/ContactUsForm'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
@@ -44,77 +46,17 @@ export async function getStaticProps({
   locale,
   locales,
 }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([
-    Redis.Key.ContactpageWeb,
-    Redis.Key.ContactpageMobileWeb,
-  ])
-  const pageContentWebUIDData: Array<any> =
-    parseDataValue(cachedData, Redis.Key.ContactpageWeb) || []
-  const pageContentMobileWebUIDData: Array<any> =
-    parseDataValue(cachedData, Redis.Key.ContactpageMobileWeb) || []
   const config = { locale, locales }
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-  const promises = new Array<Promise<any>>()
-
-  const fetchData = async (
-    pageContentUIDData: any[],
-    pageContentUIDKey: string,
-    channel: 'Web' | 'MobileWeb'
-  ) => {
-    if (!containsArrayData(pageContentUIDData)) {
-      infra?.currencies
-        ?.map((x: any) => x?.currencyCode)
-        ?.forEach((currencyCode: string, index: number) => {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const pageContentsPromise = commerce.getPagePreviewContent({
-                  id: '',
-                  slug: CONTACT_PAGE_DEFAULT_SLUG,
-                  workingVersion:
-                    process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                  channel: channel,
-                  currency: currencyCode,
-                  cachedCopy: true,
-                })
-                const pageContent = await pageContentsPromise
-                pageContentUIDData.push({
-                  key: currencyCode,
-                  value: pageContent,
-                })
-                await setData([
-                  { key: pageContentUIDKey, value: pageContentUIDData },
-                ])
-                resolve()
-              } catch (error: any) {
-                resolve()
-              }
-            })
-          )
-        })
-    }
-  }
-  fetchData(pageContentWebUIDData, Redis.Key.ContactpageWeb, 'Web')
-  fetchData(
-    pageContentMobileWebUIDData,
-    Redis.Key.ContactpageMobileWeb,
-    'MobileWeb'
-  )
-
-  await Promise.all(promises)
-  const slugsPromise = commerce.getSlugs({ slug: CONTACT_PAGE_DEFAULT_SLUG })
-  const slugs = await slugsPromise
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.CONTACT_US })
+  const pageProps = await props.getPageProps({ slug: CONTACT_PAGE_DEFAULT_SLUG, cookies: {} })
   const hostName = os.hostname()
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(
         locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!
       )),
-      globalSnippets: infra?.snippets ?? [],
-      snippets: slugs?.snippets ?? [],
-      pageContentsWeb: pageContentWebUIDData,
-      pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),

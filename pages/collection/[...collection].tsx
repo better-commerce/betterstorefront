@@ -3,7 +3,6 @@ import { useReducer, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 // Package Imports
-import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Script from 'next/script'
@@ -18,19 +17,16 @@ import 'swiper/css/navigation'
 import getCollections from '@framework/api/content/getCollections'
 import Layout from '@components/Layout/Layout'
 import os from 'os'
-import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
@@ -46,6 +42,8 @@ const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -600,100 +598,30 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   if (slug?.length) {
     slug = slug.join('/');
   }
-  const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-    infraUID: Redis.Key.INFRA_CONFIG,
-    collectionUID: Redis.Key.Collection + '_' + slug,
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.allMembershipsUID,
-    cachedDataUID.infraUID,
-    cachedDataUID.collectionUID
-  ])
-
-  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
-  let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
   let hostName = EmptyString
+  hostName = os.hostname()
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COLLECTION_PLP })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
 
-  try {
-    if (!collectionUIDData) {
-      collectionUIDData = await getCollectionBySlug(slug)
-      await setData([{ key: cachedDataUID.collectionUID, value: collectionUIDData }])
-    }
-    if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
-      infraUIDData = await infraPromise
-      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
-    }
-    hostName = os.hostname()
-
-  } catch (error: any) {
-    logError(error)
-
-    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-      let errorUrl = '/500'
-      const errorData = error?.response?.data
-      if (errorData?.errorId) {
-        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-      }
-      return {
-        redirect: {
-          destination: errorUrl,
-          permanent: false,
-        },
-      }
-    }
+  if (pageProps?.notFound) {
+    return notFoundRedirect()
   }
 
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    if (collectionUIDData?.status === "NotFound") {
-      return notFoundRedirect()
-    }
-  }
-
-  if (!allMembershipsUIDData) {
-    const data = {
-      "SearchText": null,
-      "PricingType": 0,
-      "Name": null,
-      "TermType": 0,
-      "IsActive": 1,
-      "ProductId": Guid.empty,
-      "CategoryId": Guid.empty,
-      "ManufacturerId": Guid.empty,
-      "SubManufacturerId": Guid.empty,
-      "PlanType": 0,
-      "CurrentPage": 0,
-      "PageSize": 0
-    }
-    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
-    allMembershipsUIDData = await membershipPlansPromise
-    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
-  }
-
-  let defaultDisplayMembership = EmptyObject
-  if (allMembershipsUIDData?.result?.length) {
-    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
-    if (membershipPlan) {
-      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
-      if (promoCode) {
-        const promotion = await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
-      }
+  if (pageProps?.isRedirect) {
+    return {
+      redirect: {
+        destination: pageProps?.redirect,
+        permanent: false,
+      },
     }
   }
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      ...collectionUIDData,
       query: context,
-      slug: slug,
-      globalSnippets: infraUIDData?.snippets ?? [],
-      snippets: collectionUIDData?.snippets ?? [],
       hostName: obfuscateHostName(hostName!),
-      defaultDisplayMembership,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }

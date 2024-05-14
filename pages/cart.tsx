@@ -2,15 +2,12 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Package Imports
-import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import Image from 'next/image'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import cookie from 'cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import commerce from '@lib/api/commerce'
 import MembershipOfferCard from '@components/membership/MembershipOfferCard'
 import OptMembershipModal from '@components/membership/OptMembershipModal'
 
@@ -24,10 +21,10 @@ import cartHandler from '@components/services/cart'
 import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
-import { matchStrings, parseItemId, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, EmptyObject, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -37,9 +34,9 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
-import { Redis } from '@framework/utils/redis-constants'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import wishlistHandler from '@components/services/wishlist'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
@@ -1009,7 +1006,7 @@ Cart.Layout = Layout
 
 const PAGE_TYPE = PAGE_TYPES.Cart
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketRef: any = cookies.basketId
@@ -1022,53 +1019,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     basketId: basketRef,
     cookies: context.req.cookies,
   })
-
-  const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.allMembershipsUID,
-  ])
-  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if (!allMembershipsUIDData) {
-    const data = {
-      "SearchText": null,
-      "PricingType": 0,
-      "Name": null,
-      "TermType": 0,
-      "IsActive": 1,
-      "ProductId": Guid.empty,
-      "CategoryId": Guid.empty,
-      "ManufacturerId": Guid.empty,
-      "SubManufacturerId": Guid.empty,
-      "PlanType": 0,
-      "CurrentPage": 0,
-      "PageSize": 0
-    }
-    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: context?.req?.cookies })
-    allMembershipsUIDData = await membershipPlansPromise
-    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
-  }
-
-  let defaultDisplayMembership = EmptyObject
-  if (allMembershipsUIDData?.result?.length) {
-    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
-    if (membershipPlan) {
-      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
-      if (promoCode) {
-        const promotion = await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
-      }
-    }
-  }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.CART })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],
-      allMembershipPlans: allMembershipsUIDData?.result,
-      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }

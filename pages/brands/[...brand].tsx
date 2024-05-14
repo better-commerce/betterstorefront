@@ -13,15 +13,10 @@ import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
-import getCollectionById from '@framework/api/content/getCollectionById'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { postData } from '@components/utils/clientFetcher'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
@@ -40,11 +35,12 @@ import useFaqData from '@components/SectionBrands/faqData'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
-import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
@@ -592,187 +588,19 @@ export async function getStaticProps({
     brandSlug = brandSlug.join('/');
   }
   const slug = `brands/${brandSlug}`
-  const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-    infraUID: Redis.Key.INFRA_CONFIG,
-    brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
-    collectionUID: Redis.Key.Brands.Collection + '_' + slug
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.allMembershipsUID,
-    cachedDataUID.infraUID,
-    cachedDataUID.brandSlugUID,
-    cachedDataUID.collectionUID,
-  ])
-  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
-  let brandBySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.brandSlugUID)
-  let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
+  const pageProps = await props.getPageProps({ slug, cookies: {} })
 
-  if (!brandBySlugUIDData) {
-    brandBySlugUIDData = await getBrandBySlug(slug, {})
-    await setData([{ key: cachedDataUID.brandSlugUID, value: brandBySlugUIDData }])
-  }
-
-  if (!infraUIDData) {
-    infraUIDData = await commerce.getInfra()
-    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
-  }
-
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    if (brandBySlugUIDData?.status === "NotFound") {
-      return notFoundRedirect()
-    }
-  }
-
-  const collections: any = {
-    imageBannerCollection: collectionUIDData?.imageBannerCollection || [],
-    imageCategoryCollection: collectionUIDData?.imageCategoryCollection || [],
-    imgFeatureCollection: collectionUIDData?.imgFeatureCollection || [],
-    offerBannerCollection: collectionUIDData?.offerBannerCollection || [],
-    productCollection: collectionUIDData?.productCollection || [],
-  }
-
-  try {
-    let promises: any = []
-    const widgets: any = tryParseJson(brandBySlugUIDData?.result?.widgetsConfig) || []
-    if (widgets?.length) {
-      widgets?.forEach(async (widget: any) => {
-        if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'HeroBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                collections.imageBannerCollection = await getCollectionById(
-                  widget.recordId
-                )
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'MultipleImageBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.imageCategoryCollection = res?.images
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'HeroBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                collections.imgFeatureCollection = await getCollectionById(
-                  widget.recordId
-                )
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'HeroBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.offerBannerCollection = res.images
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ProductCollection' &&
-          widget.code == 'RecommendedProductCollection'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.productCollection = res.products.results
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ProductCollection' &&
-          widget.code == 'SaleProductCollection'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.saleProductCollection = res.products.results
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        }
-      })
-    }
-
-    if (promises?.length) {
-      await Promise.all(promises)
-      await setData([{ key: cachedDataUID.collectionUID, value: collections }])
-    }
-  } catch (error: any) {
-    // return console.error(error)
-  }
-
-  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
-  if (!allMembershipsUIDData) {
-    const data = {
-      "SearchText": null,
-      "PricingType": 0,
-      "Name": null,
-      "TermType": 0,
-      "IsActive": 1,
-      "ProductId": Guid.empty,
-      "CategoryId": Guid.empty,
-      "ManufacturerId": Guid.empty,
-      "SubManufacturerId": Guid.empty,
-      "PlanType": 0,
-      "CurrentPage": 0,
-      "PageSize": 0
-    }
-    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
-    allMembershipsUIDData = await membershipPlansPromise
-    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
-  }
-
-  let defaultDisplayMembership = EmptyObject
-  if (allMembershipsUIDData?.result?.length) {
-    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
-    if (membershipPlan) {
-      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
-      if (promoCode) {
-        const promotion = await commerce.getPromotion(promoCode)
-        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
-      }
-    }
+  if (pageProps?.notFound) {
+    return notFoundRedirect()
   }
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
-      slug: slug,
-      brandDetails: brandBySlugUIDData?.result ?? {},
-      globalSnippets: infraUIDData?.snippets ?? [],
-      snippets: brandBySlugUIDData?.snippets ?? [],
-      collections,
-      defaultDisplayMembership,
     }, // will be passed to the page component as props
   }
 }

@@ -25,6 +25,8 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
 import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { PagePropType, getPagePropType } from '@framework/page-props'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -790,8 +792,12 @@ export default function OrderConfirmation({ config }: any) {
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }

@@ -14,9 +14,12 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+
 function CollectionList(props: any) {
   const router =useRouter();
   const translate = useTranslation()
@@ -100,6 +103,8 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
   const collectionUID = Redis.Key.Collection
   const cachedData = await getDataByUID([ collectionUID ])
   let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []
@@ -110,6 +115,7 @@ export async function getStaticProps({
     }
     return {
       props: {
+        ...pageProps,
         ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         data: collectionUIDData,
       },
@@ -127,6 +133,7 @@ export async function getStaticProps({
 
       return {
         props: {
+          ...pageProps,
           ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           data: collectionUIDData,
         },

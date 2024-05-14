@@ -5,7 +5,6 @@ import 'swiper/css/bundle'
 import '@assets/css/algolia-instant-search.css'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { appWithTranslation } from 'next-i18next'
-import jwt from 'jsonwebtoken'
 import NextHead from 'next/head'
 import Cookies from 'js-cookie'
 import TagManager from 'react-gtm-module'
@@ -18,21 +17,18 @@ import { SessionProvider } from 'next-auth/react'
 import os from 'os'
 
 import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
-import qs from 'querystring'
 import { IncomingMessage, ServerResponse } from 'http'
-import { AUTH_URL, CLIENT_ID, Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, REVIEW_BASE_URL, SHARED_SECRET } from '@framework/utils/constants'
+import { Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, } from '@framework/utils/constants'
 import { DeviceType } from '@commerce/utils/use-device'
 
 import packageInfo from '../package.json'
-import { cachedGetData } from '@framework/api/utils/cached-fetch'
-import { decrypt, encrypt } from '@framework/utils/cipher'
+import { decrypt, } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
-import fetcher from '@framework/fetcher'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, INFRA_ENDPOINT, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, NAV_ENDPOINT, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, EmptyObject, REVIEW_SERVICE_BASE_API, NEXT_GET_NAVIGATION, INFRA_PLUGIN_CATEGORY_ENDPOINT, PluginCategory, ENGAGE_QUERY_WEB_CAMPAIGN } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
@@ -52,7 +48,6 @@ import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
-const API_TOKEN_EXPIRY_IN_SECONDS = 3600
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
 }
@@ -148,7 +143,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
-    setNavTree()
     setClientIPAddress(pageProps)
     const addScript = document.createElement('script')
     addScript.setAttribute(
@@ -161,15 +155,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       document.getElementById('goog-gt-tt')?.remove()
     }
   }, [])
-
-  const setNavTree = async () => {
-    const { data: navResult }: any = await axios.get(NEXT_GET_NAVIGATION)
-    const { nav = [], footer = [] } = navResult
-    if (nav?.length || footer?.length) {
-      const updatedPageProps = { ...pageProps, navTree: navResult }
-      setUpdatedPageProps(updatedPageProps)
-    }
-  }
 
   const fetchEngageCampaigns = useCallback(async () => {
     try {
@@ -440,146 +425,17 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 MyApp.getInitialProps = async (
   context: AppContext
 ): Promise<AppInitialProps> => {
-  /**
-   * Generates a new auth token.
-   * @param authUrl
-   * @param clientId
-   * @param sharedSecret
-   * @returns
-   */
-  const generateToken = async (
-    authUrl: string,
-    clientId: string,
-    sharedSecret: string
-  ) => {
-    const url = new URL('oAuth/token', authUrl)
-    const { data: tokenResult } = await axios({
-      url: url.href,
-      method: 'post',
-      data: `client_id=${clientId}&client_secret=${sharedSecret}&grant_type=client_credentials`,
-    })
-    return tokenResult?.access_token
-  }
-
-  /**
-   * Manages auth token used for securing Next.js API routes.
-   * @param req
-   * @returns
-   */
-  const getToken = async (req: any) => {
-    let token = EmptyString
-    const cookies = qs.decode(req?.headers?.cookie, '; ')
-    if (cookies[Cookie.Key.API_TOKEN]) {
-      token = cookies[Cookie.Key.API_TOKEN] as string
-      const jwtResult: any = jwt.decode(decrypt(token))
-      if (jwtResult?.exp) {
-        const expiryTime = jwtResult?.exp * 1000
-        const nowTime = new Date().getTime()
-
-        if (nowTime >= expiryTime) {
-          // Generate new token
-          token = await generateToken(AUTH_URL!, CLIENT_ID!, SHARED_SECRET!)
-        }
-      }
-    } else {
-      // Generate new token
-      token = await generateToken(AUTH_URL!, CLIENT_ID!, SHARED_SECRET!)
-    }
-    return token
-  }
 
   const { ctx, Component } = context
   const { locale } = ctx
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
-  /**
-   * TODO: [GS, 08-Sep-23]: `res?.setHeader()` throws error intermittently in Next.js PRODUCTION release.
-   * This issue is not replicated in DEV mode.
-   *
-   * Temporarily commenting this logic to resolve the above issue. This snippet assists [AuthToken] generation
-   * and therefore passed-on to [API RouteGuard] that ensures no external entity is able to access
-   * Next.js app's APIs apart from the app itself.  The [AuthToken] is generated server-side and stored in
-   * encoded format in form of a cookie (valid for 60 mins). The [RouteGuard] validates the token in incoming request's
-   * cookies for authorization.
-   *
-   * The RouteGuard logic will still work as it has another level of checking the source (referrer)
-   * from where the API call has been initiated.
-   */
-  /*const token = await getToken(req)
-  if (token) {
-    res?.setHeader(
-      'Set-Cookie',
-      `${Cookie.Key.API_TOKEN}=${encrypt(
-        token
-      )}; Path=/; Max-Age=${API_TOKEN_EXPIRY_IN_SECONDS};`
-    )
-  }*/
-
   let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']
   if (!clientIPAddress && forwardedFor) {
     clientIPAddress = forwardedFor.split(',').at(0) ?? ''
   }
-
-  let appConfigResult, navTreeResult = { nav: new Array(), footer: new Array(), }
-  let defaultCurrency = BETTERCOMMERCE_DEFAULT_CURRENCY
-  let defaultCountry = BETTERCOMMERCE_DEFAULT_COUNTRY
-  let defaultLanguage = BETTERCOMMERCE_DEFAULT_LANGUAGE
-
-  const headers = { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, }
-  try {
-    appConfigResult = await cachedGetData(INFRA_ENDPOINT, req?.cookies, headers)
-    const languageCookie = req?.cookies?.Language === 'undefined' ? '' : req?.cookies?.Language
-    const currencyCookie = req?.cookies?.Currency === 'undefined' ? '' : req?.cookies?.Currency
-    const countryCookie = req?.cookies?.Country === 'undefined' ? '' : req?.cookies?.Country
-    defaultCurrency = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCurrencyCode')?.value || currencyCookie || BETTERCOMMERCE_DEFAULT_CURRENCY
-    defaultCountry = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultCountry')?.value || countryCookie || BETTERCOMMERCE_DEFAULT_COUNTRY
-    defaultLanguage = appConfigResult?.result?.configSettings?.find((setting: any) => setting?.configType === 'RegionalSettings')?.configKeys?.find((item: any) => item?.key === 'RegionalSettings.DefaultLanguageCode')?.value || languageCookie || BETTERCOMMERCE_DEFAULT_LANGUAGE
-  } catch (error: any) { }
-
-  let appConfig = null
-  if (appConfigResult) {
-    const { result: appConfigData } = appConfigResult
-    const { configSettings, shippingCountries, billingCountries, currencies, languages, snippets, } = appConfigData
-    const appConfigObj = {
-      ...{
-        configSettings: configSettings?.filter((x: any) => ['B2BSettings', 'BasketSettings', 'ShippingSettings', 'PasswordProtectionSettings'].includes(x?.configType)) || [],
-        shippingCountries,
-        billingCountries,
-        currencies,
-        languages,
-        snippets,
-      },
-      ...{ defaultCurrency, defaultLanguage, defaultCountry, },
-    }
-    appConfig = encrypt(JSON.stringify(appConfigObj))
-  }
-
-  let reviewData: any = EmptyObject
-  try {
-    const res: any = await fetcher({
-      baseUrl: REVIEW_BASE_URL,
-      url: `${REVIEW_SERVICE_BASE_API}/summary`,
-      method: 'post',
-      cookies: {},
-    })
-    reviewData = res?.Result
-  } catch (error: any) {
-    logError(error)
-  }
-
-  let pluginConfig = new Array<any>()
-  const socialLoginConfigUrl = `${INFRA_PLUGIN_CATEGORY_ENDPOINT}?categoryCode=${PluginCategory.SOCIAL_LOGIN}`
-  try {
-    const socialLoginConfig: any = await cachedGetData(socialLoginConfigUrl, req?.cookies, headers)
-    if (socialLoginConfig?.result) {
-      pluginConfig = pluginConfig?.concat(socialLoginConfig?.result)
-    }
-  } catch (error: any) {
-    logError(error)
-  }
-
   const serverHost = os.hostname()
   const urlReferrer = req?.headers?.referer
 
@@ -587,11 +443,7 @@ MyApp.getInitialProps = async (
     pageProps: {
       serverHost,
       urlReferrer,
-      appConfig: appConfig,
-      pluginConfig: encrypt(JSON.stringify(pluginConfig)),
-      navTree: navTreeResult,
-      clientIPAddress: clientIPAddress,
-      reviewData: reviewData,
+      clientIPAddress,
       locale,
       featureToggle,
     },
