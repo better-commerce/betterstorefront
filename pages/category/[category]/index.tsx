@@ -537,7 +537,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             {category?.description &&
               <div className='w-full'>
                 <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
-                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
                 </span>
               </div>
             }

@@ -479,7 +479,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
         </div>
-
         <div className="container mx-auto my-6 mt-4 bg-transparent">
           <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
             <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
@@ -488,7 +487,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
             {category?.description &&
               <div className='w-full'>
                 <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
-                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
                 </span>
               </div>
             }
