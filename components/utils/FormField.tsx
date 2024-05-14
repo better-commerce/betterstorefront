@@ -1,5 +1,6 @@
 // Base Imports
 import React, { useState } from 'react'
+import { useTranslation } from "@commerce/utils/use-translation";
 
 // Package Imports
 import { Field } from 'formik'
@@ -25,7 +26,7 @@ const FormField = (props: IFormFieldProps) => {
     lastChildInFloatingContainer,
     lastChildInLabel,
   } = props
-
+  const translate = useTranslation();
   const showLabel = item?.showLabel === undefined ? true : item?.showLabel
 
   const getErrorLabel = (context: any, item: any, ignoreTouched = false) => {
@@ -199,7 +200,7 @@ const FormField = (props: IFormFieldProps) => {
                     class={item?.className}
                   >
                     <option value="default" disabled selected>
-                    Select a Country
+                    {translate('label.addressBook.selectCountryText')}
                     </option>
                     {item?.options?.map((option: any, idx: number) => (
                       <option key={idx} value={`${option?.itemValue}&${option?.itemText}`}>

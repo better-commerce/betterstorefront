@@ -20,8 +20,10 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-2", data }) 
   const translate = useTranslation()
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
+  const [isInvalid , setIsInvalid] = useState(false)
   const { setAlert } = useUI()
   const handleChange = (e: any) => {
+    if(isInvalid){setIsInvalid(false)}
     setValue(e.target.value)
   }
   const submitSubscription = async (data: any) => {
@@ -37,6 +39,9 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-2", data }) 
           type: 'success',
           msg: translate('label.newsLetter.successText'),
         })
+      }
+      else{
+        setIsInvalid(true)
       }
     }
     catch {
@@ -60,11 +65,15 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-2", data }) 
             <h2 className="text-4xl font-semibold md:text-5xl"> {subs?.subscription_title} </h2>
             <span className="block mt-5 text-neutral-500 dark:text-neutral-400"> {subs?.subscription_subtitle} </span>
             <form className="relative max-w-sm mt-10" onSubmit={(e) => { e.preventDefault(); submitSubscription(value) }} >
-              <Input required aria-required placeholder={translate('common.message.enterYourEmailText')} type="email" value={value} onChange={handleChange} rounded="rounded-full" />
+              <Input required aria-required placeholder={translate('common.message.enterYourEmailText')} value={value} onChange={handleChange} rounded="rounded-full" />
               <ButtonCircle type="submit" className="absolute transform -translate-y-1/2 top-1/2 right-1" >
                 <ArrowSmallRightIcon className="w-6 h-6" />
               </ButtonCircle>
             </form>
+            {isInvalid &&  
+              <div className="relative max-w-sm flex items-center justify-center">
+                <p className="text-red-600 max-w-sm text-xs error-text-clr"> {translate('common.message.noEmailMsg')} </p>
+              </div>}
             {err ? <p className="px-0 mt-1 text-sm error-text-clr sm:px-0">{err}</p> : null}
           </div>
           <img alt={subs?.subscription_title} src={generateUri(subs?.subscription_image, "h=500&fm=webp") || IMG_PLACEHOLDER} sizes="(max-width: 768px) 100vw, 50vw " className="relative block lg:absolute lg:right-0 lg:bottom-0 mt-10 lg:mt-0 max-w-lg lg:max-w-[calc(40%-40px)]" />

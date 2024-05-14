@@ -146,6 +146,7 @@
       "dummyName3Text": "Colección de Ofertas"
     },
     "checkout": {
+      "informationText":"Información",
       "availableCreditText": "Crédito disponible",
       "creditLimitText": "Límite de crédito",
       "quickOrderText": "Pedido rápido",
@@ -182,6 +183,7 @@
       "saveAndContinueToDeliveryText": "Guardar y continuar a entrega",
       "saveAndContinueToBillingText": "Guardar y continuar a facturación",
       "deliveryText": "Entrega",
+      "expectedDateText": "Fecha esperada",
       "continueToPaymentText": "Continuar a pago",
       "noDeliveryMethodAvailableText": "No hay método de entrega disponible",
       "findStoresText": "Buscar tiendas",
@@ -1294,7 +1296,20 @@
         "phoneNumRequiredMsg": "El número de teléfono es un campo obligatorio",
         "phoneNumMaxLengthMsg": "El número de teléfono debe tener como máximo 12 dígitos",
         "phoneNumMinLengthMsg": "El número de teléfono debe tener al menos 7 dígitos",
-        "companyNameRequiredMsg": "El nombre de la empresa es obligatorio"
+        "companyNameRequiredMsg": "El nombre de la empresa es obligatorio",
+        "firstNameRequiredMsg": "El nombre es un campo obligatorio",
+        "lastNameRequiredMsg": "El apellido es un campo obligatorio",
+        "passwordRequiredMsg": "La contraseña de longitud 8 - 24 es un campo obligatorio",
+        "registeredNumberRequiredMsg": "El número registrado es un campo obligatorio",
+        "addressLine1RequiredMsg": "La dirección es un campo obligatorio",
+        "cityRequiredMsg": "La ciudad es un campo obligatorio",
+        "stateRequiredMsg": "El estado es un campo obligatorio",
+        "countryRequiredMsg": "El país es un campo obligatorio",
+        "postCodeRequiredMsg": "El código postal es un campo obligatorio",
+        "passwordMinLenghtMsg": "La contraseña debe tener al menos 8 caracteres",
+        "passwordMaxLengthMsg": "La contraseña debe tener como máximo 24 caracteres",
+        "maxEmailLengthMsg": "El correo electrónico debe tener como máximo 255 caracteres",
+        "emailInvalidMsg": "El correo electrónico no es válido"
       },
       "noEmailMsg": "Por favor, introduce un correo electrónico correcto",
       "returnSuccessMsg": "Devolver éxito",

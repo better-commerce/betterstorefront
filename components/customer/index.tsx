@@ -10,50 +10,6 @@ import { Checkbox } from '@components/account/Address'
 /**
  * This is a schema for registration to enable Trading account registration.
  */
-const b2bRegisterSchema = Yup.object({
-  isRequestTradingAccount: Yup.boolean(),
-
-  companyName: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-
-  registeredNumber: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-
-  email: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().max(255).required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-
-  address1: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-
-  city: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-
-  country: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-
-  postCode: Yup.string().when('isRequestTradingAccount', {
-    is: (val: boolean) => val == true,
-    then: Yup.string().required(),
-  }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
-})
-
-const loginSchema = Yup.object({
-  email: Yup.string().email().required(),
-  password: Yup.string().min(8).max(24).required(),
-})
-
 const registerInitialValues = {
   firstName: '',
   lastName: '',
@@ -95,13 +51,58 @@ export default function CustomerForm({
 }: any) {
   const translate = useTranslation()
   const registerSchema = Yup.object({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    password: Yup.string().min(8).max(24).required(),
+    firstName: Yup.string().required(translate('common.message.profile.firstNameRequiredMsg')),
+    lastName: Yup.string().required(translate('common.message.profile.lastNameRequiredMsg')),
+    password: Yup.string().min(8,translate('common.message.profile.passwordMinLenghtMsg')).max(24,translate('common.message.profile.passwordMaxLengthMsg')).required(translate('common.message.profile.passwordRequiredMsg')),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password')],translate('label.myAccount.passwordMustMatchText'))
       .required(),
   })
+
+  const b2bRegisterSchema = Yup.object({
+    isRequestTradingAccount: Yup.boolean(),
+  
+    companyName: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().required(translate('common.message.profile.companyNameRequiredMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  
+    registeredNumber: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().required(translate('common.message.profile.registeredNumberRequiredMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  
+    email: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().email(translate('common.message.profile.emailInvalidMsg')).max(255 , translate('common.message.profile.maxEmailLengthMsg') ).required(translate('common.message.profile.emailInputMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  
+    address1: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().required(translate('common.message.profile.addressLine1RequiredMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  
+    city: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().required(translate('common.message.profile.cityRequiredMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  
+    country: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().required(translate('common.message.profile.countryRequiredMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  
+    postCode: Yup.string().when('isRequestTradingAccount', {
+      is: (val: boolean) => val == true,
+      then: Yup.string().required(translate('common.message.profile.postCodeRequiredMsg')),
+    }), // Required validation of this field depends isRequestTradingAccount (i.e. when checked to TRUE)
+  })
+  
+  const loginSchema = Yup.object({
+    email: Yup.string().email(translate('common.message.profile.emailInvalidMsg')).required(translate('common.message.profile.emailRequiredMsg')),
+    password: Yup.string().min(8,translate('common.message.profile.passwordMinLenghtMsg') ).max(24,translate('common.message.profile.passwordMaxLengthMsg')).required(translate('common.message.profile.passwordRequiredText')),
+  })
+  
 
   const registrationConfig = useRegistrationConfig();
   const loginConfig = useLoginConfig();
@@ -193,7 +194,7 @@ export default function CustomerForm({
               })}
               <div className={`flex items-center justify-center !w-full my-5 ${!isLoginSidebarOpen && `md:w-1/2`}`} >
                 <Button type="submit" className="w-full border border-black btn btn-c btn-primary rounded-2xl" loading={isSubmitting} disabled={isSubmitting} >
-                  {!isSubmitting && btnText}
+                  {!isSubmitting && translate(`common.label.registerText`)}
                 </Button>
               </div>
             </Form>

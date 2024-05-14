@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Disclosure } from '@headlessui/react'
 import moment from "moment"
-
+import { useTranslation } from '@commerce/utils/use-translation'
 //
 import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
 import { DATE_FORMAT } from '@components/utils/constants'
 
 const SplitDeliveryBasketItems = ({ basket }: any) => {
+  const translate = useTranslation()
   const [deliveryPlans, setDeliveryPlans] = useState([])
 
   const groupBasketByDeliveryPlan = useMemo(() => {
@@ -36,8 +37,8 @@ const SplitDeliveryBasketItems = ({ basket }: any) => {
               <>
                 <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                   <span className="font-semibold text-black w-full flex justify-between">
-                    <span>Delivery {idx + 1} of {deliveryPlans?.length}</span>
-                    <span className='ml-2 text-xs font-medium'>Expected date: {moment(new Date(plan?.deliveryDateTarget)).format(DATE_FORMAT)}</span>
+                    <span>{translate('label.checkout.deliveryText')} {idx + 1} of {deliveryPlans?.length}</span>
+                    <span className='ml-2 text-xs font-medium'>{translate('label.checkout.expectedDateText')}: {moment(new Date(plan?.deliveryDateTarget)).format(DATE_FORMAT)}</span>
                   </span>
                   <i
                     className={`${
