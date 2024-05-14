@@ -127,7 +127,7 @@ function BrandsPage({ brands }: any) {
                 <label className="hidden" htmlFor={'search-bar'}>
                   {translate('label.search.searchText')}
                 </label>
-                <input id={'search-bar'} className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white border-0 appearance-none" placeholder="Search..." onChange={(e: any) => handleSearch(e.target.value)} />
+                <input id={'search-bar'} className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white border-0 appearance-none" placeholder={`${translate('label.search.searchText')}...`} onChange={(e: any) => handleSearch(e.target.value)} />
                 <div className="relative text-gray-400 top-2">
                   <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
                 </div>
