@@ -1304,7 +1304,7 @@
         "cityRequiredMsg": "La ville est un champ obligatoire",
         "stateRequiredMsg": "L'état est un champ obligatoire",
         "countryRequiredMsg": "Le pays est un champ obligatoire",
-        "postcodeRequiredMsg": "Le code postal est un champ obligatoire",
+        "postCodeRequiredMsg": "Le code postal est un champ obligatoire",
         "passwordMinLenghtMsg": "Le mot de passe doit comporter au moins 8 caractères",
         "passwordMaxLengthMsg": "Le mot de passe doit comporter au plus 24 caractères",
         "maxEmailLengthMsg": "L'email doit comporter au plus 255 caractères",
