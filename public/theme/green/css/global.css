@@ -2104,7 +2104,7 @@ p {
     border-radius: 8px !important;
   }
   .product-card__information {
-    padding: 16px 0 50px 0 !important;
+    padding: 16px 0 10px 0 !important;
   }
 
   .home-product-card .product-card__information {

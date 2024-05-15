@@ -482,13 +482,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section">
-        <div className="container mx-auto mt-4 bg-transparent">
+        <div className="container mx-auto mt-2 bg-transparent">
           {category?.breadCrumbs && (
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
         </div>
-        <div className="container mx-auto my-6 mt-4 bg-transparent">
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+        <div className="container mx-auto my-0 mt-1 bg-transparent">
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
             <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
@@ -498,7 +498,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
               </div>
             }
           </div>
-          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+          <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
             <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {productDataToPass?.total} {productDataToPass?.total >1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />

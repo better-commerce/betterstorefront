@@ -47,6 +47,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import FeaturedCategory from '@components/category/FeaturedCategory'
 import FeaturedBanner from '@components/category/FeaturedBanner'
 import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
+import FeaturedBrand from '@components/category/FeaturedBrand'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -532,14 +533,14 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           )}
         </div>
         <div className="container">
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3' : ''}`}>
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
             <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
-                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2' : 'text-sm mt-4'}`}>
+                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
                 </span>
               </div>
             }
@@ -551,33 +552,11 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
               <LandingFeaturedCategory featuredCategory={category?.subCategories} />
             }
-            <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
-              <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
-                {category?.featuredBrand?.map((feature: any, fdx: number) => (
-                  <div className="flex flex-col overflow-hidden shadow-lg" key={fdx} >
-                    <div className="flex-shrink-0">
-                      <>
-                        {feature?.logoImageName != '' ? (
-                          <img src={generateUri(feature?.logoImageName, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                        ) : (
-                          <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                        )}
-                      </>
-                    </div>
-                    <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
-                      <div className="flex-1">
-                        <Link href={`/${feature?.slug}`} className="block mt-2">
-                          <p className="text-xl font-semibold text-white"> {feature?.manufacturerName} </p>
-                          <div className="mt-3 text-white font-18" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(feature?.description), }} ></div>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {category?.featuredBrand?.length > 0 &&
+              <FeaturedBrand featuredBrand={category?.featuredBrand} />
+            }
             {minimalProd?.results?.length > 0 &&
-              <div className="py-4">
+              <div className="py-6">
                 <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> Featured Products</h2>
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
                   {minimalProd?.results?.map((product: any, pIdx: number) => (
@@ -586,8 +565,34 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                     </div>
                   ))}
                 </div>
+                <hr className='mt-6 border-slate-200 dark:border-slate-700 sm:mt-10' />
               </div>
             }
+            <div className="pt-2 pb-8">
+              <div className="mx-auto mb-4">
+                <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.relatedCategoriesText')} </h2>
+                <Swiper spaceBetween={10} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4.5, }, 1024: { slidesPerView: 6, }, 1400: { slidesPerView: 7 }, }} className="mySwier" >
+                  {category?.linkGroups?.length > 0 && category?.linkGroups[0]?.items?.map((related: any, cdx: number) => (
+                    <SwiperSlide key={cdx}>
+                      <div className="relative border group rounded-2xl bg-slate-100 border-slate-100 hover:bg-slate-200">
+                        <>
+                          {related?.image != '' ? (
+                            <img src={generateUri(related?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
+                          ) : (
+                            <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
+                          )}
+                        </>
+                        <div className="absolute w-full px-6 -mt-4 top-2/4">
+                          <Link href={`/${related?.link}`} className="flex justify-center w-full px-4 py-2 text-center text-white rounded-lg hover:bg-sky-800 bg-black/70 font-14">
+                            <span>{related?.name}</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="container mx-auto">
