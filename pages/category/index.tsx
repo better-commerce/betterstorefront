@@ -60,13 +60,13 @@ function CategoryPage(props: any) {
               <div className="my-0">
                 <div className="box-content relative px-0 mt-2">
                   <div className="grid grid-cols-2 my-2 mb-6 gap-x-3 gap-y-3 md:grid-cols-5 lg:grid-cols-4 sm:my-4">
-                    {props?.data?.map((category: any, key: number) => (
-                      <div key={key} className="border bg-slate-100 rounded-2xl border-slate-200 hover:border-slate-300 " >
+                    {props?.data?.sort((a:any, b:any) => a.name.localeCompare(b.name)).map((category: any, key: number) => (
+                      <div key={key} className="border bg-slate-100 rounded-2xl border-slate-200 hover:border-slate-300">
                         <div className="relative group">
                           <Link key={key} href={`/${category.link}`}>
                             {category?.image ? (
                               <div className="relative overflow-hidden aspect-w-1 aspect-h-1">
-                                <img src={ `${category?.image}?fm=webp&h=800&w=400` || IMG_PLACEHOLDER } alt={category.name|| 'category'} className="object-cover rounded-2xl object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
+                                <img src={`${category?.image}?fm=webp&h=800&w=400` || IMG_PLACEHOLDER} alt={category.name || 'category'} className="object-cover rounded-2xl object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
                               </div>
                             ) : (
                               <div className="relative overflow-hidden aspect-[4/3]">
@@ -81,6 +81,7 @@ function CategoryPage(props: any) {
                         </div>
                       </div>
                     ))}
+
                   </div>
                 </div>
               </div>
@@ -111,16 +112,16 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   let categoryUIDData: any
   try {
-    const categoryUID =  Redis.Key.Category.AllCategory
+    const categoryUID = Redis.Key.Category.AllCategory
     const cachedData = await getDataByUID([categoryUID])
     categoryUIDData = parseDataValue(cachedData, categoryUID)
-    if(!containsArrayData(categoryUIDData)){
+    if (!containsArrayData(categoryUIDData)) {
       categoryUIDData = await getAllCategories()
       await setData([{ key: categoryUID, value: categoryUIDData }])
     }
   } catch (error: any) {
     logError(error)
-    
+
     if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
       let errorUrl = '/500'
       const errorData = error?.response?.data
