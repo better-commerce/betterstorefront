@@ -499,7 +499,7 @@ function CollectionPage(props: any) {
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
           <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
             {props?.name.toLowerCase()}
           </h1>

@@ -546,115 +546,68 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             }
           </div>
         </div>
-        {category?.isFeatured ? (
-          <div className='container'>
-            <FeaturedBanner category={category} />
-            {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-              <LandingFeaturedCategory featuredCategory={category?.subCategories} />
-            }
-            {category?.featuredBrand?.length > 0 &&
-              <FeaturedBrand featuredBrand={category?.featuredBrand} />
-            }
-            {minimalProd?.results?.length > 0 &&
-              <div className="py-6">
-                <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> Featured Products</h2>
-                <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
-                  {minimalProd?.results?.map((product: any, pIdx: number) => (
-                    <div key={pIdx}>
-                      <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </div>
-                  ))}
+        <div className="container mx-auto">
+          <FeaturedBanner category={category} />
+          {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+            <FeaturedCategory featuredCategory={category?.subCategories} />
+          }
+          {category?.featuredBrand?.length > 0 &&
+            <FeaturedBrand featuredBrand={category?.featuredBrand} />
+          }
+          {productDataToPass?.results?.length > 0 &&
+            <>
+              <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
+                <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                <div className="flex justify-end align-bottom">
+                  <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                 </div>
-                <hr className='mt-6 border-slate-200 dark:border-slate-700 sm:mt-10' />
               </div>
-            }
-            <div className="pt-2 pb-8">
-              <div className="mx-auto mb-4">
-                <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.relatedCategoriesText')} </h2>
-                <Swiper spaceBetween={10} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4.5, }, 1024: { slidesPerView: 6, }, 1400: { slidesPerView: 7 }, }} className="mySwier" >
-                  {category?.linkGroups?.length > 0 && category?.linkGroups[0]?.items?.map((related: any, cdx: number) => (
-                    <SwiperSlide key={cdx}>
-                      <div className="relative border group rounded-2xl bg-slate-100 border-slate-100 hover:bg-slate-200">
-                        <>
-                          {related?.image != '' ? (
-                            <img src={generateUri(related?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                          ) : (
-                            <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                          )}
-                        </>
-                        <div className="absolute w-full px-6 -mt-4 top-2/4">
-                          <Link href={`/${related?.link}`} className="flex justify-center w-full px-4 py-2 text-center text-white rounded-lg hover:bg-sky-800 bg-black/70 font-14">
-                            <span>{related?.name}</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="container mx-auto">
-            <FeaturedBanner category={category} />
-            {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-              <FeaturedCategory featuredCategory={category?.subCategories} />
-            }
-            {productDataToPass?.results?.length > 0 &&
-              <>
-                <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                  <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
-                  <div className="flex justify-end align-bottom">
-                    <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                  </div>
-                </div>
-                <hr className='border-slate-200 dark:border-slate-700' />
-              </>
-            }
-            {productDataToPass?.results?.length > 0 ? (
-              <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
-                {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
-                  <>
-                    {isMobile ? (
-                      <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    ) : (
-                      <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+              <hr className='border-slate-200 dark:border-slate-700' />
+            </>
+          }
+          {productDataToPass?.results?.length > 0 ? (
+            <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
+              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                <>
+                  {isMobile ? (
+                    <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  ) : (
+                    <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                  )}
+                  <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                    {isMobile ? null : (
+                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     )}
-                    <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                      {isMobile ? null : (
-                        <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      )}
-                      <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </div>
-                  </>
-                ) : (
-                  <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                    <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
-                ))}
-                <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-                {/* <div className="col-span-12 cart-recently-viewed">
+                </>
+              ) : (
+                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                  <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              ))}
+              <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+              {/* <div className="col-span-12 cart-recently-viewed">
                     <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
                   </div> */}
-                <div className='flex flex-col w-full'>
-                  <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                </div>
+              <div className='flex flex-col w-full'>
+                <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
               </div>
-            ) : (
-              <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
-                <h4 className="text-3xl font-bold text-gray-300">
-                  {translate('common.label.noProductAvailableText')} {category?.name}
-                </h4>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
+              <h4 className="text-3xl font-bold text-gray-300">
+                {translate('common.label.noProductAvailableText')} {category?.name}
+              </h4>
+            </div>
+          )}
+        </div>
       </section>
     </>
   )

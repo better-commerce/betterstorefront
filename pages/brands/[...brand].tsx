@@ -452,10 +452,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               </div>
               <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
-            <div className="mt-10">
+            <div className="mt-2">
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
-                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
+                  <Heading className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
                     {translate('label.product.recommendedProductText')}
                   </Heading>
                   <div className="glide__track" data-glide-el="track">
@@ -515,7 +515,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </div>
         </>
       ) : (
-        <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
+        <div className="container pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
           <div className="max-w-screen-sm">
             <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
               <li className='flex items-center text-10-mob sm:text-sm'>
@@ -535,19 +535,19 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               </li>
             </ol>
           </div>
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
             <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {brandDetails?.name}
             </h1>
             {sanitizedDescription &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
-                  <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                  <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
                 </span>
               </div>
             }
           </div>
-          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
+          <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
             <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
