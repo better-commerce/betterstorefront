@@ -5,12 +5,12 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from "@commerce/utils/use-translation";
 import Link from "next/link";
-export default function LandingFeaturedCategory({featuredCategory}:any) {
+export default function LandingFeaturedCategory({ featuredCategory }: any) {
   const translate = useTranslation()
   return (
     <div className="py-6">
       <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2>
-      <Swiper spaceBetween={4} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 3, }, 768: { slidesPerView: 5, }, 1024: { slidesPerView: 6, }, 1400: { slidesPerView: 7, }, }} className="mySwiper" >
+      <Swiper spaceBetween={10} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: 6, }, 1400: { slidesPerView: 7, }, }} className="mySwiper" >
         {featuredCategory?.map((featured: any, featuredIdx: number) => (
           <div key={featuredIdx}>
             {featured?.isFeatured == true && (
@@ -35,6 +35,7 @@ export default function LandingFeaturedCategory({featuredCategory}:any) {
         )
         )}
       </Swiper>
+      <hr className='mt-6 border-slate-200 dark:border-slate-700 sm:mt-10' />
     </div>
   )
 }
