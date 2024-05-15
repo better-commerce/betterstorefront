@@ -356,7 +356,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-4 sm:mb-4 align-center'>
-          <span className="inline-block text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} <span className='font-semibold text-black'>{data.products.total}</span> {translate('common.label.resultsText')} </span>
+          <span className="inline-block text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} <span className='font-semibold text-black'> {productDataToPass?.total} {productDataToPass?.total >1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span> {translate('common.label.resultsText')} </span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
