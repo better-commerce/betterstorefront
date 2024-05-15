@@ -5,6 +5,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { useUI } from '@components/ui'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import dynamic from 'next/dynamic'
+import { useTranslation } from "@commerce/utils/use-translation";
 const ProductGrid = dynamic(() => import('@components/Product/Grid'))
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -92,6 +93,7 @@ export default function ProductCollection({
     : false
 
   const [isProductCompare, setProductCompare] = useState(false)
+  const translate = useTranslation();
   const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
@@ -199,7 +201,7 @@ export default function ProductCollection({
             {state.filters[0]?.Value}
           </h1>
           <h1 className="mt-2 text-xl font-bold tracking-tight text-gray-500">
-            {data.products.total} results
+          {productDataToPass?.total} {translate('common.label.resultsText')} 
           </h1>
           <div
             dangerouslySetInnerHTML={{
