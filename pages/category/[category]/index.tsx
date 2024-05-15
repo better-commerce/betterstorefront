@@ -590,7 +590,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             }
           </div>
         ) : (
-          <div className="container w-full px-0 py-0 mx-auto sm:px-0">
+          <div className="container mx-auto">
             <FeaturedBanner category={category} />
             {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
               <FeaturedCategory featuredCategory={category?.subCategories} />
