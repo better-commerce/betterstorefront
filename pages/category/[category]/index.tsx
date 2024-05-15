@@ -44,6 +44,8 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import FeaturedCategory from '@components/category/FeaturedCategory'
+import FeaturedBanner from '@components/category/FeaturedBanner'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -395,24 +397,15 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     if (category.featuredProductCSV != '' && category.featuredProductCSV) {
       CSVCollection = category?.featuredProductCSV?.split(',')
       async function handleApiCall() {
-        const data: any = Promise.all(
-          CSVCollection?.map(async (val: any) => {
-            const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
-              sortBy: '',
-              sortOrder: '',
-              currentPage: 1,
-              filters: [],
-              freeText: val || '',
-            })
-            return res?.data.products
-          })
-        )
-          .then((results) => {
-            setMinimalProd(results)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+        const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
+          sortBy: '',
+          sortOrder: '',
+          currentPage: 1,
+          filters: [],
+          stockCodes: CSVCollection || '',
+        })
+        setMinimalProd(res?.data.products)
+        return res?.data.products
       }
       handleApiCall()
     }
@@ -532,92 +525,31 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section">
-        <div className="container mx-auto mt-4 bg-transparent lg:pt-6">
+        <div className="container mx-auto mt-2 bg-transparent">
           {category?.breadCrumbs && (
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
         </div>
         <div className="container">
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-6 py-3' : ''}`}>
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3' : ''}`}>
             <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`}>
-                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
                 </span>
               </div>
             }
           </div>
-
-          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {products?.total} items</span>
-            <div className="flex justify-end align-bottom">
-              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-            </div>
-          </div>
-          <hr className='border-slate-200 dark:border-slate-700' />
         </div>
-        {category?.isFeatured != false ? (
-          <div className="container">
-            <div className="py-4">
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
-                <div className="container mx-auto mb-4">
-                  <h2 className="block text-xl font-medium sm:text-2xl lg:text-2xl">{translate('label.category.popularCategoriesText')} </h2>
-                </div>
-              )}
-              <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
-                {category?.subCategories?.map((feature: any, cdx: number) => (
-                  <div key={cdx}>
-                    {feature?.isFeatured == true && (
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          {feature?.image != '' ? (
-                            <img src={generateUri(feature?.image, 'h=160&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          ) : (
-                            <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          )}
-                          <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                            <Link href={`/${feature?.link}`} className="btn-primary-white font-14" >
-                              <span>{feature?.name}</span>
-                            </Link>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    )}
-                  </div>
-                ))}
-              </Swiper>
-            </div>
-            {/* popular category start */}
-
-            {/* category banner info start */}
-            <div className="w-full py-4">
-              {category && category?.images && category?.images.length ? (
-                category?.images.map((cat: any, idx: number) => (
-                  <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
-                    <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
-                      <div className="w-full h-full">
-                        <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                          <div className="sm:w-2/4 sm:pr-20">
-                            <h2 className="text-white uppercase"> {cat?.name} </h2>
-                            <p className="mt-5 font-light text-white"> {cat?.description} </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="order-1 sm:order-2">
-                      <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'Image'} width={700} height={700} />
-                    </div>
-                  </div>
-                ))
-              ) : null}
-            </div>
-            {/* category banner info End */}
-
-            {/* feature brand section start*/}
+        {category?.isFeatured ? (
+          <div className='container'>
+            <FeaturedBanner category={category} />
+            {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+              <FeaturedCategory featuredCategory={category?.subCategories} />
+            }
             <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
               <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
                 {category?.featuredBrand?.map((feature: any, fdx: number) => (
@@ -643,156 +575,79 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                 ))}
               </div>
             </div>
-            {/* feature brand section End*/}
-
-            {minimalProd?.length > 0 && (
-              <div className="py-6">
-                <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
-                  <h2 className="mb-2 font-bold uppercase font-18">
-                    {translate('label.category.relatedCategoriesText')}
-                  </h2>
-                  <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 5, }, }} className="mySwier" >
-                    {minimalProd?.map((product: any, cdx: number) => (
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <ProductCard data={product.results || []} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
+            {minimalProd?.results?.length > 0 &&
+              <div className="py-4">
+                <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> Featured Products</h2>
+                <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
+                  {minimalProd?.results?.map((product: any, pIdx: number) => (
+                    <div key={pIdx}>
+                      <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
-
-            {/* feature brand section End*/}
-
-            {/* related category  */}
-            <div className="py-6">
-              <div className="px-4 mx-auto mb-4 2xl:w-4/5 sm:px-4 lg:px-6 2xl:px-0">
-                <h2 className="mb-2 font-bold uppercase font-18"> {translate('label.category.relatedCategoriesText')} </h2>
-                <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 5, }, }} className="mySwier" >
-                  {category?.linkGroups?.length > 0 && category?.linkGroups[0]?.items?.map((related: any, cdx: number) => (
-                    <SwiperSlide key={cdx}>
-                      <div className="relative group">
-                        <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                        <>
-                          {related?.image != '' ? (
-                            <img src={generateUri(related?.image, "h=200&fm=webp") || IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          ) : (
-                            <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          )}
-                        </>
-                        <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                          <Link href={`/${related?.link}`} className="btn-primary-white font-14" >
-                            <span>{related?.name}</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            </div>
+            }
           </div>
         ) : (
-          <>
-            <div className="w-full px-0 py-0 mx-auto sm:px-0">
-              <div className="container py-0 mx-auto">
-                {category && category?.images && category?.images.length ? (category?.images.map((cat: any, idx: number) => (
-                  <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
-                    <div className="flex items-center justify-center order-2 w-full h-full p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
-                      <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                        <div className="sm:w-2/4 sm:pr-20">
-                          <h2 className="text-white uppercase"> {cat?.name} </h2>
-                          <p className="mt-5 font-light text-white"> {cat?.description} </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="order-1 sm:order-2">
-                      <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'category'} width={700} height={700} />
-                    </div>
+          <div className="w-full px-0 py-0 mx-auto sm:px-0">
+            <FeaturedBanner category={category} />
+            {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+              <FeaturedCategory featuredCategory={category?.subCategories} />
+            }
+            {productDataToPass?.results?.length > 0 &&
+              <div className='container'>
+                <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
+                  <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {products?.total} items</span>
+                  <div className="flex justify-end align-bottom">
+                    <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                   </div>
-                ))
-                ) : null}
-              </div>
-              {/* category banner info End */}
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                <div className="container py-6">
-                  {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
-                    <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2>
-                  )}
-                  <Swiper spaceBetween={4} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
-                    {category?.subCategories?.map((featured: any, featuredIdx: number) => (
-                      <div key={featuredIdx}>
-                        {featured?.isFeatured == true && (
-                          <SwiperSlide key={featuredIdx}>
-                            <div className="relative border group rounded-2xl bg-slate-100 border-slate-100">
-                              <>
-                                {featured?.image != '' ? (
-                                  <img src={generateUri(featured?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                                ) : (
-                                  <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                                )}
-                              </>
-                              <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                                <Link href={`/${featured?.link}`} className="px-4 py-2 text-white bg-black rounded-lg font-14">
-                                  <span>{featured?.name}</span>
-                                </Link>
-                              </div>
-                            </div>
-                          </SwiperSlide>
-                        )}
-                      </div>
-                    )
-                    )}
-                  </Swiper>
                 </div>
-              }
-              {productDataToPass?.results?.length > 0 ? (
-                <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
-                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
-                    <>
-                      {isMobile ? (
-                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      ) : (
-                        <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                <hr className='border-slate-200 dark:border-slate-700' />
+              </div>
+            }
+            {productDataToPass?.results?.length > 0 ? (
+              <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
+                {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                  <>
+                    {isMobile ? (
+                      <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    ) : (
+                      <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                    )}
+                    <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                      {isMobile ? null : (
+                        <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                        {isMobile ? null : (
-                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                        )}
-                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     </div>
-                  ))}
-                  <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-                  {/* <div className="col-span-12 cart-recently-viewed">
+                  </>
+                ) : (
+                  <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                    <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  </div>
+                ))}
+                <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+                {/* <div className="col-span-12 cart-recently-viewed">
                     <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
                   </div> */}
-                  <div className='flex flex-col w-full'>
-                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  </div>
+                <div className='flex flex-col w-full'>
+                  <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                 </div>
-              ) : (
-                <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
-                  <h4 className="text-3xl font-bold text-gray-300">
-                    {translate('common.label.noProductAvailableText')} {category?.name}
-                  </h4>
-                </div>
-              )}
-            </div>
-          </>
+              </div>
+            ) : (
+              <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
+                <h4 className="text-3xl font-bold text-gray-300">
+                  {translate('common.label.noProductAvailableText')} {category?.name}
+                </h4>
+              </div>
+            )}
+          </div>
         )}
       </section>
     </>

@@ -2364,3 +2364,29 @@ p {
   padding-bottom: 10px !important;
   font-size: 25px !important;
 }
+.category-banner-container{
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  max-height: 540px !important;
+  width: 100% !important;
+  position: relative;
+}
+.category-banner-container img{
+  border-radius: 10px;
+  max-height: 540px;
+  width: 100%;
+  object-fit: contain;
+  object-position: top;
+}
+
+.category-banner-container::after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  background: rgba(0,0,0,0.3);
+  left: 0;
+  top: 0;
+  z-index: 9;
+  border-radius: 10px;
+}
