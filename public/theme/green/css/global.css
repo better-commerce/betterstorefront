@@ -2390,3 +2390,6 @@ p {
   z-index: 9;
   border-radius: 10px;
 }
+.brand-logo-category{
+  width: auto !important;
+}
