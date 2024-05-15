@@ -589,24 +589,24 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             }
           </div>
         ) : (
-          <div className="w-full px-0 py-0 mx-auto sm:px-0">
+          <div className="container w-full px-0 py-0 mx-auto sm:px-0">
             <FeaturedBanner category={category} />
             {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
               <FeaturedCategory featuredCategory={category?.subCategories} />
             }
             {productDataToPass?.results?.length > 0 &&
-              <div className='container'>
+              <>
                 <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                   <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total >1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                  <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
                   <div className="flex justify-end align-bottom">
                     <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                   </div>
                 </div>
                 <hr className='border-slate-200 dark:border-slate-700' />
-              </div>
+              </>
             }
             {productDataToPass?.results?.length > 0 ? (
-              <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
+              <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
                 {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                   <>
                     {isMobile ? (
