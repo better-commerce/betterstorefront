@@ -46,6 +46,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import FeaturedCategory from '@components/category/FeaturedCategory'
 import FeaturedBanner from '@components/category/FeaturedBanner'
+import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -548,7 +549,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           <div className='container'>
             <FeaturedBanner category={category} />
             {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-              <FeaturedCategory featuredCategory={category?.subCategories} />
+              <LandingFeaturedCategory featuredCategory={category?.subCategories} />
             }
             <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
               <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
