@@ -1492,8 +1492,9 @@ p {
 }
 
 .brand-logo{
-  width: 65px;
+  width: 150px;
   height: auto;
+  filter: invert(1);
 }
 
 .bg-banner{
