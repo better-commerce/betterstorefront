@@ -34,7 +34,7 @@ export default function Newsletter() {
     <>
       <div className='flex w-full py-4 bg-gray-100 border sm:py-6 border-top'>
         <div className='container mx-auto'>
-          <div className='flex items-center justify-between'>
+          <div className='flex flex-col sm:flex-row items-center justify-between'>
             <div className='flex flex-col'>
               <h4 className="my-4 text-xl font-semibold text-black uppercase sm:text-2xl sm:my-0 text-footer-clr ">
                 {translate('label.newsLetter.signupText')}
@@ -43,7 +43,7 @@ export default function Newsletter() {
                 {translate('label.newsLetter.signupTitle')}
               </p>
             </div>
-            <div className='sm:min-w-[50%] min-w-full'>
+            <div className='sm:min-w-[50%] min-w-full mt-5 sm:mt-0'>
               <form className="flex sm:w-full" onSubmit={(e) => { e.preventDefault(); submitSubscription(value); }} >
                 <label htmlFor="email-address" className="sr-only"> {translate('label.newsLetter.emailLabelText')} </label>
                 <input id="email-address" type="text" name={'email-address'} placeholder={translate('common.message.enterEmailText')} value={value} onChange={handleChange} className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />

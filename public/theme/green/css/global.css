@@ -2320,6 +2320,10 @@ p {
 }
 
 @media screen and (max-width:767px) {
+  .mob-container {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
   .theme-pt-3 {
     padding-top: 0rem;
   }
