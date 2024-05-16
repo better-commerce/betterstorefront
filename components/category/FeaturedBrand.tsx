@@ -19,9 +19,9 @@ export default function FeaturedBrand({ featuredBrand }: any) {
                   <Link href={`/${feature?.slug}`}>
                     <div className="flex items-center justify-center flex-shrink-0">
                       {feature?.logoImageName != '' ? (
-                        <img src={generateUri(`https://www.imagedelivery.space/tagdeal/${feature?.logoImageName}`, 'h=50&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-center h-10 brand-logo-category max-h-[50px]" alt="Image" width={100} height={50} />
+                        <img src={generateUri(`https://www.imagedelivery.space/tagdeal/${feature?.logoImageName}`, 'h=50&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-center h-10 brand-logo-category max-h-[50px]" alt={feature?.manufacturerName} width={100} height={50} />
                       ) : (
-                        <img src={IMG_PLACEHOLDER} className="object-contain object-center h-10 brand-logo-category max-h-[50px]" alt="Image" width={100} height={50} />
+                        <img src={IMG_PLACEHOLDER} className="object-contain object-center h-10 brand-logo-category max-h-[50px]" alt={feature?.manufacturerName} width={100} height={50} />
                       )}
                     </div>
                   </Link>
