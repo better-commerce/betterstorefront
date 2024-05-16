@@ -72,9 +72,8 @@ const MyMembershipPage = ({ allPlans }: any) => {
         return 'gradient-golden text-white';
       } else if (plan === MembershipType.PLATINUM) {
         return 'gradient-platinum text-white';
-      } else {
-        return 'bg-black';
       }
+      return 'bg-black';
     };
   }, []);
   
@@ -103,8 +102,8 @@ const MyMembershipPage = ({ allPlans }: any) => {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {(allPlans?.length >= 0) ? allPlans?.sort((plan1: any, plan2: any) => plan1?.displayOrder - plan2.displayOrder)?.map((plan: any, planIdx: number) => (
               <div className="flex flex-col w-full bg-transparent border-2 border-black rounded-2xl" key={`plan-${planIdx}`}>
-                <div className={`items-center justify-center py-4 text-center ${gradientName(plan.name)} rounded-t-xl`}>
-                  <h2 className={`text-lg font-medium ${gradientName(plan.name)}`}>{plan?.name}</h2>
+                <div className={`items-center justify-center py-4 text-center ${gradientName(plan?.name)} rounded-t-xl`}>
+                  <h2 className={`text-lg font-medium ${gradientName(plan?.name)}`}>{plan?.name}</h2>
                 </div>
                 <div className="bg-gradient-to-t from-purple-100 to-white rounded-b-xl">
                   <div className="flex flex-col gap-4 p-6">
