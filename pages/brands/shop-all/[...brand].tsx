@@ -424,9 +424,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
-  const onToggleBrandListPage = () => {
-    router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
-  }
+
   return (
     <>
       <NextHead>
@@ -443,144 +441,73 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      {brandDetails?.showLandingPage && showLandingPage ? (
-        <>
-          <div className="container w-full pb-0 mx-auto bg-white md:pb-10">
-            <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2">
-              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#1f2261] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
-                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
-                <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
-              </div>
-              <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
+      <div className="container pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
+        <div className="max-w-screen-sm">
+          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href="/brands" passHref>
+                <span className="font-light hover:text-gray-900 dark:text-black text-slate-500">Brands</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href={`/${brandDetails?.link}`} passHref>
+                <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > {brandDetails?.name}</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href="#" passHref>
+                <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {brandDetails?.name}</span>
+              </Link>
+            </li>
+          </ol>
+        </div>
+        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+          <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+            {brandDetails?.name}
+          </h1>
+          {sanitizedDescription &&
+            <div className='w-full'>
+              <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+              </span>
             </div>
-            <div className="mt-2">
-              <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
-                  <div className='flex justify-between my-4'>
-                    <Heading className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
-                      {translate('label.product.recommendedProductText')}
-                    </Heading>
-                    <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
-                  </div>
-                  <div className="glide__track" data-glide-el="track">
-                    <ul className="glide__slides">
-                      {productCollectionRes?.map((item: any, index: number) => (
-                        <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-0 md:mt-10">
-              <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
-            </div>
-          </div>
-
-          <div className="container w-full mx-auto">
-            {isOnlyMobile ? (
-              <div className="mb-10 max-h-[30vh]">
-                <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
-              </div>
-            ) : (
-              <div className="mb-10">
-                <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
-              </div>
-            )}
-            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
-            <div className="mt-10">
-              <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRefNew} className={`flow-root`}>
-                  <div className='flex justify-between'>
-                    <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
-                      {translate('label.product.saleProductText')}
-                    </Heading>
-                    <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
-                  </div>
-                  <div className="glide__track" data-glide-el="track">
-                    <ul className="glide__slides">
-                      {saleProductCollectionRes?.map((item: any, index: number) => (
-                        <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="my-10">
-              <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
-              {faq?.results?.map((val: any, Idx: number) => {
-                return (
-                  <BrandDisclosure key={Idx} heading={val.faq} details={val.ans} />
-                )
-              })}
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="container pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
-          <div className="max-w-screen-sm">
-            <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
-              <li className='flex items-center text-10-mob sm:text-sm'>
-                <Link href="/brands" passHref>
-                  <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
-                </Link>
-              </li>
-              <li className='flex items-center text-10-mob sm:text-sm'>
-                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-                </span>
-              </li>
-              <li className='flex items-center text-10-mob sm:text-sm'>
-                <Link href="#" passHref>
-                  <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
-                </Link>
-              </li>
-            </ol>
-          </div>
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
-              {brandDetails?.name}
-            </h1>
-            {sanitizedDescription &&
-              <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
-                  <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
-                </span>
-              </div>
-            }
-          </div>
-          <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
-            <div className="flex justify-end align-bottom">
-              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-            </div>
-          </div>
-          <hr className='border-slate-200 dark:border-slate-700' />
-
-          <div className="flex justify-end w-full py-4">
-            <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
-          </div>
-          <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          {/* <div className="cart-recently-viewed">
-            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
-          </div> */}
-          <div className='flex flex-col w-full'>
-            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          }
+        </div>
+        <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
+          <div className="flex justify-end align-bottom">
+            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
         </div>
-      )}
+        <hr className='border-slate-200 dark:border-slate-700' />
+
+        <div className="flex justify-end w-full py-4">
+          <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
+        </div>
+        <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+        <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+        {/* <div className="cart-recently-viewed">
+            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+          </div> */}
+        <div className='flex flex-col w-full'>
+          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        </div>
+      </div>
     </>
   )
 }
