@@ -3,8 +3,8 @@ import NextHead from 'next/head'
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Layout from '@components/Layout/Layout'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from "@components/utils/constants";
-import React from "react";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, MembershipType, SITE_ORIGIN_URL } from "@components/utils/constants";
+import React, { useMemo } from "react";
 import { removeQueryString } from "@commerce/utils/uri-util";
 import { RocketLaunchIcon, TagIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps, } from "next";
@@ -64,6 +64,20 @@ const MyMembershipPage = ({ allPlans }: any) => {
   }
   const buttonConfig = buttonTitle();
 
+  const gradientName = useMemo(() => {
+    return (plan:any) => {
+      if (plan === MembershipType.SILVER) {
+        return 'gradient-silver text-black';
+      } else if (plan === MembershipType.GOLD) {
+        return 'gradient-golden text-white';
+      } else if (plan === MembershipType.PLATINUM) {
+        return 'gradient-platinum text-white';
+      } else {
+        return 'bg-black';
+      }
+    };
+  }, []);
+  
   const cleanPath = removeQueryString(router.asPath)
   return (
     <>
@@ -89,8 +103,8 @@ const MyMembershipPage = ({ allPlans }: any) => {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {(allPlans?.length >= 0) ? allPlans?.sort((plan1: any, plan2: any) => plan1?.displayOrder - plan2.displayOrder)?.map((plan: any, planIdx: number) => (
               <div className="flex flex-col w-full bg-transparent border-2 border-black rounded-2xl" key={`plan-${planIdx}`}>
-                <div className="items-center justify-center py-4 text-center bg-black rounded-t-xl">
-                  <h2 className="text-lg font-medium text-white">{plan?.name}</h2>
+                <div className={`items-center justify-center py-4 text-center ${gradientName(plan.name)} rounded-t-xl`}>
+                  <h2 className={`text-lg font-medium ${gradientName(plan.name)}`}>{plan?.name}</h2>
                 </div>
                 <div className="bg-gradient-to-t from-purple-100 to-white rounded-b-xl">
                   <div className="flex flex-col gap-4 p-6">
