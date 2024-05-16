@@ -75,7 +75,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
       }
       return 'bg-black';
     };
-  }, []);
+  }, [allPlans]);
   
   const cleanPath = removeQueryString(router.asPath)
   return (
