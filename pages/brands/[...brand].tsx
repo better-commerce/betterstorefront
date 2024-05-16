@@ -447,7 +447,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         <>
           <div className="container w-full pb-0 mx-auto bg-white md:pb-10">
             <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2">
-              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#1f2261] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 brand-rounded-xl bg-black min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
                 <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
                 <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
