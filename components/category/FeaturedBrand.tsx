@@ -15,7 +15,7 @@ export default function FeaturedBrand({ featuredBrand }: any) {
           {featuredBrand?.map((feature: any, fdx: number) => (
             <div key={fdx}>
               <SwiperSlide key={fdx}>
-                <div className="flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg hover:border-gray-300" key={fdx} >
+                <div className="flex flex-col overflow-hidden bg-[#EFEFEF] border border-gray-200 rounded-lg hover:border-gray-300" key={fdx} >
                   <Link href={`/${feature?.slug}`}>
                     <div className="flex items-center justify-center flex-shrink-0">
                       {feature?.logoImageName != '' ? (
