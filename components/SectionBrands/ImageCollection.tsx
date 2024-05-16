@@ -38,7 +38,7 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
     <div id="ImageCollection" className={`grid grid-cols-${range} gap-5`}>
       {bannerCollection.map((val: any, Idx: number) => {
         return (
-          <Link key={Idx} className="flex items-center border border-solid bg-sky-700 border-sky-700 justify-evenly group" href={val.link ? val.link : val.slug ? val.slug : '/#'} >
+          <Link key={Idx} className="flex items-center border border-solid sm:max-h-[280px] bg-white border-white brand-rounded-xl justify-evenly group" href={val.link ? val.link : val.slug ? val.slug : '/#'} >
             {val.title !== '' && (
               <p key={`${val.title ? val.title : val.name}${Idx}`} className="absolute z-10 flex text-[#212530] justify-center py-2 m-auto mt-24 text-sm font-semibold uppercase rounded-md bg-gray-50 px-9 sm:px-8 sm:mt-0 sm:py-4 md:text-md 2xl:text-lg" >
                 {' '}
@@ -47,7 +47,7 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
                 </span>
               </p>
             )}
-            <img alt="logo" key={Idx} src={generateUri(val.url, 'h=224&fm=webp') ? generateUri(val.url, 'h=224&fm=webp') || IMG_PLACEHOLDER : val.image || IMG_PLACEHOLDER} width={305} height={224} className="w-full group-hover:opacity-80" />
+            <img alt="logo" key={Idx} src={generateUri(val.url, 'h=400&fm=webp') ? generateUri(val.url, 'h=400&fm=webp') || IMG_PLACEHOLDER : val.image || IMG_PLACEHOLDER} width={305} height={224} className="w-full group-hover:opacity-80 sm:max-h-[280px] object-cover object-top brand-rounded-xl" />
           </Link>
         )
       })}

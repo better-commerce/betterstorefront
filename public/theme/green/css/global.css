@@ -2397,3 +2397,7 @@ p {
 .brand-logo-category{
   width: auto !important;
 }
+
+.brand-rounded-xl{
+  border-radius: 10px !important;
+}
