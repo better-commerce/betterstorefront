@@ -10,7 +10,7 @@ export default function FeaturedBrand({ featuredBrand }: any) {
   return (
     <>
       <div className="pb-4">
-        <h2 className="block mb-2 text-sm font-semibold sm:text-lg lg:text-lg">Featured Brands</h2>
+        <h2 className="block mb-4 text-lg font-semibold sm:text-xl lg:text-xl">Featured Brands</h2>
         <Swiper spaceBetween={10} slidesPerView={1} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 3, }, 1024: { slidesPerView: 7, }, 1400: { slidesPerView: 8, }, }} className="mySwiper" >
           {featuredBrand?.map((feature: any, fdx: number) => (
             <div key={fdx}>

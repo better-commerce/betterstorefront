@@ -48,6 +48,7 @@ import FeaturedCategory from '@components/category/FeaturedCategory'
 import FeaturedBanner from '@components/category/FeaturedBanner'
 import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
 import FeaturedBrand from '@components/category/FeaturedBrand'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -516,6 +517,21 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const onToggleBrandListPage = () => {
     router.push(`/category/shop-all/${slug?.replace('category/', '')}`)
   }
+  const breadCrumbData: any = [
+    {
+      "slug": {
+        "title": category?.name,
+        "slug": category?.link,
+        "childSlug": {
+          "title": `All ${category?.name}`,
+          "slug": category?.link,
+          "childSlug": null,
+          "isCurrent": true
+        }
+      }
+    }
+  ]
+
   return (
     <>
       <NextHead>
@@ -531,9 +547,33 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       </NextHead>
       <section className="main-section">
         <div className="container mx-auto mt-2 bg-transparent">
-          {category?.breadCrumbs && (
-            <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
-          )}
+          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href="/category" passHref>
+                <span className="font-light hover:text-gray-900 dark:text-black text-slate-500">Category</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href={`/${category?.link}`} passHref>
+                <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > {category?.name}</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href="#" passHref>
+                <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {category?.name}</span>
+              </Link>
+            </li>
+          </ol>
         </div>
         <div className="container">
           <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
@@ -549,50 +589,47 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             }
           </div>
         </div>
-        {category?.linkGroups?.length > 0 ?
-          (
-            <div className='container mx-auto'>
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                <LandingFeaturedCategory featuredCategory={category?.subCategories} />
-              }
-              <div className='grid grid-cols-1 gap-4 sm:grid-cols-12 sm:gap-10'>
-                <div className='sm:col-span-2'>
-                  <div className="pt-2 pb-8">
-                    {category?.linkGroups?.map((grp: any, grpIdx: number) => (
-                      <div className="mx-auto mb-4" key={`linkGrp-${grpIdx}`}>
-                        <h2 className="block mb-4 text-lg font-semibold sm:text-xl lg:text-xl">{grp?.name}</h2>
-                        {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
-                          <Link href={`/${item?.link}`} className="flex justify-start w-full py-1 text-left text-black font-14 hover:underline" key={cdx}>
-                            <span>{item?.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    ))}
-
-                  </div>
-                </div>
-                <div className='space-y-6 sm:col-span-10'>
-                  <FeaturedBanner category={category} />
-                  {category?.featuredBrand?.length > 0 &&
-                    <FeaturedBrand featuredBrand={category?.featuredBrand} />
-                  }
-                  {minimalProd?.results?.length > 0 &&
-                    <>
-                      <div className='flex justify-between mb-2'>
-                        <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl">Featured Products</h2>
-                        <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
-                      </div>
-                      <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
-                        {minimalProd?.results?.map((product: any, pIdx: number) => (
-                          <div key={pIdx}>
-                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                          </div>
-                        ))}
-                      </div>                      
-                    </>
-                  }
+        <div className="container mx-auto">
+          {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+            <FeaturedCategory featuredCategory={category?.subCategories} />
+          }
+          {category?.featuredBrand?.length > 0 &&
+            <FeaturedBrand featuredBrand={category?.featuredBrand} />
+          }
+          {productDataToPass?.results?.length > 0 &&
+            <>
+              <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
+                <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                <div className="flex justify-end align-bottom">
+                  <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                 </div>
               </div>
+              <hr className='border-slate-200 dark:border-slate-700' />
+            </>
+          }
+          {productDataToPass?.results?.length > 0 ? (
+            <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
+              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                <>
+                  {isMobile ? (
+                    <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  ) : (
+                    <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                  )}
+                  <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                    {isMobile ? null : (
+                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    )}
+                    <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  </div>
+                </>
+              ) : (
+                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                  <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              ))}
+              <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
               <div className='flex flex-col w-full'>
                 <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                 <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
@@ -603,67 +640,13 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
               </div>
             </div>
           ) : (
-            <div className="container mx-auto">
-              <FeaturedBanner category={category} />
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                <FeaturedCategory featuredCategory={category?.subCategories} />
-              }
-              {category?.featuredBrand?.length > 0 &&
-                <FeaturedBrand featuredBrand={category?.featuredBrand} />
-              }
-              {productDataToPass?.results?.length > 0 &&
-                <>
-                  <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                    <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
-                    <div className="flex justify-end align-bottom">
-                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                    </div>
-                  </div>
-                  <hr className='border-slate-200 dark:border-slate-700' />
-                </>
-              }
-              {productDataToPass?.results?.length > 0 ? (
-                <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
-                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
-                    <>
-                      {isMobile ? (
-                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      ) : (
-                        <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                      )}
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                        {isMobile ? null : (
-                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                        )}
-                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </div>
-                  ))}
-                  <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-                  <div className='flex flex-col w-full'>
-                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  </div>
-                </div>
-              ) : (
-                <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
-                  <h4 className="text-3xl font-bold text-gray-300">
-                    {translate('common.label.noProductAvailableText')} {category?.name}
-                  </h4>
-                </div>
-              )}
+            <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
+              <h4 className="text-3xl font-bold text-gray-300">
+                {translate('common.label.noProductAvailableText')} {category?.name}
+              </h4>
             </div>
           )}
-
+        </div>
       </section>
     </>
   )
