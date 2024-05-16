@@ -118,7 +118,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
             </div>
           }
-          <div className="container flex justify-between mx-auto">
+          <div className="container flex justify-between mx-auto mob-container">
             {isMobile &&
               <div className="flex items-center flex-1">
                 <MenuBar navItems={config} featureToggle={featureToggle} />
@@ -135,11 +135,11 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
             }
 
-            <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
+            <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100 ml-5 sm:ml-0">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
-              <button className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+              <button className="items-center justify-center w-7 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
                 {renderMagnifyingGlassIcon()}
               </button>
 
