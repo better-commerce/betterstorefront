@@ -2401,3 +2401,7 @@ p {
 .brand-rounded-xl{
   border-radius: 10px !important;
 }
+
+.swiper-center .swiper-wrapper{
+  justify-content: center !important;
+}

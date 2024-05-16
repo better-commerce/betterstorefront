@@ -49,6 +49,7 @@ import FeaturedBanner from '@components/category/FeaturedBanner'
 import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
 import FeaturedBrand from '@components/category/FeaturedBrand'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -594,7 +595,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             <FeaturedCategory featuredCategory={category?.subCategories} />
           }
           {category?.featuredBrand?.length > 0 &&
-            <FeaturedBrand featuredBrand={category?.featuredBrand} />
+            <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
           }
           {productDataToPass?.results?.length > 0 &&
             <>

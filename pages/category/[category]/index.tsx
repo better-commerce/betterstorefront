@@ -48,6 +48,7 @@ import FeaturedCategory from '@components/category/FeaturedCategory'
 import FeaturedBanner from '@components/category/FeaturedBanner'
 import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
 import FeaturedBrand from '@components/category/FeaturedBrand'
+import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -422,16 +423,11 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       return () => {
         window?.removeEventListener('scroll', trackScroll)
       }
-    } /*else {
-      resetPageScroll()
-    }*/
-
+    }
   }, [])
 
   useEffect(() => {
-    const dataToPass = IS_INFINITE_SCROLL
-      ? productListMemory?.products
-      : data?.products // productListMemory?.products
+    const dataToPass = IS_INFINITE_SCROLL ? productListMemory?.products : data?.products
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, data?.products])
 
@@ -516,6 +512,11 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const onToggleBrandListPage = () => {
     router.push(`/category/shop-all/${slug?.replace('category/', '')}`)
   }
+  const filterBrandData = ({ key, brand }: any) => {
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
   return (
     <>
       <NextHead>
@@ -542,8 +543,8 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             </h1>
             {category?.description &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2' : 'text-sm mt-4'}`}>
-                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
+                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
                 </span>
               </div>
             }
@@ -574,7 +575,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                 <div className='space-y-6 sm:col-span-10'>
                   <FeaturedBanner category={category} />
                   {category?.featuredBrand?.length > 0 &&
-                    <FeaturedBrand featuredBrand={category?.featuredBrand} />
+                    <FeaturedBrand featuredBrand={category?.featuredBrand} filterBrandData={filterBrandData} />
                   }
                   {minimalProd?.results?.length > 0 &&
                     <>
@@ -588,7 +589,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </div>
                         ))}
-                      </div>                      
+                      </div>
                     </>
                   }
                 </div>
@@ -609,7 +610,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                 <FeaturedCategory featuredCategory={category?.subCategories} />
               }
               {category?.featuredBrand?.length > 0 &&
-                <FeaturedBrand featuredBrand={category?.featuredBrand} />
+                <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
               }
               {productDataToPass?.results?.length > 0 &&
                 <>
