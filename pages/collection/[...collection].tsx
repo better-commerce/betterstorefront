@@ -9,7 +9,7 @@ import Script from 'next/script'
 import NextHead from 'next/head'
 import useSwr from 'swr'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
@@ -495,6 +495,25 @@ function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
+      <div className="container mx-auto mt-2 bg-transparent">
+        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+          <li className='flex items-center text-10-mob sm:text-sm'>
+            <Link href="/collection" passHref>
+              <span className="font-light hover:text-gray-900 dark:text-black text-slate-500">Collections</span>
+            </Link>
+          </li>
+          <li className='flex items-center text-10-mob sm:text-sm'>
+            <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+              <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+            </span>
+          </li>
+          <li className='flex items-center text-10-mob sm:text-sm'>
+            <Link href="#" passHref>
+              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+            </Link>
+          </li>
+        </ol>
+      </div>
       <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
@@ -511,8 +530,8 @@ function CollectionPage(props: any) {
             </div>
           }
         </div>
-        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
+        <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
