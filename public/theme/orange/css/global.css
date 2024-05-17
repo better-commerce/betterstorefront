@@ -1706,3 +1706,12 @@ p {
     margin-bottom: 1rem !important;
   }
 }
+.brand-filter-wrap .filter-label-applied:first-child, .hide-clear-all-plp{
+  display: none !important;
+  }
+  @media screen and (max-width:767px) {
+    .brand-text-12{
+      font-size: 12px !important;
+      margin-top: 0 !important;
+    }
+  }
