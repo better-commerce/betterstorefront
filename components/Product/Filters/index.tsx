@@ -16,6 +16,7 @@ interface Props {
   routerSortOption: any
   removeFilter: any
   featureToggle?: any
+  isBrandPLP?: boolean
 }
 
 export default function Filters({
@@ -27,6 +28,7 @@ export default function Filters({
   routerSortOption,
   removeFilter,
   featureToggle,
+  isBrandPLP = false 
 }: Props) {
   const [open, setOpen] = useState(false)
   const translate = useTranslation()
@@ -68,8 +70,10 @@ export default function Filters({
                 </button>
               </div>
 
-              {products.filters?.map((section: any) => (
-                <Disclosure as="div" key={section.name} className="p-0 bg-gray-100 border-t border-white border-y-2" >
+              {products.filters?.map((section: any, sectionIdx: number) => {
+                if (isBrandPLP && section?.name === "Brand") return <></>
+                return(
+                  <Disclosure as="div" key={section.name} className="p-0 bg-gray-100 border-t border-white border-y-2" >
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex items-center justify-between w-full px-4 py-3">
@@ -84,7 +88,8 @@ export default function Filters({
                     </>
                   )}
                 </Disclosure>
-              ))}
+                )
+               })}
             </div>
           </Transition.Child>
         </Dialog>
@@ -103,16 +108,16 @@ export default function Filters({
       </section>
       {appliedFilters?.length > 0 && (
         <>
-          <div className='flex items-center justify-between px-4'>
+          <div className={`flex items-center justify-between px-4 ${appliedFilters?.length === 1 && isBrandPLP ? 'hide-clear-all-plp' : ''}`}>
             <h4 className="flex mb-2 text-sm font-bold"> {translate('label.filters.appliedFiltersText')} </h4>
             <div className="pl-6">
               <button onClick={clearAll} type="button" className="text-gray-500" > {translate('label.filters.clearAllText')} </button>
             </div>
           </div>
           <div className="flex flex-wrap">
-            <div className="flex flex-wrap">
+            <div className={`flex flex-wrap filter-wrap-section ${isBrandPLP ? 'brand-filter-wrap' : ''}`}>
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
-                <div key={`applied-filter-${idx}`} className="flex w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl" >
+                <div key={`applied-filter-${idx}`} className="flex filter-label-applied w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl" >
                   {appliedFilter?.name && (
                     <div className="flex">
                       <span className="font-medium"> {appliedFilter?.name}:{' '} </span>
