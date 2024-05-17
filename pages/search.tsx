@@ -28,6 +28,7 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
+import { getCurrentPLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -250,17 +251,12 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     })
   }
 
-  // useEffect(() => {
-  //   router.push({
-  //     pathname: router.pathname,
-  //     query: {
-  //       ...router.query,
-  //       filters: JSON.stringify(state.filters),
-  //     },
-  //   })
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.filters])
+  useEffect(() => {
+    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
+  }, [state?.filters])
 
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })

@@ -1,3 +1,4 @@
+import { uriParams } from '@commerce/utils/uri-util'
 import {
   DataSubmit,
   ISubmitStateInterface,
@@ -20,4 +21,58 @@ export const sanitizeHtmlContent = (html: any) => {
   }
 
   return EmptyString
+}
+
+export const getCurrentPLPFilters = (filters: any, state: any) => {
+  const currentFilters = filters?.reduce(
+    (acc: any, obj: any) => {
+      acc.forEach((item: any) => {
+        if (item.Key === obj.key) {
+          item['name'] = obj.name
+          return item
+        }
+        return acc
+      })
+      return acc
+    },
+    [...state?.filters]
+  )
+  return currentFilters
+}
+
+export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array<any>) => {
+  const getFilterQuery = () => {
+    let qs = EmptyString
+    if (currentFilters?.length) {
+      qs = JSON.stringify(currentFilters?.map((filter: any) => ({ name: filter?.name, value: filter?.Value })))
+      qs = `filters=${encodeURIComponent(qs)}`
+    }
+    return qs
+  }
+
+  let filterQuery = getFilterQuery()
+  let qsSearchParamsExcludingFilters = EmptyString
+  const search = document?.location?.search
+  //if (search) {
+  const searchParams = uriParams(search)
+  const { filters, ...rest } = searchParams
+  const searchParamsExcludingFilters = {...rest}
+  for (let key in searchParamsExcludingFilters) {
+    if (!qsSearchParamsExcludingFilters) {
+      qsSearchParamsExcludingFilters = `?${key}=${searchParamsExcludingFilters[key]}`
+    } else {
+      qsSearchParamsExcludingFilters = `${qsSearchParamsExcludingFilters}&${key}=${searchParamsExcludingFilters[key]}`
+    }
+  }
+  //}
+  if (filterQuery) {
+    if (!document.location?.search) {
+      filterQuery = `?${filterQuery}`
+    } else {
+      filterQuery = `&${filterQuery}`
+    }
+    router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}${filterQuery}`, undefined, { shallow: true })
+  } else {
+    router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}`, undefined, { shallow: true })
+  }
 }

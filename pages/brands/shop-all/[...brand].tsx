@@ -12,7 +12,7 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -248,6 +248,13 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     //}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
+
+  useEffect(() => {
+    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
+  }, [state?.filters])
 
   const handleClick = () => {
     setShowLandingPage(false)

@@ -12,7 +12,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
@@ -362,6 +362,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     }
     //}
   }, [data?.products?.results?.length, data])
+
+  useEffect(() => {
+    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
+  }, [state?.filters])
 
   useEffect(() => {
     const dataToPass = IS_INFINITE_SCROLL
