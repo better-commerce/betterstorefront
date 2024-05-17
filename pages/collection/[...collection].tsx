@@ -1,5 +1,5 @@
 // Base Imports
-import { useReducer, useEffect, useState, useMemo } from 'react'
+import { useReducer, useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
 
 // Package Imports
@@ -19,8 +19,7 @@ import Layout from '@components/Layout/Layout'
 import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import commerce from '@lib/api/commerce'
-import { generateUri, uriParams } from '@commerce/utils/uri-util'
+import { generateUri, } from '@commerce/utils/uri-util'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
@@ -29,7 +28,7 @@ import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -41,12 +40,12 @@ const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid')
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import { Guid } from '@commerce/types'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { getCurrentPLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -329,40 +328,6 @@ function CollectionPage(props: any) {
     return 0
   }
 
-  const routeToWithSelectedFilters = (currentFilters: Array<any>) => {
-    const getFilterQuery = () => {
-      let qs = EmptyString
-      if (currentFilters?.length) {
-        qs = JSON.stringify(currentFilters?.map((filter: any) => ({ name: filter?.name, value: filter?.Value })))
-        if (!document.location?.search) {
-          qs = `?filters=${qs}`
-        } else {
-          qs = `&filters=${qs}`
-        }
-      }
-      return qs
-    }
-
-    const filterQuery = getFilterQuery()
-    const search = document?.location?.search
-    const searchParams = uriParams(search)
-    const { filters, ...rest } = searchParams
-    const searchParamsExcludingFilters = {...rest}
-    let qsSearchParamsExcludingFilters = EmptyString
-    for (let key in searchParamsExcludingFilters) {
-      if (!qsSearchParamsExcludingFilters) {
-        qsSearchParamsExcludingFilters = `?${key}=${searchParamsExcludingFilters[key]}`
-      } else {
-        qsSearchParamsExcludingFilters = `${qsSearchParamsExcludingFilters}&${key}=${searchParamsExcludingFilters[key]}`
-      }
-    }
-    if (filterQuery) {
-      router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}${encodeURIComponent(filterQuery)}`, undefined, { shallow: true })
-    } else {
-      router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}`, undefined, { shallow: true })
-    }
-  }
-
   const [position, setPosition] = useState(defaultYOffset())
 
   useEffect(() => {
@@ -427,21 +392,8 @@ function CollectionPage(props: any) {
   }, [state?.filters, data?.products])
 
   useEffect(() => {
-    const currentFilters = data?.products?.filters?.reduce(
-      (acc: any, obj: any) => {
-        acc.forEach((item: any) => {
-          if (item.Key === obj.key) {
-            item['name'] = obj.name
-            return item
-          }
-          return acc
-        })
-        return acc
-      },
-      [...state?.filters]
-    )
-
-    routeToWithSelectedFilters(currentFilters)
+    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
+    routeToPLPWithSelectedFilters(router, currentFilters)
   }, [state?.filters])
 
   const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
