@@ -26,6 +26,7 @@ import Nav from "./shared/Nav/Nav";
 import Next from "./shared/NextPrev/Next";
 import Prev from "./shared/NextPrev/Prev";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionSliderLargeProduct2Props {
   className?: string;
@@ -191,7 +192,7 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
             })}
 
             <li className={`glide__slide   `}>
-              <Link href={"/search"} className="relative block group">
+              <Link href={sanitizeRelativeUrl(`/search`)} className="relative block group">
                 <div className="relative flex flex-col overflow-hidden rounded-2xl">
                   <div className="relative">
                     <div className="aspect-w-8 aspect-h-5 bg-black/5 dark:bg-neutral-800"></div>

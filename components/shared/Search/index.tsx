@@ -58,12 +58,12 @@ export default function Search(props: any) {
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter') {
-      Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
+      Router.push(`search?freeText=${encodeURIComponent(inputValue.trim())}`);
     }
   };
 
   const handleClickSearch = () => {
-    Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
+    Router.push(`search?freeText=${encodeURIComponent(inputValue.trim())}`);
   }
 
   useEffect(() => {

@@ -13,7 +13,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, } from '@components/utils/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
@@ -727,7 +727,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <div className="flex flex-col items-center justify-between w-full h-full py-9">
                               <img height="100" width="100" src="/assets/images/cart.jpg" alt="cart" className="text-center" />
                               <p className="mt-5 text-gray-700">{translate('common.label.noItemsPresentText')}</p>
-                              <Link href="/search">
+                              <Link href={sanitizeRelativeUrl(`/search`)}>
                                 <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={handleClose} >
                                   {translate('label.basket.catalogText')}
                                   <span aria-hidden="true"> &rarr;</span>
