@@ -251,7 +251,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   useEffect(() => {
     const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    routeToPLPWithSelectedFilters(router, currentFilters)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
   }, [state?.filters])
 
   const handleClick = () => {

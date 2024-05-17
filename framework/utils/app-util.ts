@@ -51,11 +51,12 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   }
 
   let filterQuery = getFilterQuery()
+  let qsSearchParamsExcludingFilters = EmptyString
   const search = document?.location?.search
+  //if (search) {
   const searchParams = uriParams(search)
   const { filters, ...rest } = searchParams
   const searchParamsExcludingFilters = {...rest}
-  let qsSearchParamsExcludingFilters = EmptyString
   for (let key in searchParamsExcludingFilters) {
     if (!qsSearchParamsExcludingFilters) {
       qsSearchParamsExcludingFilters = `?${key}=${searchParamsExcludingFilters[key]}`
@@ -63,6 +64,7 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
       qsSearchParamsExcludingFilters = `${qsSearchParamsExcludingFilters}&${key}=${searchParamsExcludingFilters[key]}`
     }
   }
+  //}
   if (filterQuery) {
     if (!document.location?.search) {
       filterQuery = `?${filterQuery}`
