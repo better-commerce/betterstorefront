@@ -30,6 +30,10 @@ const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOf
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const ProductSort = dynamic(() => import('@components/Product/ProductSort'))
+const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 import useFaqData from '@components/SectionBrands/faqData'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -86,7 +90,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership, }: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const translate = useTranslation()
   const faq = useFaqData();
   const adaptedQuery = { ...query }
@@ -434,6 +438,16 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const onToggleBrandListPage = () => {
     router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
   }
+  const handleFilters = (filter: null, type: string) => {
+    dispatch({
+      type,
+      payload: filter,
+    })
+    dispatch({ type: PAGE, payload: 1 })
+  }
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
   return (
     <>
       <NextHead>
@@ -563,18 +577,39 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             }
           </div>
           <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text brand-text-12"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
           </div>
           <hr className='border-slate-200 dark:border-slate-700' />
-
-          <div className="flex justify-end w-full py-4">
-            <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
-          </div>
-          <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          {
+            <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                <>
+                  {isMobile ? (
+                    <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  ) : (
+                    <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} isBrandPLP={true} />
+                  )}
+                  <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                    {isMobile ? null : (
+                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
+                    )}
+                    {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                  </div>
+                </>
+              ) : (
+                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                  <div className="flex justify-end w-full py-4">
+                    <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
+                  </div>
+                  <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              ))}
+              <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            </div>
+          }
           {/* <div className="cart-recently-viewed">
             <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
           </div> */}
