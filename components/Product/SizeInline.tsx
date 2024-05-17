@@ -22,17 +22,17 @@ function RenderRadioOptions({ label, items, itemsCount, selectedValue, selected,
       <>
          <h4 className="text-gray-700 font-14 dark:text-white font-label-14">
                {label}:
-               <span className="pl-1 font-light text-gray-700 text-ms dark:text-white font-label-14">{selectedVal?.includes('#') ? '' : (selectedVal || currentAttribute)}</span>
+               <span className="pl-1 font-semibold text-black uppercase text-ms dark:text-white font-label-14">{selectedVal?.includes('#') ? '' : (selectedVal || currentAttribute)}</span>
             </h4>
-         <div className="grid grid-cols-5 sm:grid-cols-7 gap-2 mt-2.5">
+         <div className="flex gap-2 mt-2.5">
             {items?.map((item: any, idx: any) => (isString(item?.fieldValue) && (
                <RadioGroup.Option
                   key={`radio-panel-${idx}-${item?.fieldValue}`} value={item?.fieldValue} title={item?.fieldLabel} style={{ backgroundColor: item?.fieldValue?.includes('#') ? item?.fieldValue : '' }}
                   onClick={() => { setSizeInit('true') }}
                   className={`${(selected?.attributes ? selected?.attributes[1]?.fieldValue : currentAttribute) == item?.fieldValue ?
-                     'bg-primary-500 bg-green-primary text-white dark:text-white' :
-                     'bg-white border-gray-300'} 
-                     relative h-10 sm:h-11 attr-box rounded-2xl border flex items-center justify-center text-sm uppercase font-semibold select-none overflow-hidden z-0 cursor-pointer border-slate-300 dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-neutral-700`}>
+                     'bg-white border-black border-2 text-black' :
+                     'bg-white border-gray-300 text-gray-600'} 
+                     relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-neutral-700`}>
                   <RadioGroup.Label as="p" className="m-auto font-semibold uppercase font-12">
                      {item?.fieldValue?.includes('#') ? '' : item?.fieldValue}
                   </RadioGroup.Label>
