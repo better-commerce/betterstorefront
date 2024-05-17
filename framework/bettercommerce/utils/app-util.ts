@@ -375,9 +375,9 @@ export const removePrecedingSlash = (value: string) => {
 
 export const sanitizeRelativeUrl = (value: string) => {
   if (value && !value.startsWith('/')) {
-    return value.replace(/\/\/+/g, '/')
+    return `/${value}`
   }
-  return value.replace(/\/\/+/g, '/');
+  return value
 }
 
 export const parseFullName = (
@@ -536,23 +536,11 @@ export const getAlgoliaSearchListPriceColumn = (isIncludeVAT: boolean) => {
 export const getCartValidateMessages = (messageCode: string, product: any) => {
   let message = EmptyString
   if (messageCode) {
-    const messageCodes = tryParseJson(messageCode) as any[]
-    if (messageCodes?.length) {
-      const priceChanged = messageCodes?.find(
-        (x: any) =>
-          x?.Key === product?.stockCode &&
-          matchStrings(x?.Value, 'PriceChanged', true)
-      )
-      const soldOut = messageCodes?.find(
-        (x: any) =>
-          x?.Key === product?.stockCode &&
-          matchStrings(x?.Value, 'SoldOut', true)
-      )
-      message = priceChanged
-        ? 'Price Changed'
-        : soldOut
-        ? 'Sold Out'
-        : EmptyString
+    const messageCodes = tryParseJson(messageCode) as any[];
+    if ( messageCodes?.length) {
+      const priceChanged = messageCodes?.find((x: any) => x?.Key === product?.stockCode && matchStrings(x?.Value, "PriceChanged", true))
+      const soldOut = messageCodes?.find((x: any) => x?.Key === product?.stockCode && matchStrings(x?.Value, "SoldOut", true))
+      message = priceChanged ? "Price Changed" : soldOut ? "Sold Out" : EmptyString
     }
   }
   return message
@@ -674,19 +662,16 @@ export const saveUserToken = (userToken: any) => {
 }
 
 export const getBrowserSessionId = (originalDocument?: any) => {
-  let sessionId = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : ''
+  let sessionId = /SESS\w*ID=([^;]+)/i.test(document.cookie) ? RegExp.$1 : ""
 
   if (originalDocument) {
-    sessionId = /SESS\w*ID=([^;]+)/i.test(originalDocument.cookie)
-      ? RegExp.$1
-      : ''
+    sessionId = /SESS\w*ID=([^;]+)/i.test(originalDocument.cookie) ? RegExp.$1 : ""
   }
   return sessionId
 }
 
 export const getNavigationStack = (sessionId: string) => {
-  const navigationStack: any =
-    getItem(LocalStorage.Key.NAVIGATION_STACK) || EmptyObject
+  const navigationStack: any = getItem(LocalStorage.Key.NAVIGATION_STACK) || EmptyObject
   if (sessionId && navigationStack[sessionId]) {
     const navStack = navigationStack[sessionId]
     return navStack || []
@@ -698,7 +683,7 @@ export const canGoBack = () => {
   const sessionId = getBrowserSessionId()
   const navStack: any = getNavigationStack(sessionId)
   if (navStack?.length) {
-    return navStack?.length > 1
+    return (navStack?.length > 1)
   }
   return false
 }
@@ -707,29 +692,17 @@ export const ensureNavigationStack = (url: string, origin: string) => {
   const sessionId = getBrowserSessionId()
   const navStack: Array<string> = getNavigationStack(sessionId)
 
-  if (
-    navStack?.length == 0 ||
-    (navStack?.length > 0 &&
-      new URL(navStack[navStack?.length - 1], origin).pathname.indexOf(url) ===
-        -1) /*!matchStrings(navStack[navStack?.length - 1], url, true)*/
-  ) {
+  if (navStack?.length == 0 || (navStack?.length > 0 && new URL(navStack[navStack?.length - 1], origin).pathname.indexOf(url) === -1 /*!matchStrings(navStack[navStack?.length - 1], url, true)*/)) {
     navStack.push(url)
     setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
   }
 }
 
-export const pushSearchToNavigationStack = (
-  url: string,
-  searchTerm: string
-) => {
+export const pushSearchToNavigationStack = (url: string, searchTerm: string) => {
   const sessionId = getBrowserSessionId()
   const navStack = getNavigationStack(sessionId)
   if (navStack) {
-    navStack.push(
-      !url?.includes('?')
-        ? `${url}?searchTerm=${encodeURIComponent(searchTerm)}`
-        : `${url}&searchTerm=${encodeURIComponent(searchTerm)}`
-    )
+    navStack.push(!url?.includes('?') ? `${url}?searchTerm=${encodeURIComponent(searchTerm)}` : `${url}&searchTerm=${encodeURIComponent(searchTerm)}`)
     setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
   }
   /*if (navStack?.length > 0 && matchStrings(navStack[navStack?.length - 1], url, true)) {
@@ -772,10 +745,7 @@ export const pushNavigationStack = (url: string, window: any) => {
   } else {
     const lastNav = navStack[navStack?.length - 1]
     const navUrl = new URL(url, window?.location?.origin)
-    if (
-      lastNav.indexOf(navUrl.pathname) === -1 &&
-      !matchStrings(lastNav, url, true)
-    ) {
+    if (lastNav.indexOf(navUrl.pathname) === -1 && !matchStrings(lastNav, url, true)) {
       navStack.push(url)
       setItem(LocalStorage.Key.NAVIGATION_STACK, { [`${sessionId}`]: navStack })
     }
@@ -786,9 +756,7 @@ export const pushNavigationStack = (url: string, window: any) => {
   }*/
 }
 
-export const getSocialLoginSettings = (
-  pluginSettings: Array<any>
-): Array<any> => {
+export const getSocialLoginSettings = (pluginSettings: Array<any>): Array<any> => {
   const socialLoginSettings = pluginSettings?.filter((x: any) => {
     if (x?.categoryCode === 'SocialLogin') {
       const settings: any = tryParseJson(x?.settings)
@@ -801,32 +769,27 @@ export const getSocialLoginSettings = (
 
 export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
   const socialLoginSettings = getSocialLoginSettings(pluginSettings)
-  return (
-    socialLoginSettings?.map((x: any) => x?.name?.toLowerCase())?.join(',') ||
-    EmptyString
-  )
+  return socialLoginSettings?.map((x: any) => x?.name?.toLowerCase())?.join(',') || EmptyString
 }
 
-export const loqateAddress = async (postCode: string) => {
+export const loqateAddress = async (postCode: string ) => {
   try {
-    const cartItems: any = getItem('cartItems') || {}
-    const deliveryMethod = cartItems?.shippingMethods?.find(
-      (method: any) => method?.id === cartItems?.shippingMethodId
-    )
+    const cartItems: any = getItem('cartItems') || {};
+    const deliveryMethod = cartItems?.shippingMethods?.find((method: any) => method?.id === cartItems?.shippingMethodId);
     const response = await axios.post(LOQATE_ADDRESS, {
       postCode,
       country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-    })
+    });
 
-    const responseData = response?.data?.response?.data || []
+    const responseData = response?.data?.response?.data || [];
     return responseData?.map((item: any) => ({
       text: item?.Text,
       id: item?.Id,
       description: item?.Description,
-    }))
+    }));
   } catch (error) {
     logError(error)
-    return []
+    return [];
   }
 }
 
@@ -837,7 +800,7 @@ export const getFeaturesConfig = () => {
   } catch (error) {
     return {}
   }
-}
+};
 
 export const getRedirectionLocale = (defaultCulture: string): string => {
   const currentLocale = Cookies.get(Cookie.Key.LANGUAGE)
