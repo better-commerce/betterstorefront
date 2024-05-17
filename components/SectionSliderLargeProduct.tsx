@@ -72,7 +72,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
             ))}
 
             <li className={`glide__slide`}>
-              <Link href={"/search"} className="relative block group">
+              <Link href={sanitizeRelativeUrl(`/search`)} className="relative block group">
                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                   <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
                   <div className="absolute flex flex-col items-center justify-center inset-y-6 inset-x-10">

@@ -5,13 +5,10 @@ import { Disclosure } from "@headlessui/react";
 import { NavItemType } from "./NavigationItem";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import SocialsList from "../SocialsList/SocialsList";
-import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
-import ButtonPrimary from "../Button/ButtonPrimary";
 import { Logo, useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
-import { removePrecedingSlash, sanitizeRelativeUrl } from "@framework/utils/app-util";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -21,7 +18,7 @@ export interface NavMobileProps {
 }
 
 const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, featureToggle }) => {
-  const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
+  const { isGuestUser, user } = useUI()
   const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
     return (
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
@@ -44,7 +41,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={i?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(child?.itemLink)}` : `/${sanitizeRelativeUrl(child?.itemLink)}`} >
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={i?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(child?.itemLink)}` : `${sanitizeRelativeUrl(child?.itemLink)}`} >
                         {child?.caption.toLowerCase()}
                       </Link>
                     </li>

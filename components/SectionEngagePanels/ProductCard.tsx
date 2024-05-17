@@ -157,87 +157,79 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
       <div>
         <div className="flex justify-between gap-1 mb-5 lg:gap-3 sm:mb-10">
           <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl">{title || campaignDetails?.campaign_title}</h2>
-          {isSlider ? (
-            <>
-              <div className="flex gap-4">
-                <button aria-label="Arrow Left" onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center arrow-container">
-                  <ArrowLeftIcon className="w-10 h-10 p-2 border rounded-full border-slate-200 hover:border-slate-400" />
-                </button>
-                <button aria-label="Arrow Right" onClick={() => swiperRef.current.swiper.slideNext()} className="flex items-center justify-center arrow-container">
-                  <ArrowRightIcon className="w-10 h-10 p-2 border rounded-full border-slate-200 hover:border-slate-400" />
-                </button>
-              </div>
-            </>
-          ) : (
-            <></>
-          )}
+          {isSlider &&
+            <div className="flex gap-4">
+              <button aria-label="Arrow Left" onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center arrow-container">
+                <ArrowLeftIcon className="w-10 h-10 p-2 border rounded-full border-slate-200 hover:border-slate-400" />
+              </button>
+              <button aria-label="Arrow Right" onClick={() => swiperRef.current.swiper.slideNext()} className="flex items-center justify-center arrow-container">
+                <ArrowRightIcon className="w-10 h-10 p-2 border rounded-full border-slate-200 hover:border-slate-400" />
+              </button>
+            </div>
+          }
         </div>
         {isSlider ? (
-          <>
-            <Swiper className="px-4 bg-white sm:px-0 min-cls-h" slidesPerView={2} spaceBetween={10} navigation={false} ref={swiperRef} breakpoints={{ 640: { slidesPerView: 2 }, 768: { slidesPerView: productPerRow }, 1024: { slidesPerView: productPerRow } }}>
-              {productList?.map((item: any, index: number) => (
-                <SwiperSlide key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
-                  <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6`)}>
-                    <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-                      <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
-                        <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
-                          <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
-                        </div>
-                      </ButtonLink>
-                    </div>
-
+          <Swiper className="px-4 bg-white sm:px-0 min-cls-h" slidesPerView={2} spaceBetween={10} navigation={false} ref={swiperRef} breakpoints={{ 640: { slidesPerView: 2 }, 768: { slidesPerView: productPerRow }, 1024: { slidesPerView: productPerRow } }}>
+            {productList?.map((item: any, index: number) => (
+              <SwiperSlide key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
+                <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6`)}>
+                  <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
                     <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
-                      <div className="space-y-4 px-2.5 pt-5 pb-2.5">
-                        <div>
-                          <h2 className="text-sm sm:text-sm text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{item?.title}</h2>
-                          <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{item?.brand}</p>
-                        </div>
-                        <div className="flex items-center justify-between ">
-                          <div className="font-semibold font-14 text-green">
-                            {currencyCode}
-                            {roundToDecimalPlaces(item?.sale_price, 2)}
-                          </div>
-                        </div>
+                      <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
+                        <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
                       </div>
                     </ButtonLink>
                   </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </>
-        ) : (
-          <>
-            <div className={`grid grid-cols-2 gap-3 sm:grid-cols-${productPerRow}`}>
-              {productList?.map((item: any, index: number) => (
-                <div key={`pdp-compare-product-${index}`} className={`relative flex-col sm:w-64 w-auto h-auto sm:pb-5 pb-2 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
-                  <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent sm:mb-6 mb-2`)}>
-                    <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-                      <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
-                        <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
-                          <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
-                        </div>
-                      </ButtonLink>
-                    </div>
 
-                    <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
-                      <div className="space-y-4 px-2.5 sm:pt-5 pt-2 pb-2.5">
-                        <div>
-                          <h2 className="text-xs sm:text-sm text-left font-semibold transition-colors sm:min-h-[50px] min-h-[40px] nc-ProductCard__title">{item?.title}</h2>
-                          <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{item?.brand}</p>
-                        </div>
-                        <div className="flex items-center justify-between ">
-                          <div className="font-semibold font-14 text-green">
-                            {currencyCode}
-                            {roundToDecimalPlaces(item?.sale_price, 2)}
-                          </div>
+                  <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                    <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+                      <div>
+                        <h2 className="text-sm sm:text-sm text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{item?.title}</h2>
+                        <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{item?.brand}</p>
+                      </div>
+                      <div className="flex items-center justify-between ">
+                        <div className="font-semibold font-14 text-green">
+                          {currencyCode}
+                          {roundToDecimalPlaces(item?.sale_price, 2)}
                         </div>
                       </div>
-                    </ButtonLink>
-                  </div>
+                    </div>
+                  </ButtonLink>
                 </div>
-              ))}
-            </div>
-          </>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className={`grid grid-cols-2 gap-3 sm:grid-cols-${productPerRow}`}>
+            {productList?.map((item: any, index: number) => (
+              <div key={`pdp-compare-product-${index}`} className={`relative flex-col sm:w-64 w-auto h-auto sm:pb-5 pb-2 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
+                <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent sm:mb-6 mb-2`)}>
+                  <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
+                    <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                      <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
+                        <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
+                      </div>
+                    </ButtonLink>
+                  </div>
+
+                  <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                    <div className="space-y-4 px-2.5 sm:pt-5 pt-2 pb-2.5">
+                      <div>
+                        <h2 className="text-xs sm:text-sm text-left font-semibold transition-colors sm:min-h-[50px] min-h-[40px] nc-ProductCard__title">{item?.title}</h2>
+                        <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1`}>{item?.brand}</p>
+                      </div>
+                      <div className="flex items-center justify-between ">
+                        <div className="font-semibold font-14 text-green">
+                          {currencyCode}
+                          {roundToDecimalPlaces(item?.sale_price, 2)}
+                        </div>
+                      </div>
+                    </div>
+                  </ButtonLink>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

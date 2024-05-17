@@ -36,11 +36,11 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
   const hostName = os.hostname()
   let slug = HOME_PAGE_SLUG;
   if (CURRENT_THEME == "black") {
-      slug = HOME_PAGE_NEW_SLUG
+    slug = HOME_PAGE_NEW_SLUG
   } else if (CURRENT_THEME == "orange") {
-      slug = HOME_PAGE_SLUG
+    slug = HOME_PAGE_SLUG
   } else {
-      slug = HOME_PAGE_SLUG;
+    slug = HOME_PAGE_SLUG;
   }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.HOME })
   const pageProps = await props.getPageProps({ slug, cookies: {} })
@@ -148,19 +148,21 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
               {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
-                <SectionBrandCard data={b} key={bIdx} />
+                <div key={`brands-${bIdx}`}>
+                  <SectionBrandCard data={b} />
+                </div>
               ))}
             </div>
           }
           {pageContents?.newarrivals?.length > 0 &&
-            <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
           <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
           {pageContents?.newlookbook?.length > 0 &&
-            <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading}featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+            <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
           }
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>

@@ -11,6 +11,7 @@ import Next from "../shared/NextPrev/Next";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionHero2Props {
   className?: string;
@@ -72,13 +73,13 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
       return null;
     }
     return (
-      <div className="group home-banner-group-mob">
-        <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative sm:!pt-0 ${className}`} key={index} >
+      <div className="group home-banner-group-mob" key={`hero-banner-${index}`}>
+        <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative sm:!pt-0 ${className}`}>
           <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
             {data?.map((_: any, index: number) => {
               const isActive = indexActive === index;
               return (
-                <div key={index} onClick={() => { setIndexActive(index); handleAfterClick(); }} className={`relative px-1 py-1.5 cursor-pointer`} >
+                <div key={`banner-hero-${index}`} onClick={() => { setIndexActive(index); handleAfterClick(); }} className={`relative px-1 py-1.5 cursor-pointer`} >
                   <div className={`${isActive ? 'w-20':'w-4'} relative h-1 shadow-sm rounded-md bg-gray-400 sm:bg-white `} >
                     {isActive && (
                       <div className={`nc-SectionHero2Item__dot absolute inset-0 bg-black rounded-md`} ></div>
@@ -108,7 +109,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
                 </h2>
               </div>
 
-              <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={item?.link} >
+              <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
                 <span className="dark:text-white">{translate('label.home.exploreMoreBtnText')}</span>
                 <span>
                   <svg className="w-5 h-5 ms-2.5 dark:text-white" viewBox="0 0 24 24" fill="none">
