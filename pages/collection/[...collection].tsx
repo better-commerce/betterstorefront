@@ -393,7 +393,9 @@ function CollectionPage(props: any) {
 
   useEffect(() => {
     const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    routeToPLPWithSelectedFilters(router, currentFilters)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
   }, [state?.filters])
 
   const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length

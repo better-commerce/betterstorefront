@@ -433,7 +433,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
 
   useEffect(() => {
     const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    routeToPLPWithSelectedFilters(router, currentFilters)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
   }, [state?.filters])
 
   const handlePageChange = (page: any, redirect = true) => {

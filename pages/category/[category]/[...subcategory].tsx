@@ -365,7 +365,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
 
   useEffect(() => {
     const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    routeToPLPWithSelectedFilters(router, currentFilters)
+    if (currentFilters) {
+      routeToPLPWithSelectedFilters(router, currentFilters)
+    }
   }, [state?.filters])
 
   useEffect(() => {
