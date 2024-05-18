@@ -410,7 +410,7 @@ export default function ProductSpecifications({
                         (lengthAttr: any, ldx: number) => (
                           <div className="flex justify-start comma" key={ldx}>
                             <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
-                              {lengthAttr.fieldText}
+                              <div dangerouslySetInnerHTML={{ __html: lengthAttr.fieldText, }} className="hidden mt-2 text-xs font-normal text-gray-500 sm:block product-detail-description" />
                               {attrGroup['lookAfterMe']?.length > 1 &&
                                 <span className="s-icon">,</span>
                               }
