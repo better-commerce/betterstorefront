@@ -117,6 +117,169 @@ export default function ProductSpecifications({
                     </div>
                   </div>
                 )}
+                {attrGroup['occasion']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Occasion
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['occasion']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['occasion']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {attrGroup['event.type']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Event Type
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['event.type']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['event.type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+                {attrGroup['edit.type']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Type
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['edit.type']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['edit.type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {attrGroup['Categories']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Categories
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['Categories']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['Categories']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+                {attrGroup['product.sleevestyle']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Sleeve Style
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['product.sleevestyle']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['product.sleevestyle']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+                {attrGroup['product.print']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Print
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['product.print']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['product.print']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+                {attrGroup['Collection.Type']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Collection Type
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['Collection.Type']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['Collection.Type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
                 {attrGroup['product.fabric']?.length > 0 && (
                   <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                     <div className="flex flex-col mt-3 sm:mt-3">
@@ -200,6 +363,55 @@ export default function ProductSpecifications({
                             <span className="pr-1 mt-1 text-xs font-normal text-dark-brown sm:text-sm dark:text-white">
                               {fit.fieldText}
                               {attrGroup['clothing.type']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+              </div>
+              <div className='grid grid-cols-1 gap-x-2 gap-y-0 sm:gap-x-4 sm:gap-y-1 sm:grid-cols-1'>
+                {attrGroup['material']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Material
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['material']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['material']?.length > 1 &&
+                                <span className="s-icon">,</span>
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+                {attrGroup['lookAfterMe']?.length > 0 && (
+                  <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
+                    <div className="flex flex-col mt-3 sm:mt-3">
+                      <h4 className="mb-1 text-xs font-medium text-gray-400 uppercase sm:mb-2">
+                        Look After Me
+                      </h4>
+                    </div>
+                    <div className="flex flex-wrap">
+                      {attrGroup['lookAfterMe']?.map(
+                        (lengthAttr: any, ldx: number) => (
+                          <div className="flex justify-start comma" key={ldx}>
+                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                              {lengthAttr.fieldText}
+                              {attrGroup['lookAfterMe']?.length > 1 &&
                                 <span className="s-icon">,</span>
                               }
                             </span>
@@ -533,6 +745,9 @@ export default function ProductSpecifications({
                   </div>
                 </div>
               )}
+
+
+
               {attrGroup['hardware.type']?.length > 0 && (
                 <div>
                   <div className="flex flex-col mt-6">

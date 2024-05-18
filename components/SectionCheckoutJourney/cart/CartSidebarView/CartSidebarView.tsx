@@ -636,25 +636,26 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                           </div>
                                           <div className="">
                                             {cartItems?.lineItems?.map((child: any) => {
-                                              return matchStrings(product?.productId, child?.parentProductId) && <div className="flex">
-                                                <div className="flex flex-col mt-2 mb-6">
-                                                  <div className="flex justify-between font-medium text-gray-900">
-                                                    <div className="image-container">
-                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
-                                                        <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
-                                                      </span>
+                                              return matchStrings(product?.productId, child?.parentProductId) &&
+                                                <div className="flex">
+                                                  <div className="flex flex-col mt-2 mb-6">
+                                                    <div className="flex justify-between font-medium text-gray-900">
+                                                      <div className="image-container">
+                                                        <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
+                                                          <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
+                                                        </span>
+                                                      </div>
+                                                      <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
+                                                      <h3 className='flex justify-between m-auto'>
+                                                        <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
+                                                        <span className="mt-0 ml-4 text-xs text-green"> {' '}{isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax}{' '} </span>
+                                                      </h3>
                                                     </div>
-                                                    <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
-                                                    <h3 className='flex justify-between m-auto'>
-                                                      <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
-                                                      <span className="mt-0 ml-4 text-xs text-green"> {' '}{isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax}{' '} </span>
-                                                    </h3>
+                                                    <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => { openModal(); setItemClicked({ type: DeleteModalType.ENGRAVING, product: child }) }} >
+                                                      {translate('common.label.removeText')}
+                                                    </button>
                                                   </div>
-                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => { openModal(); setItemClicked({ type: DeleteModalType.ENGRAVING, product: child }) }} >
-                                                    {translate('common.label.removeText')}
-                                                  </button>
                                                 </div>
-                                              </div>
                                             })}
                                           </div>
                                           <div className="flex items-end justify-between text-sm">

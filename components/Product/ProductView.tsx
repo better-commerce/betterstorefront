@@ -717,7 +717,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       { product }
     )
     if (item?.message && item?.messageCode && item?.messageCode !== "C001") {
-      setAlert({ type: 'error', msg: item?.message})
+      setAlert({ type: 'error', msg: item?.message })
     }
     setCartItems(item)
     openCart()
@@ -814,8 +814,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderDetailSection = () => {
     return (
       <div className="flex flex-col">
-        <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}</h2>
-        <div dangerouslySetInnerHTML={{ __html: product.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
+        {product.shortDescription != "" &&
+          <>
+            <hr className="pt-10 mt-10 sm:pt-10 border-slate-200 dark:border-slate-700" />
+            <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}</h2>
+            <div dangerouslySetInnerHTML={{ __html: product.shortDescription, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
+          </>
+        }
       </div>
     );
   };
@@ -1051,6 +1056,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
           </>
         }
+       
         {product?.componentProducts && (
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
@@ -1062,6 +1068,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <hr className="border-slate-200 dark:border-slate-700" />
             <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
               <ProductSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+              {renderDetailSection()}
             </div>
           </div>
         }

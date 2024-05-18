@@ -29,24 +29,26 @@ const StockCheckSection = ({
 
     return (
         <div className='flex flex-col'>
-            <h4 className='font-semibold text-lg'>{translate('label.store.checkStoreStockText')}</h4>
-            <hr className='h-1 my-4'></hr>
-            <span className='font-extralight text-md'>{translate('label.store.stockCheckDescText')}</span>
-            <form className='flex flex-row mx-4 my-10 gap-x-4' onSubmit={stockCheckFormik.handleSubmit}>
+            <div className='flex flex-col p-4 border-b border-gray-200'>
+                <h4 className="font-semibold">{translate('label.store.checkStoreStockText')}</h4>
+            </div>
+
+            <span className='px-4 pt-4 font-medium text-md'>{translate('label.store.stockCheckDescText')}</span>
+            <form className='flex flex-row mx-4 mt-4 mb-10 gap-x-4' onSubmit={stockCheckFormik.handleSubmit}>
                 <input
                     name="postCode"
                     type="text"
                     value={stockCheckFormik.values.postCode}
                     onChange={stockCheckFormik.handleChange}
                     placeholder={translate('common.label.enterYourPostCodePlaceholder')}
-                    className='w-1/2 rounded border border-gray-300 placeholder:text-gray-300 placeholder:font-light'
+                    className='w-1/2 border border-gray-300 rounded placeholder:text-gray-300 placeholder:font-light'
                 />
                 <button
-                  type="submit"
-                  disabled={isLoading}
-                  className={`${isLoading && 'cursor-not-allowed'} rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80`}
+                    type="submit"
+                    disabled={isLoading}
+                    className={`${isLoading && 'cursor-not-allowed'} rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80`}
                 >
-                  { isLoading ? <LoadingDots /> : translate('label.store.findStockText')}
+                    {isLoading ? <LoadingDots /> : translate('label.store.findStockText')}
                 </button>
             </form>
         </div>
