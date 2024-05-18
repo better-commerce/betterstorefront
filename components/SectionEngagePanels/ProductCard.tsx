@@ -46,7 +46,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
   const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
-  }, [])
+  }, [isCompared])
 
   const fetchCampaignProducts = useCallback(async () => {
     try {
