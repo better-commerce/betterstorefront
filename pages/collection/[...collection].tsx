@@ -530,9 +530,7 @@ function CollectionPage(props: any) {
           </h1>
           {props?.description &&
             <div className='flex justify-between w-full align-bottom'>
-              <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
-                {props?.description}
-              </span>
+              <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
             </div>
           }
         </div>
@@ -590,6 +588,13 @@ function CollectionPage(props: any) {
           <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        </div>
+        <div className={`w-full text-left py-3 border-t`}>
+          {props?.customInfo1 &&
+            <div className='flex w-full'>
+              <div className="block mt-4 text-xs text-neutral-500 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
+            </div>
+          }
         </div>
         {data?.products?.results?.length > 0 && (
           <Script type="application/ld+json" id="schema" strategy="afterInteractive"

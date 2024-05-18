@@ -132,16 +132,13 @@ const StockCheckModal = ({
               leaveTo="opacity-0"
             >
               <div className="relative w-screen max-w-xl p-2 quickview-screen">
-                <div className="flex flex-col h-full rounded-md shadow-xl w-full bg-gray-50 p-4">
+                <div className="flex flex-col w-full h-full rounded-md shadow-xl bg-gray-50">
                   {openStoreList ? (
                     <StoreListSection buttonConfig={buttonConfig} product={product} storeList={storeList} deviceInfo={deviceInfo} />
                   ) : (
                     <StockCheckSection onSubmit={onSubmit} isLoading={isLoading} />
                   )}
-                  <XMarkIcon
-                    className="absolute m-4 right-0 top-0 h-4 w-4 hover:cursor-pointer"
-                    onClick={() => setOpenStockCheckModal(false)}
-                  />
+                  <XMarkIcon className="absolute right-0 w-8 h-8 top-5 right-5 hover:cursor-pointer" onClick={() => setOpenStockCheckModal(false)} />
                 </div>
               </div>
             </Transition.Child>

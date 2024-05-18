@@ -17626,3 +17626,11 @@ body:has(.engage-announcement-bar){
 .brand-logo-category{
   width: auto !important;
 }
+
+.dynamic-html-data p{
+  font-size: 12px !important;
+}
+.dynamic-html-data h2,
+.dynamic-html-data h3{
+  font-size: 14px !important;
+}

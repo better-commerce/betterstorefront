@@ -24,7 +24,7 @@ function RenderRadioOptions({ label, items, itemsCount, selectedValue, selected,
                {label}:
                <span className="pl-1 font-semibold text-black uppercase text-ms dark:text-white font-label-14">{selectedVal?.includes('#') ? '' : (selectedVal || currentAttribute)}</span>
             </h4>
-         <div className="flex gap-2 mt-2.5">
+         <div className="flex gap-2 mt-2.5 flex-wrap">
             {items?.map((item: any, idx: any) => (isString(item?.fieldValue) && (
                <RadioGroup.Option
                   key={`radio-panel-${idx}-${item?.fieldValue}`} value={item?.fieldValue} title={item?.fieldLabel} style={{ backgroundColor: item?.fieldValue?.includes('#') ? item?.fieldValue : '' }}
