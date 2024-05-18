@@ -138,7 +138,7 @@ const StockCheckModal = ({
                   ) : (
                     <StockCheckSection onSubmit={onSubmit} isLoading={isLoading} />
                   )}
-                  <XMarkIcon className="absolute right-0 w-8 h-8 top-5 right-5 hover:cursor-pointer" onClick={() => setOpenStockCheckModal(false)} />
+                  <XMarkIcon className="absolute w-8 h-8 top-5 right-5 hover:cursor-pointer" onClick={() => setOpenStockCheckModal(false)} />
                 </div>
               </div>
             </Transition.Child>
