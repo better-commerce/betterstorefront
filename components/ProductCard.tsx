@@ -207,7 +207,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const buttonConfig = buttonTitle()
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
-  }, [])
+  }, [isCompared])
   const renderGroupButtons = () => {
     return (
       <>
