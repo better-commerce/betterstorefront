@@ -217,7 +217,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               }
-              <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              <ButtonSecondary className="ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
               </ButtonSecondary>
@@ -229,7 +229,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
               }
-              <ButtonSecondary className="ms-1.5 bg-white hover:!bg-gray-100 hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              <ButtonSecondary className="ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
               </ButtonSecondary>
@@ -259,13 +259,13 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug || data?.link)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
           <div className="space-y-4 px-2.5 pt-5 pb-2.5 product-card__information">
             <div>
-              <h2 className="text-base text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
-              <p className={`text-sm text-left text-slate-500 dark:text-slate-400 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
+              <h2 className="text-base text-left font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
+              <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
             </div>
             <div className="flex items-center justify-between product-card-panel ">
               <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               {data?.reviewCount > 0 &&
-                <div className="flex items-center mb-0.5">
+                <div className="flex items-center mb-0.5 w-40">
                   <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
                   <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
                     {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>

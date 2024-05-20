@@ -9,7 +9,7 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   isCenter?: boolean;
 }
 
-const Heading: React.FC<HeadingProps> = ({ children, desc = "", className = "mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50", isCenter = false, hasNextPrev = false, fontClass = "text-3xl md:text-4xl font-semibold", rightDescText, rightPopoverOptions, ...args }) => {
+const Heading: React.FC<HeadingProps> = ({ children, desc = "", className = "mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50", isCenter = false, hasNextPrev = false, fontClass = "text-3xl md:text-4xl font-semibold dark:text-black", rightDescText, rightPopoverOptions, ...args }) => {
   return (
     <div className={`nc-Section-Heading relative flex flex-col sm:flex-row sm:items-end justify-between ${className}`} >
       <div className={isCenter ? "flex flex-col items-center text-center w-full mx-auto" : ""} >

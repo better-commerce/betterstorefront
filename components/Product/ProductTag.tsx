@@ -48,7 +48,7 @@ export default function ProductTag({ product }: Props) {
 
   if (isNotifyMeEnabled) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <BellIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
           {translate('label.product.notifyMeText')}
@@ -58,7 +58,7 @@ export default function ProductTag({ product }: Props) {
   }
   if (isPreorderEnabled) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <ShoppingBagIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
           {translate('label.product.preOrderText')}
@@ -67,16 +67,16 @@ export default function ProductTag({ product }: Props) {
     )
   }
   if (tagValues?.newLaunch) {
-    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.newInText')}</div></div>
+    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.newInText')}</div></div>
   }
 
   if (tagValues?.onSale) {
-    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.onSaleText')}</div></div>
+    return <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.onSaleText')}</div></div>
   }
 
   if (tagValues?.bestSeller) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <StarIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
         {translate('label.product.bestSellerText')}
@@ -87,7 +87,7 @@ export default function ProductTag({ product }: Props) {
 
   if (tagValues?.trending) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <TagIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
         {translate('label.product.trendingText')}
@@ -98,7 +98,7 @@ export default function ProductTag({ product }: Props) {
 
   if (tagValues?.exclusive) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-slate-900 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-300'>
+      <div className='px-2.5 py-1.5 text-xs bg-white dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <ClockIcon className="w-3.5 h-3.5" />
         <div className="leading-none ms-1">
         {translate('label.product.exclusiveText')}

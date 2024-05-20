@@ -340,13 +340,13 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
-      <div className="container pt-10 pb-24 mx-auto">
+      <div className="container pt-10 pb-24 mx-auto dark:bg-white">
         <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-          <h1 className={`block text-2xl font-semibold  ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
+          <h1 className={`block text-2xl font-semibold dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
             {translate('label.basket.catalogText')}
           </h1>
           <div className='w-full'>
-            <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-1' : 'text-sm mt-4'}`}>
+            <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-1' : 'text-sm mt-4'}`}>
               {translate('label.search.stepIntoWorldText')}
             </span>
           </div>
@@ -357,9 +357,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
         </div>
-        <hr className="border-slate-200 dark:border-slate-700" />
+        <hr className="border-slate-200 dark:border-slate-200" />
         {!!productDataToPass?.results?.length ? (
-          <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+          <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
             {isMobile ? (
               <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
             ) : (

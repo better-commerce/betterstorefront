@@ -17634,3 +17634,21 @@ body:has(.engage-announcement-bar){
 .dynamic-html-data h3{
   font-size: 14px !important;
 }
+@media screen and (max-width: 640px) {
+  .top-space-mobile {
+      top: 47px !important
+  }
+  .category-banner-container {
+      max-height: 175px !important;
+  }
+  .pos-absolute{
+    position: absolute !important;
+  }
+  .category-container {
+    padding-right: 0rem !important;
+    padding-left: 0rem !important;
+}
+}
+.rc-slider-mark-text.rc-slider-mark-text-active{
+  @apply dark:!text-black;
+}

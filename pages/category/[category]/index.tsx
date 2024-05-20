@@ -537,21 +537,21 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <section className="main-section">
-        <div className="container mx-auto mt-2 bg-transparent">
+      <section className="main-section dark:bg-white">
+        <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
           {category?.breadCrumbs && (
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
         </div>
         <div className="container">
           <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+            <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
-                  <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
+                  <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
                 </span>
               </div>
             }
@@ -559,16 +559,16 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         </div>
         {category?.linkGroups?.length > 0 ?
           (
-            <div className='container mx-auto'>
+            <div className='category-container container mx-auto'>
               {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                <LandingFeaturedCategory featuredCategory={category?.subCategories} />
+                <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo}/>
               }
-              <div className='grid grid-cols-1 gap-4 sm:grid-cols-12 sm:gap-10'>
+              <div className='grid grid-cols-1 gap-4 sm:grid-cols-12 sm:gap-10 px-4 sm:px-0'>
                 <div className='sm:col-span-2'>
-                  <div className="pt-2 pb-8">
+                  <div className="pt-2 sm:pb-8">
                     {category?.linkGroups?.map((grp: any, grpIdx: number) => (
-                      <div className="mx-auto mb-4" key={`linkGrp-${grpIdx}`}>
-                        <h2 className="block mb-4 text-lg font-semibold sm:text-xl lg:text-xl">{grp?.name}</h2>
+                      <div className="mx-auto sm:mb-4" key={`linkGrp-${grpIdx}`}>
+                        <h2 className="block mb-4 text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">{grp?.name}</h2>
                         {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
                           <Link href={`/${item?.link}`} className="flex justify-start w-full py-1 text-left text-black font-14 hover:underline" key={cdx}>
                             <span>{item?.name}</span>
@@ -587,7 +587,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                   {minimalProd?.results?.length > 0 &&
                     <>
                       <div className='flex justify-between mb-2'>
-                        <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl">Featured Products</h2>
+                        <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">Featured Products</h2>
                         <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
                       </div>
                       <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
@@ -627,7 +627,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                       <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                     </div>
                   </div>
-                  <hr className='border-slate-200 dark:border-slate-700' />
+                  <hr className='border-slate-200 dark:border-slate-200' />
                 </>
               }
               {productDataToPass?.results?.length > 0 ? (

@@ -570,8 +570,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             </h1>
             {sanitizedDescription &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
-                  <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                  <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
                 </span>
               </div>
             }
@@ -582,7 +582,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
           </div>
-          <hr className='border-slate-200 dark:border-slate-700' />
+          <hr className='border-slate-200 dark:border-slate-200' />
           {
             <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
               {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (

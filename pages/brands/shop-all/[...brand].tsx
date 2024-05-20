@@ -453,7 +453,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
             <li className='flex items-center text-10-mob sm:text-sm'>
               <Link href="/brands" passHref>
-                <span className="font-light hover:text-gray-900 dark:text-black text-slate-500">Brands</span>
+                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Brands</span>
               </Link>
             </li>
             <li className='flex items-center text-10-mob sm:text-sm'>
@@ -463,7 +463,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             </li>
             <li className='flex items-center text-10-mob sm:text-sm'>
               <Link href={`/${brandDetails?.link}`} passHref>
-                <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > {brandDetails?.name}</span>
+                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {brandDetails?.name}</span>
               </Link>
             </li>
             <li className='flex items-center text-10-mob sm:text-sm'>
@@ -484,8 +484,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </h1>
           {sanitizedDescription &&
             <div className='w-full'>
-              <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
-                <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+              <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
               </span>
             </div>
           }
@@ -496,7 +496,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
         </div>
-        <hr className='border-slate-200 dark:border-slate-700' />
+        <hr className='border-slate-200 dark:border-slate-200' />
 
         <div className="flex justify-end w-full py-4">
           <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />

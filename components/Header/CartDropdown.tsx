@@ -225,7 +225,7 @@ export default function CartDropdown() {
                       {cartItems?.lineItems?.length}
                     </div>
                   )}*/}
-                    <img src="/images/cartIcon.svg" className="w-6 h-6 dark:invert" />
+                    <img src="/images/cartIcon.svg" className="w-6 h-6" />
                   </>
 
                 </Popover.Button>
@@ -282,14 +282,14 @@ export default function CartDropdown() {
                 </Transition>
               </>
             ) : (
-              <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
+              <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
                 {cartItems?.lineItems?.length > 0 && (
                   <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
                     {cartItems?.lineItems?.length}
                   </div>
                 )}
                 <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
-                <img src="/images/cartIcon.svg" className="w-6 h-6 dark:invert" />
+                <img src="/images/cartIcon.svg" className="w-6 h-6" />
               </Popover.Button>
             )}
           </>

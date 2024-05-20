@@ -50,9 +50,9 @@ function CollectionList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
       </NextHead>
-      <main className="container w-full mx-auto theme-account-container">
+      <main className="container w-full mx-auto theme-account-container dark:bg-white">
         <section aria-labelledby="products-heading" className="mt-12">
-          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl dark:text-black">
             {translate('label.collection.shopByCollectionText')}
           </h1>
           {props?.data.length > 0 && (

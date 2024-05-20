@@ -11,11 +11,11 @@ const Footer = ({ navItems = [] }: any) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => (
         <div key={index} className="text-sm footer-menu-links">
-          <h2 className="font-bold text-[16px] text-black dark:text-white"> {menu?.boxTitle} </h2>
+          <h2 className="font-bold text-[16px] text-black dark:text-black"> {menu?.boxTitle} </h2>
           <ul role="list" className="mt-0 space-y-6">
             <>
               {menu?.contentBody != '' && (
-                <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight dark:text-white" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
+                <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight dark:text-black" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
               )}
               {menu?.navItems != '' && (
                 <>
@@ -40,7 +40,7 @@ const Footer = ({ navItems = [] }: any) => {
   return (
     <>
       <Newsletter />
-      <div className="relative py-20 border-t nc-Footer lg:pt-28 lg:pb-24 border-neutral-200 dark:border-neutral-700 main-footer-section">
+      <div className="relative py-20 border-t nc-Footer lg:pt-28 lg:pb-24 border-neutral-200 dark:border-neutral-700 main-footer-section dark:bg-white">
         <div className="container grid grid-cols-2 gap-y-10 gap-x-5 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 ">
           <div className="grid grid-cols-4 col-span-2 gap-5 md:col-span-4 lg:md:col-span-1 lg:flex lg:flex-col">
             <div className="col-span-2 md:col-span-1 footer-logo">

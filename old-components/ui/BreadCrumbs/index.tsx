@@ -39,7 +39,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
     <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
       <li className='flex items-center text-10-mob sm:text-sm'>
         <Link href="/" passHref>
-          <span className="font-light hover:text-gray-900 dark:text-black text-slate-500" > {translate('common.label.homeText')} </span>
+          <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {translate('common.label.homeText')} </span>
         </Link>
       </li>
       <li className='flex items-center text-10-mob sm:text-sm'>
@@ -50,7 +50,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx} className="flex items-center text-10-mob sm:text-sm" >
           <Link href={`/${breadcrumb.slug}`} passHref>
-            <span className={`font-light hover:text-gray-900 capitalize dark:text-white  ${breadcrumb.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
+            <span className={`font-light hover:text-gray-900 capitalize dark:text-black  ${breadcrumb.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
               {breadcrumb.title.toLowerCase()}
             </span>
           </Link>
