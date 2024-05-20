@@ -44,7 +44,7 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   const getFilterQuery = () => {
     let qs = EmptyString
     if (currentFilters?.length) {
-      qs = JSON.stringify(currentFilters?.map((filter: any) => ({ name: filter?.name, value: filter?.Value })))
+    qs = JSON.stringify(currentFilters/*?.map((filter: any) => ({ name: filter?.name, value: filter?.Value }))*/)
       qs = `filters=${encodeURIComponent(qs)}`
     }
     return qs
