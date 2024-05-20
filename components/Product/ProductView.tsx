@@ -200,7 +200,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         title: product?.name || EmptyString,
         sku: product?.productCode || EmptyString,
         categories: product?.classification?.category || [],
-        base_category: product?.classification?.category || EmptyString,
+        base_category:  product?.classification?.mainCategoryName ? product?.classification?.mainCategoryName : product?.classification?.category || EmptyString,
         collection_name: product?.collections ? product?.collections[0]?.name : EmptyString,
         description: product?.fullName || EmptyString,
         product_url: productUrl,
