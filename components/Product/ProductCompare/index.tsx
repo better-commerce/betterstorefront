@@ -7,15 +7,7 @@ import Layout from '@components/Layout/Layout'
 import Products from './Products'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-export default function ProductCompare({
-  products,
-  isCompare,
-  closeCompareProducts,
-  deviceInfo,
-  maxBasketItemsCount,
-  featureToggle, 
-  defaultDisplayMembership,
-}: any) {
+export default function ProductCompare({ products, isCompare, closeCompareProducts, deviceInfo, maxBasketItemsCount, featureToggle, defaultDisplayMembership, }: any) {
   const [attributeNames, setAttributeNames] = useState([])
   const translate = useTranslation()
   useEffect(() => {
@@ -26,46 +18,20 @@ export default function ProductCompare({
 
   return (
     <Transition.Root show={isCompare} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 overflow-hidden z-999"
-        onClose={() => closeCompareProducts()}
-      >
+      <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => closeCompareProducts()} >
         <div className="absolute inset-0 overflow-hidden z-999">
-          <Transition.Child
-            as={Fragment}
-            enter="transform transition ease-in-out duration-0 sm:duration-0"
-            enterFrom="translate-y-full"
-            enterTo="translate-y-0"
-            leave="transform transition ease-in-out duration-0 sm:duration-0"
-            leaveFrom="translate-y-0"
-            leaveTo="translate-y-full"
-          >
-            <Dialog.Overlay
-              className="w-full h-screen bg-black opacity-50"
-              onClick={() => closeCompareProducts()}
-            />
+          <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-0 sm:duration-0" enterFrom="translate-y-full" enterTo="translate-y-0" leave="transform transition ease-in-out duration-0 sm:duration-0" leaveFrom="translate-y-0" leaveTo="translate-y-full" >
+            <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => closeCompareProducts()} />
           </Transition.Child>
 
           <div className="fixed inset-0 flex items-end justify-center">
-            <Transition.Child
-              as={Fragment}
-              enter="transform transition ease-in-out duration-500 sm:duration-500"
-              enterFrom="translate-y-full"
-              enterTo="translate-y-0"
-              leave="transform transition ease-in-out duration-500 sm:duration-500"
-              leaveFrom="translate-y-0"
-              leaveTo="translate-y-full"
-            >
+            <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-500 sm:duration-500" enterFrom="translate-y-full" enterTo="translate-y-0" leave="transform transition ease-in-out duration-500 sm:duration-500" leaveFrom="translate-y-0" leaveTo="translate-y-full" >
               <div className="w-full mx-auto">
                 <div className="flex flex-col h-full overflow-y-auto bg-white">
                   <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 border py-7 bg-sky-100">
                     <div className="container flex items-center justify-between mx-auto">
                       <Dialog.Title className="flex items-center gap-5 text-lg font-medium uppercase">
-                        <ArrowLeftIcon
-                          onClick={() => closeCompareProducts()}
-                          className="w-4 h-4 text-black"
-                        />{' '}
+                        <ArrowLeftIcon onClick={() => closeCompareProducts()} className="w-4 h-4 text-black" />{' '}
                         {translate('label.product.comparingItemsText1')} {products?.length} {translate('common.label.itemSingularText')}
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
@@ -80,12 +46,12 @@ export default function ProductCompare({
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-12 md:grid-cols-12 sm:grid-cols-3">
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
-                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent min-h-[370px]"></div>
+                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent compare-white-space"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
                             {translate('common.label.ratingsText')}
                           </span>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
-                          {translate('common.label.brandText')}
+                            {translate('common.label.brandText')}
                           </span>
                           {attributeNames?.map((attribName: any) => (
                             <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14" >
@@ -95,37 +61,11 @@ export default function ProductCompare({
                         </div>
                       </div>
                       <div className="md:col-span-10 sm:col-span-2">
-                        <Swiper
-                          spaceBetween={10}
-                          slidesPerView={1.1}
-                          navigation={false}
-                          loop={false}
-                          breakpoints={{
-                            640: {
-                              slidesPerView: 2.5,
-                            },
-                            768: {
-                              slidesPerView: 2.5,
-                            },
-                            1024: {
-                              slidesPerView: 5.2,
-                            },
-                          }}
-                          className="grid grid-cols-5 gap-3 mySwier"
-                        >
-                          {' '}
+                        <Swiper spaceBetween={10} slidesPerView={1.1} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 2.5, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 5.2, }, }} className="grid grid-cols-5 gap-3 mySwier" >
                           {products?.map((product: any, productIdx: number) => (
                             <div key={`compare-product-${productIdx}`}>
                               <SwiperSlide>
-                                <Products
-                                  product={product}
-                                  hideWishlistCTA={true}
-                                  deviceInfo={deviceInfo}
-                                  maxBasketItemsCount={maxBasketItemsCount}
-                                  attributesCount={attributeNames?.length || 0}
-                                  featureToggle={featureToggle} 
-                                  defaultDisplayMembership={defaultDisplayMembership}
-                                />
+                                <Products product={product} hideWishlistCTA={true} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} attributesCount={attributeNames?.length || 0} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                               </SwiperSlide>
                             </div>
                           ))}
