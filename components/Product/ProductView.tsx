@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { HeartIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { HeartIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
@@ -34,6 +34,8 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
 import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
 import ProductSocialProof from './ProductSocialProof'
+import { Disclosure } from '@headlessui/react'
+import TechnicalSpecifications from './TechnicalSpecification'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -826,6 +828,31 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+  const renderProductSpecification = () => {
+    return (
+      product.customAttributes.length > 0 &&
+      <div className="w-full rounded-2xl sm:space-y-2.5">
+        <Disclosure>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
+                <span className="text-accordion dark:text-black">Technical Specification</span>
+                {!open ? (
+                  <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                ) : (
+                  <MinusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                )}
+              </Disclosure.Button>
+              <Disclosure.Panel className={` description-text dark:text-black`} as="div" >
+                <TechnicalSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
+      </div>
+
+    );
+  };
   const detailsConfig = [
     { name: translate('label.product.bundles.descriptionText'), content: productDesc },
     { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
@@ -965,9 +992,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
         {product && <AccordionInfo data={detailsConfig} />}
+        {renderProductSpecification()}
         <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
           <DeliveryInfo product={product} grpData={attrGroup} config={config} />
         </div>
+
       </div>
     );
   };
@@ -1008,7 +1037,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <>
               {featureToggle?.features?.isImageGallery ? (
-                <div className="w-full lg:w-[55%]">
+                <div className="w-full lg:w-[55%] sticky top-0">
                   <ImageGallery
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
@@ -1025,7 +1054,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   />
                 </div>
               ) : (
-                <div className="w-full lg:w-[55%]">
+                <div className="w-full lg:w-[55%] sticky top-0">
                   <div className="relative">
                     <div className="relative aspect-w-16 aspect-h-16">
                       <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
@@ -1033,11 +1062,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     {renderStatus()}
                   </div>
                   <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                    {product?.images?.map((item: any, index: number) => (
-                      <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
-                      </div>
-                    ))}
+                    {product?.images?.filter((image: any) => image.tag !== "specification")
+                      .map((item: any, index: number) => (
+                        <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                          <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}
