@@ -22,8 +22,8 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
               {({ open }) => (
                 <>
                   <Disclosure.Button className={`flex items-center justify-between w-full gap-2 px-0 py-3 text-left text-black bg-white rounded-lg outline-none dark:bg-transparent hover:bg-white dark:hover:bg-transparent active:outline-none hover:outline-none ${CURRENT_THEME == 'green' ? 'text-xl font-medium' : 'uppercase text-sm font-semibold'}`}>
-                    <span className='dark:text-white'>{section?.name}</span>
-                    <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5 dark:text-white`} />
+                    <span className='dark:text-black'>{section?.name}</span>
+                    <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5 dark:text-black`} />
                   </Disclosure.Button>
                   <Disclosure.Panel className="px-0 pt-0 pb-2">
                     {section?.key === "price.raw.withTax" ? <PriceFilterSlider handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} /> :

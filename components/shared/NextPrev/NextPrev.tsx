@@ -34,7 +34,7 @@ const NextPrev: FC<NextPrevProps> = ({
         <button
           className={`${btnClassName} ${
             !onlyPrev ? "me-2" : ""
-          } border-slate-200 dark:border-slate-600 rounded-full flex items-center justify-center only-next ${
+          } border-slate-200 dark:border-slate-200 rounded-full flex items-center justify-center only-next ${
             focus === "left" ? "border-2" : ""
           }`}
           onClick={(e) => {
@@ -71,7 +71,7 @@ const NextPrev: FC<NextPrevProps> = ({
       )}
       {!onlyPrev && (
         <button
-          className={`${btnClassName}  border-slate-200 dark:border-slate-600 rounded-full flex items-center justify-center only-prev ${
+          className={`${btnClassName}  border-slate-200 dark:border-slate-200 rounded-full flex items-center justify-center only-prev ${
             focus === "right" ? "border-2" : ""
           }`}
           onClick={(e) => {

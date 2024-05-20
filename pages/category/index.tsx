@@ -50,9 +50,10 @@ function CategoryPage(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="container w-full pt-6 mx-auto sm:pt-10 theme-account-container">
+      <div className='w-full dark:bg-white'>
+      <main className="container w-full pt-6 mx-auto sm:pt-10 theme-account-container dark:bg-white">
         <section aria-labelledby="products-heading ">
-          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">{translate('label.category.shopByCategoryText')}</h1>
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl dark:text-black">{translate('label.category.shopByCategoryText')}</h1>
           {props?.data?.length > 0 && (
             <div className="box-content relative grid grid-cols-2 my-8 gap-x-6 gap-y-6 md:grid-cols-5 lg:grid-cols-4 sm:my-10">
               {props?.data?.sort((a: any, b: any) => a.name.localeCompare(b.name)).map((category: any, key: number) => (
@@ -87,6 +88,7 @@ function CategoryPage(props: any) {
           )}
         </section>
       </main>
+      </div>
     </>
   )
 }

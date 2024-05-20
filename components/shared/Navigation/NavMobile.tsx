@@ -22,12 +22,12 @@ export interface NavMobileProps {
 
 const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, featureToggle }) => {
   const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
-  const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
+  const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-900 font-medium ") => {
     return (
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
         {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={`${sanitizeRelativeUrl(i?.hyperlink)}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
+            <Link href={`${sanitizeRelativeUrl(i?.hyperlink)}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
               <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
                 {i?.boxTitle.toLowerCase()}
               </span>
@@ -44,7 +44,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={i?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(child?.itemLink)}` : `/${sanitizeRelativeUrl(child?.itemLink)}`} >
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-600 dark:hover:text-black " href={i?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(child?.itemLink)}` : `/${sanitizeRelativeUrl(child?.itemLink)}`} >
                         {child?.caption.toLowerCase()}
                       </Link>
                     </li>
@@ -61,8 +61,8 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
 
   const _renderItem = (item: any, index: number) => {
     return (
-      <Disclosure key={index} as="li" className="text-slate-900 dark:text-white" >
-        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href={`${sanitizeRelativeUrl(item.hyperlink)}`} >
+      <Disclosure key={index} as="li" className="text-slate-900 dark:text-slate-900" >
+        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-100 rounded-lg" href={`${sanitizeRelativeUrl(item.hyperlink)}`} >
           <span className={!item?.children ? "block w-full" : ""} onClick={onClickClose} >
             {item?.caption}
           </span>
@@ -104,7 +104,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
   };
 
   return (
-    <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-neutral-900 divide-neutral-100 dark:divide-neutral-800">
+    <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-white divide-neutral-100 dark:divide-neutral-800">
       <div className="px-5 pb-2">
         <Logo />
         <span className="absolute p-1 right-2 top-4">

@@ -488,20 +488,20 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <section className="main-section">
-        <div className="container mx-auto mt-2 bg-transparent">
+      <section className="main-section dark:bg-white">
+        <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
           {category?.breadCrumbs && (
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
         </div>
         <div className="container mx-auto my-0 mt-1 bg-transparent">
           <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+            <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
               <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-400 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-6' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
               </div>
             }
           </div>
@@ -511,7 +511,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
           </div>
-          <hr className='border-slate-200 dark:border-slate-700' />
+          <hr className='border-slate-200 dark:border-slate-200' />
         </div>
 
 

@@ -62,7 +62,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
           >
             <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
               <div
-                className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:rounded-2xl dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100"
+                className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-white shadow-xl lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100"
               >
                 <span className="absolute z-50 end-3 top-3">
                   <ButtonClose onClick={onCloseModalQuickView} />

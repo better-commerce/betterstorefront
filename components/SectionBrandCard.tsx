@@ -7,7 +7,7 @@ const SectionBrandCard = ({ data }: any) => {
   return (
     <div className='flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-0'>
       <div>
-        <h2 className='mb-4 text-3xl font-semibold md:text-4xl'>{data?.brand_brandname}</h2>
+        <h2 className='mb-4 text-3xl font-semibold md:text-4xl dark:text-black'>{data?.brand_brandname}</h2>
         <div className='max-w-full mb-3 text-sm font-normal leading-relaxed text-gray-600 sm:max-w-96' dangerouslySetInnerHTML={{ __html: data?.brand_branddescription }}></div>
         <Link href={data?.brand_link} passHref>
           <span className="mt-3 text-sm font-medium text-black underline">Shop Now <ChevronRightIcon className="inline-block w-3 h-3" /></span>

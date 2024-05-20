@@ -9,12 +9,12 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   isCenter?: boolean;
 }
 
-const GliderNextPrev: React.FC<HeadingProps> = ({ children, desc = "", className = "text-neutral-900 dark:text-neutral-50", isCenter = false, hasNextPrev = false, fontClass = "text-3xl md:text-4xl font-semibold", rightDescText, rightPopoverOptions, ...args }) => {
+const GliderNextPrev: React.FC<HeadingProps> = ({ children, desc = "", className = "text-neutral-900 dark:text-neutral-50", isCenter = false, hasNextPrev = false, fontClass = "text-3xl md:text-4xl font-semibold dark:text-black", rightDescText, rightPopoverOptions, ...args }) => {
   return (
     <div className={`nc-Section-Heading  flex flex-col sm:flex-row sm:items-end justify-between ${className}`} >
       {hasNextPrev && !isCenter && (
         <div className="flex justify-end flex-shrink-0 mt-4 sm:ms-2 sm:mt-0 glider-pos">
-          <NextPrev onClickNext={() => { }} onClickPrev={() => { }} />
+          <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
         </div>
       )}
     </div>

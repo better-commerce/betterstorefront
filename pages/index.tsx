@@ -139,7 +139,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <div className="relative overflow-hidden nc-PageHome homepage-main">
+      <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         <SectionHero2 data={pageContents?.banner} />
         <div className="mt-14 sm:mt-24 lg:mt-32">
           <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />

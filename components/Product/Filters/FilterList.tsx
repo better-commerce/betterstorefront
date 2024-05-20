@@ -95,7 +95,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
             }}
           />
         )}
-        <span className={`long-f-name capitalize text-black dark:text-white ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'text-xs font-medium' : ''}`}>{generateOptionName()}</span>
+        <span className={`long-f-name capitalize text-black dark:text-black ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'text-xs font-medium' : ''}`}>{generateOptionName()}</span>
         {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{
@@ -135,7 +135,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
         </span>
       }
       {sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME === 'green' &&
-        <span className="justify-end float-right pl-1 pr-2 text-sm font-semibold text-right text-slate-400 dark:text-white">
+        <span className="justify-end float-right pl-1 pr-2 text-sm font-semibold text-right text-slate-400 dark:text-slate-400">
           {option.count}
         </span>
       }

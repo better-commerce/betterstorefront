@@ -97,7 +97,7 @@ function handleWishlist() {
     const translate = useTranslation()
     return (
       <>
-        <div className={`top-0 td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90`}>
+        <div className={`top-0 td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>
           {!isMobile &&
             <div className="container justify-between hidden mx-auto sm:flex">
               <div className="promotion-banner mob-marquee"></div>
@@ -143,7 +143,7 @@ function handleWishlist() {
 
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
-                  <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                  <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                     <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (
                       <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">

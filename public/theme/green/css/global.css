@@ -2079,21 +2079,18 @@ p {
   .search-results__products {
     grid-template-columns: 1fr 1fr 1fr 1fr !important;
     grid-row-gap: 70px !important;
-    grid-column-gap: 25px !important;
   }
   }
   @media screen and (min-width:1025px) and (max-width:1499px) {
     .search-results__products {
       grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
       grid-row-gap: 50px !important;
-      grid-column-gap: 20px !important;
     }
   }
   @media screen and (min-width: 1500px) {
     .search-results__products {
       grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
       grid-row-gap: 50px !important;
-      grid-column-gap: 20px !important;
     }
   }
   .product-card__image-container img {

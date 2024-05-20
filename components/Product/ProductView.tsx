@@ -864,7 +864,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-xl font-semibold sm:text-2xl product-name-h2">
+          <h2 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
@@ -873,7 +873,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {reviews?.review?.totalRecord > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
-                <div className="flex items-center">
+                <div className="flex items-center w-52">
                   <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
@@ -919,7 +919,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                         {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
                         )}
                         <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                       </button>
@@ -937,7 +937,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     {isInWishList(selectedAttrData?.productId) ? (
                       <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                     ) : (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
                     )}
                     <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                   </button>
@@ -982,7 +982,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       {featureToggle?.features?.enableEngage &&
         <ProductSocialProof data={analyticsData} />
       }
-      <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 ">
+      <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 dark:bg-white">
         <div className='flex flex-1 px-4 mb-1 sm:px-0 sm:mb-4 '>
           {breadcrumbs && (
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />

@@ -78,7 +78,7 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
     <button
       onClick={handleAction}
       type="button"
-      className={`${bgColor} hover:${hoverBgColor} focus:${focusRingColor} ${className} ${size == "small" ? 'text-xs font-medium py-1 px-0 sm:py-1 sm:px-1' : 'ttnc-ButtonPrimary btn-green-new w-full text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button'} sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0`}
+      className={`${bgColor} hover:${hoverBgColor} focus:${focusRingColor} ${className} ${size == "small" ? 'text-xs font-medium py-1 px-0 sm:py-1 sm:px-1' : 'ttnc-ButtonPrimary btn-green-new w-full text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button'} sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 text-slate-50 dark:text-white shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0`}
       disabled={isLoading || disabled}
     >
       {isLoading ? (<LoadingDots />) : title == 'Add' ? (

@@ -535,7 +535,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000">
+          <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000 dark:text-black">
             <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView}>{selectedAttrData?.name}</Link>
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
@@ -543,7 +543,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             {selectedAttrData?.reviewCount > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
-                <div className="flex items-center">
+                <div className="flex items-center w-56">
                   <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
@@ -565,11 +565,11 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           {!isEngravingAvailable && (
             <div className="flex mt-6 sm:mt-4 !text-sm w-full">
               <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 dark:border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
                 {isInWishList(selectedAttrData?.productId) ? (
                   <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                 ) : (
-                  <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                  <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
                 )}
                 <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
               </button>

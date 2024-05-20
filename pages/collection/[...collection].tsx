@@ -432,7 +432,7 @@ function CollectionPage(props: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
-      <div className='flex flex-col'>
+      <div className='flex flex-col dark:bg-white'>
         {props?.customInfo3 == 'vertical' && (
           <>
             <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-4 sm:px-4 2xl:sm:px-0 sm:mt-4">
@@ -501,11 +501,11 @@ function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container mx-auto mt-2 bg-transparent">
-        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+      <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
+        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
           <li className='flex items-center text-10-mob sm:text-sm'>
             <Link href="/collection" passHref>
-              <span className="font-light hover:text-gray-900 dark:text-black text-slate-500">Collections</span>
+              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Collections</span>
             </Link>
           </li>
           <li className='flex items-center text-10-mob sm:text-sm'>
@@ -520,17 +520,17 @@ function CollectionPage(props: any) {
           </li>
         </ol>
       </div>
-      <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space">
+      <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space dark:bg-white">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
         <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
             {props?.name.toLowerCase()}
           </h1>
           {props?.description &&
             <div className='flex justify-between w-full align-bottom'>
-              <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
+              <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
             </div>
           }
         </div>
@@ -540,7 +540,7 @@ function CollectionPage(props: any) {
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
         </div>
-        <hr className='border-slate-200 dark:border-slate-700' />
+        <hr className='border-slate-200 dark:border-slate-200' />
         {
           <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
             {props?.allowFacets ? (
