@@ -1725,3 +1725,7 @@ p {
     min-height: 370px !important;
   }
 }
+
+.bg-switch-enable{
+  background-color: #07ca6c !important;
+}

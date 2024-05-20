@@ -28,7 +28,7 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
             <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-500 sm:duration-500" enterFrom="translate-y-full" enterTo="translate-y-0" leave="transform transition ease-in-out duration-500 sm:duration-500" leaveFrom="translate-y-0" leaveTo="translate-y-full" >
               <div className="w-full mx-auto">
                 <div className="flex flex-col h-full overflow-y-auto bg-white">
-                  <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 border py-7 bg-sky-100">
+                  <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 border py-7 bg-[#FFE25B]">
                     <div className="container flex items-center justify-between mx-auto">
                       <Dialog.Title className="flex items-center gap-5 text-lg font-medium uppercase">
                         <ArrowLeftIcon onClick={() => closeCompareProducts()} className="w-4 h-4 text-black" />{' '}
