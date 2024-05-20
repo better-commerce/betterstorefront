@@ -436,7 +436,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     if (currentFilters) {
       routeToPLPWithSelectedFilters(router, currentFilters)
     }
-  }, [state?.filters])
+  }, [data?.products?.filters])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
