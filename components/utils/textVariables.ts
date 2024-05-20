@@ -1,4 +1,5 @@
 export const ITEM_TYPE_ADDON = 'ADDON'
+export const ITEM_TYPE_ADDONS = 'ADDONS'
 export const ITEM_TYPE_ADDON_10 = 10
 export const ITEM_TYPE_ALTERNATIVE = 'ALTERNATIVE'
 export const IMG_PLACEHOLDER =

@@ -257,21 +257,23 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         </div>
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug || data?.link)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
-          <div className="space-y-4 px-2.5 pt-5 pb-2.5 product-card__information">
-            <div>
+          <div className="px-2.5 pt-5 pb-2.5 product-card__information">
+            <div className='mt-4'>
               <h2 className="text-base text-left font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
-              <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
             </div>
-            <div className="flex items-center justify-between product-card-panel ">
-              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <div className='flex justify-between mt-1'>
+              <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
               {data?.reviewCount > 0 &&
-                <div className="flex items-center mb-0.5 w-40">
+                <div className="flex items-center mb-0.5 w-40 justify-end">
                   <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
                   <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
                     {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
                   </span>
                 </div>
               }
+            </div>
+            <div className="flex items-center justify-between mt-2 product-card-panel">
+              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
             {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
