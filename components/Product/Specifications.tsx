@@ -29,7 +29,7 @@ export default function ProductSpecifications({
               <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                 <div className="flex flex-wrap ul-li-disc text-limit-lines">
                   {attrGroup['whyweloveit'].map((detail: any, cdx: number) => (
-                    <div key={`product-${cdx}-detil-value`} className="text-slate-600 dark:text-slate-300" dangerouslySetInnerHTML={{ __html: detail.value || detail.value, }} />
+                    <div key={`product-${cdx}-detail-value`} className="product-detail-description text-slate-600 dark:text-slate-300" dangerouslySetInnerHTML={{ __html: detail.value || detail.value, }} />
                   ))}
                 </div>
               </div>
@@ -49,7 +49,7 @@ export default function ProductSpecifications({
                       {attrGroup['material']?.map(
                         (lengthAttr: any, ldx: number) => (
                           <div className="flex justify-start comma" key={ldx}>
-                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
+                            <span className="pr-1 mt-1 font-normal capitalize text-slate-600 product-detail-description">
                               {lengthAttr.fieldText}
                               {attrGroup['material']?.length > 1 &&
                                 <span className="s-icon">,</span>
@@ -72,8 +72,8 @@ export default function ProductSpecifications({
                       {attrGroup['lookAfterMe']?.map(
                         (lengthAttr: any, ldx: number) => (
                           <div className="flex justify-start comma" key={ldx}>
-                            <span className="pr-1 mt-1 text-xs font-normal capitalize text-dark-brown sm:text-sm">
-                              <div dangerouslySetInnerHTML={{ __html: lengthAttr.fieldText, }} className="hidden mt-2 text-xs font-normal text-gray-500 sm:block product-detail-description" />
+                            <span className="pr-1 mt-1 font-normal capitalize">
+                              <div dangerouslySetInnerHTML={{ __html: lengthAttr.fieldText, }} className="mt-2 font-normal text-slate-600 sm:block product-detail-description" />
                               {attrGroup['lookAfterMe']?.length > 1 &&
                                 <span className="s-icon">,</span>
                               }

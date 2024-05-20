@@ -10,6 +10,7 @@
     "enableMyStoreFeature": true,
     "enableAddToBagPlp": false,
     "enableMembership": true,
+    "isImageGallery": false,
     "enableHeaderWishlist": false,
     "enableProductSpecification": true
   },
