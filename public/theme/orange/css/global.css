@@ -1729,3 +1729,12 @@ p {
 .bg-switch-enable{
   background-color: #07ca6c !important;
 }
+
+.text-limit-lines {
+   overflow: hidden;
+    max-height: 70px;
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+           line-clamp: 3; 
+   -webkit-box-orient: vertical;
+}
