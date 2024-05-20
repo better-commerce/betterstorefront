@@ -81,7 +81,7 @@ const StoreListSection = ({
                                     <tr key={store?.DeliveryCenterName}>
                                         <td className="py-2 text-sm text-center uppercase border border-gray-400">{store?.DeliveryCenterName}</td>
                                         <td className="py-2 text-sm text-center uppercase border border-gray-400"> {store?.Qty > 0 ? store?.Qty : translate('label.basket.outOfStockText')} </td>
-                                        <td className="py-2 text-sm text-center border border-gray-400">{Math.ceil(store?.DistanceInMiles) <= 1 ? `${Math.ceil(store?.DistanceInMiles)} ${translate('common.label.mileText')}` : `${Math.ceil(store?.DistanceInMiles)} ${translate('common.label.milesText')}`} </td>
+                                        <td className="py-2 text-sm text-center border border-gray-400">{store?.Distance <= 1 ? `${store?.Distance} ${translate('common.label.mileText')}` : `${store?.Distance} ${translate('common.label.milesText')}`} </td>
                                     </tr>
                                 ))}
                             </tbody>

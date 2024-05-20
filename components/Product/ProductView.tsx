@@ -235,7 +235,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   useEffect(() => {
     fetchProduct()
-    setIsCompared('true')
+    setIsCompared('false')
   }, [slug, currency])
 
   useEffect(() => {
@@ -888,7 +888,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <div className="">{renderVariants()}</div>
 
         {product?.quantityBreakRules?.length > 0 &&
-          <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} />
+          <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
         }
         {promotions?.promotions?.availablePromotions?.length > 0 && (
           <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
