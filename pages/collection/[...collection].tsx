@@ -396,7 +396,7 @@ function CollectionPage(props: any) {
     if (currentFilters) {
       routeToPLPWithSelectedFilters(router, currentFilters)
     }
-  }, [state?.filters])
+  }, [data?.products?.filters])
 
   const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)

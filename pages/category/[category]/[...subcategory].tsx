@@ -368,7 +368,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     if (currentFilters) {
       routeToPLPWithSelectedFilters(router, currentFilters)
     }
-  }, [state?.filters])
+  }, [data?.products?.filters])
 
   useEffect(() => {
     const dataToPass = IS_INFINITE_SCROLL
