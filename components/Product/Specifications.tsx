@@ -19,8 +19,8 @@ export default function ProductSpecifications({
   const translate = useTranslation()
   return (
     <>
-      <div className="grid px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
-        <div className="sm:col-span-8">
+      <div className="grid gap-10 px-4 sm:grid-cols-12 sm:px-4 md:px-6 lg:px-6 2xl:px-0">
+        <div className={`${imageTagGroup?.specification?.length > 0 ? 'sm:col-span-7' : 'sm:col-span-12'}`}>
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
             <h2 className="flex items-center pb-2 text-2xl font-semibold md:text-3xl sm:pb-2 h2-heading-text">
               {translate('label.product.productSpecificationText')}
@@ -29,13 +29,7 @@ export default function ProductSpecifications({
               <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">
                 <div className="flex flex-wrap ul-li-disc">
                   {attrGroup['whyweloveit'].map((detail: any, cdx: number) => (
-                    <div
-                      key={`product-${cdx}-detil-value`}
-                      className="text-slate-600 dark:text-slate-300"
-                      dangerouslySetInnerHTML={{
-                        __html: detail.value || detail.value,
-                      }}
-                    />
+                    <div key={`product-${cdx}-detil-value`} className="text-slate-600 dark:text-slate-300" dangerouslySetInnerHTML={{ __html: detail.value || detail.value, }} />
                   ))}
                 </div>
               </div>
@@ -823,59 +817,16 @@ export default function ProductSpecifications({
             </div>
           </div>
         </div>
-        <div className="sm:col-span-4">
-          {imageTagGroup?.specification?.length && (
+        {imageTagGroup?.specification?.length && (
+          <div className="sm:col-span-5">
             <div className="my-6 sm:col-span-1 specifications sm:my-0">
-              <Swiper
-                slidesPerView={1.3}
-                spaceBetween={8}
-                navigation={true}
-                loop={false}
-                freeMode={true}
-                modules={[FreeMode]}
-                breakpoints={{
-                  640: {
-                    slidesPerView: 1.3,
-                  },
-                  768: {
-                    slidesPerView: 1.3,
-                  },
-                  1024: {
-                    slidesPerView: 1.3,
-                  },
-                }}
-              >
-                <div
-                  role="list"
-                  className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0"
-                >
+              <Swiper slidesPerView={1.3} spaceBetween={8} navigation={true} loop={false} freeMode={true} modules={[FreeMode]} breakpoints={{ 640: { slidesPerView: 1.3, }, 768: { slidesPerView: 1.3, }, 1024: { slidesPerView: 1.3, }, }} >
+                <div role="list" className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0" >
                   {imageTagGroup?.specification?.map(
                     (img: any, iid: number) => (
-                      <SwiperSlide
-                        className={`px-0 ${iid === 0 && isOnlyMobile ? 'cs-mr-1' : ''
-                          } `}
-                        key={`product-${iid}-swiper-detil`}
-                      >
+                      <SwiperSlide className={`px-0 ${iid === 0 && isOnlyMobile ? 'cs-mr-1' : ''} `} key={`product-${iid}-swiper-detail`} >
                         <div className="image-container" style={{ paddingTop }}>
-                          <Image
-                            priority
-                            layout="fill"
-                            objectFit="contain"
-                            quality="100"
-                            onLoad={({ target }) => {
-                              const { naturalWidth, naturalHeight } =
-                                target as HTMLImageElement
-                              setPaddingTop(`0`)
-                            }}
-                            src={
-                              generateUri(img?.image, 'fm=webp&h=450&q=40') ||
-                              IMG_PLACEHOLDER
-                            }
-                            //src={img?.image}
-                            alt={img.name || 'slider-image'}
-                            className="image"
-                          ></Image>
-                          {/* <Image src={img?.image} className="bhdLno" layout="fill" alt={img.name}></Image> */}
+                          <img onLoad={({ target }) => { const { naturalWidth, naturalHeight } = target as HTMLImageElement; setPaddingTop(`0`) }} src={generateUri(img?.image, 'fm=webp&h=450&q=40') || IMG_PLACEHOLDER} alt={img.name || 'slider-image'} className="image rounded-2xl" />
                         </div>
                       </SwiperSlide>
                     )
@@ -883,8 +834,8 @@ export default function ProductSpecifications({
                 </div>
               </Swiper>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   )

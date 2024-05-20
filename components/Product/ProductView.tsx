@@ -390,6 +390,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
+    } else if (product?.componentProducts?.length > 0) {
+      buttonConfig.title = "Add Bundle"
     } else if (
       product?.preOrder?.isEnabled &&
       selectedAttrData?.currentStock <= 0
@@ -844,14 +846,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
               {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
                 <div key={`review-${reviewIdx}`}>
-                  <ReviewItem
-                    data={{
-                      comment: review?.comment,
-                      date: review?.postedOn,
-                      name: review?.title,
-                      starPoint: review?.rating,
-                    }}
-                  />
+                  <ReviewItem data={{ comment: review?.comment, date: review?.postedOn, name: review?.title, starPoint: review?.rating, }} />
                 </div>
               ))}
             </div>
@@ -998,13 +993,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     {renderStatus()}
                   </div>
                 </SwiperSlide>
-                {product?.images?.map((item: any, index: number) => (
-                  <SwiperSlide key={index}>
-                    <div className="relative">
-                      <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
-                    </div>
-                  </SwiperSlide>
-                ))}
+                {product?.images.map((item: any, index: number) => {
+                  return (
+                    item?.tag != "specification" &&
+                    <SwiperSlide key={index}>
+                      <div className="relative">
+                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                    </SwiperSlide>
+                  )
+                })}
               </Swiper>
             </div>
           ) : (
@@ -1056,7 +1054,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
           </>
         }
-       
+
         {product?.componentProducts && (
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
