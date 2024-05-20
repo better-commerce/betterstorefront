@@ -252,11 +252,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   }
 
   useEffect(() => {
-    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
+    const currentFilters: any = getCurrentPLPFilters(data?.products?.filters, state)
     if (currentFilters) {
       routeToPLPWithSelectedFilters(router, currentFilters)
     }
-  }, [state?.filters])
+  }, [data?.products?.filters])
 
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })

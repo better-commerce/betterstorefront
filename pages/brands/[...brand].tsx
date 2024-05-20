@@ -258,7 +258,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     if (currentFilters) {
       routeToPLPWithSelectedFilters(router, currentFilters)
     }
-  }, [state?.filters])
+  }, [data?.products?.filters])
 
   const handleClick = () => {
     setShowLandingPage(false)
