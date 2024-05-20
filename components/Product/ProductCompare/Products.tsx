@@ -54,7 +54,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
   attributesCount = 0,
-  featureToggle, 
+  featureToggle,
   defaultDisplayMembership,
 }) => {
   const [currentProductData, setCurrentProductData] = useState({
@@ -369,8 +369,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
           <span className="font-normal text-black font-14">{product?.brand}</span>
         </div>
         {attribs?.map((attrib: any, idx: number) => (
-          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14" >
-            <span>{getAttribValue(attrib.value)}</span>
+          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
+            {getAttribValue(attrib.value).includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: getAttribValue(attrib.value) }}></span>) : (<span>{getAttribValue(attrib.value)}</span>)}
           </div>
         ))}
       </div>
