@@ -66,13 +66,24 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   }
   //}
   if (filterQuery) {
-    // if (!document.location?.search) {
-    //   filterQuery = `?${filterQuery}`
-    // } else {
-    //   filterQuery = `&${filterQuery}`
-    // }
-    router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}?${filterQuery}`, undefined, { shallow: true })
+    if (!qsSearchParamsExcludingFilters) {
+      filterQuery = `?${filterQuery}`
+    } else {
+      filterQuery = `&${filterQuery}`
+    }
+    router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}${filterQuery}`, undefined, { shallow: true })
   } else {
     router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}`, undefined, { shallow: true })
   }
 }
+
+export const extractFiltersFromUrl = (url:string) => {
+  if(!url) return []
+  const urlObj = new URL(url);
+  const queryParams = new URLSearchParams(urlObj.search);
+
+  const filtersParam = queryParams.get('filters');
+  const filters = filtersParam ? JSON.parse(decodeURIComponent(filtersParam)) : null;
+  
+  return  filters ;
+};
