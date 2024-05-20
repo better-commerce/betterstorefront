@@ -1116,7 +1116,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     </div>
                     {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
                       <div className='absolute z-10 right-1 top-1'>
-                        <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-teal-500 rounded-full' />
+                        <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-red-500 rounded-full' />
                       </div>
                     }
                     {renderStatus()}
