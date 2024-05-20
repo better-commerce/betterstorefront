@@ -5,7 +5,7 @@ export default function ProductDescription({ seoInfo }: any) {
         seoInfo['product.seocontent'].map((seocontent: any, cdx: number) => (
           <div
             key={cdx}
-            className="mb-4 text-xs font-normal text-brown seo-info custom-html"
+            className="mb-4 font-normal text-brown seo-info custom-html product-detail-description"
             dangerouslySetInnerHTML={{
               __html: seocontent.value || seocontent.value,
             }}

@@ -1738,3 +1738,7 @@ p {
            line-clamp: 3; 
    -webkit-box-orient: vertical;
 }
+
+.product-detail-description, .product-detail-description p {
+  font-size: .875rem !important;
+}

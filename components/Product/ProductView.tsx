@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, Fragment } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { HeartIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { GiftIcon, HeartIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
@@ -34,8 +34,9 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
 import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
 import ProductSocialProof from './ProductSocialProof'
-import { Disclosure } from '@headlessui/react'
+import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import TechnicalSpecifications from './TechnicalSpecification'
+import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -86,6 +87,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [isEngravingAvailable, setIsEngravingAvailable] = useState<any>(null)
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
   const [openStoreLocaltorModal, setOpenStockCheckModal] = useState(false)
+  const [showDetails, setShowGwpDetail] = useState(false)
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
@@ -765,6 +767,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     productDesc = product.description
   }
 
+  const showGwpDetails = () => {
+    setShowGwpDetail(true)
+  }
+  const closeGwpDetails = () => {
+    setShowGwpDetail(false)
+  }
   const renderCustomControls = () => {
     if (fullscreen) {
       return (
@@ -911,9 +919,56 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             }
           </div>
         </div>
+        <div className='flex flex-col'>
+          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
+            relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
+              <>
+                <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
+                  <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
+                  <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
+                  <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
+                </div>
+                <Transition appear show={showDetails} as={Fragment}>
+                  <Dialog
+                    as="div"
+                    className="fixed inset-0 z-50 cart-z-index-9999"
+                    onClose={closeGwpDetails}
+                  >
+                    <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
+                      <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+                        <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
+                      </Transition.Child>
 
+                      {/* This element is to trick the browser into centering the modal contents. */}
+                      <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
+                      <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
+                        <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
+                          <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
+                            <span className="absolute z-50 end-3 top-3">
+                              <ButtonClose onClick={closeGwpDetails} />
+                            </span>
+
+                            <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
+                              <div className='flex flex-col justify-center text-center'>
+                                <div className='mx-auto'>
+                                  <img src={gwp?.image} className='w-auto h-80' />
+                                </div>
+                                <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
+                                <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
+                                <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Transition.Child>
+                    </div>
+                  </Dialog>
+                </Transition>
+              </>
+            ))
+          )}
+        </div>
         <div className="">{renderVariants()}</div>
-
         {product?.quantityBreakRules?.length > 0 &&
           <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
         }
@@ -1059,6 +1114,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     <div className="relative aspect-w-16 aspect-h-16">
                       <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
                     </div>
+                    {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
+                      <div className='absolute z-10 right-1 top-1'>
+                        <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-teal-500 rounded-full' />
+                      </div>
+                    }
                     {renderStatus()}
                   </div>
                   <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
