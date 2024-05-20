@@ -242,7 +242,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product?.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(data?.slug || data?.link)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
@@ -276,7 +276,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
                 {product?.compared && (
-                  <button className="w-full py-2 font-semibold uppercase border border-transparent rounded-b-2xl bg-slate-100 hover:bg-slate-300 font-14">
+                  <button className="w-full py-2 font-semibold text-red-600 uppercase border-t border-red-600 bg-red-50 rounded-b-2xl hover:bg-red-100 font-14">
                     Remove
                   </button>
                 )}
