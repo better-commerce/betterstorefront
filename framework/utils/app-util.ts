@@ -66,12 +66,12 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   }
   //}
   if (filterQuery) {
-    if (!document.location?.search) {
-      filterQuery = `?${filterQuery}`
-    } else {
-      filterQuery = `&${filterQuery}`
-    }
-    router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}${filterQuery}`, undefined, { shallow: true })
+    // if (!document.location?.search) {
+    //   filterQuery = `?${filterQuery}`
+    // } else {
+    //   filterQuery = `&${filterQuery}`
+    // }
+    router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}?${filterQuery}`, undefined, { shallow: true })
   } else {
     router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}`, undefined, { shallow: true })
   }
