@@ -13,13 +13,13 @@ import cartHandler from '@components/services/cart'
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
+import { getCurrentPage, sanitizeRelativeUrl, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import wishlistHandler from '@components/services/wishlist'
 import AccordionInfo from '@components/AccordionInfo'
@@ -586,10 +586,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   useEffect(() => {
     const isEngraving =
       !!relatedProducts?.relatedProducts?.filter(
-        (item: any) => item?.stockCode === ITEM_TYPE_ADDON
-      ).length ||
-      !!product?.customAttributes.filter(
-        (item: any) => item?.display == 'Is Enabled'
+        (item: any) => item?.relatedType === ITEM_TYPE_ADDONS
       ).length
     setIsEngravingAvailable(isEngraving)
   }, [relatedProducts])
@@ -870,14 +867,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderReviews = () => {
     return (
       <>
-        <hr className="pt-10 mt-10 sm:pt-10 border-slate-200 dark:border-slate-700" />
+        <hr className="pt-5 mt-5 sm:pt-5 border-slate-200 dark:border-slate-700" />
         <div className="" id='productReview'>
           <h2 className="flex items-center text-2xl font-semibold">
             <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
             <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
           </h2>
 
-          <div className="mt-10">
+          <div className="my-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-11 gap-x-28">
               {reviews?.review?.productReviews?.length > 0 && reviews?.review?.productReviews?.map((review: any, reviewIdx: number) => (
                 <div key={`review-${reviewIdx}`}>
@@ -903,7 +900,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {reviews?.review?.totalRecord > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
-                <div className="flex items-center w-52">
+                <div className="flex items-center w-64">
                   <Link href={`#productReview`} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
@@ -919,9 +916,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             }
           </div>
         </div>
-        <div className='flex flex-col'>
-          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
-            relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
+        {attrGroup['product.relatedproducts']?.length > 0 &&
+          <div className='flex w-full'>
+            <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
+              {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
+                <SwiperSlide key={index}>
+                  <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
+                    <Link href={`/products${sanitizeRelativeUrl(item?.fieldText)}`}> <span>{item?.display}</span> </Link>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        }
+
+        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
+          <div className='flex flex-col'>
+            {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
               <>
                 <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
                   <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
@@ -965,9 +976,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   </Dialog>
                 </Transition>
               </>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
         <div className="">{renderVariants()}</div>
         {product?.quantityBreakRules?.length > 0 &&
           <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
@@ -1023,23 +1034,19 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
               {isEngravingAvailable && (
                 <>
-                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                    <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  </div>
-                  <div className="flex mt-6 sm:mt-8 sm:flex-col1">
-                    <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                    <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                      {translate('label.product.engravingText')}
-                    </button>
-                    <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                      {isInWishList(selectedAttrData?.productId) ? (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                      ) : (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                      )}
-                      <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                    </button>
-                  </div>
+                  <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                    {translate('label.product.engravingText')}
+                  </button>
+                  <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                    {isInWishList(selectedAttrData?.productId) ? (
+                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
+                    ) : (
+                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                    )}
+                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                  </button>
                 </>
               )}
             </div>
@@ -1151,7 +1158,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </>
         )}
-        {featureToggle?.features?.enableProductSpecification &&
+        {alternativeProducts?.length > 0 && (
+          <>
+            <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
+            <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto pdp-compare-section">
+              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            </div>
+          </>
+        )}
+        {featureToggle?.features?.enableProductSpecification && (attrGroup['material']?.length > 0 || attrGroup['lookAfterMe']?.length > 0 || attrGroup['product.perfectfor']?.length > 0 || attrGroup['product.fabriccare']?.length > 0 || attrGroup['product.washcare']?.length > 0 || attrGroup['whyweloveit']?.length > 0 ) &&
           <div className="px-4 mt-12 sm:px-0 sm:mt-12">
             <hr className="border-slate-200 dark:border-slate-700" />
             <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
@@ -1160,19 +1175,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </div>
           </div>
         }
-        {reviews?.review?.productReviews?.length > 0 &&
-          renderReviews()
-        }
         <div className="w-full px-4 pt-6 mx-auto sm:px-0 lg:max-w-none sm:pt-8">
-          {alternativeProducts?.length > 0 && (
-            <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto pdp-compare-section">
-              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            </div>
-          )}
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="container flex flex-col w-full px-4 py-10 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
+              <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
                 <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
@@ -1194,6 +1201,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
+          {reviews?.review?.productReviews?.length > 0 &&
+            renderReviews()
+          }
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6 pdp-description-section">
               <ProductDescription seoInfo={attrGroup} />
