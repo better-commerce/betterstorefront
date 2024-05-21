@@ -129,7 +129,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
                     <h4 className="text-sm font-normal text-black">{translate('label.membership.billedAnnuallyText')}</h4>
                   </div>
                   <div className="flex items-center justify-center px-6 pt-3 pb-6 mt-6">
-                    <Button className={'w-full py-3 text-sm text-white !bg-black rounded-full hover:!bg-purple-900'} title={buttonConfig.title} action={() => buttonConfig.action(plan)} buttonType={buttonConfig.type || 'cart'} />
+                    <Button className={'w-full py-3 text-sm text-white !bg-black rounded-full hover:!bg-gray-900'} title={buttonConfig.title} action={() => buttonConfig.action(plan)} buttonType={buttonConfig.type || 'cart'} />
                   </div>
                 </div>
               </div>

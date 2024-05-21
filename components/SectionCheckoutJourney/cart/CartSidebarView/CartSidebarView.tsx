@@ -585,7 +585,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                       <div className="flex flex-col flex-1 col-span-9 ml-4">
                                         <div className="flex flex-col flex-1">
                                           <div className="flex justify-between font-normal text-gray-900 font-sm">
-                                            <h5 onClick={handleClose} className='text-base font-medium'>
+                                            <h5 onClick={handleClose} className='text-base font-medium dark:text-black'>
                                               <Link href={`/${product.slug}`}> {' '} {product.name}{' '}</Link>
                                             </h5>
                                             <p className="mt-0 ml-4 font-semibold text-green">

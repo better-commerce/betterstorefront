@@ -68,9 +68,9 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
 
       <div className="flex flex-col items-center justify-center w-full">
         <div className="w-full px-10 font-semibold sm:px-0">
-          <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
+          <label className="text-neutral-800 dark:text-neutral-800">{translate('label.addressBook.emailText')}</label>
           <input
-            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
+            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
             value={value}
             type="email"
             onChange={onChange}
@@ -278,7 +278,7 @@ const router = useRouter()
       <section aria-labelledby="trending-heading" className="bg-white">
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-            <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+            <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
               {translate('label.register.freeRegisterText')}
             </h1>
           </div>
@@ -305,7 +305,7 @@ const router = useRouter()
               </>
             )}
 
-            <span className="block text-center text-neutral-700 dark:text-neutral-300">
+            <span className="block text-center text-neutral-700 dark:text-neutral-700">
               {translate('label.myAccount.alreadyAccountText')} {` `}
               <Link passHref className="text-green-600" href="/my-account/login">
                 {translate('label.login.loginBtnText')}

@@ -55,7 +55,7 @@ useEffect(()=>{
 
   return (
     <>
-      <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.order.returnHistoryHeadingText')}</h2>
+      <h2 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.order.returnHistoryHeadingText')}</h2>
       <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
         <MyReturns />
       </div>

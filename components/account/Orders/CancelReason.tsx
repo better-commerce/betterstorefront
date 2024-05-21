@@ -87,7 +87,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
 
                     <Button
                       type="button"
-                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center text-white bg-red-700 border dark:text-black cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center text-white bg-red-700 border dark:!text-white cursor-pointer dark:!bg-black ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={isDisabled}
                       onClick={openModal} 
                     >
@@ -159,7 +159,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                           <Button
                             variant='slim'
                             onClick={async () => await onItemCancellation(reason)}
-                            className={cn('!font-bold', {
+                            className={cn('!font-bold dark:!bg-black dark:!text-white', {
                               '!py-2': !cancelLoadingState,
                               '!py-3': cancelLoadingState,
                             })}
