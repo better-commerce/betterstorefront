@@ -466,16 +466,16 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="container w-full pb-0 mx-auto bg-white md:pb-10">
+          <div className="container w-full pb-0 mx-auto bg-white md:pb-4">
             <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2">
-              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 brand-rounded-xl bg-black min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 rounded-xl brand-rounded-xl bg-black min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
                 <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
                 <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
               <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
-            <div className="mt-2">
+            <div className="mt-10 border-t border-gray-200">
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
                   <div className='flex justify-between my-4'>
@@ -496,27 +496,28 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
               </div>
             </div>
-            <div className="mt-0 md:mt-10">
+            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
+            <div className="mt-0 md:mt-2">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
           </div>
 
           <div className="container w-full mx-auto">
             {isOnlyMobile ? (
-              <div className="mb-10 max-h-[30vh]">
+              <div className="mb-2 max-h-[30vh]">
                 <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
               </div>
             ) : (
-              <div className="mb-10">
+              <div className="mb-2">
                 <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
               </div>
             )}
-            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
-            <div className="mt-10">
+
+            <div className="mt-10 border-gray-200 border-y">
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRefNew} className={`flow-root`}>
                   <div className='flex justify-between'>
-                    <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
+                    <Heading className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev >
                       {translate('label.product.saleProductText')}
                     </Heading>
                     <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
@@ -533,8 +534,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
               </div>
             </div>
-            <div className="my-10">
-              <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
+            <div className="max-w-4xl mx-auto my-10">
+              <p className="mb-6 text-3xl font-semibold capitalize md:text-4xl text-slate-900">{faq.title}</p>
               {faq?.results?.map((val: any, Idx: number) => {
                 return (
                   <BrandDisclosure key={Idx} heading={val.faq} details={val.ans} />
