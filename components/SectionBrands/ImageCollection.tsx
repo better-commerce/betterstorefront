@@ -35,7 +35,7 @@ export default function ImageCollection({ heading, range, AttrArray }: any) {
   }, [AttrArray])
 
   return (
-    <div id="ImageCollection" className={`grid grid-cols-${range} gap-5`}>
+    <div id="ImageCollection" className={`grid grid-cols-${range} gap-5 md:col-span-3`}>
       {bannerCollection.map((val: any, Idx: number) => {
         return (
           <Link key={Idx} className="flex items-center border border-solid sm:max-h-[280px] bg-white border-gray-400 brand-rounded-xl rounded-xl justify-evenly group" href={val.link ? val.link : val.slug ? val.slug : '/#'} >
