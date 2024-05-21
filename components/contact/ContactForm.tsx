@@ -220,7 +220,7 @@ function ContactForm() {
 
           {/* Buttons and submit logic here */}
 
-          <div className="text-brand-blue font-16 font-normal">
+          <div className="text-brand-blue font-16 font-normal dark:text-black">
             {translate('common.message.RequiredFieldMsg')}
           </div>
           <div className="mt-10">

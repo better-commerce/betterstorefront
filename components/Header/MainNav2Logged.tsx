@@ -168,7 +168,7 @@ function handleWishlist() {
     );
   };
   return (
-    <div className="bg-white border-b nc-MainNav2Logged dark:bg-neutral-900 border-slate-100 dark:border-slate-700">
+    <div className="bg-white border-b nc-MainNav2Logged dark:bg-neutral-900 border-slate-100 dark:border-slate-100">
       <div className="container ">{renderContent()}</div>
     </div>
   );
