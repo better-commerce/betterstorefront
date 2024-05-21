@@ -107,6 +107,7 @@ export interface IExtraProps {
 }
 
 const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {},featureToggle={}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav }) => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
@@ -115,9 +116,7 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
   const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
 
   useEffect(() => {
-    Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => {
-      setIsLoading(false)
       setIsCompared('false')
     })
 
@@ -126,10 +125,24 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => { })
       Router.events.off('routeChangeComplete', () => { })
     }
   }, [])
+
+  useEffect(() => {
+    const handleStart = () => setIsLoading(true);
+    const handleComplete = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, []);
 
   const { locale = 'en-US', ...rest } = useRouter()
 
