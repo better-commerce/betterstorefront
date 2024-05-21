@@ -121,7 +121,7 @@ const initialState = {
     isOnlyMobile: false,
     isDesktop: false,
     isIPadorTablet: false,
-    deviceType: DeviceType.UNKNOWN,
+    deviceType: DeviceType.DESKTOP,
   },
   includeVAT: getItem('includeVAT') || 'true',
   isCompared: getItem('isCompared') || 'false',
@@ -588,23 +588,18 @@ export const UIProvider: React.FC<any> = (props) => {
      */
     const getDeviceType = () => {
       var userAgent = navigator.userAgent || navigator.vendor || window.opera
+      const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini|iPhone|iPod|Windows Phone/i;
+      const tabletRegex = /iPad|Android(?!.*(mobile|mobi)).*?(Tablet|Tab)/i;
 
-      // Windows Phone must come first because its UA also contains "Android"
-      if (/windows phone/i.test(userAgent)) {
-        return DeviceType.WINDOWS_PHONE
+      if ( mobileRegex.test(userAgent)) {
+        return DeviceType.MOBILE
+      }else if (tabletRegex.test(userAgent)) {
+        return DeviceType.TABLET
+      }else {
+        return DeviceType.DESKTOP
       }
-
-      if (/android/i.test(userAgent)) {
-        return DeviceType.ANDROID
-      }
-
-      // iOS detection from: http://stackoverflow.com/a/9039885/177710
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return DeviceType.IOS
-      }
-
-      return DeviceType.UNKNOWN
     }
+
     const deviceTypeInfo = getDeviceType()
     const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
 

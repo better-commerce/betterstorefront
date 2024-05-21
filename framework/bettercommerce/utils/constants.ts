@@ -89,12 +89,9 @@ export module Cookie {
 }
 
 export enum DeviceType {
-  IOS = 1,
-  ANDROID = 2,
-  WINDOWS_PHONE = 3,
-  DESKTOP = 4,
-  TABLET = 5,
-  MOBILE = 6,
+  DESKTOP = 1,
+  MOBILE = 2,
+  TABLET = 3,
 }
 
 export module UserAuthType {
