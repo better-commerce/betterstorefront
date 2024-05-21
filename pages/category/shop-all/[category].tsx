@@ -14,7 +14,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
+import { extractFiltersFromUrl, getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
@@ -297,14 +297,12 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
     : false
-  adaptedQuery.filters
-    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
-    : false
+  const adaptedFilters = extractFiltersFromUrl(router?.asPath)
   const [isProductCompare, setProductCompare] = useState(false)
   const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
+    filters: adaptedFilters || [],
     categoryId: category.id,
   }
   const [isLoading, setIsLoading] = useState(true)

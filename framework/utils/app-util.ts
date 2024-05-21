@@ -77,13 +77,21 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   }
 }
 
-export const extractFiltersFromUrl = (url:string) => {
-  if(!url) return []
-  const urlObj = new URL(url);
-  const queryParams = new URLSearchParams(urlObj.search);
-
+export const extractFiltersFromUrl = (urlString: string) => {
+  if (!urlString) return [];
+  const url = new URL(urlString, window.location.origin);
+  const queryParams = new URLSearchParams(url.search);
   const filtersParam = queryParams.get('filters');
-  const filters = filtersParam ? JSON.parse(decodeURIComponent(filtersParam)) : null;
   
-  return  filters ;
+  let filters = null;
+  if (filtersParam) {
+    try {
+      filters = JSON.parse(decodeURIComponent(filtersParam));
+    } catch (e) {
+      console.error('Failed to parse filters from URL', e);
+      filters = null;
+    }
+  }
+
+  return filters || [];
 };
