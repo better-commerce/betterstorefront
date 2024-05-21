@@ -559,12 +559,12 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         </div>
         {category?.linkGroups?.length > 0 ?
           (
-            <div className='category-container container mx-auto'>
+            <div className='container mx-auto category-container'>
               {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
                 <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo}/>
               }
-              <div className='grid grid-cols-1 gap-4 sm:grid-cols-12 sm:gap-10 px-4 sm:px-0'>
-                <div className='sm:col-span-2'>
+              <div className='grid grid-cols-1 gap-4 px-4 sm:grid-cols-12 sm:gap-10 sm:px-0'>
+                <div className={`${CURRENT_THEME != 'green' ? 'sm:col-span-3':'sm:col-span-2'}`}>
                   <div className="pt-2 sm:pb-8">
                     {category?.linkGroups?.map((grp: any, grpIdx: number) => (
                       <div className="mx-auto sm:mb-4" key={`linkGrp-${grpIdx}`}>
@@ -576,10 +576,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                         ))}
                       </div>
                     ))}
-
                   </div>
                 </div>
-                <div className='space-y-6 sm:col-span-10'>
+                <div className={`${CURRENT_THEME != 'green' ? 'space-y-6 sm:col-span-9':'space-y-6 sm:col-span-10'}`}>
                   <FeaturedBanner category={category} />
                   {category?.featuredBrand?.length > 0 &&
                     <FeaturedBrand featuredBrand={category?.featuredBrand} filterBrandData={filterBrandData} />
@@ -590,7 +589,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                         <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">Featured Products</h2>
                         <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
                       </div>
-                      <div className='grid grid-cols-1 gap-4 sm:grid-cols-5'>
+                      <div className={`${CURRENT_THEME != 'green' ? 'grid grid-cols-1 gap-4 sm:grid-cols-3':'grid grid-cols-1 gap-4 sm:grid-cols-5'}`}>
                         {minimalProd?.results?.map((product: any, pIdx: number) => (
                           <div key={pIdx}>
                             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
