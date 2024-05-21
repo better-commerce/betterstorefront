@@ -1162,7 +1162,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
             <div className="flex flex-col w-full px-0 pt-10 pb-6 mx-auto pdp-compare-section">
-              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount(config)} attributeNames={attributeNames} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <PDPCompare compareProductsAttributes={compareProductsAttributes} name={data?.brand || ''} pageConfig={config} products={alternativeProducts} deviceInfo={deviceInfo} activeProduct={product} maxBasketItemsCount={maxBasketItemsCount} attributeNames={attributeNames} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
           </>
         )}
