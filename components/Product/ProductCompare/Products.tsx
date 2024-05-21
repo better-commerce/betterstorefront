@@ -357,7 +357,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
       </div>
       <div className="mt-2 bg-white border-t border-gray-200 lg:mt-4">
-        <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
+        <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon key={rating} aria-hidden="true" className={classNames(product?.rating > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
           ))}
@@ -365,7 +365,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.rating}
           </label>
         </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
+        <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
           <span className="font-normal text-black font-14">{product?.brand}</span>
         </div>
         {attribs?.map((attrib: any, idx: number) => (
