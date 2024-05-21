@@ -47,14 +47,14 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
                           <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent compare-white-space"></div>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
+                          <span className="flex items-center justify-center w-full h-[48px] font-14">
                             {translate('common.label.ratingsText')}
                           </span>
-                          <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
+                          <span className="flex items-center justify-center w-full h-[48px] font-14">
                             {translate('common.label.brandText')}
                           </span>
                           {attributeNames?.map((attribName: any) => (
-                            <span key={attribName} className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14" >
+                            <span key={attribName} className="flex items-center justify-center w-full h-[48px] font-14" >
                               {attribName}
                             </span>
                           ))}
