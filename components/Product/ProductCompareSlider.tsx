@@ -33,7 +33,7 @@ const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceI
   return (
     <>
       <div className="flex justify-between gap-1 mb-2 lg:gap-3 sm:mb-0">
-        <h2 className="flex-1 pb-0 pr-4 mb-2 font-semibold sm:pb-4 font-18 text-dark-brown dark:text-black">{translate('label.product.compareSameRangeText')}</h2>
+        <h2 className="flex items-center pb-6 text-2xl font-semibold md:text-3xl sm:pb-6 h2-heading-text">{translate('label.product.compareSameRangeText')}</h2>
         <div className="flex gap-4">
           <button aria-label="Arrow Left" onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center rounded arrow-container hover:border-2">
             <i className="sprite-icons sprite-left-arrow"></i>
@@ -45,12 +45,12 @@ const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceI
       </div>
       <Swiper className="px-4 pb-5 mb-4 bg-white sm:mb-8 sm:px-0 min-cls-h" slidesPerView={1.1} spaceBetween={10} navigation={false} ref={swiperRef}
         breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 4.01 }, 1024: { slidesPerView: 4.01 }, }}>
-        <SwiperSlide className="relative inline-flex flex-col w-64 h-auto pb-5 text-left border border-orange-500 rounded-md cursor-pointer height-auto-slide group lg:w-auto">
+        <SwiperSlide className="relative inline-flex flex-col w-64 h-auto text-left border-2 cursor-pointer border-amber-400 rounded-3xl height-auto-slide group lg:w-auto">
           <CompareProductCard active={true} compareProductsAttributes={compareProductsAttributes} attributeNames={attributeNames} data={activeProduct} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </SwiperSlide>
         {products?.map((product?: any, productIdx?: number) => (
           activeProduct?.stockCode != product?.stockCode &&
-          <SwiperSlide key={`pdp-compare-product-${productIdx}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
+          <SwiperSlide key={`pdp-compare-product-${productIdx}`} className={`relative flex-col w-64 h-auto text-left cursor-pointer height-auto-slide group lg:w-auto`}>
             <CompareProductCard active={false} compareProductsAttributes={compareProductsAttributes} attributeNames={attributeNames} data={product} hideWishlistCTA={false} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </SwiperSlide>
         ))}

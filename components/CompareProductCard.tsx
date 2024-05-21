@@ -231,9 +231,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             {attributesMap?.map((attrib: any, attribIdx: any) => (
               <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                 <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
-                {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
+                {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No"  || attrib?.value == false  || attrib?.value == "false" ?
                   <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='w-4 h-4 icon-small' /></>
-                  : attrib?.value == "True" || attrib?.value == "Yes" ?
+                  : attrib?.value == "True" || attrib?.value == "Yes" || attrib?.value == true || attrib?.value == "true" ?
                     <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='w-4 h-4 icon-small icon-small-green' /></>
                     : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                   <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
@@ -275,7 +275,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
