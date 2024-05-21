@@ -3,6 +3,7 @@ import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { CURRENT_THEME } from "@components/utils/constants";
 export default function FeaturedBrand({ featuredBrand, filterBrandData }: any) {
   return (
     <div className="pt-2 pb-4 mx-auto">
@@ -11,7 +12,7 @@ export default function FeaturedBrand({ featuredBrand, filterBrandData }: any) {
           <SwiperSlide key={fdx}>
             <div className="flex items-center justify-center flex-col overflow-hidden cursor-pointer bg-[#EFEFEF] border border-gray-200 rounded-lg hover:border-gray-300 flex-shrink-0" key={fdx} >
               {feature?.logoImageName != '' ? (
-                <img src={generateUri(`https://www.imagedelivery.space/tagdeal/${feature?.logoImageName}`, 'h=50&fm=webp') || IMG_PLACEHOLDER} title={feature?.manufacturerName} className="object-contain object-center h-10 brand-logo-category max-h-[50px] dark:text-black" alt={feature?.manufacturerName} width={100} height={50} />
+                <img src={CURRENT_THEME ==='green' ?  (generateUri(`https://www.imagedelivery.space/tagdeal/${feature?.logoImageName}`, 'h=50&fm=webp') || IMG_PLACEHOLDER) : (generateUri(`https://www.imagedelivery.space/fashion/${feature?.logoImageName}`, 'h=50&fm=webp') || IMG_PLACEHOLDER)} title={feature?.manufacturerName} className="object-contain object-center h-10 brand-logo-category max-h-[50px] dark:text-black" alt={feature?.manufacturerName} width={100} height={50} />
               ) : (
                 <img src={IMG_PLACEHOLDER} className="object-contain object-center h-10 brand-logo-category max-h-[50px] dark:text-black" alt={feature?.manufacturerName} title={feature?.manufacturerName} width={100} height={50} />
               )}
