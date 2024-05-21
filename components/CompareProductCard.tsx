@@ -232,9 +232,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                 <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
                 {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
-                  <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
+                  <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='w-4 h-4 icon-small' /></>
                   : attrib?.value == "True" || attrib?.value == "Yes" ?
-                    <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                    <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='w-4 h-4 icon-small icon-small-green' /></>
                     : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                   <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
               </span>
@@ -294,16 +294,18 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           <div className="space-y-4 px-2.5 pt-5 pb-2.5">
             <div>
               <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
-              <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
             </div>
-            <div className="flex items-center justify-between ">
-              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <div className='flex justify-between'>
+              <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
               <div className="flex items-center mb-0.5">
                 <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
                 <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
                   {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
                 </span>
               </div>
+            </div>
+            <div className="flex items-center justify-between ">
+              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
             {renderCompareAttributes()}
             {isComparedEnabled && product?.compared && (

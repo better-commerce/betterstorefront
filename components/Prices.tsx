@@ -31,7 +31,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
     <>
       <div className={`${className}`}>
         {featureToggle?.features?.enableMembership && (
-          <div className="py-1 pl-2 mb-2 font-semibold text-black rounded-md bg-sky-100 font-14">
+          <div className="py-1 pl-2 mb-2 font-semibold text-black bg-yellow-100 rounded-md font-14">
             {isIncludeVAT ? memberPriceWithTax : memberPriceWithoutTax}<span className="text-xs font-normal text-gray-500">{' (Member Price)'}</span>
             <span className="pl-1 font-light text-right text-gray-900 font-10">
               {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')} 

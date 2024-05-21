@@ -501,7 +501,6 @@ a {
 body {
   font-family: var(--font-primary) !important;
   font-size: var(--font-16);
-  overflow-x: hidden;
 }
 
 h1 {
