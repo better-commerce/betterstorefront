@@ -166,22 +166,13 @@ export const checkIfFalsyUserId = (userId: any) => {
 
 export const detectDeviceType = (userAgent = navigator.userAgent) => {
   // RegExp for device types
-  const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i
-  const iosRegex = /iPhone|iPod/i
-  const androidRegex = /Android/i
-  const windowsPhoneRegex = /Windows Phone/i
-  const tabletRegex = /iPad|Android(?!.+(?:mobile|mobi)).*?(?:Tablet|Tab)/i
+  const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini|iPhone|iPod|Windows Phone/i;
+  const tabletRegex = /iPad|Android(?!.*(mobile|mobi)).*?(Tablet|Tab)/i;
 
-  if (iosRegex.test(userAgent)) {
-    return DeviceType.IOS
-  } else if (androidRegex.test(userAgent)) {
-    return DeviceType.ANDROID
-  } else if (windowsPhoneRegex.test(userAgent)) {
-    return DeviceType.WINDOWS_PHONE
+  if (mobileRegex.test(userAgent)) {
+    return DeviceType.MOBILE
   } else if (tabletRegex.test(userAgent)) {
     return DeviceType.TABLET
-  } else if (mobileRegex.test(userAgent)) {
-    return DeviceType.MOBILE
   } else {
     return DeviceType.DESKTOP
   }

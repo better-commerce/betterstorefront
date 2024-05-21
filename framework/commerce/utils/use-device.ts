@@ -11,10 +11,9 @@ interface DeviceDetection {
 }
 
 export enum DeviceType {
-    UNKNOWN = 0,
-    IOS = 1,
-    ANDROID = 2,
-    WINDOWS_PHONE = 3,
+    DESKTOP = 1,
+    MOBILE = 2,
+    TABLET = 3,
 }
 
 const useDevice = (): DeviceDetection => {
@@ -28,23 +27,17 @@ const useDevice = (): DeviceDetection => {
      * @returns {String}
      */
     const getDeviceType = () => {
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera
+      const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini|iPhone|iPod|Windows Phone/i;
+      const tabletRegex = /iPad|Android(?!.*(mobile|mobi)).*?(Tablet|Tab)/i;
 
-        // Windows Phone must come first because its UA also contains "Android"
-        if (/windows phone/i.test(userAgent)) {
-            return DeviceType.WINDOWS_PHONE;
-        }
-
-        if (/android/i.test(userAgent)) {
-            return DeviceType.ANDROID;
-        }
-
-        // iOS detection from: http://stackoverflow.com/a/9039885/177710
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            return DeviceType.IOS;
-        }
-
-        return DeviceType.UNKNOWN;
+      if ( mobileRegex.test(userAgent)) {
+        return DeviceType.MOBILE
+      }else if (tabletRegex.test(userAgent)) {
+        return DeviceType.TABLET
+      }else {
+        return DeviceType.DESKTOP
+      }
     }
 
     return {
