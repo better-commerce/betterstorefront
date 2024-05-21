@@ -218,14 +218,14 @@ export default function CartDropdown() {
           <>
             {b2bUser ? (
               <>
-                <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`} >
+                <Popover.Button className={`w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`} >
                   <>
                     {/*{cartItems?.lineItems?.length > 0 && (
                     <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
                       {cartItems?.lineItems?.length}
                     </div>
                   )}*/}
-                    <img src="/images/cartIcon.svg" className="w-6 h-6" />
+                    <img src="/images/cartIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5" />
                   </>
 
                 </Popover.Button>
@@ -289,7 +289,7 @@ export default function CartDropdown() {
                   </div>
                 )}
                 <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
-                <img src="/images/cartIcon.svg" className="w-6 h-6" />
+                <img src="/images/cartIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5" />
               </Popover.Button>
             )}
           </>

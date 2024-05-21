@@ -143,7 +143,7 @@ function MyOrdersPage({ deviceInfo }: any) {
 
   return (
     <>
-     <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.order.orderHistory')}</h2>
+     <h2 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.order.orderHistory')}</h2>
       <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
         <MyOrders
           allOrders={allOrders}

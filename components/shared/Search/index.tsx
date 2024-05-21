@@ -75,7 +75,7 @@ export default function Search(props: any) {
   const CLASSES = "absolute top-3 start-3";
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
-      <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-neutral-800/20 '></div>
+      <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-primary-50 '></div>
       <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden" onClick={closeWrapper} >
         <XMarkIcon />
       </div>

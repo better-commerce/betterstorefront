@@ -79,7 +79,7 @@ export default function MyReturns() {
 
   return (
     <section aria-labelledby="recent-heading" className="w-full mt-4 bg-white">
-      <h2 id="recent-heading" className="sr-only">
+      <h2 id="recent-heading" className="sr-only dark:text-black">
         {translate('label.orderDetails.recentOrdersText')}
       </h2>
       {returns?.length > 0 ? (
@@ -170,7 +170,7 @@ export default function MyReturns() {
           </div>
         </>
       ) : (
-        <div className="py-4 sm:py-10 lg:mx-0">No Return available</div>
+        <div className="py-4 sm:py-10 lg:mx-0 dark:text-black">No Return available</div>
       )}
     </section>
   )

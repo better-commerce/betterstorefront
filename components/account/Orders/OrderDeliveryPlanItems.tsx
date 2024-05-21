@@ -72,7 +72,7 @@ const OrderDeliveryPlanItems = ({
                       </p>
                       <button className="border border-gray-900 rounded-full">
                         <ChevronDownIcon
-                          className={`w-4 h-4 ${
+                          className={`w-4 h-4 dark:text-gray-900 ${
                             open && 'rotate-180 transform'
                           }`}
                         />

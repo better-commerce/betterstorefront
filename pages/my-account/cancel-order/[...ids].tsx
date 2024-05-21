@@ -228,6 +228,7 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                     <div className="w-full py-4">
                       <Button
                         variant="slim"
+                        className='dark:!bg-black dark:!text-white'
                         onClick={() => {
                           onCancelReason()
                           hideCancellationReasons()

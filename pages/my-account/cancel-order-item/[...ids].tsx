@@ -194,7 +194,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                                       itemData?.categoryItems[0]?.categoryName}
                                   </p>
                                 </div>
-                                <h3 className="pr-6 mt-2 font-normal text-12 text-primary !text-sm">
+                                <h3 className="pr-6 mt-2 font-normal text-12 text-primary !text-sm dark:text-black">
                                   <Link href={`/${itemData?.slug}`} passHref>
                                     {itemData?.name}
                                   </Link>
@@ -223,16 +223,16 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                         </div>
                         <div className="flex items-center justify-between pb-2 border-gray-300 border-dashed border-y">
                           <div className="flex items-end flex-1 px-3 py-2 pl-0 mt-1">
-                            <label className="text-base font-bold text-primary">
+                            <label className="text-base font-bold text-primary dark:text-black">
                               {translate('label.myAccount.selectQuantityText')}
                             </label>
                           </div>
                           <div className="py-2">
                             <div className="flex flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
-                              <label className="mt-2 mr-2 text-xs text-primary">
+                              <label className="mt-2 mr-2 text-xs text-primary dark:text-black">
                                 {translate('common.label.qtyText')}{' '}
                               </label>
-                              <select className="text-xs bg-white sm:w-22 text-primary" required value={value} onChange={handleChange} >
+                              <select className="text-xs bg-white sm:w-22 text-primary dark:text-black" required value={value} onChange={handleChange} >
                                 <option value="0">Select</option>
                                 {Array.from(Array(itemData?.qty).keys())?.map((x: number) => x + 1)?.map((qty: any, idx: number) => (
                                   <option key={idx} value={qty}>

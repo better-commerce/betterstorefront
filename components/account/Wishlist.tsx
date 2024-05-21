@@ -36,11 +36,11 @@ export default function Wishlist({ deviceInfo, featureToggle, defaultDisplayMemb
     <section aria-labelledby="recent-heading" className="max-w-4xl">
       {!data.length && !isLoading && (
         <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
-          <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24 dark:text-white">{translate('label.wishlist.emptyWishlistText')}</div>
-          <p className="mt-3 text-xs sm:text-sm text-primary opacity-60">{translate('label.wishlist.saveItemsText')}.{' '}</p>
+          <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24 dark:text-black">{translate('label.wishlist.emptyWishlistText')}</div>
+          <p className="mt-3 text-xs sm:text-sm text-primary opacity-60 dark:text-black">{translate('label.wishlist.saveItemsText')}.{' '}</p>
           <div className="flex w-full mt-5 sm:flex-col">
             <Link legacyBehavior passHref href={sanitizeRelativeUrl(`/search`)} className="w-50 flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 btn-primary">
-              <Button className="w-52 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">{translate('label.orderDetails.startShoppingBtnText')}</Button>
+              <Button className="w-52 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-slate-900 hover:bg-slate-800 text-slate-50 dark:!text-slate-50 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">{translate('label.orderDetails.startShoppingBtnText')}</Button>
             </Link>
           </div>
         </div>

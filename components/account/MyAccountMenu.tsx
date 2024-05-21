@@ -130,7 +130,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                   href={item.href}
                   passHref
                   className={`block py-2 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
-                    ? "border-l-sky-500 border-l-2 border-b border-b-slate-200 pl-2 font-semibold dark:text-slate-200 icon-text-black"
+                    ? "border-l-sky-500 border-l-2 border-b border-b-slate-200 pl-2 font-semibold dark:text-black icon-text-black"
                     : "border-white border-l-2  text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                     }`}
                 >
@@ -159,7 +159,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                   <span className="inline-block text-black sm:hidden dark:text-white">
                     {isMobile ? item?.head : item?.mtext}
                   </span>
-                  <span className={`hidden sm:inline-block text-black dark:text-white ${item.text == 'My Company' && 'font-display'}`} >
+                  <span className={`hidden sm:inline-block text-black dark:text-black ${item.text == 'My Company' && 'font-display'}`} >
                     {isMobile ? item?.head : item?.text}
                   </span>
                 </Link>

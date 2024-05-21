@@ -19,7 +19,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
             <div className="relative pl-9">
               <a
                 href="#"
-                className="absolute left-0 top-2/4 -translate-y-2/4 "
+                className="absolute left-0 top-2/4 -translate-y-2/4 dark:text-gray-900"
                 onClick={() => {
                   isB2B ?
                     router.push('/my-account/my-company?tab=orders')
@@ -52,7 +52,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                       {translate('label.orderDetails.replacementOrderText')} </p>
                   </>
                 )}
-                <p className="text-sm text-black-light">
+                <p className="text-sm text-black-light dark:text-gray-900">
                   #{details?.orderNo} • {details?.items?.length}{' '}
                   {details?.items?.length > 1 ? (
                     <span>{translate('common.label.itemPluralText')}</span>
@@ -70,7 +70,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
               </div>
             </div>
             <div className="hidden sm:block">
-              <h5 className="uppercase font-10 text-black-light">
+              <h5 className="uppercase font-10 text-black-light dark:text-gray-900">
                 {translate('label.orderDetails.orderPlacedOnHeadingText')} </h5>
               <p className="text-sm dark:text-black text-primary">
                 {moment(new Date(details?.orderDate)).format(DATE_FORMAT)}

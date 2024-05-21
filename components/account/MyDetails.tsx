@@ -75,10 +75,10 @@ export default function MyDetails() {
   return (
     <main className="pb-6 space-y-10 sm:space-y-12 sm:pb-10">
       <div className=''>
-        <h2 className="text-2xl font-semibold sm:text-3xl dark:text-white">
+        <h2 className="text-2xl font-semibold sm:text-3xl dark:text-black">
           Account infomation
         </h2>
-        <p className="mt-2 text-sm font-normal text-black dark:text-white">
+        <p className="mt-2 text-sm font-normal text-black dark:text-black">
           {translate('label.myAccount.editYourDetailsText')}
         </p>
       </div>
@@ -122,11 +122,11 @@ export default function MyDetails() {
                       return (
                         formItem.type !== 'singleSelectButtonGroup' && (
                           <div key={`${formItem.label}_${idx}`}>
-                            <label className="text-base font-medium nc-Label text-neutral-900 dark:text-neutral-200 ">
+                            <label className="text-base font-medium nc-Label text-neutral-900 dark:text-neutral-900 ">
                               {formItem.label}
                             </label>
                             <div className="mt-1.5 flex icon-input-form">
-                              <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                              <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-50 text-neutral-500 dark:text-neutral-500 text-sm">
                                 <i className={`${formItem.placeholder} text-2xl las`}></i>
                               </span>
                               <Field
@@ -139,7 +139,7 @@ export default function MyDetails() {
                                 value={values[formItem.name]}
                                 type={formItem.type}
                                 maxLength={formItem.maxLength}
-                                className="block !rounded-l-none mt-0 w-full border outline-none border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 bg-white dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl text-sm font-normal h-11 px-4 py-3"
+                                className="block !rounded-l-none mt-0 w-full border outline-none border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 bg-white dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white dark:text-black disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl text-sm font-normal h-11 px-4 py-3"
                               />
 
                               {errors[formItem.name] && touched[formItem.name] && (
@@ -169,7 +169,7 @@ export default function MyDetails() {
                       <Button
                         type="submit"
                         onClick={handleSubmit}
-                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-black hover:bg-slate-800 dark:hover:bg-slate-800 text-slate-50 dark:!text-white shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                         loading={isSubmitting}
                         disabled={isSubmitting}
                       >

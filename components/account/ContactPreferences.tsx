@@ -136,7 +136,7 @@ export default function ContactPreferences() {
           {/* <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1> */}
-          <p className="mt-2 text-sm flex flex-col text-black dark:text-white">
+          <p className="mt-2 text-sm flex flex-col text-black dark:text-black">
             <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescTitle')}</span>
             <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescText')}</span>
           </p>
@@ -159,7 +159,7 @@ export default function ContactPreferences() {
                 />
                 <label
                   htmlFor={`radio-btn-${idx}`}
-                  className="ml-3 block text-sm font-medium text-black dark:text-white"
+                  className="ml-3 block text-sm font-medium text-black dark:text-black"
                 >
                   {btn.title}
                 </label>
@@ -213,7 +213,7 @@ export default function ContactPreferences() {
                     }}
                   />
                 </label>
-                <span>{box.label}</span>
+                <span className='dark:text-black'>{box.label}</span>
               </div>
             )
           })}
@@ -225,7 +225,7 @@ export default function ContactPreferences() {
                 <Button
                   type="submit"
                   onClick={handleSubmit}
-                  className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-black shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                  className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-black shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >
