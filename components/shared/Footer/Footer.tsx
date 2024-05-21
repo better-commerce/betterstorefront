@@ -1,5 +1,5 @@
 import { Logo } from "@components/ui";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SocialsList1 from "@components/shared/SocialsList1/SocialsList1";
 import Link from "next/link";
 import { sanitizeHtmlContent } from "framework/utils/app-util";
@@ -7,6 +7,8 @@ import Newsletter from "../Newsletter";
 
 
 const Footer = ({ navItems = [] }: any) => {
+  const [domLoaded, setDOMLoaded] = useState<boolean>(false)
+
   const renderWidgetMenuItem = (item: any, index: number) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => (
@@ -37,6 +39,10 @@ const Footer = ({ navItems = [] }: any) => {
     );
   };
 
+  useEffect(() => {
+    setDOMLoaded(true)
+  }, [])
+
   return (
     <>
       <Newsletter />
@@ -50,7 +56,7 @@ const Footer = ({ navItems = [] }: any) => {
               <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
             </div>
           </div>
-          {navItems?.map(renderWidgetMenuItem)}
+          {domLoaded && navItems?.map(renderWidgetMenuItem)}
         </div>
       </div>
     </>

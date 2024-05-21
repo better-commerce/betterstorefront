@@ -105,6 +105,7 @@ export interface IExtraProps {
 }
 
 const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, featureToggle = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const { setIsCompared , myAccountActiveTab } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
@@ -113,13 +114,10 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
   // const [isShow, setShow] = useState(true)
   const translate = useTranslation()
   const { user } = useUI()
-  const router = useRouter()
   // const [myAccountActiveTab, setmyAccountActiveTab ]= useState(translate('label.myAccount.myDetailsHeadingText'))
 
   useEffect(() => {
-    Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => {
-      setIsLoading(false)
       setIsCompared('false')
     })
 
@@ -128,10 +126,24 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
     }
 
     return () => {
-      Router.events.off('routeChangeStart', () => { })
       Router.events.off('routeChangeComplete', () => { })
     }
   }, [])
+
+  useEffect(() => {
+    const handleStart = () => setIsLoading(true);
+    const handleComplete = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, []);
 
   const { locale = 'en-US', ...rest } = useRouter()
 
