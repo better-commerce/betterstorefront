@@ -339,7 +339,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   placeholder={translate('label.promotion.applyPromotionText')}
                   onChange={handleChange}
                   value={value}
-                  className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md"
+                  className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md dark:text-black"
                   required
                 />
 

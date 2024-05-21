@@ -118,7 +118,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
             </div>
           }
-          <div className="container-navbar flex justify-between mx-auto mob-container">
+          <div className="container flex justify-between mx-auto mob-container">
             {isMobile &&
               <div className="flex items-center flex-1">
                 <MenuBar navItems={config} featureToggle={featureToggle} />
@@ -146,7 +146,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
                   <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-8 h-8 rounded-full lg:flex xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                    <HeartIcon className="flex-shrink-0 block mx-auto text-black 2xl:w-7 2xl:h-7 h-6 w-6 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (
                       <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
                         {wishListItems?.length}
@@ -171,7 +171,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     );
   };
   return (
-    <div className="bg-white border-b nc-MainNav2Logged dark:bg-neutral-900 border-slate-100 dark:border-slate-700">
+    <div className="bg-white border-b nc-MainNav2Logged dark:bg-neutral-900 border-slate-100 dark:border-slate-100">
       <div className="container ">{renderContent()}</div>
     </div>
   );

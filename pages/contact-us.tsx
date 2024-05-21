@@ -176,10 +176,10 @@ function Contact({
           {pageContents?.contactbanner?.map((contact: any, Idx: any) => (
             <div className="flex flex-col items-center p-10 bg-gray-200 rounded-md cursor-pointer" key={Idx}>
               <img src={contact?.contactbanner_heroimage} alt={contact?.contactbanner_herotitle} />
-              <p className="mt-5 mb-5 text-2xl font-semibold leading-9">
+              <p className="mt-5 mb-5 text-2xl font-semibold leading-9 dark:text-black">
                 {contact?.contactbanner_herotitle}
               </p>
-              <div className="mt-1 text-center" dangerouslySetInnerHTML={{ __html: contact?.contactbanner_herodescription, }} />
+              <div className="mt-1 text-center dark:text-black" dangerouslySetInnerHTML={{ __html: contact?.contactbanner_herodescription, }} />
             </div>
           ))}
         </div>

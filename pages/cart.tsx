@@ -689,7 +689,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       <div className={`container w-full py-4 pt-10  lg:pb-28 lg:pt-20 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
-        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16 basket-h1">
+        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16 basket-h1 dark:text-black">
           <span>{translate('label.basket.shoppingCartText')}{' '}</span>
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
@@ -702,7 +702,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
               <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} setItemClicked={setItemClicked} />
               <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded-md shadow-md top-2' : 'bg-slate-50 rounded-2xl top-24'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky lg:col-span-5 sm:mt-0`} >
-                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
+                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6 dark:text-black" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
@@ -761,7 +761,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 text-slate-50 dark:text-slate-50 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
@@ -866,7 +866,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                             {isInWishList(product?.productId) ? (
                                               <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
                                             ) : (
-                                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
                                             )
                                             }
                                           </button>
@@ -888,7 +888,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                     {isInWishList(product?.productId) ? (
                                       <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
                                     ) : (
-                                      <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                      <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
                                     )
                                     }
                                   </button>

@@ -129,27 +129,27 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
                           <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
                             {product?.colorName != "" &&
                               <div className="flex items-center space-x-1.5">
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                <svg className="w-4 h-4 dark:text-slate-600" viewBox="0 0 24 24" fill="none">
                                   <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                   <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                   <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                   <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                   <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
-                                <span>{product?.colorName}</span>
+                                <span className='dark:text-slate-600'>{product?.colorName}</span>
                               </div>
                             }
                             {product?.size != "" &&
                               <>
                                 <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
                                 <div className="flex items-center space-x-1.5">
-                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                  <svg className="w-4 h-4 dark:text-slate-600" viewBox="0 0 24 24" fill="none">
                                     <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                   </svg>
-                                  <span className='uppercase'>{product?.size}</span>
+                                  <span className='uppercase dark:text-slate-600'>{product?.size}</span>
                                 </div>
                               </>
                             }
@@ -177,11 +177,11 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
                         </div>
                         {!product?.isMembership && product?.price?.raw?.withTax !== 0 &&
                           <div className="relative justify-center hidden text-center sm:flex">
-                            <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
-                            <span className="w-10 h-8 px-4 py-1 text-md sm:py-1">
+                            <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer dark:text-black" /></span>
+                            <span className="w-10 h-8 px-4 py-1 text-md sm:py-1 dark:text-black">
                               {product.qty}
                             </span>
-                            <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
+                            <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer dark:text-black" onClick={() => handleItem(product, 'increase')} /></span>
                           </div>
                         }
                         <div className="justify-end flex-1 hidden sm:flex basket-item-price">
@@ -197,7 +197,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
                             {isInWishList(product?.productId) ? (
                               <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
                             ) : (
-                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
                             )
                             }
                           </button>
