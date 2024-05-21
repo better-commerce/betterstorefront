@@ -200,7 +200,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         title: product?.name || EmptyString,
         sku: product?.productCode || EmptyString,
         categories: product?.classification?.category || [],
-        base_category:  product?.classification?.mainCategoryName ? product?.classification?.mainCategoryName : product?.classification?.category || EmptyString,
+        base_category: product?.classification?.mainCategoryName ? product?.classification?.mainCategoryName : product?.classification?.category || EmptyString,
         collection_name: product?.collections ? product?.collections[0]?.name : EmptyString,
         description: product?.fullName || EmptyString,
         product_url: productUrl,
@@ -1084,7 +1084,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     {renderStatus()}
                   </div>
                 </SwiperSlide>
-                {product?.images.map((item: any, index: number) => {
+                {product?.images?.map((item: any, index: number) => {
                   return (
                     item?.tag != "specification" &&
                     <SwiperSlide key={index}>
@@ -1129,7 +1129,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     {renderStatus()}
                   </div>
                   <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                    {product?.images?.filter((image: any) => image.tag !== "specification")
+                    {product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
                       .map((item: any, index: number) => (
                         <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
                           <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
@@ -1166,7 +1166,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </div>
           </>
         )}
-        {featureToggle?.features?.enableProductSpecification && (attrGroup['material']?.length > 0 || attrGroup['lookAfterMe']?.length > 0 || attrGroup['product.perfectfor']?.length > 0 || attrGroup['product.fabriccare']?.length > 0 || attrGroup['product.washcare']?.length > 0 || attrGroup['whyweloveit']?.length > 0 ) &&
+        {featureToggle?.features?.enableProductSpecification && (attrGroup['material']?.length > 0 || attrGroup['lookAfterMe']?.length > 0 || attrGroup['product.perfectfor']?.length > 0 || attrGroup['product.fabriccare']?.length > 0 || attrGroup['product.washcare']?.length > 0 || attrGroup['whyweloveit']?.length > 0) &&
           <div className="px-4 mt-12 sm:px-0 sm:mt-12">
             <hr className="border-slate-200 dark:border-slate-700" />
             <div className="flex flex-col w-full px-0 pt-6 lg:mx-auto sm:container page-container product-specification-section">
