@@ -138,7 +138,7 @@ function CollectionPage(props: any) {
 
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
-  const adaptedFilters = extractFiltersFromUrl(`http://example.com${router?.asPath}`)
+  const adaptedFilters = extractFiltersFromUrl(router?.asPath)
   const initialState = { ...DEFAULT_STATE, filters: adaptedFilters || [], collectionId: props?.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
