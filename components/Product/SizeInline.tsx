@@ -228,7 +228,7 @@ export default function SizeInline({
    return (
       <>
          <div className="flex items-center justify-between my-2" id="productSize">
-            <h4 className="text-gray-700 font-14 capitalize">
+            <h4 className="text-gray-700 capitalize font-14">
                {label}:
                <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700">
                   {currentAttribute}

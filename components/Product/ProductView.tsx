@@ -869,9 +869,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       <>
         <hr className="pt-5 mt-5 sm:pt-5 border-slate-200 dark:border-slate-700" />
         <div className="" id='productReview'>
-          <h2 className="flex items-center text-2xl font-semibold">
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl">Rating & Review</h2>
+          <h2 className="flex items-center mt-4 text-2xl font-semibold sm:mt-8">
             <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
-            <span className="ml-1.5"> {reviews?.review?.ratingAverage} · {reviews?.review?.productReviews?.length} Reviews</span>
+            <span className="ml-1.5"> {reviews?.review?.ratingAverage} <span className='text-sm font-normal text-gray-500'>({reviews?.review?.productReviews?.length} Reviews)</span></span>
           </h2>
 
           <div className="my-10">
@@ -896,7 +897,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-
             {reviews?.review?.totalRecord > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>

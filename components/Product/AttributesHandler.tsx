@@ -265,7 +265,7 @@ export default function AttributesHandler({
       })?.map((option: any, optionIdx: number) => {
         const optionsToPass = generateOptions(option)
         const originalAttribute = isCustomAttr ? stateAttributes[option?.fieldCode] : originalAttributes[option?.fieldCode]
-        const Component = ATTR_COMPONENTS[option?.fieldName == "Colour" ? "HorizontalList" : "SizeInline"] || mapComponents[option?.fieldCode] || DefaultComponent
+        const Component = ATTR_COMPONENTS[(option?.fieldName == "Colour" || option?.fieldName == "Color") ? "HorizontalList" : "SizeInline"] || mapComponents[option?.fieldCode] || DefaultComponent
         return (
           <div key={`attribute-handler-${optionIdx}`}>
             <Component
