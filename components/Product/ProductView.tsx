@@ -922,7 +922,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
                 <SwiperSlide key={index}>
                   <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                    <Link href={`/products${sanitizeRelativeUrl(item?.fieldText)}`}> <span>{item?.display}</span> </Link>
+                    <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
                   </div>
                 </SwiperSlide>
               ))}
