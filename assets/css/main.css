@@ -17660,3 +17660,7 @@ body:has(.engage-announcement-bar){
 .swiper-center .swiper-wrapper {
     justify-content: center !important;
 }
+
+.bg-switch-enable{
+  background-color: #07ca6c !important;
+}

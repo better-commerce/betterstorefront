@@ -892,9 +892,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
+          <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
             {product?.name}
-          </h2>
+          </h1>
           <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             {reviews?.review?.totalRecord > 0 &&
