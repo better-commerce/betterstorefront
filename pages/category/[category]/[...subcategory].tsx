@@ -12,7 +12,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
@@ -227,6 +227,7 @@ export const ACTION_TYPES = {
   SORT_ORDER: 'SORT_ORDER',
   CLEAR: 'CLEAR',
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
+  SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
@@ -246,7 +247,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], categoryId: '', }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -263,6 +264,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
       return { ...state, categoryId: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -275,6 +278,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
@@ -293,7 +298,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
         categoryId: category?.id,
       },
     },
@@ -301,7 +306,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -364,11 +369,25 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    if (currentFilters) {
-      routeToPLPWithSelectedFilters(router, currentFilters)
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
     }
-  }, [data?.products?.filters])
+  }, [state?.filters])
+
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   useEffect(() => {
     const dataToPass = IS_INFINITE_SCROLL

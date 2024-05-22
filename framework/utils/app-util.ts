@@ -5,6 +5,7 @@ import {
 } from '@commerce/utils/use-data-submit'
 import { EmptyString } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
+import { tryParseJson } from '@framework/utils/parse-util'
 export const resetSubmitData = (dispatch: any) => {
   if (dispatch) {
     dispatch({ type: DataSubmit.RESET_SUBMITTING })
@@ -23,21 +24,13 @@ export const sanitizeHtmlContent = (html: any) => {
   return EmptyString
 }
 
-export const getCurrentPLPFilters = (filters: any, state: any) => {
-  const currentFilters = filters?.reduce(
-    (acc: any, obj: any) => {
-      acc.forEach((item: any) => {
-        if (item.Key === obj.key) {
-          item['name'] = obj.name
-          return item
-        }
-        return acc
-      })
-      return acc
-    },
-    [...state?.filters]
-  )
-  return currentFilters
+export const parsePLPFilters = (qsFilters: string) => {
+  const queryFilters = decodeURIComponent(qsFilters as string)
+  if (queryFilters) {
+    const filters: any = tryParseJson(queryFilters) || []
+    return filters
+  }
+  return new Array<any>()
 }
 
 export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array<any>) => {
@@ -66,7 +59,7 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   }
   //}
   if (filterQuery) {
-    if (!document.location?.search) {
+    if (!qsSearchParamsExcludingFilters) {
       filterQuery = `?${filterQuery}`
     } else {
       filterQuery = `&${filterQuery}`

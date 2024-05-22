@@ -14,17 +14,15 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
@@ -222,6 +220,7 @@ export const ACTION_TYPES = {
   SORT_ORDER: 'SORT_ORDER',
   CLEAR: 'CLEAR',
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
+  SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
@@ -248,6 +247,7 @@ const {
   SORT_ORDER,
   CLEAR,
   HANDLE_FILTERS_UI,
+  SET_FILTERS,
   ADD_FILTERS,
   REMOVE_FILTERS,
   SET_CATEGORY_ID,
@@ -274,6 +274,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
       return { ...state, categoryId: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -291,6 +293,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage
@@ -318,7 +322,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
         categoryId: category.id,
       },
     },
@@ -326,7 +330,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -431,12 +435,26 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, data?.products])
 
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
+
   useEffect(() => {
-    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    if (currentFilters) {
-      routeToPLPWithSelectedFilters(router, currentFilters)
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
     }
-  }, [data?.products?.filters])
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {

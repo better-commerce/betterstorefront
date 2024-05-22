@@ -20,7 +20,7 @@ import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -45,7 +45,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -54,6 +54,7 @@ export const ACTION_TYPES = {
   SORT_ORDER: 'SORT_ORDER',
   CLEAR: 'CLEAR',
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
+  SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
 }
@@ -71,7 +72,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
@@ -85,6 +86,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case SET_FILTERS:
+        return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -108,6 +111,8 @@ function CollectionPage(props: any) {
 
   const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery: any = { ...router.query }
@@ -149,14 +154,14 @@ function CollectionPage(props: any) {
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
         collectionId: props?.id,
         sortBy: null,
       },
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -245,6 +250,9 @@ function CollectionPage(props: any) {
     }
   }, [productListMemory?.products, data?.products])
 
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
@@ -392,11 +400,21 @@ function CollectionPage(props: any) {
   }, [state?.filters, data?.products])
 
   useEffect(() => {
-    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    if (currentFilters) {
-      routeToPLPWithSelectedFilters(router, currentFilters)
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
     }
-  }, [data?.products?.filters])
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
