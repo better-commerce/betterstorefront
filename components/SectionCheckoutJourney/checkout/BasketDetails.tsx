@@ -41,15 +41,6 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
   const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
   const [openOMM, setOpenOMM] = useState(false)
-  useEffect(() => {
-    const fetchReferralPromotion = async () => {
-      let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
-      if (referralPromotions?.referralDetails) {
-        setReferralAvailable(true)
-      }
-    }
-    fetchReferralPromotion()
-  }, [])
 
   const handleReferralRegisterUser = async (referralId: any) => {
     let { data: voucherInfo } = await axios.post(

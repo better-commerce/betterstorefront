@@ -44,15 +44,6 @@ const BasketDetails = ({ basket, deviceInfo }: any) => {
   })
   const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
-  useEffect(() => {
-    const fetchReferralPromotion = async () => {
-      let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
-      if (referralPromotions?.referralDetails) {
-        setReferralAvailable(true)
-      }
-    }
-    fetchReferralPromotion()
-  }, [])
 
   const handleReferralRegisterUser = async (referralId: any) => {
     let { data: voucherInfo } = await axios.post(
