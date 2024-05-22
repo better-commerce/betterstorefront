@@ -3,7 +3,7 @@ import axios from 'axios'
 import Link from 'next/link'
 import cn from 'classnames'
 import Cookies from 'js-cookie'
-import { getCurrencySymbol, getFeaturesConfig, logError } from '@framework/utils/app-util'
+import { getCurrencySymbol, getFeaturesConfig, logError, sanitizeRelativeUrl } from '@framework/utils/app-util'
 import { priceFormat, roundToDecimalPlaces, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -198,7 +198,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
                   </div>
                 </div>
                 <div className="col-span-8">
-                  <Link href={`${item?.product_url}`} passHref>
+                  <Link href={sanitizeRelativeUrl(`${item?.product_url}`)} passHref>
                     <h3 className="font-semibold text-black font-16 hover:text-sky-600">{item?.title}</h3>
                   </Link>
                 </div>
