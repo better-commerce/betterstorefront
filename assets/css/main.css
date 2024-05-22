@@ -17664,3 +17664,46 @@ body:has(.engage-announcement-bar){
 .bg-switch-enable{
   background-color: #07ca6c !important;
 }
+
+@media only screen and (min-width: 768px) and (max-width: 1350px) {
+  .max-list-panel {
+    max-height: 270px;
+    overflow-y: auto;
+    margin-bottom: 10px !important;
+  }
+  .max-list-panel.max-mega-height {
+    max-height: 350px !important;
+  }
+}
+@media only screen and (min-width: 1351px) and (max-width: 1700px) {
+  .max-list-panel {
+    max-height: 270px;
+    overflow-y: auto;
+    margin-bottom: 10px !important;
+  }
+  .max-list-panel.max-mega-height {
+    max-height: 470px !important;
+  }
+}
+@media only screen and (min-width: 1701px) {
+  .max-list-panel.max-mega-height {
+    max-height: 670px !important;
+  }
+}
+
+.menu-html {
+  display: flex;
+  gap: 1rem;
+  max-width: 300px; 
+  margin-bottom: 20px;
+}
+
+.menu-html p{
+  font-size: 12px;
+  font-weight: 600 !important;
+  text-align: center;
+}
+
+.menu-html img{
+  border-radius: 6px;
+}
