@@ -5,13 +5,18 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { useTranslation } from "@commerce/utils/use-translation";
 import Link from "next/link";
+import { CURRENT_THEME } from "@components/utils/constants";
 export default function LandingFeaturedCategory({ featuredCategory, deviceInfo }: any) {
   const { isMobile, isIPadorTablet } = deviceInfo
   const translate = useTranslation()
+  let spv = 4
+  if (CURRENT_THEME == 'green') {
+    spv = 7
+  }
   return (
     <div className="py-6">
       {/* <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2> */}
-      <Swiper spaceBetween={10} slidesPerView={2.3} navigation={!isMobile} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: 6, }, 1400: { slidesPerView: 7, }, }} className="mySwiper center-content swiper-center" >
+      <Swiper spaceBetween={10} slidesPerView={2.3} navigation={!isMobile} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: spv, }, 1400: { slidesPerView: spv, }, }} className="mySwiper center-content swiper-center" >
         {featuredCategory?.map((featured: any, featuredIdx: number) => (
           <div key={featuredIdx}>
             {featured?.isFeatured == true && (
@@ -19,7 +24,7 @@ export default function LandingFeaturedCategory({ featuredCategory, deviceInfo }
                 <div className="relative border group sm:rounded-2xl bg-slate-100 border-slate-100 hover:bg-slate-200">
                   <>
                     {featured?.image != '' ? (
-                      <img src={generateUri(featured?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full sm:rounded-2xl" alt="Image" width={240} height={160} />
+                      <img src={generateUri(featured?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full sm:rounded-2xl" alt="Image" width={240} height={160} />
                     ) : (
                       <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
                     )}
