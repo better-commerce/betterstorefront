@@ -17707,3 +17707,25 @@ body:has(.engage-announcement-bar){
 .menu-html img{
   border-radius: 6px;
 }
+
+.image-name-overlay{
+  width: 94%;
+  left: 3%;
+}
+
+.image-overlay-container{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.image-overlay-container:after{
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: "";
+  z-index: 1;
+  background: rgba(0,0,0,0.3);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
