@@ -66,7 +66,7 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
   }
   //}
   if (filterQuery) {
-    if (!qsSearchParamsExcludingFilters) {
+    if (!document.location?.search) {
       filterQuery = `?${filterQuery}`
     } else {
       filterQuery = `&${filterQuery}`
@@ -76,22 +76,3 @@ export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array
     router.replace(`${document?.location?.pathname}${qsSearchParamsExcludingFilters}`, undefined, { shallow: true })
   }
 }
-
-export const extractFiltersFromUrl = (urlString: string) => {
-  if (!urlString) return [];
-  const url = new URL(urlString, window.location.origin);
-  const queryParams = new URLSearchParams(url.search);
-  const filtersParam = queryParams.get('filters');
-  
-  let filters = null;
-  if (filtersParam) {
-    try {
-      filters = JSON.parse(decodeURIComponent(filtersParam));
-    } catch (e) {
-      console.error('Failed to parse filters from URL', e);
-      filters = null;
-    }
-  }
-
-  return filters || [];
-};

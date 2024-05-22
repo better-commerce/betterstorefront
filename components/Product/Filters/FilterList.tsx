@@ -41,7 +41,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
           {option?.to != null ? option?.to : 'Max'}
         </span>
       </>
-    if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]?.toLowerCase()
+    if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1].toLowerCase()
     if (sectionKey === FILTER_KEYS.RATING) {
       // Check if the option name contains a decimal point
       if (option.name.includes('.')) {
@@ -182,7 +182,7 @@ export default function FilterList({
   const handleSearch = (value: string) => {
     const itemsClone = [...items]
     const filteredItems = itemsClone.filter((item: any) =>
-      item.name?.toLowerCase().includes(value?.toLowerCase())
+      item.name.toLowerCase().includes(value.toLowerCase())
     )
     setFilterItems(filteredItems)
   }
