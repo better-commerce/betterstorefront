@@ -1490,7 +1490,9 @@ p {
 .wishlist-img-height{
   min-height: 272px !important;
 }
-
+.logo-container{
+  max-height: 80px !important;
+}
 .brand-logo{
   width: 65px;
   height: auto;
