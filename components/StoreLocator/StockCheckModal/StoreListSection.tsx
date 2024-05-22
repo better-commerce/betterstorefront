@@ -50,11 +50,11 @@ const StoreListSection = ({
             </div>
             <div className='flex flex-col w-full max-h-[70vh] overflow-y-auto overflow-x-hidden !custom-scroll p-4'>
                 <div className='flex flex-col pb-6 mb-4 border-b sm:flex-row gap-x-4'>
-                    <img src={generateUri(product?.image, 'h=500&fm-webp')|| IMG_PLACEHOLDER} alt={product?.name} height={1200} width={1200} className='w-full h-auto sm:w-1/5 rounded-xl'></img>
+                    <img src={generateUri(product?.image, 'h=500&fm-webp') || IMG_PLACEHOLDER} alt={product?.name} height={1200} width={1200} className='object-cover object-top w-full h-60 sm:w-1/5 rounded-xl'></img>
                     <div className='flex flex-col justify-start p-0 my-auto mt-2 gap-y-4 sm:mt-0 sm:p-4 h-1/2'>
                         <h4 className='text-xl font-semibold leading-3'>{product?.name}</h4>
                         <span className='text-2xl font-semibold text-gray-700'>{product?.brand}</span>
-                        <span className='font-normal text-gray-600 text-md'>{product?.shortDescription}</span>
+                        <div className='font-normal text-gray-600 text-md' dangerouslySetInnerHTML={{ __html: product?.shortDescription }}></div>
                         <span className='font-semibold text-gray-700 text-md'>{product?.price?.formatted?.withTax}</span>
                         <Button className='w-full sm:!w-1/2' title={buttonConfig.title} action={() => buttonConfig.action()} buttonType={buttonConfig.type || 'cart'} />
                     </div>

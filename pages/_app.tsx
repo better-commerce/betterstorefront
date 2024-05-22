@@ -113,48 +113,11 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
-  let googleTranslateElementInit: any
-  //ACTIVATE ONLY OMNILYTICS ENABLED
-  if (!OMNILYTICS_DISABLED) {
-    googleTranslateElementInit = () => {
-      const windowClone: any = window
-      new windowClone.google.translate.TranslateElement(
-        {
-          pageLanguage: 'en',
-          layout:
-            windowClone.google.translate.TranslateElement.FloatPosition
-              .TOP_LEFT,
-        },
-        'google_translate_element'
-      )
-
-      const selector = "iframe[name='votingFrame']"
-      const elem = document.querySelector(selector)
-      if (elem) {
-        elem.setAttribute('title', 'Google Voting Frame')
-      }
-    }
-  }
-
   const setClientIPAddress = (pageProps: any) => {
     if (pageProps?.clientIPAddress) {
       Cookies.set(Cookie.Key.CLIENT_IP_ADDRESS, pageProps?.clientIPAddress)
     }
   }
-
-  useEffect(() => {
-    setClientIPAddress(pageProps)
-    const addScript = document.createElement('script')
-    addScript.setAttribute(
-      'src',
-      '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'
-    )
-    if (!OMNILYTICS_DISABLED) {
-      document.body.appendChild(addScript)
-        ; (window as any).googleTranslateElementInit = googleTranslateElementInit
-      document.getElementById('goog-gt-tt')?.remove()
-    }
-  }, [])
 
   const fetchEngageCampaigns = useCallback(async () => {
     try {
@@ -383,8 +346,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       </NextHead>
 
       <Head {...appConfig}></Head>
-      {OMNILYTICS_DISABLED ? null : <div id="google_translate_element" />}
-
       <ManagedUIContext>
         <PasswordProtectedRoute config={appConfig}>
           {(snippets?.length > 0) && (

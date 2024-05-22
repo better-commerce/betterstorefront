@@ -27,6 +27,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import LayoutStore from '@components/Layout/LayoutStore'
 
 const DEBOUNCE_TIMER = 300
 
@@ -287,11 +288,9 @@ function StoreLocatorPage({ deviceInfo }: any) {
 
   return (
     <>
+      
       <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>Stores</title>
         <meta name="title" content="Stores" />
@@ -349,5 +348,5 @@ function StoreLocatorPage({ deviceInfo }: any) {
   )
 }
 
-StoreLocatorPage.LayoutAccount = Layout
-export default withDataLayer(StoreLocatorPage, PAGE_TYPES.StoreLocator, true)
+StoreLocatorPage.LayoutStore = LayoutStore
+export default withDataLayer(StoreLocatorPage, PAGE_TYPES.StoreLocator, true, LayoutStore)
