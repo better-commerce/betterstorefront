@@ -61,7 +61,7 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                         </div>
                       </div>
                       <div className="md:col-span-10 sm:col-span-2">
-                        <Swiper spaceBetween={10} slidesPerView={1.1} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 2.5, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 5.2, }, }} className="grid grid-cols-5 gap-3 mySwier" >
+                        <Swiper spaceBetween={10} slidesPerView={1.1} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 2.5, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4.2, }, 1520: { slidesPerView: 5.2, } }} className="grid grid-cols-5 gap-3 mySwier" >
                           {products?.map((product: any, productIdx: number) => (
                             <div key={`compare-product-${productIdx}`}>
                               <SwiperSlide>

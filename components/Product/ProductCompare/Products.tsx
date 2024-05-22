@@ -328,10 +328,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   return (
     <>
-      <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14"
-        key={product.id}
-      >
+      <div className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14 " key={product.id} >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link passHref href={`/${currentProductData.link}`} onMouseEnter={(ev: any) => handleHover(ev, 'enter')} onMouseLeave={(ev: any) => handleHover(ev, 'leave')} title={`${product.name} \t ${itemPrice}`} >
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">

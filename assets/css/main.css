@@ -17651,56 +17651,6 @@ body:has(.engage-announcement-bar){
 .rc-slider-mark-text.rc-slider-mark-text-active{
   @apply dark:!text-black;
 }
-.container-navbar {
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 1rem;
-  padding-left: 1rem;
-}
-@media (min-width: 640px) {
-
-  .container-navbar {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-}
-@media (min-width: 768px) {
-
-  .container-navbar {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-  .search-top {
-    margin-top: -12px;
-  }
-}
-@media (min-width: 1024px) {
-
-  .container-navbar {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-  .search-top {
-    margin-top: 0px;
-  }
-}
-@media (min-width: 1280px) {
-
-  .container-navbar {
-    max-width: 1280px;
-    padding-right: 40px;
-    padding-left: 40px;
-  }
-}
-@media (min-width: 1536px) {
-
-  .container-navbar {
-    max-width: 1536px;
-    padding-right: 128px;
-    padding-left: 128px;
-  }
-}
 
 .icon-small{
   width: 20px !important;
