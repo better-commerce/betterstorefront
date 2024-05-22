@@ -17706,3 +17706,7 @@ body:has(.engage-announcement-bar){
   width: 20px !important;
   height: 20px !important;
 }
+
+.swiper-center .swiper-wrapper {
+    justify-content: center !important;
+}
