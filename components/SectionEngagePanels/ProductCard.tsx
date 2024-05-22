@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { getCurrencySymbol, getFeaturesConfig, logError } from '@framework/utils/app-util'
+import { cleanUrl, getCurrencySymbol, getFeaturesConfig, logError } from '@framework/utils/app-util'
 import { roundToDecimalPlaces, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -176,14 +176,14 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                 <SwiperSlide key={`pdp-compare-product-${index}`} className={`relative flex-col w-64 h-auto pb-5 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
                   <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6`)}>
                     <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-                      <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                      <ButtonLink isComparedEnabled={isComparedEnabled} href={`${cleanUrl(item?.product_url)}`} itemPrice={item?.price} productName={item?.title}>
                         <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
                           <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
                         </div>
                       </ButtonLink>
                     </div>
 
-                    <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                    <ButtonLink isComparedEnabled={isComparedEnabled} href={`${cleanUrl(item?.product_url)}`} itemPrice={item?.price} productName={item?.title}>
                       <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                         <div>
                           <h2 className="text-sm sm:text-sm text-left font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{item?.title}</h2>
@@ -207,14 +207,14 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                 <div key={`pdp-compare-product-${index}`} className={`relative flex-col sm:w-64 w-auto h-auto sm:pb-5 pb-2 text-left cursor-pointer height-auto-slide group lg:w-auto`}>
                   <div key={index} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent sm:mb-6 mb-2`)}>
                     <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-                      <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                      <ButtonLink isComparedEnabled={isComparedEnabled} href={`${cleanUrl(item?.product_url)}`} itemPrice={item?.price} productName={item?.title}>
                         <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
                           <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
                         </div>
                       </ButtonLink>
                     </div>
 
-                    <ButtonLink isComparedEnabled={isComparedEnabled} href={`${item?.product_url}`} itemPrice={item?.price} productName={item?.title}>
+                    <ButtonLink isComparedEnabled={isComparedEnabled} href={`${cleanUrl(item?.product_url)}`} itemPrice={item?.price} productName={item?.title}>
                       <div className="space-y-4 px-2.5 sm:pt-5 pt-2 pb-2.5">
                         <div>
                           <h2 className="text-xs sm:text-sm text-left font-semibold transition-colors sm:min-h-[50px] min-h-[40px] nc-ProductCard__title">{item?.title}</h2>
