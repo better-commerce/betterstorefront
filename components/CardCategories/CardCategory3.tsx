@@ -19,7 +19,7 @@ export interface CardCategory3Props {
 const CardCategory3: FC<CardCategory3Props> = ({ className, featuredImage, name, desc, color, link, buttonText }) => {
   const translate = useTranslation()
   return (
-    <Link href={sanitizeRelativeUrl(link)} className={`nc-CardCategory3 block ${className}`} >
+    <Link href={link} className={`nc-CardCategory3 block ${className}`} >
       <div className={`relative w-full aspect-w-16 aspect-h-11 sm:aspect-h-9 rounded-2xl overflow-hidden group ${color}`} >
         <div>
           <div className="absolute inset-5 sm:inset-8">

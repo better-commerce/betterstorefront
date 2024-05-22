@@ -13,7 +13,7 @@ import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/parse-util";
-import { cartItemsValidateAddToCart, getFeaturesConfig } from "@framework/utils/app-util";
+import { cartItemsValidateAddToCart, getFeaturesConfig, sanitizeRelativeUrl } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import _ from 'lodash';
 import { ArrowRight } from './shared/icons';
@@ -277,7 +277,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
     <>
       <div key={key} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-          <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+          <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug}` || `/${data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
               <img src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
             </div>
@@ -290,7 +290,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           {!isComparedEnabled && renderGroupButtons()}
         </div>
 
-        <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+        <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug}` || `/${data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
           <div className="space-y-4 px-2.5 pt-5 pb-2.5">
             <div>
               <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
