@@ -44,7 +44,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, de
           </div>
         </div>
       </div>
-      <Link href={`/${link}`} className="absolute inset-0 "></Link>
+      <Link href={link} className="absolute inset-0 "></Link>
     </div>
   );
 };

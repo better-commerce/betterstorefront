@@ -8,6 +8,7 @@ import CardCategory2 from "@components/CardCategories/CardCategory2";
 import { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface CardCategoryData {
   name: string;
@@ -71,7 +72,7 @@ const SectionSliderCategories: FC<SectionSliderCategoriesProps> = ({
           <ul className="glide__slides">
             {data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide category-card ${itemClassName}`}>
-                <CardCategory2 featuredImage={item.departments_image} name={item?.departments_name} desc={item?.departments_subtitle} link={item?.departments_link} bgClass={item?.color} />
+                <CardCategory2 featuredImage={item.departments_image} name={item?.departments_name} desc={item?.departments_subtitle} link={sanitizeRelativeUrl(`/${item?.departments_link}`)} bgClass={item?.color} />
               </li>
             ))}
             <li className={`glide__slide ${itemClassName}`}>

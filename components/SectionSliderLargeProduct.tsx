@@ -64,7 +64,7 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
                   images={product?.newlookbook_looksimage}
                   primaryImage={product?.newlookbook_primaryimage}
                   description={product?.newlookbook_category}
-                  link={sanitizeRelativeUrl(product?.newlookbook_link)}
+                  link={sanitizeRelativeUrl(`${product?.newlookbook_link}`)}
                   featureToggle={featureToggle}
                   defaultDisplayMembership={defaultDisplayMembership}
                 />

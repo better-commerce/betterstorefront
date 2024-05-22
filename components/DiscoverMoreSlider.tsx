@@ -5,6 +5,7 @@ import Heading from "./Heading/Heading";
 import CardCategory3 from "./CardCategories/CardCategory3";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 const DiscoverMoreSlider = ({ heading, data }: any) => {
   const sliderRef = useRef(null);
@@ -42,7 +43,7 @@ const DiscoverMoreSlider = ({ heading, data }: any) => {
         <ul className="glide__slides">
           {data?.map((item: any, index: number) => (
             <li key={index} className={`glide__slide`}>
-              <CardCategory3 name={item?.category_subtitle} desc={item?.category_title} featuredImage={item?.category_image} color={item?.category_categorycolor} link={item?.category_link} buttonText={item?.category_buttontext} />
+              <CardCategory3 name={item?.category_subtitle} desc={item?.category_title} featuredImage={item?.category_image} color={item?.category_categorycolor} link={sanitizeRelativeUrl(`/${item?.category_link}`)} buttonText={item?.category_buttontext} />
             </li>
           ))}
         </ul>

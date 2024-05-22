@@ -375,9 +375,9 @@ export const removePrecedingSlash = (value: string) => {
 
 export const sanitizeRelativeUrl = (value: string) => {
   if (value && !value.startsWith('/')) {
-    return `/${value}`
+     value = `/${value}`
   }
-  return value
+  return value.replace(/^\/+/g,'/')
 }
 
 export const parseFullName = (

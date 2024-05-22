@@ -27,7 +27,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
         {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={`${sanitizeRelativeUrl(i?.hyperlink)}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
+            <Link href={`${sanitizeRelativeUrl(`/${i?.hyperlink}`)}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
               <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
                 {i?.boxTitle.toLowerCase()}
               </span>
@@ -44,7 +44,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-600 dark:hover:text-black " href={i?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(child?.itemLink)}` : `/${sanitizeRelativeUrl(child?.itemLink)}`} >
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-600 dark:hover:text-black " href={i?.navBlockType == 9 ? `collection${sanitizeRelativeUrl(`/${child?.itemLink}`)}` : `${sanitizeRelativeUrl(`/${child?.itemLink}`)}`} >
                         {child?.caption.toLowerCase()}
                       </Link>
                     </li>
