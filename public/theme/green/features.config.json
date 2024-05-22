@@ -12,7 +12,8 @@
     "enableMembership": false,
     "isImageGallery": true,
     "enableHeaderWishlist": true,
-    "enableProductSpecification": false
+    "enableProductSpecification": false,
+    "enableTrendingCategory": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

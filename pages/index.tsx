@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
@@ -11,7 +11,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
+import { getCurrency, getCurrentCurrency, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
@@ -20,7 +20,10 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import SectionBrandCard from '@components/SectionBrandCard'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
-
+import Heading from '@components/Heading/Heading'
+// @ts-ignore
+import Glide from "@glidejs/glide/dist/glide.esm";
+import Link from 'next/link'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -122,7 +125,28 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
+  const sliderRef = useRef(null);
+  const [isShow, setIsShow] = useState(false);
+  useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 6, gap: 16, bound: true,
+      breakpoints: {
+        1280: { gap: 16, perView: 6, },
+        1279: { gap: 16, perView: 6, },
+        1023: { gap: 16, perView: 5, },
+        768: { gap: 16, perView: 4, },
+        500: { gap: 16, perView: 2, },
+      },
+    };
+    if (!sliderRef.current) return;
 
+    let slider = new Glide(sliderRef.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRef]);
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -141,9 +165,62 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         <SectionHero2 data={pageContents?.banner} />
-        <div className="mt-14 sm:mt-24 lg:mt-32">
-          <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
-        </div>
+        {pageContents?.shopbygender?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-24 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+              {pageContents?.shopbygender?.map((item: any, itemIdx: number) => (
+                <div key={`banner-${itemIdx}`}>
+                  <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
+                    <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
+                      <img src={item?.url} className='object-cover object-top w-full h-full rounded-xl' />
+                      <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
+                        <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
+                        <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+
+        {pageContents?.shopbycategory?.length > 0 &&
+          <div className={`nc-SectionSliderProductCard product-card-slider container sm:mt-8 pt-8 relative`}>
+            <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+              {pageContents?.shopbycategoryheading?.map((h: any, iIdx: number) => (
+                <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
+                  {h?.shopbycategoryheading_title}
+                </Heading>
+              ))}
+              <div className="glide__track" data-glide-el="track">
+                <ul className="glide__slides">
+                  {pageContents?.shopbycategory?.map((item: any, index: number) => (
+                    <li key={index} className={`glide__slide product-card-item home-product-card`}>
+                      <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
+                        <div className='relative flex flex-col rounded-lg'>
+                          <img src={item?.url} className='object-cover object-top w-full rounded-lg h-96' />
+                          <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/90 bottom-2 left-2 image-name-overlay'>
+                            <span className='text-2xl font-semibold'>{item?.title}</span>
+                            <span>Shop Now</span>
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        }
+        {featureToggle?.features?.enableTrendingCategory &&
+          <>
+
+            <div className="mt-14 sm:mt-24 lg:mt-32">
+              <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
+            </div>
+          </>
+        }
         <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} container relative my-16 sm:my-24 lg:my-32 product-collections`}>
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
