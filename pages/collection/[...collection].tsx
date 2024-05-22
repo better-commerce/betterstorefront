@@ -45,7 +45,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { extractFiltersFromUrl, getCurrentPLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -135,9 +135,11 @@ function CollectionPage(props: any) {
     eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
   })
 
+
+
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
-  adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
-  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], collectionId: props?.id, }
+  const adaptedFilters = extractFiltersFromUrl(router?.asPath)
+  const initialState = { ...DEFAULT_STATE, filters: adaptedFilters || [], collectionId: props?.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
