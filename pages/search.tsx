@@ -7,7 +7,6 @@ import Script from 'next/script'
 import NextHead from 'next/head'
 import { GetServerSideProps } from 'next'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import commerce from '@lib/api/commerce'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { postData } from '@components/utils/clientFetcher'
@@ -16,7 +15,7 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -28,12 +27,12 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 declare const window: any
-export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const PAGE_TYPE = PAGE_TYPES['Search']
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
 interface actionInterface {
   type?: string
@@ -59,6 +58,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case FREE_TEXT:
@@ -103,6 +104,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   })
 
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
@@ -115,13 +118,13 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
         freeText: query.freeText || '',
       },
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, excludeOOSProduct }],
+    ['/api/catalog/products', { ...state, excludeOOSProduct, filters: filters || [] }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -251,12 +254,26 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     })
   }
 
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
+
   useEffect(() => {
-    const currentFilters: any = getCurrentPLPFilters(data?.products?.filters, state)
-    if (currentFilters) {
-      routeToPLPWithSelectedFilters(router, currentFilters)
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
     }
-  }, [data?.products?.filters])
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })

@@ -12,7 +12,7 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import { getCurrentPLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -41,12 +41,11 @@ import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import { Guid } from '@commerce/types'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 
-export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
   type?: string
@@ -61,7 +60,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -76,6 +75,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -176,6 +177,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   })
 
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [manufacturerStateVideoName, setManufacturerStateVideoName] =
     useState('')
@@ -209,12 +212,12 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
       },
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct, filters: filters || [] } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -254,11 +257,21 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    const currentFilters = getCurrentPLPFilters(data?.products?.filters, state)
-    if (currentFilters) {
-      routeToPLPWithSelectedFilters(router, currentFilters)
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
     }
-  }, [data?.products?.filters])
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   const handleClick = () => {
     setShowLandingPage(false)
@@ -444,6 +457,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       payload: filter,
     })
     dispatch({ type: PAGE, payload: 1 })
+  }
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
   }
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
