@@ -41,7 +41,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
             </Link>
             {i?.navItems && (
               <Disclosure.Panel>
-                <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
+                <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
                       <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-600 dark:hover:text-black " href={i?.navBlockType == 9 ? `collection${sanitizeRelativeUrl(`/${child?.itemLink}`)}` : `${sanitizeRelativeUrl(`/${child?.itemLink}`)}`} >

@@ -561,7 +561,7 @@ function CollectionPage(props: any) {
         <hr className='border-slate-200 dark:border-slate-200' />
         {
           <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
-            {props?.allowFacets ? (
+            {props?.allowFacets && productDataToPass?.filters?.length > 0  ? (
               <>
                 {isMobile ? (
                   <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
