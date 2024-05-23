@@ -132,6 +132,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData)
     const navTreeUIDData = await this.getNavTree({ cookies })
+    const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {
       // --- Common STARTS
       navTree: navTreeUIDData,
@@ -139,6 +140,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
       reviewData,
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
+      keywords: keywordsUIDData || [],
       // --- Common ENDS
 
       data: productSlugUIDData || EmptyObject,

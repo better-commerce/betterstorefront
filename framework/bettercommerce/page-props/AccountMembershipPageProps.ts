@@ -35,6 +35,7 @@ export class AccountMembershipPageProps extends BasePagePropsProvider implements
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData)
     const navTreeUIDData = await this.getNavTree({ cookies })
+    const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {
       // --- Common STARTS
       navTree: navTreeUIDData,
@@ -42,6 +43,7 @@ export class AccountMembershipPageProps extends BasePagePropsProvider implements
       reviewData,
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
+      keywords: keywordsUIDData || [],
       // --- Common ENDS
 
       allMembershipPlans: allMembershipsUIDData?.result,

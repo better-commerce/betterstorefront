@@ -89,7 +89,6 @@ export const SCROLLABLE_LOCATIONS = [
 function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }: any) {
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
-  const [keywordsData, setKeywordsData] = useState([])
   const [isAppLoading, setAppIsLoading] = useState(true)
   const [language, setLanguage] = useState('')
   const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
@@ -104,6 +103,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
   const [campaignData, setCampaignData] = useState()
 
+  const keywordsData = pageProps?.keywords || []
   let snippets = [
     ...(pageProps?.globalSnippets ?? []),
     ...(pageProps?.snippets ?? []),
@@ -180,15 +180,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }
 
-  const fetchKeywords = async function () {
-    try {
-      const { data }: any = await axios.get(NEXT_API_KEYWORDS_ENDPOINT)
-      setKeywordsData(data.result)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
     initializeGTM()
     document.body.classList?.remove('loading')
@@ -201,7 +192,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
       Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
     }
-    fetchKeywords()
 
     if (!GA4_DISABLED) {
       initializeGA4()
