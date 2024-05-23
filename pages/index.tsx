@@ -168,7 +168,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         <SectionHero2 data={pageContents?.banner} />
         {pageContents?.shopbygender?.length > 0 &&
-          <div className='container relative flex flex-col pt-10 mt-24 mb-7 sm:mb-8 lg:mb-12'>
+          <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
               {pageContents?.shopbygender?.map((item: any, itemIdx: number) => (
                 <div key={`banner-${itemIdx}`}>
@@ -188,10 +188,10 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         }
 
         {pageContents?.shopbycategory?.length > 0 &&
-          <div className={`nc-SectionSliderProductCard product-card-slider container sm:mt-8 pt-8 relative`}>
+          <div className={`nc-SectionSliderProductCard product-card-slider sm:container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
             <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
               {pageContents?.shopbycategoryheading?.map((h: any, iIdx: number) => (
-                <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
+                <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
                   {h?.shopbycategoryheading_title}
                 </Heading>
               ))}
@@ -202,8 +202,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                       <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
                         <div className='relative flex flex-col rounded-lg'>
                           <img alt={item?.title} src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full rounded-lg h-96' />
-                          <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/90 bottom-2 left-2 image-name-overlay'>
-                            <span className='text-2xl font-semibold'>{item?.title}</span>
+                          <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/80 bottom-2 left-2 image-name-overlay'>
+                            <span className='text-lg font-semibold sm:text-xl'>{item?.title}</span>
+                            <span className='text-2xl font-semibold sm:text-3xl'>{item?.description}</span>
                             <span>Shop Now</span>
                           </span>
                         </div>
