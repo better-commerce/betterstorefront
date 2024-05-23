@@ -161,6 +161,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData)
     const navTreeUIDData = await this.getNavTree({ cookies })
+    const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {
       ...collectionUIDData,
 
@@ -171,6 +172,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: brandBySlugUIDData?.snippets ?? [],
+      keywords: keywordsUIDData || [],
       // --- Common ENDS
 
       slug,

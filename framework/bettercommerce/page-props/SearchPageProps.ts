@@ -34,6 +34,7 @@ export class SearchPageProps extends BasePagePropsProvider implements IPageProps
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData)
     const navTreeUIDData = await this.getNavTree({ cookies })
+    const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {
       // --- Common STARTS
       navTree: navTreeUIDData,
@@ -42,6 +43,7 @@ export class SearchPageProps extends BasePagePropsProvider implements IPageProps
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: allProducts?.snippets ?? [],
+      keywords: keywordsUIDData || [],
       // --- Common ENDS
 
       defaultDisplayMembership,

@@ -10,6 +10,7 @@ import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTER
 import commerce from '@lib/api/commerce'
 import { Guid } from '@commerce/types'
 import { stringToNumber } from '@framework/utils/parse-util'
+import useKeywords from '@framework/api/endpoints/keywords'
 
 /**
  * Class {BasePagePropsProvider} encapsulates the abstract behavior of PageProps rendering module.
@@ -225,5 +226,19 @@ export abstract class BasePagePropsProvider {
       }
     }
     return navTreeUIDData
+  }
+
+  protected async getKeywords({ cookies }: any) {
+    const key = Redis.Key.Keywords
+    const cachedData = await getDataByUID([
+        key,
+    ])
+    let keywordsUIDData: any = parseDataValue(cachedData, key)
+    if (!keywordsUIDData) {
+      const { result: response } = await useKeywords(cookies)
+      keywordsUIDData = response
+      await setData([{ key, value: keywordsUIDData }])
+    }
+    return keywordsUIDData
   }
 }

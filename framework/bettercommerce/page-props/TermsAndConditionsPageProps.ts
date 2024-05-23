@@ -72,6 +72,7 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData)
     const navTreeUIDData = await this.getNavTree({ cookies })
+    const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {
       // --- Common STARTS
       navTree: navTreeUIDData,
@@ -80,6 +81,7 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: slugs?.snippets ?? [],
+      keywords: keywordsUIDData || [],
       // --- Common ENDS
 
       pageContentsWeb: pageContentWebUIDData,

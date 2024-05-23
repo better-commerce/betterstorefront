@@ -34,6 +34,7 @@ export class CommonPageProps extends BasePagePropsProvider implements IPageProps
         slugs = await slugsPromise
     }
     const navTreeUIDData = await this.getNavTree({ cookies })
+    const keywordsUIDData = await this.getKeywords({ cookies })
     
     const props = {
       // --- Common STARTS
@@ -42,6 +43,7 @@ export class CommonPageProps extends BasePagePropsProvider implements IPageProps
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: slugs?.snippets ?? [],
+      keywords: keywordsUIDData || [],
       // --- Common ENDS
     }
     return props
