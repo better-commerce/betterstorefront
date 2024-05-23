@@ -139,14 +139,14 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
-              <button className="items-center justify-center w-8 h-8 rounded-full lg:flex xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+              <button className="items-center justify-center w-7 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                 {renderMagnifyingGlassIcon()}
               </button>
 
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
-                  <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-8 h-8 rounded-full lg:flex xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    <HeartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black 2xl:w-7 2xl:h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                  <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                    <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (
                       <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
                         {wishListItems?.length}
@@ -158,8 +158,8 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
               <CartDropdown />
               {featureToggle?.features?.enableMembership &&
-                <Link href="/my-membership" passHref className="flex items-center justify-center w-8 h-8 rounded-full xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  <StarIcon className="w-5 h-5 2xl:w-7 2xl:h-7 text-slate-700 dark:invert" title="Membership" />
+                <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                  <StarIcon className="w-7 h-7 text-slate-700 dark:invert" title="Membership" />
                 </Link>
               }
             </div>
