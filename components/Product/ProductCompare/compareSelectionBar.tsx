@@ -36,7 +36,7 @@ export default function CompareSelectionBar({ name, showCompareProducts, isCompa
 
   return (
     <>
-      <div className={`fixed bottom-0 left-0 flex items-center justify-between w-full h-32 p-2 py-3  ${isCompare ? 'z-999' : 'z-99999'} sm:h-20 md:h-20 lg:h-20 bg-[#FFE25B] lg:p-0 md:p-2`}>
+      <div className={`fixed bottom-0 left-0 flex items-center justify-between w-full h-32 p-2 py-3  ${isCompare ? 'z-999' : 'z-999'} sm:h-20 md:h-20 lg:h-20 bg-[#FFE25B] lg:p-0 md:p-2`}>
         <div className="container flex flex-col gap-4 py-2 mx-auto sm:items-center sm:justify-center sm:flex-row md:flex-row lg:flex-row sm:px-4">
           <div className="flex flex-col gap-0 sm:items-center sm:gap-10 md:gap-10 lg:gap-10 sm:flex-row lg:flex-row md:flex-row">
             <h5 className="mt-2 text-sm font-semibold uppercase dark:text-black sm:pt-0">{products?.length || 'No'} {translate('label.product.itemssalectedText')}</h5>
