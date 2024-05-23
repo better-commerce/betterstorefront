@@ -31,7 +31,7 @@ const Heading: React.FC<HeadingProps> = ({ children, desc = "", className = "mb-
         )}
       </div>
       {hasNextPrev && !isCenter && (
-        <div className="flex justify-end flex-shrink-0 mt-4 sm:ms-2 sm:mt-0 sm:block">
+        <div className="justify-end flex-shrink-0 hidden mt-4 sm:ms-2 sm:mt-0 sm:block">
           <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
         </div>
       )}
