@@ -41,10 +41,10 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                                         <li key={`navItems-items-${idx}`} className="mt-0 mb-2">
                                           <Link
                                             href={navItem?.navBlockType == 9 ? `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}` : `${sanitizeRelativeUrl(`/${item?.itemLink}`)}`}
-                                            className="relative flex items-center h-full font-normal text-gray-700 hover:underline hover:text-black"
+                                            className="relative flex items-center h-full font-normal text-gray-700 capitalize hover:underline hover:text-black"
                                             title={item?.caption}
                                           >
-                                            {item?.caption}
+                                            {item?.caption?.toLowerCase()}
                                           </Link>
                                         </li>
                                       ))}
