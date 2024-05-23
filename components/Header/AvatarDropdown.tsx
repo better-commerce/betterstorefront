@@ -163,8 +163,8 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
       <Popover className="relative">
         {({ open, close }) => (
           <>
-            <Popover.Button className={`w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 rounded-full text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none flex items-center justify-center`} >
-              <img alt="" src="/images/userIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5 mx-auto" />
+            <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none flex items-center justify-center`} >
+              <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto" />
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">

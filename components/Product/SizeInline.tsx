@@ -55,7 +55,7 @@ function RenderRadioOptions({
       <>
          <div className="flex flex-wrap items-center gap-1">
             {items?.map((item: any, idx: any) => {
-               const stockPerAttribute = product?.variantProducts?.find((variant: any) => variant?.slug === item?.slug);
+               const stockPerAttribute = getStockPerAttribute(fieldCode, item?.fieldValue)
                return isString(item?.fieldValue) && (
                   <RadioGroup.Option
                      key={`radio-panel-${idx}-${item?.fieldValue}`}
@@ -63,10 +63,12 @@ function RenderRadioOptions({
                      title={item?.fieldLabel}
                      style={{ backgroundColor: item?.fieldValue?.includes('#') ? item?.fieldValue : '' }}
                      onClick={() => { setSizeInit('true') }}
-                     className={`${(selected?.attributes ? selected?.attributes[1]?.fieldValue : currentAttribute) == item?.fieldValue ?
-                        'bg-white border-black border-2 text-black' :
-                        'bg-white border-gray-300 text-gray-600'} 
-                        relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-neutral-700`}
+                     className={({ active, checked }) => 
+                        `
+                           ${checked ? 'bg-white border-black border-2 text-black' : 'bg-white border-gray-300 text-gray-600'}
+                           relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-neutral-700
+                        `
+                     }
                   >
                      {isOutOfStock(stockPerAttribute) && <div className="w-[1px] h-[55px] bg-[#0000004d] absolute -top-[9px] rotate-45" />}
                      <RadioGroup.Label as="p" className="m-auto font-semibold uppercase font-12">
@@ -126,7 +128,7 @@ export default function SizeInline({
    const [isSizeChange, setSizeChange] = useState(false)
    const [validationState, SetvalidationState] = useState<any>(false)
    const [selected, setSelected] = useState({
-      ...currentAttribute,
+      fieldValue: currentAttribute,
       stock: productData.currentStock,
       productId: productData.productId,
       stockCode: productData.stockCode,
@@ -134,19 +136,16 @@ export default function SizeInline({
 
    useEffect(() => {
       SetvalidationState(true)
-      const getStockPerAttrData = getStockPerAttribute(
-         fieldCode,
-         currentAttribute
-      )
+      const getStockPerAttrData = getStockPerAttribute(fieldCode, currentAttribute)
       setProductData(getStockPerAttrData)
       setSelected({
-         ...currentAttribute,
          fieldValue: currentAttribute,
          stock: getStockPerAttrData.currentStock,
          productId: getStockPerAttrData.productId,
          stockCode: getStockPerAttrData.stockCode,
       })
       handleSetProductVariantInfo({ clothSize: currentAttribute })
+      setSelectedAttrData(getStockPerAttrData);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [currentAttribute])
@@ -158,7 +157,6 @@ export default function SizeInline({
       )
       setProductData(getStockPerAttrData)
       setSelected({
-         ...currentAttribute,
          fieldValue: currentAttribute,
          stock: getStockPerAttrData.currentStock,
          productId: getStockPerAttrData.productId,
@@ -207,8 +205,8 @@ export default function SizeInline({
    const handleOnChange = (value: any) => {
       let selectedVariant = items?.find((o: any) => o?.fieldValue === value);
       const slug = selectedVariant?.slug || `products/${router.query?.slug}`;
-      selectedVariant = product?.variantProducts?.find((variant: any) => variant?.slug === slug);
-      setSelected({ ...value, ...selectedVariant });
+      selectedVariant = getStockPerAttribute(fieldCode, value)
+      setSelected({ fieldValue: value, ...selectedVariant });
       setAttrCombination(fieldCode, value);
       setSelectedAttrData(selectedVariant);
       if (value?.stock === 0 && !isPreOrderEnabled) {
