@@ -27,7 +27,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
         {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={`${sanitizeRelativeUrl(`/${i?.hyperlink}`)}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
+            <Link href={sanitizeRelativeUrl(`/${i?.hyperlink}`)} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
               <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
                 {i?.boxTitle.toLowerCase()}
               </span>
@@ -62,7 +62,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
   const _renderItem = (item: any, index: number) => {
     return (
       <Disclosure key={index} as="li" className="text-slate-900 dark:text-slate-900" >
-        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-100 rounded-lg" href={`${sanitizeRelativeUrl(item.hyperlink)}`} >
+        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-100 rounded-lg" href={sanitizeRelativeUrl(`/${item?.hyperlink}`)} >
           <span className={!item?.children ? "block w-full" : ""} onClick={onClickClose} >
             {item?.caption}
           </span>
