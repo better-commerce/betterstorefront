@@ -27,7 +27,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
         {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={sanitizeRelativeUrl(`/${i?.hyperlink}`)} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
+            <div className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
               <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
                 {i?.boxTitle.toLowerCase()}
               </span>
@@ -38,7 +38,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
                   </Disclosure.Button>
                 </span>
               )}
-            </Link>
+            </div>
             {i?.navItems && (
               <Disclosure.Panel>
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level">
