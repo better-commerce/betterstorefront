@@ -8,6 +8,7 @@ import { NEXT_GET_PRODUCT } from '@components/utils/constants'
 import attributesGenerator, { getAttributesFromSlug, productLookup } from '@components/utils/attributesGenerator'
 import SizeInline from './SizeInline'
 import InlineList from './InlineList'
+import { matchStrings } from '@framework/utils/parse-util'
 
 const ATTR_COMPONENTS: any = {
   SizeInline: (props: any) => <SizeInline {...props} />,
@@ -143,14 +144,10 @@ export default function AttributesHandler({
       sellWithoutInventory: false,
       stockCode: '',
     }
-    // const slug = `products/${router.query.slug}`
+    const slug = `products/${router.query.slug}`
     variantProducts?.find((product: any) => {
       product?.attributes?.forEach((attr: any) => {
-        if (
-          key?.toLowerCase() === attr?.fieldCode?.toLowerCase() &&
-          attr?.fieldValue === variant
-          // product.slug === slug
-        ) {
+        if (matchStrings(key, attr?.fieldCode, true) && matchStrings(attr?.fieldValue, variant) && matchStrings(product?.slug, slug)) {
           productData.stock = product?.currentStock
           productData = { ...productData, ...product }
         }
@@ -277,7 +274,7 @@ export default function AttributesHandler({
               label={option?.fieldName}
               isDisabled={!optionsToPass.length}
               onChange={handleChange}
-              setSelectedAttrData={handleSelectedAttrData}
+              setSelectedAttrData={setSelectedAttrData}
               fieldCode={option?.fieldCode}
               productId={product?.id}
               setAttrCombination={handleAttrCombinations}
