@@ -397,7 +397,7 @@ function CollectionPage(props: any) {
       [...state?.filters]
     )
     setAppliedFilters(currentFilters)
-  }, [state?.filters, data?.products])
+  }, [state?.filters, data?.products?.filters])
 
   useEffect(() => {
     if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
