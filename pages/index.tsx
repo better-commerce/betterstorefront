@@ -24,6 +24,8 @@ import Heading from '@components/Heading/Heading'
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -135,7 +137,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         1279: { gap: 16, perView: 6, },
         1023: { gap: 16, perView: 5, },
         768: { gap: 16, perView: 4, },
-        500: { gap: 16, perView: 2, },
+        500: { gap: 16, perView: 1.5, },
       },
     };
     if (!sliderRef.current) return;
@@ -172,7 +174,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 <div key={`banner-${itemIdx}`}>
                   <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
                     <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
-                      <img alt="" src={item?.url} className='object-cover object-top w-full h-full rounded-xl' />
+                      <img alt={item?.title} src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
                       <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
                         <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
                         <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
@@ -199,7 +201,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <li key={index} className={`glide__slide product-card-item home-product-card`}>
                       <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
                         <div className='relative flex flex-col rounded-lg'>
-                          <img alt="" src={item?.url} className='object-cover object-top w-full rounded-lg h-96' />
+                          <img alt={item?.title} src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full rounded-lg h-96' />
                           <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/90 bottom-2 left-2 image-name-overlay'>
                             <span className='text-2xl font-semibold'>{item?.title}</span>
                             <span>Shop Now</span>
@@ -214,12 +216,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
         {featureToggle?.features?.enableTrendingCategory &&
-          <>
-
-            <div className="mt-14 sm:mt-24 lg:mt-32">
-              <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
-            </div>
-          </>
+          <div className="mt-14 sm:mt-24 lg:mt-32">
+            <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
+          </div>
         }
         <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} container relative my-16 sm:my-24 lg:my-32 product-collections`}>
           {pageContents?.brand?.length > 0 &&
