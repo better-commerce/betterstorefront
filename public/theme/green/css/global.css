@@ -2414,4 +2414,13 @@ display: none !important;
     font-size: 12px !important;
     margin-top: 0 !important;
   }
+  .nav-mobile-sub-menu{
+    background: #f1f5f9;
+    padding-left: 0 !important;
+    border-left:5px solid #8ebfef;
+    box-sizing: border-box;
+  }
+  .nav-submenu-level{
+    background-color: #fff;
+  }
 }
