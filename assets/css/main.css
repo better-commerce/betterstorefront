@@ -17757,6 +17757,6 @@ body:has(.engage-announcement-bar){
 }
 @media screen and (min-width:1280px) {
   .compare-white-space {
-    min-height: 416px !important;
+    min-height: 410px !important;
   }
 }

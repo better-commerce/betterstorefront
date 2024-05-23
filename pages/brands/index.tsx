@@ -127,7 +127,7 @@ function BrandsPage({ brands }: any) {
                 <label className="hidden" htmlFor={'search-bar'}>
                   {translate('label.search.searchText')}
                 </label>
-                <input id={'search-bar'} className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white border-0 appearance-none" placeholder={`${translate('label.search.searchText')}...`} onChange={(e: any) => handleSearch(e.target.value)} />
+                <input id={'search-bar'} className="w-full min-w-0 text-gray-700 placeholder-gray-500 bg-white border-0 appearance-none focus:border-0 active:border-0 focus:outline-none active:outline-none" placeholder={`${translate('label.search.searchText')}...`} onChange={(e: any) => handleSearch(e.target.value)} />
                 <div className="relative text-gray-400 top-2">
                   <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
                 </div>
@@ -140,11 +140,11 @@ function BrandsPage({ brands }: any) {
                 <h2 id={brand.title.toUpperCase()} className="pb-3 mb-3 text-2xl font-semibold text-gray-900 border-b-2 sm:text-5xl border-sky-700">
                   {brand.title.toUpperCase()}
                 </h2>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-3">
                   {brand.results.map((brands: any, brandIdx: number) => (
-                    <div key={`brand-list-${brandIdx}`} className="flex text-gray-900 sm:inline-flex" >
+                    <div key={`brand-list-${brandIdx}`} className="flex w-full text-gray-900 sm:inline-flex" >
                       <Link passHref href={brands.link}>
-                        <span className="py-2 text-sm capitalize cursor-pointer sm:text-lg sm:py-5 hover:text-sky-700 hover:underline hover:font-medium">
+                        <span className="w-full text-sm capitalize cursor-pointer sm:text-lg hover:text-sky-700 hover:underline hover:font-medium">
                           {brands?.manufacturerName.toLowerCase()}
                         </span>
                       </Link>
