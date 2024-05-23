@@ -17,7 +17,7 @@ import UseMyLocationModal from '@components/StoreLocator/UseMyLocationModal'
 import { StoreSearch } from '@components/StoreLocator/StoreSearch'
 import { useDebounce } from 'hooks/useDebounce'
 import { StoreList } from '@components/StoreLocator/StoreList'
-import { removeQueryString } from '@commerce/utils/uri-util';
+import { removeQueryString } from '@commerce/utils/uri-util'
 import { GetServerSideProps } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -27,19 +27,24 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import LayoutStore from '@components/Layout/LayoutStore'
+import StoreLocatorScript from '@components/StoreLocator/Script'
+import { LoadingDots } from '@components/ui'
 
 const DEBOUNCE_TIMER = 300
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
-  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const props: IPagePropsProvider = getPagePropType({
+    type: PagePropType.COMMON,
+  })
   const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
 
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      ...(await serverSideTranslations(
+        locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!
+      )),
     },
   }
 }
@@ -62,6 +67,7 @@ function StoreLocatorPage({ deviceInfo }: any) {
   const [isErrorMsg, setErrorMsg] = useState(false)
   const searchPincodeRef = useRef(null)
   const [map, setMap]: any = useState(null)
+  const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false)
   const { isMobile } = deviceInfo
 
   useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
@@ -284,13 +290,19 @@ function StoreLocatorPage({ deviceInfo }: any) {
     }
   }
 
+  const onScriptReady = () => {
+    setIsScriptLoaded(true)
+  }
+
   const cleanPath = removeQueryString(router.asPath)
 
   return (
     <>
-      
       <NextHead>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
         <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>Stores</title>
         <meta name="title" content="Stores" />
@@ -300,53 +312,67 @@ function StoreLocatorPage({ deviceInfo }: any) {
         <meta property="og:title" content="Stores" key="ogtitle" />
         <meta property="og:description" content="Stores" key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
+        <meta
+          property="og:url"
+          content={SITE_ORIGIN_URL + cleanPath}
+          key="ogurl"
+        />
       </NextHead>
       <div className="container py-4 mx-auto sm:py-10 header-space">
         <h1 className="pb-6 text-2xl font-semibold text-left text-gray-900 sm:pb-8 sm:text-3xl">
           Find a Store near you
         </h1>
+        <StoreLocatorScript onScriptReady={onScriptReady} />
         <div className="grid grid-cols-1 mt-0 sm:gap-4 sm:grid-cols-12">
-          <div className="sm:col-span-4">
-            <StoreSearch
-              isDataLoading={false}
-              isMobile={false}
-              searchPincodeRef={searchPincodeRef}
-              inputValue={inputValue}
-              setInputValue={setInputValue}
-              onSearchChangeDebounce={onSearchChangeDebounce}
-              searchInputButton={searchInputButton}
-              autoCompleteList={autoCompleteList}
-              selectPlace={selectPlace}
-              stores={stores}
-            />
-            <div className="grid grid-cols-1 mt-0 sm:gap-2 sm:grid-cols-1">
-              <StoreList
-                isDataLoading={isDataLoading}
-                filteredStores={filteredStores}
-              />
-            </div>
-          </div>
-          <div className="sm:col-span-8">
-            <MapWithMarkers locations={stores} setMap={setMap} />
-          </div>
+          {!isScriptLoaded && <LoadingDots />}
+          {isScriptLoaded && (
+            <>
+              <div className="sm:col-span-4">
+                <StoreSearch
+                  isDataLoading={false}
+                  isMobile={false}
+                  searchPincodeRef={searchPincodeRef}
+                  inputValue={inputValue}
+                  setInputValue={setInputValue}
+                  onSearchChangeDebounce={onSearchChangeDebounce}
+                  searchInputButton={searchInputButton}
+                  autoCompleteList={autoCompleteList}
+                  selectPlace={selectPlace}
+                  stores={stores}
+                />
+                <div className="grid grid-cols-1 mt-0 sm:gap-2 sm:grid-cols-1">
+                  <StoreList
+                    isDataLoading={isDataLoading}
+                    filteredStores={filteredStores}
+                  />
+                </div>
+              </div>
+              <div className="sm:col-span-8">
+                <MapWithMarkers locations={stores} setMap={setMap} />
+              </div>
 
-          <UseMyLocationModal
-            isLocationDialog={isLocationDialog}
-            setLocationDialog={setLocationDialog}
-            getUserLocation={getUserLocation}
-            setLoadingDots={setLoadingDots}
-            loadingDots={loadingDots}
-            isErrorMsg={isErrorMsg}
-            setErrorMsg={setErrorMsg}
-            deviceInfo={deviceInfo}
-          />
+              <UseMyLocationModal
+                isLocationDialog={isLocationDialog}
+                setLocationDialog={setLocationDialog}
+                getUserLocation={getUserLocation}
+                setLoadingDots={setLoadingDots}
+                loadingDots={loadingDots}
+                isErrorMsg={isErrorMsg}
+                setErrorMsg={setErrorMsg}
+                deviceInfo={deviceInfo}
+              />
+            </>
+          )}
         </div>
       </div>
-      
     </>
   )
 }
 
-StoreLocatorPage.LayoutStore = LayoutStore
-export default withDataLayer(StoreLocatorPage, PAGE_TYPES.StoreLocator, true, LayoutStore)
+StoreLocatorPage.Layout = Layout
+export default withDataLayer(
+  StoreLocatorPage,
+  PAGE_TYPES.StoreLocator,
+  true,
+  Layout
+)

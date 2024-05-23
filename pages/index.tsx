@@ -172,7 +172,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 <div key={`banner-${itemIdx}`}>
                   <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
                     <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
-                      <img src={item?.url} className='object-cover object-top w-full h-full rounded-xl' />
+                      <img alt="" src={item?.url} className='object-cover object-top w-full h-full rounded-xl' />
                       <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
                         <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
                         <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
@@ -199,7 +199,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <li key={index} className={`glide__slide product-card-item home-product-card`}>
                       <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
                         <div className='relative flex flex-col rounded-lg'>
-                          <img src={item?.url} className='object-cover object-top w-full rounded-lg h-96' />
+                          <img alt="" src={item?.url} className='object-cover object-top w-full rounded-lg h-96' />
                           <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/90 bottom-2 left-2 image-name-overlay'>
                             <span className='text-2xl font-semibold'>{item?.title}</span>
                             <span>Shop Now</span>

@@ -184,9 +184,6 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
         <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
         <link rel="stylesheet" href={`/assets/css/image-gallery.css`} />
-        {featureToggle?.features?.enableStoreLocator &&
-          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY&libraries=places"></script>
-        }
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
