@@ -17729,3 +17729,34 @@ body:has(.engage-announcement-bar){
   height: 100%;
   border-radius: 10px;
 }
+
+@media screen and (max-width:375px) {
+  .compare-white-space {
+    min-height: 300px !important;
+  }
+}
+@media screen and (min-width: 376px) and (max-width: 414px) {
+  .compare-white-space {
+    min-height: 318px !important;
+  }
+}
+@media screen and (min-width: 415px) and (max-width: 639px) {
+  .compare-white-space {
+    min-height: 395px !important;
+  }
+}
+@media screen and (min-width: 640px) and (max-width: 767px) {
+  .compare-white-space {
+    min-height: 315px !important;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .compare-white-space {
+    min-height: 352px !important;
+  }
+}
+@media screen and (min-width:1280px) {
+  .compare-white-space {
+    min-height: 416px !important;
+  }
+}

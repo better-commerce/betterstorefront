@@ -25,7 +25,7 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
 import { ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-const Heading = dynamic(() => import('@components/Heading/Heading'))
+const HeadingWithButton = dynamic(() => import('@components/Heading/HeadingWithButton'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -495,10 +495,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
                   <div className='flex justify-between my-4'>
-                    <Heading className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
-                      {translate('label.product.recommendedProductText')}
-                    </Heading>
-                    <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
+                    <HeadingWithButton className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All" >
+                    {translate('label.product.recommendedProductText')}
+                    </HeadingWithButton>
                   </div>
                   <div className="glide__track" data-glide-el="track">
                     <ul className="glide__slides">
@@ -533,10 +532,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRefNew} className={`flow-root`}>
                   <div className='flex justify-between'>
-                    <Heading className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev >
+                    <HeadingWithButton className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All"
+                     >
                       {translate('label.product.saleProductText')}
-                    </Heading>
-                    <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
+                    </HeadingWithButton>
                   </div>
                   <div className="glide__track" data-glide-el="track">
                     <ul className="glide__slides">
