@@ -188,7 +188,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         }
 
         {pageContents?.shopbycategory?.length > 0 &&
-          <div className={`nc-SectionSliderProductCard product-card-slider sm:container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
+          <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
             <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
               {pageContents?.shopbycategoryheading?.map((h: any, iIdx: number) => (
                 <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
