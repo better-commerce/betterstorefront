@@ -86,7 +86,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [compareProductsAttributes, setCompareProductAttribute] = useState([])
   const [isEngravingAvailable, setIsEngravingAvailable] = useState<any>(null)
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
-  const [openStoreLocaltorModal, setOpenStockCheckModal] = useState(false)
+  const [openStoreLocatorModal, setOpenStockCheckModal] = useState(false)
   const [showDetails, setShowGwpDetail] = useState(false)
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
@@ -961,7 +961,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                             <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
                               <div className='flex flex-col justify-center text-center'>
                                 <div className='mx-auto'>
-                                  <img src={gwp?.image} className='w-auto h-80' />
+                                  <img alt='' src={gwp?.image} className='w-auto h-80' />
                                 </div>
                                 <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
                                 <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
@@ -986,7 +986,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
         )}
         {
-          openStoreLocaltorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
+          openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
         }
         {featureToggle?.features?.enableStoreLocator &&
           <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>

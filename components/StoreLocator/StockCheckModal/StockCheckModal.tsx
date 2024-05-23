@@ -3,10 +3,12 @@ import React, { Fragment, useState } from 'react'
 import axios from 'axios'
 
 // Component Imports
+import { LoadingDots } from '@components/ui';
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import StockCheckSection from './StockCheckSection'
 import StoreListSection from './StoreListSection'
+import StoreLocatorScript from '@components/StoreLocator/Script'
 
 // Other Imports
 import { cartItemsValidateAddToCart, logError } from '@framework/utils/app-util'
@@ -19,12 +21,20 @@ import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 const StockCheckModal = ({
   product,
   setOpenStockCheckModal,
-  deviceInfo
+  deviceInfo,
 }: any) => {
   const [openStoreList, setOpenStoreList] = useState(false)
   const [storeList, setStoreList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const { basketId, user, setCartItems, cartItems, maxBasketItemsCount, setAlert } = useUI()
+  const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false)
+  const {
+    basketId,
+    user,
+    setCartItems,
+    cartItems,
+    maxBasketItemsCount,
+    setAlert,
+  } = useUI()
   const translate = useTranslation()
 
   const buttonTitle = () => {
@@ -32,17 +42,36 @@ const StockCheckModal = ({
       title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
-          if (matchStrings(o.productId, product?.recordId, true) || matchStrings(o.productId, product?.productId, true)) {
+          if (
+            matchStrings(o.productId, product?.recordId, true) ||
+            matchStrings(o.productId, product?.productId, true)
+          ) {
             return o
           }
         })
-        if (product?.currentStock === cartLineItem?.qty && !product?.fulfilFromSupplier && !product?.flags?.sellWithoutInventory) {
-          setAlert({ type: 'error', msg: translate('common.message.cartItemMaxAddedErrorMsg'), })
+        if (
+          product?.currentStock === cartLineItem?.qty &&
+          !product?.fulfilFromSupplier &&
+          !product?.flags?.sellWithoutInventory
+        ) {
+          setAlert({
+            type: 'error',
+            msg: translate('common.message.cartItemMaxAddedErrorMsg'),
+          })
           return false
         }
-        const isValid = cartItemsValidateAddToCart(cartItems, maxBasketItemsCount)
+        const isValid = cartItemsValidateAddToCart(
+          cartItems,
+          maxBasketItemsCount
+        )
         if (!isValid) {
-          setAlert({ type: 'error', msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), })
+          setAlert({
+            type: 'error',
+            msg: stringFormat(
+              translate('common.message.basket.maxBasketItemsCountErrorMsg'),
+              { maxBasketItemsCount }
+            ),
+          })
         }
         return isValid
       },
@@ -72,56 +101,57 @@ const StockCheckModal = ({
     }
     return buttonConfig
   }
-  const buttonConfig = buttonTitle();
+  const buttonConfig = buttonTitle()
 
   const fetchStoreList = async (payload: any) => {
     try {
-      const response = await axios.post(NEXT_GET_PRODUCT_AVAILABILITY_BY_POSTCODE, payload);
-      const responseData = response?.data || [];
-      return responseData;
+      const response = await axios.post(
+        NEXT_GET_PRODUCT_AVAILABILITY_BY_POSTCODE,
+        payload
+      )
+      const responseData = response?.data || []
+      return responseData
     } catch (error) {
       logError(error)
-      return [];
+      return []
     }
   }
 
-  const onSubmit = async ({
-    postCode
-  }: any) => {
+  const onSubmit = async ({ postCode }: any) => {
     setIsLoading(true)
     const payload = {
       stockCode: product?.stockCode,
-      postCode: postCode
+      postCode: postCode,
     }
-    const storeList = await fetchStoreList(payload);
-    if( storeList?.length ) {
+    const storeList = await fetchStoreList(payload)
+    if (storeList?.length) {
       setIsLoading(false)
       setStoreList(storeList)
-      setOpenStoreList(true);
-    }
-    else {
+      setOpenStoreList(true)
+    } else {
       setIsLoading(false)
-      setAlert({ type: 'error', msg: translate('common.message.noStoresErrorMsg'), })
+      setAlert({
+        type: 'error',
+        msg: translate('common.message.noStoresErrorMsg'),
+      })
     }
   }
 
-  return (
-    <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-x-hidden overflow-y-auto z-999" onClose={() => setOpenStockCheckModal(false)}>
-        <div className="absolute inset-0 overflow-hidden z-999">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => setOpenStockCheckModal(false)} />
-          </Transition.Child>
+  const onScriptReady = () => {
+    setIsScriptLoaded(true)
+  }
 
-          <div className="fixed inset-0 flex items-center justify-center">
+  return (
+    <>
+      <StoreLocatorScript onScriptReady={onScriptReady} />
+
+      <Transition.Root show={true} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 overflow-x-hidden overflow-y-auto z-999"
+          onClose={() => setOpenStockCheckModal(false)}
+        >
+          <div className="absolute inset-0 overflow-hidden z-999">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -131,21 +161,52 @@ const StockCheckModal = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="relative w-screen max-w-xl p-2 quickview-screen">
-                <div className="flex flex-col w-full h-full rounded-md shadow-xl bg-gray-50">
-                  {openStoreList ? (
-                    <StoreListSection buttonConfig={buttonConfig} product={product} storeList={storeList} deviceInfo={deviceInfo} />
-                  ) : (
-                    <StockCheckSection onSubmit={onSubmit} isLoading={isLoading} />
-                  )}
-                  <XMarkIcon className="absolute w-8 h-8 top-5 right-5 hover:cursor-pointer" onClick={() => setOpenStockCheckModal(false)} />
-                </div>
-              </div>
+              <Dialog.Overlay
+                className="w-full h-screen bg-black opacity-50"
+                onClick={() => setOpenStockCheckModal(false)}
+              />
             </Transition.Child>
+
+            <div className="fixed inset-0 flex items-center justify-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="relative w-screen max-w-xl p-2 quickview-screen">
+                  {!isScriptLoaded && <LoadingDots />}
+                  {isScriptLoaded && (
+                    <div className="flex flex-col w-full h-full rounded-md shadow-xl bg-gray-50">
+                      {openStoreList ? (
+                        <StoreListSection
+                          buttonConfig={buttonConfig}
+                          product={product}
+                          storeList={storeList}
+                          deviceInfo={deviceInfo}
+                        />
+                      ) : (
+                        <StockCheckSection
+                          onSubmit={onSubmit}
+                          isLoading={isLoading}
+                        />
+                      )}
+                      <XMarkIcon
+                        className="absolute w-8 h-8 top-5 right-5 hover:cursor-pointer"
+                        onClick={() => setOpenStockCheckModal(false)}
+                      />
+                    </div>
+                  )}
+                </div>
+              </Transition.Child>
+            </div>
           </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+        </Dialog>
+      </Transition.Root>
+    </>
   )
 }
 
