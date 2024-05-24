@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react'
-import { MagnifyingGlassIcon, StarIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, StarIcon, XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import axios from 'axios'
 import { SEARCH_PROVIDER, NEXT_SEARCH_PRODUCTS, } from '@components/utils/constants'
-import Link from 'next/link'
-import { XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
-import { useRouter } from 'next/router'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { useUI } from '@components/ui/context'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-//import ElasticSearchBar from './ElasticSearchBar'
-import ElasticSearch from './elastic/ElasticSearch'
 import ElasticSearchResult from './elastic/ElasticSearchResult'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider } from '@framework/utils/enums'
@@ -23,7 +19,7 @@ import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
 
 export default function Search(props: any) {
-  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo } = props;
+  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
@@ -40,12 +36,12 @@ export default function Search(props: any) {
         const response: any = await axios.post(NEXT_SEARCH_PRODUCTS, {
           value: inputValue,
         })
-        setProducts(response?.data?.products)
+        setProducts(response?.data?.results)
         setIsLoading(false)
         eventDispatcher(SearchEvent, {
           entity: JSON.stringify({
             FreeText: inputValue,
-            ResultCount: response?.data?.products?.length || 0,
+            ResultCount: response?.data?.results?.length || 0,
           }),
           entityId: inputValue,
           entityName: inputValue,
@@ -57,24 +53,29 @@ export default function Search(props: any) {
         setIsLoading(false)
       }
     }
-    if (inputValue.length > 2) fetchItems()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (inputValue.trim().length > 2) fetchItems()
   }, [inputValue])
 
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
+    if (event.key === 'Enter') {
+      Router.push(`search?freeText=${encodeURIComponent(inputValue.trim())}`);
+    }
+  };
 
+  const handleClickSearch = () => {
+    Router.push(`search?freeText=${encodeURIComponent(inputValue.trim())}`);
+  }
 
   useEffect(() => {
     if (path !== Router.asPath) {
       closeWrapper()
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
-  const css = { maxWidth: '100%', height: 'auto' }
+
   const CLASSES = "absolute top-3 start-3";
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
-      <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-neutral-800/20 '></div>
+      <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-primary-50 '></div>
       <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden" onClick={closeWrapper} >
         <XMarkIcon />
       </div>
@@ -87,9 +88,9 @@ export default function Search(props: any) {
             <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
-            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} />
+            <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
-              <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
+              <MagnifyingGlassIcon onClick={handleClickSearch} className="w-6 h-6" aria-hidden="true"/>
             </div>
           </div>
         </div>
@@ -117,7 +118,7 @@ export default function Search(props: any) {
                           pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
                         }
                       }}>
-                      <img src={generateUri(product?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
+                      <img src={generateUri(product?.image, 'h=270&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
                     </div>
                   </Link>
                   <div className={CLASSES}>
@@ -128,10 +129,10 @@ export default function Search(props: any) {
                 <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                   <div>
                     <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] nc-ProductCard__title">{product?.name}</h2>
-                    <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{product?.classification?.mainCategoryName}</p>
+                    <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
                   </div>
-                  <div className="flex items-end justify-between ">
-                    <Prices price={product?.price} listPrice={product?.listPrice} />
+                  <div className="flex items-end justify-between product-card-panel">
+                    <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     {product?.reviewCount > 0 &&
                       <div className="flex items-center mb-0.5">
                         <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />

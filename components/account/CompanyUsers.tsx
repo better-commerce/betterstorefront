@@ -11,14 +11,14 @@ function CompanyUsers({ users }: any) {
           <Spinner />
         </>
       ) : (
-        <div className="flex flex-col gap-y-6 p-8">
+        <div className="flex flex-col py-8 gap-y-6">
           {users?.map((user: any, Idx: any) => (
             <div
               key={Idx}
-              className="flex border-[1px] flex-col gap-y-3 px-6 py-4"
+              className="flex flex-col px-6 py-4 border border-slate-200 rounded-2xl gap-y-3"
             >
               <div className="flex flex-row gap-x-6">
-                <h2 className="text-2xl font-Inter font-semibold text-brand-blue leading-6">
+                <h2 className="text-2xl font-semibold leading-6 font-Inter text-brand-blue">
                   {`${user?.firstName} ${user?.lastName}`}
                 </h2>
               </div>

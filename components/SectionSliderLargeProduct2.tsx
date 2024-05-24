@@ -26,11 +26,14 @@ import Nav from "./shared/Nav/Nav";
 import Next from "./shared/NextPrev/Next";
 import Prev from "./shared/NextPrev/Prev";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionSliderLargeProduct2Props {
   className?: string;
   itemClassName?: string;
   cardStyle?: "style1" | "style2";
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 
@@ -38,6 +41,8 @@ export interface SectionSliderLargeProduct2Props {
 const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
   className = "",
   cardStyle = "style1",
+  featureToggle, 
+  defaultDisplayMembership,
 }) => {
   const translate = useTranslation()
   const [tabActive, setTabActive] = useState("Last 24 hours");
@@ -181,13 +186,13 @@ const SectionSliderLargeProduct2: FC<SectionSliderLargeProduct2Props> = ({
             {DEMO_LARGE_PRODUCTS?.map((item, index) => {
               return (
                 <li key={index} className={`glide__slide`}>
-                  <MyCollectionCard imgs={item.images} />
+                  <MyCollectionCard imgs={item.images} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 </li>
               );
             })}
 
             <li className={`glide__slide   `}>
-              <Link href={"/search"} className="relative block group">
+              <Link href={sanitizeRelativeUrl(`/search`)} className="relative block group">
                 <div className="relative flex flex-col overflow-hidden rounded-2xl">
                   <div className="relative">
                     <div className="aspect-w-8 aspect-h-5 bg-black/5 dark:bg-neutral-800"></div>

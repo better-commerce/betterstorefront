@@ -1,31 +1,69 @@
-'use client'
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
+import React from 'react'
 import NextHead from 'next/head'
 import axios from 'axios'
 import { useTranslation } from 'next-i18next'
-
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
 import { NEXT_POST_LOGGER } from '@components/utils/constants'
 
-function ErrorBoundary({ children }: any) {
-  const logError = async (error: Error) => {
-    try {
-      await axios.post(NEXT_POST_LOGGER, {
-        data: {
-          name: error.name,
-          message: error.message,
-        },
-      })
-    } catch (err) {
-      // console.log(err)
-    }
+interface IProps {
+  readonly children: any
+}
+
+interface IState {
+  readonly hasError: boolean
+}
+
+class ErrorBoundary extends React.Component<IProps, IState> {
+
+  constructor(props: IProps) {
+    super(props);
+    this.state = { hasError: false };
   }
 
+  static getDerivedStateFromError(error: any) {
+    // Update state so the next render shows the fallback UI.
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    // You can also log the error to an error reporting service
+    console.error("error", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI
+      return (
+        <ReactErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
+          {this.props.children}
+        </ReactErrorBoundary>
+      )
+    }
+
+    return this.props.children; 
+  }
+}
+
+const logError = async (error: Error) => {
+  try {
+    await axios.post(NEXT_POST_LOGGER, {
+      data: {
+        name: error.name,
+        message: error.message,
+      },
+    })
+  } catch (err) {
+    // console.log(err)
+  }
+}
+
+/*function ErrorBoundary({ children }: any) {
   return (
     <ReactErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
       {children}
     </ReactErrorBoundary>
   )
-}
+}*/
 
 function ErrorFallback(props: any) {
   const { t } = useTranslation()

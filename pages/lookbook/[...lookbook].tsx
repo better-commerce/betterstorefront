@@ -10,6 +10,7 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
+  EmptyObject,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
@@ -24,8 +25,12 @@ import CompareSelectionBar from '@old-components/product/ProductCompare/compareS
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Guid } from '@commerce/types'
+import { stringToNumber } from '@framework/utils/parse-util'
 
-function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
+function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const router = useRouter()
   const { basketId, openCart, setCartItems, isCompared } = useUI()
@@ -36,12 +41,10 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
     setProducts(response?.data?.products)
   }
 
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-    pageCategory: 'Lookbook',
-    omniImg: data.mainImage,
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.Lookbook,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
   })
 
   useEffect(() => {
@@ -134,6 +137,8 @@ function LookbookDetailPage({ data, slug, deviceInfo, config }: any) {
           deviceInfo={deviceInfo}
           maxBasketItemsCount={maxBasketItemsCount(config)}
           isCompared={isCompared}
+          featureToggle={featureToggle} 
+          defaultDisplayMembership={defaultDisplayMembership}
         />
       </div>
       {isCompared === 'true' && (
@@ -159,20 +164,69 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const slug: any = params!.lookbook
   const response = await getSingleLookbook(slug[0])
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
+
+  const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
+    infraUID: Redis.Key.INFRA_CONFIG,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
+    cachedDataUID.infraUID,
+  ])
+
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  if (!infraUIDData) {
+    const infraPromise = commerce.getInfra()
+    infraUIDData = await infraPromise
+    await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+  }
+
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if(!allMembershipsUIDData){
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion= await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
+      }
+    }
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: response,
       slug: slug[0],
-      globalSnippets: infra?.snippets ?? [],
+      globalSnippets: infraUIDData?.snippets ?? [],
       snippets: response?.snippets ?? [],
+      defaultDisplayMembership,
     },
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
-const PAGE_TYPE = PAGE_TYPES['Page']
+
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const data = await getLookbooks()
   let paths = data?.map((lookbook: any) => {
@@ -185,4 +239,4 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 }
 
 LookbookDetailPage.Layout = Layout
-export default withDataLayer(LookbookDetailPage, PAGE_TYPE)
+export default withDataLayer(LookbookDetailPage, PAGE_TYPES.LookbookList)

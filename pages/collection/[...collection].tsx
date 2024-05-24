@@ -1,16 +1,15 @@
 // Base Imports
-import { useReducer, useEffect, useState } from 'react'
+import { useReducer, useEffect, useState, } from 'react'
 import { useRouter } from 'next/router'
 
 // Package Imports
-import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Script from 'next/script'
 import NextHead from 'next/head'
 import useSwr from 'swr'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import 'swiper/css'
 import 'swiper/css/navigation'
 
@@ -18,22 +17,18 @@ import 'swiper/css/navigation'
 import getCollections from '@framework/api/content/getCollections'
 import Layout from '@components/Layout/Layout'
 import os from 'os'
-import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { generateUri, } from '@commerce/utils/uri-util'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll, logError } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -44,6 +39,14 @@ const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'))
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+
 declare const window: any
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
@@ -51,6 +54,7 @@ export const ACTION_TYPES = {
   SORT_ORDER: 'SORT_ORDER',
   CLEAR: 'CLEAR',
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
+  SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
 }
@@ -67,24 +71,9 @@ interface stateInterface {
   filters: any
 }
 
-const IS_INFINITE_SCROLL =
-  process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const {
-  SORT_BY,
-  PAGE,
-  SORT_ORDER,
-  CLEAR,
-  HANDLE_FILTERS_UI,
-  ADD_FILTERS,
-  REMOVE_FILTERS,
-} = ACTION_TYPES
-const DEFAULT_STATE = {
-  sortBy: '',
-  sortOrder: 'asc',
-  currentPage: 1,
-  filters: [],
-}
-
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -97,6 +86,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -111,8 +102,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-export default function CollectionPage(props: any) {
-  const { deviceInfo, config } = props
+function CollectionPage(props: any) {
+  const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
     return <></>
@@ -120,6 +111,8 @@ export default function CollectionPage(props: any) {
 
   const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
   const adaptedQuery: any = { ...router.query }
@@ -136,19 +129,20 @@ export default function CollectionPage(props: any) {
   })
   const { isCompared } = useUI()
 
-  adaptedQuery.currentPage
-    ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
-    : false
-  adaptedQuery.filters
-    ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters))
-    : false
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
+    entity: JSON.stringify({
+      id: props?.id || EmptyGuid,
+      name: props?.name || EmptyString,
+    }),
+    entityId: props?.id || EmptyGuid,
+    entityName: props?.name || EmptyString,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
+    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
+  })
 
-  const initialState = {
-    ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
-    collectionId: props?.id,
-  }
-
+  adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
+  adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
+  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], collectionId: props?.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
@@ -160,14 +154,14 @@ export default function CollectionPage(props: any) {
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
         collectionId: props?.id,
         sortBy: null,
       },
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -181,7 +175,7 @@ export default function CollectionPage(props: any) {
       results: [], // current page result set
       sortList: [],
       pages: 0, // total number of pages
-      total: 0, // total numer of records
+      total: 0, // total number of records
       currentPage: 1, // current page
       filters: [],
       collectionId: props?.id,
@@ -248,16 +242,17 @@ export default function CollectionPage(props: any) {
   }, [productDataToPass])
 
   useEffect(() => {
-    const dataToPass = IS_INFINITE_SCROLL
-      ? productListMemory?.products
-      : data?.products // productListMemory?.products
+    const dataToPass = IS_INFINITE_SCROLL ? productListMemory?.products : data?.products // productListMemory?.products
     if (dataToPass?.results?.length > 0) {
       setProductDataToPass(dataToPass)
-    } else  {
+    } else {
       setProductDataToPass(null)
     }
   }, [productListMemory?.products, data?.products])
 
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
@@ -377,6 +372,13 @@ export default function CollectionPage(props: any) {
 
   }, [])
 
+  useEffect(() => {
+    // for engage
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_collection_page_view_before({ item_id: props?.name || EmptyString })
+    }
+  }, [])
+
   const [visible, setVisible] = useState(true)
   const [appliedFilters, setAppliedFilters] = useState<any[]>([])
 
@@ -395,15 +397,26 @@ export default function CollectionPage(props: any) {
       [...state?.filters]
     )
     setAppliedFilters(currentFilters)
-  }, [state?.filters, data?.products])
+  }, [state?.filters, data?.products?.filters])
 
-  const cls = visible
-    ? 'sticky w-full mx-auto bg-white top-108 sm:container'
-    : 'relative'
-  const totalResults =
-    appliedFilters?.length > 0
-      ? data?.products?.total
-      : props?.products?.total || data?.products?.results?.length
+  useEffect(() => {
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value }))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value })))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
+
+  const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
   const handleTogglePLPSidebar = () => {
     setOpenPLPSidebar(!openPLPSidebar)
@@ -437,7 +450,7 @@ export default function CollectionPage(props: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
-      <div className='flex flex-col'>
+      <div className='flex flex-col dark:bg-white'>
         {props?.customInfo3 == 'vertical' && (
           <>
             <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-4 sm:px-4 2xl:sm:px-0 sm:mt-4">
@@ -506,61 +519,71 @@ export default function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container pt-10 pb-24 mx-auto bg-transparent">
+      <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
+        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+          <li className='flex items-center text-10-mob sm:text-sm'>
+            <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+            </Link>
+          </li>
+          <li className='flex items-center text-10-mob sm:text-sm'>
+            <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+              <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+            </span>
+          </li>
+          <li className='flex items-center text-10-mob sm:text-sm'>
+          <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+          </li>
+        </ol>
+      </div>
+      <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space dark:bg-white">
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        <div className="max-w-screen-sm">
-          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
             {props?.name.toLowerCase()}
           </h1>
           {props?.description &&
             <div className='flex justify-between w-full align-bottom'>
-              <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base">
-                {props?.description}
-              </span>
+              <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
             </div>
           }
         </div>
-        <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} results`}</span>
+        <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
         </div>
-        <hr className='border-slate-200 dark:border-slate-700' />
-        {productDataToPass?.results?.length > 0 && (
-          <div className="grid grid-cols-1 gap-1 overflow-hidden lg:grid-cols-12 md:grid-cols-3 sm:grid-cols-3">
-            {props?.allowFacets ? (
+        <hr className='border-slate-200 dark:border-slate-200' />
+        {
+          <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+            {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
               <>
                 {isMobile ? (
-                  <>
-                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
-                  </>
+                  <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                 ) : (
                   <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                 )}
-                <div className="sm:col-span-9 p-[1px]">
+                <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
                   {isMobile ? null : (
-                    <>
-                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
-                    </>
+                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   )}
-                  <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                  {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                 </div>
               </>
             ) : (
               <div className="col-span-12">
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
-                <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
               </div>
             )}
           </div>
-        )}
+        }
         {props?.products?.total == 0 && (
           <div className="w-full py-32 mx-auto text-center">
             <h3 className="py-3 text-3xl font-semibold text-gray-200">
-              {' '}
               {translate('label.collection.noItemAvailableText')} {props?.name} {translate('label.collection.collectionsTextWithExclamationMark')}
             </h3>
             <Link href="/collection" passHref>
@@ -573,14 +596,24 @@ export default function CollectionPage(props: any) {
         )}
 
         <PLPFilterSidebar handleSortBy={handleSortBy} openSidebar={openPLPSidebar} handleTogglePLPSidebar={handleTogglePLPSidebar} plpFilterState={plpFilterState} />
-
         <CompareSelectionBar name={props?.name} showCompareProducts={showCompareProducts} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-
+        <div className='flex flex-col w-full'>
+          <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        </div>
+        <div className={`w-full text-left py-3 border-t`}>
+          {props?.customInfo1 &&
+            <div className='flex w-full'>
+              <div className="block mt-4 text-xs text-neutral-500 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
+            </div>
+          }
+        </div>
         {data?.products?.results?.length > 0 && (
-          <Script
-            type="application/ld+json"
-            id="schema"
-            strategy="afterInteractive"
+          <Script type="application/ld+json" id="schema" strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
               {
@@ -611,63 +644,29 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   if (slug?.length) {
     slug = slug.join('/');
   }
-  const cachedDataUID = {
-    infraUID: Redis.Key.INFRA_CONFIG,
-    collectionUID: Redis.Key.Collection + '_' + slug,
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.infraUID,
-    cachedDataUID.collectionUID
-  ])
-
-  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
-  let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
   let hostName = EmptyString
+  hostName = os.hostname()
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COLLECTION_PLP })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
 
-  try {
-    if (!collectionUIDData) {
-      collectionUIDData = await getCollectionBySlug(slug)
-      await setData([{ key: cachedDataUID.collectionUID, value: collectionUIDData }])
-    }
-    if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
-      infraUIDData = await infraPromise
-      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
-    }
-    hostName = os.hostname()
-
-  } catch (error: any) {
-    logError(error)
-
-    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-      let errorUrl = '/500'
-      const errorData = error?.response?.data
-      if (errorData?.errorId) {
-        errorUrl = `${errorUrl}?errorId=${errorData.errorId}`
-      }
-      return {
-        redirect: {
-          destination: errorUrl,
-          permanent: false,
-        },
-      }
-    }
+  if (pageProps?.notFound) {
+    return notFoundRedirect()
   }
 
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    if (collectionUIDData?.status === "NotFound") {
-      return notFoundRedirect()
+  if (pageProps?.isRedirect) {
+    return {
+      redirect: {
+        destination: pageProps?.redirect,
+        permanent: false,
+      },
     }
   }
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      ...collectionUIDData,
       query: context,
-      slug: slug,
-      globalSnippets: infraUIDData?.snippets ?? [],
-      snippets: collectionUIDData?.snippets ?? [],
       hostName: obfuscateHostName(hostName!),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
@@ -691,3 +690,5 @@ export async function getStaticPaths() {
     fallback: 'blocking',
   }
 }
+
+export default withDataLayer(CollectionPage, PAGE_TYPES.CollectionList)

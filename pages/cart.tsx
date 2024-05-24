@@ -1,15 +1,15 @@
 // Base Imports
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // Package Imports
-import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import Image from 'next/image'
 import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import cookie from 'cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import MembershipOfferCard from '@components/membership/MembershipOfferCard'
+import OptMembershipModal from '@components/membership/OptMembershipModal'
 
 // Component Imports
 import Layout from '@components/Layout/Layout'
@@ -18,13 +18,13 @@ import { useCart as getCart } from '@framework/cart'
 import { basketId as basketIdGenerator } from '@components/ui/context'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon } from '@heroicons/react/24/outline'
+import { PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, TrashIcon, MinusIcon, PlusIcon, NoSymbolIcon, CheckIcon, HeartIcon } from '@heroicons/react/24/outline'
 import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
-import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { vatIncluded, getCartValidateMessages, maxBasketItemsCount } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug } from '@components/utils/constants'
+import { vatIncluded, } from '@framework/utils/app-util'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -32,10 +32,15 @@ import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Prices from '@components/Prices'
-import NcInputNumber from '@components/NcInputNumber'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
-function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
+import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
+import wishlistHandler from '@components/services/wishlist'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
+function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
@@ -50,24 +55,23 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       )?.value || ''
   )
 
-  const {
-    setCartItems,
-    cartItems,
-    basketId,
-    setIsSplitDelivery,
-    isSplitDelivery,
-  } = useUI()
-  const { addToCart } = cartHandler()
+  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
   const [altRelatedProducts, setAltRelatedProducts] = useState<any>()
   const [relatedProducts, setRelatedProducts] = useState<any>()
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
   const [splitDeliveryItems, setSplitDeliveryItems] = useState<any>(null)
   const [splitDeliveryDates, setSplitDeliveryDates] = useState<any>(null)
+  const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
+  const [basket, setBasket] = useState(cart)
+  const [membership, setMembership] = useState([])
   const [selectedProductOnSizeChange, setSelectedProductOnSizeChange] =
     useState(null)
+  const [openOMM, setOpenOMM] = useState(false)
   const [basketPromos, setBasketPromos] = useState<Array<any> | undefined>(
     undefined
   )
@@ -75,6 +79,86 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   const [isOpen, setIsOpen] = useState(false)
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
+  const { isInWishList } = wishlistHandler()
+  const getUserId = () => {
+    return user?.userId && user?.userId != Guid.empty ? user?.userId : cartItems?.userId
+  }
+  const enableHtmlScroll = () => {
+    const element: any = document.getElementsByTagName('html')[0]
+    element.classList.add('overlow-y-auto-p')
+  }
+  const insertToLocalWishlist = (product: any) => {
+    const userId = getUserId()
+    if (isGuestUser || (userId && matchStrings(userId, Guid.empty, true))) {
+      openLoginSideBar()
+      return
+    }
+    const createWishlist = async () => {
+      try {
+        await axios.post(NEXT_CREATE_WISHLIST, {
+          id: user?.userId,
+          productId: (product?.productId).toLowerCase(),
+          flag: true,
+        })
+
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
+    createWishlist()
+    setIsWishlistClicked(true)
+    addToWishlist(product)
+    handleItem(product, 'delete')
+    openWishlistAfter()
+  }
+  const openWishlistAfter = () => {
+    setTimeout(() => openWishlist(), 1000)
+  }
+
+  const handleWishList = async (product: any | Array<any>) => {
+    closeModal()
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      //  setAlert({ type: 'success', msg:" Please Login "})
+      openLoginSideBar()
+      return
+    }
+    if (objUser) {
+      const createWishlist = async (product: any) => {
+        try {
+          await axios.post(NEXT_CREATE_WISHLIST, {
+            id: getUserId(),
+            productId: itemClicked?.length
+              ? product?.productId.toLowerCase()
+              : itemClicked?.productId.toLowerCase(),
+            flag: true,
+          })
+          insertToLocalWishlist(product)
+        } catch (error) {
+          console.log(error, 'error')
+        }
+      }
+
+      if (itemClicked && itemClicked?.length) {
+        itemClicked?.forEach((product: any) => {
+          createWishlist(product)
+        })
+      } else if (itemClicked?.productId) {
+        createWishlist(product)
+      }
+    } else {
+      closeSidebar()
+      setSidebarView('LOGIN_VIEW')
+      enableHtmlScroll()
+    }
+
+    let productAvailability = 'Yes'
+    if (product?.currentStock > 0) {
+      productAvailability = 'Yes'
+    } else {
+      productAvailability = 'No'
+    }
+  }
   const getBasketPromos = async (basketId: string) => {
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
@@ -166,6 +250,44 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     )
     setAltRelatedProducts(altRelatedProducts)
   }
+
+
+  const getBasket = async (basketId: string) => {
+    const basketResult: any = await getCart({
+      basketId,
+    })
+    const isLoggedIn = (user?.userId && user?.userId !== EmptyGuid && !isGuestUser) || false
+    setIsLoggedIn(isLoggedIn)
+    return basketResult
+  }
+
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+        setCartItems(basketResult)
+      }
+    }
+  }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.BasketViewed, {
+    entity: JSON.stringify({
+      id: basketId,
+      grandTotal: cartItems?.grandTotal?.raw.withTax,
+      lineItems: cartItems?.lineItems,
+      promoCode: cartItems?.promotionsApplied,
+      shipCharge: cartItems?.shippingCharge?.raw?.withTax,
+      shipTax: cartItems?.shippingCharge?.raw?.tax,
+      taxPercent: cartItems?.taxPercent,
+      tax: cartItems?.grandTotal?.raw?.tax,
+    }),
+    entityName: PAGE_TYPES.Cart,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Basket,
+    eventType: EVENTS_MAP.EVENT_TYPES.BasketViewed,
+    promoCodes: cartItems.promotionsApplied,
+  })
 
   useEffect(() => {
     let splitProducts = groupItemsByDeliveryDate(cartItems?.lineItems)
@@ -367,6 +489,21 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
   }
 
   useEffect(() => {
+    async function fetchMembership() {
+      const membershipItem = basket?.lineItems?.find((x: any) => x?.isMembership)
+      const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
+      const data = { userId, basketId: basket?.id, membershipPlanId: null }
+
+      const { data: membershipBenefitsResult } = await axios.post(NEXT_MEMBERSHIP_BENEFITS, data)
+      if (membershipBenefitsResult?.result) {
+        const membershipPlans = membershipBenefitsResult?.result
+        setMembership(membershipPlans)
+      }
+    }
+    fetchMembership()
+  }, [basket, basket?.id, basket?.lineItems])
+
+  useEffect(() => {
     const handleAsync = async () => {
       const promise = await new Promise<any>(
         async (resolve: any, reject: any) => {
@@ -393,6 +530,33 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketId, cartItems])
+
+  const recordEventInEngage = () => {
+    const iterator = cart?.lineItems?.values();
+    const itemsFromArr = []
+    for (const value of iterator) {
+      itemsFromArr?.push({
+        id: parseItemId(value?.stockCode) || EmptyString,
+        name: value?.name || EmptyString,
+        quantity: value?.qty || 1,
+        price: value?.totalPrice?.raw?.withTax || 1,
+        line_price: value?.totalPrice?.raw?.withTax * value?.qty,
+        sku: value?.sku || EmptyString
+      })
+    }
+
+    const cardData = {
+      item_id: "cart",
+      item_ids: cart?.lineItems?.map((x: any) => parseItemId(x?.stockCode)) || [],
+      items: itemsFromArr,
+      total_value: cart?.grandTotal?.raw?.withTax || EmptyString
+    }
+
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_checkout_initiate_before(cardData)
+    }
+  }
+
   useEffect(() => {
     async function loadShippingPlans() {
       await fetchShippingPlans([])
@@ -403,21 +567,23 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
     } else {
       setCartItems(cart)
     }
-
+    // calling Engage event
+    recordEventInEngage()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleItem = (product: any, type = 'increase') => {
+    if (!product?.id) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
     }
     const asyncHandleItem = async () => {
       let data: any = {
         basketId,
-        productId: product.id,
-        stockCode: product.stockCode,
-        manualUnitPrice: product.manualUnitPrice,
-        displayOrder: product.displayOrderta,
+        productId: product?.id,
+        stockCode: product?.stockCode,
+        manualUnitPrice: product?.manualUnitPrice,
+        displayOrder: product?.displayOrderta,
         qty: -1,
       }
       if (type === 'increase') {
@@ -426,16 +592,15 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       if (type === 'delete') {
         data.qty = 0
         userCart.lineItems = userCart.lineItems.filter(
-          (item: { id: any }) => item.id !== product.id
+          (item: { id: any }) => item.id !== product?.id
         )
       }
       try {
         const item = await addToCart(data)
+        setCartItems(item)
+        setBasket(item)
         if (isSplitDelivery) {
-          setCartItems(item)
           fetchShippingPlans(item)
-        } else {
-          setCartItems(item)
         }
       } catch (error) {
         console.log(error)
@@ -502,6 +667,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
       </div>
     );
   };
+
+  const isMembershipItemOnly = useMemo(() => {
+    const membershipItemsCount = basket?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+    return (membershipItemsCount === basket?.lineItems?.length)
+  }, [basket])
+
   return (
     <>
       <NextHead>
@@ -517,160 +688,42 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div className="container w-full py-4 pt-10 bg-white lg:pb-28 lg:pt-20">
-        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16">
-          {translate('label.basket.shoppingCartText')}{' '}
+      <div className={`container w-full py-4 pt-10  lg:pb-28 lg:pt-20 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
+        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16 basket-h1 dark:text-black">
+          <span>{translate('label.basket.shoppingCartText')}{' '}</span>
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
-        <hr className='my-2 border-slate-200 dark:border-slate-700 xl:my-12' />
+        <hr className={`${CURRENT_THEME != 'green' ? 'my-2 xl:my-12 border-slate-200 dark:border-slate-700' : 'my-0 xl:my-0'} border-[#EEEEEE] dark:border-slate-700`} />
         {!isEmpty && !isSplitDelivery && (
           <>
-            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
-              <section aria-labelledby="cart-heading" className="lg:col-span-7">
-                <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-                  {userCart.lineItems?.map((product: any, productIdx: number) => {
-                    const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
-                    return (
-                      <div key={`cart-${productIdx}`} className={`relative flex last:pb-0 ${product?.price?.raw?.withTax > 0 ? 'py-4 sm:py-6 xl:py-8' : 'bg-green-100 items-center mb-2 py-2 sm:py-2 xl:py-2 px-4'}`} >
-                        <div className={`${product?.price?.raw?.withTax > 0 ? 'w-24 overflow-hidden h-36 sm:w-32' : 'w-16 overflow-hidden h-20 sm:w-16'} relative flex-shrink-0 rounded-xl bg-slate-100`}>
-                          <img src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product?.name} className="object-contain object-center w-full h-full p-2" />
-                          <Link href={`/${product?.slug}`} className="absolute inset-0"></Link>
-                        </div>
-
-                        <div className="flex flex-col flex-1 ml-3 sm:ml-6">
-                          <div>
-                            <div className="flex justify-between ">
-                              <div className="flex-[1.5] ">
-                                <h3 className="text-base font-semibold">
-                                  <Link href={`/${product?.slug}`}>{product?.name}</Link>
-                                </h3>
-
-                                <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
-                                  {product?.colorName != "" &&
-                                    <div className="flex items-center space-x-1.5">
-                                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                        <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                      </svg>
-                                      <span>{product?.colorName}</span>
-                                    </div>
-                                  }
-                                  {product?.size != "" &&
-                                    <>
-                                      <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
-                                      <div className="flex items-center space-x-1.5">
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                          <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                          <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                          <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                          <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        <span className='uppercase'>{product?.size}</span>
-                                      </div>
-                                    </>
-                                  }
-                                </div>
-                                <div className="relative flex items-center justify-between w-full mt-3 sm:hidden">
-                                  {product?.price?.raw?.withTax > 0 ?
-                                    <div className='relative block text-left'>
-                                      <div className='inline-block'>
-                                        <div className="flex items-center justify-around text-gray-900">
-                                          <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
-                                            <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer " />
-                                          </div>
-                                          <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
-                                            {product.qty}
-                                          </span>
-                                          <div className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-400'>
-                                            <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    : <div></div>}
-                                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} />
-                                </div>
-                              </div>
-                              {product?.price?.raw?.withTax !== 0 &&
-                                <div className="relative justify-center hidden text-center sm:flex">
-                                  <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" /></span>
-                                  <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
-                                    {product.qty}
-                                  </span>
-                                  <span className='flex items-center justify-center w-8 h-8 border rounded-full border-slate-300'><PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} /></span>
-                                </div>
-                              }
-                              <div className="justify-end flex-1 hidden sm:flex">
-                                <Prices price={product?.price} listPrice={product?.listPrice} className="mt-0.5" />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-between pt-2 mt-auto text-sm">
-                            <div></div>
-                            {product?.price?.raw?.withTax != 0 &&
-                              <div className="flex items-end justify-end text-sm">
-                                <button type="button" onClick={() => { openModal(); setItemClicked(product); }} className="relative flex items-center text-sm font-medium text-primary-6000 hover:text-primary-500 " >
-                                  <span>{translate('common.label.removeText')}</span>
-                                </button>
-                              </div>
-                            }
-                          </div>
-                        </div>
-                        {product.children?.map((child: any, idx: number) => (
-                          <div className="flex mt-10" key={'child' + idx}>
-                            <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                              <img src={child?.image} alt={child?.name || 'cart-image'} className="object-cover object-center w-full h-full" />
-                            </div>
-                            <div className="flex justify-between ml-5 font-medium text-gray-900">
-                              <Link href={`/${child?.slug}`}>{child?.name}</Link>
-                              <p className="ml-4">
-                                {child?.price?.formatted?.withTax > 0 ? isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax : ''}
-                              </p>
-                            </div>
-                            {!child?.parentProductId ? (
-                              <div className="flex items-center justify-end flex-1 text-sm">
-                                <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
-                                  <span className="sr-only"> {translate('common.label.removeText')} </span>
-                                  <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9"> {child.qty} </div>
-                            )}
-                          </div>
-                        ))}
-                        <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                          {product?.shippingPlan?.shippingSpeed}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </section>
-              <section aria-labelledby="summary-heading" className="p-4 mt-10 border sm:p-6 rounded-2xl bg-slate-50 border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0" >
-                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6" >
+            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
+              <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} setItemClicked={setItemClicked} />
+              <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded-md shadow-md top-2' : 'bg-slate-50 rounded-2xl top-24'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky lg:col-span-5 sm:mt-0`} >
+                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6 dark:text-black" >
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
+                {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
+                  <>
+                    <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
+                    <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} setBasket={setBasket} />
+                  </>
+                )}
                 <div className="mt-2 sm:mt-6">
-                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} membership={membership} setBasket={setBasket} />
                 </div>
-                <dl className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
-                  <div className="flex items-center justify-between py-4">
+                <dl className={`text-sm mt-7 text-slate-500 dark:text-slate-400  ${CURRENT_THEME != 'green' ? 'divide-y divide-slate-200/70 dark:divide-slate-700/80' : ''}`}>
+                  <div className="flex items-center justify-between py-4 basket-summary-price">
                     <dt className="text-sm text-gray-600">
-                      {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT ? cartItems?.subTotal?.formatted?.withTax : cartItems?.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between py-4">
+                  <div className="flex items-center justify-between py-4 basket-summary-price">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>{translate('label.orderSummary.shippingText')}</span>
                     </dt>
@@ -679,7 +732,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                     </dd>
                   </div>
                   {userCart.promotionsApplied?.length > 0 && (
-                    <div className="flex items-center justify-between py-4">
+                    <div className="flex items-center justify-between py-4 basket-summary-price">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>
                       </dt>
@@ -688,7 +741,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       </dd>
                     </div>
                   )}
-                  <div className="flex items-center justify-between py-4">
+                  <div className="flex items-center justify-between py-4 basket-summary-price">
                     <dt className="flex items-center text-sm text-gray-600">
                       <span>{translate('label.orderSummary.taxText')}</span>
                     </dt>
@@ -696,17 +749,19 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       {cartItems?.grandTotal?.formatted?.tax}
                     </dd>
                   </div>
-                  <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
-                    <dt className="text-lg font-semibold text-black">
-                      {translate('label.orderSummary.totalText')}
-                    </dt>
-                    <dd className="text-xl font-semibold text-black"> {isIncludeVAT ? cartItems?.grandTotal?.formatted?.withTax : cartItems?.grandTotal?.formatted?.withTax} </dd>
-                  </div>
+                  {cartItems?.grandTotal?.raw?.withTax > 0 &&
+                    <div className="flex items-center justify-between pt-2 text-gray-900 border-t basket-summary-price-total">
+                      <dt className="text-lg font-semibold text-black">
+                        {translate('label.orderSummary.totalText')}
+                      </dt>
+                      <dd className="text-xl font-semibold text-black"> {cartItems?.grandTotal?.formatted?.withTax} </dd>
+                    </div>
+                  }
                 </dl>
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 " >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 text-slate-50 dark:text-slate-50 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
@@ -724,8 +779,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
         )}
         {!isEmpty && isSplitDelivery && splitBasketProducts && (
           <>
-            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
-              <section aria-labelledby="cart-heading" className="lg:col-span-7">
+            <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
+              <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
                 <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
                   {Object.keys(splitBasketProducts)?.map(
                     (deliveryDate: any, Idx: any) => (
@@ -785,11 +840,11 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                     </p>
                                   )}
                                   <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
+                                    {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
                                     <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
                                       {product.qty}
                                     </span>
-                                    <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
+                                    {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
                                   </div>
                                 </div>
 
@@ -807,6 +862,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                       </div>
                                       {!child.parentProductId ? (
                                         <div className="flex items-center justify-end flex-1 text-sm">
+                                          <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                                            {isInWishList(product?.productId) ? (
+                                              <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                                            ) : (
+                                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                            )
+                                            }
+                                          </button>
                                           <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
                                             <span className="sr-only"> {translate('common.label.removeText')} </span>
                                             <TrashIcon className="w-5 h-5" aria-hidden="true" />
@@ -821,6 +884,14 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                                   )
                                 )}
                                 <div className="absolute top-0 right-0">
+                                  <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                                    {isInWishList(product?.productId) ? (
+                                      <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                                    ) : (
+                                      <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                    )
+                                    }
+                                  </button>
                                   <button type="button" onClick={() => handleItem(product, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
                                     <span className="sr-only">
                                       {translate('common.label.removeText')}
@@ -840,17 +911,17 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                   )}
                 </div>
               </section>
-              <section aria-labelledby="summary-heading" className="px-4 py-0 mt-4 bg-white rounded-sm md:sticky top-20 sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-5" >
+              <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded' : 'bg-slate-50 rounded-2xl'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0`} >
                 <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-3xl" >
                   {translate('label.orderSummary.orderSummaryText')}
                 </h4>
                 <div className="mt-2 sm:mt-6">
-                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} />
+                  <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} membership={membership} setBasket={setBasket} />
                 </div>
                 <dl className="mt-6 space-y-2 sm:space-y-2">
                   <div className="flex items-center justify-between">
                     <dt className="text-sm text-gray-600">
-                      {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="font-semibold text-black text-md">
                       {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}
@@ -876,14 +947,16 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
                       </dd>
                     </div>
                   )}
-                  <div className="flex items-center justify-between pt-2 sm:pt-1">
-                    <dt className="flex items-center text-sm text-gray-600">
-                      <span>{translate('label.orderSummary.taxText')}</span>
-                    </dt>
-                    <dd className="font-semibold text-black text-md">
-                      {cartItems.grandTotal?.formatted?.tax}
-                    </dd>
-                  </div>
+                  {cartItems?.grandTotal?.raw?.withTax > 0 &&
+                    <div className="flex items-center justify-between pt-2 sm:pt-1">
+                      <dt className="flex items-center text-sm text-gray-600">
+                        <span>{translate('label.orderSummary.taxText')}</span>
+                      </dt>
+                      <dd className="font-semibold text-black text-md">
+                        {cartItems.grandTotal?.formatted?.tax}
+                      </dd>
+                    </div>
+                  }
                   <div className="flex items-center justify-between pt-2 text-gray-900 border-t">
                     <dt className="text-lg font-bold text-black">
                       {translate('label.orderSummary.totalText')}
@@ -896,7 +969,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 " >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>
@@ -931,9 +1004,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config }: any) {
 }
 Cart.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES['Checkout']
+const PAGE_TYPE = PAGE_TYPES.Cart
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketRef: any = cookies.basketId
@@ -946,9 +1019,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     basketId: basketRef,
     cookies: context.req.cookies,
   })
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.CART })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],

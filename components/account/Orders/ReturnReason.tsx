@@ -4,7 +4,7 @@ import React, { Fragment, useState } from 'react'
 // Package Imports
 import Image from 'next/image'
 import { Dialog, Transition } from '@headlessui/react'
-import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CheckIcon } from '@heroicons/react/24/outline'
 
 // Other Imports
@@ -80,8 +80,8 @@ const ReturnReason = ({
       <div className="w-full">
         <div className="mx-auto cancel-continer">
           <Link href="/my-account/orders" className="mobile-view">
-            <h4 className="mr-2 leading-none text-xl text-gray-900 uppercase font-bold">
-              <i className="sprite-icon sprite-left-arrow mr-2"></i> {translate('label.help.returnItemText')}
+            <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
+               <ArrowLeftIcon className='inline-block w-4 h-4 mr-2 text-black' /> {translate('label.help.returnItemText')}
             </h4>
           </Link>
           <div className="w-full py-4">
@@ -128,7 +128,7 @@ const ReturnReason = ({
                 {translate('label.exchangeReason.picturesUploadLimitText')}s{' '}
               </h4>
               {/* <p>(Images exceeding {formatBytes(PDP_REVIEW_IMAGE_SIZE_IN_BYTES)} will be ignored)</p> */}
-              <p className="text-sm mb-1 text-gray-700">
+              <p className="mb-1 text-sm text-gray-700">
                 {translate('label.exchangeReason.identifyProblemText')} </p>
               <p className="text-sm text-gray-700">
                 <InformationCircleIcon className="inline-block w-4 h-4 mb-1" />{' '}
@@ -166,7 +166,7 @@ const ReturnReason = ({
                 ))}
             </div>
             <div className="py-0">
-              <p className="relative info-text py-4 text-gray-600">
+              <p className="relative py-4 text-gray-600 info-text">
                 <InformationCircleIcon className="inline-block w-4 h-4 mb-1" />
                 <span className="text-sm font-normal">
                   {' '}
@@ -178,7 +178,7 @@ const ReturnReason = ({
               <Button
                 type="button"
                 className="!py-3 !font-bold !w-auto"
-                disabled={!(!isDisabled && reason)}
+                disabled={!(reason)}
                 onClick={openModal}
               >
                 {translate('label.returnReason.requestReturnBtnText')} </Button>
@@ -247,11 +247,11 @@ const ReturnReason = ({
                           </div>
                           <div className="w-full"></div>
 
-                          <div className="w-full py-4">
+                          <div className="flex justify-between w-full py-4 mb-3">
                             <Button
                               type="button"
                               onClick={closeModal}
-                              className="mb-3 !py-3 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200"
+                              className="!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200"
                             >
                               {translate('label.returnReason.dontReturnBtnText')} </Button>
                             <Button
@@ -260,8 +260,8 @@ const ReturnReason = ({
                                 await onItemReturn(reason, selectedImages)
                               }}
                               className={classNames('!font-bold', {
-                                '!py-3': !itemReturnLoadingState,
-                                '!py-5': itemReturnLoadingState,
+                                '!py-2': !itemReturnLoadingState,
+                                '!py-3': itemReturnLoadingState,
                               })}
                               disabled={itemReturnLoadingState}
                             >

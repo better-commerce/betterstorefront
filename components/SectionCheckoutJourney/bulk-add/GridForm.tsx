@@ -21,7 +21,7 @@ export const GridForm: FC<IGridFormProps> = ({
   type = 'bulkAddViaGrid',
 }: IGridFormProps) => {
   const { headerValues, schema, initialValues, config } = VALUES_MAP[type]
-  const translate = useTranslation();
+  const translate = useTranslation()
   const onAddMoreOrderPads = (
     e: any,
     field: any,
@@ -48,6 +48,8 @@ export const GridForm: FC<IGridFormProps> = ({
     // call formik onChange method
     field.onChange(e)
   }
+
+  const entryFieldsTableHeaderText = translate('label.bulkAdd.entryFieldsTableHeaderText')
 
   return (
     <Formik
@@ -86,11 +88,17 @@ export const GridForm: FC<IGridFormProps> = ({
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-100">
                 <tr key={'header'}>
-                  {headerValues.map((x: any, idx: number) => (
-                    <th key={`th-${idx}`} scope="col" className={x.className}>
-                      {x.text}
-                    </th>
-                  ))}
+                  {headerValues.map((x: any, idx: number) => {
+                    let text = x?.text
+                    if (type === 'bulkAddViaGrid') {
+                      text = entryFieldsTableHeaderText?.split('|')[idx]
+                    }
+                    return (
+                      <th key={`th-${idx}`} scope="col" className={x.className}>
+                        {text}
+                      </th>
+                    )
+                  })}
                 </tr>
               </thead>
               <tbody className="bg-white">
@@ -107,14 +115,14 @@ export const GridForm: FC<IGridFormProps> = ({
                         <tr key={i}>
                           <td
                             key={i}
-                            className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 whitespace-nowrap sm:pl-6"
+                            className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 border-b border-slate-200 whitespace-nowrap sm:pl-6"
                           >
                             {i + 1}
                           </td>
                           {config?.map((x: any, idx: number) => (
                             <td
                               key={`inner-${idx}`}
-                              className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap"
+                              className="px-3 py-4 text-sm text-gray-500 border-b border-slate-200 whitespace-nowrap"
                             >
                               <Field
                                 key={`field_${i}_${x.key}`}
@@ -124,7 +132,7 @@ export const GridForm: FC<IGridFormProps> = ({
                                   x.className +
                                   (orderPadErrors[x.key] &&
                                   orderPadTouched[x.key]
-                                    ? '  border rounded placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-2 pr-2 pl-12 border-red-500'
+                                    ? '  border rounded-xl placeholder-gray-400 focus:border-indigo-400 focus:outline-none py-1 pr-2 pl-12 border-red-500'
                                     : '')
                                 }
                               />

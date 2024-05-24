@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useFormik } from 'formik'
 import {
   addressFinderSchema,
@@ -6,12 +6,15 @@ import {
 } from './config'
 import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
+  DeliveryType,
   EmptyString,
 } from '@components/utils/constants'
 import { retrieveAddress } from '@components/SectionCheckoutJourney/checkout/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
+import DeliveryTypeSelection from './DeliveryTypeSelection'
+import BillingAddressForm from './BillingAddressForm'
 
 const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -24,6 +27,13 @@ const ShippingAddressForm: React.FC<any> = ({
   onGuestCheckout,
   onEditAddressToggleView,
   shippingCountries,
+  basket,
+  deliveryTypeMethod,
+  setDeliveryTypeMethod,
+  featureToggle,
+  deliveryMethods,
+  billingCountries,
+  disableDeliveryTypeSelection = true,
 }) => {
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
@@ -126,6 +136,9 @@ const ShippingAddressForm: React.FC<any> = ({
       formik.handleSubmit()
     }
   }
+
+  const isDeliverTypeSelected = useMemo(() => deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY), [deliveryTypeMethod])
+
   return (
     <>
       {!isGuest && (
@@ -135,327 +148,351 @@ const ShippingAddressForm: React.FC<any> = ({
           </span>
         </div>
       )}
-      <div
-        className={`flex flex-col gap-2 sm:mt-4 mt-3 sm:rounded-md sm:border ${
-          isGuest
-            ? 'border-transparent bg-white py-4 px-0'
-            : 'sm:border-gray-200 sm:bg-gray-50 sm:py-4 sm:px-4'
-        }`}
-      >
-        <h5 className="font-medium font-18 dark:text-black">
-          {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.shippingAddressHeadingText')}
-        </h5>
-        <div className="p-0 mb-4 rounded-md sm:bg-transparent sm:border-0 sm:rounded-none sm:mb-0">
-          {/* address finder form */}
-          {!editAddressValues && (
+      {!editAddressValues && disableDeliveryTypeSelection && (
+        <DeliveryTypeSelection
+          basket={basket}
+          deliveryTypeMethod={deliveryTypeMethod}
+          setDeliveryTypeMethod={setDeliveryTypeMethod}
+          featureToggle={featureToggle}
+          deliveryMethods={deliveryMethods}
+        />
+      )}
+      {isDeliverTypeSelected && (
+        <div
+          className={`flex flex-col gap-2 sm:mt-4 mt-3 sm:rounded-md sm:border ${
+            isGuest
+              ? 'border-transparent bg-white py-4 px-0'
+              : 'sm:border-gray-200 sm:bg-gray-50 sm:py-4 sm:px-4'
+          }`}
+        >
+          <h5 className="font-medium font-18 dark:text-black">
+            {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.shippingAddressHeadingText')}
+          </h5>
+          <div className="p-0 mb-4 rounded-md sm:bg-transparent sm:border-0 sm:rounded-none sm:mb-0">
+            {/* address finder form */}
+            {!editAddressValues && (
+              <form
+                onSubmit={addressFinderFormik.handleSubmit}
+                className="flex items-start w-full gap-2 mt-1 sm:gap-4 sm:mt-4"
+              >
+                <div className="">
+                  <input
+                    name="postCode"
+                    type="text"
+                    value={addressFinderFormik.values.postCode}
+                    onChange={addressFinderFormik.handleChange}
+                    placeholder={translate('common.label.enterYourPostCodePlaceholder')}
+                    className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default rounded"
+                  />
+                  {addressFinderFormik.errors.postCode &&
+                    addressFinderFormik.touched.postCode && (
+                      <span className="form-input-error">
+                        {addressFinderFormik.errors.postCode}
+                      </span>
+                    )}
+                  {searchedAddresses?.length > 0 && (
+                    <div className="absolute z-10 p-4 mt-2 origin-top-right transform scale-100 bg-white border border-black rounded shadow-xl opacity-100 dark:bg-white focus:outline-none">
+                      <div className="!max-h-80 overflow-y-scroll max-panel pr-4">
+                        {searchedAddresses?.map(
+                          (address: any, addressIdx: number) => {
+                            return (
+                              <AddressItem
+                                option={address?.description}
+                                optionIdx={addressIdx}
+                                key={addressIdx}
+                                address={address}
+                                handleSelectAddress={handleSelectAddress}
+                              />
+                            )
+                          }
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={addressFinderFormik.isSubmitting}
+                  className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
+                >
+                  {addressFinderFormik.isSubmitting ? (
+                    <LoadingDots />
+                  ) : isMobile ? (
+                    translate('common.label.findText')
+                  ) : (
+                    translate('common.label.findAddressText')
+                  )}
+                </button>
+              </form>
+            )}
+            {/* address form */}
             <form
-              onSubmit={addressFinderFormik.handleSubmit}
-              className="flex items-start w-full gap-2 mt-1 sm:gap-4 sm:mt-4"
+              onSubmit={handleGuestWithAddressSubmit}
+              className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
             >
-              <div className="">
-                <input
-                  name="postCode"
-                  type="text"
-                  value={addressFinderFormik.values.postCode}
-                  onChange={addressFinderFormik.handleChange}
-                  placeholder={translate('common.label.enterYourPostCodePlaceholder')}
-                  className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
-                />
-                {addressFinderFormik.errors.postCode &&
-                  addressFinderFormik.touched.postCode && (
+              <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">
+                <div className="relative mt-1 sm:col-span-12 custom-select">
+                  <select
+                    name="country"
+                    value={formik.values.country}
+                    onChange={formik.handleChange}
+                    className="checkout-input-field dark:bg-white dark:text-black"
+                  >
+                    <option value="">{translate('label.addressBook.selectCountryText')}</option>
+                    {shippingCountries?.map((country: any, idx: number) => (
+                      <option key={idx} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  {formik.errors.country && (
                     <span className="form-input-error">
-                      {addressFinderFormik.errors.postCode}
+                      {formik.errors.country}
                     </span>
                   )}
-                {searchedAddresses?.length > 0 && (
-                  <div className="absolute z-10 p-4 mt-2 origin-top-right transform scale-100 bg-white border border-black rounded shadow-xl opacity-100 dark:bg-white focus:outline-none">
-                    <div className="!max-h-80 overflow-y-scroll max-panel pr-4">
-                      {searchedAddresses?.map(
-                        (address: any, addressIdx: number) => {
-                          return (
-                            <AddressItem
-                              option={address?.description}
-                              optionIdx={addressIdx}
-                              key={addressIdx}
-                              address={address}
-                              handleSelectAddress={handleSelectAddress}
-                            />
-                          )
+                </div>
+                <div className="sm:col-span-6">
+                  <input
+                    name="firstName"
+                    type="text"
+                    value={formik.values.firstName}
+                    onChange={formik.handleChange}
+                    placeholder={translate('common.label.firstNameText')}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                  />
+                  {formik.errors.firstName && (
+                    <span className="form-input-error">
+                      {formik.errors.firstName}
+                    </span>
+                  )}
+                </div>
+                <div className="sm:col-span-6">
+                  <input
+                    name="lastName"
+                    type="text"
+                    value={formik.values.lastName}
+                    onChange={formik.handleChange}
+                    placeholder={translate('common.label.lastNameText')}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                  />
+                  {formik.errors.lastName && (
+                    <span className="form-input-error">
+                      {formik.errors.lastName}
+                    </span>
+                  )}
+                </div>
+
+                <div className="sm:col-span-12">
+                  <input
+                    name="phoneNo"
+                    type="text"
+                    value={formik.values.phoneNo}
+                    onChange={formik.handleChange}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                    placeholder={translate('common.label.mobileNumText')}
+                    onKeyDown={(ev: any) => {
+                      const target = ev?.target
+                      if (target && target?.value) {
+                        const txtPhoneNo: any = document.querySelector(
+                          "input[name='phoneNo']"
+                        )
+                        if (txtPhoneNo) {
+                          formik.setValues({
+                            ...formik.values,
+                            phoneNo: target?.value?.replace(
+                              `+${BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE}`,
+                              '0'
+                            ),
+                          })
                         }
-                      )}
-                    </div>
-                  </div>
-                )}
+                      }
+                    }}
+                    onKeyUp={(ev: any) => {
+                      const target = ev?.target
+                      if (target && target?.value) {
+                        const txtPhoneNo: any = document.querySelector(
+                          "input[name='phoneNo']"
+                        )
+                        if (txtPhoneNo) {
+                          formik.setValues({
+                            ...formik.values,
+                            phoneNo: target?.value?.replace(
+                              `+${BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE}`,
+                              '0'
+                            ),
+                          })
+                        }
+                      }
+                    }}
+                  />
+                  {formik.errors.phoneNo && (
+                    <span className="form-input-error">
+                      {formik.errors.phoneNo}
+                    </span>
+                  )}
+                </div>
+
+                <div className="sm:col-span-12">
+                  <input
+                    name="companyName"
+                    type="text"
+                    value={formik.values.companyName}
+                    onChange={formik.handleChange}
+                    placeholder={translate('common.label.companyNameAndVATNumText')}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                  />
+                  {formik.errors.companyName && (
+                    <span className="form-input-error">
+                      {formik.errors.companyName}
+                    </span>
+                  )}
+                </div>
+                <div className="sm:col-span-12">
+                  <input
+                    name="address1"
+                    type="text"
+                    value={formik.values.address1}
+                    onChange={formik.handleChange}
+                    placeholder={translate('common.label.addressLine1Text')}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                  />
+                  {formik.errors.address1 && (
+                    <span className="form-input-error">
+                      {formik.errors.address1}
+                    </span>
+                  )}
+                </div>
+                <div className="sm:col-span-12">
+                  <input
+                    name="address2"
+                    type="text"
+                    value={formik.values.address2}
+                    onChange={formik.handleChange}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                    placeholder={translate('common.label.addressLine2Text')}
+                  />
+                  {formik.errors.address2 && (
+                    <span className="form-input-error">
+                      {formik.errors.address2}
+                    </span>
+                  )}
+                </div>
+                <div className="sm:col-span-12">
+                  <input
+                    name="address3"
+                    type="text"
+                    value={formik.values.address3}
+                    onChange={formik.handleChange}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                    placeholder={translate('common.label.addressLine3Text')}
+                  />
+                  {formik.errors.address3 && (
+                    <span className="form-input-error">
+                      {formik.errors.address3}
+                    </span>
+                  )}
+                </div>
+                <div className="sm:col-span-6">
+                  <input
+                    name="city"
+                    type="text"
+                    value={formik.values.city}
+                    onChange={formik.handleChange}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                    placeholder={translate('common.label.cityText')}
+                  />
+                  {formik.errors.city && (
+                    <span className="form-input-error">{formik.errors.city}</span>
+                  )}
+                </div>
+                <div className="sm:col-span-6">
+                  <input
+                    name="postCode"
+                    type="text"
+                    value={formik.values.postCode}
+                    onChange={formik.handleChange}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                    placeholder={translate('common.label.postcodeText')}
+                  />
+                  {formik.errors.postCode && (
+                    <span className="form-input-error">
+                      {formik.errors.postCode}
+                    </span>
+                  )}
+                </div>
+
+                <div className="sm:col-span-12">
+                  <input
+                    name="state"
+                    type="text"
+                    value={formik.values.state}
+                    onChange={formik.handleChange}
+                    className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
+                    placeholder={translate('common.label.countyStateEtcText')}
+                  />
+                  {formik.errors.state && (
+                    <span className="form-input-error">
+                      {formik.errors.state}
+                    </span>
+                  )}
+                </div>
               </div>
-              <button
-                type="submit"
-                disabled={addressFinderFormik.isSubmitting}
-                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
-              >
-                {addressFinderFormik.isSubmitting ? (
-                  <LoadingDots />
-                ) : isMobile ? (
-                  translate('common.label.findText')
-                ) : (
-                  translate('common.label.findAddressText')
-                )}
-              </button>
-            </form>
-          )}
-          {/* address form */}
-          <form
-            onSubmit={handleGuestWithAddressSubmit}
-            className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
-          >
-            <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">
-              <div className="relative mt-1 sm:col-span-12 custom-select">
-                <select
-                  name="country"
-                  value={formik.values.country}
-                  onChange={formik.handleChange}
-                  className="checkout-input-field dark:bg-white dark:text-black"
+
+              <div>
+                <input
+                  id="useSameForBilling"
+                  name="useSameForBilling"
+                  type="checkbox"
+                  checked={useSameForBilling}
+                  onChange={(e) => {
+                    setUseSameForBilling(e.target.checked)
+                  }}
+                />
+                <label
+                  htmlFor="useSameForBilling"
+                  className="pl-1 font-medium text-black font-14"
                 >
-                  <option value="">{translate('label.addressBook.selectCountryText')}</option>
-                  {shippingCountries?.map((country: any, idx: number) => (
-                    <option key={idx} value={country.name}>
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
-                {formik.errors.country && (
-                  <span className="form-input-error">
-                    {formik.errors.country}
-                  </span>
-                )}
-              </div>
-              <div className="sm:col-span-6">
-                <input
-                  name="firstName"
-                  type="text"
-                  value={formik.values.firstName}
-                  onChange={formik.handleChange}
-                  placeholder={translate('common.label.firstNameText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                />
-                {formik.errors.firstName && (
-                  <span className="form-input-error">
-                    {formik.errors.firstName}
-                  </span>
-                )}
-              </div>
-              <div className="sm:col-span-6">
-                <input
-                  name="lastName"
-                  type="text"
-                  value={formik.values.lastName}
-                  onChange={formik.handleChange}
-                  placeholder={translate('common.label.lastNameText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                />
-                {formik.errors.lastName && (
-                  <span className="form-input-error">
-                    {formik.errors.lastName}
-                  </span>
-                )}
+                  {translate('label.checkout.useSameAddressForBillingText')}
+                </label>
               </div>
 
-              <div className="sm:col-span-12">
-                <input
-                  name="phoneNo"
-                  type="text"
-                  value={formik.values.phoneNo}
-                  onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder={translate('common.label.mobileNumText')}
-                  onKeyDown={(ev: any) => {
-                    const target = ev?.target
-                    if (target && target?.value) {
-                      const txtPhoneNo: any = document.querySelector(
-                        "input[name='phoneNo']"
-                      )
-                      if (txtPhoneNo) {
-                        formik.setValues({
-                          ...formik.values,
-                          phoneNo: target?.value?.replace(
-                            `+${BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE}`,
-                            '0'
-                          ),
-                        })
-                      }
-                    }
-                  }}
-                  onKeyUp={(ev: any) => {
-                    const target = ev?.target
-                    if (target && target?.value) {
-                      const txtPhoneNo: any = document.querySelector(
-                        "input[name='phoneNo']"
-                      )
-                      if (txtPhoneNo) {
-                        formik.setValues({
-                          ...formik.values,
-                          phoneNo: target?.value?.replace(
-                            `+${BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE}`,
-                            '0'
-                          ),
-                        })
-                      }
-                    }
-                  }}
-                />
-                {formik.errors.phoneNo && (
-                  <span className="form-input-error">
-                    {formik.errors.phoneNo}
-                  </span>
+              <div className="grid flex-col w-full gap-2 mt-4 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
+                {onEditAddressToggleView && (
+                  <button
+                    className="border-black btn-primary-white btn"
+                    type="button"
+                    onClick={() => onEditAddressToggleView(undefined)}
+                  >
+                    {translate('common.label.cancelText')}
+                  </button>
                 )}
-              </div>
-
-              <div className="sm:col-span-12">
-                <input
-                  name="companyName"
-                  type="text"
-                  value={formik.values.companyName}
-                  onChange={formik.handleChange}
-                  placeholder={translate('common.label.companyNameAndVATNumText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                />
-                {formik.errors.companyName && (
-                  <span className="form-input-error">
-                    {formik.errors.companyName}
-                  </span>
-                )}
-              </div>
-              <div className="sm:col-span-12">
-                <input
-                  name="address1"
-                  type="text"
-                  value={formik.values.address1}
-                  onChange={formik.handleChange}
-                  placeholder={translate('common.label.addressLine1Text')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                />
-                {formik.errors.address1 && (
-                  <span className="form-input-error">
-                    {formik.errors.address1}
-                  </span>
-                )}
-              </div>
-              <div className="sm:col-span-12">
-                <input
-                  name="address2"
-                  type="text"
-                  value={formik.values.address2}
-                  onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder={translate('common.label.addressLine2Text')}
-                />
-                {formik.errors.address2 && (
-                  <span className="form-input-error">
-                    {formik.errors.address2}
-                  </span>
-                )}
-              </div>
-              <div className="sm:col-span-12">
-                <input
-                  name="address3"
-                  type="text"
-                  value={formik.values.address3}
-                  onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder={translate('common.label.addressLine3Text')}
-                />
-                {formik.errors.address3 && (
-                  <span className="form-input-error">
-                    {formik.errors.address3}
-                  </span>
-                )}
-              </div>
-              <div className="sm:col-span-6">
-                <input
-                  name="city"
-                  type="text"
-                  value={formik.values.city}
-                  onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder={translate('common.label.cityText')}
-                />
-                {formik.errors.city && (
-                  <span className="form-input-error">{formik.errors.city}</span>
-                )}
-              </div>
-              <div className="sm:col-span-6">
-                <input
-                  name="postCode"
-                  type="text"
-                  value={formik.values.postCode}
-                  onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder={translate('common.label.postcodeText')}
-                />
-                {formik.errors.postCode && (
-                  <span className="form-input-error">
-                    {formik.errors.postCode}
-                  </span>
-                )}
-              </div>
-
-              <div className="sm:col-span-12">
-                <input
-                  name="state"
-                  type="text"
-                  value={formik.values.state}
-                  onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
-                  placeholder={translate('common.label.countyStateEtcText')}
-                />
-                {formik.errors.state && (
-                  <span className="form-input-error">
-                    {formik.errors.state}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <input
-                id="useSameForBilling"
-                name="useSameForBilling"
-                type="checkbox"
-                checked={useSameForBilling}
-                onChange={(e) => {
-                  setUseSameForBilling(e.target.checked)
-                }}
-              />
-              <label
-                htmlFor="useSameForBilling"
-                className="pl-1 font-medium text-black font-14"
-              >
-                {translate('label.checkout.useSameAddressForBillingText')}
-              </label>
-            </div>
-
-            <div className="grid flex-col w-full gap-2 mt-4 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
-              {onEditAddressToggleView && (
                 <button
-                  className="border-black btn-primary-white btn"
-                  type="button"
-                  onClick={() => onEditAddressToggleView(undefined)}
+                  className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
+                  type="submit"
+                  disabled={formik.isSubmitting}
                 >
-                  {translate('common.label.cancelText')}
+                  {useSameForBilling
+                    ? translate('label.checkout.saveAndContinueToDeliveryText')
+                    : translate('label.checkout.saveAndContinueToBillingText')}
                 </button>
-              )}
-              <button
-                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
-                type="submit"
-                disabled={formik.isSubmitting}
-              >
-                {useSameForBilling
-                  ? translate('label.checkout.saveAndContinueToDeliveryText')
-                  : translate('label.checkout.saveAndContinueToBillingText')}
-              </button>
-            </div>
-          </form>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
+      {deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
+        <div className="mt-4">
+          <BillingAddressForm
+            editAddressValues={editAddressValues}
+            shippingCountries={shippingCountries}
+            billingCountries={billingCountries}
+            searchAddressByPostcode={searchAddressByPostcode}
+            onSubmit={onSubmit}
+            useSameForBilling={useSameForBilling}
+            shouldDisplayEmail={false}
+          />
+        </div>
+      )}
     </>
   )
 }

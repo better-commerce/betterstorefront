@@ -8,6 +8,7 @@ import getSiteInfo from './operations/get-site-info'
 import getCustomerWishlist from './operations/get-customer-wishlist'
 import getAllProductPaths from './operations/get-all-product-paths'
 import getAllProducts from './operations/get-all-products'
+import getAllRecentlyViewedProducts from './operations/get-all-recently-viewed'
 import getProduct from './operations/get-product'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -27,6 +28,7 @@ const operations = {
   getCustomerWishlist,
   getAllProductPaths,
   getAllProducts,
+  getAllRecentlyViewedProducts,
   getProduct,
 }
 

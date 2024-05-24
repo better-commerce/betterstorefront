@@ -1,5 +1,6 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 interface Props {
   basketId?: string
   productId?: string
@@ -7,6 +8,7 @@ interface Props {
   manualUnitPrice?: number
   displayOrder?: number
   stockCode?: string
+  isMembership?: boolean
   cookies?: any
 }
 
@@ -18,6 +20,7 @@ export default function useAddItem() {
     manualUnitPrice,
     displayOrder,
     stockCode,
+    isMembership = false,
     cookies,
   }: Props) {
     const data = {
@@ -27,6 +30,7 @@ export default function useAddItem() {
       //manualUnitPrice,
       displayOrder,
       stockCode,
+      isMembership,
     }
     try {
       const response: any = await fetcher({
@@ -38,9 +42,9 @@ export default function useAddItem() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
         },
       })
-      return { ...response.result, ...{ message: response.message } }
+      return { ...response.result, ...{ message: response?.message, messageCode: response?.messageCode } }
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

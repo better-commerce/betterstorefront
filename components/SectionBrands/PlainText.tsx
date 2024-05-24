@@ -17,9 +17,9 @@ export default function PlainText({ textNames, heading }: any) {
   }, [isExpandable])
 
   return (
-    <div className={`bg-[#F3F3F3] grid grid-cols-1 gap-5 md:grid-cols-2 ${height} p-10 sm:p-20`} >
+    <div className={`bg-[#F3F3F3] grid grid-cols-1 md:grid-cols-1 ${height} p-10 sm:p-10 rounded-2xl`} >
       <div className="flex items-center py-0 sm:items-start">
-        <h4 className="font-semibold text-[12px] text-[#212530] md:text-[32px] leading-2 sm:leading-10 text-sm">
+        <h4 className="font-semibold text-[12px] text-[#212530] md:text-[24px] leading-2 sm:leading-10 text-sm mb-0">
           {heading ? heading : translate('label.brand.brandHeadingText')}
         </h4>
       </div>

@@ -32,6 +32,7 @@ interface Props {
   product: any
   hideWishlistCTA?: any
   attributesCount?: number
+  defaultDisplayMembership: any
 }
 
 interface Attribute {
@@ -53,6 +54,8 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
   attributesCount = 0,
+  featureToggle,
+  defaultDisplayMembership,
 }) => {
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
@@ -325,10 +328,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   return (
     <>
-      <div
-        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14"
-        key={product.id}
-      >
+      <div className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14 " key={product.id} >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link passHref href={`/${currentProductData.link}`} onMouseEnter={(ev: any) => handleHover(ev, 'enter')} onMouseLeave={(ev: any) => handleHover(ev, 'leave')} title={`${product.name} \t ${itemPrice}`} >
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
@@ -342,7 +342,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
-            <Prices price={product?.price} listPrice={product?.listPrice} />
+            <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         </Link>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col">
@@ -354,7 +354,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
       </div>
       <div className="mt-2 bg-white border-t border-gray-200 lg:mt-4">
-        <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
+        <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon key={rating} aria-hidden="true" className={classNames(product?.rating > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
           ))}
@@ -362,12 +362,12 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.rating}
           </label>
         </div>
-        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
+        <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
           <span className="font-normal text-black font-14">{product?.brand}</span>
         </div>
         {attribs?.map((attrib: any, idx: number) => (
-          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14" >
-            <span>{getAttribValue(attrib.value)}</span>
+          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
+            {getAttribValue(attrib.value).includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: getAttribValue(attrib.value) }}></span>) : (<span>{getAttribValue(attrib.value)}</span>)}
           </div>
         ))}
       </div>

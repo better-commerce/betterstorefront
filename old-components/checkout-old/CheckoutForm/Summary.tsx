@@ -387,8 +387,8 @@ export default function Summary({
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-gray-900">
                           {isIncludeVAT
-                            ? translate('label.orderSummary.subTotalTaxIncText')
-                            : translate('label.orderSummary.subTotalTaxExcText')}
+                            ? translate('label.orderSummary.subTotalVATIncText')
+                            : translate('label.orderSummary.subTotalVATExText')}
                         </dt>
                         <dd className="text-gray-900 text-md">
                           {isIncludeVAT
@@ -649,8 +649,8 @@ export default function Summary({
                 <div className="flex items-center justify-between font-semibold text-black text-md">
                   <dt>
                     {isIncludeVAT
-                      ? translate('label.orderSummary.subTotalTaxIncText')
-                      : translate('label.orderSummary.subTotalTaxExcText')}
+                      ? translate('label.orderSummary.subTotalVATIncText')
+                      : translate('label.orderSummary.subTotalVATExText')}
                   </dt>
                   <dd>
                     {isIncludeVAT

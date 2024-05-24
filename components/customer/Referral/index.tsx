@@ -71,8 +71,10 @@ const CustomerReferral = ({ router }: any) => {
         }
 
         checkReferralProgram()
-        fetchReferralSlug()
-    }, [router.query])
+        if (router?.query?.['referral-code']) {
+            fetchReferralSlug()
+        }
+    }, [router.query?.['referral-code']])
 
     return (
         <>

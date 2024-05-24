@@ -7,6 +7,7 @@ import type {
   GetAllProductPathsOperation,
   GetAllProductsOperation,
   GetProductOperation,
+  getAllRecentlyViewedProductsOperation,
 } from '../types/product'
 import type { APIProvider, CommerceAPI } from '.'
 
@@ -22,6 +23,7 @@ export const OPERATIONS = [
   'getCustomerWishlist',
   'getAllProductPaths',
   'getAllProducts',
+  'getAllRecentlyViewedProducts',
   'getProduct',
   'getProductPreview',
   'getInfra',
@@ -52,11 +54,13 @@ export const OPERATIONS = [
   'getCancelReason',
   'cancelOrder',
   'getReturnReason',
+  'getPromotion',
   'resetCache',
   'logPayment',
   'logActivity',
   'getCountries',
   'getReviewSummary',
+  'getMembershipPlans',
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -201,6 +205,22 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
 
+  getAllRecentlyViewedProducts: {
+    <T extends getAllRecentlyViewedProductsOperation>(opts: {
+      variables?: T['variables']
+      config?: P['config']
+      preview?: boolean
+    }): Promise<T['data']>
+
+    <T extends getAllRecentlyViewedProductsOperation>(
+      opts: {
+        variables?: T['variables']
+        config?: P['config']
+        preview?: boolean
+      } & OperationOptions
+    ): Promise<T['data']>
+  }
+
   getProduct: {
     <T extends GetProductOperation>(opts: {
       variables: T['variables']
@@ -233,10 +253,12 @@ export type Operations<P extends APIProvider> = {
     ): Promise<T['data']>
   }
 
+  getPromotion: {}
   resetCache: {}
   logPayment: {}
   logActivity: {}
   getReviewSummary: {}
+  getMembershipPlans: {}
 }
 
 export type APIOperations<P extends APIProvider> = {

@@ -136,7 +136,7 @@ export default function ContactPreferences() {
           {/* <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1> */}
-          <p className="mt-2 text-sm flex flex-col text-black">
+          <p className="mt-2 text-sm flex flex-col text-black dark:text-white">
             <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescTitle')}</span>
             <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescText')}</span>
           </p>
@@ -159,7 +159,7 @@ export default function ContactPreferences() {
                 />
                 <label
                   htmlFor={`radio-btn-${idx}`}
-                  className="ml-3 block text-sm font-medium text-black"
+                  className="ml-3 block text-sm font-medium text-black dark:text-white"
                 >
                   {btn.title}
                 </label>

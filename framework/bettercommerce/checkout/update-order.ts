@@ -1,5 +1,6 @@
 import { ORDERS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 export async function updateOrder(
@@ -36,7 +37,7 @@ export async function updateOrder(
       })
       return response
     } catch (error: any) {
-      console.log(error, 'err')
+      logError(error)
       // throw new Error(error.message)
     }
   }

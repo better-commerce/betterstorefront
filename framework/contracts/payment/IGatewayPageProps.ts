@@ -10,4 +10,5 @@ export interface IGatewayPageProps {
   }
   readonly isCancelled: boolean
   readonly isCOD?: boolean
+  readonly config?: any
 }

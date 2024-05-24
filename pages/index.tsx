@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
@@ -6,18 +6,26 @@ import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import commerce from '@lib/api/commerce'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { HOME_PAGE_DEFAULT_SLUG, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
-import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
-import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
+import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { getCurrency, getCurrentCurrency, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
+import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
+import { useUI } from '@components/ui/context'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import SectionBrandCard from '@components/SectionBrandCard'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { PagePropType, getPagePropType } from '@framework/page-props'
+import Heading from '@components/Heading/Heading'
+// @ts-ignore
+import Glide from "@glidejs/glide/dist/glide.esm";
+import Link from 'next/link'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri } from '@commerce/utils/uri-util'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -27,60 +35,25 @@ const SectionSliderCategories = dynamic(() => import('@components/SectionSliderC
 const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
-export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
-  const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
-  const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
-  const config = { locale, locales }
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-  const promises = new Array<Promise<any>>()
-  let Page_Slug = HOME_PAGE_SLUG;
-  if (CURRENT_THEME == "black") {
-    Page_Slug = HOME_PAGE_NEW_SLUG
-  } else if (CURRENT_THEME == "orange") {
-    Page_Slug = HOME_PAGE_SLUG
-  } else {
-    Page_Slug = HOME_PAGE_SLUG;
-  }
-  const fetchData = async (pageContentUIDData: any[], pageContentUIDKey: string, channel: 'Web' | 'MobileWeb') => {
-    if (!containsArrayData(pageContentUIDData)) {
-      infra?.currencies?.map((x: any) => x?.currencyCode)?.forEach((currencyCode: string, index: number) => {
-        promises.push(new Promise(async (resolve: any, reject: any) => {
-          try {
-            const pageContentsPromise = commerce.getPagePreviewContent({
-              id: '',
-              slug: Page_Slug,
-              workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-              channel: channel,
-              currency: currencyCode,
-              cachedCopy: true,
-            })
-            const pageContent = await pageContentsPromise
-            pageContentUIDData.push({ key: currencyCode, value: pageContent })
-            await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
-            resolve()
-          } catch (error: any) {
-            resolve()
-          }
-        }))
-      })
-    }
-  };
-  fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web');
-  fetchData(pageContentMobileWebUIDData, Redis.Key.HomepageMobileWeb, 'MobileWeb');
+declare const window: any
 
-  await Promise.all(promises)
-  const slugsPromise = commerce.getSlugs({ slug: Page_Slug });
-  const slugs = await slugsPromise;
+export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const hostName = os.hostname()
+  let slug = HOME_PAGE_SLUG;
+  if (CURRENT_THEME == "black") {
+    slug = HOME_PAGE_NEW_SLUG
+  } else if (CURRENT_THEME == "orange") {
+    slug = HOME_PAGE_SLUG
+  } else {
+    slug = HOME_PAGE_SLUG;
+  }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.HOME })
+  const pageProps = await props.getPageProps({ slug, cookies: {} })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      globalSnippets: infra?.snippets ?? [],
-      snippets: slugs?.snippets ?? [],
-      pageContentsWeb: pageContentWebUIDData,
-      pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
@@ -89,8 +62,9 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
+  const { user } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -124,6 +98,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [currencyCode, isMobile])
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_index_page_view_before({ item_id: "index", bc_user_id: user?.userId || EmptyGuid })
+    }
+  }, [])
+
   useAnalytics(PageViewed, {
     entity: JSON.stringify({
       id: '',
@@ -147,6 +127,28 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="flex w-full text-center flex-con"> <Loader /> </div>
     )
   }
+  const sliderRef = useRef(null);
+  const [isShow, setIsShow] = useState(false);
+  useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 6, gap: 16, bound: true,
+      breakpoints: {
+        1280: { gap: 16, perView: 6, },
+        1279: { gap: 16, perView: 6, },
+        1023: { gap: 16, perView: 5, },
+        768: { gap: 16, perView: 4, },
+        500: { gap: 16, perView: 1.5, },
+      },
+    };
+    if (!sliderRef.current) return;
+
+    let slider = new Glide(sliderRef.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRef]);
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -163,24 +165,115 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <div className="relative overflow-hidden nc-PageHome">
+      <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         <SectionHero2 data={pageContents?.banner} />
-        <div className="mt-24 lg:mt-32">
-          <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
-        </div>
-        <div className="container relative my-24 space-y-24 lg:space-y-32 lg:my-32">
-          <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} />
-          <div className="relative py-16 lg:py-20">
+        {pageContents?.shopbygender?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+              {pageContents?.shopbygender?.map((item: any, itemIdx: number) => (
+                <div key={`banner-${itemIdx}`}>
+                  <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
+                    <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
+                      <img alt={item?.title} src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+                      <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
+                        <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
+                        <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+
+        {pageContents?.shopbycategory?.length > 0 &&
+          <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
+            <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+              {pageContents?.shopbycategoryheading?.map((h: any, iIdx: number) => (
+                <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
+                  {h?.shopbycategoryheading_title}
+                </Heading>
+              ))}
+              <div className="glide__track" data-glide-el="track">
+                <ul className="glide__slides">
+                  {pageContents?.shopbycategory?.map((item: any, index: number) => (
+                    <li key={index} className={`glide__slide product-card-item home-product-card`}>
+                      <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
+                        <div className='relative flex flex-col rounded-lg'>
+                          <img alt={item?.title} src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full rounded-lg h-96' />
+                          <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/80 bottom-2 left-2 image-name-overlay'>
+                            <span className='text-lg font-semibold sm:text-xl'>{item?.title}</span>
+                            <span className='text-2xl font-semibold sm:text-3xl'>{item?.description}</span>
+                            <span>Shop Now</span>
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        }
+        {featureToggle?.features?.enableTrendingCategory &&
+          <div className="mt-14 sm:mt-24 lg:mt-32">
+            <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
+          </div>
+        }
+        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} container relative my-16 sm:my-24 lg:my-32 product-collections`}>
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
+              {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
+                <div key={`brands-${bIdx}`}>
+                  <SectionBrandCard data={b} />
+                </div>
+              ))}
+            </div>
+          }
+          {pageContents?.newarrivals?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
             <BackgroundSection />
             <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
           </div>
-          <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} cardStyle="style2" />
+          {pageContents?.newlookbook?.length > 0 &&
+            <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+          }
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
+              {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.nevermisssale?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          {pageContents?.brand?.length > 0 &&
+            <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
+              {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
+                <SectionBrandCard data={b} key={bIdx} />
+              ))}
+            </div>
+          }
+          {pageContents?.popular?.length > 0 &&
+            <SectionSliderProductCard data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          }
+          <div className='flex flex-col w-full engage-product-card-section'>
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+          </div>
           <SectionPromo3 data={pageContents?.subscription} />
         </div>
       </div>
     </>
   )
 }
-
 Home.Layout = Layout
 export default withDataLayer(Home, PAGE_TYPE)

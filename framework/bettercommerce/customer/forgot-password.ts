@@ -1,6 +1,7 @@
 import fetcher from '../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 import validateToken from './validate-token'
+import { logError } from '@framework/utils/app-util'
 
 export default async function forgotPassword(email: string, cookies: any) {
   try {
@@ -16,6 +17,7 @@ export default async function forgotPassword(email: string, cookies: any) {
     }
     return { forgotRes: res }
   } catch (error: any) {
+    logError(error)
     throw new Error(error)
   }
 }

@@ -30,6 +30,7 @@ import { Guid } from '@commerce/types'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
+import SaveB2BQuote from './SaveB2BQuote'
 
 interface PaymentMethodSelectionProps {
   readonly basket: any
@@ -134,7 +135,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
             countryCode:
               selectedAddress?.billingAddress?.countryCode ||
               BETTERCOMMERCE_DEFAULT_COUNTRY,
-            basketId: basketId,
+            basketId: basket?.id != Guid.empty ? basket?.id : basketId,
           })
         )
       )
@@ -214,7 +215,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     const getPaymentOrderInfo = async (paymentMethod: any) => {
       const paymentOrderInfo = {
         user,
-        basketId,
+        basketId: basket?.id != Guid.empty ? basket?.id : basketId,
         customerId: basket.userId != Guid.empty ? basket.userId : user?.userId,
         basket,
         billingAddress: {
@@ -455,6 +456,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                           orderModelResponse={state?.orderResponse}
                         />
                       )}
+                    <SaveB2BQuote basket={basket} />
                   </div>
                   {state?.error && (
                     <h4 className="py-5 text-lg font-semibold text-red-500">

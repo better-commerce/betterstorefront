@@ -5,12 +5,14 @@ import {
   NEXT_GET_USER_CART,
   NEXT_ASSOCIATE_CART,
   NEXT_MERGE_CART,
+  NEXT_DELETE_CART,
 } from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
+import { logError } from '@framework/utils/app-util'
 
 interface CartItem {
   basketId?: string
@@ -21,6 +23,7 @@ interface CartItem {
   stockCode?: string
   userId?: string
   isAssociated?: boolean
+  isMembership?: boolean
   CustomInfo4?: string
   CustomInfo5?: string
   CustomInfo4Formatted?: string
@@ -46,6 +49,7 @@ export default function cartHandler() {
         stockCode,
         userId,
         isAssociated = true,
+        isMembership = false,
       }: CartItem,
       type = 'ADD',
       data: any = {}
@@ -58,6 +62,7 @@ export default function cartHandler() {
         manualUnitPrice,
         displayOrder,
         stockCode,
+        isMembership,
       } // Set default post data
 
       const isBundledProduct =
@@ -226,7 +231,7 @@ export default function cartHandler() {
             })[0]
           }
         } catch (error) {
-          console.log(error, 'err')
+          logError(error)
         }
       }
       return null
@@ -252,6 +257,42 @@ export default function cartHandler() {
       } catch (error) {
         console.log(error, 'err')
       }
+    },
+    getUserCarts: async ({ userId, basketId }: any) => {
+      if (userId && userId !== Guid.empty) {
+        try {
+          const { data: userCarts }: any = await axios.get(NEXT_GET_USER_CART, {
+            params: {
+              userId: userId,
+            },
+          })
+
+          if (userCarts?.length) {
+            return userCarts?.sort((cart1: any, cart2: any) => {
+              return (
+                new Date(cart2?.lastUpdated).getTime() -
+                new Date(cart1?.lastUpdated).getTime()
+              )
+            })
+          }
+        } catch (error) {
+          logError(error)
+        }
+      }
+      return null
+    },
+    deleteCart: async ({ basketId }: any) => {
+      if (basketId && basketId !== Guid.empty) {
+        try {
+          const { data: deleteCartResult }: any = await axios.post(NEXT_DELETE_CART, {
+            basketId,
+          })
+          return deleteCartResult
+        } catch (error) {
+          logError(error)
+        }
+      }
+      return null
     },
   }
 }

@@ -4,18 +4,21 @@ import dynamic from 'next/dynamic'
 import { IExtraProps } from '@components/Layout/Layout'
 import rangeMap from '@lib/range-map'
 import Pagination from '../Pagination'
+import { CURRENT_THEME } from '@components/utils/constants'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 interface Props {
-  products: any
-  currentPage: number | string
+  readonly products: any
+  readonly currentPage: number | string
   handlePageChange?: any
   handleInfiniteScroll: any
-  isCompared: any
+  readonly isCompared: any
+  readonly featureToggle: any
+  readonly defaultDisplayMembership: any
 }
 
 export default function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll,
-  deviceInfo, maxBasketItemsCount, isCompared }: Props & IExtraProps) {
+  deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
     Router.events.on('routeChangeComplete', () => {
@@ -30,6 +33,11 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
     }
   }, [Router.events])
 
+  let gridClass = 'lg:grid-cols-3'
+  if (CURRENT_THEME == 'green') {
+    gridClass = 'lg:grid-cols-4 product-card-3'
+  }
+
   return (
     <>
       {IS_INFINITE_SCROLL && (
@@ -39,18 +47,9 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
           total={products.total}
           currentNumber={products.results.length}
           component={
-            <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 4 ? `lg:grid-cols-3` : 'lg:grid-cols-3'}`} >
-              {!products.results.length && rangeMap(12, (i) => (
-                <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
-                  <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
-                    <div className="flex flex-col space-y-3">
-                      <div className="w-full h-48 bg-gray-100 rounded-md "></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 search-results__products ${products.results.length < 4 ? `${gridClass}` : gridClass}`} >
               {products?.results?.map((product: any, productIdx: number) => (
-                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+                <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               ))}
             </div>
           }
@@ -58,7 +57,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? `lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3` : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'}`} >
+          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-4 ${products.results.length < 6 ? gridClass : gridClass}`} >
             {!products?.results?.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -69,7 +68,7 @@ export default function Grid({ products, currentPage, handlePageChange = () => {
               </div>
             ))}
             {products.results.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             ))}
           </div>
           {products.pages > 1 && (

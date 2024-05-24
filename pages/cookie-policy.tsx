@@ -7,7 +7,6 @@ import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Layout from '@components/Layout/Layout'
-import commerce from '@lib/api/commerce'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   SITE_ORIGIN_URL,
@@ -26,14 +25,9 @@ import {
   setCurrentCurrency,
 } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
-import {
-  containsArrayData,
-  getDataByUID,
-  parseDataValue,
-  setData,
-} from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -41,77 +35,17 @@ export async function getStaticProps({
   locale,
   locales,
 }: GetStaticPropsContext) {
-  const cachedData = await getDataByUID([
-    Redis.Key.CookiepageWeb,
-    Redis.Key.CookiepageMobileWeb,
-  ])
-  const pageContentWebUIDData: Array<any> =
-    parseDataValue(cachedData, Redis.Key.CookiepageWeb) || []
-  const pageContentMobileWebUIDData: Array<any> =
-    parseDataValue(cachedData, Redis.Key.CookiepageMobileWeb) || []
   const config = { locale, locales }
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-  const promises = new Array<Promise<any>>()
-
-  const fetchData = async (
-    pageContentUIDData: any[],
-    pageContentUIDKey: string,
-    channel: 'Web' | 'MobileWeb'
-  ) => {
-    if (!containsArrayData(pageContentUIDData)) {
-      infra?.currencies
-        ?.map((x: any) => x?.currencyCode)
-        ?.forEach((currencyCode: string, index: number) => {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const pageContentsPromise = commerce.getPagePreviewContent({
-                  id: '',
-                  slug: COOKIES_PAGE_DEFAULT_SLUG,
-                  workingVersion:
-                    process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                  channel: channel,
-                  currency: currencyCode,
-                  cachedCopy: true,
-                })
-                const pageContent = await pageContentsPromise
-                pageContentUIDData.push({
-                  key: currencyCode,
-                  value: pageContent,
-                })
-                await setData([
-                  { key: pageContentUIDKey, value: pageContentUIDData },
-                ])
-                resolve()
-              } catch (error: any) {
-                resolve()
-              }
-            })
-          )
-        })
-    }
-  }
-  fetchData(pageContentWebUIDData, Redis.Key.CookiepageWeb, 'Web')
-  fetchData(
-    pageContentMobileWebUIDData,
-    Redis.Key.CookiepageMobileWeb,
-    'MobileWeb'
-  )
-
-  await Promise.all(promises)
-  const slugsPromise = commerce.getSlugs({ slug: COOKIES_PAGE_DEFAULT_SLUG })
-  const slugs = await slugsPromise
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PRIVACY_POLICY })
+  const pageProps = await props.getPageProps({ slug: COOKIES_PAGE_DEFAULT_SLUG, cookies: {} })
   const hostName = os.hostname()
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(
         locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!
       )),
-      globalSnippets: infra?.snippets ?? [],
-      snippets: slugs?.snippets ?? [],
-      pageContentsWeb: pageContentWebUIDData,
-      pageContentsMobileWeb: pageContentMobileWebUIDData,
       hostName: obfuscateHostName(hostName),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
@@ -233,10 +167,10 @@ function Cookie({
         </NextHead>
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
-      <div className="container">
+      <div className="container mb-10">
         {pageContents?.heading?.map((head: any, Idx: any) => (
           <div key={Idx}>
-            <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold">
+            <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold heading-alignment">
               {head?.heading_herotitle}
             </h1>
             <div

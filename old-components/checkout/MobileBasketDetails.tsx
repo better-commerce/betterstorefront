@@ -47,15 +47,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
   })
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
   const isIncludeVAT = vatIncluded()
-  useEffect(() => {
-    const fetchReferralPromotion = async () => {
-      let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
-      if (referralPromotions?.referralDetails) {
-        setReferralAvailable(true)
-      }
-    }
-    fetchReferralPromotion()
-  }, [])
+
   const handleReferralRegisterUser = async (referralId: any) => {
     // let referralEmail = ''
     // if (guestUser?.email) {

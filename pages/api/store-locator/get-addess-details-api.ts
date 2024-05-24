@@ -1,4 +1,4 @@
-import getAddressDetailByPlaceId from '@framework/storeLocator/getAddressDetailByPlaceId'
+import getAddressDetailByPlaceId from '@framework/store-locator/get-address-detail-by-place-id'
 
 export default async (req: any, res: any) => {
   const { placeId } = req.query

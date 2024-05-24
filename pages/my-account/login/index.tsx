@@ -4,13 +4,17 @@ import NextHead from 'next/head'
 import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useUI } from '@components/ui/context'
-import Login from '@old-components/account/Login'
+import Login from '@components/account/Login'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { decrypt } from '@framework/utils/cipher'
 import { matchStrings } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 function LoginPage({ appConfig, pluginConfig = [] }: any) {
   const router = useRouter()
   const translate = useTranslation()
@@ -32,6 +36,12 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
   }
 
   const { isGuestUser, user } = useUI()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.Login,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   if (!isGuestUser && user.userId) {
     Router.push('/')
@@ -58,13 +68,16 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
 
 LoginPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(LoginPage, PAGE_TYPE)
+export default withDataLayer(LoginPage, PAGE_TYPES.Login)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }

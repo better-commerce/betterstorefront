@@ -10,7 +10,7 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 
 // Other Imports
 import cartHandler from '@components/services/cart'
-import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
+import { getOrderId, getOrderInfo, getRedirectionLocale } from '@framework/utils/app-util'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentStatus } from '@components/utils/payment-constants'
@@ -24,7 +24,7 @@ const IS_RESPONSE_REDIRECT_ENABLED = true
 const PaymentGatewayNotification = (props: IGatewayPageProps) => {
   const orderInfo = getOrderInfo()
   const { associateCart } = cartHandler()
-  const { gateway, params, isCancelled, isCOD = false } = props
+  const { gateway, params, isCancelled, isCOD = false, config } = props
   const {
     user,
     setCartItems,
@@ -151,8 +151,10 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       setCartItems(newCart.data)
       setOrderId(paymentResponseRequest?.orderId)
 
+      const defaultCulture = `${config?.defaultLanguage}-${config?.defaultCountry}`
+      const redirectionLocale = getRedirectionLocale(defaultCulture)
       if (IS_RESPONSE_REDIRECT_ENABLED) {
-        setRedirectUrl('/thank-you')
+        setRedirectUrl(`${redirectionLocale}/thank-you`)
       }
     } else if (
       paymentResponseResult === PaymentStatus.PENDING ||

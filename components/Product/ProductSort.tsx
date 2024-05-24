@@ -8,23 +8,33 @@ import { useUI } from '@components/ui'
 import { Switch } from '@headlessui/react'
 import Radio from '@components/shared/Radio/Radio'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { CURRENT_THEME } from '@components/utils/constants'
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
+
 interface Props {
   products: any
   action: any
   routerSortOption: any
+  featureToggle?: any
 }
 
-export default function ProductSort({ products, action, routerSortOption, }: Props) {
+export default function ProductSort({ products, action, routerSortOption, featureToggle }: Props) {
   const translate = useTranslation()
   const router = useRouter()
   const { isCompared, setIsCompared } = useUI()
   const [enabled, setEnabled] = useState(false)
   const [sortOrderStates, setSortOrderStates] = useState<string>("");
+
   useEffect(() => {
     setEnabled(stringToBoolean(isCompared))
   }, [isCompared])
+
+  useEffect(() => {
+    if (routerSortOption) {
+      const selectedOption = products.sortList.find((item: any) => item.key === routerSortOption);
+      if (selectedOption) {
+        setSortOrderStates(selectedOption.value);
+      }
+    }
+  }, [routerSortOption, products.sortList])
 
   const handleChange = (val: boolean) => {
     setEnabled(val)
@@ -40,7 +50,7 @@ export default function ProductSort({ products, action, routerSortOption, }: Pro
     );
   };
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 md:pr-10 lg:pr-0">
       {featureToggle?.features?.enableCompare &&
         <div>
           <div className="flex items-center justify-end w-full px-0 pt-0 mx-auto sm:pt-1 sm:px-4">
@@ -49,9 +59,9 @@ export default function ProductSort({ products, action, routerSortOption, }: Pro
             </div>
             <div className="flow-root w-10 px-2 sm:w-14">
               <div className="flex justify-center flex-1 mx-auto">
-                <Switch checked={enabled} onChange={handleChange} className={`${enabled ? 'bg-white' : 'bg-gray-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border border-slate-300 transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
+                <Switch checked={enabled} onChange={handleChange} className={`${enabled ? 'bg-switch-enable border-emerald-500' : 'bg-gray-300 border-slate-300'} relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`} >
                   <span className="sr-only">{translate('label.product.compareItemsText')}</span>
-                  <span aria-hidden="true" className={`${enabled ? 'translate-x-4' : 'translate-x-0'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out`} />
+                  <span aria-hidden="true" className={`${enabled ? 'translate-x-4 bg-white' : 'translate-x-0 bg-black'} pointer-events-none inline-block h-[15px] w-[15px] transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`} />
                 </Switch>
               </div>
             </div>
@@ -70,7 +80,7 @@ export default function ProductSort({ products, action, routerSortOption, }: Pro
                 }
                 `}
             >
-              <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none">
+              <svg className="w-4 h-4 dark:text-black" viewBox="0 0 20 20" fill="none">
                 <path d="M11.5166 5.70834L14.0499 8.24168" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M11.5166 14.2917V5.70834" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M8.48327 14.2917L5.94995 11.7583" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
@@ -78,18 +88,18 @@ export default function ProductSort({ products, action, routerSortOption, }: Pro
                 <path d="M10.0001 18.3333C14.6025 18.3333 18.3334 14.6024 18.3334 10C18.3334 5.39763 14.6025 1.66667 10.0001 1.66667C5.39771 1.66667 1.66675 5.39763 1.66675 10C1.66675 14.6024 5.39771 18.3333 10.0001 18.3333Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
 
-              <span className="ml-2">
-                {sortOrderStates}{sortOrderStates ? products?.sortList.filter((i: any) => i.key === sortOrderStates) : "Sort order"}
+              <span className="ml-2 dark:text-black">
+                {sortOrderStates}{sortOrderStates ? products?.sortList.filter((i: any) => i.key === sortOrderStates) : translate('label.filters.sortOrderText')}
               </span>
               {!sortOrderStates.length ? (
-                <ChevronDownIcon className="w-4 h-4 ml-3" />
+                <ChevronDownIcon className="w-4 h-4 ml-3 dark:text-black" />
               ) : (
-                <span onClick={() => setSortOrderStates("")}> {renderXClear()} </span>
+                <span onClick={() => {action(""); setSortOrderStates("")}}> {renderXClear()} </span>
               )}
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
-              <Popover.Panel className="absolute right-0 z-40 w-screen max-w-sm px-4 mt-3 sm:px-0 lg:max-w-sm">
-                <div className="overflow-hidden bg-white border shadow-xl rounded-2xl dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700">
+              <Popover.Panel className="absolute right-0 z-40 w-screen max-w-sm px-12 mt-3 sm:px-0 lg:max-w-sm">
+                <div className="overflow-hidden bg-white border shadow-xl dark:bg-white rounded-2xl border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-5">
                     {products?.sortList?.map((item: any, index: number) => (
                       <Radio
@@ -98,7 +108,7 @@ export default function ProductSort({ products, action, routerSortOption, }: Pro
                         name="productSort"
                         label={item?.value}
                         defaultChecked={sortOrderStates === item?.value}
-                        onChange={() => { action(item?.key); close(); setSortOrderStates(item.value); }}
+                        onChange={() => { action(item?.key); close(); setSortOrderStates(item?.value); }}
                       />
                     ))}
                   </div>

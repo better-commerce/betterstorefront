@@ -14,6 +14,8 @@ export interface CollectionCard2Props {
   name?: string;
   price?: number;
   description?: string;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 const CollectionCard2: FC<CollectionCard2Props> = ({
@@ -22,6 +24,8 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
   name = "Product Name",
   description = "Product Description",
   price,
+  featureToggle,
+  defaultDisplayMembership,
 }) => {
   const translate = useTranslation();
   return (
@@ -62,7 +66,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
       <div className="relative flex justify-between mt-5">
         {/* TITLE */}
         <div className="flex-1">
-          <h2 className="text-lg font-semibold sm:text-xl ">{name}</h2>
+          <h2 className="text-lg font-semibold sm:text-xl dark:text-black">{name}</h2>
           {/* AUTHOR */}
           <div className="flex items-center mt-3 text-slate-500 dark:text-slate-400">
             <span className="text-sm ">
@@ -75,7 +79,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
             </span>
           </div>
         </div>
-        <Prices className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} />
+        <Prices className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
       </div>
       <Link href={"/product-detail-2"} className="absolute inset-0 "></Link>
     </div>

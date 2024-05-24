@@ -1,22 +1,37 @@
 
-import type { GetStaticPropsContext } from 'next'
-import getAllStores from '@framework/storeLocator/getAllStores'
+import type { GetServerSideProps, GetStaticPropsContext } from 'next'
+import getAllStores from '@framework/store-locator/get-all-stores'
 import dynamic from 'next/dynamic';
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MapWithMarker from '@components/ui/Map/Marker';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer';
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider';
+import { getPagePropType, PagePropType } from '@framework/page-props';
+const PAGE_TYPE = PAGE_TYPES.MyStore
+import useAnalytics from '@components/services/analytics/useAnalytics';
+import { EVENTS_MAP } from '@components/services/analytics/constants';
+
 interface Props {
   data: any
 }
 
-export default function StoreLocatorDetailsPage({ data }: Props) {
+function StoreLocatorDetailsPage({ data }: Props) {
   const router = useRouter()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.StoreLocatorDetail,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
+
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -61,7 +76,7 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
                 <meta property="og:title" content={store?.name} key="ogtitle" />
                 <meta property="og:description" content={store?.name} key="ogdesc" />
               </NextHead>
-              <div className='flex flex-col' key={`store-detail-${storeIdx}`}>
+              <div className='flex flex-col header-space' key={`store-detail-${storeIdx}`}>
                 <div className='flex items-center justify-start gap-1 mb-4 sm:mb-6'>
                   <Link href="/store-locator" passHref>
                     <span className="flex items-end font-14">Stores</span>
@@ -117,8 +132,6 @@ export default function StoreLocatorDetailsPage({ data }: Props) {
           )
         })}
       </div>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1v3pkeBrwwbC-0KPCK5Uuhn77iHg2AjY&libraries=places"></script>
-
     </>
   )
 }
@@ -131,14 +144,20 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export async function getStaticProps({ params, locale }: GetStaticPropsContext) {
   const response = await getAllStores()
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
+
   return {
     props: {
-      data: response
+      ...pageProps,
+      data: response,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }
 }
 
 StoreLocatorDetailsPage.Layout = Layout
+export default withDataLayer(StoreLocatorDetailsPage, PAGE_TYPES.StoreLocatorDetail, true)

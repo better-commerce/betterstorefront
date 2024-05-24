@@ -11,7 +11,7 @@ import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
-const MainNav2Logged = dynamic(() => import('@components/Header/MainNav2Logged'))
+const MainNav = dynamic(() => import('@components/Header/MainNav'))
 const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
 const WishlistSidebarView = dynamic(() => import('@components/shared/Wishlist/WishlistSidebarView'))
 const BulkAddSidebarView = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/BulkAddSidebarView'))
@@ -25,6 +25,7 @@ import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
+import ProductMembershipOfferModal from '@components/membership/ProductMembershipOfferModal'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -48,6 +49,7 @@ interface Props {
     categories: Category[]
     navTree?: any
     reviewData: any
+    featureToggle?: any
   }
   nav: []
   footer: []
@@ -102,19 +104,20 @@ export interface IExtraProps {
   keywords?: any
   config?: any
   pluginConfig?: any
+  featureToggle?: any
 }
 
-const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
+const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, featureToggle = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const { setIsCompared } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
+  const [productMembershipModalData, setProductMembershipModalData] = useState<any>()
 
   useEffect(() => {
-    Router.events.on('routeChangeStart', () => setIsLoading(true))
     Router.events.on('routeChangeComplete', () => {
-      setIsLoading(false)
       setIsCompared('false')
     })
 
@@ -122,11 +125,33 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       document.title = document.location.host
     }
 
+    const closeMemberProductPriceInfo = () => {
+      setProductMembershipModalData({ open: false })
+    }
+    const handleMemberProductPriceInfoViewed = ({ detail: { defaultDisplayMembership, price, isIncludeVAT, } }: any) => {
+      setProductMembershipModalData({ open: (price !== null), defaultDisplayMembership, price, isIncludeVAT, closeCallback: closeMemberProductPriceInfo })
+    }
+    window.addEventListener('MemberProductPriceInfoViewed', handleMemberProductPriceInfoViewed)
     return () => {
-      Router.events.off('routeChangeStart', () => { })
       Router.events.off('routeChangeComplete', () => { })
+      window?.removeEventListener('MemberProductPriceInfoViewed', handleMemberProductPriceInfoViewed);
     }
   }, [])
+
+  useEffect(() => {
+    const handleStart = () => setIsLoading(true);
+    const handleComplete = () => setIsLoading(false);
+
+    router.events.on('routeChangeStart', handleStart);
+    router.events.on('routeChangeComplete', handleComplete);
+    router.events.on('routeChangeError', handleComplete);
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart);
+      router.events.off('routeChangeComplete', handleComplete);
+      router.events.off('routeChangeError', handleComplete);
+    };
+  }, []);
 
   const { locale = 'en-US', ...rest } = useRouter()
 
@@ -161,8 +186,9 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
-        <div className={`text-base sm:pt-20 pt-16 border-b border-slate-200 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} />
+        <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
+          <ProductMembershipOfferModal {...productMembershipModalData} />
+          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           {children}
           <Footer navItems={navTree?.footer} />

@@ -47,15 +47,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
   })
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
   const isIncludeVAT = vatIncluded()
-  useEffect(() => {
-    const fetchReferralPromotion = async () => {
-      let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
-      if (referralPromotions?.referralDetails) {
-        setReferralAvailable(true)
-      }
-    }
-    fetchReferralPromotion()
-  }, [])
+
   const handleReferralRegisterUser = async (referralId: any) => {
     // let referralEmail = ''
     // if (guestUser?.email) {
@@ -141,11 +133,10 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
             <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-300 bg-gray-50">
               <span className="font-medium text-orange-700 font-12">
                 <ShoppingCartIcon className="inline-block w-4 h-4 text-orange-700" />{' '}
-                {open ? translate('common.label.hideText') : translate('common.label.showText') }{translate('label.orderSummary.orderSummaryText')}{' '}
+                {open ? translate('common.label.hideText') : translate('common.label.showText')}{translate('label.orderSummary.orderSummaryText')}{' '}
                 <ChevronDownIcon
-                  className={`inline-block w-4 h-4 text-orange-700 ${
-                    open ? 'rotate-180 transform' : ''
-                  }`}
+                  className={`inline-block w-4 h-4 text-orange-700 ${open ? 'rotate-180 transform' : ''
+                    }`}
                 />
               </span>
               <span className="font-semibold text-black">
@@ -176,15 +167,15 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         productNameWithVoltageAttr =
                           electricVoltAttrLength?.length > 0
                             ? electricVoltAttrLength?.map(
-                                (volt: any, vId: number) => (
-                                  <span key={`voltage-${vId}`}>
-                                    {product?.name?.toLowerCase()}{' '}
-                                    <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
-                                      {volt?.ValueText}
-                                    </span>
+                              (volt: any, vId: number) => (
+                                <span key={`voltage-${vId}`}>
+                                  {product?.name?.toLowerCase()}{' '}
+                                  <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                                    {volt?.ValueText}
                                   </span>
-                                )
+                                </span>
                               )
+                            )
                             : (productNameWithVoltageAttr = product?.name)
                         if (product?.length) {
                           return (
@@ -202,11 +193,10 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         return (
                           <div
                             key={product?.id}
-                            className={`w-full px-2 py-2 mb-2 border rounded items-list ${
-                              product?.price?.raw?.withTax > 0
+                            className={`w-full px-2 py-2 mb-2 border rounded items-list ${product?.price?.raw?.withTax > 0
                                 ? 'bg-white'
                                 : 'bg-emerald-50 border-emerald-400'
-                            }`}
+                              }`}
                           >
                             <div className="grid grid-cols-12 gap-2">
                               <div className="col-span-3">
@@ -232,22 +222,22 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                                           {isIncludeVAT
                                             ? product?.price?.formatted?.withTax
                                             : product?.price?.formatted
-                                                ?.withoutTax}
+                                              ?.withoutTax}
                                           {product?.listPrice?.raw.withTax >
                                             0 &&
-                                          product?.listPrice?.raw.withTax !=
+                                            product?.listPrice?.raw.withTax !=
                                             product?.price?.raw?.withTax ? (
                                             <span className="pl-2 font-normal text-gray-400 line-through font-14">
                                               {' '}
                                               {isIncludeVAT
                                                 ? product?.listPrice.formatted
-                                                    ?.withTax
+                                                  ?.withTax
                                                 : product?.listPrice.formatted
-                                                    ?.withoutTax}
+                                                  ?.withoutTax}
                                             </span>
                                           ) : null}
                                           <span className="pl-2 font-light text-black font-12">
-                                            {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText') }
+                                            {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}
                                           </span>
                                         </span>
                                       </>
@@ -318,10 +308,10 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                                   ? data?.shippingCharge?.raw?.withTax == 0
                                     ? 'FREE'
                                     : data?.shippingCharge?.formatted
-                                        ?.withTax || EmptyString
+                                      ?.withTax || EmptyString
                                   : data?.shippingCharge?.raw?.withoutTax == 0
-                                  ? 'FREE'
-                                  : data?.shippingCharge?.formatted
+                                    ? 'FREE'
+                                    : data?.shippingCharge?.formatted
                                       ?.withoutTax || EmptyString}
                               </dd>
                             </>
@@ -394,15 +384,16 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         {data?.subTotal?.formatted?.withoutTax}
                       </dd>
                     </div>
-                    <div className="flex items-center justify-between pt-2 sm:pt-1">
-                      <dt className="flex items-center text-black font-18">
-                        <span>{translate('label.orderSummary.totalVATText')}</span>
-                      </dt>
-                      <dd className="font-semibold text-black text-md">
-                        {data?.grandTotal?.formatted?.tax}
-                      </dd>
-                    </div>
-
+                    {data?.grandTotal?.raw?.tax > 0 &&
+                      <div className="flex items-center justify-between pt-2 sm:pt-1">
+                        <dt className="flex items-center text-black font-18">
+                          <span>{translate('label.orderSummary.totalVATText')}</span>
+                        </dt>
+                        <dd className="font-semibold text-black text-md">
+                          {data?.grandTotal?.formatted?.tax}
+                        </dd>
+                      </div>
+                    }
                     {cartItems?.deliveryPlans?.length > 0 && (
                       <div className="flex items-center justify-between pt-2 sm:pt-1">
                         <dt className="flex items-center text-black font-18">
@@ -413,10 +404,10 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                             ? cartItems?.shippingCharge?.raw?.withTax == 0
                               ? translate('label.orderSummary.freeText')
                               : cartItems?.shippingCharge?.formatted?.withTax ||
-                                EmptyString
+                              EmptyString
                             : cartItems?.shippingCharge?.raw?.withoutTax == 0
-                            ? translate('label.orderSummary.freeText')
-                            : cartItems?.shippingCharge?.formatted
+                              ? translate('label.orderSummary.freeText')
+                              : cartItems?.shippingCharge?.formatted
                                 ?.withoutTax || EmptyString}
                         </dd>
                       </div>
@@ -483,7 +474,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                        {translate('label.myAccount.beenReferredByFriendHeadingText')}
+                          {translate('label.myAccount.beenReferredByFriendHeadingText')}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
                           <button

@@ -10,10 +10,10 @@ import detail3JPG from "images/products/detail3.jpg";
 import AccordionInfo from "@components/AccordionInfo";
 import Link from "next/link";
 import { generateUri } from "@commerce/utils/uri-util";
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from "@components/utils/textVariables";
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDON_10 } from "@components/utils/textVariables";
 import AttributesHandler from "@components/Product/AttributesHandler";
 import axios from "axios";
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW } from "@components/utils/constants";
+import { Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_PRODUCT_REVIEW, NEXT_UPDATE_CART_INFO } from "@components/utils/constants";
 import ProductTag from "@components/Product/ProductTag";
 import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -25,24 +25,29 @@ import wishlistHandler from "@components/services/wishlist";
 import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { PRODUCTS } from "./Product/data";
+const Engraving = dynamic(() => import('@components/Product/Engraving'))
 
 export interface ProductQuickViewProps {
   className?: string;
   product?: any;
   maxBasketItemsCount?: any
   onCloseModalQuickView?: any
+  featureToggle: any
+  defaultDisplayMembership: any
 }
 
-const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView }) => {
+const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView, featureToggle, defaultDisplayMembership }) => {
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
-  const { openNotifyUser, basketId, cartItems, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
+  const { openNotifyUser, basketId, cartItems, setCartItems, user, openCart, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
   const [quickViewData, setQuickViewData] = useState<any>(undefined)
   const [reviewData, setReviewData] = useState<any>(undefined)
+  const [relatedProducts, setRelatedProducts] = useState<any>(null)
   const [isEngravingOpen, showEngravingModal] = useState(false)
+  const [isPersonalizeLoading, setIsPersonalizeLoading] = useState(false)
   const [sizeInit, setSizeInit] = useState('')
   let currentPage = getCurrentPage()
   const translate = useTranslation();
@@ -61,11 +66,18 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     }
   }
   const productSlug: any = product?.slug;
+
+  const fetchRelatedProducts = async (recordId : string) => {
+    const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId })
+    setRelatedProducts(relatedProducts)
+  }
+
   const handleFetchProductQuickView = (productSlug: any) => {
     const loadView = async (productSlug: string) => {
       const { data: productQuickViewData }: any = await axios.post(NEXT_GET_PRODUCT_QUICK_VIEW, { slug: productSlug })
       const data = productQuickViewData?.product
       const { data: reviewData }: any = await axios.post(NEXT_GET_PRODUCT_REVIEW, { recordId: data?.recordId })
+      fetchRelatedProducts(data?.recordId)
       setQuickViewData(data)
       setReviewData(reviewData?.review)
       if (data) {
@@ -89,6 +101,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         )
 
         const data = productQuickViewData?.product
+        fetchRelatedProducts(data?.recordId)
         setQuickViewData(productQuickViewData?.product)
         setReviewData(reviewData?.review)
         if (data) {
@@ -327,11 +340,88 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     setQuickViewData(undefined)
     onCloseModalQuickView()
   }
-  const isEngravingAvailable = !!product?.relatedProducts?.filter(
-    (item: any) => item?.stockCode === ITEM_TYPE_ADDON
-  ).length
+
+  const isEngravingAvailable =
+    !!relatedProducts?.relatedProducts?.filter(
+      (item: any) => item?.stockCode === ITEM_TYPE_ADDON
+    ).length ||
+    !!product?.customAttributes?.filter(
+      (item: any) => item?.display == 'Is Enabled'
+    ).length
+
   const buttonConfig = buttonTitle()
 
+  const handleEngravingSubmit = (values: any) => {
+    const updatedProduct = {
+      ...product,
+      ...{
+        recordId: selectedAttrData?.productId,
+        stockCode: selectedAttrData?.stockCode,
+      },
+    }
+    const addonProducts = relatedProducts?.relatedProducts?.filter((item: any) => item?.itemType === ITEM_TYPE_ADDON_10)
+    const addonProductsWithParentProduct = addonProducts?.map((item: any) => {
+      item.parentProductId = updatedProduct?.recordId
+      return item
+    })
+    const computedProducts = [
+      ...addonProductsWithParentProduct,
+      updatedProduct,
+    ].reduce((acc: any, obj: any) => {
+      acc.push({
+        ProductId: obj?.recordId || obj?.productId,
+        BasketId: basketId,
+        ParentProductId: obj?.parentProductId || null,
+        Qty: 1,
+        DisplayOrder: obj?.displayOrder || 0,
+        StockCode: obj?.stockCode,
+        ItemType: obj?.itemType || 0,
+        CustomInfo1: values?.line1?.message || null,
+        CustomInfo2: values?.line1?.imageUrl || null,
+        CustomInfo3: values?.line3 || null,
+        CustomInfo4: values?.line4 || null,
+        CustomInfo5: values?.line5 || null,
+        ProductName: obj?.name,
+        ManualUnitPrice: obj?.manualUnitPrice || 0.0,
+        PostCode: obj?.postCode || null,
+        IsSubscription: obj?.subscriptionEnabled || false,
+        IsMembership: obj?.hasMembership || false,
+        SubscriptionPlanId: obj?.subscriptionPlanId || null,
+        SubscriptionTermId: obj?.subscriptionTermId || null,
+        UserSubscriptionPricing: obj?.userSubscriptionPricing || 0,
+        GiftWrapId: obj?.giftWrapConfig || null,
+        IsGiftWrapApplied: obj?.isGiftWrapApplied || false,
+        ItemGroupId: obj?.itemGroupId || 0,
+        PriceMatchReqId:
+          obj?.priceMatchReqId || '00000000-0000-0000-0000-000000000000',
+      })
+      return acc
+    }, [])
+
+    const asyncHandler = async () => {
+      try {
+        const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
+          basketId,
+          products: computedProducts,
+        })
+        await axios.post(NEXT_UPDATE_CART_INFO, {
+          basketId,
+          info: [...Object.values(values)],
+          lineInfo: computedProducts,
+        })
+        setCartItems(newCart.data)
+        showEngravingModal(false)
+        openCart()
+      } catch (error) {
+        console.log(error, 'err')
+      }
+    }
+    asyncHandler()
+  }
+
+  const handleTogglePersonalizationDialog = () => {
+    if (!isPersonalizeLoading) showEngravingModal((v) => !v)
+  }
   const insertToLocalWishlist = () => {
     addToWishlist(product)
     openWishlist()
@@ -445,22 +535,22 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     return (
       <div className="space-y-8">
         <div>
-          <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000">
-            <Link href={`/${product?.slug}`}>{product?.name}</Link>
+          <h2 className="text-2xl font-semibold transition-colors hover:text-primary-6000 dark:text-black">
+            <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView}>{selectedAttrData?.name}</Link>
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} />
-            {product?.reviewCount > 0 &&
+            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={selectedAttrData?.price} listPrice={selectedAttrData?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            {selectedAttrData?.reviewCount > 0 &&
               <>
                 <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
-                <div className="flex items-center">
-                  <Link href={`/${product?.slug}`} className="flex items-center text-sm font-medium" >
+                <div className="flex items-center w-56">
+                  <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
-                      <span>{product?.rating}</span>
+                      <span>{selectedAttrData?.rating}</span>
                       <span className="block mx-2">·</span>
                       <span className="underline text-slate-600 dark:text-slate-400">
-                        {product?.reviewCount} {translate('common.label.reviews')}
+                        {selectedAttrData?.reviewCount} {translate('common.label.reviews')}
                       </span>
                     </div>
                   </Link>
@@ -475,13 +565,13 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           {!isEngravingAvailable && (
             <div className="flex mt-6 sm:mt-4 !text-sm w-full">
               <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn">
+              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 dark:border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
                 {isInWishList(selectedAttrData?.productId) ? (
                   <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                 ) : (
-                  <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                  <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
                 )}
-                <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
               </button>
             </div>
           )}
@@ -493,23 +583,23 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
               </div>
               <div className="flex mt-6 sm:mt-8 sm:flex-col1">
                 <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white uppercase bg-gray-400 border border-transparent rounded-sm sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-400 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
                   <span className="font-bold"> {translate('label.product.engravingText')} </span>
                 </button>
-                <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
+                <button type="button" onClick={handleWishList} className="flex items-center justify-center px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-10 hover:border-pink" >
                   {isInWishList(selectedAttrData?.productId) ? (
                     <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                   ) : (
                     <HeartIcon className="flex-shrink-0 w-6 h-6" />
                   )}
-                  <span className="sr-only"> {translate('label.product.addTofavouriteText')} </span>
+                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                 </button>
               </div>
             </>
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: quickViewData?.description }]} />}
+        {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: selectedAttrData?.description }]} />}
       </div>
     );
   };
@@ -520,22 +610,24 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         <div className="w-full lg:w-[50%] ">
           <div className="relative">
             <div className="aspect-w-16 aspect-h-16">
-              <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
+              <img src={generateUri(selectedAttrData?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={selectedAttrData?.name} />
             </div>
-            {renderStatus()}
-            <LikeButton className="absolute end-3 top-3 " />
+            {renderStatus()}            
           </div>
           <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
-            {product?.images?.slice(0, 2).map((item: any, index: number) => {
+            {selectedAttrData?.images?.slice(0, 2).map((item: any, index: number) => {
               return (
                 <div key={index} className="aspect-w-3 aspect-h-4">
-                  <img src={generateUri(item?.url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={product?.name} />
+                  <img src={generateUri(item?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={item?.name} />
                 </div>
               );
             })}
           </div>
         </div>
-        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8">
+        {isEngravingAvailable && (
+            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
+          )}
+        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0">
           {renderSectionContent()}
         </div>
       </div>

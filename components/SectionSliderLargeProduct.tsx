@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useId, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Heading from "@components/Heading/Heading";
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
@@ -8,6 +8,7 @@ import CollectionCard from "./CollectionCard";
 import CollectionCard2 from "./CollectionCard2";
 import Link from "next/link";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionSliderLargeProductProps {
   className?: string;
@@ -15,40 +16,25 @@ export interface SectionSliderLargeProductProps {
   cardStyle?: "style1" | "style2";
   data?: any;
   heading?: any;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ className = "", cardStyle = "style2", data, heading }) => {
+const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ className = "", cardStyle = "style2", data, heading, featureToggle, defaultDisplayMembership, }) => {
   const sliderRef = useRef(null);
-
   const [isShow, setIsShow] = useState(false);
   const translate = useTranslation()
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: 3,
-      gap: 32,
-      bound: true,
+      perView: 3, gap: 32, bound: true,
       breakpoints: {
-        1280: {
-          gap: 28,
-          perView: 2.5,
-        },
-        1024: {
-          gap: 20,
-          perView: 2.15,
-        },
-        768: {
-          gap: 20,
-          perView: 1.5,
-        },
-
-        500: {
-          gap: 20,
-          perView: 1,
-        },
+        1280: { gap: 28, perView: 2.5, },
+        1024: { gap: 20, perView: 2.15, },
+        768: { gap: 20, perView: 1.5, },
+        500: { gap: 20, perView: 1, },
       },
     };
     if (!sliderRef.current) return;
-
     let slider = new Glide(sliderRef.current, OPTIONS);
     slider.mount();
     setIsShow(true);
@@ -57,37 +43,36 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({ classNa
     };
   }, [sliderRef]);
 
-  const MyCollectionCard =
-    cardStyle === "style1" ? CollectionCard : CollectionCard2;
+  const MyCollectionCard = cardStyle === "style1" ? CollectionCard : CollectionCard2;
 
   return (
-    <div className={`nc-SectionSliderLargeProduct ${className}`}>
+    <div className={`nc-SectionSliderLargeProduct large-product-slider ${className}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {heading?.map((h: any, hIdx: number) => (
           <div key={hIdx}>
-            <Heading isCenter={false} hasNextPrev>
-              {h?.lookbookheading_title}
-            </Heading>
+            <Heading isCenter={false} hasNextPrev>{h?.lookbookheading_title}</Heading>
           </div>
         ))}
 
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {data?.map((product:any, index:number) => (
-              <li className={`glide__slide`} key={index}>
+            {data?.map((product: any, index: number) => (
+              <li className={`glide__slide collection-card-section`} key={index}>
                 <MyCollectionCard
                   name={product?.newlookbook_name}
                   price={product?.newlookbook_price}
                   images={product?.newlookbook_looksimage}
                   primaryImage={product?.newlookbook_primaryimage}
                   description={product?.newlookbook_category}
-                  link={product?.newlookbook_link}
+                  link={sanitizeRelativeUrl(`${product?.newlookbook_link}`)}
+                  featureToggle={featureToggle}
+                  defaultDisplayMembership={defaultDisplayMembership}
                 />
               </li>
             ))}
 
             <li className={`glide__slide`}>
-              <Link href={"/lookbook"} className="relative block group">
+              <Link href={sanitizeRelativeUrl(`/search`)} className="relative block group">
                 <div className="relative rounded-2xl overflow-hidden h-[410px]">
                   <div className="h-[410px] bg-black/5 dark:bg-neutral-800"></div>
                   <div className="absolute flex flex-col items-center justify-center inset-y-6 inset-x-10">

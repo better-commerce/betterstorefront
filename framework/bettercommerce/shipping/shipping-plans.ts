@@ -1,6 +1,7 @@
 import { OMS_SHIPPING_PLANS } from '@components/utils/constants'
 import { OMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   model: any
@@ -31,7 +32,7 @@ export default function getShippingPlans() {
       })
       return response.Result //for omsapi20 response.Result, for oms.dev-omnicx response.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

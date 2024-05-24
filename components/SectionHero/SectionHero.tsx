@@ -5,6 +5,7 @@ import Image from "next/image";
 import ButtonPrimary from "../shared/Button/ButtonPrimary";
 import ButtonSecondary from "../shared/Button/ButtonSecondary";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionHeroProps {
   className?: string;
@@ -32,11 +33,11 @@ const SectionHero: FC<SectionHeroProps> = ({
             {subHeading}
           </span>
           <div className="flex space-x-4 pt-7">
-            <ButtonPrimary href="/search">
+            <ButtonPrimary href={sanitizeRelativeUrl(`/search`)}>
               <span className="">{translate('label.sectionHero.exploreText')}</span>
               <MagnifyingGlassIcon className="w-5 h-5 ml-2.5" />
             </ButtonPrimary>
-            <ButtonSecondary href="/search">
+            <ButtonSecondary href={sanitizeRelativeUrl(`/search`)}>
               <span>{translate('label.sectionHero.createText')}</span>
               <svg className="w-5 h-5 ml-2.5" viewBox="0 0 24 24" fill="none">
                 <path

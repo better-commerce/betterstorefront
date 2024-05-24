@@ -15,12 +15,14 @@ interface DeliveryTypeSelectionProps {
   basket: any
   deliveryTypeMethod: any
   setDeliveryTypeMethod: any
+  featureToggle?: any
 }
 
 const DeliveryTypeSelection = ({
   basket,
   deliveryTypeMethod,
   setDeliveryTypeMethod,
+  featureToggle,
 }: DeliveryTypeSelectionProps) => {
   const translate = useTranslation()
   const DELIVERY_METHODS_TYPE = [

@@ -14,12 +14,14 @@ interface Props {
   products: any
   action: any
   routerSortOption: any
+  featureToggle?: any
 }
 
 export default function ProductSort({
   products,
   action,
   routerSortOption,
+  featureToggle,
 }: Props) {
   const translate = useTranslation()
   const router = useRouter()

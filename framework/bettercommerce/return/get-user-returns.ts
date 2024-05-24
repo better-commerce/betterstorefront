@@ -1,5 +1,6 @@
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 export default async function getReturnData(userId: string, cookies?: any) {
   try {
@@ -10,7 +11,7 @@ export default async function getReturnData(userId: string, cookies?: any) {
     })
     return res
   } catch (error: any) {
-    console.log(error)
+    logError(error)
     throw new Error(error)
   }
 }

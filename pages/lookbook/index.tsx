@@ -16,16 +16,19 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
 SwiperCore.use([Navigation])
 
 function LookbookPage({ data }: any) {
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
-  const {} = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
 
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-    pageCategory: 'Lookbook',
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.LookbookList,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
     omniImg: (data?.length) ? data[0]?.image : IMG_PLACEHOLDER,
   })
 
@@ -109,8 +112,6 @@ function LookbookPage({ data }: any) {
 
 LookbookPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES['Page']
-
 export async function getStaticProps({
   params,
   locale,
@@ -119,18 +120,33 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const lookbookData = await getLookbooks()
 
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
+  const cachedDataUID = {
+    infraUID: Redis.Key.INFRA_CONFIG,
+  }
+  const cachedData = await getDataByUID([
+    cachedDataUID.infraUID,
+  ])
+
+  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+  if (!infraUIDData) {
+    const infraPromise = commerce.getInfra()
+    infraUIDData = await infraPromise
+    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
+  }
+
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: lookbookData,
-      globalSnippets: infra?.snippets ?? [],
+      globalSnippets: infraUIDData?.snippets ?? [],
       snippets: [],
     },
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 
-export default withDataLayer(LookbookPage, PAGE_TYPE)
+export default withDataLayer(LookbookPage, PAGE_TYPES.Lookbook)

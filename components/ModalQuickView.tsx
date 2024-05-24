@@ -3,16 +3,17 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { FC, Fragment } from "react";
 import ProductQuickView from "./ProductQuickView";
-import ProductQuickView2 from "./ProductQuickView2";
 import { usePathname } from "next/navigation";
 import ButtonClose from "./shared/ButtonClose/ButtonClose";
 
 export interface ModalQuickViewProps {
-  show: boolean;
-  productData: any;
-  deviceInfo?: any;
-  maxBasketItemsCount?: any;
+  readonly show: boolean;
+  readonly productData: any;
+  readonly deviceInfo?: any;
+  readonly maxBasketItemsCount?: any;
   onCloseModalQuickView: () => void;
+  readonly featureToggle: any;
+  readonly defaultDisplayMembership: any;
 }
 
 const ModalQuickView: FC<ModalQuickViewProps> = ({
@@ -21,6 +22,8 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
   deviceInfo,
   maxBasketItemsCount,
   onCloseModalQuickView,
+  featureToggle,
+  defaultDisplayMembership,
 }) => {
   const pathname = usePathname();
 
@@ -28,7 +31,7 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
     <Transition appear show={show} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-50"
+        className="fixed inset-0 z-50 cart-z-index-9999"
         onClose={onCloseModalQuickView}
       >
         <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
@@ -59,14 +62,14 @@ const ModalQuickView: FC<ModalQuickViewProps> = ({
           >
             <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
               <div
-                className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl lg:rounded-2xl dark:bg-neutral-900 dark:border dark:border-slate-700 dark:text-slate-100"
+                className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-white shadow-xl lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100"
               >
                 <span className="absolute z-50 end-3 top-3">
                   <ButtonClose onClick={onCloseModalQuickView} />
                 </span>
 
                 <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} />
+                  <ProductQuickView product={productData} onCloseModalQuickView={onCloseModalQuickView} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 </div>
               </div>
             </div>

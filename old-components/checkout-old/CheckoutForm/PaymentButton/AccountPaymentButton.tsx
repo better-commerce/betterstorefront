@@ -43,7 +43,7 @@ export class AccountPaymentButton extends BasePaymentButton {
       const userId = uiContext?.user?.userId
       uiContext?.setOverlayLoaderState({
         visible: true,
-        message: translate('label.checkoutForm.validatingAccount'),
+        message: translate('common.label.validatingAccountText'),
       })
       const {
         errors = [],
@@ -77,7 +77,7 @@ export class AccountPaymentButton extends BasePaymentButton {
           if (creditAvailable?.raw?.withTax <= creditLimit?.raw?.withTax) {
             uiContext?.setOverlayLoaderState({
               visible: true,
-              message: translate('label.checkoutForm.pleaseWaitText'),
+              message: translate('common.label.pleaseWaitText'),
             })
             const { state, result: orderResult } = await super.confirmOrder(
               paymentMethod,

@@ -9,36 +9,17 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string }>) {
-  let pdpCachedImages = null
-  const productPromise = commerce.getProductPreview({ query: params!.slug[0] })
-  const product = await productPromise
-
-  const infraPromise = commerce.getInfra()
-  const infra = await infraPromise
-
-  try {
-    if (product?.product?.productCode) {
-      // GET SELECTED PRODUCT ALL REVIEWS
-      const pdpCachedImagesPromise = commerce.getPdpCachedImage({
-        query: product?.product?.productCode,
-      })
-
-      pdpCachedImages = await pdpCachedImagesPromise
-    }
-  } catch (error: any) {}
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PDP_PREVIEW })
+  const pageProps = await props.getPageProps({ slug: params!.slug[0], cookies: {} })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      data: product,
-      slug: params!.slug[0],
-      globalSnippets: infra?.snippets ?? [],
-      snippets: product?.snippets ?? [],
-      pdpCachedImages: pdpCachedImages?.images
-        ? JSON.parse(pdpCachedImages?.images)
-        : [],
     },
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }

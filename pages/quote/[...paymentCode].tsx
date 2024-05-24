@@ -23,6 +23,8 @@ import {
 } from '@components/utils/constants'
 import { AlertType } from '@framework/utils/enums'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 const PaymentLinkPage = ({ paymentCode, deviceInfo, config }: any) => {
   const {
@@ -127,9 +129,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
   const params: any = context?.query
   const paymentCode = params?.paymentCode?.length ? params?.paymentCode[0] : ''
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       paymentCode: paymentCode,
     }, // will be passed to the page component as props

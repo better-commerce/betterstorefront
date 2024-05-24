@@ -15,6 +15,8 @@ interface Props {
   clearAll: any
   routerSortOption: any
   removeFilter: any
+  featureToggle?: any
+  isBrandPLP?: boolean
 }
 
 export default function Filters({
@@ -25,6 +27,8 @@ export default function Filters({
   clearAll,
   routerSortOption,
   removeFilter,
+  featureToggle,
+  isBrandPLP = false 
 }: Props) {
   const [open, setOpen] = useState(false)
   const translate = useTranslation()
@@ -53,7 +57,7 @@ export default function Filters({
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 flex z-999" onClose={setOpen}>
           <Transition.Child as={Fragment} enter="transition-opacity ease-linear duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="transition-opacity ease-linear duration-300" leaveFrom="opacity-100" leaveTo="opacity-0" >
-            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-900/20" />
           </Transition.Child>
 
           <Transition.Child as={Fragment} enter="transition ease-in-out duration-300 transform" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition ease-in-out duration-300 transform" leaveFrom="translate-x-0" leaveTo="translate-x-full" >
@@ -66,8 +70,10 @@ export default function Filters({
                 </button>
               </div>
 
-              {products.filters?.map((section: any) => (
-                <Disclosure as="div" key={section.name} className="p-0 bg-gray-100 border-t border-white border-y-2" >
+              {products.filters?.map((section: any, sectionIdx: number) => {
+                if (isBrandPLP && section?.name === "Brand") return <></>
+                return(
+                  <Disclosure as="div" key={section.name} className="p-0 bg-gray-100 border-t border-white border-y-2" >
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex items-center justify-between w-full px-4 py-3">
@@ -82,13 +88,14 @@ export default function Filters({
                     </>
                   )}
                 </Disclosure>
-              ))}
+                )
+               })}
             </div>
           </Transition.Child>
         </Dialog>
       </Transition.Root>
 
-      <section aria-labelledby="filter-heading-filter" className="flex items-center justify-start w-screen gap-2 px-0 py-0 text-center sm:justify-between mob-w-screen sm:px-4 lg:max-w-7xl lg:px-8" >
+      <section aria-labelledby="filter-heading-filter" className="flex items-center justify-start w-screen gap-2 px-0 py-2 text-center justify-between mob-w-screen sm:px-4 lg:max-w-7xl pr-12 pl-4" >
         <h2 id="filter-heading-filter" className="sr-only"> {translate('label.filters.filtersText')} </h2>
         <div className="relative col-start-1 row-start-1 py-2 sm:py-3">
           <div className="flex mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
@@ -97,20 +104,20 @@ export default function Filters({
             </button>
           </div>
         </div>
-        <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} />
+        <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />
       </section>
       {appliedFilters?.length > 0 && (
         <>
-          <div className='flex items-center justify-between px-4'>
+          <div className={`flex items-center justify-between px-4 ${appliedFilters?.length === 1 && isBrandPLP ? 'hide-clear-all-plp' : ''}`}>
             <h4 className="flex mb-2 text-sm font-bold"> {translate('label.filters.appliedFiltersText')} </h4>
             <div className="pl-6">
               <button onClick={clearAll} type="button" className="text-gray-500" > {translate('label.filters.clearAllText')} </button>
             </div>
           </div>
           <div className="flex flex-wrap">
-            <div className="flex flex-wrap">
+            <div className={`flex flex-wrap filter-wrap-section ${isBrandPLP ? 'brand-filter-wrap' : ''}`}>
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
-                <div key={`applied-filter-${idx}`} className="flex w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl" >
+                <div key={`applied-filter-${idx}`} className="flex filter-label-applied w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl" >
                   {appliedFilter?.name && (
                     <div className="flex">
                       <span className="font-medium"> {appliedFilter?.name}:{' '} </span>

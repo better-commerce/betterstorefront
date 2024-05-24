@@ -1,3 +1,4 @@
+import { logError } from '@framework/utils/app-util'
 import axios from 'axios'
 
 const url =
@@ -35,7 +36,7 @@ export default function loqateAddress() {
         }
       }
     } catch (error: any) {
-      console.log(error, 'err')
+      logError(error)
       // throw new Error(error.message)
     }
   }
