@@ -46,7 +46,7 @@ import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
-const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`)
+const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -100,7 +100,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     deviceType: DeviceType.UNKNOWN,
     isOnlyMobile: undefined,
   })
-  const [updatedPageProps, setUpdatedPageProps] = useState({...pageProps, featureToggle, })
+  const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
   const [campaignData, setCampaignData] = useState()
 
   const keywordsData = pageProps?.keywords || []
@@ -355,7 +355,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
               <CustomerReferral router={router} />
               <SessionProvider session={pageProps?.session}>
                 <Component
-                  {...updatedPageProps}
+                  {...pageProps}
                   campaignData={campaignData}
                   location={location}
                   ipAddress={location.Ip}
@@ -373,7 +373,9 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   )
 }
 
-MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> => {
+MyApp.getInitialProps = async (
+  context: AppContext
+): Promise<AppInitialProps> => {
 
   const { ctx, Component } = context
   const { locale } = ctx
@@ -394,6 +396,7 @@ MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> =>
       urlReferrer,
       clientIPAddress,
       locale,
+      featureToggle,
     },
   }
 }
