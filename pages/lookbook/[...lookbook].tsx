@@ -10,6 +10,7 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
+  CURRENT_THEME,
   EmptyObject,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
@@ -29,8 +30,9 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Guid } from '@commerce/types'
 import { stringToNumber } from '@framework/utils/parse-util'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
-function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+function LookbookDetailPage({ data, slug, deviceInfo, config, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const router = useRouter()
   const { basketId, openCart, setCartItems, isCompared } = useUI()

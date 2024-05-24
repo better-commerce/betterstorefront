@@ -41,6 +41,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+const featureToggle = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const PAGE_TYPE = PAGE_TYPES.SubCategoryList
 declare const window: any
@@ -275,7 +276,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
+function CategoryPage({ category, slug, products, deviceInfo, config, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const qsFilters = router?.query?.filters
