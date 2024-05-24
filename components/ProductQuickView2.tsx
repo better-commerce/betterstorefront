@@ -24,9 +24,11 @@ import { PRODUCTS } from "./Product/data";
 
 export interface ProductQuickView2Props {
   className?: string;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
+const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", featureToggle, defaultDisplayMembership }) => {
   const translate = useTranslation()
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
@@ -44,6 +46,8 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
           show={t.visible}
           sizeSelected={sizeSelected}
           variantActive={variantActive}
+          featureToggle={featureToggle}
+          defaultDisplayMembership={defaultDisplayMembership}
         />
       ),
       { position: "top-right", id: "nc-product-notify", duration: 3000 }
@@ -208,6 +212,8 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "" }) => {
               contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
               price={112}
               listPrice={122}
+              featureToggle={featureToggle}
+              defaultDisplayMembership={defaultDisplayMembership}
             />
 
             <div className="h-6 border-l border-slate-300 dark:border-slate-700"></div>

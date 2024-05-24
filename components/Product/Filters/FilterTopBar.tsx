@@ -8,9 +8,11 @@ interface Props {
   clearAll: any
   routerSortOption: any
   removeFilter: any
+  featureToggle?: any
+  isBrandPLP?: boolean
 }
 
-export default function FiltersRightOpen({ products = { filters: [] }, handleSortBy, routerFilters, clearAll, routerSortOption, removeFilter }: Props) {
+export default function FiltersRightOpen({ products = { filters: [] }, handleSortBy, routerFilters, clearAll, routerSortOption, removeFilter, featureToggle, isBrandPLP = false  }: Props) {
   const translate = useTranslation()
   const appliedFilters = products?.filters?.reduce(
     (acc: any, obj: any) => {
@@ -29,20 +31,20 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
   return (
     <section aria-labelledby="filter-heading" className="items-center justify-between flex-1 hidden w-full py-4 text-center sm:mb-0 sm:flex sm:pr-2 lg:pr-6 flex-end mob-filter" >
       {appliedFilters?.length > 0 ? (
-        <div className="relative col-start-1 row-start-1 py-2 pl-4">
+        <div className={`relative col-start-1 row-start-1 py-2 pl-4 ${isBrandPLP ? 'brand-plp-filter-show' : ''}`}>
           <div className="flex px-0 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-0 lg:px-0">
-            <button onClick={clearAll} type="button" className="text-gray-500"> {translate('label.filters.clearAllText')} </button>
-            <div className="flex flex-wrap">
+            <button onClick={clearAll} type="button" className={`text-gray-500 ${appliedFilters?.length === 1 && isBrandPLP ? 'hide-clear-all-plp' : ''}`}> {translate('label.filters.clearAllText')} </button>
+            <div className={`flex flex-wrap filter-wrap-section ${isBrandPLP ? 'brand-filter-wrap' : ''}`}>
               {appliedFilters?.map((appliedFilter: any, idx: number) => {
                 let secondValue = appliedFilter?.Value;
                 if (appliedFilter?.Value) {
                   const parts = appliedFilter.Value.split('|');
-                  if (parts.length > 1) {
+                  if (parts?.length > 1) {
                     secondValue = parts[1];
                   }
                 }
                 return (
-                  <div key={`applied-filter-top-bar-${idx}`} className="flex justify-center m-1 text-gray-600" >
+                  <div key={`applied-filter-top-bar-${idx}`} className="flex justify-center m-1 text-gray-600 filter-label-applied" >
                     {appliedFilter?.name && (
                       <span className="flex px-2 py-1 font-medium text-gray-600 border font-14 border-slate-300 bg-slate-50 rounded-2xl">
                         {secondValue}
@@ -62,7 +64,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
       ) : (
         <div></div>
       )}
-      <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} />
+      {!!products?.results?.length && <ProductSort routerSortOption={routerSortOption} products={products} action={handleSortBy} featureToggle={featureToggle} />}
     </section>
   )
 }

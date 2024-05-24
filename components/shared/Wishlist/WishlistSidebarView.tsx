@@ -251,7 +251,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                                   <div className="flex justify-end w-full">
                                     <button
                                       type="button"
-                                      className="font-medium text-black hover:text-indigo-500"
+                                      className="font-medium border rounded-xl !text-xs lg:text-md py-1 px-4 bg-black text-white hover:bg-gray-700 truncate"
                                       onClick={() => handleAddToCart(product)}
                                     >
                                       {translate('label.basket.addToBagText')}

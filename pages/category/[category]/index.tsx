@@ -11,25 +11,24 @@ import 'swiper/css/navigation'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { Redis } from '@framework/utils/redis-constants'
-import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
+import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError, sanitizeRelativeUrl } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -37,7 +36,19 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const PAGE_TYPE = PAGE_TYPES.Category
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { Guid } from '@commerce/types'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import FeaturedCategory from '@components/category/FeaturedCategory'
+import FeaturedBanner from '@components/category/FeaturedBanner'
+import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
+import FeaturedBrand from '@components/category/FeaturedBrand'
+import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
+
+const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
 
 export async function getStaticProps(context: any) {
@@ -45,12 +56,17 @@ export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
   const slug = slugName + '/' + context.params[slugName]
 
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+
   const cachedDataUID = {
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
     infraUID: Redis.Key.INFRA_CONFIG,
     categorySlugUID: Redis.Key.Category.Slug + '_' + slug,
     categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug,
   }
   const cachedData = await getDataByUID([
+    cachedDataUID.allMembershipsUID,
     cachedDataUID.infraUID,
     cachedDataUID.categorySlugUID,
     cachedDataUID.categoryProductUID,
@@ -88,6 +104,39 @@ export async function getStaticProps(context: any) {
     }
   }
 
+  let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)
+  if (!allMembershipsUIDData) {
+    const data = {
+      "SearchText": null,
+      "PricingType": 0,
+      "Name": null,
+      "TermType": 0,
+      "IsActive": 1,
+      "ProductId": Guid.empty,
+      "CategoryId": Guid.empty,
+      "ManufacturerId": Guid.empty,
+      "SubManufacturerId": Guid.empty,
+      "PlanType": 0,
+      "CurrentPage": 0,
+      "PageSize": 0
+    }
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
+    allMembershipsUIDData = await membershipPlansPromise
+    await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
+  }
+
+  let defaultDisplayMembership = EmptyObject
+  if (allMembershipsUIDData?.result?.length) {
+    const membershipPlan = allMembershipsUIDData?.result?.sort((a: any, b: any) => a?.price?.raw?.withTax - b?.price?.raw?.withTax)[0]
+    if (membershipPlan) {
+      const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
+      if (promoCode) {
+        const promotion = await commerce.getPromotion(promoCode)
+        defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
+      }
+    }
+  }
+
   if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     if (categorySlugUIDData?.status === "NotFound") {
       return notFoundRedirect()
@@ -101,24 +150,28 @@ export async function getStaticProps(context: any) {
       return {
 
         props: {
+          ...pageProps,
           ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
+          defaultDisplayMembership,
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
     } else {
       return {
         props: {
+          ...pageProps,
           ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
+          defaultDisplayMembership,
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -126,12 +179,14 @@ export async function getStaticProps(context: any) {
   } else {
     return {
       props: {
+        ...pageProps,
         ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         category: categorySlugUIDData,
         slug,
         products: null,
         globalSnippets: infraUIDData?.snippets ?? [],
         snippets: categorySlugUIDData?.snippets ?? [],
+        defaultDisplayMembership,
       },
       revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
@@ -165,6 +220,7 @@ export const ACTION_TYPES = {
   SORT_ORDER: 'SORT_ORDER',
   CLEAR: 'CLEAR',
   HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI',
+  SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
@@ -191,6 +247,7 @@ const {
   SORT_ORDER,
   CLEAR,
   HANDLE_FILTERS_UI,
+  SET_FILTERS,
   ADD_FILTERS,
   REMOVE_FILTERS,
   SET_CATEGORY_ID,
@@ -217,6 +274,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
       return { ...state, categoryId: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -231,15 +290,11 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryLandingPage({
-  category,
-  slug,
-  products,
-  deviceInfo,
-  config,
-}: any) {
+function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage
@@ -267,7 +322,7 @@ function CategoryLandingPage({
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
         categoryId: category.id,
       },
     },
@@ -275,7 +330,7 @@ function CategoryLandingPage({
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
     ],
     ([url, body]: any) => postData(url, body),
     {
@@ -292,6 +347,7 @@ function CategoryLandingPage({
       currentPage: 1,
       filters: [],
       categoryId: category.id,
+      sortBy: null,
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
@@ -302,17 +358,32 @@ function CategoryLandingPage({
     dispatch({ type: PAGE, payload: 1 })
   }
 
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
+    entity: JSON.stringify({
+      id: category?.id,
+      name: category?.name || EmptyString,
+    }),
+    entityId: category?.id || EmptyGuid,
+    entityName: PAGE_TYPE,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
+    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
+  })
+
   useEffect(() => {
     if (category.id !== state.categoryId)
       dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+    // for Engage
+    if (typeof window !== "undefined" && window?.ch_session) {
+      window.ch_page_view_before({ item_id: category?.name || EmptyString })
+    }
   }, [category.id])
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
     if (
-      data?.products?.currentPage !==
-      productListMemory?.products?.currentPage ||
-      data?.products?.total !== productListMemory?.products?.total
+      data.products.currentPage !== productListMemory.products.currentPage ||
+      data.products.total !== productListMemory.products.total ||
+      data.products.sortBy !== productListMemory.products.sortBy
     ) {
       setProductListMemory((prevData: any) => {
         let dataClone = { ...data }
@@ -333,24 +404,15 @@ function CategoryLandingPage({
     if (category.featuredProductCSV != '' && category.featuredProductCSV) {
       CSVCollection = category?.featuredProductCSV?.split(',')
       async function handleApiCall() {
-        const data: any = Promise.all(
-          CSVCollection?.map(async (val: any) => {
-            const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
-              sortBy: '',
-              sortOrder: '',
-              currentPage: 1,
-              filters: [],
-              freeText: val || '',
-            })
-            return res?.data.products
-          })
-        )
-          .then((results) => {
-            setMinimalProd(results)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+        const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
+          sortBy: '',
+          sortOrder: '',
+          currentPage: 1,
+          filters: [],
+          stockCodes: CSVCollection || '',
+        })
+        setMinimalProd(res?.data.products)
+        return res?.data.products
       }
       handleApiCall()
     }
@@ -365,18 +427,34 @@ function CategoryLandingPage({
       return () => {
         window?.removeEventListener('scroll', trackScroll)
       }
-    } /*else {
-      resetPageScroll()
-    }*/
-
+    }
   }, [])
 
   useEffect(() => {
-    const dataToPass = IS_INFINITE_SCROLL
-      ? productListMemory?.products
-      : data?.products // productListMemory?.products
+    const dataToPass = IS_INFINITE_SCROLL ? productListMemory?.products : data?.products
     setProductDataToPass(dataToPass)
   }, [productListMemory?.products, data?.products])
+
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
+
+  useEffect(() => {
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value }))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value })))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -456,6 +534,14 @@ function CategoryLandingPage({
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
+  const onToggleBrandListPage = () => {
+    router.push(`/category/shop-all/${slug?.replace('category/', '')}`)
+  }
+  const filterBrandData = ({ key, brand }: any) => {
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
+
   return (
     <>
       <NextHead>
@@ -469,244 +555,129 @@ function CategoryLandingPage({
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <section className="main-section">
-        <div className="container mx-auto mt-4 bg-transparent lg:pt-6">
+      <section className="main-section dark:bg-white">
+        <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
           {category?.breadCrumbs && (
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
           )}
         </div>
         <div className="container">
-          <div className='flex flex-col'>
-            <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl">
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+            <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
             {category?.description &&
-              <div className='flex justify-between w-full align-bottom'>
-                <span className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(category?.description) }} ></span>
+              <div className='w-full'>
+                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
+                  <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                </span>
               </div>
             }
           </div>
-          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {products?.total} results</span>
-            <div className="flex justify-end align-bottom">
-              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-            </div>
-          </div>
-          <hr className='border-slate-200 dark:border-slate-700' />
         </div>
-        {category?.isFeatured != false ? (
-          <div className="container">
-            <div className="py-4">
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
-                <div className="container mx-auto mb-4">
-                  <h2 className="block text-xl font-medium sm:text-2xl lg:text-2xl">{translate('label.category.popularCategoriesText')} </h2>
-                </div>
-              )}
-              <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
-                {category?.subCategories?.map((feature: any, cdx: number) => (
-                  <div key={cdx}>
-                    {feature?.isFeatured == true && (
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          {feature?.image != '' ? (
-                            <img src={generateUri(feature?.image, 'h=160&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          ) : (
-                            <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          )}
-                          <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                            <Link href={`/${feature?.link}`} className="btn-primary-white font-14" >
-                              <span>{feature?.name}</span>
-                            </Link>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    )}
-                  </div>
-                ))}
-              </Swiper>
-            </div>
-            {/* popular category start */}
-
-            {/* category banner info start */}
-            <div className="w-full py-4">
-              {category && category?.images && category?.images.length ? (
-                category?.images.map((cat: any, idx: number) => (
-                  <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
-                    <div className="flex items-center justify-center order-2 p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
-                      <div className="w-full h-full">
-                        <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                          <div className="sm:w-2/4 sm:pr-20">
-                            <h2 className="text-white uppercase"> {cat?.name} </h2>
-                            <p className="mt-5 font-light text-white"> {cat?.description} </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="order-1 sm:order-2">
-                      <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'Image'} width={700} height={700} />
-                    </div>
-                  </div>
-                ))
-              ) : null}
-            </div>
-            {/* category banner info End */}
-
-            {/* feature brand section start*/}
-            <div className="px-4 py-6 mx-auto md:w-4/5 sm:px-0">
-              <div className="grid max-w-lg gap-5 mx-auto lg:grid-cols-3 lg:max-w-none">
-                {category?.featuredBrand?.map((feature: any, fdx: number) => (
-                  <div className="flex flex-col overflow-hidden shadow-lg" key={fdx} >
-                    <div className="flex-shrink-0">
-                      <>
-                        {feature?.logoImageName != '' ? (
-                          <img src={generateUri(feature?.logoImageName, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                        ) : (
-                          <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                        )}
-                      </>
-                    </div>
-                    <div className="flex flex-col justify-between flex-1 p-6 bg-blue-web">
-                      <div className="flex-1">
-                        <Link href={`/${feature?.slug}`} className="block mt-2">
-                          <p className="text-xl font-semibold text-white"> {feature?.manufacturerName} </p>
-                          <div className="mt-3 text-white font-18" dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(feature?.description), }} ></div>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* feature brand section End*/}
-
-            {minimalProd?.length > 0 && (
-              <div className="py-6">
-                <div className="px-4 mx-auto mb-4 md:w-4/5 sm:px-0">
-                  <h2 className="mb-2 font-bold uppercase font-18">
-                    {translate('label.category.relatedCategoriesText')}
-                  </h2>
-                  <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 5, }, }} className="mySwier" >
-                    {minimalProd?.map((product: any, cdx: number) => (
-                      <SwiperSlide key={cdx}>
-                        <div className="relative group">
-                          <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                          <ProductCard data={product.results || []} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
-              </div>
-            )}
-
-            {/* feature brand section End*/}
-
-            {/* related category  */}
-            <div className="py-6">
-              <div className="px-4 mx-auto mb-4 2xl:w-4/5 sm:px-4 lg:px-6 2xl:px-0">
-                <h2 className="mb-2 font-bold uppercase font-18"> {translate('label.category.relatedCategoriesText')} </h2>
-                <Swiper spaceBetween={0} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 5, }, }} className="mySwier" >
-                  {category?.linkGroups?.length > 0 && category?.linkGroups[0]?.items?.map((related: any, cdx: number) => (
-                    <SwiperSlide key={cdx}>
-                      <div className="relative group">
-                        <div className="absolute top-0 left-0 w-full h-full bg-transparent group-hover:bg-black/30"></div>
-                        <>
-                          {related?.image != '' ? (
-                            <img src={generateUri(related?.image, "h=200&fm=webp") || IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          ) : (
-                            <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full" alt="Image" width={240} height={160} />
-                          )}
-                        </>
-                        <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                          <Link href={`/${related?.link}`} className="btn-primary-white font-14" >
-                            <span>{related?.name}</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="w-full px-0 py-0 mx-auto sm:px-0">
-              <div className="container py-0 mx-auto">
-                {category && category?.images && category?.images.length ? (category?.images.map((cat: any, idx: number) => (
-                  <div className="relative grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2" key={idx} >
-                    <div className="flex items-center justify-center order-2 w-full h-full p-4 py-8 bg-blue-web sm:py-0 sm:p-0 sm:order-1">
-                      <div className="relative sm:absolute sm:top-2/4 sm:left-2/4 sm:-translate-x-2/4 sm:-translate-y-2/4 cat-container">
-                        <div className="sm:w-2/4 sm:pr-20">
-                          <h2 className="text-white uppercase"> {cat?.name} </h2>
-                          <p className="mt-5 font-light text-white"> {cat?.description} </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="order-1 sm:order-2">
-                      <img src={generateUri(cat?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} className="w-full" alt={category?.name || 'category'} width={700} height={700} />
-                    </div>
-                  </div>
-                ))
-                ) : null}
-              </div>
-              {/* category banner info End */}
+        {category?.linkGroups?.length > 0 ?
+          (
+            <div className='container mx-auto category-container'>
               {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                <div className="container py-6">
-                  {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 && (
-                    <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2>
-                  )}
-                  <Swiper spaceBetween={4} slidesPerView={1} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 3, }, 1024: { slidesPerView: 4, }, 1400: { slidesPerView: 4, }, }} className="mySwier" >
-                    {category?.subCategories?.map((featured: any, featuredIdx: number) => (
-                      <div key={featuredIdx}>
-                        {featured?.isFeatured == true && (
-                          <SwiperSlide key={featuredIdx}>
-                            <div className="relative border group rounded-2xl bg-slate-100 border-slate-100">
-                              <>
-                                {featured?.image != '' ? (
-                                  <img src={generateUri(featured?.image, 'h=240&fm=webp') || IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                                ) : (
-                                  <img src={IMG_PLACEHOLDER} className="object-fill object-center w-full rounded-2xl" alt="Image" width={240} height={160} />
-                                )}
-                              </>
-                              <div className="absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4">
-                                <Link href={`/${featured?.link}`} className="px-4 py-2 text-white bg-black rounded-lg font-14">
-                                  <span>{featured?.name}</span>
-                                </Link>
-                              </div>
-                            </div>
-                          </SwiperSlide>
-                        )}
-                      </div>
-                    )
-                    )}
-                  </Swiper>
-                </div>
+                <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo} />
               }
-              {products?.total > 0 ? (
-                <div className="container grid grid-cols-1 mx-auto sm:grid-cols-12">
-                  {!!products && (products?.filters?.length > 0 ? (
+              <div className='grid grid-cols-1 gap-4 px-4 sm:grid-cols-12 sm:gap-10 sm:px-0'>
+                <div className={`${CURRENT_THEME != 'green' ? 'sm:col-span-3' : 'sm:col-span-2'}`}>
+                  <div className="pt-2 sm:pb-8">
+                    {category?.linkGroups?.map((grp: any, grpIdx: number) => (
+                      <div className="mx-auto sm:mb-4" key={`linkGrp-${grpIdx}`}>
+                        <h2 className="block mb-4 text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">{grp?.name}</h2>
+                        {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
+                          <Link href={item?.link != null ? sanitizeRelativeUrl(`/${item?.link}`) : `#`} className="flex justify-start w-full py-1 text-left text-black font-14 hover:underline" key={cdx}>
+                            <span>{item?.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className={`${CURRENT_THEME != 'green' ? 'space-y-6 sm:col-span-9' : 'space-y-6 sm:col-span-10'}`}>
+                  <FeaturedBanner category={category} />
+                  {category?.featuredBrand?.length > 0 &&
+                    <FeaturedBrand featuredBrand={category?.featuredBrand} filterBrandData={filterBrandData} />
+                  }
+                  {minimalProd?.results?.length > 0 &&
+                    <>
+                      <div className='flex justify-between mb-2'>
+                        <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">Featured Products</h2>
+                        <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
+                      </div>
+                      <div className={`${CURRENT_THEME != 'green' ? 'grid grid-cols-1 gap-4 sm:grid-cols-3' : 'grid grid-cols-1 gap-4 sm:grid-cols-5'}`}>
+                        {minimalProd?.results?.map((product: any, pIdx: number) => (
+                          <div key={pIdx}>
+                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  }
+                </div>
+              </div>
+              <div className='flex flex-col w-full col-span-12 overflow-hidden'>
+                <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+              </div>
+            </div>
+          ) : (
+            <div className="container mx-auto">
+              <FeaturedBanner category={category} />
+              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+                <FeaturedCategory featuredCategory={category?.subCategories} />
+              }
+              {category?.featuredBrand?.length > 0 &&
+                <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+              }
+              {productDataToPass?.results?.length > 0 &&
+                <>
+                  <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
+                    <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                    <div className="flex justify-end align-bottom">
+                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                    </div>
+                  </div>
+                  <hr className='border-slate-200 dark:border-slate-200' />
+                </>
+              }
+              {productDataToPass?.results?.length > 0 ? (
+                <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
+                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                     <>
                       {isMobile ? (
-                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
                         <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                       )}
-                      <div className="sm:col-span-10 p-[1px]">
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                         {isMobile ? null : (
-                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
+                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                         )}
-                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                       </div>
                     </>
                   ) : (
                     <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} />
-                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
+                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     </div>
                   ))}
                   <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+                  <div className='flex flex-col w-full col-span-12 overflow-hidden'>
+                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                    <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  </div>
                 </div>
               ) : (
                 <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
@@ -716,8 +687,8 @@ function CategoryLandingPage({
                 </div>
               )}
             </div>
-          </>
-        )}
+          )}
+
       </section>
     </>
   )

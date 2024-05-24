@@ -1,13 +1,24 @@
-import { Cookie } from '@framework/utils/constants'
-import { EVENTS_MAP } from './constants'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const endpoint = 'https://omnilytics.bettercommerce.io/data'
+//
+import { Cookie, OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import { CUSTOM_EVENTS, EVENTS_MAP } from './constants'
+import { EmptyGuid, EmptyObject, EmptyString, OMNILYTICS_ASSETS_DATA, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { tryParseJson } from '@framework/utils/parse-util'
+import setSessionIdCookie, { setGeoDataCookie } from '@components/utils/setSessionId'
+import { getItem } from '@components/utils/localStorage'
+import { detectDeviceType } from '@framework/utils'
 
 const publisher = async (data: any, event: string) => {
+  if (OMNILYTICS_DISABLED) return
   const windowClone: any = typeof window !== 'undefined' ? window : {}
+  const navigator: any = windowClone.navigator
   const windowDataLayer = windowClone.dataLayer && windowClone.dataLayer[0]
+  const geoData: any = tryParseJson(Cookies.get(Cookie.Key.GEO_ENDPOINT_DATA_CACHED))
+  const pageUrl = SITE_ORIGIN_URL + new URL(windowClone?.location.href).pathname;
+
+  setSessionIdCookie()
 
   const getQueryStringValue = function (n: string) {
     return decodeURIComponent(
@@ -23,11 +34,7 @@ const publisher = async (data: any, event: string) => {
     )
   }
 
-  const visitorData: any = JSON.parse(
-    windowClone.localStorage.getItem('user')
-  ) || {
-    email: '',
-  }
+  const visitorData: any = getItem('user') || EmptyObject
 
   const _getOmniImage = function () {
     var t = '',
@@ -73,44 +80,61 @@ const publisher = async (data: any, event: string) => {
         windowWidth: document.body.clientWidth,
       },
       navigator: _cloneNavigator(),
-      referrer: document.referrer,
       timing: window.performance.timing,
     }
   }
 
-  let dataToPublish = {
-    dataLayer: {
-      ...windowDataLayer,
-      utmCampaign: getQueryStringValue('utm_campaign'),
-      utmMedium: getQueryStringValue('utm_medium'),
-      utmSource: getQueryStringValue('utm_source'),
-      utmContent: getQueryStringValue('utm_content'),
-      utmTerm: getQueryStringValue('utm_term'),
-      pageUrl: window.location.href,
-      urlReferrer: document.referrer,
-      currency: Cookies.get(Cookie.Key.CURRENCY),
-      visitorEmail: visitorData.email,
-      visitorExistingCustomer: visitorData.userName || '',
-      visitorId: visitorData.userId || '',
-      visitorLoggedIn: !!visitorData.email,
-      dataLayer: JSON.stringify({
-        ...JSON.parse(data.entity || '{}'),
-        omniImg: data.omniImg || _getOmniImage(),
-      }),
-      data: JSON.stringify(getBrowserData()),
-      pageTitle: document.title,
-      ...data,
-    },
-    deviceType: windowDataLayer.deviceType,
-    ipAddress: windowDataLayer.ipAddress,
-    event,
-    session: windowDataLayer.sessionId,
-    trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
-    url: window.location.href,
+  const sendEventData = async (geoData?: any) => {
+    const dataToPublish = {
+      dataLayer: {
+        ...windowDataLayer,
+        ...data,
+        utmCampaign: getQueryStringValue('utm_campaign'),
+        utmMedium: getQueryStringValue('utm_medium'),
+        utmSource: getQueryStringValue('utm_source'),
+        utmContent: getQueryStringValue('utm_content'),
+        utmTerm: getQueryStringValue('utm_term'),
+        pageUrl,
+        urlReferrer: windowDataLayer?.urlReferrer || document.referrer,
+        currency: Cookies.get(Cookie.Key.CURRENCY),
+        visitorEmail: visitorData?.email || EmptyString,
+        visitorExistingCustomer: Boolean(visitorData?.username),
+        visitorId: visitorData?.userId || EmptyGuid,
+        visitorLoggedIn: Boolean(visitorData?.email),
+        dataLayer: JSON.stringify({
+          ...JSON.parse(data?.entity || '{}'),
+          omniImg: data?.omniImg || _getOmniImage(),
+        }),
+        data: JSON.stringify(getBrowserData()),
+        pageTitle: document.title,
+        sessionId: Cookies.get(Cookie.Key.SESSION_ID),
+        orgId: process.env.NEXT_PUBLIC_ORG_ID,
+        appId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        domainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+        deviceType: detectDeviceType(),
+        channel: 'Web',
+        lang: Cookies.get(Cookie.Key.LANGUAGE),
+        browserInfo: navigator.userAgent,
+        city: geoData?.City || EmptyString,
+        country: geoData?.Country || EmptyString,
+        ipAddress: geoData?.Ip || EmptyString,
+      },
+      deviceType: detectDeviceType(),
+      ipAddress: geoData?.Ip || EmptyString,
+      event,
+      session: Cookies.get(Cookie.Key.SESSION_ID),
+      trackerId: process.env.NEXT_PUBLIC_OMNILYTICS_ID,
+      url: pageUrl,
+    }
+    const { data: analyticsData } = await axios.post(OMNILYTICS_ASSETS_DATA, { ...dataToPublish })
+    if (data?.eventType === EVENTS_MAP.EVENT_TYPES.ProductViewed) {
+      window.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.ProductViewed, { detail: analyticsData }))
+    }
   }
 
   try {
-    await axios.post(endpoint, { ...dataToPublish })
+    if (!geoData) setGeoDataCookie(geoData).then(sendEventData)
+    else sendEventData(geoData)
   } catch (error) {
     console.log(error)
   }
@@ -132,7 +156,7 @@ export default function AnalyticsService() {
   }
 
   const categoryViewed = (payload: any) => {
-    console.log('CategoryViewed')
+    publisher(payload, 'categoryViewed')
   }
 
   const checkoutConfirmation = (payload: any) => {
@@ -148,7 +172,7 @@ export default function AnalyticsService() {
   }
 
   const collectionViewed = (payload: any) => {
-    console.log('CollectionViewed')
+    publisher(payload, 'collectionViewed')
   }
 
   const customerCreated = (payload: any) => {
@@ -180,6 +204,9 @@ export default function AnalyticsService() {
   const search = (payload: any) => {
     publisher(payload, 'search')
   }
+  const passwordProtection = (payload: any) => {
+    publisher(payload, 'passwordProtection')
+  }
 
   const defaultAction = (payload?: any) => {
     return null
@@ -204,6 +231,7 @@ export default function AnalyticsService() {
     PageViewed,
     ProductViewed,
     Search,
+    PasswordProtection,
   } = EVENTS_MAP.EVENT_TYPES
 
   const eventHandler = function (event: any) {
@@ -277,6 +305,10 @@ export default function AnalyticsService() {
       case ProductViewed:
         productViewed(payload)
         break
+      
+      case PasswordProtection:
+        passwordProtection(payload)
+        break
 
       case Search:
         search(payload)
@@ -289,14 +321,16 @@ export default function AnalyticsService() {
   }
   Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
     console.log('event listener', eventType)
-    window.addEventListener(EVENTS_MAP.EVENT_TYPES[eventType], eventHandler)
+    const eventTypes: any = EVENTS_MAP.EVENT_TYPES
+    window.addEventListener(eventTypes[eventType], eventHandler)
   })
   return {
     removeListeners: () =>
       Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
         console.log(eventType, '=======remove')
+        const eventTypes: any = EVENTS_MAP.EVENT_TYPES
         window.removeEventListener(
-          EVENTS_MAP.EVENT_TYPES[eventType],
+          eventTypes[eventType],
           eventHandler
         )
       }),

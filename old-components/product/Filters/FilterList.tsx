@@ -43,7 +43,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
   return (
     <div key={`option-right-value-${option.value}-${optionIdx}`} className="flex items-center pt-4" >
       <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
-      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label" >
+      <label htmlFor={`${optionIdx}-input[]`} onClick={handleCheckbox} className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-white" >
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
             style={{
@@ -61,7 +61,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
             }}
           />
         )}
-        <span className="long-f-name">{generateOptionName()}</span>
+        <span className="long-f-name dark:text-white">{generateOptionName()}</span>
         {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{
@@ -95,7 +95,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
           />
         )}
       </label>
-      <span className="px-1 text-xs font-semibold text-black">
+      <span className="px-1 text-xs font-semibold text-black dark:text-white">
         ({option.count})
       </span>
     </div>

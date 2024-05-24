@@ -25,7 +25,6 @@ import React from 'react'
 
 export default function B2BOrders({
   //   allOrders,
-  selectedOption,
   //   handleInfiniteScroll,
   deviceInfo,
   isShowDetailedOrder,

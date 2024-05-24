@@ -8,6 +8,8 @@ import { EmptyString } from '@components/utils/constants'
 export module Redis {
   // Redis data keys
   export module Key {
+    export const Keywords = 'Keywords'
+    export const ALL_MEMBERSHIPS = 'AllMemberships'
     export const NavTree = 'NavTree'
     export const HomepageWeb = 'HomepageWeb'
     export const CookiepageWeb = 'CookiepageWeb'
@@ -21,9 +23,14 @@ export module Redis {
     export const HomepageMobileWeb = 'HomepageMobileWeb'
     export const Collection = 'Collection'
     export const INFRA_CONFIG = 'InfraConfig'
+    export const REVIEW_SUMMARY = 'ReviewSummary'
+    export const PLUGIN_CONFIG = 'PluginConfig'
+    export const MEMBERSHIP_PLANS = 'MembershipPlans'
     export const HOME_SLUG_CONTENTS = 'HomeSlugContent'
     export module PDP {
       export const Products = 'Products'
+      export const ProductsPreview = 'ProductsPreview'
+      export const ProductImages = 'ProductImages'
       export const ProductsByCat = 'ProductsByCat'
       export const ProductReviewData = 'ProductReviewData'
       export const AvailablePromo = 'AvailablePromo'

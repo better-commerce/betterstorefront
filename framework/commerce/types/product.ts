@@ -93,6 +93,15 @@ export type GetAllProductsOperation<T extends ProductTypes = ProductTypes> = {
   }
 }
 
+export type getAllRecentlyViewedProductsOperation<T extends ProductTypes = ProductTypes> = {
+  data: { products: T['product'][] }
+  variables: {
+    relevance?: 'featured' | 'best_selling' | 'newest'
+    ids?: string[]
+    first?: number
+  }
+}
+
 export type GetProductOperation<T extends ProductTypes = ProductTypes> = {
   data: { product?: T['product'] }
   variables: { path: string; slug?: never } | { path?: never; slug: string }

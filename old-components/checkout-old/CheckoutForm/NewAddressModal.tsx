@@ -15,6 +15,7 @@ import { findByFieldName } from '@framework/utils/app-util'
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 
 export const NEW_ADDRESS_FORM_ID = 'newAddressForm'
 export const NEW_ADDRESS_FORM_FIELDS = [
@@ -286,11 +287,11 @@ export const DEFAULT_ADDRESS_VALUES = {
           //     is: (label: string) => {
           //         return matchStrings(categoryName, "Other", true);
           //     },
-          //     then: Yup.string().min(3, Messages.Validations.AddNewAddress["ADDRESS_TYPE_MIN_LENGTH"])
-          //         .required(Messages.Validations.AddNewAddress["ADDRESS_TYPE_REQUIRED"])
+          //     then: Yup.string().min(3, Messages.Validations.addNewAddressText["ADDRESS_TYPE_MIN_LENGTH"])
+          //         .required(Messages.Validations.addNewAddressText["ADDRESS_TYPE_REQUIRED"])
           //         .matches(
           //             Messages.Validations.RegularExpressions.ADDRESS_LABEL, {
-          //             message: Messages.Validations.AddNewAddress["ADDRESS_TYPE_INPUT"],
+          //             message: Messages.Validations.addNewAddressText["ADDRESS_TYPE_INPUT"],
           //         }).nullable(),
           //     otherwise: Yup.string().nullable(),
           // }),
@@ -318,12 +319,12 @@ export const DEFAULT_ADDRESS_VALUES = {
                     <div className="relative z-50 flex flex-col h-full bg-white shadow-xl">
                       <div className="z-10 px-4 py-6 pb-2 border-b sm:px-6 left-1 top-1">
                         <div className="flex justify-between pb-2 mb-0">
-                          <h3 className="font-bold text-black text-20 dark:text-black">
+                          <h3 className="font-bold text-black text-20 dark:text-black flex items-center">
                             <a
                               onClick={onCloseModal}
                               className="inline-block cursor-pointer sm:hidden"
                             >
-                              <i className="mr-2 sprite-icon sprite-left-arrow"></i>
+                            <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>
                             </a>
                             {selectedAddressId ? (
                               <>{translate('common.label.editAddressText')}</>

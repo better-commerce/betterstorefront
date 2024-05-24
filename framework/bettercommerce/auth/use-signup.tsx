@@ -1,6 +1,7 @@
 import { REGISTER_CUSTOMER } from '@components/utils/constants'
 import fetcher from '../fetcher'
 import qs from 'qs'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   Email: string
@@ -40,7 +41,7 @@ export default function useSignup() {
       })
       return response.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       throw new Error(error.message)
     }
   }

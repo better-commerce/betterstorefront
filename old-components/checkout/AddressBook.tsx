@@ -24,6 +24,7 @@ interface AddressBookProps {
   deliveryTypeMethod?: any
   setDeliveryTypeMethod?: any
   handleCollect?: any
+  featureToggle?: any
 }
 
 const AddressBook: React.FC<AddressBookProps> = ({
@@ -41,7 +42,8 @@ const AddressBook: React.FC<AddressBookProps> = ({
   basket,
   deliveryTypeMethod,
   setDeliveryTypeMethod,
-  handleCollect
+  handleCollect,
+  featureToggle,
 }) => {
   const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
@@ -99,6 +101,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
         basket={basket}
         deliveryTypeMethod={deliveryTypeMethod}
         setDeliveryTypeMethod={setDeliveryTypeMethod}
+        featureToggle={featureToggle}
       />
       {deliveryTypeMethod?.type === 1 ? (
         <>
@@ -111,7 +114,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
                 onClick={onAddNewAddress}
               >
-                {translate('label.addressBook.addNewAddress')}
+                {translate('label.addressBook.addNewAddressText')}
               </button>
             </div>
             {noAddressesFound && (

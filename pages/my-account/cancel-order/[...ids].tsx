@@ -1,6 +1,5 @@
 // Base Imports
 import { useEffect, useState } from 'react'
-import Layout from '@components/Layout/Layout'
 
 // Package Imports
 import axios from 'axios'
@@ -26,9 +25,16 @@ import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 declare const window: any
 
-export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
+function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
@@ -97,6 +103,12 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
     }
   }
 
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+    entityName: PAGE_TYPES.OrderCancel,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
+    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+  })
+
   useEffect(() => {
     const handleAsync = async () => {
       const orderDetails = await handleFetchOrderDetails(orderId)
@@ -140,8 +152,8 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
+                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.order.cancelOrderText')}
                 </h3>
               </Link>
@@ -149,8 +161,8 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
 
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h4 className="mr-2 text-xl font-semibold leading-none text-gray-900 uppercase flex items-center">
+                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.order.cancelOrderText')}
                 </h4>
               </Link>
@@ -216,6 +228,7 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                     <div className="w-full py-4">
                       <Button
                         variant="slim"
+                        className='dark:!bg-black dark:!text-white'
                         onClick={() => {
                           onCancelReason()
                           hideCancellationReasons()
@@ -246,8 +259,8 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                   hideCancellationReasons()
                 }}
               >
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
+                  <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
                   {translate('label.cancelReason.cancelReasonHeadingText')}
                 </h3>
               </a>
@@ -272,8 +285,12 @@ export default function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
 export async function getServerSideProps(context: any) {
   const { locale } = context
   const ids = context?.query?.ids
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
@@ -281,4 +298,6 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-OrderCancel.Layout = Layout
+OrderCancel.LayoutAccount = LayoutAccount
+
+export default withDataLayer(OrderCancel, PAGE_TYPES.OrderCancel)

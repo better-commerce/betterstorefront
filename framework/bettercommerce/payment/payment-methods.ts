@@ -4,7 +4,7 @@ import {
   PAYMENTS_ENDPOINT,
   PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS,
 } from '@components/utils/constants'
-import { parsePaymentMethods } from '@framework/utils/app-util'
+import { logError, parsePaymentMethods } from '@framework/utils/app-util'
 
 interface Props {
   countryCode: string
@@ -43,7 +43,7 @@ export default function getPaymentMethods() {
       }
       return response?.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       // throw new Error(error.message)
     }
   }

@@ -10,10 +10,12 @@ import { useUI } from "@components/ui";
 import { Guid } from "@commerce/types";
 import Router from 'next/router'
 import { signOut } from "next-auth/react";
-import { SocialMediaType } from "@components/utils/constants";
+import { EmptyString, SocialMediaType } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline";
+import DataLayerInstance from '@components/utils/dataLayer';
 
-export default function AvatarDropdown({ pluginConfig = [] }) {
+export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any) {
   const translate = useTranslation()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
@@ -22,6 +24,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
     {
       type: SocialMediaType.GOOGLE,
       title: translate('label.login.googleLoginText'),
+      isEnable: true,
       className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
       head: (
         <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded google-plus-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -33,6 +36,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
     {
       type: SocialMediaType.FACEBOOK,
       title: translate('label.login.facebookLoginText'),
+      isEnable: true,
       className: 'items-center max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
       head: (
         <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-4 h-4 mr-1 rounded fb-logo" fill="currentColor" viewBox="0 0 24 24">
@@ -66,6 +70,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
         </svg>
       ),
       tail: null,
+      isEnable: true
     },
     {
       href: '/my-account/register',
@@ -78,6 +83,7 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
         </svg>
       ),
       tail: null,
+      isEnable: true
     },
   ]
 
@@ -99,52 +105,52 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
       title: translate('label.common.myAccountText'),
       className: 'text-left p-2 cursor-pointer',
       head: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
-          <path d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M7.15997 14.56C4.73997 16.18 4.73997 18.82 7.15997 20.43C9.90997 22.27 14.42 22.27 17.17 20.43C19.59 18.81 19.59 16.17 17.17 14.56C14.43 12.73 9.91997 12.73 7.15997 14.56Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <UserIcon className="w-6 h-6 text-gray-500" />
       ),
+      isEnable: true
     },
     {
       href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders',
       title: translate('label.order.myOrdersText'),
       className: 'text-left p-2 cursor-pointer',
       head: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" >
-          <path d="M8 12.2H15" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M8 16.2H12.38" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M10 6H14C16 6 16 5 16 4C16 2 15 2 14 2H10C9 2 8 2 8 4C8 6 9 6 10 6Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M16 4.02002C19.33 4.20002 21 5.43002 21 10V16C21 20 20 22 15 22H9C4 22 3 20 3 16V10C3 5.44002 4.67 4.20002 8 4.02002" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <ClipboardDocumentListIcon className="w-6 h-6 text-gray-500" />
       ),
+      isEnable: true
     },
     {
       href: '/my-account/wishlist',
       title: translate('label.wishlist.wishlistText'),
       className: 'text-left p-2 cursor-pointer',
       head: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" >
-          <path d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.68998C2 5.59998 4.49 3.09998 7.56 3.09998C9.38 3.09998 10.99 3.97998 12 5.33998C13.01 3.97998 14.63 3.09998 16.44 3.09998C19.51 3.09998 22 5.59998 22 8.68998C22 15.69 15.52 19.82 12.62 20.81Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <HeartIcon className="w-6 h-6 text-gray-500" />
       ),
+      isEnable: true
+    },
+    {
+      href: '/my-store/recommendations',
+      title: translate('label.wishlist.myStore'),
+      className: 'text-left p-2 cursor-pointer',
+      head: (
+        <BuildingStorefrontIcon className="w-6 h-6 text-gray-500"/>
+      ),
+      isEnable: featureToggle?.features?.enableMyStoreFeature
     },
     {
       href: '/',
       title: translate('common.label.logOutText'),
       className: 'text-left p-2 cursor-pointer text-red-600',
       head: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
-          <path d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M15 12H3.62" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M5.85 8.6499L2.5 11.9999L5.85 15.3499" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <ArrowLeftEndOnRectangleIcon className="w-6 h-6 text-gray-500"/>
       ),
       onClick: async () => {
+        DataLayerInstance.setItemInDataLayer('visitorId', EmptyString)
         deleteUser({ router: Router })
         if (user?.socialData?.socialMediaType) {
           await signOut()
         }
       },
+      isEnable: true
     },
   ]
   let accountDropdownConfig = accountDropDownConfigUnauthorized
@@ -157,38 +163,38 @@ export default function AvatarDropdown({ pluginConfig = [] }) {
       <Popover className="relative">
         {({ open, close }) => (
           <>
-            <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`} >
-              <svg className="w-6 h-6 " viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
-                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+            <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none flex items-center justify-center`} >
+              <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto" />
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
                 <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-neutral-800 py-7">
+                  <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-white py-7">
                     {!isGuestUser && user.userId && <>
                       <div className="flex items-center space-x-3">
                         <img className="w-10 h-10 text-lg rounded-full" alt={title} src={`/assets/user-avatar.png`} />
                         <div className="flex-grow">
-                          <h4 className="font-semibold">{title}</h4>
+                          <h4 className="font-semibold capitalize dark:text-black">{title}</h4>
                         </div>
                       </div>
-                      <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
+                      <div className="w-full border-b border-neutral-200 dark:border-neutral-200" />
                     </>
                     }
-                    {accountDropdownConfig?.map((item: any, idx: number) => (
-                      <>
-                        <Link key={idx} title={item?.title} passHref href={item?.href} className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => { if (item?.onClick) item?.onClick(ev); close() }}>
-                          <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
-                            {item?.head ?? null}
-                          </div>
-                          <div className="ml-4">
-                            <p className="text-sm font-medium ">{item?.title}</p>
-                          </div>
-                        </Link>
-                      </>
-                    ))}
+                    {accountDropdownConfig?.map((item: any, idx: number) => {
+                      return (
+                        item?.isEnable &&
+                        <div key={`account-dropdown-${idx}`}>
+                          <Link title={item?.title} passHref href={item?.href} className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => { if (item?.onClick) item?.onClick(ev); close() }}>
+                            <div className="flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-500">
+                              {item?.head ?? null}
+                            </div>
+                            <div className="ml-4">
+                              <p className="text-sm font-medium capitalize dark:text-neutral-900">{item?.title}</p>
+                            </div>
+                          </Link>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </Popover.Panel>

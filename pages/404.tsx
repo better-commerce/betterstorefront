@@ -1,6 +1,5 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
-import commerce from '@lib/api/commerce'
 import Link from 'next/link'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
@@ -8,6 +7,11 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutError from '@components/Layout/LayoutError'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export async function getStaticProps({
   preview,
@@ -15,23 +19,29 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const config = { locale, locales }
-  const { pages } = await commerce.getAllPages({ config, preview })
-  const { categories, brands } = await commerce.getSiteInfo({ config, preview })
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      pages,
-      categories,
-      brands,
     },
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }
 }
 
-export default function NotFound({ deviceInfo }: any) {
+function NotFound({ deviceInfo }: any) {
   const translate = useTranslation()
   const router = useRouter()
   const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.NotFound,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
+
   return (
     <>
       {!isMobile && (
@@ -97,3 +107,5 @@ export default function NotFound({ deviceInfo }: any) {
 }
 
 NotFound.Layout = LayoutError
+
+export default withDataLayer(NotFound, PAGE_TYPES.NotFound)

@@ -2,9 +2,18 @@
   "features": {
     "enableLanguage": true,
     "enablePriceIncVatToggle": true,
-    "enableQuickOrderPad": false,
+    "enableQuickOrderPad": true,
     "enableCompare": true,
-    "enableStoreLocator": false
+    "enableStoreLocator": false,
+    "enableCollectDeliveryOption": true,
+    "enableEngage":true,
+    "enableMyStoreFeature": true,
+    "enableAddToBagPlp": false,
+    "enableMembership": false,
+    "isImageGallery": false,
+    "enableHeaderWishlist": false,
+    "enableProductSpecification": true,
+    "enableTrendingCategory": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

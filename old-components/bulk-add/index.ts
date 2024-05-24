@@ -79,14 +79,14 @@ export const gridBulkAddConfig = [
     label: 'Stock Code',
     type: 'text',
     placeholder: '',
-    className: 'p-3 border bg-white text-gray-500 w-full',
+    className: 'px-2 py-2 border bg-white text-gray-500 w-full',
   },
   {
     key: 'quantity',
     label: 'Quantity',
     type: 'text',
     placeholder: '',
-    className: 'p-3 border bg-white text-gray-500 w-full',
+    className: 'p-2 border bg-white text-gray-500 w-full',
   },
 ]
 

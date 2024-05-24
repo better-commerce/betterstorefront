@@ -27,11 +27,13 @@
       "@commerce": ["framework/commerce"],
       "@commerce/*": ["framework/commerce/*"],
       "@framework": ["framework/bettercommerce"],
+      "@framework/contracts": ["framework/contracts"],
       "@theme/*": ["theme/*"],
       "@framework/*": ["framework/bettercommerce/*"],
+      "@framework/contracts/*": ["framework/contracts/*"],
       "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
-  "exclude": ["node_modules", "./framework/bigcommerce"]
+  "exclude": ["node_modules"]
 }

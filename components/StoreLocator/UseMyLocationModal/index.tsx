@@ -1,7 +1,13 @@
+import { Fragment, useMemo } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
-import LoadingDots from '@components/ui/LoadingDots'
 import { MapPinIcon } from '@heroicons/react/24/outline'
+import Cookies from 'js-cookie'
+import { useTranslation } from '@commerce/utils/use-translation'
+
+//
+import LoadingDots from '@components/ui/LoadingDots'
+import { Cookie } from '@framework/utils/constants'
+import { stringToBoolean } from '@framework/utils/parse-util'
 
 const UseMyLocationModal = ({
   isLocationDialog,
@@ -13,8 +19,14 @@ const UseMyLocationModal = ({
   setErrorMsg,
   deviceInfo,
 }: any) => {
+  const  translate  = useTranslation()
   const { isMobile } = deviceInfo
-  
+  const disableUserLocationPopup = useMemo(() => stringToBoolean(Cookies.get(Cookie.Key.DISABLE_USER_LOCATION_POPUP)), [])
+
+  if (disableUserLocationPopup) {
+    return <></>
+  }
+
   return (
     <Transition.Root show={isLocationDialog} as={Fragment}>
       <Dialog
@@ -57,10 +69,10 @@ const UseMyLocationModal = ({
                           <div className="flex justify-between items-baseline">
                             <div>
                               <h3 className="text-base font-semibold text-black">
-                                See Nearby Stores
+                                {translate('label.store.seeNearbyStoreText')}
                               </h3>
                               <h5 className="text-xs font-light text-primary">
-                                We use your location to show you nearby stores
+                                {translate('label.store.usingLocationToShowStoresText')}
                               </h5>
                             </div>
 
@@ -70,6 +82,7 @@ const UseMyLocationModal = ({
                               onClick={() => {
                                 setLocationDialog(false)
                                 setErrorMsg(false)
+                                Cookies.set(Cookie.Key.DISABLE_USER_LOCATION_POPUP, 'true')
                               }}
                             >
                               Skip
@@ -84,6 +97,7 @@ const UseMyLocationModal = ({
                             onClick={() => {
                               getUserLocation()
                               setLoadingDots('currentLocation')
+                              Cookies.set(Cookie.Key.DISABLE_USER_LOCATION_POPUP, 'true')
                             }}
                           >
                             {' '}

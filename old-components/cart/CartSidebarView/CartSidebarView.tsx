@@ -11,7 +11,7 @@ import PromotionInput from '../PromotionInput'
 import RelatedProducts from '@old-components/product/RelatedProducts'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
+import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
@@ -430,6 +430,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
               current_page: 'Cart',
             },
           })
+          if(window?.ch_session){
+            window.ch_remove_from_cart_before({ item_id : product?.sku || EmptyString})
+          }
         }
       }
       try {
@@ -766,7 +769,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {!isEmpty && (
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                         <div className="flex justify-between py-2 text-sm text-gray-900">
-                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncsubTotalVATIncTextText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
                           <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between py-2 text-sm text-gray-900">

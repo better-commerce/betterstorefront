@@ -12,14 +12,20 @@ import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import { resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 declare const window: any
 
-export const basketId = () => {
+export const basketId = (generateOnly = false) => {
+  const basketId = uuid()
+  if (generateOnly) {
+    return basketId
+  }
+
   if (Cookies.get(Cookie.Key.BASKET_ID)) {
     return Cookies.get(Cookie.Key.BASKET_ID) || ''
   }
-  const basketId = uuid()
+  
   Cookies.set(Cookie.Key.BASKET_ID, basketId, {
     expires: getExpiry(getMinutesInDays(365)),
   })
@@ -54,6 +60,7 @@ export interface IPLPFilterState {
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
+  myAccountActiveTab : string
   displayModal: boolean
   sidebarView: string
   modalView: string
@@ -80,6 +87,7 @@ export interface State {
 
 const initialState = {
   displaySidebar: false,
+  myAccountActiveTab: "My Details",
   displayDropdown: false,
   displayModal: false,
   modalView: 'LOGIN_VIEW',
@@ -113,108 +121,109 @@ const initialState = {
     isOnlyMobile: false,
     isDesktop: false,
     isIPadorTablet: false,
-    deviceType: DeviceType.UNKNOWN,
+    deviceType: DeviceType.DESKTOP,
   },
   includeVAT: getItem('includeVAT') || 'true',
   isCompared: getItem('isCompared') || 'false',
   compareProductList: getItem('compareProductList') || {},
   isPaymentLink: getItem('isPaymentLink') || false,
+  productInfo: undefined,
 }
 
 type Action =
-  | {
-    type: 'OPEN_SIDEBAR'
-  }
-  | {
-    type: 'CLOSE_SIDEBAR'
-  }
-  | {
-    type: 'OPEN_DROPDOWN'
-  }
-  | {
-    type: 'CLOSE_DROPDOWN'
-  }
-  | {
-    type: 'OPEN_MODAL'
-  }
-  | {
-    type: 'SHOW_ALERT'
-  }
-  | {
-    type: 'HIDE_ALERT'
-  }
-  | {
-    type: 'USE_ALERT'
-    payload: any
-  }
-  | {
-    type: 'OPEN_NOTIFY_USER_POPUP'
-    payload: string
-  }
-  | {
-    type: 'CLOSE_NOTIFY_USER_POPUP'
-  }
-  | {
-    type: 'CLOSE_MODAL'
-  }
-  | {
-    type: 'SET_MODAL_VIEW'
-    view: MODAL_VIEWS
-  }
-  | {
-    type: 'SET_SIDEBAR_VIEW'
-    view: SIDEBAR_VIEWS
-  }
-  | {
-    type: 'SHOW_DETAILED_ORDER'
-  }
-  | {
-    type: 'HIDE_DETAILED_ORDER'
-  }
-  | {
-    type: 'SET_USER_AVATAR'
-    value: string
-  }
-  | {
-    type: 'ADD_TO_WISHLIST'
-    payload: any
-  }
-  | {
-    type: 'REMOVE_FROM_WISHLIST'
-    payload: any
-  }
-  | {
-    type: 'ADD_TO_CART'
-    payload: any
-  }
-  | {
-    type: 'REMOVE_FROM_CART'
-    payload: any
-  }
-  | { type: 'SET_CART_ITEMS'; payload: any }
-  | {
-    type: 'SET_USER'
-    payload: any
-  }
-  | {
-    type: 'SET_GUEST_USER'
-    payload: any
-  }
-  | {
-    type: 'SET_IS_GUEST_USER'
-    payload: boolean
-  }
-  | {
-    type: 'SET_IS_PAYMENT_LINK'
-    payload: boolean
-  }
-  | {
-    type: 'SET_IS_SPLIT_DELIVERY'
-    payload: boolean
-  } | {
-    type: 'SET_REFERRAL_PROGRAM_ACTIVE'
-    payload: boolean
-  }
+| {
+  type: 'OPEN_SIDEBAR'
+}
+| {
+  type: 'CLOSE_SIDEBAR'
+}
+| {
+  type: 'OPEN_DROPDOWN'
+}
+| {
+  type: 'CLOSE_DROPDOWN'
+}
+| {
+  type: 'OPEN_MODAL'
+}
+| {
+  type: 'SHOW_ALERT'
+}
+| {
+  type: 'HIDE_ALERT'
+}
+| {
+  type: 'USE_ALERT'
+  payload: any
+}
+| {
+  type: 'OPEN_NOTIFY_USER_POPUP'
+  payload: string
+}
+| {
+  type: 'CLOSE_NOTIFY_USER_POPUP'
+}
+| {
+  type: 'CLOSE_MODAL'
+}
+| {
+  type: 'SET_MODAL_VIEW'
+  view: MODAL_VIEWS
+}
+| {
+  type: 'SET_SIDEBAR_VIEW'
+  view: SIDEBAR_VIEWS
+}
+| {
+  type: 'SHOW_DETAILED_ORDER'
+}
+| {
+  type: 'HIDE_DETAILED_ORDER'
+}
+| {
+  type: 'SET_USER_AVATAR'
+  value: string
+}
+| {
+  type: 'ADD_TO_WISHLIST'
+  payload: any
+}
+| {
+  type: 'REMOVE_FROM_WISHLIST'
+  payload: any
+}
+| {
+  type: 'ADD_TO_CART'
+  payload: any
+}
+| {
+  type: 'REMOVE_FROM_CART'
+  payload: any
+}
+| { type: 'SET_CART_ITEMS'; payload: any }
+| {
+  type: 'SET_USER'
+  payload: any
+}
+| {
+  type: 'SET_GUEST_USER'
+  payload: any
+}
+| {
+  type: 'SET_IS_GUEST_USER'
+  payload: boolean
+}
+| {
+  type: 'SET_IS_PAYMENT_LINK'
+  payload: boolean
+}
+| {
+  type: 'SET_IS_SPLIT_DELIVERY'
+  payload: boolean
+} | {
+  type: 'SET_REFERRAL_PROGRAM_ACTIVE'
+  payload: boolean
+}
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -230,6 +239,8 @@ type Action =
   | { type: 'SET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'SET_CURRENCY'; payload: any }
+  | { type: 'SET_PRODUCT_INFO'; payload: any }
+  | { type: 'CHANGE_TAB'; payload: string}
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -446,6 +457,13 @@ function uiReducer(state: State, action: Action) {
         user: {},
       }
     }
+
+    case 'CHANGE_TAB' : {
+      return {
+        ...state,
+        myAccountActiveTab: action.payload
+      }
+    }
     case 'SET_BASKET_ID': {
       return {
         ...state,
@@ -536,6 +554,12 @@ function uiReducer(state: State, action: Action) {
         currency: action.payload,
       }
     }
+    case 'SET_PRODUCT_INFO': {
+      return {
+        ...state,
+        productInfo: action.payload,
+      }
+    }
   }
 }
 
@@ -545,7 +569,8 @@ type UIProviderProps = {
 
 export const UIProvider: React.FC<any> = (props) => {
   const Router = useRouter()
-
+  const translate = useTranslation()
+ 
   const [state, dispatch] = React.useReducer<React.Reducer<any, any>>(
     uiReducer,
     initialState
@@ -563,23 +588,18 @@ export const UIProvider: React.FC<any> = (props) => {
      */
     const getDeviceType = () => {
       var userAgent = navigator.userAgent || navigator.vendor || window.opera
+      const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini|iPhone|iPod|Windows Phone/i;
+      const tabletRegex = /iPad|Android(?!.*(mobile|mobi)).*?(Tablet|Tab)/i;
 
-      // Windows Phone must come first because its UA also contains "Android"
-      if (/windows phone/i.test(userAgent)) {
-        return DeviceType.WINDOWS_PHONE
+      if ( mobileRegex.test(userAgent)) {
+        return DeviceType.MOBILE
+      }else if (tabletRegex.test(userAgent)) {
+        return DeviceType.TABLET
+      }else {
+        return DeviceType.DESKTOP
       }
-
-      if (/android/i.test(userAgent)) {
-        return DeviceType.ANDROID
-      }
-
-      // iOS detection from: http://stackoverflow.com/a/9039885/177710
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return DeviceType.IOS
-      }
-
-      return DeviceType.UNKNOWN
     }
+
     const deviceTypeInfo = getDeviceType()
     const isOnlyMobile = (isMobile && !isIPadorTablet) || deviceTypeInfo === 2
 
@@ -609,6 +629,14 @@ export const UIProvider: React.FC<any> = (props) => {
     },
     [dispatch]
   )
+
+  const changeMyAccountTab = useCallback(
+    (payload: string) => {
+      dispatch({ type: 'CHANGE_TAB', payload })
+    },
+    [dispatch]
+  )
+
   const setAddressId = useCallback(
     (payload: number) => {
       dispatch({ type: 'SET_SELECTED_ADDRESS_ID', payload })
@@ -864,7 +892,7 @@ export const UIProvider: React.FC<any> = (props) => {
         Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
 
         if (!isSilentLogout) {
-          setAlert({ type: 'success', msg: 'Logout Successful' })
+          setAlert({ type: 'success', msg: translate('common.message.logoutSuccessfulText') })
         }
       }
 
@@ -1077,6 +1105,14 @@ export const UIProvider: React.FC<any> = (props) => {
     },
     [dispatch]
   )
+
+  const setProductInfo = useCallback(
+    (payload: any) => {
+      dispatch({ type: 'SET_PRODUCT_INFO', payload })
+    },
+    [dispatch]
+  )
+
   const value = useMemo(
     () => ({
       ...state,
@@ -1116,6 +1152,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setAppConfig,
       setOrderId,
       setUserIp,
+      changeMyAccountTab,
       setOverlayLoaderState,
       hideOverlayLoaderState,
       resetCartItems,
@@ -1129,6 +1166,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setCompareProducts,
       resetCompareProducts,
       setCurrency,
+      setProductInfo,
     }),
 
     [state]

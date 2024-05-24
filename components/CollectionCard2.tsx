@@ -15,10 +15,12 @@ export interface CollectionCard2Props {
   price?: any;
   description?: any;
   primaryImage?: any;
-  link?: any
+  link?: any;
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
-const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, description, price, primaryImage, link }) => {
+const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, description, price, primaryImage, link, featureToggle, defaultDisplayMembership, }) => {
   return (
     <div className={`CollectionCard2 group relative ${className}`}>
       <div className="relative flex flex-col">
@@ -33,7 +35,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, de
       <div className="relative flex justify-between mt-5">
         {/* TITLE */}
         <div className="flex-1">
-          <h2 className="text-lg font-semibold sm:text-xl ">{name}</h2>
+          <h2 className="text-lg font-semibold sm:text-xl dark:text-black">{name}</h2>
           {/* AUTHOR */}
           <div className="flex items-center mt-3 text-slate-500 dark:text-slate-400">
             <span className="text-sm ">
@@ -42,7 +44,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({ className, images, name, de
           </div>
         </div>
       </div>
-      <Link href={`/${link}`} className="absolute inset-0 "></Link>
+      <Link href={link} className="absolute inset-0 "></Link>
     </div>
   );
 };

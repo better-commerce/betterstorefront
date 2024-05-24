@@ -1,32 +1,25 @@
-import { useState, useEffect } from 'react'
-import Layout from '@components/Layout/Layout'
+import { useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useConfig } from '@components/utils/myAccount'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
-import NextHead from 'next/head'
 import React from 'react'
 import Wishlist from '@components/account/Wishlist'
-import { vatIncluded } from '@framework/utils/app-util'
-import SideMenu from '@components/account/MyAccountMenu'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-function MyAccount({
-  deviceInfo,
-}: any) {
-  const [isShow, setShow] = useState(true)
+import LayoutAccount from '@components/Layout/LayoutAccount'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+
+function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
-  const { user, deleteUser, isGuestUser } = useUI()
-  const isIncludeVAT = vatIncluded()
-  const currentOption = translate('label.wishlist.wishlistText')
+  const { user, isGuestUser, changeMyAccountTab } = useUI()
 
   useEffect(() => {
     if (isGuestUser) {
@@ -56,72 +49,36 @@ function MyAccount({
       entityType: Customer,
     }
   }
-  const [active, setActive] = useState(false)
 
-  const handleClick = () => {
-    setActive(!active)
-  }
+  useEffect(()=>{
+    changeMyAccountTab(translate('label.wishlist.wishlistText'))
+  },[])
+
   useAnalytics(CustomerProfileViewed, loggedInEventData)
 
   return (
     <>
-      <NextHead>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
-        <title>{translate('label.wishlist.wishlistText')}</title>
-        <meta name="title" content={translate('label.wishlist.wishlistText')} />
-        <meta name="description" content={translate('label.wishlist.wishlistText')} />
-        <meta name="keywords" content={translate('label.wishlist.wishlistText')} />
-        <meta property="og:image" content="" />
-        <meta property="og:title" content={translate('label.wishlist.wishlistText')} key="ogtitle" />
-        <meta property="og:description" content={translate('label.wishlist.wishlistText')} key="ogdesc" />
-      </NextHead>
-      <section className="container w-full">
-        <div className="mt-14 sm:mt-20">
-          <div className='max-w-4xl mx-auto'>
-            <div className="max-w-2xl">
-              <h2 className="text-3xl xl:text-4xl font-semibold">Account</h2>
-              <span className="block mt-4 text-neutral-500 dark:text-neutral-400 text-base sm:text-lg">
-                <span className="text-slate-900 dark:text-slate-200 font-semibold">
-                  {user?.firstName},
-                </span>{" "}
-                {user.email}
-              </span>
-            </div>
-            <hr className="mt-10 border-slate-200 dark:border-slate-700"></hr>
-            <SideMenu
-              handleClick={handleClick}
-              setShow={setShow}
-              currentOption={currentOption}
-            />
-            <hr className="border-slate-200 dark:border-slate-700"></hr>
-          </div>
-          <div className="max-w-4xl mx-auto pt-14 sm:pt-26 pb-24 lg:pb-32">
-            <h2 className='text-2xl sm:text-3xl font-semibold'>Wishlist</h2>
-            <div className={'orders bg-white my-2 sm:my-6'}>
-              <Wishlist deviceInfo={deviceInfo} />
-            </div>
-          </div>
-        </div>
-      </section>
+      <h2 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.wishlist.wishlistText')}</h2>
+      <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
+        <Wishlist deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+      </div>
     </>
   )
 }
 
-MyAccount.Layout = Layout
-
-const PAGE_TYPE = PAGE_TYPES.Page
+MyAccount.LayoutAccount = LayoutAccount
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.WISHLIST })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }
 
-export default withDataLayer(withAuth(MyAccount), PAGE_TYPE, true)
+export default withDataLayer(withAuth(MyAccount), PAGE_TYPES.Wishlist, true, LayoutAccount)

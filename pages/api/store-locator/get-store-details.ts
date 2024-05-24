@@ -1,4 +1,4 @@
-import getStoreDetails from '@framework/storeLocator/getStoreDetails';
+import getStoreDetails from '@framework/store-locator/get-store-details';
 
 export default async (req:any, res:any) => {
   const { storeId } = req.query;

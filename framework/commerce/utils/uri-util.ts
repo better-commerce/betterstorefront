@@ -1,3 +1,4 @@
+import { EmptyObject } from "@components/utils/constants";
 
 export const generateUri = (uri: string, qs: string) => {
    if (uri) {
@@ -23,6 +24,8 @@ export const sanitizeUri = (uri: string) => {
 };
 
 export const uriParams = (uri: string) => {
+   if (!uri)
+      return EmptyObject
    let url = decodeURI(uri);
    url = url.substring(url.indexOf("?") + 1);
    const params = url.replace('?', '')
@@ -42,4 +45,12 @@ export const removeQueryString = (path: any) => {
       return path.slice(0, queryStringIndex)
    }
    return path
+}
+
+
+export const hasBaseUrl = (uri: string) => {
+   if (!uri) {
+      return false
+   }
+   return (uri?.startsWith('http://') || uri?.startsWith('https://'))
 }

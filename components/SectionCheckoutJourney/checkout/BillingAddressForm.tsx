@@ -21,11 +21,14 @@ const BillingAddressForm: React.FC<any> = ({
   billingCountries,
   useSameForBilling,
   shouldDisplayEmail = true,
+  guestCheckoutFormik,
+  onGuestCheckout,
 }) => {
   const translate = useTranslation()
   const BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA = billingAddressWithPhoneCheckout2Schema();
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
-  const { isGuestUser, user } = useUI()
+  const { isGuestUser, user, setOverlayLoaderState } = useUI()
+  const [isGuestCheckoutSubmit, setIsGuestCheckoutSubmit] = useState(false)
   const [searchedAddresses, setSearchedAddresses] = useState([])
 
   const addressFinderFormik = useFormik({
@@ -83,6 +86,34 @@ const BillingAddressForm: React.FC<any> = ({
     },
   })
 
+  const handleGuestWithAddressSubmit = async (e: any) => {
+    e.preventDefault()
+    setIsGuestCheckoutSubmit(false)
+    if (guestCheckoutFormik) {
+      setIsGuestCheckoutSubmit(true)
+      const guestCheckoutErrors = await guestCheckoutFormik.validateForm()
+      const addressErrors = await formik.validateForm()
+      if (
+        (!guestCheckoutErrors ||
+          (guestCheckoutErrors &&
+            Object.keys(guestCheckoutErrors).length == 0)) &&
+        (!addressErrors ||
+          (addressErrors && Object.keys(addressErrors).length == 0))
+      ) {
+        setOverlayLoaderState({ visible: true, message: 'Please wait...' })
+        if (onGuestCheckout) {
+          onGuestCheckout(guestCheckoutFormik.values, () => {
+            formik.handleSubmit()
+          })
+        } else {
+          formik.handleSubmit()
+        }
+      }
+    } else {
+      formik.handleSubmit()
+    }
+  }
+
   const handleSelectAddress = async (address: any) => {
     if (!address?.id) return
     const foundAddress: any = await retrieveAddress(address?.id)
@@ -109,7 +140,9 @@ const BillingAddressForm: React.FC<any> = ({
             : 'sm:border sm:border-gray-200 sm:bg-gray-50 bg-white rounded-md sm:p-4'
         } flex flex-col gap-2 my-4 `}
       >
-        <h5 className="font-medium font-18 dark:text-black">{translate('label.addressBook.BillingAddressHeadingText')}</h5>
+        <h5 className="font-medium font-18 dark:text-black">
+          {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.BillingAddressHeadingText')}
+        </h5>
         {/* address finder form */}
         <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4">
           <form
@@ -123,7 +156,7 @@ const BillingAddressForm: React.FC<any> = ({
                 value={addressFinderFormik.values.postCode}
                 onChange={addressFinderFormik.handleChange}
                 placeholder="Enter your postcode"
-                className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
+                className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default rounded"
               />
               {addressFinderFormik.errors.postCode &&
                 addressFinderFormik.touched.postCode && (
@@ -167,7 +200,7 @@ const BillingAddressForm: React.FC<any> = ({
           </form>
           {/* address form */}
           <form
-            onSubmit={formik.handleSubmit}
+            onSubmit={handleGuestWithAddressSubmit}
             className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
           >
             <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">
@@ -185,9 +218,9 @@ const BillingAddressForm: React.FC<any> = ({
                     </option>
                   ))}
                 </select>
-                {formik.errors.country && formik.touched.country && (
+                {formik?.errors?.country && formik?.touched?.country && (
                   <span className="form-input-error">
-                    {formik.errors.country}
+                    {formik?.errors?.country}
                   </span>
                 )}
               </div>
@@ -198,11 +231,11 @@ const BillingAddressForm: React.FC<any> = ({
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.firstNameText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                 />
-                {formik.errors.firstName && (
+                {formik?.errors?.firstName && (
                   <span className="form-input-error">
-                    {formik.errors.firstName}
+                    {formik?.errors?.firstName}
                   </span>
                 )}
               </div>
@@ -213,11 +246,11 @@ const BillingAddressForm: React.FC<any> = ({
                   value={formik.values.lastName}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.lastNameText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                 />
-                {formik.errors.lastName && formik.touched.lastName && (
+                {formik?.errors?.lastName /*&& formik?.touched?.lastName*/ && (
                   <span className="form-input-error">
-                    {formik.errors.lastName}
+                    {formik?.errors?.lastName}
                   </span>
                 )}
               </div>
@@ -227,7 +260,7 @@ const BillingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.phoneNo}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default rounded"
                   placeholder={translate('common.label.mobileNumText')}
                   onKeyDown={(ev: any) => {
                     const target = ev?.target
@@ -264,9 +297,9 @@ const BillingAddressForm: React.FC<any> = ({
                     }
                   }}
                 />
-                {formik.errors.phoneNo && formik.touched.phoneNo && (
+                {formik?.errors?.phoneNo /*&& formik?.touched?.phoneNo*/ && (
                   <span className="form-input-error">
-                    {formik.errors.phoneNo}
+                    {formik?.errors?.phoneNo}
                   </span>
                 )}
               </div>
@@ -277,9 +310,9 @@ const BillingAddressForm: React.FC<any> = ({
                   value={formik.values.companyName}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.companyNameAndVATNumText')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                 />
-                {formik.errors.companyName && formik.touched.companyName && (
+                {formik?.errors?.companyName && formik?.touched?.companyName && (
                   <span className="form-input-error">
                     {formik.errors.companyName}
                   </span>
@@ -292,9 +325,9 @@ const BillingAddressForm: React.FC<any> = ({
                   value={formik.values.address1}
                   onChange={formik.handleChange}
                   placeholder={translate('common.label.addressLine1Text')}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                 />
-                {formik.errors.address1 && formik.touched.address1 && (
+                {formik?.errors?.address1 /*&& formik?.touched?.address1*/ && (
                   <span className="form-input-error">
                     {formik.errors.address1}
                   </span>
@@ -306,12 +339,12 @@ const BillingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address2}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                   placeholder={translate('common.label.addressLine2Text')}
                 />
-                {formik.errors.address2 && formik.touched.address2 && (
+                {formik?.errors?.address2 && formik?.touched?.address2 && (
                   <span className="form-input-error">
-                    {formik.errors.address2}
+                    {formik?.errors?.address2}
                   </span>
                 )}
               </div>
@@ -321,12 +354,12 @@ const BillingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.address3}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                   placeholder={translate('common.label.addressLine3Text')}
                 />
-                {formik.errors.address3 && formik.touched.address3 && (
+                {formik?.errors?.address3 && formik?.touched?.address3 && (
                   <span className="form-input-error">
-                    {formik.errors.address3}
+                    {formik?.errors?.address3}
                   </span>
                 )}
               </div>
@@ -336,11 +369,11 @@ const BillingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.city}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                   placeholder={translate('common.label.cityText')}
                 />
-                {formik.errors.city && formik.touched.city && (
-                  <span className="form-input-error">{formik.errors.city}</span>
+                {formik?.errors?.city /*&& formik?.touched?.city*/ && (
+                  <span className="form-input-error">{formik?.errors?.city}</span>
                 )}
               </div>
               <div className="sm:col-span-6">
@@ -349,12 +382,12 @@ const BillingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.postCode}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                   placeholder={translate('common.label.postcodeText')}
                 />
-                {formik.errors.postCode && formik.touched.postCode && (
+                {formik?.errors?.postCode /*&& formik?.touched?.postCode*/ && (
                   <span className="form-input-error">
-                    {formik.errors.postCode}
+                    {formik?.errors?.postCode}
                   </span>
                 )}
               </div>
@@ -365,12 +398,12 @@ const BillingAddressForm: React.FC<any> = ({
                   type="text"
                   value={formik.values.state}
                   onChange={formik.handleChange}
-                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal"
+                  className="font-medium text-black checkout-input-field dark:bg-white dark:text-black placeholder:text-gray-400 placeholder:font-normal rounded"
                   placeholder={translate('common.label.countyStateEtcText')}
                 />
-                {formik.errors.state && formik.touched.state && (
+                {formik?.errors?.state && formik?.touched?.state && (
                   <span className="form-input-error">
-                    {formik.errors.state}
+                    {formik?.errors?.state}
                   </span>
                 )}
               </div>

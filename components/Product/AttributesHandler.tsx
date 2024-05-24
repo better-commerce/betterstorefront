@@ -1,9 +1,15 @@
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import cloneDeep from 'lodash/cloneDeep'
+import axios from 'axios'
+
+//
+import { NEXT_GET_PRODUCT } from '@components/utils/constants'
 import attributesGenerator, { getAttributesFromSlug, productLookup } from '@components/utils/attributesGenerator'
-import { cloneDeep } from 'lodash'
 import SizeInline from './SizeInline'
 import InlineList from './InlineList'
+import { matchStrings } from '@framework/utils/parse-util'
+
 const ATTR_COMPONENTS: any = {
   SizeInline: (props: any) => <SizeInline {...props} />,
   HorizontalList: (props: any) => <InlineList {...props} />,
@@ -17,8 +23,7 @@ export default function AttributesHandler({
   variantInfo,
   handleSetProductVariantInfo,
   isQuickView = false,
-  handleFetchProductQuickView = () => {},
-  setVariantInfo,
+  handleFetchProductQuickView = () => { },
   componentAttributeKey = '',
   sizeInit,
   setSizeInit,
@@ -31,7 +36,7 @@ export default function AttributesHandler({
   } = product
 
   const TEMP_MAP = variantAttributes?.reduce((tempMap: any, attribute: any) => {
-    const componentKey = (attribute?.fieldName == 'Colour' || attribute?.fieldName == 'Color') ?
+    const componentKey = attribute?.fieldName == 'Colour' ?
       attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
       attribute?.inputType == "" ? 'SizeInline' : attribute?.inputType || 'SizeInline';
     tempMap[attribute?.fieldCode] = ATTR_COMPONENTS[componentKey];
@@ -39,7 +44,7 @@ export default function AttributesHandler({
   }, {});
 
   const dynamicComponentMap = variantAttributes?.reduce((map: any, attribute: any) => {
-    const componentKey = (attribute?.fieldName == 'Colour' || attribute?.fieldName == 'Color') ?
+    const componentKey = attribute?.fieldName == 'Colour' ?
       attribute?.inputType == "" ? 'HorizontalList' : attribute?.inputType || 'HorizontalList' :
       attribute?.inputType == "" ? 'SizeInline' : attribute?.inputType || 'SizeInline';
     map[attribute?.fieldCode] = ATTR_COMPONENTS[componentKey];
@@ -48,12 +53,7 @@ export default function AttributesHandler({
 
   const [mapComponents, setMapComponents] = useState(dynamicComponentMap);
 
-  const initialFieldData = variantAttributes?.reduce((data: any, attribute: any) => {
-    data[attribute?.fieldCode] = '';
-    return data;
-  }, {});
-
-  const [fieldData, setFieldData] = useState(initialFieldData);
+  const [fieldData, setFieldData] = useState({});
 
 
   useEffect(() => {
@@ -67,15 +67,23 @@ export default function AttributesHandler({
   }, [componentAttributeKey])
 
   const router = useRouter()
-  const slug = productSlug || variant?.slug || variant?.link || `products/${router.query.slug}`
-  const originalAttributes = getAttributesFromSlug(slug, variantProducts) || {}
-  const generatedAttrCombination = Object?.fromEntries(Object?.entries(originalAttributes))
-  const [attrCombination, setAttrCombination] = useState(generatedAttrCombination)
+
+  const slug = useMemo(() => productSlug || variant?.slug || variant?.link || `products/${router.query?.slug}`, [productSlug, variant?.slug, variant?.link, router.query?.slug])
+  const originalAttributes = useMemo(() => getAttributesFromSlug(slug, variantProducts) || {}, [slug, variantProducts])
+  const [attrCombination, setAttrCombination] = useState<any>({})
 
   useEffect(() => {
-    const updatedFieldData = { ...fieldData };
+    const updatedAttrCombination = getAttributesFromSlug(slug, product?.variantProducts) || {}
+    setAttrCombination(updatedAttrCombination)
+  }, [slug, product?.variantProducts])
 
-    variantAttributes?.forEach((attribute: any) => {
+  useEffect(() => {
+    const initialFieldData = product?.variantAttributes?.reduce((data: any, attribute: any) => {
+      data[attribute?.fieldCode] = '';
+      return data;
+    }, {});
+    const updatedFieldData = { ...(initialFieldData || {}) };
+    product?.variantAttributes?.forEach((attribute: any) => {
       const { fieldCode } = attribute;
       const variantValue = variantInfo[fieldCode];
 
@@ -85,7 +93,7 @@ export default function AttributesHandler({
     });
 
     setFieldData(updatedFieldData);
-  }, [variantInfo, variantAttributes]);
+  }, [variantInfo, product?.variantAttributes]);
 
 
   const generateLink = (fieldData: any) => {
@@ -105,6 +113,11 @@ export default function AttributesHandler({
     return slug
   }
 
+  const getProduct = async (slug: string) => {
+    const { data: productData }: any = await axios.post(NEXT_GET_PRODUCT, { slug: slug })
+    return productData
+  }
+
   const handleChange = (fieldCode: string, value: string, fieldSet: any) => {
     const updatedFieldData = {
       ...fieldData,
@@ -118,44 +131,11 @@ export default function AttributesHandler({
 
     // for PDP, page should get refreshed if slug exist
     if (fieldSet?.slug && !isQuickView) {
-      router.push(`/${fieldSet?.slug}`)
+      router.push(`/${fieldSet?.slug}`, undefined, { scroll: false })
     }
 
     setFieldData(updatedFieldData);
   }
-
-  const handleChangeOld = (fieldCode: string, value: string, fieldSet: any) => {
-    const updatedFieldData = {
-      ...fieldData,
-      [fieldCode]: value,
-    };
-    setFieldData(updatedFieldData);
-    const slug = generateLink(updatedFieldData);
-    const constructParameters = (fieldData: any, fieldSet: any) => {
-      const parameters: any = {
-        slug,
-        fieldSet,
-      };
-
-      Object?.keys(fieldData)?.forEach((fieldCode) => {
-        parameters[fieldCode] = fieldData[fieldCode];
-      });
-
-      return parameters;
-    };
-
-    if (slug) {
-      if (isQuickView) {
-        const parameters = constructParameters(updatedFieldData, fieldSet);
-        handleFetchProductQuickView(parameters);
-      } else {
-        const parameters = constructParameters(updatedFieldData, fieldSet);
-        router.push(`/${slug}`);
-      }
-    }
-
-  }
-
   const getStockPerAttribute = (key: string, variant: string) => {
     let productData = {
       stock: 0,
@@ -164,14 +144,10 @@ export default function AttributesHandler({
       sellWithoutInventory: false,
       stockCode: '',
     }
-    // const slug = `products/${router.query.slug}`
+    const slug = `products/${router.query.slug}`
     variantProducts?.find((product: any) => {
       product?.attributes?.forEach((attr: any) => {
-        if (
-          key?.toLowerCase() === attr?.fieldCode?.toLowerCase() &&
-          attr?.fieldValue === variant
-          // product.slug === slug
-        ) {
+        if (matchStrings(key, attr?.fieldCode, true) && matchStrings(attr?.fieldValue, variant) && matchStrings(product?.slug, slug)) {
           productData.stock = product?.currentStock
           productData = { ...productData, ...product }
         }
@@ -179,30 +155,20 @@ export default function AttributesHandler({
     })
     return productData
   }
-  const isCustomAttr = product?.variantAttributes?.length > 2
-  const generateOptions = (option: any) => {
-    const isInOrder = Object?.keys(originalAttributes)?.findIndex((i: string) => i === option?.fieldCode) - Object?.keys(attrCombination)?.length === 0 || Object?.keys(attrCombination)?.includes(option?.fieldCode)
-    const isLastItem = Object?.keys(attrCombination).pop() === option?.fieldCode
-    if (isInOrder) {
-      if (
-        isCustomAttr &&
-        Object?.keys(attrCombination)?.length > 1 &&
-        !isLastItem
-      ) {
-        const entriesFromCombination = () => {
-          return Object?.fromEntries(Object?.entries(attrCombination)?.slice(-1))
-        }
-        const generatedAttributes = attributesGenerator(
-          entriesFromCombination(),
-          variantProducts
-        )
-        return generatedAttributes?.map((item: any) => {
-          if (option?.fieldCode === item?.fieldCode) {
-            return item
-          }
-        }).filter((el) => el)
-      } else return option?.fieldValues
-    } else return []
+  const isCustomAttr = false //product?.variantAttributes?.length > 2
+
+  const generateOptions = (option: { fieldCode: string, fieldValues: any[] }) => {
+    const originalKeys = Object.keys(originalAttributes)
+    const combinationKeys: any = Object.keys(attrCombination)
+    const isInOrder = originalKeys?.findIndex(key => key === option?.fieldCode) - combinationKeys?.length === 0 || combinationKeys?.includes(option?.fieldCode)
+    const isLastItem = combinationKeys?.at(-1) === option?.fieldCode
+    if (!isInOrder) return []
+    if (isCustomAttr && combinationKeys?.length > 1 && !isLastItem) {
+      const lastEntry = Object.fromEntries([combinationKeys?.map((key: any) => [key, attrCombination?.[key]]).at(-1)])
+      const generatedAttributes = attributesGenerator(lastEntry, variantProducts)
+      return generatedAttributes.filter((item: any) => item?.fieldCode === option?.fieldCode)
+    }
+    return option?.fieldValues
   }
 
   const handleAttrCombinations = (key: string, value: any) => {
@@ -249,7 +215,7 @@ export default function AttributesHandler({
         }
         variantAttrib.fieldValues = variantAttrib.fieldValues.filter(
           (field: any) =>
-            attribValues.some((o: any) => o.fieldValue === field.fieldValue)
+            attribValues.some((o: any) => o?.fieldValue === field?.fieldValue)
         )
       }
     }
@@ -308,7 +274,7 @@ export default function AttributesHandler({
               label={option?.fieldName}
               isDisabled={!optionsToPass.length}
               onChange={handleChange}
-              setSelectedAttrData={handleSelectedAttrData}
+              setSelectedAttrData={setSelectedAttrData}
               fieldCode={option?.fieldCode}
               productId={product?.id}
               setAttrCombination={handleAttrCombinations}
@@ -318,6 +284,7 @@ export default function AttributesHandler({
               handleSetProductVariantInfo={handleSetProductVariantInfo}
               sizeInit={sizeInit}
               setSizeInit={setSizeInit}
+              isLastComponentIdx={optionIdx === newVariantAttrs?.length - 1}
             />
           </div>
         )

@@ -3,7 +3,7 @@ import getCollections from '@framework/api/content/getCollections'
 import Layout from '@components/Layout/Layout'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -14,9 +14,24 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-export default function CollectionList(props: any) {
-  const router =useRouter();
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
+function CollectionList(props: any) {
+  const router = useRouter();
   const translate = useTranslation()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
+    entity: JSON.stringify({ id: props?.id || EmptyGuid, name: props?.name || EmptyString, }),
+    entityId: props?.id || EmptyGuid,
+    entityName: props?.name || EmptyString,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
+    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
+  })
+
   return (
     <>
       <NextHead>
@@ -30,32 +45,27 @@ export default function CollectionList(props: any) {
         <meta property="og:title" content={translate('label.collection.collectionsText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.collection.collectionsText')} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath}  key="ogurl" />
+        <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="container w-full mx-auto">
+      <main className="container w-full mx-auto theme-account-container dark:bg-white">
         <section aria-labelledby="products-heading" className="mt-12">
-          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl dark:text-black">
             {translate('label.collection.shopByCollectionText')}
           </h1>
           {props?.data.length > 0 && (
-            <div className="grid grid-cols-2 py-10 sm:gap-y-10 gap-y-6 sm:grid-cols-5 gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+            <div className="grid grid-cols-2 py-10 sm:gap-y-3 sm:grid-cols-5 gap-x-3 gap-y-4 lg:grid-cols-4 xl:gap-x-3">
               {props.data.map((collection: any, key: any) => (
                 <Link key={key} passHref href={`/collection/${collection.slug}`}>
-                  <span key={collection.id} className="group">
+                  <span key={collection.id} className="block mb-8 group">
                     <div className="relative w-full pb-0 overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 sm:aspect-w-2 sm:aspect-h-3">
                       <div className="relative image-container">
                         <img src={IMG_PLACEHOLDER} alt={collection.name || 'image'} className="object-cover object-center w-full h-full group-hover:opacity-75 image" />
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h2 className="flex w-full pt-2 text-sm font-medium text-gray-900 sm:text-xl text-md">
+                    <div className="justify-center flex-1 w-full text-center">
+                      <h2 className="flex justify-center w-full pt-2 text-sm font-medium text-gray-900 sm:text-xl text-md">
                         {collection.name}
                       </h2>
-
-                      <h4 className="w-full pt-1 text-xs font-normal text-gray-500 sm:text-sm">
-                        {collection.noOfRecords}{' '}
-                        <span className="italic">{translate('label.collection.productAvailableText')}</span>
-                      </h4>
                     </div>
                   </span>
                 </Link>
@@ -63,13 +73,11 @@ export default function CollectionList(props: any) {
             </div>
           )}
           {props?.data.length == 0 && (
-            <>
-              <div className="flex flex-col py-32 text-center">
-                <h2 className="w-full mx-auto text-4xl font-bold text-gray-200">
-                  {translate('label.collection.noCollectionAvailableText')}
-                </h2>
-              </div>
-            </>
+            <div className="flex flex-col py-32 text-center">
+              <h2 className="w-full mx-auto text-4xl font-bold text-gray-200">
+                {translate('label.collection.noCollectionAvailableText')}
+              </h2>
+            </div>
           )}
         </section>
       </main>
@@ -85,8 +93,10 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
   const collectionUID = Redis.Key.Collection
-  const cachedData = await getDataByUID([ collectionUID ])
+  const cachedData = await getDataByUID([collectionUID])
   let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []
   try {
     if (!containsArrayData(collectionUIDData)) {
@@ -95,6 +105,7 @@ export async function getStaticProps({
     }
     return {
       props: {
+        ...pageProps,
         ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         data: collectionUIDData,
       },
@@ -112,6 +123,7 @@ export async function getStaticProps({
 
       return {
         props: {
+          ...pageProps,
           ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           data: collectionUIDData,
         },
@@ -123,3 +135,5 @@ export async function getStaticProps({
     }
   }
 }
+
+export default withDataLayer(CollectionList, PAGE_TYPES.Collection)

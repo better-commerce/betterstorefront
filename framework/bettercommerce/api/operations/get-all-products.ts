@@ -22,7 +22,8 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       categoryId = '',
       brandId = '',
       pageSize = 20,
-      excludeOOSProduct = true,
+      stockCodes = [],
+      excludeOOSProduct = true
     } = query
     const data: any = {
       freeText,
@@ -35,7 +36,8 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       collectionId,
       categoryId,
       brandId,
-      excludeOOSProduct,
+      stockCodes,
+      excludeOOSProduct
     }
 
     if (filters?.length) {

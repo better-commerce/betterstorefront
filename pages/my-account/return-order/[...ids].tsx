@@ -10,7 +10,6 @@ import Link from 'next/link'
 // Component Imports
 import { useUI } from '@components/ui/context'
 import ReturnReason from '../../../components/account/Orders/ReturnReason'
-import Layout from '@components/Layout/Layout'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
@@ -27,8 +26,17 @@ import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 
-export default function ReturnOrder({
+function ReturnOrder({
   orderId = Guid.empty,
   itemId = Guid.empty,
   deviceInfo,
@@ -145,6 +153,13 @@ export default function ReturnOrder({
   const hideReturnReasons = () => {
     setShowReturnReasons(!showReturnReasons)
   }
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+    entityName: PAGE_TYPES.OrderReturn,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
+    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+  })
+
   useEffect(() => {
     const handleAsync = async () => {
       const orderDetails = await handleFetchOrderDetails(orderId)
@@ -153,8 +168,8 @@ export default function ReturnOrder({
         setItemData(
           orderDetails?.order?.items?.length > 0
             ? orderDetails?.order?.items?.find((x: any) =>
-                matchStrings(x?.productId, itemId, true)
-              )
+              matchStrings(x?.productId, itemId, true)
+            )
             : []
         )
       }
@@ -183,17 +198,17 @@ export default function ReturnOrder({
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i> 
+                <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />
                   {translate('label.help.returnItemText')}
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i> 
-                 {translate('label.help.returnItemText')}
+                <h4 className="flex items-center mr-2 text-xl font-semibold leading-none text-gray-900 uppercase">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />
+                  {translate('label.help.returnItemText')}
                 </h4>
               </Link>
               <div className="w-full">
@@ -203,11 +218,10 @@ export default function ReturnOrder({
                       <li className="px-0 pb-2 my-4">
                         <div className="flex gap-3 py-6 sm:gap-6 max-w-fit">
                           <div className="flex-shrink-0">
-                            <Image
+                            <img
                               width={100}
-                              height={228}
-                              layout="fixed"
-                              src={itemData?.image}
+                              height={120}
+                              src={generateUri(itemData?.image, 'h=120&fm=webp') || IMG_PLACEHOLDER}
                               alt="image"
                               className="basket-image"
                             />
@@ -256,13 +270,13 @@ export default function ReturnOrder({
                               {translate('label.myAccount.selectQuantityText')}
                             </label>
                           </div>
-                          <div className="flex items-end px-3 py-2 pl-0 mt-1 ml-2">
-                            <div className="flex items-end flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
-                              <label className="text-xs text-primary">
+                          <div className="py-2">
+                            <div className="flex flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
+                              <label className="mt-2 mr-2 text-xs text-primary">
                                 {translate('common.label.qtyText')}{' '}
                               </label>
                               <select
-                                className="w-full px-1 text-xs bg-white sm:w-22 text-primary"
+                                className="text-xs bg-white sm:w-22 text-primary"
                                 value={value}
                                 onChange={handleChange}
                               >
@@ -335,8 +349,12 @@ export default function ReturnOrder({
 export async function getServerSideProps(context: any) {
   const { locale } = context
   const ids = context?.query?.ids
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
@@ -344,4 +362,6 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-ReturnOrder.Layout = Layout
+ReturnOrder.LayoutAccount = LayoutAccount
+
+export default withDataLayer(ReturnOrder, PAGE_TYPES.OrderReturn)

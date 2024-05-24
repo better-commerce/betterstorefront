@@ -81,5 +81,22 @@ export module Cookie {
     export const ADVERTISEMENT = 'advertisement'
     export const NAV_ENDPOINT_DATA_CACHED = 'nedc'
     export const ALGOLIA_SETTINGS_DATA_CACHED = 'asdc'
+    export const DISABLE_USER_LOCATION_POPUP = 'dulp'
+    export const PASSWORD_PROTECTION_AUTH = 'ppa'
+    export const ENGAGE_SESSION = 'ch_cookie'
+    export const GEO_ENDPOINT_DATA_CACHED = 'gedc'
   }
+}
+
+export enum DeviceType {
+  DESKTOP = 1,
+  MOBILE = 2,
+  TABLET = 3,
+}
+
+export module UserAuthType {
+  export const DEFAULT = 0
+  export const PASSWORD = 1
+  export const OTP = 2
+  export const LOGIN_TOKEN = 3
 }

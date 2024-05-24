@@ -12,36 +12,40 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import { sanitizeHtmlContent } from 'framework/utils/app-util'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { tryParseJson } from '@framework/utils/parse-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
-import getCollectionById from '@framework/api/content/getCollectionById'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
-import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { postData } from '@components/utils/clientFetcher'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
 import { ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-const Heading = dynamic(() => import('@components/Heading/Heading'))
+const HeadingWithButton = dynamic(() => import('@components/Heading/HeadingWithButton'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const ProductSort = dynamic(() => import('@components/Product/ProductSort'))
+const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
+const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
+const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 import useFaqData from '@components/SectionBrands/faqData'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
-import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
 interface actionInterface {
   type?: string
@@ -56,7 +60,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -71,6 +75,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
+    case SET_FILTERS:
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -85,7 +91,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, }: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const translate = useTranslation()
   const faq = useFaqData();
   const adaptedQuery = { ...query }
@@ -171,6 +177,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   })
 
   const router = useRouter()
+  const qsFilters = router?.query?.filters
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [manufacturerStateVideoName, setManufacturerStateVideoName] =
     useState('')
@@ -204,12 +212,12 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         pages: 0,
         total: 0,
         currentPage: 1,
-        filters: [],
+        filters: state?.filters || [],
       },
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct, filters: filters || [] } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -247,6 +255,23 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     //}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
+
+  useEffect(() => {
+    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
+
+  useEffect(() => {
+    if (qsFilters) {
+      const filters = parsePLPFilters(qsFilters as string)
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+        setFilter(filters)
+      }
+    } else {
+      setFilter([])
+    }
+  }, [qsFilters])
 
   const handleClick = () => {
     setShowLandingPage(false)
@@ -423,7 +448,22 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
-
+  const onToggleBrandListPage = () => {
+    router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
+  }
+  const handleFilters = (filter: null, type: string) => {
+    dispatch({
+      type,
+      payload: filter,
+    })
+    dispatch({ type: PAGE, payload: 1 })
+  }
+  const setFilter = (filters: any) => {
+    dispatch({ type: SET_FILTERS, payload: filters })
+  }
+  const removeFilter = (key: string) => {
+    dispatch({ type: REMOVE_FILTERS, payload: key })
+  }
   return (
     <>
       <NextHead>
@@ -442,26 +482,28 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
-          <div className="container w-full pb-0 mx-auto bg-white md:pb-10">
-            <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2">
-              <div className="flex flex-col items-center px-4 sm:px-10 py-4 sm:py-10 bg-[#1f2261] min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <img alt="Brand Logo" src={brandDetails.premiumBrandLogo || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto" />
+          <div className="container w-full pb-0 mx-auto bg-white md:pb-4">
+            <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-12">
+              <div className="flex md:col-span-9 flex-col items-center px-4 sm:px-10 py-4 sm:py-10 rounded-xl brand-rounded-xl bg-teal-500 min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+                <img alt="Brand Logo" src={brandDetails.logoImageName || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto rounded-2xl" />
                 <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
                 <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
-              <ImageCollection range={2} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
+              <ImageCollection range={1} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
             </div>
-            <div className="mt-10">
+            <div className="mt-10 border-t border-gray-200">
               <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
-                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev >
+                <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
+                  <div className='flex justify-between my-4'>
+                    <HeadingWithButton className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All" >
                     {translate('label.product.recommendedProductText')}
-                  </Heading>
+                    </HeadingWithButton>
+                  </div>
                   <div className="glide__track" data-glide-el="track">
                     <ul className="glide__slides">
                       {productCollectionRes?.map((item: any, index: number) => (
                         <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} />
+                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         </li>
                       ))}
                     </ul>
@@ -469,33 +511,37 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
               </div>
             </div>
-            <div className="mt-0 md:mt-10">
+            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
+            <div className="mt-0 md:mt-2">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
           </div>
 
           <div className="container w-full mx-auto">
             {isOnlyMobile ? (
-              <div className="mb-10 max-h-[30vh]">
+              <div className="mb-2 max-h-[30vh]">
                 <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
               </div>
             ) : (
-              <div className="mb-10">
+              <div className="mb-2">
                 <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
               </div>
             )}
-            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
-            <div className="mt-10">
+
+            <div className="mt-10 border-gray-200 border-y">
               <div className={`nc-SectionSliderProductCard`}>
                 <div ref={sliderRefNew} className={`flow-root`}>
-                  <Heading className="mt-10 mb-6 lg:mb-8 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="2024" hasNextPrev >
-                    {translate('label.product.saleProductText')}
-                  </Heading>
+                  <div className='flex justify-between'>
+                    <HeadingWithButton className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All"
+                     >
+                      {translate('label.product.saleProductText')}
+                    </HeadingWithButton>
+                  </div>
                   <div className="glide__track" data-glide-el="track">
                     <ul className="glide__slides">
                       {saleProductCollectionRes?.map((item: any, index: number) => (
                         <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} />
+                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         </li>
                       ))}
                     </ul>
@@ -503,8 +549,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
               </div>
             </div>
-            <div className="my-10">
-              <p className="text-3xl font-semibold md:text-4xl text-slate-900"> {faq.title} </p>
+            <div className="max-w-4xl mx-auto my-10">
+              <p className="mb-6 text-3xl font-semibold capitalize md:text-4xl text-slate-900">{faq.title}</p>
               {faq?.results?.map((val: any, Idx: number) => {
                 return (
                   <BrandDisclosure key={Idx} heading={val.faq} details={val.ans} />
@@ -514,33 +560,81 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </div>
         </>
       ) : (
-        <div className="container pt-5 pb-0 mx-auto mt-4 bg-transparent sm:mt-6">
+        <div className="container pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
           <div className="max-w-screen-sm">
-            <Link href="/brands" passHref>
-              <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
-            </Link>
-            <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
+            <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+              <li className='flex items-center text-10-mob sm:text-sm'>
+                <Link href="/brands" passHref>
+                  <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
+                </Link>
+              </li>
+              <li className='flex items-center text-10-mob sm:text-sm'>
+                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                </span>
+              </li>
+              <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
+              </li>
+            </ol>
+          </div>
+          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {brandDetails?.name}
             </h1>
             {sanitizedDescription &&
-              <div className='flex justify-between w-full align-bottom'>
-                <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} className="block mt-4 text-sm text-neutral-500 dark:text-neutral-400 sm:text-base" />
+              <div className='w-full'>
+                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                  <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                </span>
               </div>
             }
           </div>
-          <div className='flex justify-between w-full pb-4 mt-1 mb-4 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-black"> {translate('label.search.resultCountText1')} {data?.products?.total} {translate('common.label.resultsText')}</span>
+          <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text brand-text-12"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
           </div>
-          <hr className='border-slate-200 dark:border-slate-700' />
-
-          <div className="flex justify-end w-full pt-6">
-            <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} />
+          <hr className='border-slate-200 dark:border-slate-200' />
+          {
+            <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                <>
+                  {isMobile ? (
+                    <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  ) : (
+                    <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} isBrandPLP={true} />
+                  )}
+                  <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                    {isMobile ? null : (
+                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
+                    )}
+                    {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                  </div>
+                </>
+              ) : (
+                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                  <div className="flex justify-end w-full py-4">
+                    <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
+                  </div>
+                  <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              ))}
+              <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            </div>
+          }
+          {/* <div className="cart-recently-viewed">
+            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+          </div> */}
+          <div className='flex flex-col w-full col-span-12'>
+            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           </div>
-          <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} />
-          <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
         </div>
       )}
     </>
@@ -553,155 +647,24 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ brand: string }>) {
-  let  brandSlug :any = params!.brand;
+  let brandSlug: any = params!.brand;
   if (brandSlug?.length) {
     brandSlug = brandSlug.join('/');
   }
   const slug = `brands/${brandSlug}`
-  const cachedDataUID = {
-    infraUID: Redis.Key.INFRA_CONFIG,
-    brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
-    collectionUID: Redis.Key.Brands.Collection + '_' + slug
-  }
-  const cachedData = await getDataByUID([
-    cachedDataUID.infraUID,
-    cachedDataUID.brandSlugUID,
-    cachedDataUID.collectionUID,
-  ])
-  let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
-  let brandBySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.brandSlugUID)
-  let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
+  const pageProps = await props.getPageProps({ slug, cookies: {} })
 
-  if (!brandBySlugUIDData) {
-    brandBySlugUIDData = await getBrandBySlug(slug, {})
-    await setData([{ key: cachedDataUID.brandSlugUID, value: brandBySlugUIDData }])
+  if (pageProps?.notFound) {
+    return notFoundRedirect()
   }
 
-  if (!infraUIDData) {
-    infraUIDData = await commerce.getInfra()
-    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
-  }
-
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    if (brandBySlugUIDData?.status === "NotFound") {
-      return notFoundRedirect()
-    }
-  }  
-
-  const collections: any = {
-    imageBannerCollection: collectionUIDData?.imageBannerCollection || [],
-    imageCategoryCollection: collectionUIDData?.imageCategoryCollection || [],
-    imgFeatureCollection: collectionUIDData?.imgFeatureCollection || [],
-    offerBannerCollection: collectionUIDData?.offerBannerCollection || [],
-    productCollection: collectionUIDData?.productCollection || [],
-  }
-
-  try {
-    let promises: any = []
-    const widgets: any = tryParseJson(brandBySlugUIDData?.result?.widgetsConfig) || []
-    if (widgets?.length) {
-      widgets?.forEach(async (widget: any) => {
-        if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'HeroBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                collections.imageBannerCollection = await getCollectionById(
-                  widget.recordId
-                )
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'MultipleImageBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.imageCategoryCollection = res?.images
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'HeroBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                collections.imgFeatureCollection = await getCollectionById(
-                  widget.recordId
-                )
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ImageCollection' &&
-          widget.code == 'HeroBanner'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.offerBannerCollection = res.images
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ProductCollection' &&
-          widget.code == 'RecommendedProductCollection'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.productCollection = res.products.results
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        } else if (
-          widget.manufacturerSettingType == 'ProductCollection' &&
-          widget.code == 'SaleProductCollection'
-        ) {
-          promises.push(
-            new Promise(async (resolve: any, reject: any) => {
-              try {
-                const res = await getCollectionById(widget.recordId)
-                collections.saleProductCollection = res.products.results
-              } catch (error: any) { }
-              resolve()
-            })
-          )
-        }
-      })
-    }
-
-    if (promises?.length) {
-      await Promise.all(promises)
-      await setData([{ key: cachedDataUID.collectionUID, value: collections }])
-    }
-  } catch (error: any) {
-    // return console.error(error)
-  }
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
-      slug: slug,
-      brandDetails: brandBySlugUIDData?.result ?? {},
-      globalSnippets: infraUIDData?.snippets ?? [],
-      snippets: brandBySlugUIDData?.snippets ?? [],
-      collections,
     }, // will be passed to the page component as props
   }
 }

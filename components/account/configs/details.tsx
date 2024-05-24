@@ -30,7 +30,7 @@ export const useDetailsFormConfig = () => {
     },
     {
       type: 'phone',
-      name: 'phone',
+      name: 'telephone',
       placeholder: translate('label.b2b.phoneNumberText'),
       label: translate('label.b2b.phoneNumberText'),
     },
@@ -39,7 +39,7 @@ export const useDetailsFormConfig = () => {
       name: 'gender',
       placeholder: '',
       label: translate('common.label.genderText'),
-      labelClassName: 'nc-Label text-base font-medium text-neutral-900 dark:text-neutral-200 mb-1.5',
+      labelClassName: 'nc-Label text-base font-medium text-neutral-900 dark:text-neutral-900 mb-1.5',
       options: [
         {
           label: translate('common.label.femaleText'),
@@ -75,7 +75,7 @@ export const useSchema = () => {
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.mobileNumInputMsg'),
       }),
-    phone: Yup.string()
+    telephone: Yup.string()
       .max(10)
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.phoneNumInputMsg'),

@@ -1,5 +1,6 @@
 import { NAV_ENDPOINT } from '@components/utils/constants'
 import fetcher from '@framework/fetcher';
+import { logError } from '@framework/utils/app-util';
 
 export default async function useNavTree(cookies?: any) {
   try {
@@ -14,7 +15,7 @@ export default async function useNavTree(cookies?: any) {
     })
     return response
   } catch (error: any) {
-    console.log(error)
+    logError(error)
     // throw new Error(error.message)
   }
 }

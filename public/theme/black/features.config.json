@@ -4,7 +4,16 @@
     "enablePriceIncVatToggle": false,
     "enableQuickOrderPad": false,
     "enableCompare": false,
-    "enableStoreLocator": false
+    "enableStoreLocator": false,
+    "enableCollectDeliveryOption": false,
+    "enableEngage":true,
+    "enableMyStoreFeature": true,
+    "enableAddToBagPlp": false,
+    "enableMembership": false,
+    "isImageGallery": false,
+    "enableHeaderWishlist": false,
+    "enableProductSpecification": true,
+    "enableTrendingCategory": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

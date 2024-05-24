@@ -18,6 +18,8 @@ import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'
 import BasketPromo from './BasketPromo'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { logError } from '@framework/utils/app-util'
+import { Guid } from '@commerce/types'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -28,16 +30,22 @@ interface IPromotionInputProps {
   readonly items: any
   readonly getBasketPromoses?: any
   readonly deviceInfo?: any
+  readonly setBasket?: any
+  readonly membership?: any
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {
+  const { user } = useUI()
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = useDevice()
+  const [appliedBenefit, setAppliedBenefit] = useState(false)
   const {
     basketPromos,
     // paymentOffers,
     items,
     getBasketPromoses = () => {},
+    setBasket = () => {},
+    membership = [],
   } = props
   const [error, setError] = useState(false)
   const { basketId, setCartItems, cartItems } = useUI()
@@ -75,6 +83,31 @@ const PromotionInput = (props: IPromotionInputProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asPath])
 
+  const fetchMemberShipBenefits = async () => {
+    if(!!membership?.benefits?.length){
+      if (!cartItems?.lineItems?.length) return
+      setAppliedBenefit(false)
+      try {
+        const membershipVouchers: Array<string> = membership?.benefits?.map((plan: any) => plan?.voucher)
+        if (membershipVouchers?.length) {
+          const findAppliedVouchersInBasket = cartItems?.promotionsApplied?.find((promo:any)=> membershipVouchers?.includes(promo?.promoCode))
+          if (findAppliedVouchersInBasket) {
+            setAppliedBenefit(membership?.benefits?.find((plan: any) => plan?.voucher === findAppliedVouchersInBasket?.promoCode))
+          }
+        }
+      } catch (error) {
+        logError(error)
+      }
+    }
+  }
+
+  useEffect(() => {
+
+    if (cartItems?.lineItems?.length) {
+      fetchMemberShipBenefits()
+    }
+  }, [ membership, cartItems, cartItems?.id, cartItems?.lineItems])
+
   useEffect(() => {
     if (error) {
       setTimeout(() => {
@@ -99,6 +132,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
       })
       if (data?.result) {
         //setError(data?.result?.isVaild);
+        setBasket(data?.result?.basket)
         setCartItems(data?.result?.basket)
         setValue('')
       } else {
@@ -170,9 +204,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
     (x: any) => x?.promoType != 22
   )
 
-  const PromotionsCount =
-    basketPromos?.applicablePromotions?.length +
-    basketPromos?.availablePromotions?.length
+  const PromotionsCount = basketPromos?.applicablePromotions?.length +  basketPromos?.availablePromotions?.length
   return (
     <>
       <div
@@ -190,8 +222,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
       </div>
 
       <div className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
-        {cartItems.promotionsApplied?.length
-          ? cartItems.promotionsApplied.map((promo: any, key: number) => {
+        {(cartItems?.promotionsApplied?.length > 0) ? cartItems?.promotionsApplied?.map((promo: any, key: number) => {
               return (
                 <div
                   className="pt-2 mt-2"
@@ -204,7 +235,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                     <div className="flex">
                       <h5 className="text-sm text-gray-600">
                         {' '}
-                        {promo.promoCode}
+                        { appliedBenefit ? promo?.name : promo?.promoCode }
                       </h5>
                     </div>
                     <div className="flex justify-end">
@@ -301,10 +332,6 @@ const PromotionInput = (props: IPromotionInputProps) => {
       {SHOW_APPLY_COUPON_SECTION && !(isMobile || isIPadorTablet) && (
         <div className="flex items-center w-full pt-0 mt-3">
           <div className="w-full">
-            {/* <h3 className="text-lg text-gray-900 font-display">Use Coupon</h3>
-            <label className="text-sm font-light text-gray-600">
-              You may apply mutliple codes for max discount
-            </label> */}
             <div className="flex flex-col mt-0">
               <div className="flex items-center justify-between gap-2 mb-2 -mt-1 font-normal text-left cursor-text text">
                 <input
@@ -312,7 +339,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   placeholder={translate('label.promotion.applyPromotionText')}
                   onChange={handleChange}
                   value={value}
-                  className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md"
+                  className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md dark:text-black"
                   required
                 />
 

@@ -161,7 +161,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
               currency: orderResult?.currencyCode,
               payment_type: CheckoutPaymentType.Regular,
               reference: getOrderId(orderInfo?.order),
-              description: `${translate('label.checkoutForm.itemsForOrderText')}: ${orderId}; ${translate('label.basket.basketText')}: ${orderResult?.basketId}`,
+              description: `Items for order: ${orderId}; Basket: ${orderResult?.basketId}`,
               capture: true,
               capture_on: new Date().toISOString(),
 
@@ -327,7 +327,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
         {that.state?.scriptLoaded && (
           <div className="checkout-frame-container">
             <h5 className="mb-6 font-semibold text-black font-18">
-              Debit/Credit Card details
+              {translate('label.checkout.debitCreditDetailsText')}
             </h5>
             <Frames
               config={config}

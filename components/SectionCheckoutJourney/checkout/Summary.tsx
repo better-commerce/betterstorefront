@@ -9,6 +9,8 @@ const Summary = ({
   deviceInfo,
   basketPromos,
   getBasketPromos,
+  setBasket = () => { },
+  membership,
 }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -21,6 +23,8 @@ const Summary = ({
             basketPromos={basketPromos}
             items={basket}
             getBasketPromoses={getBasketPromos}
+            setBasket={setBasket}
+            membership={membership}
           />
         </div>
         <dl className="space-y-2 sm:space-y-2">
@@ -84,20 +88,20 @@ const Summary = ({
           </div>
           <div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
-              <span>{translate('label.orderSummary.subTotalVATExText')}</span>
+              <span>{isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
               {basket?.subTotal?.formatted?.withoutTax}
             </dd>
           </div>
-          <div className="flex items-center justify-between pt-2 sm:pt-1">
+          {/*<div className="flex items-center justify-between pt-2 sm:pt-1">
             <dt className="flex items-center text-black font-14">
               <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
               {basket?.subTotal?.formatted?.withTax}
             </dd>
-          </div>
+          </div>*/}
           {basket?.promotionsApplied?.length > 0 && (
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-900">
@@ -110,14 +114,16 @@ const Summary = ({
               </dd>
             </div>
           )}
-          <div className="flex items-center justify-between pt-2 sm:pt-1">
-            <dt className="flex items-center text-black font-14">
-              <span>{translate('label.orderSummary.totalVATText')}</span>
-            </dt>
-            <dd className="font-semibold text-black text-md">
-              {basket?.grandTotal?.formatted?.tax}
-            </dd>
-          </div>
+          {basket?.grandTotal?.raw?.tax > 0 &&
+            <div className="flex items-center justify-between pt-2 sm:pt-1">
+              <dt className="flex items-center text-black font-14">
+                <span>{translate('label.orderSummary.totalVATText')}</span>
+              </dt>
+              <dd className="font-semibold text-black text-md">
+                {basket?.grandTotal?.formatted?.tax}
+              </dd>
+            </div>
+          }
           {
             <div className="flex items-center justify-between pt-2 sm:pt-1">
               <dt className="flex items-center text-black font-14">
@@ -135,8 +141,8 @@ const Summary = ({
               {basket?.grandTotal?.formatted?.withTax}
             </dd>
           </div>
-        </dl>
-      </div>
+        </dl >
+      </div >
     </>
   )
 }

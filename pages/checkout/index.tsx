@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
 import ShippingAddressForm from '@components/SectionCheckoutJourney/checkout/ShippingAddressForm'
@@ -15,15 +16,19 @@ import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
   CURRENT_THEME,
+  DeliveryType,
   EmptyGuid,
   EmptyObject,
   EmptyString,
+  EngageEventTypes,
   LOQATE_ADDRESS,
   Messages,
   NEXT_AUTHENTICATE,
   NEXT_BASKET_VALIDATE,
+  NEXT_CLICK_AND_COLLECT_STORE_DELIVERY,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_GUEST_CHECKOUT,
+  NEXT_SHIPPING_ENDPOINT,
   NEXT_UPDATE_CHECKOUT2_ADDRESS,
   NEXT_UPDATE_DELIVERY_INFO,
   NEXT_UPDATE_SHIPPING,
@@ -33,22 +38,33 @@ import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import CheckoutLayoutV2 from '@components/Layout/CheckoutLayoutV2'
-import { loqateAddress, saveUserToken } from '@framework/utils/app-util'
+import { logError, loqateAddress, saveUserToken } from '@framework/utils/app-util'
 import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
 import cartHandler from '@components/services/cart'
 import {
   matchStrings,
   stringToBoolean,
+  stringToNumber,
   tryParseJson,
 } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
 import { Logo } from '@components/ui'
-import { compact } from 'lodash'
+import compact from 'lodash/compact'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { Cookie } from '@framework/utils/constants'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import commerce from '@lib/api/commerce'
+import { Redis } from '@framework/utils/redis-constants'
+import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import eventDispatcher from '@components/services/analytics/eventDispatcher'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
+
 export enum BasketStage {
   CREATED = 0,
   ANONYMOUS = 1,
@@ -59,30 +75,13 @@ export enum BasketStage {
   PLACED = 5,
 }
 
-const steps = [
-  {
-    key: 'address',
-    label: 'Information',
-    shouldActiveOn: 'login,new-address,edit-address,billing-address',
-  },
-  { key: 'delivery', label: 'Delivery', shouldActiveOn: '' },
-  { key: 'review', label: 'Payment', shouldActiveOn: '' },
-]
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
-  const uiContext = useUI()
-  const {
-    isGuestUser,
-    user,
-    setAlert,
-    setUser,
-    setIsGuestUser,
-    setIsGhostUser,
-    setOverlayLoaderState,
-    hideOverlayLoaderState,
-  } = useUI()
+  const uiContext: any = useUI()
+  const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
+  const [isCheckoutStarted, setCheckoutStarted] = useState(false)
   const [appConfigData, setAppConfigData] = useState<any>()
   const { isMobile, isIPadorTablet } = deviceInfo
   const translate = useTranslation()
@@ -101,6 +100,34 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
   const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] =
     useState<boolean>(false)
   const [editAddressValues, setEditAddressValues] = useState<any>(undefined)
+  const [deliveryMethods, setDeliveryMethods] = useState(new Array<any>())
+
+  const steps = [
+    {
+      key: 'address',
+      label: translate('label.checkout.informationText'),
+      shouldActiveOn: 'login,new-address,edit-address,billing-address',
+    },
+    { key: 'delivery', label: translate('label.checkout.deliveryText'), shouldActiveOn: '' },
+    { key: 'review', label: translate('label.checkout.paymentHeadingText'), shouldActiveOn: '' },
+  ]
+
+  const DELIVERY_METHODS_TYPE = [
+    {
+      id: 0,
+      title: 'Deliver',
+      content: translate('label.checkout.toChoiceAddressText'),
+      children: [],
+      type: [ DeliveryType.STANDARD_DELIVERY, DeliveryType.EXPRESS_DELIVERY ],
+    },
+    {
+      id: 1,
+      type: [ DeliveryType.COLLECT ],
+      title: 'Collect',
+      content: translate('common.label.inStoreUsingCollectPlusText'),
+      children: [],
+    },
+  ]
 
   const getStepFromStage = (stage: number) => {
     let step = CheckoutStep.NONE
@@ -165,7 +192,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     if (!isGuestUser) {
       const addressList = await fetchAddress()
       const basketRes: any = await getBasket(basketId)
-      await checkIfDefaultShippingAndBilling(addressList, basketRes)
+      await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
+      if (!featureToggle?.features?.enableCollectDeliveryOption) {
+        await checkIfDefaultShippingAndBilling(addressList, basketRes)
+      } else {
+        await checkIfCNCBasketUpdated(addressList, basketRes)
+      }
       new Promise(() => {
         goToStep(CheckoutStep.ADDRESS)
       })
@@ -180,17 +212,44 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       backdropInvisible: true,
     })
     const basketRes: any = await getBasket(basketId)
+    await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
     if (basketRes?.shippingAddress?.id !== basketRes?.billingAddress?.id) {
       updateAddressList({ ...basketRes?.shippingAddress, isBilling: false })
       updateAddressList({ ...basketRes?.billingAddress, isBilling: true })
     } else {
       updateAddressList({ ...basketRes?.shippingAddress, isBilling: false })
     }
-    // const step = getStepFromStage(basketRes?.stage)
+    await checkIfGuestShippingAndBilling(basketRes)
+    const step = getStepFromStage(basketRes?.stage)
     new Promise(() => {
-      goToStep(CheckoutStep.LOGIN)
+      goToStep(step || CheckoutStep.LOGIN)
     })
     hideOverlayLoaderState()
+  }
+
+  const checkIfGuestShippingAndBilling = async (basket: any) => {
+    let redirectToStep: any = CheckoutStep.LOGIN
+    const hasShippingAddress = basket?.shippingAddress?.id > 0
+    const hasBillingAddress = basket?.billingAddress?.id > 0
+    const isDeliveryMethodSelected = basket?.deliveryPlans?.length > 0
+
+    if (hasShippingAddress && hasBillingAddress && isDeliveryMethodSelected) {
+      setCompletedSteps((prev) => [...new Set([...prev, CheckoutStep.ADDRESS, CheckoutStep.DELIVERY])])
+      redirectToStep = CheckoutStep.REVIEW
+    } else if (hasShippingAddress && hasBillingAddress) {
+      setCompletedSteps((prev) => [...new Set([...prev, CheckoutStep.ADDRESS])])
+      redirectToStep = CheckoutStep.DELIVERY
+    } else if ((hasShippingAddress && !hasBillingAddress) || (!hasShippingAddress && hasBillingAddress)) {
+      setCompletedSteps((prev) => [...new Set([...prev, CheckoutStep.ADDRESS])])
+      redirectToStep = CheckoutStep.ADDRESS
+    }
+
+    if (redirectToStep) {
+      return new Promise(() => {
+        goToStep(redirectToStep)
+        hideOverlayLoaderState()
+      })
+    }
   }
 
   const fetchBasketReValidate = async () => {
@@ -282,6 +341,45 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       cb()
       setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
       setIsLoggedIn(false)
+    }
+  }
+
+  const checkIfCNCBasketUpdated = async (addressList: any, basket: any) => {
+    let redirectToStep: any = CheckoutStep.ADDRESS
+    const defaultDeliveryAddr = addressList?.find((address: any) => address.isDefaultDelivery)
+    const defaultBillingAddr = addressList?.find((address: any) => address.isDefaultBilling)
+    const hasShippingAddress = basket?.shippingAddress?.id > 0 || defaultDeliveryAddr?.id > 0
+    const hasBillingAddress = basket?.billingAddress?.id > 0 || defaultBillingAddr?.id > 0
+    const hasStoreId = basket?.storeId !== EmptyGuid
+
+    if (hasStoreId && hasBillingAddress && hasShippingAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS, CheckoutStep.DELIVERY]),
+      ])
+      // redirectToStep = CheckoutStep.REVIEW
+    }/** else if (hasBillingAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS]),
+      ])
+      redirectToStep = CheckoutStep.DELIVERY
+    } */
+
+    const billingAddress = !defaultBillingAddr ? defaultDeliveryAddr : defaultBillingAddr
+    // if (!basket?.billingAddress?.id && billingAddress?.id > 0) {
+    //   await updateCheckoutAddress({ billingAddress: billingAddress }, false)
+    // } else {
+    //   await updateCheckoutAddress({ billingAddress: basket?.billingAddress }, false)
+    // }
+
+    if (redirectToStep) {
+      return new Promise(() => {
+        setSelectedAddress({
+          billingAddress: billingAddress,
+          shippingAddress: defaultDeliveryAddr,
+        })
+        goToStep(redirectToStep)
+        hideOverlayLoaderState()
+      })
     }
   }
 
@@ -433,7 +531,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       // add new address
       const newAddressResult = await createAddress(payload)
       if (newAddressResult?.isValid) {
-        if (!isGuestCheckoutSubmit) {
+        if (isLoggedIn) {
           const updatedAddresses = await fetchAddress()
           newAddressData = updatedAddresses?.find(
             (addr: any) => addr?.id === newAddressResult?.id
@@ -456,7 +554,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       }
       const updateAddressResult = await updateAddress(payload)
       if (updateAddressResult) {
-        if (!isGuestCheckoutSubmit) {
+        if (isLoggedIn) {
           const updatedAddresses = await fetchAddress()
           newAddressData = updatedAddresses?.find(
             (addr: any) => addr?.id === payload?.id
@@ -477,36 +575,19 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
         })
       } else {
         if (address?.useSameForBilling) {
-          await updateCheckoutAddress(
-            {
-              billingAddress: newAddressData,
-              shippingAddress: newAddressData,
-            },
-            true
-          )
-          setSelectedAddress({
-            billingAddress: newAddressData,
-            shippingAddress: newAddressData,
-          })
+          await updateCheckoutAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, }, true)
+          setSelectedAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, })
         } else {
-          await updateCheckoutAddress(
-            {
-              shippingAddress: newAddressData,
-            },
-            true
-          )
+          await updateCheckoutAddress({ shippingAddress: newAddressData, }, true)
 
-          setSelectedAddress({
-            billingAddress: undefined,
-            shippingAddress: newAddressData,
-          })
+          setSelectedAddress({ billingAddress: undefined, shippingAddress: newAddressData, })
         }
       }
     }
     cb()
     hideOverlayLoaderState()
     if (address?.isBilling || address?.useSameForBilling) {
-      if (isGuestCheckoutSubmit) {
+      if (!isLoggedIn) {
         setCompletedSteps((prev) => [
           ...new Set([...prev, CheckoutStep.ADDRESS]),
         ])
@@ -548,6 +629,17 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
 
   const handleDeliveryMethodSelect = async (method: any, store: any) => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
+
+    if (store && basket?.storeId !== store?.Id) {
+      const data = { basketId: basket?.id, deliveryMethodId: deliveryTypeMethod?.id, store }
+      const { data: clickCollectStoreResult } = await axios.post(NEXT_CLICK_AND_COLLECT_STORE_DELIVERY, data)
+      if (clickCollectStoreResult?.message || !clickCollectStoreResult?.isValid) {
+        hideOverlayLoaderState()
+        setAlert({ type: AlertType.ERROR, msg: clickCollectStoreResult?.message })
+        return
+      }
+    }
+
     let deliveryPlans = basket?.deliveryPlans
     if (basket?.shippingMethodId != method?.id) {
       // Update shipping method
@@ -600,8 +692,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       basketId,
       model: address,
       cdp,
-      basketItems: basket?.lineItems,
+      basket,
       postCode: basket?.postCode,
+      isCNC: deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT),
     })
     return response
   }
@@ -625,7 +718,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
             ? 'text-black font-medium'
             : !isCompleted && !isActive
               ? 'text-gray-400'
-              : 'text-black font-semibold underline' 
+              : 'text-black font-semibold underline'
           }`}
       >
         <span>{label}</span>
@@ -652,29 +745,31 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
 
   const onContinueAddressBook = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...' })
-    await updateCheckoutAddress(
-      { shippingAddress: selectedAddress?.shippingAddress },
-      true
-    )
+    if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
+      await updateCheckoutAddress({ billingAddress: selectedAddress?.billingAddress }, true)
+    } else {
+      await updateCheckoutAddress({ shippingAddress: selectedAddress?.shippingAddress, billingAddress: selectedAddress?.billingAddress }, true)
+    }
     hideOverlayLoaderState()
     goToStep(CheckoutStep.DELIVERY)
   }
 
   const loginOrGuestProps = {
     basket,
+    featureToggle,
     onLoginSuccess: handleLoginSuccess,
     onGuestCheckout: handleGuestCheckout,
   }
 
   const handleCollect = () => {
-    if(deliveryTypeMethod.type === 2){
+    if (deliveryTypeMethod.type === 2) {
       setCompletedSteps((prev) => [
         ...new Set([...prev, CheckoutStep.ADDRESS]),
       ])
     }
     goToStep(CheckoutStep.DELIVERY)
   }
-  
+
   const addressBookProps = {
     selectedAddress,
     editAddressValues,
@@ -694,7 +789,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     basket,
     deliveryTypeMethod,
     setDeliveryTypeMethod,
-    handleCollect
+    handleCollect,
+    featureToggle,
+    deliveryMethods,
   }
 
 
@@ -707,7 +804,10 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     billingCountries: appConfigData?.billingCountries,
     handleCollect,
     deliveryTypeMethod,
-    setDeliveryTypeMethod
+    setDeliveryTypeMethod,
+    featureToggle,
+    deliveryMethods,
+    basket,
   }
 
   const editAddressFormProps = {
@@ -716,6 +816,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     onEditAddressToggleView,
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,
+    featureToggle,
   }
 
   const deliveryMethodSelectionProps = {
@@ -725,7 +826,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     onContinue: () => {
       goToStep(CheckoutStep.REVIEW)
     },
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const reviewOrderProps = {
@@ -747,7 +849,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
     setOverlayLoaderState,
     hideOverlayLoaderState,
     generateBasketId,
-    goToStep
+    goToStep,
+    deliveryTypeMethod,
   }
 
   const renderCurrentStep = () => {
@@ -770,6 +873,116 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
         return null
     }
   }
+
+  const loadDeliveryMethods = useCallback(async (shippingAddress: any, basketId: any) => {
+    try {
+      const { data: deliveryMethods = [] }: any = await axios.post(NEXT_SHIPPING_ENDPOINT, {
+        basketId,
+        countryCode: shippingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      })
+      if (deliveryMethods?.length) {
+        const output: any = DELIVERY_METHODS_TYPE?.map((method: any) => {
+          const foundMethods: any = deliveryMethods?.filter((o: any) => method?.type?.includes(o?.type))
+          if (foundMethods?.length) {
+            method.children = foundMethods
+            // check if feature 'enableCollectDeliveryOption' is disabled
+            if (method?.type?.includes(DeliveryType.COLLECT) && !featureToggle?.features?.enableCollectDeliveryOption) {
+              // then set empty shipping methods' data
+              method.children = []
+            }
+          }
+          return method
+        })
+        setDeliveryMethods(output)
+        if (deliveryTypeMethod) {
+          setDeliveryTypeMethod(output[deliveryTypeMethod?.id])
+        } else {
+          setDeliveryTypeMethod(output[0])
+        }
+      }
+    } catch (error) {
+      logError(error)
+    }
+  }, [])
+
+  const refreshBasket = async () => {
+    const basketId = basket?.id
+    if (basketId && basketId != Guid.empty) {
+      const basketResult = await getBasket(basketId)
+      if (basketResult) {
+        setBasket(basketResult)
+        uiContext?.setCartItems(basketResult)
+      }
+    }
+  }
+
+  const basketDetailsProps = {
+    basket,
+    setBasket,
+    deviceInfo, 
+    allMembershipPlans, 
+    defaultDisplayMembership, 
+    refreshBasket,
+    featureToggle,
+  }
+
+  useEffect(() => {
+    if (basket?.id && basket?.lineItems) {
+      if (basket?.lineItems?.length == 0) {
+        router.push('/cart')
+      } else {
+        if (!isCheckoutStarted) {
+          const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
+          const { Basket } = EVENTS_MAP.ENTITY_TYPES
+          setCheckoutStarted(true)
+          eventDispatcher(CheckoutStarted, {
+            entity: JSON.stringify({
+              id: basket?.id,
+              basketId,
+              customerId: basket?.userId,
+              grandTotal: basket?.grandTotal?.raw?.withTax,
+              tax: basket?.grandTotal?.raw?.tax,
+              taxPercent: basket?.taxPercent,
+              shipCharge: basket?.shippingCharge?.raw?.withoutTax,
+              shipTax: basket?.shippingCharge?.raw?.tax,
+              subTotal: basket?.subTotal?.raw?.withoutTax,
+              discount: basket?.discount?.raw?.withoutTax,
+              lineitems: basket?.lineItems?.map((lineitem: any) => ({
+                id: lineitem?.id,
+                manufacturer: lineitem?.manufacturer,
+                subManufacturer: lineitem?.subManufacturer,
+                productId: lineitem?.productId,
+                stockCode: lineitem?.stockCode,
+                name: lineitem?.name,
+                discountAmt: lineitem?.discountAmt?.raw?.withoutTax || lineitem?.discount?.raw?.withoutTax || 0,
+                isSubscription: lineitem?.isSubscription,
+                itemType: lineitem?.itemType,
+                qty: lineitem?.qty,
+                price: lineitem?.price?.raw?.withoutTax,
+                tax: lineitem?.price?.raw?.tax,
+                categories: lineitem?.categoryItems?.map((category: any) => ({
+                  categoryId: category?.categoryId,
+                  categoryName: category?.categoryName,
+                  parentCategoryName: category?.parentCategoryName,
+                })),
+                img: lineitem?.img || lineitem?.image,
+                rootManufacturer: lineitem?.categoryItems?.find((category: any) => !category?.parentCategoryName)?.categoryName,
+              })) || new Array(),
+              promoCode: basket?.promotionsApplied || new Array(),
+              paidAmount: basket?.grandTotal?.raw?.withTax,
+              shippingAddress: basket?.shippingAddress,
+              billingAddress: basket?.billingAddress,
+            }),
+            promoCodes: JSON.stringify(basket?.promotionsApplied),
+            entityId: basket?.id,
+            entityName: PAGE_TYPE,
+            entityType: Basket,
+            eventType: CheckoutStarted,
+          })
+        }
+      }
+    }
+  }, [basket])
 
   useEffect(() => {
     if (basket?.lineItems?.length == 0) {
@@ -850,10 +1063,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
             router.push('/cart')
           } else {
             setBasket(basketResult)
+            uiContext?.setCartItems(basketResult)
           }
         } else {
           if (basketResult?.id === basket?.id) {
             setBasket(basketResult)
+            uiContext?.setCartItems(basketResult)
           }
         }
       }
@@ -919,12 +1134,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
         <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 border-b border-gray-300 checkout-header">
-        <div className="flex justify-between container-storefront small-screen">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 sm:py-4 bg-gray-100 border-b border-gray-300 checkout-header">
+        <div className="flex justify-between container-storefront gap-x-5 small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88">
             <Logo />
           </Link>
-          <h2 className="flex items-center justify-center text-2xl font-semibold mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
+          <h2 className="flex items-center justify-center text-lg sm:text-2xl font-semibold mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
             {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
               <i className="ml-4 sprite-icons sprite-secure"></i>
@@ -934,8 +1149,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
       </div>
 
       {isMobile || isIPadorTablet ? (
-        <div className="justify-start w-full">
-          <BasketDetails basket={basket} deviceInfo={deviceInfo} />
+        <div className="justify-start w-full bar">
+          <BasketDetails { ...basketDetailsProps }  />
         </div>
       ) : (
         <></>
@@ -968,9 +1183,17 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId }: any) => {
           <></>
         ) : (
           <div className="justify-start min-h-screen p-8 bg-gray-100 border-gray-300 border-x basket-container top-14">
-            <BasketDetails basket={basket} deviceInfo={deviceInfo} />
+            <BasketDetails  { ...basketDetailsProps } />
           </div>
         )}
+      </div>
+      <div className='flex flex-col w-full'>
+        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+        <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
       </div>
     </>
   )
@@ -979,10 +1202,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context
   const cookies = cookie.parse(context.req.headers.cookie || '')
   let basketId: any = cookies?.basketId
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.CHECKOUT })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+  
   return {
-    props: { 
+    props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      basketId, 
+      basketId,
     }
   }
 }

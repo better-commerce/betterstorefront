@@ -14,14 +14,26 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
-export default function CategoryList(props: any) {
+function CategoryPage(props: any) {
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
   const router = useRouter()
   const translate = useTranslation()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
+    entityName: PAGE_TYPE,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
+    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
+  })
+
   return (
     <>
       <NextHead>
@@ -38,40 +50,31 @@ export default function CategoryList(props: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="container w-full pt-6 mx-auto sm:pt-10">
+      <div className='w-full dark:bg-white'>
+      <main className="container w-full pt-6 mx-auto sm:pt-10 theme-account-container dark:bg-white">
         <section aria-labelledby="products-heading ">
-          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl">
-            {translate('label.category.shopByCategoryText')}
-          </h1>
-          {props?.data.length > 0 && (
-            <div className="flow-root mt-1 sm:mt-0">
-              <div className="my-0">
-                <div className="box-content relative px-0 mt-2">
-                  <div className="grid grid-cols-2 my-2 mb-6 gap-x-3 gap-y-3 md:grid-cols-5 lg:grid-cols-4 sm:my-4">
-                    {props?.data?.map((category: any, key: number) => (
-                      <div key={key} className="border bg-slate-100 rounded-2xl border-slate-100 hover:border-slate-300 " >
-                        <div className="relative group">
-                          <Link key={key} href={`/${category.link}`}>
-                            {category?.image ? (
-                              <div className="relative overflow-hidden aspect-w-1 aspect-h-1">
-                                <img src={ `${category?.image}?fm=webp&h=800&w=400` || IMG_PLACEHOLDER } alt={category.name|| 'category'} className="object-cover object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
-                              </div>
-                            ) : (
-                              <div className="relative overflow-hidden aspect-[4/3]">
-                                <img src={IMG_PLACEHOLDER} alt={category.name || 'category'} className="object-cover object-center w-full h-auto sm:h-full" width={600} height={900} />
-                              </div>
-                            )}
-                            <span aria-hidden="true" className="absolute inset-x-0 bottom-4 h-1/3 opacity-40" />
-                            <h2 className="relative flex items-center justify-center w-full py-3 text-sm tracking-wide text-center text-gray-700 capitalize bg-white rounded-b-2xl lg:mt-auto sm:text-lg bg-opacity-70 bg-nav dark:text-gray-700">
-                              {category.name}
-                            </h2>
-                          </Link>
-                        </div>
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl dark:text-black">{translate('label.category.shopByCategoryText')}</h1>
+          {props?.data?.length > 0 && (
+            <div className="box-content relative grid grid-cols-2 my-8 gap-x-6 gap-y-6 md:grid-cols-5 lg:grid-cols-4 sm:my-10">
+              {props?.data?.sort((a: any, b: any) => a.name.localeCompare(b.name)).map((category: any, key: number) => (
+                <div key={key} className="relative border bg-slate-100 rounded-2xl border-slate-200 hover:border-slate-300 group">
+                  <Link key={key} href={`/${category?.link}`}>
+                    {category?.image ? (
+                      <div className="relative overflow-hidden aspect-w-1 aspect-h-1">
+                        <img src={`${category?.image}?fm=webp&h=800&w=400` || IMG_PLACEHOLDER} alt={category?.name || 'category'} className="object-cover rounded-2xl object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
                       </div>
-                    ))}
-                  </div>
+                    ) : (
+                      <div className="relative overflow-hidden aspect-[4/3]">
+                        <img src={IMG_PLACEHOLDER} alt={category?.name || 'category'} className="object-cover object-center w-full h-auto sm:h-full rounded-2xl" width={600} height={900} />
+                      </div>
+                    )}
+                    <span aria-hidden="true" className="absolute inset-x-0 bottom-4 h-1/3 opacity-40" />
+                    <h2 className="relative flex items-center justify-center w-full py-3 text-sm font-semibold tracking-wide text-center text-black capitalize bg-white rounded-b-2xl lg:mt-auto sm:text-lg bg-opacity-70 bg-nav dark:text-gray-700">
+                      {category?.name}
+                    </h2>
+                  </Link>
                 </div>
-              </div>
+              ))}
             </div>
           )}
           {props?.data.length == 0 && (
@@ -85,11 +88,12 @@ export default function CategoryList(props: any) {
           )}
         </section>
       </main>
+      </div>
     </>
   )
 }
 
-CategoryList.Layout = Layout
+CategoryPage.Layout = Layout
 
 export async function getStaticProps({
   params,
@@ -99,16 +103,16 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   let categoryUIDData: any
   try {
-    const categoryUID =  Redis.Key.Category.AllCategory
+    const categoryUID = Redis.Key.Category.AllCategory
     const cachedData = await getDataByUID([categoryUID])
     categoryUIDData = parseDataValue(cachedData, categoryUID)
-    if(!containsArrayData(categoryUIDData)){
+    if (!containsArrayData(categoryUIDData)) {
       categoryUIDData = await getAllCategories()
       await setData([{ key: categoryUID, value: categoryUIDData }])
     }
   } catch (error: any) {
     logError(error)
-    
+
     if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
       let errorUrl = '/500'
       const errorData = error?.response?.data
@@ -123,11 +127,20 @@ export async function getStaticProps({
       }
     }
   }
+
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: categoryUIDData,
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
+
+const PAGE_TYPE = PAGE_TYPES.Category
+
+export default withDataLayer(CategoryPage, PAGE_TYPE)

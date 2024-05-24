@@ -1,7 +1,5 @@
 // Base Imports
 import { useEffect, useState } from 'react'
-import Layout from '@components/Layout/Layout'
-
 // Package Imports
 import axios from 'axios'
 import Image from 'next/image'
@@ -28,9 +26,16 @@ import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import LayoutAccount from '@components/Layout/LayoutAccount'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 declare const window: any
 
-export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
+function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
   const translate = useTranslation();
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
@@ -115,6 +120,12 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
     }
   }
 
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+    entityName: PAGE_TYPES.OrderCancel,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
+    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+  })
+
   useEffect(() => {
     const handleAsync = async () => {
       const orderDetails = await handleFetchOrderDetails(orderId)
@@ -123,8 +134,8 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
         const itemsDatasNew =
           orderDetails?.order?.items?.length > 0
             ? orderDetails?.order?.items?.filter((x: any) =>
-                matchStrings(x?.productId, itemId, true)
-              )
+              matchStrings(x?.productId, itemId, true)
+            )
             : []
         setItemDatas(itemsDatasNew)
         setItemData(
@@ -152,16 +163,16 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
               <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                 </h3>
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
               <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-bold leading-none text-gray-900 uppercase">
-                  <i className="mr-2 sprite-icon sprite-left-arrow"></i>{' '}
+                <h4 className="flex items-center mr-2 text-xl font-semibold leading-none text-gray-900 uppercase">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
                 </h4>
               </Link>
@@ -172,14 +183,7 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                       <li className="px-0 pb-2 my-4">
                         <div className="flex gap-3 py-6 sm:gap-6 max-w-fit">
                           <div className="flex-shrink-0">
-                            <Image
-                              width={72}
-                              height={128}
-                              layout="fixed"
-                              src={itemData?.image}
-                              alt="image"
-                              className="basket-image"
-                            />
+                            <Image width={72} height={128} layout="fixed" src={itemData?.image} alt="image" className="basket-image" />
                           </div>
                           <div className="flex flex-col flex-1">
                             <div>
@@ -190,15 +194,13 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                                       itemData?.categoryItems[0]?.categoryName}
                                   </p>
                                 </div>
-                                <h3 className="pr-6 mt-2 font-normal text-12 text-primary !text-sm">
+                                <h3 className="pr-6 mt-2 font-normal text-12 text-primary !text-sm dark:text-black">
                                   <Link href={`/${itemData?.slug}`} passHref>
                                     {itemData?.name}
                                   </Link>
                                 </h3>
                                 <p className="mt-2 text-xs font-semibold text-secondary-full-opacity">
-                                  {isIncludeVAT
-                                    ? itemData?.price?.formatted?.withTax
-                                    : itemData?.price?.formatted?.withoutTax}
+                                  {isIncludeVAT ? itemData?.price?.formatted?.withTax : itemData?.price?.formatted?.withoutTax}
                                 </p>
                                 <div className="flex mt-3">
                                   <div className="w-24">
@@ -221,29 +223,22 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
                         </div>
                         <div className="flex items-center justify-between pb-2 border-gray-300 border-dashed border-y">
                           <div className="flex items-end flex-1 px-3 py-2 pl-0 mt-1">
-                            <label className="text-base font-bold text-primary">
+                            <label className="text-base font-bold text-primary dark:text-black">
                               {translate('label.myAccount.selectQuantityText')}
                             </label>
                           </div>
-                          <div className="flex items-end px-3 py-2 pl-0 mt-1 ml-2">
-                            <div className="flex items-end flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
-                              <label className="text-xs text-primary">
-                               {translate('common.label.qtyText')}{' '}
+                          <div className="py-2">
+                            <div className="flex flex-1 px-3 py-2 mt-1 ml-2 text-sm border border-gray-200">
+                              <label className="mt-2 mr-2 text-xs text-primary dark:text-black">
+                                {translate('common.label.qtyText')}{' '}
                               </label>
-                              <select
-                                className="w-full px-1 text-xs bg-white sm:w-22 text-primary"
-                                required
-                                value={value}
-                                onChange={handleChange}
-                              >
+                              <select className="text-xs bg-white sm:w-22 text-primary dark:text-black" required value={value} onChange={handleChange} >
                                 <option value="0">Select</option>
-                                {Array.from(Array(itemData?.qty).keys())
-                                  ?.map((x: number) => x + 1)
-                                  ?.map((qty: any, idx: number) => (
-                                    <option key={idx} value={qty}>
-                                      {qty}
-                                    </option>
-                                  ))}
+                                {Array.from(Array(itemData?.qty).keys())?.map((x: number) => x + 1)?.map((qty: any, idx: number) => (
+                                  <option key={idx} value={qty}>
+                                    {qty}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -309,8 +304,12 @@ export default function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty,
 export async function getServerSideProps(context: any) {
   const { locale } = context
   const ids = context?.query?.ids
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
@@ -318,4 +317,6 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-OrderCancel.Layout = Layout
+OrderCancel.LayoutAccount = LayoutAccount
+
+export default withDataLayer(OrderCancel, PAGE_TYPES.OrderCancel)

@@ -10,7 +10,7 @@ export default function InfiniteScrollComponent({ component, total, fetchData, c
       hasMore={currentNumber < total}
       loader={null}
       endMessage={
-        <p className="py-5 font-medium dark:text-black" style={{ textAlign: 'center' }}>
+        <p className="py-5 font-medium dark:text-white" style={{ textAlign: 'center' }}>
           {translate('common.label.pageEndText')}
         </p>
       }

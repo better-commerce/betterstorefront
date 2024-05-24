@@ -3,7 +3,8 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import Link from 'next/link'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
@@ -13,14 +14,16 @@ import cartHandler from '@components/services/cart'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { getEnabledSocialLogins } from '@framework/utils/app-util'
-import Link from 'next/link'
+import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
+import { AlertType } from '@framework/utils/enums'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
@@ -47,7 +50,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
 
   return (
     <>
-      <div className="flex flex-1 w-full">
+      {/* <div className="flex flex-1 w-full">
         {
           socialLogins && (
             <>
@@ -61,13 +64,13 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
             </>
           )
         }
-      </div>
+      </div> */}
 
       <div className="flex flex-col items-center justify-center w-full">
-        <div className="w-full px-5 font-semibold sm:px-0">
-          <label className="text-neutral-800 dark:text-neutral-200">{translate('label.addressBook.emailText')}</label>
+        <div className="w-full px-10 font-semibold sm:px-0">
+          <label className="text-neutral-800 dark:text-neutral-800">{translate('label.addressBook.emailText')}</label>
           <input
-            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
+            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
             value={value}
             type="email"
             onChange={onChange}
@@ -75,12 +78,12 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
           />
         </div>
         {error ? <span className="text-red-500 capitalize">{error}</span> : null}
-        <div className="flex items-center justify-center w-full my-5">
+        <div className="flex items-center justify-center w-full my-5 px-10 sm:px-0">
           <Button
             className="w-full border border-black btn btn-c btn-primary rounded-2xl"
             buttonType="default"
             action={handleSubmit}
-            title={'Submit'}
+            title={translate('common.label.submitText')}
           />
         </div>
       </div>
@@ -94,7 +97,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
   const translate = useTranslation()
-  const { isGuestUser, setIsGuestUser, user, basketId, setAlert, setUser } = useUI()
+  const { isGuestUser, setIsGuestUser, user, basketId, setAlert, setUser, deleteUser } = useUI()
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { associateCart } = cartHandler()
@@ -107,8 +110,10 @@ const router = useRouter()
       )?.configKeys || []
   }
 
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.Register,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
   })
 
   useEffect(() => {
@@ -130,14 +135,26 @@ const router = useRouter()
     const response: any = await associateCart(userId, basketId)
   }
 
+  const b2bEnabled = b2bSettings?.length
+  ? stringToBoolean(
+    b2bSettings.find((x: any) => x.key === 'B2BSettings.EnableB2B')?.value
+    )
+    : false
+
   const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {
-      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
+      const data = {
+        ...values,
+        email: userEmail
+      }
+      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: b2bEnabled ? values : data })
       if (!result.data) {
-        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
+        setAlert({ type: 'error', msg: translate('common.message.authenticationFailedText') })
+        Router.push('/my-account/login')
       } else if (result.data) {
         setAlert({ type: 'success', msg: translate('common.label.successText') })
         let userObj = { ...result.data }
+        if (userObj?.userToken) saveUserToken(userObj?.userToken)
         const updatedUserObj = await axios.post(
           `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
         )
@@ -151,9 +168,10 @@ const router = useRouter()
     asyncLoginUser()
   }
 
-  const handleUserRegister = async (values: any) => {
+  const handleUserRegister = async (values: any, cb = () => {}) => {
     let userCreated = false
     let recordId = Guid.empty
+    let responseMsg = EmptyString
     const reqData = {
       ...values,
       email: userEmail,
@@ -188,6 +206,10 @@ const router = useRouter()
           ? true
           : false
       recordId = tradingAccountResponse.data?.recordId
+
+      if (tradingAccountResponse?.data?.message) {
+        responseMsg = tradingAccountResponse?.data?.message
+      }
     } else {
       // Otherwise, consider it as user registration.
 
@@ -199,13 +221,17 @@ const router = useRouter()
       recordId = response.data?.recordId
     }
 
+    // execute form helper
+    cb()
+
     // Trigger error message for failed registration.
     if (!userCreated) {
-      setError(translate('common.message.requestCouldNotProcessErrorMsg'))
+      setAlert({ type: 'error', msg: responseMsg || translate('common.message.requestCouldNotProcessErrorMsg') })
     }
 
     // If registration is SUCCESS
     if (userCreated) {
+      deleteUser({ isSilentLogout: true })
       eventDispatcher(CustomerCreated, {
         entity: JSON.stringify({
           id: recordId,
@@ -214,8 +240,10 @@ const router = useRouter()
         }),
         eventType: CustomerCreated,
       })
-      await handleBasketAssociation(recordId)
-      handleUserLogin(values)
+      setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.registerSuccessMsg')})
+      Router.push('/my-account/login')
+      // await handleBasketAssociation(recordId)
+      // handleUserLogin(values)
       setIsGuestUser(false)
     }
   }
@@ -250,7 +278,7 @@ const router = useRouter()
       <section aria-labelledby="trending-heading" className="bg-white">
         <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
           <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-            <h1 className="my-20 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-100 justify-center">
+            <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
               {translate('label.register.freeRegisterText')}
             </h1>
           </div>
@@ -277,29 +305,31 @@ const router = useRouter()
               </>
             )}
 
-            <span className="block text-center text-neutral-700 dark:text-neutral-300">
+            <span className="block text-center text-neutral-700 dark:text-neutral-700">
               {translate('label.myAccount.alreadyAccountText')} {` `}
-              <a className="text-green-600" href="/my-account/login">
-                {translate('label.myAccount.SignInText')}
-              </a>
+              <Link passHref className="text-green-600" href="/my-account/login">
+                {translate('label.login.loginBtnText')}
+              </Link>
             </span>
           </div>
         </div>
       </section>
-
     </>
   )
 }
 
 RegisterPage.Layout = Layout
 
-const PAGE_TYPE = PAGE_TYPES.Page
-export default withDataLayer(RegisterPage, PAGE_TYPE)
+export default withDataLayer(RegisterPage, PAGE_TYPES.Register)
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }

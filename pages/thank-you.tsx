@@ -3,27 +3,31 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
+import NextHead from 'next/head'
 import axios from 'axios'
 import { Transition, Dialog } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL, SITE_NAME
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
-import { } from '@components/utils/constants'
 import { removeItem } from '@components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
-import { eddDateFormat, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
+import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import NonHeadContentSnippet from '@old-components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
+import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { PagePropType, getPagePropType } from '@framework/page-props'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -328,6 +332,51 @@ export default function OrderConfirmation({ config }: any) {
     handleReferralInfo()
   }, [])
 
+  useEffect(() => {
+    const itemsFromArr = []
+    if (order?.items) {
+      const iterator = order?.items?.values();
+      for (const value of iterator) {
+        itemsFromArr?.push({
+          id: parseItemId(value?.stockCode) || EmptyString,
+          name: value?.name || EmptyString,
+          quantity: value?.qty || 1,
+          price: value?.totalPrice?.raw?.withTax || 1,
+          line_price: value?.totalPrice?.raw?.withTax * value?.qty,
+          sku: value?.sku || EmptyString
+        })
+      }
+    }
+    const orderData = {
+      item_id: "thankyou",
+      order_id: order?.orderNo || EmptyString,
+      order_price: order?.grandTotal?.raw?.withTax,
+      order_shipping_zip: order?.shippingAddress?.postCode || EmptyString,
+      order_shipping_city: order?.shippingAddress?.city || EmptyString,
+      payment_transactions: [{
+        amount: order?.payments ? order?.payments[0]?.orderAmount : EmptyString,
+        gateway: order?.payments ? order?.payments[0]?.paymentGateway : EmptyString,
+        status: "paid"
+      }],
+      coupons: [{
+        code: '',
+        discount_amt: order?.discount?.raw?.withTax
+      }],
+      item_ids: order?.items?.map((x: any) => parseItemId(x?.stockCode)) || [],
+      items: itemsFromArr,
+      customer: {
+        id: order?.customerId || EmptyString,
+        f_name: order?.billingAddress?.firstName || EmptyString,
+        l_name: order?.billingAddress?.lastName || EmptyString,
+        email: order?.customer?.username || EmptyString,
+        contact_no: order?.billingAddress?.phoneNo || EmptyString
+      }
+    }
+    if (window !== undefined && window?.ch_session && order?.orderNo) {
+      window.ch_purchase_complete_before(orderData)
+    }
+  }, [order?.orderNo])
+
   if (isLoading) {
     return (
       <main className="px-4 pt-16 pb-24 bg-white sm:px-6 sm:pt-24 lg:px-8 lg:py-32">
@@ -353,13 +402,28 @@ export default function OrderConfirmation({ config }: any) {
   const bodyStartScrCntrRef = React.createRef<any>()
   const bodyEndScrCntrRef = React.createRef<any>()
 
+  let absPath = ''
+  if (typeof window !== 'undefined') {
+    absPath = window?.location?.href
+  }
   return (
     <>
-      <div
-        ref={bodyStartScrCntrRef}
-        className={`${ELEM_ATTR}body-start-script-cntr-pc`}
-      ></div>
-      <main className="px-4 pt-6 pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+      <NextHead>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <title>{translate('label.thankyou.thankyouText')}</title>
+        <meta name="title" content={translate('label.thankyou.thankyouText')} />
+        <meta name="title" content={translate('label.thankyou.thankyouText')} />
+        <meta name="description" content={translate('label.thankyou.thankyouText')} />
+        <meta name="keywords" content={translate('label.thankyou.thankyouText')} />
+        <meta property="og:image" content="" />
+        <meta property="og:title" content={translate('label.thankyou.thankyouText')} key="ogtitle" />
+        <meta property="og:description" content={translate('label.thankyou.thankyouText')} key="ogdesc" />
+        <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+      </NextHead>
+      <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr-pc`} ></div>
+      <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
             <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
@@ -370,40 +434,21 @@ export default function OrderConfirmation({ config }: any) {
             </h1>
             {order?.orderNo ? (
               <p className="mt-2 text-black">
-                  {translate('label.checkout.yourOrderText')}{' '}
+                {translate('label.checkout.yourOrderText')}{' '}
                 <span className="font-bold text-black">{order?.orderNo}</span>{' '}
-                  {translate('label.thankyou.willBeWithYouSoonText')}
+                {translate('label.thankyou.willBeWithYouSoonText')}
               </p>
             ) : null}
           </div>
           {order?.orderNo ? (
-            <section
-              aria-labelledby="order-heading"
-              className="mt-10 border-t border-gray-200"
-            >
-              <h2 id="order-heading" className="sr-only">
-                {translate('label.checkout.yourOrderText')}
-              </h2>
-
+            <section aria-labelledby="order-heading" className="mt-10 border-t border-gray-200" >
+              <h2 id="order-heading" className="sr-only"> {translate('label.checkout.yourOrderText')} </h2>
               <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
-              {order?.items?.map((product: any) => (
+              {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
                 <>
-                  <div
-                    key={product.id}
-                    className="flex py-10 space-x-6 border-b border-gray-200"
-                  >
+                  <div key={product.id} className="flex py-10 space-x-6 border-b border-gray-200" >
                     <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                      <img
-                        style={css}
-                        src={
-                          generateUri(product.image, 'h=200&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        width={200}
-                        height={200}
-                        alt={product.name || 'thank you'}
-                        className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
-                      />
+                      <img style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
                     </div>
                     <div className="flex flex-col flex-auto">
                       <div>
@@ -430,7 +475,7 @@ export default function OrderConfirmation({ config }: any) {
                               {translate('common.label.priceText')}
                             </dt>
                             <dd className="ml-2 text-gray-700">
-                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
+                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
                             </dd>
                           </div>
                         </dl>
@@ -438,8 +483,9 @@ export default function OrderConfirmation({ config }: any) {
                     </div>
                   </div>
                 </>
-              ))}
-
+              )) : (
+                <SplitDeliveryOrderItems order={order} />
+              )}
               <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
                 <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
 
@@ -447,12 +493,11 @@ export default function OrderConfirmation({ config }: any) {
                 <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                   <div>
                     <dt className="font-bold text-gray-900">
-                      {/* {GENERAL_SHIPPING_ADDRESS} */}
                       {translate('label.orderDetails.deliveryAddressHeadingText')}
                     </dt>
                     <dd className="mt-2 text-gray-700">
                       <address className="not-italic">
-                        <span className="block">{`${order?.shippingAddress.firstName} ${order?.shippingAddress.lastName}`}</span>
+                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName ? order?.shippingAddress?.lastName : ""}`}</span>
                         <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address1}`}</span>
                         <span className="block">{`${order?.shippingAddress?.address2}`}</span>
@@ -460,20 +505,6 @@ export default function OrderConfirmation({ config }: any) {
                       </address>
                     </dd>
                   </div>
-                  {/* <div>
-                    <dt className="font-medium text-gray-900">
-                      {GENERAL_BILLING_ADDRESS}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div> */}
                 </dl>
 
                 <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
@@ -513,78 +544,78 @@ export default function OrderConfirmation({ config }: any) {
                     </dd>
                   </div>
                 </dl>
-                {isNextorderPromo &&
-                  nextOrderPromo?.firstOrderSetting &&
-                  !isFirstOrderValid && (
-                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
-                      <p className="">
+                {isNextorderPromo && nextOrderPromo?.firstOrderSetting && !isFirstOrderValid && (
+                  <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
+                    <p className="">
                       {translate('label.thankyou.congratilationDiscountText')}{' '}
-                        <span className="font-bold text-indigo-600">
-                          {nextOrderPromo?.nextOrderPromoName}
-                        </span>
-                      </p>
-                      <p>
-                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
-                          days: nextOrderPromo?.nextOrderPromoValidity,
-                        })}
-                      </p>
-                    </div>
-                  )}
-                {isNextorderPromo &&
-                  nextOrderPromo?.everyOrderSetting &&
-                  !isFirstOrderValid && (
-                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
-                      <p className="">
+                      <span className="font-bold text-indigo-600">
+                        {nextOrderPromo?.nextOrderPromoName}
+                      </span>
+                    </p>
+                    <p>
+                      {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
+                        days: nextOrderPromo?.nextOrderPromoValidity,
+                      })}
+                    </p>
+                  </div>
+                )}
+                {isNextorderPromo && nextOrderPromo?.everyOrderSetting && !isFirstOrderValid && (
+                  <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
+                    <p className="">
                       {translate('label.thankyou.congratilationDiscountText')}{' '}
-                        <span className="font-bold text-indigo-600">
-                          {nextOrderPromo?.nextOrderPromoName}
-                        </span>
-                      </p>
-                      <p>
-                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
-                          days: nextOrderPromo?.nextOrderPromoValidity,
-                        })}
-                      </p>
-                    </div>
-                  )}
+                      <span className="font-bold text-indigo-600">
+                        {nextOrderPromo?.nextOrderPromoName}
+                      </span>
+                    </p>
+                    <p>
+                      {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
+                        days: nextOrderPromo?.nextOrderPromoValidity,
+                      })}
+                    </p>
+                  </div>
+                )}
                 <h3 className="sr-only">{translate('label.thankyou.summaryText')}</h3>
                 <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
-                      {isIncludeVAT
-                        ? translate('label.orderSummary.subTotalTaxIncText')
-                        : translate('label.orderSummary.subTotalTaxExcText')}
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                     </dt>
                     <dd className="text-gray-700">
-                      {isIncludeVAT
-                        ? order?.subTotal?.formatted?.withTax
-                        : order?.subTotal?.formatted?.withoutTax}
+                      {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax}
                     </dd>
                   </div>
+                  {order?.discount.raw?.withTax > 0 &&
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-900">
+                        {translate('label.orderSummary.discountText')}
+                      </dt>
+                      <dd className="text-gray-700">
+                        {isIncludeVAT ? order?.discount.formatted?.withTax : order?.discount.formatted?.withoutTax}
+                      </dd>
+                    </div>
+                  }
                   <div className="flex justify-between">
                     <dt className="font-medium text-gray-900">
                       {translate('label.orderSummary.shippingText')}
                     </dt>
                     <dd className="text-gray-700">
-                      {isIncludeVAT
-                        ? order?.shippingCharge.formatted?.withTax
-                        : order?.shippingCharge.formatted?.withoutTax}
+                      {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax}
                     </dd>
                   </div>
-                  <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
-                    <dd className="text-gray-700">
-                      {order?.grandTotal.formatted?.tax}
-                    </dd>
-                  </div>
+                  {order?.grandTotal.raw?.tax > 0 &&
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
+                      <dd className="text-gray-700">
+                        {order?.grandTotal.formatted?.tax}
+                      </dd>
+                    </div>
+                  }
                   <div className="flex justify-between">
                     <dt className="text-lg font-bold text-gray-900">
                       {translate('label.orderSummary.totalText')}
                     </dt>
                     <dd className="text-lg font-bold text-gray-900">
-                      {isIncludeVAT
-                        ? order?.grandTotal?.formatted?.withTax
-                        : order?.grandTotal?.formatted?.withTax}
+                      {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax}
                     </dd>
                   </div>
                 </dl>
@@ -681,15 +712,7 @@ export default function OrderConfirmation({ config }: any) {
                                   )
                                 }
                               )}
-                              {/* <span className="w-5 h-5 mx-2 my-2 text-black">
-                                <ChatBubbleLeftEllipsisIcon />
-                              </span>
-                              <span className="w-5 h-5 mx-2 my-2 text-black">
-                                <EnvelopeIcon />
-                              </span>
-                              <span className="w-5 h-5 mx-2 my-2 text-black">
-                                <LinkIcon />
-                              </span> */}
+
                             </div>
                             <p className="px-5 text-center">
                               {translate('label.checkout.enterReferalfriendText')}
@@ -787,8 +810,12 @@ export default function OrderConfirmation({ config }: any) {
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }

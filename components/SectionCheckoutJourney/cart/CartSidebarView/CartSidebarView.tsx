@@ -3,17 +3,17 @@ import axios from 'axios'
 import { FC } from 'react'
 import { useUI } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
-import { matchStrings, priceFormat, stringFormat, tryParseJson, } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat, tryParseJson, } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, PlusSmallIcon, MinusSmallIcon, ChevronDownIcon, EyeIcon, CheckCircleIcon, TrashIcon, HeartIcon, ArrowRightIcon, } from '@heroicons/react/24/outline'
+import { XMarkIcon, ChevronDownIcon, EyeIcon, CheckCircleIcon, HeartIcon, ArrowRightIcon, MinusIcon, PlusIcon, } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, } from '@components/utils/constants'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, } from '@components/utils/constants'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
@@ -25,6 +25,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import RelatedProducts from '@components/Product/RelatedProducts'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import Engraving from '@components/Product/Engraving'
+import Router from 'next/router'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -97,7 +98,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       },
     }
     const { data: offersResult } = { data: '' } //await getJusPayOffers(data);
-    //console.log(offersResult);
     setPaymentOffers(offersResult)
   }
 
@@ -119,7 +119,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         async (resolve: any, reject: any) => {
           await getBasketPromos(basketId)
           await fetchBasketReValidate()
-          setIsGetBasketPromoRunning(!isGetBasketPromoRunning)
+          setIsGetBasketPromoRunning(false)
           resolve()
         }
       )
@@ -131,6 +131,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     if (!isGetBasketPromoRunning) {
       setIsGetBasketPromoRunning(true)
       handleAsync()
+    }
+
+    if (window.location.pathname.startsWith('/cart')) {
+      const membershipItemsCount = cartItems?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
+      if (membershipItemsCount === cartItems?.lineItems?.length) {
+        Router.reload()
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -370,6 +377,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }
 
   const handleItem = (product: any, type = 'increase') => {
+    if (!product?.id) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
     }
@@ -429,6 +437,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
               current_page: 'Cart',
             },
           })
+        }
+        if (window?.ch_session) {
+          window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
         }
       }
       try {
@@ -545,7 +556,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         <Dialog.Title className="text-lg font-medium text-gray-900 ">
                           {translate('label.basket.shoppingCartText')}
                           {itemsInBag() > 0 ? (
-                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? ' items' : ' item'}{' '} </span>
+                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? translate('common.label.itemSingularText') : translate('common.label.itemPluralText')}{' '} </span>
                           ) : (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '}{translate('common.label.emptyText')}{' '} </span>
                           )}
@@ -557,164 +568,154 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           </button>
                         </div>
                       </div>
-                      {/* {totalDiscount > 0 && cartItems.lineItems?.length > 0 && (
-                        <div className="flex flex-col w-full px-4 py-1 border-b bg-cart-sidebar-green-light sm:px-4">
-                          <h4 className="font-semibold text-green-dark">
-                            {priceFormat(totalDiscount, undefined, cartItems?.discount?.currencySymbol)}{' '} {translate('label.basket.totalSavingsText')}
-                          </h4>
-                        </div>
-                      )} */}
                       <div className="mt-2">
                         <div className="flow-root">
                           <ul role="list" className="px-4">
                             {cartItems.lineItems?.sort((lineItem1: any, lineItem2: any) => { return (lineItem1?.displayOrder - lineItem2?.displayOrder) })?.map((product: any) => {
                               const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
-                              return (
-                                <li key={product.id} className="mb-2">
-                                  <div className={`grid items-start grid-cols-12 gap-1 py-4 ${product?.price?.raw?.withTax == 0 ? 'bg-green-100 border border-emerald-300 rounded-lg p-2' : 'bg-white border-b border-slate-200 p-2'}`}>
-                                    <div className="flex-shrink-0 col-span-3 overflow-hidden rounded-md">
-                                      <Link href={`/${product.slug}`}>
-                                        <img width={100} height={100} style={css} src={generateUri(product.image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'cart-image'} className="object-cover object-center w-full h-full" onClick={handleRedirectToPDP} />
-                                      </Link>
-                                    </div>
-                                    <div className="flex flex-col flex-1 col-span-9 ml-4">
-                                      <div className="flex flex-col flex-1">
-                                        <div className="flex justify-between font-normal text-gray-900 font-sm">
-                                          <h5 onClick={handleClose} className='text-base font-medium'>
-                                            <Link href={`/${product.slug}`}> {' '} {product.name}{' '}</Link>
-                                          </h5>
-                                          <p className="mt-0 ml-4 font-semibold text-green">
-                                            {product?.price?.raw?.withTax > 0 ?
-                                              (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax)
-                                              : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
-                                            }
-                                          </p>
-                                        </div>
-                                        <div className='flex flex-col'>
-                                          <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
-                                            {product?.colorName != "" &&
-                                              <div className="flex items-center space-x-1.5">
-                                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                                  <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                                  <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                                  <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                                  <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                                  <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                                <span>{product?.colorName}</span>
-                                              </div>
-                                            }
-                                            {product?.size != "" &&
-                                              <>
-                                                <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
-                                                <div className="flex items-center space-x-1.5">
-                                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                                    <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                  </svg>
-                                                  <span className='uppercase'>{product?.size}</span>
-                                                </div>
-                                              </>
-                                            }
+                              return product?.stockCode != ITEM_TYPE_ADDON &&
+                                <>
+                                  <li key={product.id} className="mb-2">
+                                    <div className={`grid items-start grid-cols-12 gap-1 py-4 ${product?.price?.raw?.withTax == 0 ? 'bg-green-100 border border-emerald-300 rounded-lg p-2' : 'bg-white border-b border-slate-200 p-2'}`}>
+                                      <div className="flex-shrink-0 col-span-3 overflow-hidden rounded-md">
+                                        <Link href={`/${product.slug}`}>
+                                          <img width={100} height={100} style={css} src={generateUri(product.image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'cart-image'} className="object-cover object-center w-full h-full" onClick={handleRedirectToPDP} />
+                                        </Link>
+                                      </div>
+                                      <div className="flex flex-col flex-1 col-span-9 ml-4">
+                                        <div className="flex flex-col flex-1">
+                                          <div className="flex justify-between font-normal text-gray-900 font-sm">
+                                            <h5 onClick={handleClose} className='text-base font-medium dark:text-black'>
+                                              <Link href={`/${product.slug}`}> {' '} {product.name}{' '}</Link>
+                                            </h5>
+                                            <p className="mt-0 ml-4 font-semibold text-green">
+                                              {product?.price?.raw?.withTax > 0 ?
+                                                (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax)
+                                                : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                              }
+                                            </p>
                                           </div>
-                                        </div>
-                                        <div className="">
-                                          {product.children?.map((child: any, idx: number) => {
-                                            return (
-                                              <div className="flex" key={idx} >
-                                                <div className="flex flex-col mt-2 mb-6">
-                                                  <div className="flex justify-between font-medium text-gray-900">
-                                                    <div className="image-container">
-                                                      <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
-                                                        <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
-                                                      </span>
-                                                    </div>
-                                                    <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
-                                                    <h3>
-                                                      <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
-                                                      <span className="mt-0 ml-4 text-xs"> {' '} {isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax}{' '} </span>
-                                                    </h3>
+                                          <div className='flex flex-col'>
+                                            <div className="mt-1.5 sm:mt-1.5 flex text-sm text-slate-600 dark:text-slate-300 justify-between gap-2 items-center">
+                                              <span className='flex'>
+                                                {product?.colorName != "" &&
+                                                  <div className="flex items-center space-x-1.5">
+                                                    <svg className="w-4 h-4 dark:text-slate-600" viewBox="0 0 24 24" fill="none">
+                                                      <path d="M7.01 18.0001L3 13.9901C1.66 12.6501 1.66 11.32 3 9.98004L9.68 3.30005L17.03 10.6501C17.4 11.0201 17.4 11.6201 17.03 11.9901L11.01 18.0101C9.69 19.3301 8.35 19.3301 7.01 18.0001Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                      <path d="M8.35 1.94995L9.69 3.28992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                      <path d="M2.07 11.92L17.19 11.26" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                      <path d="M3 22H16" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                                                      <path d="M18.85 15C18.85 15 17 17.01 17 18.24C17 19.26 17.83 20.09 18.85 20.09C19.87 20.09 20.7 19.26 20.7 18.24C20.7 17.01 18.85 15 18.85 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                    <span className='dark:text-slate-600'>{product?.colorName}</span>
                                                   </div>
-                                                  <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => handleItem(child, translate('common.label.deleteText'))} >
-                                                    {translate('common.label.removeText')}
-                                                  </button>
+                                                }
+                                                {product?.size != "" &&
+                                                  <>
+                                                    <span className="mx-2 border-l border-slate-200 dark:border-slate-700 "></span>
+                                                    <div className="flex items-center space-x-1.5">
+                                                      <svg className="w-4 h-4 dark:text-slate-600" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M21 9V3H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M3 15V21H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M21 3L13.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M10.5 13.5L3 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                      </svg>
+                                                      <span className='uppercase dark:text-slate-600'>{product?.size}</span>
+                                                    </div>
+                                                  </>
+                                                }
+                                              </span>
+                                              {product?.price?.raw?.withTax > 0 &&
+                                                <div className="flex flex-row items-center justify-end px-4 text-gray-900 border">
+                                                  {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
+                                                  <span className="px-2 py-2 text-md"> {product.qty} </span>
+                                                  {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
                                                 </div>
-                                              </div>
-                                            )
-                                          })}
-                                        </div>
-                                        <div className="flex items-end justify-between text-sm">
-                                          <div className="flex justify-between w-full mt-2">
-                                            {product?.variantProducts?.length > 0 ? (
-                                              <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} className='w-full'>
-                                                <div className="border w-[fit-content] flex flex-row justify-between items-center py-2 px-2">
-                                                  <p className="m-auto mr-1 text-sm text-gray-700">
-                                                    Size:{' '}
-                                                    <span className="uppercase"> {' '} {getLineItemSizeWithoutSlug(product)}{' '} </span>
-                                                  </p>
-                                                  <ChevronDownIcon className="w-4 h-4 text-black" />
-                                                </div>
-                                              </div>
-                                            ) : (
-                                              <div className='w-full'></div>
-                                            )}
-                                            {product?.price?.raw?.withTax > 0 &&
-                                              <div className="flex flex-row items-center px-4 text-gray-900 border">
-                                                <MinusSmallIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />
-                                                <span className="px-2 py-2 text-md"> {product.qty} </span>
-                                                <PlusSmallIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />
-                                              </div>
-                                            }
-                                            <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                                              {reValidateData?.message != null && soldOutMessage != '' && (
-                                                matchStrings(soldOutMessage, "sold out", true) ? (
-                                                  <div className="flex flex-col col-span-12">
-                                                    <div className="flex text-xs font-semibold text-left text-red-500">
-                                                      <span className="relative mr-1">
-                                                        <img
-                                                          alt="Sold Out"
-                                                          src="/assets/images/not-shipped-edd.svg"
-                                                          width={20}
-                                                          height={20}
-                                                          className="relative inline-block mr-1 top-2"
-                                                        />
-                                                      </span>
-                                                      <span className="mt-2">{soldOutMessage}</span>
-                                                    </div>
-                                                  </div>
-                                                ) : matchStrings(soldOutMessage, "price changed", true) && (
-                                                  <div className="items-center w-full col-span-12">
-                                                    <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
-                                                      {soldOutMessage}
-                                                    </div>
-                                                  </div>
-                                                )
-                                              )}
+                                              }
                                             </div>
                                           </div>
-                                        </div>
-                                        {product?.price?.raw?.withTax > 0 &&
-                                          <div className="flex flex-row justify-between mt-3 \text-left">
-                                            <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
-                                              {isInWishList(product?.productId) ? (
-                                                <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
-                                              ) : (
-                                                <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-400" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
-                                              )
-                                              }
-                                            </button>
-                                            <button type="button" className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group " onClick={() => { openModal(); setItemClicked(product) }} >
-                                              <span className="relative z-10 flex items-center mt-0 text-sm font-medium text-primary-6000 hover:text-primary-500 ">{translate('common.label.removeText')}</span>
-                                            </button>
+                                          <div className="">
+                                            {cartItems?.lineItems?.map((child: any) => {
+                                              return matchStrings(product?.productId, child?.parentProductId) &&
+                                                <div className="flex">
+                                                  <div className="flex flex-col mt-2 mb-6">
+                                                    <div className="flex justify-between font-medium text-gray-900">
+                                                      <div className="image-container">
+                                                        <span className="align-middle cursor-pointer" onClick={() => { handleToggleEngravingModal(product) }} title={translate('common.label.viewPersonalisationText')} >
+                                                          <EyeIcon className="inline-block w-4 h-4 hover:text-gray-400 lg:-mt-2 md:-mt-1 xsm:-mt-3 xsm:h-5" />
+                                                        </span>
+                                                      </div>
+                                                      <p className="ml-1 mr-1 font-thin text-gray-500"> {' '} |{' '} </p>
+                                                      <h3 className='flex justify-between m-auto'>
+                                                        <span className="text-xs uppercase cursor-default">{translate('common.label.personalisationText')}</span>
+                                                        <span className="mt-0 ml-4 text-xs text-green"> {' '}{isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax}{' '} </span>
+                                                      </h3>
+                                                    </div>
+                                                    <button type="button" className="-ml-32 text-xs font-medium text-indigo-600 hover:text-indigo-500" onClick={() => { openModal(); setItemClicked({ type: DeleteModalType.ENGRAVING, product: child }) }} >
+                                                      {translate('common.label.removeText')}
+                                                    </button>
+                                                  </div>
+                                                </div>
+                                            })}
                                           </div>
-                                        }
+                                          <div className="flex items-end justify-between text-sm">
+                                            <div className="flex justify-between w-full">
+                                              {product?.variantProducts?.length > 0 ? (
+                                                <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} className='w-full mt-2'>
+                                                  <div className="border w-[fit-content] flex flex-row justify-between items-center py-2 px-2">
+                                                    <p className="m-auto mr-1 text-sm text-gray-700">
+                                                      Size:{' '}
+                                                      <span className="uppercase"> {' '} {getLineItemSizeWithoutSlug(product)}{' '} </span>
+                                                    </p>
+                                                    <ChevronDownIcon className="w-4 h-4 text-black" />
+                                                  </div>
+                                                </div>
+                                              ) : (
+                                                <div className='w-full'></div>
+                                              )}
+
+                                              <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
+                                                {reValidateData?.message != null && soldOutMessage != '' && (
+                                                  matchStrings(soldOutMessage, "sold out", true) ? (
+                                                    <div className="flex flex-col col-span-12">
+                                                      <div className="flex text-xs font-semibold text-left text-red-500">
+                                                        <span className="relative mr-1">
+                                                          <img alt="Sold Out" src="/assets/images/not-shipped-edd.svg" width={20} height={20} className="relative inline-block mr-1 top-2" />
+                                                        </span>
+                                                        <span className="mt-2">{soldOutMessage}</span>
+                                                      </div>
+                                                    </div>
+                                                  ) : matchStrings(soldOutMessage, "price changed", true) && (
+                                                    <div className="items-center w-full col-span-12">
+                                                      <div className="flex justify-center w-full p-1 text-xs font-semibold text-center text-gray-500 bg-gray-100 border border-gray-100 rounded">
+                                                        {soldOutMessage}
+                                                      </div>
+                                                    </div>
+                                                  )
+                                                )}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          {product?.price?.raw?.withTax > 0 &&
+                                            <div className="flex flex-row justify-between mt-0 \text-left">
+                                              <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
+                                                {isInWishList(product?.productId) ? (
+                                                  <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
+                                                ) : (
+                                                  <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
+                                                )
+                                                }
+                                              </button>
+                                              <button type="button" className="flex items-center gap-1 text-xs font-normal text-left text-red-400 group " onClick={() => { openModal(); setItemClicked({ type: DeleteModalType.PRODUCT, product: product }) }} >
+                                                <span className="relative z-10 flex items-center mt-0 text-sm font-medium text-primary-6000 hover:text-primary-500 ">{translate('common.label.removeText')}</span>
+                                              </button>
+                                            </div>
+                                          }
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </li>
-                              )
+                                  </li>
+                                </>
                             })}
                             {isWishlistClicked && (
                               <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
@@ -727,7 +728,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <div className="flex flex-col items-center justify-between w-full h-full py-9">
                               <img height="100" width="100" src="/assets/images/cart.jpg" alt="cart" className="text-center" />
                               <p className="mt-5 text-gray-700">{translate('common.label.noItemsPresentText')}</p>
-                              <Link href="/search">
+                              <Link href={sanitizeRelativeUrl(`/search`)}>
                                 <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={handleClose} >
                                   {translate('label.basket.catalogText')}
                                   <span aria-hidden="true"> &rarr;</span>
@@ -741,8 +742,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             </div>
                           )}
                           {isEmpty && (
-                            <div className="cart-recently-viewed">
-                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} />
+                            <div className="px-4 cart-recently-viewed sm:px-8">
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={1.4} />
                             </div>
                           )}
                           {!isEmpty && relatedProductData && (
@@ -765,8 +766,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {!isEmpty && (
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                         <div className="flex justify-between py-2 text-sm text-gray-900">
-                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalTaxIncText') : translate('label.orderSummary.subTotalTaxExcText')}{' '} </p>
-                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax : cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
+                          <p className='text-sm'> {' '} {cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'>{translate('label.orderSummary.shippingText')}</p>
@@ -779,10 +780,12 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
-                        <div className="flex justify-between py-2 text-sm text-gray-900">
-                          <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
-                          <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
-                        </div>
+                        {cartItems.grandTotal?.raw?.tax > 0 &&
+                          <div className="flex justify-between py-2 text-sm text-gray-900">
+                            <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
+                            <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
+                          </div>
+                        }
                         <div className="flex justify-between py-4 font-bold text-gray-900 font-20">
                           <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
                           <p className="font-20 link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
@@ -795,12 +798,12 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     )}
                     {cartItems.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                        <Link href="/cart" onClick={() => {
+                        <Link href="/checkout" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
                         }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
                           <span className='flex flex-col justify-start pl-5 text-left'>
-                            <span>{cartItems?.totalWithoutShipping?.formatted?.withTax}</span>
+                            <span>{cartItems.grandTotal?.formatted?.withTax}</span>
                             <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
                           </span>
                           <span className='flex items-center gap-2 pr-5'>

@@ -13,7 +13,7 @@ import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/parse-util";
-import { cartItemsValidateAddToCart, getFeaturesConfig } from "@framework/utils/app-util";
+import { cartItemsValidateAddToCart, getFeaturesConfig, sanitizeRelativeUrl } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import _ from 'lodash';
 import { ArrowRight } from './shared/icons';
@@ -35,9 +35,11 @@ export interface ProductCardProps {
   compareProductsAttributes?: any
   active?: any
   hideWishlistCTA?: any
+  featureToggle: any
+  defaultDisplayMembership: any
 }
 
-const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA }) => {
+const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, attributeNames, compareProductsAttributes, active, hideWishlistCTA, featureToggle, defaultDisplayMembership, }) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -142,7 +144,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       title: translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
-          if (matchStrings(o.productId, data?.recordId, true) || matchStrings(o.productId, data?.productId, true)) {
+          if (matchStrings(o?.productId, data?.recordId, true) || matchStrings(o?.productId, data?.productId, true)) {
             return o
           }
         })
@@ -229,10 +231,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             {attributesMap?.map((attrib: any, attribIdx: any) => (
               <span key={`compare-attributes-${attribIdx}`} className="flex items-center justify-start w-full pb-1 font-semibold text-left text-black uppercase font-12">
                 <ArrowRight className="inline-block w-3 h-3 pr-1 text-black" />{' '}
-                {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No" ?
-                  <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='icon-small' /></>
-                  : attrib?.value == "True" || attrib?.value == "Yes" ?
-                    <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='icon-small-green' /></>
+                {attrib?.name}{' '}:{' '}{attrib?.value ? attrib?.value == "False" || attrib?.value == "No"  || attrib?.value == false  || attrib?.value == "false" ?
+                  <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='w-4 h-4 icon-small' /></>
+                  : attrib?.value == "True" || attrib?.value == "Yes" || attrib?.value == true || attrib?.value == "true" ?
+                    <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='w-4 h-4 icon-small icon-small-green' /></>
                     : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
                   <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
               </span>
@@ -273,9 +275,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard relative flex flex-col sm:group bg-transparent ${className}`, { 'height-full': isComparedEnabled, 'height-full border-sky-800 rounded-2xl border': product.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-          <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+          <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug}` || `/${data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
               <img src={generateUri(data?.image, 'h=600&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
             </div>
@@ -288,20 +290,22 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           {!isComparedEnabled && renderGroupButtons()}
         </div>
 
-        <ButtonLink isComparedEnabled={isComparedEnabled} href={`/${data.slug}`} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
+        <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug}` || `/${data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
           <div className="space-y-4 px-2.5 pt-5 pb-2.5">
             <div>
               <h2 className="text-base font-semibold transition-colors min-h-[60px] nc-ProductCard__title">{data?.name}</h2>
-              <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
             </div>
-            <div className="flex items-center justify-between ">
-              <Prices price={data?.price} listPrice={data?.listPrice} />
+            <div className='flex justify-between'>
+              <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{data?.classification?.mainCategoryName}</p>
               <div className="flex items-center mb-0.5">
                 <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
                 <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
                   {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
                 </span>
               </div>
+            </div>
+            <div className="flex items-center justify-between ">
+              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
             {renderCompareAttributes()}
             {isComparedEnabled && product?.compared && (
@@ -318,7 +322,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
       </div>
       {/* QUICKVIEW */}
-      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
     </>
   );
 };

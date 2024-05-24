@@ -15,9 +15,9 @@ import {
   pincodeLookup,
   submittingClassName,
 } from '@framework/utils/app-util'
-import { AddressPageAction } from '@components/utils/constants'
+import { AddressPageAction, OTP_LOGIN_ENABLED } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
-import { NEW_ADDRESS_FORM_FIELDS } from './NewAddressModal'
+import { useNewAddressFormFields } from './NewAddressModal'
 import { IFormProps } from 'framework/contracts/IFormProps'
 import { INewAddressFormProps } from 'framework/contracts/address/INewAddressFormProps'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -43,6 +43,8 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
       ? defaultValues
       : initialValues
     : initialValues
+  
+  const NEW_ADDRESS_FORM_FIELDS = useNewAddressFormFields()
 
   const onLookup = async (target: any) => {
     //const target: any = ev?.target;
@@ -75,14 +77,8 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
     >
       {(context) => {
         const {
-          errors,
-          touched,
           handleSubmit,
           values,
-          handleChange,
-          setValues,
-          handleBlur,
-          setFieldValue,
         } = context
         // form.setTouched({...form.touched,[field.name]: true });
         return (
@@ -167,7 +163,7 @@ const NewAddressForm = (props: IFormProps & INewAddressFormProps) => {
               {
                 <AddressFormField context={context} item={findByFieldName(formFields, 'mobileNumber')} />
               }
-                {
+                {OTP_LOGIN_ENABLED &&
                   <AddressFormField
                     context={context}
                     item={findByFieldName(formFields, 'whtsappUpdated')}

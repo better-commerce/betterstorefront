@@ -10,7 +10,7 @@ const MapWithMarkers = ({ locations, setMap }:any) => {
   }, [locations]);
 
   return (
-    <div ref={mapRef} className='w-full h-[400px] rounded-2xl border border-slate-200'>
+    <div ref={mapRef} className='w-full h-[300px] rounded-2xl border border-slate-200'>
       {/* Map will be rendered here */}
     </div>
   );

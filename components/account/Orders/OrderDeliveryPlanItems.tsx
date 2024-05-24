@@ -70,9 +70,9 @@ const OrderDeliveryPlanItems = ({
                           ).format(DATE_FORMAT)}
                         </span>
                       </p>
-                      <button className="border rounded-full border-gray-900">
+                      <button className="border border-gray-900 rounded-full">
                         <ChevronDownIcon
-                          className={`w-4 h-4 ${
+                          className={`w-4 h-4 dark:text-gray-900 ${
                             open && 'rotate-180 transform'
                           }`}
                         />
@@ -95,7 +95,7 @@ const OrderDeliveryPlanItems = ({
           </div>
           {details?.allowedToTrack && (
             <>
-              <div className="w-full px-4 py-4 mb-4 border-b border-gray-300 border-dashed sm:px-16 sm:pl-0 sm:pt-0">
+              <div className="w-full px-4 py-4 border-b border-gray-300 border-dashed sm:px-16 sm:pl-0 sm:pt-0">
                 <div className="flex flex-col w-full">
                   <a
                     onClick={() => trackPackage(details)}
@@ -111,9 +111,9 @@ const OrderDeliveryPlanItems = ({
           )}
 
           <div className="w-full">
-            <div className="px-0 mt-4">
+            <div className="px-0">
               <div className="flow-root">
-                <ul role="list" className="-my-6 divide-y divide-gray-200">
+                <ul role="list" className="">
                   {deliveryPlan?.items?.map((item: any, idx: number) =>
                     details?.items
                       ?.filter((x: any) =>
@@ -157,7 +157,7 @@ const OrderDeliveryPlanItems = ({
                         ) : (
                           <>
                             <li
-                              className="px-0 pb-0 my-4 border-b border-gray-300 border-dashed"
+                              className="px-0 pb-0 m-0 border-b border-gray-300 border-dashed"
                               key={idx}
                             >
                               <div className="flex gap-3 py-6 sm:gap-6">
@@ -187,7 +187,7 @@ const OrderDeliveryPlanItems = ({
                                   <div>
                                     <div className="flex flex-col justify-between font-medium text-gray-900">
                                       <div className="flex items-center justify-between">
-                                        <p className="font-normal text-10 text-black">
+                                        <p className="font-normal text-black text-10">
                                           {
                                             productItem?.categoryItems[0]
                                               ?.categoryName
@@ -229,7 +229,7 @@ const OrderDeliveryPlanItems = ({
                                           </a>
                                         </h3>
                                       </div>
-                                      <p className="mt-2 text-sm font-normal text-secondary-full-opacity">
+                                      <p className="mt-2 text-lg font-bold text-secondary-full-opacity">
                                         {productItem?.price?.raw?.withTax > 0 ? priceFormat(
                                           productItem?.price?.raw?.withTax,
                                           undefined,

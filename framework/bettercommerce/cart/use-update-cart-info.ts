@@ -1,5 +1,6 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 interface Props {
   basketId?: string
   info: any
@@ -28,8 +29,8 @@ export default function useUpdateCartInfo() {
       })
       return response.result
     } catch (error: any) {
-      console.log(error)
-      throw new Error(error.message)
+      logError(error)
+      //throw new Error(error.message)
     }
   }
 }

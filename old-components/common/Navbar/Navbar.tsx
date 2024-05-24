@@ -365,7 +365,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                                     <div key={`navbar-parent-${navIdx}`} className="grid grid-cols-1 px-5 py-2 border-b border-gray-200 sm:px-6 gap-y-0 gap-x-0 lg:gap-x-0" >
                                       <ul role="list" aria-labelledby="clothing-heading" className="col-span-1" >
                                         {navBlock?.navItems?.map((navItem: any, idx: any) => (
-                                          <Link legacyBehavior key={`${navItem?.caption}-${idx}`} title={navItem?.caption} href={navBlock?.navBlockType == 9 ? `/collection/${removePrecedingSlash(navItem?.itemLink)}` : `/${removePrecedingSlash(navItem?.itemLink)}`} passHref>
+                                          <Link legacyBehavior key={`${navItem?.caption}-${idx}`} title={navItem?.caption} href={navBlock?.navBlockType == 9 ? `collection/${removePrecedingSlash(navItem?.itemLink)}` : `/${removePrecedingSlash(navItem?.itemLink)}`} passHref>
                                             <li onClick={() => { setOpen(false); hamburgerMenuClickLevel2(item?.caption, navBlock?.boxTitle) }} className="flex pb-2 my-3 text-sm text-gray-700 hover:text-gray-800 dark:text-gray-700" >
                                               {navItem?.caption}
                                             </li>
@@ -442,7 +442,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
                                   <div key={`navItems-${navIdx}`} className="grid grid-cols-5 pt-4 border-t border-gray-100 sm:pt-6 gap-y-1 gap-x-6 lg:gap-x-8" >
                                     {navBlock?.navItems?.map((navItem: any, idx: number) => (
                                       <Popover.Button key={`popover-button-${idx}`} className={classNames(openState == idx ? '' : 'border-gray-200 text-gray-700 hover:text-pink', 'relative z-10 flex my-2 items-center transition-colors ease-out duration-200 text-md font-normal text-gray-600 hover:text-pink hover:font-semibold -mb-px pt-px')} >
-                                        <Link href={navBlock?.navBlockType == 9 ? `/collection/${removePrecedingSlash(navItem?.itemLink)}` : `/${removePrecedingSlash(navItem?.itemLink)}`} className="relative flex items-center h-full hover:text-pink" title={navItem?.caption} onClick={() => setOpenState(-1)} >
+                                        <Link href={navBlock?.navBlockType == 9 ? `collection/${removePrecedingSlash(navItem?.itemLink)}` : `${removePrecedingSlash(navItem?.itemLink)}`} className="relative flex items-center h-full hover:text-pink" title={navItem?.caption} onClick={() => setOpenState(-1)} >
                                           {navItem?.caption}
                                         </Link>
                                       </Popover.Button>

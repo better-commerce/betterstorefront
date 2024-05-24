@@ -7,7 +7,7 @@
     {
       "files": ["framework/saleor/**/*"],
       "options": {
-        "printWidth": 120
+        "printWidth": 1200
       }
     }
   ]

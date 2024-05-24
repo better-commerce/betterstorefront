@@ -8,7 +8,7 @@ const TrackingDetail = ({ deliveryPlan }: any) => {
    const translate = useTranslation()
    return (
       <>
-      <div className='w-full px-4 pt-6 pb-0 sm:px-0'>
+      <div className='w-full px-4 pt-4 pb-0 sm:px-0'>
       {
          deliveryPlan?.trackingNo && (
                <div className='flex justify-between'>
@@ -18,7 +18,7 @@ const TrackingDetail = ({ deliveryPlan }: any) => {
                   </div>
                   <div className='w-full'>
                      <h3 className='mb-1 text-gray-700 font-10'>{translate('label.orderDetails.awbNumberHeadingText')}</h3>
-                     <p className='text-black text-sm font-normal dark:text-black'>#{deliveryPlan?.trackingNo}</p>
+                     <p className='text-sm font-normal text-black dark:text-black'>#{deliveryPlan?.trackingNo}</p>
                   </div>
                </div>
          )

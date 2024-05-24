@@ -9,9 +9,9 @@ import SocialsList from "../SocialsList/SocialsList";
 import SwitchDarkMode from "../SwitchDarkMode/SwitchDarkMode";
 import ButtonClose from "../ButtonClose/ButtonClose";
 import ButtonPrimary from "../Button/ButtonPrimary";
-import { Logo } from "@components/ui";
+import { Logo, useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
-import { removePrecedingSlash } from "@framework/utils/app-util";
+import { removePrecedingSlash, sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -20,18 +20,14 @@ export interface NavMobileProps {
   featureToggle?: any
 }
 
-const NavMobile: React.FC<NavMobileProps> = ({
-  data,
-  navItems,
-  onClickClose,
-  featureToggle
-}) => {
-  const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-200 font-medium ") => {
+const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, featureToggle }) => {
+  const { setShowSearchBar, openBulkAdd, isGuestUser, user } = useUI()
+  const _renderMenuChild = (item: any, itemClass = "pl-3 text-neutral-900 dark:text-neutral-900 font-medium ") => {
     return (
       <ul className="pb-1 pl-6 text-base nav-mobile-sub-menu">
         {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
-            <Link href={`/${i?.hyperlink}`} className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-800 mt-0.5 pr-4 ${itemClass}`} >
+            <div className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
               <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
                 {i?.boxTitle.toLowerCase()}
               </span>
@@ -42,13 +38,13 @@ const NavMobile: React.FC<NavMobileProps> = ({
                   </Disclosure.Button>
                 </span>
               )}
-            </Link>
+            </div>
             {i?.navItems && (
               <Disclosure.Panel>
-                <ul className="grid grid-cols-2 pl-3 mt-2 space-2">
+                <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`}>
-                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-400 dark:hover:text-white " href={i?.navBlockType == 9 ? `/collection/${removePrecedingSlash(child?.itemLink)}` : `/${removePrecedingSlash(child?.itemLink)}`} >
+                      <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-600 dark:hover:text-black " href={i?.navBlockType == 9 ? `collection${sanitizeRelativeUrl(`/${child?.itemLink}`)}` : `${sanitizeRelativeUrl(`/${child?.itemLink}`)}`} >
                         {child?.caption.toLowerCase()}
                       </Link>
                     </li>
@@ -65,8 +61,8 @@ const NavMobile: React.FC<NavMobileProps> = ({
 
   const _renderItem = (item: any, index: number) => {
     return (
-      <Disclosure key={index} as="li" className="text-slate-900 dark:text-white" >
-        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" href={`/${item.hyperlink}`} >
+      <Disclosure key={index} as="li" className="text-slate-900 dark:text-slate-900" >
+        <Link className="flex w-full items-center py-2.5 px-4 font-medium uppercase tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-100 rounded-lg" href={sanitizeRelativeUrl(`/${item?.hyperlink}`)} >
           <span className={!item?.children ? "block w-full" : ""} onClick={onClickClose} >
             {item?.caption}
           </span>
@@ -108,7 +104,7 @@ const NavMobile: React.FC<NavMobileProps> = ({
   };
 
   return (
-    <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-neutral-900 divide-neutral-100 dark:divide-neutral-800">
+    <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-white divide-neutral-100 dark:divide-neutral-800">
       <div className="px-5 pb-2">
         <Logo />
         <span className="absolute p-1 right-2 top-4">
@@ -126,8 +122,27 @@ const NavMobile: React.FC<NavMobileProps> = ({
             </Link>
           </Disclosure>
         }
+        {!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature &&
+          <Disclosure as="li" className="py-4 text-black border bg-slate-50 dark:text-white border-slate-200 rounded-xl">
+            <div className="flex w-full items-center pb-2.5 px-4 font-semibold tracking-wide text-sm hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg" >
+              My Fashion Store
+            </div>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-store`} passHref >
+              <span>Browsing History</span>
+            </Link>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-store/recommendations`} passHref >
+              <span>Recommended For You</span>
+            </Link>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-store/improve-recommendations`} passHref >
+              <span>Improve Your Recommendation</span>
+            </Link>
+            <Link onClick={onClickClose} className="flex items-center w-full px-4 py-1 font-normal tracking-wide rounded-lg font-12 hover:bg-slate-100 dark:hover:bg-slate-800" href={`/my-account`} passHref >
+              <span>Your Profile</span>
+            </Link>
+          </Disclosure>
+        }
       </ul>
-    </div>
+    </div >
   );
 };
 

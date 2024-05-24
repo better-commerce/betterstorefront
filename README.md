@@ -1,5 +1,8 @@
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fvercel.com%2Fnew%2Fclone%3Frepository-url%26repo-name%3Dcommerce%26demo-title%3DNext.js%20Commerce%26demo-description%3DAn%20all-in-one%20starter%20kit%20for%20high-performance%20e-commerce%20sites.%26demo-url%3Dhttps%3A%2F%2Fdemo.vercel.store%26demo-image%3Dhttps%3A%2F%2Favatars.githubusercontent.com%2Fu%2F22865887%3Fs%3D400%26u%3D39f1404d7795dcf15ae6b7c1b3499a94d6c8308c%26v%3D4%26integration-ids%3Doac_MuWZiE4jtmQ2ejZQaQ7ncuDT)
 
+## Setup
+To ensure that your development environment is ready, [install Node.js from here](https://nodejs.org/en/download). You’ll need Node.js **version 18** or higher.
+
 ## Getting Started
 
 Run the following command to create a new project with this Starter:
@@ -25,7 +28,7 @@ npx create-next-app [project-name] -e https://github.com/better-commerce/betters
 
 BetterCommerce is a **Headless**, **API-First SaaS based**  suite of independent **composable** modules **Ecommerce, PIM, OMS**, **AI Product Recommendations** and **Analytics** that work independently with other platforms as well as it works fully integrated as an end-to-end commerce solution. 
 
-This storefront is an all-in-one storefront based on Next.js, for high-performance e-commerce sites. With a few clicks, developers can clone, deploy and fully customize their own store. The storefront by default works out-of-the-box with BetterCommerce suite of APIs, however can be customized to work with other headless commerce API providers as well. 
+This storefront is an all-in-one storefront based on Next.js **version 13.3.0**, for high-performance e-commerce sites. With a few clicks, developers can clone, deploy and fully customize their own store. The storefront by default works out-of-the-box with BetterCommerce suite of APIs, however can be customized to work with other headless commerce API providers as well. 
 
 Start right now at [bettercommerce.io](https://bettercommerce.io)
 
@@ -91,7 +94,48 @@ Next.js Commerce integrates out-of-the-box with BigCommerce, Shopify, Swell, Sal
 - `config` - basic store config.
 - `framework` - All the functions used to communicate with the API.
 - `pages` - This is a special folder used by NextJS. Do not rename this. For every file / folder in page NextJS will create a new page. For example if you put a /hello.tsx in pages, the content will be rendered on hostname/hello. Read more here: https://nextjs.org/docs/basic-features/pages
+    - `api` - Front-end API middlewares interacting with server-side APIs in framework
+    - `index` - Home page
+    - `brands`
+        - [...brand] - Brand landing page
+        - `shop-all`
+            - [...brand] - Brand's PLP page
+    - `cache`
+        - `reset`
+            - `index` - Reset client browser's cache & server-side redis cache
+    - `cart` - Basket page
+    - `category`
+        - `index` - Category list page
+        - `[category]`
+            - `index` - Sub-category list page
+            - `[...subcategory]` - Sub-category PLP page
+    - `checkout`
+        - `index` - Checkout page
+    - `collection`
+        - `index` - Collection list page
+        - `[...collection]` - Collection PLP page
+    - `payment-failed` - Order failure page
+    - `payment-notification`
+        - `[...gateway]` - Page for synchronous processing of the order / transaction with status when redirected from the payment gateway's payment page (for all integrated payment gateways)
+    - `payment-webhook`
+        - `[...gateway]` - Server-side page for handling webhooks execution for all the integrated payment gateways
+    - `products`
+        - `[...slug]` - PDP page
+    - `quote`
+        - `[...paymentCode]` - Payment link page
+    - `thank-you` - Order confirmation page
+    - `404` - Page displayed for non-existent route / url
+    - `500` - Generic error page
 - `public` - images and other assets used publicly.
+- `ssl` - Self-signed certificates for running app locally on SSL.
+- `public` - images and other assets used publicly.
+- `next.config.js` - Configuration file for Next.js
+- `package.json` - Project dependencies and scripts
+- `middleware.ts` - Next.js request middleware
+- `.env` - Environment variables
+- `.eslint.json` - Configuration file for ESLint
+- `.gitignore` - Git files and folders to ignore
+- `tsconfig.json` - Configuration file for TypeScript
 
 ## Configuration
 
@@ -109,7 +153,7 @@ Next.js Commerce integrates out-of-the-box with BigCommerce, Shopify, Swell, Sal
 |NEXT_PUBLIC_API_VERSION|version of the API used|v2|
 |NEXT_PUBLIC_ENABLE_INFINITE_SCROLL|Should the infinite scroll be enabled on PLPs or standard paging|TRUE|
 |NEXT_PUBLIC_OMNILYTICS_ID|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
-|NEXT_PUBLIC_GEO_ENDPOINT|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
+|OMNILYTICS_BASE_URL|If Omnilytics is enabled for realtime event capture, then this value to be provided|Provided by your BC Account Manager|
 |OMS_BASE_URL|OMS API Url which is used for fetching basket delivery plan, split shipment, inventory|https://omsapi20.bettercommerce.io/|
 
 That's it!

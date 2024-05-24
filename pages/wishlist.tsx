@@ -1,5 +1,4 @@
 import type { GetStaticPropsContext } from 'next'
-import commerce from '@lib/api/commerce'
 import { Heart } from '@components/shared/icons'
 import Layout from '@components/Layout/Layout'
 import { Text, Container, Skeleton } from '@components/ui'
@@ -10,6 +9,11 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { WishlistCard } from 'old-components/wishlist'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { PagePropType, getPagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 
 export async function getStaticProps({
@@ -25,25 +29,28 @@ export async function getStaticProps({
   }
 
   const config = { locale, locales }
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
-  const { pages } = await pagesPromise
-  const { categories } = await siteInfoPromise
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
 
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
-      pages,
-      categories,
     },
   }
 }
 
-export default function Wishlist() {
+function Wishlist() {
   const { data: customer } = useCustomer()
   // @ts-ignore  - Fix this types
   const { data, isLoading, isEmpty } = useWishlist({ includeProducts: true })
   const translate = useTranslation()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.Wishlist, {
+    entityName: PAGE_TYPES.Wishlist,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.Wishlist,
+  })
 
   return (
     <Container>
@@ -88,3 +95,5 @@ export default function Wishlist() {
 }
 
 Wishlist.Layout = Layout
+
+export default withDataLayer(Wishlist, PAGE_TYPES.Wishlist)

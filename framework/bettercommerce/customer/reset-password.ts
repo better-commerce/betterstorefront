@@ -1,3 +1,4 @@
+import { logError } from '@framework/utils/app-util'
 import fetcher from '../fetcher'
 import { CUSTOMER_BASE_API } from '@components/utils/constants'
 
@@ -21,6 +22,6 @@ export default async function resetPassword(
     })
     return res
   } catch (error) {
-    console.log(error)
+    logError(error)
   }
 }

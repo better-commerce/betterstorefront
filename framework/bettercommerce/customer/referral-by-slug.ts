@@ -1,5 +1,6 @@
 import { REFERRAL_BY_SLUG } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
+import { logError } from "@framework/utils/app-util";
 
 interface props{
     slug?:string
@@ -18,7 +19,7 @@ export default function useReferralBySlug(){
             })
             return response
         } catch (error: any) {
-            console.log(error, 'err')
+            logError(error)
             // throw new Error(error.message)
         }
     }

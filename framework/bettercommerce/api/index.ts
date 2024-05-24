@@ -7,6 +7,7 @@ import {
   getProduct,
   getProductPreview,
   getAllProducts,
+  getAllRecentlyViewedProducts,
   getAllProductPaths,
   getCustomerWishlist,
   getSiteInfo,
@@ -33,6 +34,7 @@ import {
   getPdpLookbookProduct,
   getPdpCachedImage,
   getProductPromos,
+  getPromotion,
   getCancelReason,
   cancelOrder,
   getReturnReason,
@@ -43,6 +45,8 @@ import {
   logActivity,
   getCountries,
   getReviewSummary,
+  getMembershipPlans,
+  getMembershipBenefits
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -62,6 +66,7 @@ const operations = {
   getCustomerWishlist,
   getAllProductPaths,
   getAllProducts,
+  getAllRecentlyViewedProducts,
   getProduct,
   getProductPreview,
   getInfra,
@@ -87,6 +92,7 @@ const operations = {
   getPdpLookbookProduct,
   getPdpCachedImage,
   getProductPromos,
+  getPromotion,
   getCancelReason,
   cancelOrder,
   getReturnReason,
@@ -97,6 +103,8 @@ const operations = {
   logActivity,
   getCountries,
   getReviewSummary,
+  getMembershipPlans,
+  getMembershipBenefits,
 }
 
 export const provider = { config, operations }

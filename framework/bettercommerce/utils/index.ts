@@ -7,6 +7,7 @@ import DailyRotateFile from 'winston-daily-rotate-file'
 
 import { FetcherError } from '@commerce/utils/errors'
 import {
+  DeviceType,
   ERROR_LOG_ENABLED,
   ERROR_LOG_OUTPUT_DIR,
   HTTP_MESSAGES,
@@ -161,4 +162,18 @@ export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
 
 export const checkIfFalsyUserId = (userId: any) => {
   return (!userId || (userId && (userId === Guid.empty || userId === 'undefined' || userId === 'null')))
+}
+
+export const detectDeviceType = (userAgent = navigator.userAgent) => {
+  // RegExp for device types
+  const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini|iPhone|iPod|Windows Phone/i;
+  const tabletRegex = /iPad|Android(?!.*(mobile|mobi)).*?(Tablet|Tab)/i;
+
+  if (mobileRegex.test(userAgent)) {
+    return DeviceType.MOBILE
+  } else if (tabletRegex.test(userAgent)) {
+    return DeviceType.TABLET
+  } else {
+    return DeviceType.DESKTOP
+  }
 }

@@ -866,7 +866,7 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
                                       <HeartIcon className="flex-shrink-0 w-5 h-5" />
                                     )}
                                     <span className="sr-only">
-                                      {translate('label.product.addTofavouriteText')}
+                                      {translate('label.product.addToFavoriteText')}
                                     </span>
                                   </button>
                                 </div>

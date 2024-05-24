@@ -1,15 +1,21 @@
 import { KEYWORDS_ENDPOINT } from '@components/utils/constants'
-import { cachedGetData } from '../utils/cached-fetch';
+import fetcher from '@framework/fetcher';
+import { logError } from '@framework/utils/app-util';
 
 export default async function useKeywords(cookies?: any) {
   try {
     const headers = {
       DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
     };
-    const response: any = await cachedGetData(KEYWORDS_ENDPOINT, cookies, headers);
+    const response = await fetcher({
+      url: KEYWORDS_ENDPOINT,
+      method: 'get',
+      cookies,
+      headers,
+    })
     return response
   } catch (error: any) {
-    console.log(error)
+    logError(error)
     // throw new Error(error.message)
   }
 }

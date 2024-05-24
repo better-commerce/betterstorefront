@@ -11,6 +11,11 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import LayoutError from '@components/Layout/LayoutError'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export async function getStaticProps({
   preview,
@@ -18,17 +23,28 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const config = { locale, locales }
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: {} })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }
 }
 
-export default function InternalServerError({ deviceInfo }: any) {
+function InternalServerError({ deviceInfo }: any) {
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.InternalError,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
+
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -98,3 +114,4 @@ export default function InternalServerError({ deviceInfo }: any) {
 }
 
 InternalServerError.Layout = LayoutError
+export default withDataLayer(InternalServerError, PAGE_TYPES.InternalError)

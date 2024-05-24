@@ -6,6 +6,7 @@ import Logo from "./shared/Logo/Logo";
 import ButtonPrimary from "./shared/Button/ButtonPrimary";
 import NcImage from "./shared/NcImage/NcImage";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 
 export interface SectionPromo2Props {
   className?: string;
@@ -36,7 +37,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
           </span>
           <div className="flex mt-6 space-x-2 sm:space-x-5 sm:mt-12">
             <ButtonPrimary
-              href="/search"
+              href={sanitizeRelativeUrl(`/search`)}
               className="dark:bg-slate-200 dark:text-slate-900"
             >
               {translate('common.label.discoverMoreText')} 

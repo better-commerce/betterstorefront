@@ -1,4 +1,4 @@
-import getStores from '@framework/storeLocator/getStores'
+import getStores from '@framework/store-locator/get-stores'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from '../base/api-route-guard'
 

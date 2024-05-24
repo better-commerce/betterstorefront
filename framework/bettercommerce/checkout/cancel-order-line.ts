@@ -1,5 +1,6 @@
 import { ORDERS_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
+import { logError } from '@framework/utils/app-util'
 
 interface Props {
   data: any
@@ -20,7 +21,7 @@ export default function useCancelOrderLine() {
       })
       return response?.result
     } catch (error: any) {
-      console.log(error)
+      logError(error)
       throw new Error(error.message)
     }
   }

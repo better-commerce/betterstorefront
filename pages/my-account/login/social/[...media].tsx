@@ -22,6 +22,11 @@ import {
   SocialMediaType,
 } from '@components/utils/constants'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 interface ISocialLoginPageProps {
   readonly medium: SocialMediaType
@@ -45,6 +50,12 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
     cartItems,
     basketId,
   } = useUI()
+
+  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+    entityName: PAGE_TYPES.SocialLogin,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
+    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+  })
 
   useEffect(() => {
     const asyncLoginHandler = async (media: string) => {
@@ -139,12 +150,16 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
   const params: any = context?.query
   const media = params?.media?.length ? params?.media[0] : ''
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       medium: media, // Generic
     }, // will be passed to the page component as props
   }
 }
 
-export default SocialLoginPage
+export default withDataLayer(SocialLoginPage, PAGE_TYPES.SocialLogin)

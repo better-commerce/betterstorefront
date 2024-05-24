@@ -1,4 +1,4 @@
-import getAllStores from '@framework/storeLocator/getAllStores'
+import getAllStores from '@framework/store-locator/get-all-stores'
 
 export default async (req:any, res:any) => {
   try {

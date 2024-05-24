@@ -4,21 +4,26 @@ import moment from 'moment'
 import React from 'react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useRouter } from 'next/router'
+import { isB2BUser } from '@framework/utils/app-util'
+import { useUI } from '@components/ui'
 const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
   const translate = useTranslation();
   const router = useRouter();
+  const { user } = useUI()
+  const isB2B = isB2BUser(user)
   return (
     <>
-      <div className="w-full pb-6 o-detail-header">
+      <div className="w-full pb-2">
         <div className="w-full">
           <div className="flex justify-between">
             <div className="relative pl-9">
               <a
                 href="#"
-                className="absolute left-0 top-2/4 -translate-y-2/4 "
+                className="absolute left-0 top-2/4 -translate-y-2/4 dark:text-gray-900"
                 onClick={() => {
-                  router.push('/my-account/orders')
-                  // showDetailedOrder(false)
+                  isB2B ?
+                    router.push('/my-account/my-company?tab=orders')
+                    : router.push('/my-account/orders');
                 }}
               >
                 <svg
@@ -38,7 +43,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
               }
 
               <div className="w-full">
-                <h5 className="font-semibold text-16 text-secondary-full-opacity ">
+                <h5 className="font-bold text-18 text-secondary-full-opacity ">
                   {translate('label.orderDetails.orderDetailsHeadingText')}
                 </h5>
                 {details?.parentCustomNo?.length != 0 && (
@@ -47,7 +52,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                       {translate('label.orderDetails.replacementOrderText')} </p>
                   </>
                 )}
-                <p className="text-sm text-black-light">
+                <p className="text-sm text-black-light dark:text-gray-900">
                   #{details?.orderNo} • {details?.items?.length}{' '}
                   {details?.items?.length > 1 ? (
                     <span>{translate('common.label.itemPluralText')}</span>
@@ -65,7 +70,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
               </div>
             </div>
             <div className="hidden sm:block">
-              <h5 className="uppercase font-10 text-black-light">
+              <h5 className="uppercase font-10 text-black-light dark:text-gray-900">
                 {translate('label.orderDetails.orderPlacedOnHeadingText')} </h5>
               <p className="text-sm dark:text-black text-primary">
                 {moment(new Date(details?.orderDate)).format(DATE_FORMAT)}
@@ -101,39 +106,35 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
         </div>
       </div>
       <div className="flex flex-col">
-      <hr className="my-6 border-slate-200 dark:border-slate-700"></hr>
+        <hr className="my-2 border-dashed border-slate-200 dark:border-slate-700"></hr>
       </div>
 
-      {/* addresss section start */}
-      <div className="w-full py-6">
-        <div className="w-full">
-          <div className="w-full">
-            <h4 className="mb-2 text-base font-semibold text-primary text dark:text-black">
-              {' '}
-              {translate('label.orderDetails.deliveryAddressHeadingText')} </h4>
-            <h5 className="mb-1 text-sm text-primary dark:text-black">
-              {details?.customer?.label} •{' '}
-              {details?.customer?.firstName}{' '}
-              {details?.customer?.lastName}
-            </h5>
-            <div className="pl-2">
-              <p className="mb-1 text-sm font-normal text-black dark:text-black">
-                {details?.billingAddress?.address1}{' '}
-                {details?.billingAddress?.address2}
-              </p>
-              <p className="mb-1 text-sm font-normal text-black dark:text-black">
-                {details?.billingAddress?.city} -{' '}
-                {details?.billingAddress?.postCode}
-              </p>
-              <p className="text-sm font-normal text-black dark:text-black">
-                {details?.billingAddress?.phoneNo}
-              </p>
-            </div>
-          </div>
+      {/* address section start */}
+      <div className="w-full py-3">
+        <h4 className="mb-2 text-base font-semibold text-primary text dark:text-black">
+          {' '}
+          {translate('label.orderDetails.deliveryAddressHeadingText')} </h4>
+        <h5 className="mb-1 text-sm text-primary dark:text-black">
+          {details?.customer?.label} •{' '}
+          {details?.customer?.firstName}{' '}
+          {details?.customer?.lastName}
+        </h5>
+        <div className="pl-2">
+          <p className="mb-1 text-sm font-normal text-black dark:text-black">
+            {details?.billingAddress?.address1}{' '}
+            {details?.billingAddress?.address2}
+          </p>
+          <p className="mb-1 text-sm font-normal text-black dark:text-black">
+            {details?.billingAddress?.city} -{' '}
+            {details?.billingAddress?.postCode}
+          </p>
+          <p className="text-sm font-normal text-black dark:text-black">
+            {details?.billingAddress?.phoneNo}
+          </p>
         </div>
       </div>
       <div className="flex flex-col">
-      <hr className="my-6 border-slate-200 dark:border-slate-700"></hr>
+        <hr className="my-2 border-dashed border-slate-200 dark:border-slate-700"></hr>
       </div>
     </>
   )
