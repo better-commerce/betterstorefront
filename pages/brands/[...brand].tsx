@@ -574,9 +574,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </span>
               </li>
               <li className='flex items-center text-10-mob sm:text-sm'>
-                <Link href="#" passHref>
-                  <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
-                </Link>
+              <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
               </li>
             </ol>
           </div>

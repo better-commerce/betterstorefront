@@ -49,11 +49,24 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       </li>
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx} className={`flex items-center text-10-mob sm:text-sm ${breadcrumbIdx === flattenedItems.length - 1 ? 'truncate' : ''}`} >
+        {breadcrumb.isCurrent ? (
+          <>
+          <div className={`${breadcrumbIdx === flattenedItems.length - 1 ? 'truncate' : ''}`}>
+            <span className={`font-light hover:text-gray-900 capitalize  ${breadcrumb.isCurrent ? ' font-medium text-black dark:text-black' : 'text-slate-500 dark:text-slate-500'}`} >
+              {breadcrumb?.title?.toLowerCase()}
+            </span>
+          </div>
+          </>
+        ):(
+          <>
           <Link href={`/${breadcrumb.slug}`} className={`${breadcrumbIdx === flattenedItems.length - 1 ? 'truncate' : ''}`} passHref>
             <span className={`font-light hover:text-gray-900 capitalize  ${breadcrumb.isCurrent ? ' font-medium text-black dark:text-black' : 'text-slate-500 dark:text-slate-500'}`} >
               {breadcrumb?.title?.toLowerCase()}
             </span>
           </Link>
+          </>
+        )}
+          
           {breadcrumbIdx !== flattenedItems.length - 1 && (
             <ChevronRightIcon className='w-3 h-3 mx-1 dark:text-black'></ChevronRightIcon>
           )}
