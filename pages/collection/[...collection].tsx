@@ -87,7 +87,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case SET_FILTERS:
-        return { ...state, filters: payload }
+      return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
     case REMOVE_FILTERS:
@@ -408,7 +408,7 @@ function CollectionPage(props: any) {
   useEffect(() => {
     if (qsFilters) {
       const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
+      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value }))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value })))) {
         setFilter(filters)
       }
     } else {
@@ -522,8 +522,8 @@ function CollectionPage(props: any) {
       <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
         <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
           <li className='flex items-center text-10-mob sm:text-sm'>
-            <Link href="/collection" passHref>
-              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Collections</span>
+            <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
             </Link>
           </li>
           <li className='flex items-center text-10-mob sm:text-sm'>
@@ -561,7 +561,7 @@ function CollectionPage(props: any) {
         <hr className='border-slate-200 dark:border-slate-200' />
         {
           <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
-            {props?.allowFacets && productDataToPass?.filters?.length > 0  ? (
+            {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
               <>
                 {isMobile ? (
                   <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
