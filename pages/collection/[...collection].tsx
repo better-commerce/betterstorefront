@@ -46,6 +46,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -103,7 +104,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CollectionPage(props: any) {
-  const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
+  const { deviceInfo, config, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
     return <></>
