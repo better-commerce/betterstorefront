@@ -12,6 +12,7 @@ import { useTranslation } from "@commerce/utils/use-translation";
 import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
+import Link from "next/link";
 
 export interface SectionHero2Props {
   className?: string;
@@ -97,33 +98,35 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
 
-          <div className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container mob-hero-container">
-            <div className="w-full mob-heroinner-container">
-            <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
-              <div className="space-y-5 sm:space-y-6 text-info-inner">
-                <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
-                  {item?.subTitle}
-                </span>
-                <h2 className="nc-SectionHero2Item__heading font-semibold text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl !leading-[114%] text-slate-900">
-                  {item?.name}
-                </h2>
+          <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container mob-hero-container">
+            <div>
+              <div className="w-full mob-heroinner-container">
+                <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
+                  <div className="space-y-5 sm:space-y-6 text-info-inner">
+                    <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
+                      {item?.subTitle}
+                    </span>
+                    <h2 className="nc-SectionHero2Item__heading font-semibold text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl !leading-[114%] text-slate-900">
+                      {item?.name}
+                    </h2>
+                  </div>
+ 
+                  <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
+                    <span className="dark:text-white">{translate('label.home.exploreMoreBtnText')}</span>
+                    <span>
+                      <svg className="w-5 h-5 ms-2.5 dark:text-white" viewBox="0 0 24 24" fill="none">
+                        <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M22 22L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </ButtonPrimary>
+                </div>
+                <div className="top-0 bottom-0 w-full z-[1] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl banner-image-container">
+                  <img className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image" src={generateUri(item?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={item?.name} />
+                </div>
               </div>
-
-              <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
-                <span className="dark:text-white">{translate('label.home.exploreMoreBtnText')}</span>
-                <span>
-                  <svg className="w-5 h-5 ms-2.5 dark:text-white" viewBox="0 0 24 24" fill="none">
-                    <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M22 22L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </ButtonPrimary>
             </div>
-            <div className="top-0 bottom-0 w-full z-[1] max-w-2xl mt-10 lg:mt-0 lg:absolute end-0 rtl:-end-28 xl:max-w-3xl 2xl:max-w-4xl banner-image-container">
-              <img className="object-contain object-right-bottom w-full h-full nc-SectionHero2Item__image" src={generateUri(item?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={item?.name} />
-            </div>
-            </div>
-          </div>
+          </Link>
         </div>
       </div>
     );

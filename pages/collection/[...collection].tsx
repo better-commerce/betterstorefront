@@ -532,9 +532,7 @@ function CollectionPage(props: any) {
             </span>
           </li>
           <li className='flex items-center text-10-mob sm:text-sm'>
-            <Link href="#" passHref>
-              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
-            </Link>
+          <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
           </li>
         </ol>
       </div>
