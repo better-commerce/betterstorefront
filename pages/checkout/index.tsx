@@ -64,7 +64,6 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`)
 
 export enum BasketStage {
   CREATED = 0,
@@ -77,7 +76,7 @@ export enum BasketStage {
 }
 
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
   const uiContext: any = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()

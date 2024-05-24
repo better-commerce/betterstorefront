@@ -48,7 +48,6 @@ import LandingFeaturedCategory from '@components/category/LandingFeaturedCategor
 import FeaturedBrand from '@components/category/FeaturedBrand'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
-const featureToggle = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -292,7 +291,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryLandingPage({ category, slug, products, deviceInfo, config, campaignData, defaultDisplayMembership }: any) {
+function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const qsFilters = router?.query?.filters

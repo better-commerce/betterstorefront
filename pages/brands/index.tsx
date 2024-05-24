@@ -47,11 +47,11 @@ const dataNormalize = (data: any = []) => {
 
 function BrandsPage({ brands }: any) {
   const router = useRouter()
-  const data = dataNormalize(brands?.results || [])
+  const data = dataNormalize(brands.results)
   const translate = useTranslation()
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
-    const filteredData = data?.filter((item: any) => {
+    const filteredData = data.filter((item: any) => {
       const result = item.results.find((brand: any) =>
         brand.manufacturerName.toLowerCase().includes(value.toLowerCase())
       )

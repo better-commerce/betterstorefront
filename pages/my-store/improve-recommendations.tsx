@@ -1,4 +1,4 @@
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EngageEventTypes } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -11,7 +11,6 @@ import Link from "next/link";
 import EngageRecommendationCard from "@components/SectionEngagePanels/EngageRecommendationCard";
 import { IPagePropsProvider } from "@framework/contracts/page-props/IPagePropsProvider";
 import { getPagePropType, PagePropType } from "@framework/page-props";
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics';
@@ -30,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 }
 
-function ImproveRecommendations({ campaignData, }: any) {
+function ImproveRecommendations({ campaignData, featureToggle }: any) {
   const router = useRouter()
   const translate = useTranslation()
   const { user, isGuestUser, changeMyAccountTab } = useUI()
