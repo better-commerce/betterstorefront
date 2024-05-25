@@ -17766,7 +17766,7 @@ body:has(.engage-announcement-bar){
   width: 100vw !important;
   content: "";
   position: absolute;
-  left: -7% !important;
+  left: 0 !important;
   top: 0;
   z-index: -1;
 }
@@ -17777,7 +17777,7 @@ body:has(.engage-announcement-bar){
     width: 100vw !important;
     content: "";
     position: absolute;
-    left: -13% !important;
+    left: 0 !important;
     top: 0;
     z-index: -1;
   }

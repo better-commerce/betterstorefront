@@ -1704,10 +1704,17 @@ p {
 }
 
 .theme-container .sub-menu {
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  box-shadow: none !important;
+}
+.theme-container .sub-menu .inner-container {
   max-width: 90% !important;
   margin: 0 auto !important;
+    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-
 .theme-top .nc-SectionHero2Item__left{
   float: left;
 }
@@ -1845,7 +1852,12 @@ p {
   }
 
   .theme-container .sub-menu {
+    max-width: 100% !important;
+  }
+
+  .theme-container .sub-menu .inner-container{
     max-width: 80% !important;
+    margin: 0 auto !important;
   }
 
   .theme-top .banner-image-container{
