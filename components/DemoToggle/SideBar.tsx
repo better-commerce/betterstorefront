@@ -107,6 +107,7 @@ export default function SideBar({ featureToggle }: any) {
 
   const handleFeatureClick = (feature: any) => {
     setRouteOnFeatureChange({ feature, store: selectedWebsite });
+    setIsVisible(!isVisible);
     // Assuming you want to navigate to a different route based on feature URL without a full reload
     //router.push(`${feature?.url}?storecode=${selectedWebsite?.code}&urlcode=${feature?.urlCode}`, undefined, { shallow: true });
     router.push(feature?.url);
