@@ -13,7 +13,8 @@
     "isImageGallery": false,
     "enableHeaderWishlist": false,
     "enableProductSpecification": true,
-    "enableTrendingCategory": true
+    "enableTrendingCategory": true,
+    "enableDemoToggle": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

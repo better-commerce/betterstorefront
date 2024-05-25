@@ -26,6 +26,8 @@ import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProductMembershipOfferModal from '@components/membership/ProductMembershipOfferModal'
+import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline'
+import DemoSideBar from '@components/DemoToggle/SideBar'
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
@@ -165,7 +167,6 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       setIsIncludeVATState(value)
     }, 50)
   }
-
   return (
     <>
       <Head>
@@ -187,6 +188,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
+        <DemoSideBar featureToggle={featureToggle} />
         <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <ProductMembershipOfferModal {...productMembershipModalData} />
           <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
