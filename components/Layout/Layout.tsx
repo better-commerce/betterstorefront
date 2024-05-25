@@ -6,6 +6,7 @@ import Router from 'next/router'
 import Head from 'next/head'
 import { CommerceProvider } from '@framework'
 import { stringToBoolean } from '@framework/utils/parse-util'
+import { ChevronDoubleUpIcon, ChevronDoubleDownIcon } from "@heroicons/react/24/solid";
 import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -26,6 +27,7 @@ import { CURRENT_THEME } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
 import ProductMembershipOfferModal from '@components/membership/ProductMembershipOfferModal'
+import DemoSideBar from '@components/DemoToggle/SideBar'
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -37,11 +39,12 @@ const secondaryButtonStyle = { backgroundColor: 'gray' }
 const Content = () => {
   const translate = useTranslation()
   return (
-  <>
-    <h3></h3>
-    <p>{translate('common.message.cookiesText')}</p>
-  </>
-)}
+    <>
+      <h3></h3>
+      <p>{translate('common.message.cookiesText')}</p>
+    </>
+  )
+}
 interface Props {
   children: any
   pageProps: {
@@ -165,7 +168,6 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       setIsIncludeVATState(value)
     }, 50)
   }
-
   return (
     <>
       <Head>
@@ -186,6 +188,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
+        <DemoSideBar featureToggle={featureToggle} />
         <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <ProductMembershipOfferModal {...productMembershipModalData} />
           <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
@@ -198,7 +201,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
             <CookieBanner enableManagement managementButtonText="Manage Cookies" headingColor="white" managementContent={<Content />} cookieCategories={['analytics', 'advertisement']} infoContent={<Content />} primaryButtonStyle={primaryButtonStyle} secondaryButtonStyle={secondaryButtonStyle} />
           </div>
         </div>
-      </CommerceProvider>
+      </CommerceProvider >
     </>
   );
 }

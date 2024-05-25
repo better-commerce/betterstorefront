@@ -17786,3 +17786,22 @@ body:has(.engage-announcement-bar){
   width: 100% !important;
   background-color: white !important;
 }
+
+.max-demo-list{
+  max-height: 250px;
+  overflow-y: auto;
+}
+.max-demo-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.max-demo-list::-webkit-scrollbar-track {
+  background: #16223b !important;
+  opacity: 1;
+}
+
+.max-demo-list::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 6px;
+  border-radius: 6px;
+}
