@@ -39,7 +39,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
               </Link>
               {item?.navBlocks?.length > 0 && (
                 <div className={`absolute inset-x-0 z-50 transform ${hoveredItemIndex === itemIdx ? 'visible' : 'invisible'} sub-menu ${subMenuPosition}`} >
-                  <div className="bg-white shadow-lg dark:bg-neutral-900">
+                  <div className="bg-white shadow-lg dark:bg-neutral-900 inner-container">
                     <div className="container py-10">
                       <div className="relative grid items-start w-full grid-cols-1 mx-auto gap-y-4 gap-x-6 md:grid-cols-1 lg:gap-x-0">
                         <div className="grid grid-flow-col gap-4 auto-cols-auto max-list-panel max-mega-height">
