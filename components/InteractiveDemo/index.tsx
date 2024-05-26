@@ -5,6 +5,8 @@ import config from './config.json'
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
 import { matchStrings } from '@framework/utils/parse-util';
+import { useUI } from '@components/ui';
+import { useTranslation } from '@commerce/utils/use-translation';
 
 declare const window: any
 
@@ -22,6 +24,8 @@ interface IFeature {
 
 export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const router = useRouter();
+  const translate = useTranslation()
+  const { setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const websites = config?.websites || []
   const [selectedWebsite, setSelectedWebsite] = useState<IWebsite | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +106,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const handleWebsiteChange = (e: any) => {
     const website = websites.find(w => w.name === e.target.value);
     if (website) {
+      setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
       window.location.href = `${website?.url}?demo=1`
       //setSelectedWebsite(website);
       //setRouteOnFeatureChange({ store: website });
