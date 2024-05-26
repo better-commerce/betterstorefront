@@ -3,7 +3,7 @@
       {
           "name": "Fashion Store",
           "code": "fashion",
-          "url": "https://fashion.bettercommerce.tech/",
+          "url": "https://fashion.bettercommerce.tech",
           "features":[
             {
               "group": "Global",
@@ -258,7 +258,7 @@
       {
           "name": "Multi-brand",
           "code": "multi-brand",
-          "url": "https://multibrand.bettercommerce.tech/",
+          "url": "https://multibrand.bettercommerce.tech",
           "features": [
               {"name": "PLP", "url": "https://multibrand.bettercommerce.tech/search"},
               {"name": "PDP", "url": "https://multibrand.bettercommerce.tech/products/hugo-boss-hugo-boss-regular-fit-sweater-mens-hbs1191-black-xxl"}
