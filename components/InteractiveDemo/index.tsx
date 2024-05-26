@@ -43,31 +43,36 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
 
   useEffect(() => {
     if (websites?.length) {
+      const currentOrigin = window.location.origin
       const qs = new URL(window.location.href);
       if (qs.searchParams.size > 0) {
-        const storeCode = qs.searchParams.get('storecode');
+        //const storeCode = qs.searchParams.get('storecode');
         const urlCode = qs.searchParams.get('urlcode');
 
-        const store: any = websites.find(o => o.code === (storeCode || 'fashion'));
-        const feature = store?.features?.find((o: any) => o.urlCode === urlCode);
-        setSelectedWebsite(store);
+        //const store: any = websites.find(o => o.code === (storeCode || 'fashion'));
+        const store: any = websites.find(o => o.url === currentOrigin);
+        if (store) {
+          const storeUrlCode = store?.code
+          const feature = store?.features?.find((o: any) => o.urlCode === urlCode || storeUrlCode);
+          setSelectedWebsite(store);
 
-        const featureGroupedObj = groupBy(store?.features, 'group');
-        setFeatureGrouped(featureGroupedObj);
+          const featureGroupedObj = groupBy(store?.features, 'group');
+          setFeatureGrouped(featureGroupedObj);
 
-        let accordionOpenIdx = 0;
-        if (urlCode) {
-          for (let i in featureGroupedObj) {
-            const features = featureGroupedObj[i];
-            if (features?.some((o: any) => o.urlCode === urlCode)) {
-              break;
+          let accordionOpenIdx = 0;
+          if (urlCode) {
+            for (let i in featureGroupedObj) {
+              const features = featureGroupedObj[i];
+              if (features?.some((o: any) => o.urlCode === urlCode)) {
+                break;
+              }
+              accordionOpenIdx += 1;
             }
-            accordionOpenIdx += 1;
           }
-        }
-        toggleAccordion(accordionOpenIdx);
+          toggleAccordion(accordionOpenIdx);
 
-        setRouteOnFeatureChange({ store, feature });
+          setRouteOnFeatureChange({ store, feature });
+        }
       } else {
         const store = websites[0];
         setSelectedWebsite(store);
@@ -91,14 +96,14 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
     }
     const newUrl = `${window.location.pathname}?${qs.toString()}`;
     window.history.replaceState(null, '', newUrl);
+    return newUrl;
   }, []);
 
   const handleWebsiteChange = (e: any) => {
     const website = websites.find(w => w.name === e.target.value);
     if (website) {
-      //setSelectedWebsite(website);
-      //setRouteOnFeatureChange({ store: website });
-      window.location.href = `${website.url}?demo=1`
+      setSelectedWebsite(website);
+      setRouteOnFeatureChange({ store: website });
     }
   };
 
@@ -106,7 +111,9 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
     setRouteOnFeatureChange({ feature, store: selectedWebsite });
     setIsVisible(!isVisible);
     // Assuming you want to navigate to a different route based on feature URL without a full reload
-    //router.push(`${feature?.url}?storecode=${selectedWebsite?.code}&urlcode=${feature?.urlCode}`, undefined, { shallow: true });
+    //router.push(`${feature?.url}?storecode=${selectedWebsite?.code}&urlcode=${feature?.urlCode}`, undefined, { shallow: true }).then(() => window.history.replaceState(null, '', newUrl));
+    
+    
     const currentOrigin = window.location.origin
     const targetUrl = new URL(feature?.url)
     if (matchStrings(currentOrigin, targetUrl.origin, true)) {
@@ -115,9 +122,9 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
         redirectUrl = `${redirectUrl}?demo=1`
       else
       redirectUrl = `${redirectUrl}&demo=1`
-      router.push(redirectUrl);
+      router.push(redirectUrl).then(() => setRouteOnFeatureChange({ feature, store: selectedWebsite }));
     } else {
-      router.push(feature?.url);
+      router.push(feature?.url).then(() => setRouteOnFeatureChange({ feature, store: selectedWebsite }));
     }
   };
   return (
