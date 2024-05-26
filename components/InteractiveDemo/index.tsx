@@ -109,7 +109,12 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
     const currentOrigin = window.location.origin
     const targetUrl = new URL(feature?.url)
     if (matchStrings(currentOrigin, targetUrl.origin, true)) {
-      router.push(`${targetUrl?.pathname}${targetUrl?.search}`);
+      let redirectUrl = `${targetUrl?.pathname}${targetUrl?.search}`
+      if (!targetUrl?.search)
+        redirectUrl = `${redirectUrl}?demo=1`
+      else
+      redirectUrl = `${redirectUrl}&demo=1`
+      router.push(redirectUrl);
     } else {
       router.push(feature?.url);
     }
