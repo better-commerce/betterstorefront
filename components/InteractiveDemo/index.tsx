@@ -102,8 +102,9 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const handleWebsiteChange = (e: any) => {
     const website = websites.find(w => w.name === e.target.value);
     if (website) {
-      setSelectedWebsite(website);
-      setRouteOnFeatureChange({ store: website });
+      window.location.href = `${website?.url}?demo=1`
+      //setSelectedWebsite(website);
+      //setRouteOnFeatureChange({ store: website });
     }
   };
 
