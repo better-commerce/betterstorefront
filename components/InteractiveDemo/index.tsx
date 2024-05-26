@@ -1,30 +1,32 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import _, { groupBy } from 'lodash';
-import config from '../DemoToggle/config.json'
+import config from './config.json'
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
-interface Website {
-  name: string;
-  url: string;
-  features: Feature[];
-  code: string;
+import { matchStrings } from '@framework/utils/parse-util';
+
+declare const window: any
+
+interface IWebsite {
+  readonly name: string;
+  readonly url: string;
+  readonly features: IFeature[];
+  readonly code: string;
 }
 
-interface Feature {
-  name: string;
-  url: string;
+interface IFeature {
+  readonly name: string;
+  readonly url: string;
 }
 
-export default function SideBar({ featureToggle }: any) {
+export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const router = useRouter();
-  const [websites, setWebsites] = useState<Website[]>([]);
-  const [selectedWebsite, setSelectedWebsite] = useState<Website | null>(null);
-  const [iframeSrc, setIframeSrc] = useState<string>('');
+  const websites = config?.websites || []
+  const [selectedWebsite, setSelectedWebsite] = useState<IWebsite | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(undefined);
   const [featureGrouped, setFeatureGrouped] = useState<any>({});
-  const [url, setUrl] = useState<any>({})
   const [isVisible, setIsVisible] = useState(false);
 
   // Step 2: Create a function to toggle the state
@@ -38,12 +40,6 @@ export default function SideBar({ featureToggle }: any) {
     }
     setIsOpen(false);
   };
-  console.log({ config })
-  useEffect(() => {
-    if (websites?.length < 1) {
-      setWebsites(config.websites);
-    };
-  }, [websites]);
 
   useEffect(() => {
     if (websites?.length) {
@@ -110,7 +106,13 @@ export default function SideBar({ featureToggle }: any) {
     setIsVisible(!isVisible);
     // Assuming you want to navigate to a different route based on feature URL without a full reload
     //router.push(`${feature?.url}?storecode=${selectedWebsite?.code}&urlcode=${feature?.urlCode}`, undefined, { shallow: true });
-    router.push(feature?.url);
+    const currentOrigin = window.location.origin
+    const targetUrl = new URL(feature?.url)
+    if (matchStrings(currentOrigin, targetUrl.origin, true)) {
+      router.push(`${targetUrl?.pathname}${targetUrl?.search}`);
+    } else {
+      router.push(feature?.url);
+    }
   };
   return (
     <>

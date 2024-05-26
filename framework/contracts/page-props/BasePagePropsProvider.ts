@@ -225,7 +225,7 @@ export abstract class BasePagePropsProvider {
         await setData([{ key, value: navTreeUIDData }])
       }
     }
-    return navTreeUIDData
+    return navTreeUIDData || EmptyObject
   }
 
   protected async getKeywords({ cookies }: any) {
