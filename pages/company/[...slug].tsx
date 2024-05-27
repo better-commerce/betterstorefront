@@ -9,6 +9,8 @@ import fetcher from '@framework/fetcher'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { notFoundRedirect } from '@framework/utils/app-util'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Company
@@ -79,20 +81,17 @@ export async function getServerSideProps(context: any) {
     return notFoundRedirect();
   }
 
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+
   return {
     props: {
+      ...pageProps,
       ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       slug: slug,
       pageContents: pageContents || {},
     },
   };
-
-  return {
-    props: {
-      slug: slug,
-      pageContents: pageContents || {},
-    },
-  }
 }
 
 CompanyPages.Layout = Layout

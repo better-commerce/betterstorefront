@@ -17763,25 +17763,14 @@ body:has(.engage-announcement-bar){
 .sub-menu::before {
   background: rgba(0, 0, 0, 0.8);
   height: 100vh !important;
-  width: 100vw !important;
+  width: 100% !important;
   content: "";
   position: absolute;
   left: 0 !important;
   top: 0;
   z-index: -1;
 }
-@media screen and (min-width:1024px) {
-  .sub-menu::before {
-    background: rgba(0, 0, 0, 0.8);
-    height: 100vh !important;
-    width: 100vw !important;
-    content: "";
-    position: absolute;
-    left: 0 !important;
-    top: 0;
-    z-index: -1;
-  }
-}
+
 #payment-form {
   width: 100% !important;
   background-color: white !important;
