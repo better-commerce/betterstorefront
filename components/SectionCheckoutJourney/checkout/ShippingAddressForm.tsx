@@ -13,8 +13,8 @@ import { retrieveAddress } from '@components/SectionCheckoutJourney/checkout/Che
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
-import DeliveryTypeSelection from './DeliveryTypeSelection'
 import BillingAddressForm from './BillingAddressForm'
+import { CheckoutStep } from '@framework/utils/enums'
 
 const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -27,13 +27,9 @@ const ShippingAddressForm: React.FC<any> = ({
   onGuestCheckout,
   onEditAddressToggleView,
   shippingCountries,
-  basket,
   deliveryTypeMethod,
-  setDeliveryTypeMethod,
-  featureToggle,
-  deliveryMethods,
   billingCountries,
-  disableDeliveryTypeSelection = true,
+  currentStep,
 }) => {
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
@@ -139,6 +135,16 @@ const ShippingAddressForm: React.FC<any> = ({
 
   const isDeliverTypeSelected = useMemo(() => deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY), [deliveryTypeMethod])
 
+  const buttonText = useMemo(() => {
+    if (!useSameForBilling) {
+      return translate('label.checkout.saveAndContinueToBillingText')
+    }
+    if (currentStep === CheckoutStep.DELIVERY_TYPE_SELECT) {
+      return translate('common.label.saveAndContinueBtnText')
+    }
+    return translate('label.checkout.saveAndContinueToDeliveryText')
+  }, [currentStep, useSameForBilling, translate])
+
   return (
     <>
       {!isGuest && (
@@ -147,15 +153,6 @@ const ShippingAddressForm: React.FC<any> = ({
             {user?.userEmail || user?.email}
           </span>
         </div>
-      )}
-      {!editAddressValues && disableDeliveryTypeSelection && (
-        <DeliveryTypeSelection
-          basket={basket}
-          deliveryTypeMethod={deliveryTypeMethod}
-          setDeliveryTypeMethod={setDeliveryTypeMethod}
-          featureToggle={featureToggle}
-          deliveryMethods={deliveryMethods}
-        />
       )}
       {isDeliverTypeSelected && (
         <div
@@ -471,9 +468,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   type="submit"
                   disabled={formik.isSubmitting}
                 >
-                  {useSameForBilling
-                    ? translate('label.checkout.saveAndContinueToDeliveryText')
-                    : translate('label.checkout.saveAndContinueToBillingText')}
+                  {buttonText}
                 </button>
               </div>
             </form>
