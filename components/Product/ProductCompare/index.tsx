@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment, useMemo } from 'react'
 import _ from 'lodash'
 import { Dialog, Transition } from '@headlessui/react'
 import { ArrowLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -6,15 +6,31 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Layout from '@components/Layout/Layout'
 import Products from './Products'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { matchStrings } from '@framework/utils/parse-util'
 
 export default function ProductCompare({ products, isCompare, closeCompareProducts, deviceInfo, maxBasketItemsCount, featureToggle, defaultDisplayMembership, }: any) {
-  const [attributeNames, setAttributeNames] = useState([])
   const translate = useTranslation()
+  const [productCompareAttributes, setProductCompareAttributes] = useState<any>(null)
+
   useEffect(() => {
     let mappedAttribsArrStr = products.map((o: any) => o.attributes).flat()
-    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr.map((o: any) => o.display))
-    setAttributeNames(mappedAttribsArrStr)
+    mappedAttribsArrStr = _.uniq(mappedAttribsArrStr.map((o: any) => o.display?.toLowerCase()))
+    const attribByProductId = products?.reduce((acc: any, cur: any) => {
+      acc[cur?.recordId] = mappedAttribsArrStr?.reduce((attributes: any, attribKey: any) => {
+        attributes[attribKey] = cur?.attributes?.find((o: any) => matchStrings(o?.display, attribKey, true))?.value || '-'
+        return attributes
+      }, {})
+      return acc
+    }, {})
+    setProductCompareAttributes(attribByProductId)
   }, [products])
+
+  const compareAttributeKeys = useMemo(() => {
+    if (products?.[0]?.recordId) {
+      return Object.keys((productCompareAttributes?.[products?.[0]?.recordId] || {}))
+    }
+    return []
+  }, [productCompareAttributes, products])
 
   return (
     <Transition.Root show={isCompare} as={Fragment}>
@@ -53,7 +69,7 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                           <span className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14">
                             {translate('common.label.brandText')}
                           </span>
-                          {attributeNames?.map((attribName: any) => (
+                          {compareAttributeKeys?.map((attribName: any) => (
                             <span key={attribName} className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14" >
                               {attribName}
                             </span>
@@ -65,7 +81,7 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                           {products?.map((product: any, productIdx: number) => (
                             <div key={`compare-product-${productIdx}`}>
                               <SwiperSlide>
-                                <Products product={product} hideWishlistCTA={true} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} attributesCount={attributeNames?.length || 0} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                                <Products product={product} hideWishlistCTA={true} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} compareAttributes={productCompareAttributes?.[product?.recordId]} />
                               </SwiperSlide>
                             </div>
                           ))}
