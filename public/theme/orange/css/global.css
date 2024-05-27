@@ -1747,7 +1747,7 @@ p {
 }
 .btn-primary.btn-fixed{
   position: fixed;
-  bottom: 105px;
+  bottom: 30px;
   left: 0;
   z-index: 99;
   border-radius: 0;
@@ -1774,11 +1774,12 @@ p {
 }
 .demo-enable-section{
   position: fixed;
-  width: 18%;
+  max-width: 345px;
+  width:95%;
   display: flex;
     height: auto !important;
     z-index: 99;
-    bottom: 165px;
+    bottom: 90px;
     left: 10px;
     top: auto;
     box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.5);
@@ -1803,4 +1804,14 @@ p {
     max-height: 210px;
     overflow-y: auto;
   }
+}
+.max-demo-list.scroll-bg-demo::-webkit-scrollbar-track {
+  background: #16223b !important;
+  opacity: 1;
+}
+
+.max-demo-list.scroll-bg-demo::-webkit-scrollbar-thumb {
+  background: #fff !important;
+  width: 6px;
+  border-radius: 6px;
 }

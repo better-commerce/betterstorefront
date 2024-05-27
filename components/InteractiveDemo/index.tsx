@@ -182,7 +182,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
                         </span>
                       </button>
                       {openIndex == index && (
-                        <div className="accordion-content max-demo-list">
+                        <div className="accordion-content max-demo-list scroll-bg-demo">
                           <ul className='mt-2'>
                             {featureGrouped[group].map((item: any, index: number) => (
                               <li key={`content${index}`} className='mb-1 text-sm font-normal cursor-pointer hover:underline' onClick={() => handleFeatureClick(item)}>
