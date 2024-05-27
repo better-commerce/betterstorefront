@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useFormik } from 'formik'
 import { addressFinderSchema, billingAddressWithPhoneCheckout2Schema } from './config'
 import {
@@ -9,6 +9,7 @@ import { retrieveAddress } from '@components/SectionCheckoutJourney/checkout/Che
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { CheckoutStep } from '@framework/utils/enums'
 
 export const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -23,6 +24,7 @@ const BillingAddressForm: React.FC<any> = ({
   shouldDisplayEmail = true,
   guestCheckoutFormik,
   onGuestCheckout,
+  currentStep,
 }) => {
   const translate = useTranslation()
   const BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA = billingAddressWithPhoneCheckout2Schema();
@@ -124,6 +126,13 @@ const BillingAddressForm: React.FC<any> = ({
     }
   }
 
+  const buttonText = useMemo(() => {
+    if (currentStep === CheckoutStep.DELIVERY_TYPE_SELECT) {
+      return translate('common.label.saveAndContinueBtnText')
+    }
+    return translate('label.checkout.saveAndContinueToDeliveryText')
+  }, [currentStep, useSameForBilling, translate])
+
   return (
     <>
       {shouldDisplayEmail && (
@@ -138,13 +147,13 @@ const BillingAddressForm: React.FC<any> = ({
           !useSameForBilling
             ? ''
             : 'sm:border sm:border-gray-200 sm:bg-gray-50 bg-white rounded-md sm:p-4'
-        } flex flex-col gap-2 my-4 `}
+        } flex flex-col gap-2 sm:mt-4 mt-3 sm:rounded-md sm:border border-transparent bg-white py-4 px-0`}
       >
         <h5 className="font-medium font-18 dark:text-black">
           {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.BillingAddressHeadingText')}
         </h5>
         {/* address finder form */}
-        <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4">
+        <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent">
           <form
             onSubmit={addressFinderFormik.handleSubmit}
             className="flex items-start w-full gap-4 sm:mt-4"
@@ -423,7 +432,7 @@ const BillingAddressForm: React.FC<any> = ({
                 type="submit"
                 disabled={formik.isSubmitting}
               >
-                {translate('label.checkout.saveAndContinueToDeliveryText')}
+                {buttonText}
               </button>
             </div>
           </form>

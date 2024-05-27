@@ -12,6 +12,7 @@ import { Guid } from '@commerce/types'
 import FindStore from './FindStore'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { DeliveryType } from '@components/utils/constants'
+import { LoadingDots } from '@old-components/ui'
 
 interface ShippingMethod {
   id: string
@@ -120,6 +121,10 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
     return (method: any)  => method?.type === DeliveryType.STANDARD_DELIVERY
   }, [])
 
+  if (!selectedDeliveryMethod || !selectedDeliveryMethod?.children) {
+    return <LoadingDots />
+  }
+
   return (
     <>
       {selectedDeliveryMethod?.children?.length > 0 ? (
@@ -167,7 +172,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
           )}
           <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
             <button
-              className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-55 rounded-xl"
+              className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-55 btn-primary btn-c btn-primary btn"
               onClick={handleContinue}
               disabled={shouldContinueBtnEnabled}
             >

@@ -52,6 +52,7 @@ import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
 import { Logo } from '@components/ui'
 import compact from 'lodash/compact'
+import size from 'lodash/size'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -64,6 +65,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
 
 export enum BasketStage {
   CREATED = 0,
@@ -108,7 +110,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       label: translate('label.checkout.informationText'),
       shouldActiveOn: 'login,new-address,edit-address,billing-address',
     },
-    { key: 'delivery', label: translate('label.checkout.deliveryText'), shouldActiveOn: '' },
+    { key: 'delivery', label: translate('label.checkout.deliveryText'), shouldActiveOn: 'select-delivery-type' },
     { key: 'review', label: translate('label.checkout.paymentHeadingText'), shouldActiveOn: '' },
   ]
 
@@ -351,7 +353,18 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     const hasShippingAddress = basket?.shippingAddress?.id > 0 || defaultDeliveryAddr?.id > 0
     const hasBillingAddress = basket?.billingAddress?.id > 0 || defaultBillingAddr?.id > 0
     const hasStoreId = basket?.storeId !== EmptyGuid
+    const hasAddress = (addressList?.length || 0) > 0
 
+    if (!hasAddress) {
+      setCompletedSteps((prev) => [
+        ...new Set([...prev, CheckoutStep.ADDRESS]),
+      ])
+      if (!featureToggle?.features?.enableCollectDeliveryOption) {
+        redirectToStep = CheckoutStep.NEW_ADDRESS
+      } else {
+        redirectToStep = CheckoutStep.DELIVERY_TYPE_SELECT
+      }
+    }
     if (hasStoreId && hasBillingAddress && hasShippingAddress) {
       setCompletedSteps((prev) => [
         ...new Set([...prev, CheckoutStep.ADDRESS, CheckoutStep.DELIVERY]),
@@ -604,10 +617,12 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         prevAddrList = new Array(2).fill(undefined)
       }
       const { isBilling, ...addressData } = newAddress
-      if (isBilling) {
-        prevAddrList[1] = addressData
-      } else {
-        prevAddrList[0] = addressData
+      if (size(addressData) > 0) {
+        if (isBilling) {
+          prevAddrList[1] = addressData
+        } else {
+          prevAddrList[0] = addressData
+        }
       }
       return compact(prevAddrList)
     })
@@ -761,13 +776,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onGuestCheckout: handleGuestCheckout,
   }
 
-  const handleCollect = () => {
-    if (deliveryTypeMethod.type === 2) {
-      setCompletedSteps((prev) => [
-        ...new Set([...prev, CheckoutStep.ADDRESS]),
-      ])
-    }
-    goToStep(CheckoutStep.DELIVERY)
+  const onContinueToSelectDeliveryType = () => {
+    setCompletedSteps((prev) => [
+      ...new Set([...prev, CheckoutStep.ADDRESS]),
+    ])
+    goToStep(CheckoutStep.DELIVERY_TYPE_SELECT)
   }
 
   const addressBookProps = {
@@ -789,9 +802,10 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     basket,
     deliveryTypeMethod,
     setDeliveryTypeMethod,
-    handleCollect,
+    onContinueToSelectDeliveryType,
     featureToggle,
     deliveryMethods,
+    currentStep,
   }
 
 
@@ -802,7 +816,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onEditAddressToggleView,
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,
-    handleCollect,
+    onContinueToSelectDeliveryType,
     deliveryTypeMethod,
     setDeliveryTypeMethod,
     featureToggle,
@@ -819,6 +833,20 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
   }
 
+  const deliveryTypeSelectionProps = {
+    basket,
+    featureToggle,
+    shippingCountries: appConfigData?.shippingCountries,
+    billingCountries: appConfigData?.billingCountries,
+    onSubmit: handleAddressSubmit,
+    searchAddressByPostcode,
+    deliveryTypeMethod,
+    setDeliveryTypeMethod,
+    deliveryMethods,
+    user,
+    currentStep,
+  }
+
   const deliveryMethodSelectionProps = {
     basket,
     deliveryMethod: deliveryTypeMethod,
@@ -828,6 +856,10 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     },
     goToStep,
     deliveryTypeMethod,
+    setDeliveryTypeMethod,
+    featureToggle,
+    deliveryMethods,
+    deliveryTypeSelectionProps,
   }
 
   const reviewOrderProps = {
@@ -869,6 +901,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         return <DeliveryMethodSelection {...deliveryMethodSelectionProps} />
       case CheckoutStep.REVIEW:
         return <ReviewOrder {...reviewOrderProps} />
+      case CheckoutStep.DELIVERY_TYPE_SELECT:
+        return <DeliveryTypeSelection {...deliveryTypeSelectionProps} addressBookProps={addressBookProps} />
       default:
         return null
     }
