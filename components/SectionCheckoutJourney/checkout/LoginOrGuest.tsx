@@ -5,7 +5,6 @@ import { DeliveryType, EmptyString, Messages, } from '@components/utils/constant
 import { LoadingDots, useUI } from '@components/ui'
 import { guestLoginCheckout2Schema } from './config'
 import ShippingAddressForm from './ShippingAddressForm'
-import DeliveryTypeSelection from './DeliveryTypeSelection'
 import { useTranslation } from '@commerce/utils/use-translation'
 import BillingAddressForm from './BillingAddressForm'
 
@@ -17,7 +16,7 @@ const LoginOrGuest: React.FC<any> = ({
   searchAddressByPostcode,
   shippingCountries,
   billingCountries,
-  handleCollect,
+  onContinueToSelectDeliveryType,
   deliveryTypeMethod,
   setDeliveryTypeMethod,
   featureToggle,
@@ -38,8 +37,10 @@ const LoginOrGuest: React.FC<any> = ({
     onSubmit: (values, { setSubmitting }) => {
       const payload: any = GUEST_LOGIN_CHECKOUT2_SCHEMA.cast(values)
       guestCheckoutFormik.values.email = payload.email
-      onGuestCheckout(payload, () => setSubmitting(false));
-      handleCollect()
+      onGuestCheckout(payload, () => {
+        setSubmitting(false)
+        onContinueToSelectDeliveryType()
+      });
     },
   })
   const loginCheckoutFormSchema = yup.object({
@@ -94,7 +95,6 @@ const LoginOrGuest: React.FC<any> = ({
           featureToggle={featureToggle}
           deliveryMethods={deliveryMethods}
           billingCountries={billingCountries}
-          disableDeliveryTypeSelection={false}
         />
       )
     } else if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
@@ -118,7 +118,7 @@ const LoginOrGuest: React.FC<any> = ({
             <>
               <button
                 className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
-                onClick={handleCollect}
+                onClick={onContinueToSelectDeliveryType}
               >
                 {translate('label.checkout.saveAndContinueToCollectBtnText')}
               </button>
@@ -241,15 +241,33 @@ const LoginOrGuest: React.FC<any> = ({
                 {guestCheckoutFormik.errors.email}
               </span>
             )}
+            {featureToggle?.features?.enableCollectDeliveryOption && (
+              <button
+                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1 self-end"
+                type="submit"
+                disabled={guestCheckoutFormik.isSubmitting}
+              >
+                {translate('label.checkout.saveAndContinueToDeliveryText')}
+              </button>
+            )}
           </form>
-          <DeliveryTypeSelection
-            basket={basket}
-            deliveryTypeMethod={deliveryTypeMethod}
-            setDeliveryTypeMethod={setDeliveryTypeMethod}
-            featureToggle={featureToggle}
-            deliveryMethods={deliveryMethods}
-          />
-          {displayView()}
+          {!featureToggle?.features?.enableCollectDeliveryOption && (
+            <ShippingAddressForm
+              shippingCountries={shippingCountries}
+              guestCheckoutFormik={guestCheckoutFormik}
+              onSubmit={onSubmit}
+              searchAddressByPostcode={searchAddressByPostcode}
+              deliveryType={deliveryTypeMethod?.type}
+              isGuest={true}
+              onGuestCheckout={onGuestCheckout}
+              basket={basket}
+              deliveryTypeMethod={deliveryTypeMethod}
+              setDeliveryTypeMethod={setDeliveryTypeMethod}
+              featureToggle={featureToggle}
+              deliveryMethods={deliveryMethods}
+              billingCountries={billingCountries}
+            />
+          )}
         </>
       )}
     </div>
