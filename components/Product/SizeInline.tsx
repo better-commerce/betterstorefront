@@ -229,7 +229,7 @@ export default function SizeInline({
             <h4 className="text-gray-700 capitalize font-14">
                {label}:
                <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700">
-                  {currentAttribute}
+                  {selected?.fieldValue}
                </span>
                <span className="pl-1 text-xs font-bold text-black sm:text-sm">
                   {product?.mappedCategories?.length > 0 && SizeAttribute?.sizes?.map((attr: any, aid: number) => (matchStrings(attr.name, product?.mappedCategories[0].categoryName, true) && (

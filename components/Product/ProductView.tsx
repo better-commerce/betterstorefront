@@ -277,17 +277,28 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const productImages = product?.images || []
   const productVideos = product?.videos || []
-  let content = [{ image: selectedAttrData.image }, ...productImages].filter(
-    (value: any, index: number, self: any) =>
-      index === self.findIndex((t: any) => t.image === value.image)
-  )
 
-  if (product?.videos && product?.videos?.length > 0) {
-    content = [...productImages, ...productVideos].filter(
+  let content = useMemo(() => {
+    let images = [ ...productImages ]
+
+    if (selectedAttrData?.image) {
+      images.push({ image: selectedAttrData?.image })
+    }
+
+    let data = [...images].filter(
       (value: any, index: number, self: any) =>
         index === self.findIndex((t: any) => t.image === value.image)
     )
-  }
+
+    if (product?.videos && product?.videos?.length > 0) {
+      data = [...productImages, ...productVideos].filter(
+        (value: any, index: number, self: any) =>
+          index === self.findIndex((t: any) => t.image === value.image)
+      )
+    }
+
+    return data
+  }, [selectedAttrData?.image, product, productImages])
 
   const handleTogglePersonalizationDialog = () => {
     if (!isPersonalizeLoading) showEngravingModal((v) => !v)
@@ -698,29 +709,35 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   if (!product) {
     return null
   }
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = content.map((image: any) => {
-        return {
-          original: image.image,
-          thumbnail: image.image,
-        }
-      })
 
-      const truncateFirstEmptyArray = (arr: any) => {
-        if (arr.length > 0 && Object.keys(arr[0]).length === 0) {
-          return arr.slice(1);
-        }
-        return arr;
-      };
+  const images = content.map((image: any) => {
+    return {
+      original: image.image,
+      thumbnail: image.image,
+    }
+  })
 
-      // Process data
-      const processedData = truncateFirstEmptyArray(data);
-      setImages(processedData);
+
+  const fetchData = async () => {
+    const data = content.map((image: any) => {
+      return {
+        original: image.image,
+        thumbnail: image.image,
+      }
+    })
+
+    const truncateFirstEmptyArray = (arr: any) => {
+      if (arr.length > 0 && Object.keys(arr[0]).length === 0) {
+        return arr.slice(1);
+      }
+      return arr;
     };
 
-    fetchData();
-  }, []);
+    // Process data
+    let processedData = truncateFirstEmptyArray(data);
+    setImages(processedData);
+  };
+
 
 
 
@@ -1122,7 +1139,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
                     originalAlt={product?.name}
-                    items={newImages ?? []}
+                    items={images ?? []}
                     thumbnailPosition="left"
                     showPlayButton={false}
                     additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
