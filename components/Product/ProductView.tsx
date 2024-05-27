@@ -88,6 +88,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
   const [openStoreLocatorModal, setOpenStockCheckModal] = useState(false)
   const [showDetails, setShowGwpDetail] = useState(false)
+  const [newImages, setImages] = useState([]);
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
@@ -697,13 +698,31 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   if (!product) {
     return null
   }
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = content.map((image: any) => {
+        return {
+          original: image.image,
+          thumbnail: image.image,
+        }
+      })
 
-  const images = content.map((image: any) => {
-    return {
-      original: image.image,
-      thumbnail: image.image,
-    }
-  })
+      const truncateFirstEmptyArray = (arr: any) => {
+        if (arr.length > 0 && Object.keys(arr[0]).length === 0) {
+          return arr.slice(1);
+        }
+        return arr;
+      };
+
+      // Process data
+      const processedData = truncateFirstEmptyArray(data);
+      setImages(processedData);
+    };
+
+    fetchData();
+  }, []);
+
+
 
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
@@ -898,7 +917,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             {reviews?.review?.totalRecord > 0 &&
-              <>                
+              <>
                 <div className="flex w-64">
                   <Link href={`#productReview`} className="flex text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
@@ -1103,7 +1122,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
                     originalAlt={product?.name}
-                    items={images ?? []}
+                    items={newImages ?? []}
                     thumbnailPosition="left"
                     showPlayButton={false}
                     additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
