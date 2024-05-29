@@ -164,7 +164,7 @@ function ReferralPage() {
                   }`}
               >
                 <div className={'orders bg-white my-2 sm:my-6 pl-2'}>
-                  <h1 className="px-5 py-2 font-bold">
+                  <h1 className="px-5 py-2 font-bold dark:text-black">
                     {referralInfo?.successfulInvites > 0
                       ? referralInfo?.successfulInvites == 1
                         ? `1 ${translate('label.myAccount.successfulInviteHeadingText')}`

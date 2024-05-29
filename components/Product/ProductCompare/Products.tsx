@@ -300,7 +300,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`} >
-          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] nc-ProductCard__title text-left  ">
+          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] dark:text-black nc-ProductCard__title text-left  ">
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
@@ -329,7 +329,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
         {Object.values(compareAttributes)?.map((attrib: any, idx: number) => (
           <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
-          {attrib?.includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: attrib }}></span>) : (<span>{attrib}</span>)}
+          {attrib?.includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: attrib }}></span>) : (<span className='dark:text-black'>{attrib}</span>)}
         </div>
         ))}
       </div>

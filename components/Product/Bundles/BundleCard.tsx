@@ -77,7 +77,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                         <span className='inline-block pl-1 text-gray-600'>{productData?.stockCode}</span>
                     </h4>
                     <h4 className='mt-2 text-sm text-black'>
-                      <span className='inline-block font-semibold'>{productData?.price?.formatted?.withoutTax}</span>
+                      <span className='inline-block font-semibold dark:text-black'>{productData?.price?.formatted?.withoutTax}</span>
                       <span className='inline-block pl-3 text-xs font-semibold text-red-400 line-through'>{productData?.listPrice?.formatted?.withoutTax}</span>
                     </h4>
                   </div>

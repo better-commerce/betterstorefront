@@ -164,7 +164,7 @@ export default function CustomerForm({
     <Formik validationSchema={extendedSchema} initialValues={extendedInitialValues} onSubmit={(values, actions) => { onSubmit(values, () => { actions.setSubmitting(false) }) }} >
       {({ errors, touched, handleSubmit, values, handleChange, isSubmitting, }: any) => {
         return (
-          <div className={`flex flex-col items-center justify-center w-full lg:px-0 px-5 ${!isLoginSidebarOpen && `px-5`}`} >
+          <div className={`flex flex-col items-center justify-center w-full lg:px-0 ${!isLoginSidebarOpen && `px-5`}`} >
             <Form onSubmit={handleSubmit} className={`w-full font-semibold ${!isLoginSidebarOpen && `sm:w-full`}`} >
               {extendedConfig.map((formItem: any, idx: number) => {
                 function handleKeyPress(e: any) {

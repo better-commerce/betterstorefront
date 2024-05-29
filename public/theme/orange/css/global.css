@@ -1815,3 +1815,9 @@ p {
   width: 6px;
   border-radius: 6px;
 }
+@media screen and (max-width:767px) {
+  .mob-container {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}

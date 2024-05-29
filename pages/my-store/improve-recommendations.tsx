@@ -65,7 +65,7 @@ function ImproveRecommendations({ campaignData, featureToggle }: any) {
  
   return (
     <>
-      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('label.store.improveRecommendationsText')}</h2>
+      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-black">{translate('label.store.improveRecommendationsText')}</h2>
       <div className="mx-auto cart-recently-viewed mob-padding-0">
         <EngageRecommendationCard productLimit={15} type={EngageEventTypes.PURCHASE_HISTORY} campaignData={campaignData} title="Improve Your Recommendation" isSlider={false} productPerRow={5} forceDisplay={true} />
       </div>

@@ -752,7 +752,7 @@ export default function OrderConfirmation({ config }: any) {
                         ) : (
                           <div
                             className={classNames(
-                              'my-20 flex w-full flex-col justify-center items-center'
+                              'my-20 flex w-full flex-col justify-center items-center dark:text-black'
                             )}
                           >
                             <h2 className="px-5 text-center">

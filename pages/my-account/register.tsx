@@ -70,7 +70,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
         <div className="w-full px-10 font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-800">{translate('label.addressBook.emailText')}</label>
           <input
-            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
+            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black"
             value={value}
             type="email"
             onChange={onChange}

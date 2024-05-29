@@ -225,7 +225,7 @@ export default function CartDropdown() {
                       {cartItems?.lineItems?.length}
                     </div>
                   )}*/}
-                    <img alt="" src="/images/cartIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5" />
+                    <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
                   </>
 
                 </Popover.Button>
@@ -289,7 +289,7 @@ export default function CartDropdown() {
                   </div>
                 )}
                 <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
-                <img alt="" src="/images/cartIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5" />
+                <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
               </Popover.Button>
             )}
           </>

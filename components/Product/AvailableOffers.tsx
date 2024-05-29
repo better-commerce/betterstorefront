@@ -41,10 +41,10 @@ export default function AvailableOffers({ currency, offers, key }: any) {
         <div className="grid w-full grid-cols-12 px-0 sm:grid-cols-6 sm:px-0 mob-promo-grid">
           <div className="col-span-7 sm:col-span-3 mob-left-7">
             <h2 className="font-semibold font-16 text-16 dark:text-black">
-              <span className="font-medium opacity_056 text-primary dark:text-white font-label-14">
+              <span className="font-medium opacity_056 text-primary dark:text-black font-label-14">
                 {translate('label.product.bestPriceText')}{' '}
               </span>
-              <span className="inline-block pl-1 text-sm text-black dark:text-white font-label-14">
+              <span className="inline-block pl-1 text-sm text-black dark:text-black font-label-14">
                 {priceFormat(bestprice, undefined, currency?.currencySymbol)}
               </span>
             </h2>
@@ -71,7 +71,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
         </div>
       </div>
       <div className="flex flex-col px-0 py-2 pr-0 mt-2 sm:pr-4 gap-x-4 sm:px-0 offeres m-hide-navigation">
-        <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-white offer-heading-text">
+        <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-black offer-heading-text">
           {translate('label.basket.moreOffersText')}
         </h2>
         <Swiper
@@ -103,7 +103,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                       <div className="flex">
                         <BankOfferIcon />
                         <div className="pl-2">
-                          <p className="font-semibold text-md">{translate('label.basket.moreOffersText')}</p>
+                          <p className="font-semibold text-md dark:text-black">{translate('label.basket.moreOffersText')}</p>
                           <p className="font-semibold text-left text-black uppercase font-10 break-word-text"> {saving.name} </p>
                           {saving?.promoType == 1 && (
                             <span>

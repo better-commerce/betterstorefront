@@ -547,9 +547,9 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
-                      <span>{selectedAttrData?.rating}</span>
-                      <span className="block mx-2">·</span>
-                      <span className="underline text-slate-600 dark:text-slate-400">
+                      <span className="dark:text-black">{selectedAttrData?.rating}</span>
+                      <span className="block mx-2 dark:text-black">·</span>
+                      <span className="underline text-slate-600 dark:text-slate-600">
                         {selectedAttrData?.reviewCount} {translate('common.label.reviews')}
                       </span>
                     </div>
@@ -598,7 +598,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             </>
           )}
         </div>
-        <hr className=" border-slate-200 dark:border-slate-700"></hr>
+        <hr className=" border-slate-200 dark:border-slate-200"></hr>
         {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: selectedAttrData?.description }]} />}
       </div>
     );

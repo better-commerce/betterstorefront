@@ -905,10 +905,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       <>
         <hr className="pt-5 mt-5 sm:pt-5 border-slate-200 dark:border-slate-700" />
         <div className="" id='productReview'>
-          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl">Rating & Review</h2>
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl dark:text-black">Rating & Review</h2>
           <h2 className="flex items-center mt-4 text-2xl font-semibold sm:mt-8">
             <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
-            <span className="ml-1.5"> {reviews?.review?.ratingAverage} <span className='text-sm font-normal text-gray-500'>({reviews?.review?.productReviews?.length} Reviews)</span></span>
+            <span className="ml-1.5 dark:text-black"> {reviews?.review?.ratingAverage} <span className='text-sm font-normal text-gray-500'>({reviews?.review?.productReviews?.length} Reviews)</span></span>
           </h2>
 
           <div className="my-10">
@@ -939,9 +939,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <Link href={`#productReview`} className="flex text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
-                      <span>{reviews?.review?.ratingAverage}</span>
-                      <span className="block mx-2">·</span>
-                      <span className="underline text-slate-600 dark:text-slate-400">
+                      <span className='dark:text-black'>{reviews?.review?.ratingAverage}</span>
+                      <span className="block mx-2 dark:text-black">·</span>
+                      <span className="underline text-slate-600 dark:text-slate-600">
                         {reviews?.review?.totalRecord} {translate('common.label.reviews')}
                       </span>
                     </div>
@@ -1027,7 +1027,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {featureToggle?.features?.enableStoreLocator &&
           <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
             <MyLocationIcon className='w-4 h-4' />
-            <span className='cursor-pointer hover:underline' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+            <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
           </div>
         }
         <div id="add-to-cart-button">
@@ -1124,7 +1124,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     item?.tag != "specification" &&
                     <SwiperSlide key={index}>
                       <div className="relative">
-                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
                       </div>
                     </SwiperSlide>
                   )
@@ -1215,7 +1215,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
               <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
-                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
+                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>

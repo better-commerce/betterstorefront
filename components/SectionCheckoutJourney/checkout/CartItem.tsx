@@ -126,7 +126,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
                             <Link href={`/${product?.slug}`}>{product?.name}</Link>
                           </h3>
 
-                          <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-300">
+                          <div className="mt-1.5 sm:mt-2.5 flex text-sm text-slate-600 dark:text-slate-600">
                             {product?.colorName != "" &&
                               <div className="flex items-center space-x-1.5">
                                 <svg className="w-4 h-4 dark:text-slate-600" viewBox="0 0 24 24" fill="none">
