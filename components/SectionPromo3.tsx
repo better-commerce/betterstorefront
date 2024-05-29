@@ -56,14 +56,14 @@ const SectionPromo3: FC<SectionPromo3Props> = ({ className = "lg:pt-2", data }) 
   return (
     <div className={`nc-SectionPromo3 main-newsletter-section ${className}`}>
       {data?.map((subs: any, subsIdx: number) => (
-        <div key={subsIdx} className="relative flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 pb-0 sm:p-5 sm:pb-0 lg:p-24">
+        <div key={subsIdx} className="relative flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-50 rounded-2xl sm:rounded-[40px] p-4 pb-0 sm:p-5 sm:pb-0 lg:p-24">
           <div className="absolute inset-0">
-            <Image fill className="absolute object-contain object-bottom w-full h-full dark:opacity-5" src={backgroundLineSvg} alt="backgroundLineSvg" />
+            <Image fill className="absolute object-contain object-bottom w-full h-full" src={backgroundLineSvg} alt="backgroundLineSvg" />
           </div>
 
           <div className="lg:w-[50%] max-w-lg relative">
-            <h2 className="text-4xl font-semibold md:text-5xl"> {subs?.subscription_title} </h2>
-            <span className="block mt-5 text-neutral-500 dark:text-neutral-400"> {subs?.subscription_subtitle} </span>
+            <h2 className="text-4xl font-semibold md:text-5xl dark:text-black"> {subs?.subscription_title} </h2>
+            <span className="block mt-5 text-neutral-500 dark:text-neutral-500"> {subs?.subscription_subtitle} </span>
             <form className="relative max-w-sm mt-10" onSubmit={(e) => { e.preventDefault(); submitSubscription(value) }} >
               <Input required aria-required placeholder={translate('common.message.enterYourEmailText')} value={value} onChange={handleChange} rounded="rounded-full" />
               <ButtonCircle type="submit" className="absolute transform -translate-y-1/2 top-1/2 right-1" >

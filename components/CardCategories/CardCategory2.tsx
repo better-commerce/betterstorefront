@@ -34,8 +34,8 @@ const CardCategory2: FC<CardCategory2Props> = ({
         <span className="absolute inset-0 transition-opacity bg-black opacity-0 group-hover:opacity-100 bg-opacity-10 rounded-2xl"></span>
       </div>
       <div className="flex-1 mt-5 text-center">
-        <h2 className="text-base font-semibold sm:text-lg text-neutral-900 dark:text-neutral-100"> {name} </h2>
-        <span className="block mt-0.5 sm:mt-1.5 text-sm text-neutral-500 dark:text-neutral-400"> {desc} </span>
+        <h2 className="text-base font-semibold sm:text-lg text-neutral-900 dark:text-neutral-900"> {name} </h2>
+        <span className="block mt-0.5 sm:mt-1.5 text-sm text-neutral-500 dark:text-neutral-500"> {desc} </span>
       </div>
     </Link>
   );

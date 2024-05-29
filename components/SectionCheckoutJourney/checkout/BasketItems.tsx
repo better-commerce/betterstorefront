@@ -53,7 +53,7 @@ const BasketItems = ({ userCartItems }: any) => {
                   <div className="justify-start text-left">
                     {product?.price?.raw?.withTax > 0 ? (
                       <>
-                        <span className="block font-semibold text-black font-14">
+                        <span className="block font-semibold text-black font-14 dark:text-black">
                           {isIncludeVAT
                             ? product?.price?.formatted?.withTax
                             : product?.price?.formatted?.withoutTax}

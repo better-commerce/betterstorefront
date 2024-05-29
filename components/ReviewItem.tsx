@@ -27,8 +27,8 @@ const ReviewItem: FC<ReviewItemProps> = ({ className = "", data, }) => {
 
         <div className="flex justify-between flex-1">
           <div className="text-sm sm:text-base">
-            <span className="block font-semibold">{data?.name}</span>
-            <span className="block mt-0.5 text-slate-500 dark:text-slate-400 text-sm">
+            <span className="block font-semibold dark:text-black">{data?.name}</span>
+            <span className="block mt-0.5 text-slate-500 dark:text-slate-500 text-sm">
               {moment(new Date(data?.date)).format(DATE_FORMAT)}
             </span>
           </div>
@@ -41,7 +41,7 @@ const ReviewItem: FC<ReviewItemProps> = ({ className = "", data, }) => {
         </div>
       </div>
       <div className="mt-4 prose-sm prose sm:prose dark:prose-invert sm:max-w-2xl">
-        <p className="text-slate-600 dark:text-slate-300">{data?.comment}</p>
+        <p className="text-slate-600 dark:text-slate-600">{data?.comment}</p>
       </div>
     </div>
   );

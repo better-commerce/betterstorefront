@@ -46,7 +46,7 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                 <div className="flex flex-col h-full overflow-y-auto bg-white">
                   <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 border py-7 bg-[#FFE25B]">
                     <div className="container flex items-center justify-between mx-auto">
-                      <Dialog.Title className="flex items-center gap-5 text-lg font-medium uppercase">
+                      <Dialog.Title className="flex items-center gap-5 text-lg font-medium uppercase dark:text-black">
                         <ArrowLeftIcon onClick={() => closeCompareProducts()} className="w-4 h-4 text-black" />{' '}
                         {translate('label.product.comparingItemsText1')} {products?.length} {translate('common.label.itemSingularText')}
                       </Dialog.Title>
@@ -63,14 +63,14 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
                           <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent compare-white-space"></div>
-                          <span className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14">
+                          <span className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14 dark:text-black">
                             {translate('common.label.ratingsText')}
                           </span>
-                          <span className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14">
+                          <span className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14 dark:text-black">
                             {translate('common.label.brandText')}
                           </span>
                           {compareAttributeKeys?.map((attribName: any) => (
-                            <span key={attribName} className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14" >
+                            <span key={attribName} className="flex items-center justify-center capitalize font-semibold text-black w-full h-[48px] font-14 dark:text-black" >
                               {attribName}
                             </span>
                           ))}

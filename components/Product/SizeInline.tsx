@@ -66,7 +66,7 @@ function RenderRadioOptions({
                      className={({ active, checked }) => 
                         `
                            ${checked ? 'bg-white border-black border-2 text-black' : 'bg-white border-gray-300 text-gray-600'}
-                           relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-neutral-700
+                           relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-primary-700
                         `
                      }
                   >

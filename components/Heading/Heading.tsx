@@ -18,7 +18,7 @@ const Heading: React.FC<HeadingProps> = ({ children, desc = "", className = "mb-
           {rightDescText && (
             <>
               <span className="">{' '}</span>
-              <span className="text-neutral-500 dark:text-neutral-400">
+              <span className="text-neutral-500 dark:text-neutral-500">
                 {rightDescText}
               </span>
             </>

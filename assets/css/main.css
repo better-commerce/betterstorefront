@@ -17794,3 +17794,15 @@ body:has(.engage-announcement-bar){
   width: 6px;
   border-radius: 6px;
 }
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: black !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(232, 240, 254) inset !important;
+  box-shadow: 0 0 0px 1000px rgb(232, 240, 254) inset !important;
+}
+.menu-top-space {
+margin-top: -0.6rem;
+}
+.menu-top-padding {
+  padding-top: 20px;
+  }

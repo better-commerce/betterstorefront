@@ -45,7 +45,7 @@ const StoreListSection = ({
 
     return (
         <div className="flex flex-col text-lg">
-            <div className='flex flex-col p-4 border-b border-gray-200'>
+            <div className='flex flex-col p-4 border-b border-gray-200 dark:text-black'>
                 <h4 className="font-semibold">{translate('label.store.findInStoreText')}</h4>
             </div>
             <div className='flex flex-col w-full max-h-[70vh] overflow-y-auto overflow-x-hidden !custom-scroll p-4'>

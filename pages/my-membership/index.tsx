@@ -94,7 +94,7 @@ const MyMembershipPage = ({ allPlans }: any) => {
       <div className="py-6 sm:py-16 bg-gradient-to-t from-purple-100 to-white">
         <div className="container flex flex-col justify-center py-6 mx-auto text-center sm:py-10">
           <h3 className="mx-auto my-1 text-5xl font-semibold text-black leading-extra-loose sm:max-w-xl">GET 20% OFF + {translate('label.product.freeDeliveryText')}</h3>
-          <p>{translate('label.membership.membershipDescText')}</p>
+          <p className="dark:text-black">{translate('label.membership.membershipDescText')}</p>
         </div>
       </div>
       <div className="pb-10 sm:pb-24 bg-gradient-to-b from-purple-100 to-white">

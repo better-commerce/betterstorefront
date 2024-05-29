@@ -492,7 +492,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </ol>
         </div>
         <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-          <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+          <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
             {brandDetails?.name}
           </h1>
           {sanitizedDescription &&
@@ -504,7 +504,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           }
         </div>
         <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>

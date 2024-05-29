@@ -596,7 +596,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                             </p>
                                           </div>
                                           <div className='flex flex-col'>
-                                            <div className="mt-1.5 sm:mt-1.5 flex text-sm text-slate-600 dark:text-slate-300 justify-between gap-2 items-center">
+                                            <div className="mt-1.5 sm:mt-1.5 flex text-sm text-slate-600 dark:text-slate-600 justify-between gap-2 items-center">
                                               <span className='flex'>
                                                 {product?.colorName != "" &&
                                                   <div className="flex items-center space-x-1.5">

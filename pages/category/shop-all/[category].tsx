@@ -625,7 +625,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           {productDataToPass?.results?.length > 0 &&
             <>
               <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
                 <div className="flex justify-end align-bottom">
                   <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                 </div>

@@ -275,8 +275,8 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
             <Dialog.Panel className="w-full max-w-lg mx-auto bg-white">
               <Dialog.Title className="p-3">
                 <div className="flex items-center justify-between">
-                  <p className="font-semibold font-20">{translate('label.filters.changeSizeText')}</p>
-                  <span className="p-2 -mr-2 cursor-pointer hover:bg-gray-100" role="button" tabIndex={0} onClick={handleCloseModal} onKeyDown={handleCloseModal} >
+                  <p className="font-semibold font-20 dark:text-black">{translate('label.filters.changeSizeText')}</p>
+                  <span className="p-2 -mr-2 cursor-pointer hover:bg-gray-100 dark:text-black" role="button" tabIndex={0} onClick={handleCloseModal} onKeyDown={handleCloseModal} >
                     <XMarkIcon className="w-4 h-4" />
                   </span>
                 </div>
@@ -295,9 +295,9 @@ function SizeChangeModal({ open, handleToggleOpen, product }: any) {
                         {({ checked, disabled }) => (
                           <li
                             className={cn(
-                              'outline relative outline-gray-300 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-sky-700 transition-colors uppercase duration-75 rounded-xl',
+                              'outline relative outline-gray-300 outline-1 ml-[1px] list-none text-center cursor-pointer px-3 py-2 flex-1 hover:bg-sky-700 transition-colors uppercase duration-75 rounded-xl dark:text-black',
                               {
-                                'bg-sky-500 text-white outline-sky-500 z-50 cursor-pointer': checked,
+                                'bg-sky-500 text-white dark:text-white outline-sky-500 z-50 cursor-pointer': checked,
                                 '!cursor-default': disabled,
                                 '!bg-slate-100 !cursor-not-allowed !pointer-events-none !text-slate-400': !(size?.currentStock || size?.sellWithoutInventory)
                               }

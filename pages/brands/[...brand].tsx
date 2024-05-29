@@ -565,7 +565,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
               <li className='flex items-center text-10-mob sm:text-sm'>
                 <Link href="/brands" passHref>
-                  <span className="flex items-end upper case font-12">{translate('common.label.brandsText')}</span>
+                  <span className="flex items-end upper case font-12 dark:text-black">{translate('common.label.brandsText')}</span>
                 </Link>
               </li>
               <li className='flex items-center text-10-mob sm:text-sm'>
@@ -579,7 +579,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             </ol>
           </div>
           <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-            <h1 className={`block text-2xl capitalize ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+            <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {brandDetails?.name}
             </h1>
             {sanitizedDescription &&
@@ -591,7 +591,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             }
           </div>
           <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-white result-count-text brand-text-12"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text brand-text-12"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>

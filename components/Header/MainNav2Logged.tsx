@@ -116,7 +116,7 @@ function handleWishlist() {
               </div>
             </div>
           }
-          <div className="container flex justify-between mx-auto">
+          <div className="container flex justify-between mx-auto mob-container">
             {isMobile &&
               <div className="flex items-center flex-1">
                 <MenuBar navItems={config} featureToggle={featureToggle} />
@@ -133,7 +133,7 @@ function handleWishlist() {
               </div>
             }
 
-            <div className="flex items-center justify-end flex-1 text-slate-700 dark:text-slate-100">
+            <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
@@ -156,8 +156,8 @@ function handleWishlist() {
               <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
               <CartDropdown />
               {featureToggle?.features?.enableMembership &&
-                <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
-                  <StarIcon className="w-7 h-7 text-slate-700 dark:invert" title="Membership" />
+                <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                  <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
                 </Link>
               }
             </div>

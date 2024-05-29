@@ -122,7 +122,7 @@ function ForgotPasswordPage() {
                 return (
                   <div key={Idx} className="w-full mb-4">
                     <label className="text-neutral-800 dark:text-neutral-800">{field.label}</label>
-                    <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
+                    <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
                     {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
                       <div className="w-full text-red-600">{emailStatus}</div>
                     )}
