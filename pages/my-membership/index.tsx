@@ -3,12 +3,11 @@ import NextHead from 'next/head'
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Layout from '@components/Layout/Layout'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, MembershipType, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { MembershipType, SITE_ORIGIN_URL } from "@components/utils/constants";
 import React, { useMemo } from "react";
 import { removeQueryString } from "@commerce/utils/uri-util";
 import { RocketLaunchIcon, TagIcon } from "@heroicons/react/24/outline";
 import { GetServerSideProps, } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import cartHandler from "@components/services/cart";
 import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -28,7 +27,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       
     },
   }

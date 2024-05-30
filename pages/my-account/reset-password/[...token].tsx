@@ -1,9 +1,7 @@
 import Layout from '@components/Layout/Layout'
 import { useEffect, useState } from 'react'
 import NextHead from 'next/head'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, NEXT_RESET_PASSWORD, NEXT_VALIDATE_TOKEN, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { EmptyString, NEXT_RESET_PASSWORD, NEXT_VALIDATE_TOKEN, SITE_ORIGIN_URL } from '@components/utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { Button } from '@components/ui'
@@ -27,7 +25,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
   }
 }

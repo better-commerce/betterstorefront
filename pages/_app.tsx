@@ -28,7 +28,7 @@ import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framew
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN, NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
@@ -46,7 +46,9 @@ import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
-const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
+import { I18nProvider } from '@components/ui/i18nContext';
+import { i18nLocalization } from 'framework/utils/app-util';
+const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`)
 
 const tagManagerArgs: any = {
   gtmId: process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID,
@@ -100,7 +102,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     deviceType: DeviceType.UNKNOWN,
     isOnlyMobile: undefined,
   })
-  const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
+  const [updatedPageProps, setUpdatedPageProps] = useState({...pageProps, featureToggle, })
   const [campaignData, setCampaignData] = useState()
 
   const keywordsData = pageProps?.keywords || []
@@ -116,6 +118,16 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const setClientIPAddress = (pageProps: any) => {
     if (pageProps?.clientIPAddress) {
       Cookies.set(Cookie.Key.CLIENT_IP_ADDRESS, pageProps?.clientIPAddress)
+    }
+  }
+  const i18n = i18nLocalization(pageProps?.locale || EmptyString)
+
+  const setNavTree = async () => {
+    const { data: navResult }: any = await axios.get(NEXT_GET_NAVIGATION)
+    const { nav = [], footer = [] } = navResult
+    if (nav?.length || footer?.length) {
+      const newPageProps = { ...updatedPageProps, navTree: navResult }
+      setUpdatedPageProps(newPageProps)
     }
   }
 
@@ -181,6 +193,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
+    setNavTree()
     initializeGTM()
     document.body.classList?.remove('loading')
     if (appConfig) {
@@ -348,40 +361,41 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
               <BrowserNavigation deviceInfo={deviceInfo} />
             )
           }
-          <ErrorBoundary>
-            <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
-              <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
-              <OverlayLoader />
-              <CustomerReferral router={router} />
-              <SessionProvider session={pageProps?.session}>
-                <Component
-                  {...pageProps}
-                  campaignData={campaignData}
-                  location={location}
-                  ipAddress={location.Ip}
-                  config={appConfig}
-                  pluginConfig={pluginConfig}
-                  deviceInfo={deviceInfo}
-                />
-              </SessionProvider>
-              <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
-            </Layout>
-          </ErrorBoundary>
+          <I18nProvider value={i18n}>
+            <ErrorBoundary>
+              <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
+                <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
+                <OverlayLoader />
+                <CustomerReferral router={router} />
+                <SessionProvider session={pageProps?.session}>
+                  <Component
+                    {...updatedPageProps}
+                    campaignData={campaignData}
+                    location={location}
+                    ipAddress={location.Ip}
+                    config={appConfig}
+                    pluginConfig={pluginConfig}
+                    deviceInfo={deviceInfo}
+                  />
+                </SessionProvider>
+                <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
+              </Layout>
+            </ErrorBoundary>
+          </I18nProvider>
         </PasswordProtectedRoute>
       </ManagedUIContext>
     </>
   )
 }
 
-MyApp.getInitialProps = async (
-  context: AppContext
-): Promise<AppInitialProps> => {
+MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> => {
 
   const { ctx, Component } = context
   const { locale } = ctx
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
+  let navTreeResult = { nav: new Array(), footer: new Array(), }
   let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']
   if (!clientIPAddress && forwardedFor) {
@@ -394,9 +408,9 @@ MyApp.getInitialProps = async (
     pageProps: {
       serverHost,
       urlReferrer,
+      navTree: navTreeResult,
       clientIPAddress,
       locale,
-      featureToggle,
     },
   }
 }

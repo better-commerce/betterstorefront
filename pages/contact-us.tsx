@@ -5,11 +5,8 @@ import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Layout from '@components/Layout/Layout'
-import commerce from '@lib/api/commerce'
 import {
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -26,13 +23,6 @@ import {
   setCurrentCurrency,
 } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
-import {
-  containsArrayData,
-  getDataByUID,
-  parseDataValue,
-  setData,
-} from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import ContactForm from '@components/contact/ContactForm'
@@ -54,9 +44,6 @@ export async function getStaticProps({
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(
-        locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!
-      )),
       hostName: obfuscateHostName(hostName),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),

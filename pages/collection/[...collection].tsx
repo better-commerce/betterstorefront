@@ -20,7 +20,7 @@ import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -30,7 +30,6 @@ import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -46,6 +45,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -103,7 +103,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CollectionPage(props: any) {
-  const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
+  const { deviceInfo, config, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
     return <></>
@@ -665,7 +665,6 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context,
       hostName: obfuscateHostName(hostName!),
     },

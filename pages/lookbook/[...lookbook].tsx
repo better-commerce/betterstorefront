@@ -9,7 +9,7 @@ const ProductGrid = dynamic(() => import('@old-components/product/Grid/ProductGr
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
+  CURRENT_THEME,
   EmptyObject,
   NEXT_BULK_ADD_TO_CART,
   NEXT_GET_SINGLE_LOOKBOOK,
@@ -24,13 +24,13 @@ import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@old-components/product/ProductCompare/compareSelectionBar'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Guid } from '@commerce/types'
 import { stringToNumber } from '@framework/utils/parse-util'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
-function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+function LookbookDetailPage({ data, slug, deviceInfo, config, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const router = useRouter()
   const { basketId, openCart, setCartItems, isCompared } = useUI()
@@ -216,7 +216,6 @@ export async function getStaticProps({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       data: response,
       slug: slug[0],
       globalSnippets: infraUIDData?.snippets ?? [],
