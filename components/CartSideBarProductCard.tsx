@@ -69,8 +69,8 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
           <div className="">
             {product?.children
               ?.filter((x: any) => x?.itemType === CartProductType.ENGRAVING)
-              ?.map((child: any) => (
-                <div className="flex">
+              ?.map((child: any, index: number) => (
+                <div key={index} className="flex">
                   <div className="flex flex-col mt-2 mb-6">
                     <div className="flex justify-between font-medium text-gray-900">
                       <div className="image-container">
@@ -175,8 +175,8 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
           )}
           {product?.children
             ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
-            ?.map((child: any) => (
-              <BundleProductCard subProduct={child} andleRedirectToPDP={handleRedirectToPDP} handleClose={handleClose} />
+            ?.map((child: any, index: number) => (
+              <BundleProductCard key={index} subProduct={child} andleRedirectToPDP={handleRedirectToPDP} handleClose={handleClose} />
             ))}
         </div>
       </div>
