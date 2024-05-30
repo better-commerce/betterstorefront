@@ -650,3 +650,7 @@ export enum MembershipType {
   PLATINUM = 'Platinum',
   DEFAULT = 'Default',
 }
+
+export enum CartProductType {
+  ENGRAVING = 10,
+}

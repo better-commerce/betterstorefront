@@ -758,23 +758,45 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload: any) => dispatch({ type: 'SHOW_SEARCH_BAR', payload }),
     [dispatch]
   )
+  
   const setCartItems = useCallback(
     (payload: any) => {
-      const newCartDataClone: any = { ...payload }
-      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
-        newCartDataClone?.lineItems?.forEach((i: any) => {
-          if (element.parentProductId === i.productId) {
-            i.children = i.children ? [...i.children, element] : [element]
-            newCartDataClone.lineItems.splice(idx, 1)
+      const { lineItems }: any = payload
+      const childrenMap = new Map()
+      const rootProducts: any = []
+
+      lineItems?.forEach((item: any) => {
+        if (!item?.parentProductId || item?.parentProductId === Guid.empty) {
+          if (!item?.children) item.children = []
+          rootProducts.push(item)
+        } else {
+          if (!childrenMap.has(item?.parentProductId)) {
+            childrenMap.set(item?.parentProductId, [])
           }
-        })
+          childrenMap.get(item?.parentProductId).push(item)
+        }
       })
 
-      const cart = { ...payload }
-      setItem('cartItems', cart)
+      const updatedLineItems: any[] = []
+      if (lineItems && lineItems?.length > 0) {
+        rootProducts?.forEach((item: any) => {
+          updatedLineItems?.push(item)
+          const childItems = childrenMap?.get(item.productId)
+          if (childItems) {
+            childItems?.forEach((child: any) => {
+              if (!child?.isPromo) item?.children.push(child)
+              else updatedLineItems.push(child)
+            })
+          }
+        })
+      }
 
-      if (cart?.lineItems?.length == 0) {
-        resetBasket(setBasketId, basketId)
+      const newCartData: any = { ...payload, lineItems: updatedLineItems }
+
+    setItem('cartItems', newCartData)
+
+    if (newCartData?.lineItems?.length == 0) {
+      resetBasket(setBasketId, basketId)
         /*const user = {
           ...state?.user,
           ...{
@@ -783,7 +805,7 @@ export const UIProvider: React.FC<any> = (props) => {
         };
         setUser(user);*/
       }
-      dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
+      dispatch({ type: 'SET_CART_ITEMS', payload: newCartData })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]

@@ -92,6 +92,7 @@ export default function cartHandler() {
             productName: x.name,
             parentProductId: isComplementary ? Guid.empty : productId,
             qty: 1,
+            customInfo2: x.image 
           }
         })
         const products = isComplementary
