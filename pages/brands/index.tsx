@@ -10,12 +10,13 @@ import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 
@@ -46,11 +47,11 @@ const dataNormalize = (data: any = []) => {
 
 function BrandsPage({ brands }: any) {
   const router = useRouter()
-  const data = dataNormalize(brands?.results || [])
+  const data = dataNormalize(brands.results)
   const translate = useTranslation()
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
-    const filteredData = data?.filter((item: any) => {
+    const filteredData = data.filter((item: any) => {
       const result = item.results.find((brand: any) =>
         brand.manufacturerName.toLowerCase().includes(value.toLowerCase())
       )
@@ -183,6 +184,7 @@ export async function getStaticProps({
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       brands: brandsUIDData?.result || { results: new Array<any>() },
       snippets: brandsUIDData?.snippets ?? [],
     },

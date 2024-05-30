@@ -23,12 +23,13 @@ import Spinner from '@components/ui/Spinner'
 // Other Imports
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { PaymentStatus } from '@components/utils/payment-constants'
-import { DATE_FORMAT, NEXT_GET_ORDER, NEXT_GET_ORDER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, DATE_FORMAT, NEXT_GET_ORDER, NEXT_GET_ORDER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { isB2BUser, notFoundRedirect, vatIncluded } from '@framework/utils/app-util'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import withAuth from '@components/utils/withAuth'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { GetServerSideProps } from 'next'
 import { matchStrings } from '@framework/utils/parse-util'
 import LayoutAccount from '@components/Layout/LayoutAccount'
@@ -337,6 +338,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     return {
         props: {
             ...pageProps,
+            ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         }
     }
 }

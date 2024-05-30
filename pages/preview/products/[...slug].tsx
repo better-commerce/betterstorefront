@@ -7,6 +7,8 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 
@@ -17,6 +19,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS
   }

@@ -13,6 +13,7 @@ import React from 'react'
 // import MyOrders from '@old-components/account/MyOrders'
 import axios from 'axios'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_ADDRESS,
   NEXT_B2B_GET_QUOTES,
   NEXT_B2B_GET_USERS,
@@ -29,6 +30,7 @@ import { Guid } from '@commerce/types'
 import { isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { BuildingOffice2Icon } from '@heroicons/react/24/outline'
 import { CompanyTabs, companyMenuTabs } from '@components/account/configs/company'
@@ -287,6 +289,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!))
     }, // will be passed to the page component as props
   }
 }

@@ -2,12 +2,13 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import Layout from '@components/Layout/Layout'
-import { PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { notFoundRedirect } from '@framework/utils/app-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
@@ -86,6 +87,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       slug: slug,
       pageContents: pageContents || {},
     },

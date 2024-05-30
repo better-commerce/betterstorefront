@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import { Button } from '@components/ui'
 import NextHead from 'next/head'
-import { NEXT_FORGOT_PASSWORD, SITE_ORIGIN_URL, } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_FORGOT_PASSWORD, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validate } from 'email-validator'
@@ -11,6 +11,7 @@ import { useUI } from '@components/ui/context'
 import { Messages, EmptyString } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -151,6 +152,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

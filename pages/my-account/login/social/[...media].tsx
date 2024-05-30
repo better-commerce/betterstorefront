@@ -16,10 +16,12 @@ import { parseFullName } from '@framework/utils/app-util'
 import cartHandler from '@components/services/cart'
 import useWishlist from '@components/services/wishlist'
 import {
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_SSO_AUTHENTICATE,
   SocialMediaType,
 } from '@components/utils/constants'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -154,6 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       medium: media, // Generic
     }, // will be passed to the page component as props
   }
