@@ -1,9 +1,9 @@
 import React from 'react'
 import NextHead from 'next/head'
 import axios from 'axios'
+import { useTranslation } from 'next-i18next'
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
 import { NEXT_POST_LOGGER } from '@components/utils/constants'
-import { useTranslation } from '@commerce/utils/use-translation'
 
 interface IProps {
   readonly children: any

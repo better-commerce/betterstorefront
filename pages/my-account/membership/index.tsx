@@ -5,6 +5,8 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import MyMembership from '@components/membership/MyMembership'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid } from '@components/utils/constants'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { useEffect } from 'react'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -57,6 +59,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

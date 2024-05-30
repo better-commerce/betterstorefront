@@ -7,7 +7,7 @@ import { useCart as getCart } from '@framework/cart'
 import { GetServerSideProps } from 'next'
 import { useUI } from '@components/ui/context'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import { NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/utils/constants'
 import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
@@ -15,6 +15,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import CheckoutHeading from '@components/SectionCheckoutJourney/checkout/CheckoutHeading'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutRouter'))
 const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutForm'))
 
@@ -249,6 +250,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
     }, // will be passed to the page component as props
   }

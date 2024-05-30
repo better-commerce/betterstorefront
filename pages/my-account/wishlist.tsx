@@ -7,14 +7,14 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import React from 'react'
 import Wishlist from '@components/account/Wishlist'
-import { CURRENT_THEME, EmptyObject } from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
-function MyAccount({ deviceInfo, defaultDisplayMembership, }: any) {
+function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const router = useRouter()
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
@@ -76,6 +76,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

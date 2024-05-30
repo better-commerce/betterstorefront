@@ -5,6 +5,7 @@ import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Layout from '@components/Layout/Layout'
 import {
   BETTERCOMMERCE_DEFAULT_LANGUAGE,
@@ -42,6 +43,9 @@ export async function getStaticProps({
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(
+        locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!
+      )),
       hostName: obfuscateHostName(hostName),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),

@@ -1,6 +1,7 @@
-import { CURRENT_THEME, EngageEventTypes } from "@components/utils/constants";
+import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import EngageProductCard from "@components/SectionEngagePanels/ProductCard";
@@ -10,7 +11,6 @@ import { useTranslation } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import { IPagePropsProvider } from "@framework/contracts/page-props/IPagePropsProvider";
 import { getPagePropType, PagePropType } from "@framework/page-props";
-const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const PAGE_TYPE = PAGE_TYPES.MyStore
 
@@ -22,11 +22,12 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
   }
 }
 
-function MyStore({ campaignData, }: any) {
+function MyStore({ campaignData, featureToggle }: any) {
   const router = useRouter()
   const translate = useTranslation()
   const { user, isGuestUser, changeMyAccountTab } = useUI()
