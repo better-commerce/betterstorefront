@@ -14,12 +14,11 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { postData } from '@components/utils/clientFetcher'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
@@ -44,6 +43,7 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
 
@@ -91,18 +91,18 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
+function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, campaignData, defaultDisplayMembership }: any) {
   const translate = useTranslation()
   const faq = useFaqData();
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
-  let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
-  let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
-  let imgFeatureCollection: any = collections.imgFeatureCollection
-  let offerBannerResult: any = collections.offerBannerResult
-  let productCollectionRes: any = collections.productCollection
-  let saleProductCollectionRes: any = collections.saleProductCollection
+  let imageBannerCollectionResponse: any = collections?.imageBannerCollectionResponse
+  let imageCategoryCollectionResponse: any = collections?.imageCategoryCollection
+  let imgFeatureCollection: any = collections?.imgFeatureCollection
+  let offerBannerResult: any = collections?.offerBannerResult
+  let productCollectionRes: any = collections?.productCollection
+  let saleProductCollectionRes: any = collections?.saleProductCollection
   const sliderRef = useRef(null);
   const sliderRefNew = useRef(null);
   const [isShow, setIsShow] = useState(false);
@@ -662,7 +662,6 @@ export async function getStaticProps({
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
     }, // will be passed to the page component as props

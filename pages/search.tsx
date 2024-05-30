@@ -8,14 +8,13 @@ import NextHead from 'next/head'
 import { GetServerSideProps } from 'next'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -433,7 +432,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
     }, // will be passed to the page component as props
   }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
@@ -21,8 +21,6 @@ import {
   EmptyObject,
   EmptyString,
   EngageEventTypes,
-  LOQATE_ADDRESS,
-  Messages,
   NEXT_AUTHENTICATE,
   NEXT_BASKET_VALIDATE,
   NEXT_CLICK_AND_COLLECT_STORE_DELIVERY,
@@ -47,6 +45,7 @@ import {
   stringToNumber,
   tryParseJson,
 } from '@framework/utils/parse-util'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Link from 'next/link'
 import { decrypt } from '@framework/utils/cipher'
 import { Guid } from '@commerce/types'
@@ -55,16 +54,13 @@ import compact from 'lodash/compact'
 import size from 'lodash/size'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Cookie } from '@framework/utils/constants'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import commerce from '@lib/api/commerce'
-import { Redis } from '@framework/utils/redis-constants'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`)
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
 
 export enum BasketStage {
@@ -78,7 +74,7 @@ export enum BasketStage {
 }
 
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
   const router = useRouter()
   const uiContext: any = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()

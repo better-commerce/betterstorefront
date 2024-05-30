@@ -7,11 +7,11 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constan
 import { notFoundRedirect } from '@framework/utils/app-util'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyObject } from '@components/utils/constants'
 import ProductView from '@components/Product/ProductView'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
@@ -34,7 +34,6 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
@@ -52,7 +51,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
-function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, featureToggle, defaultDisplayMembership }: any) {
+function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, defaultDisplayMembership }: any) {
   const router = useRouter()
   const translate = useTranslation()
 

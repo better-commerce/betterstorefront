@@ -15,14 +15,12 @@ import BasicLayout from '@old-components/common/Layout/BasicLayout'
 import { Guid } from '@commerce/types'
 import { useUI } from '@components/ui'
 import {
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   Messages,
   NEXT_GET_CART,
   NEXT_GET_CUSTOMER_DETAILS,
   NEXT_VALIDATE_PAYMENT_LINK,
 } from '@components/utils/constants'
 import { AlertType } from '@framework/utils/enums'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 
@@ -135,7 +133,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       paymentCode: paymentCode,
     }, // will be passed to the page component as props
   }

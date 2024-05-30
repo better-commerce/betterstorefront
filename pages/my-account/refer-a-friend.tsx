@@ -11,7 +11,6 @@ import { Disclosure } from '@headlessui/react'
 import { Transition } from '@headlessui/react'
 import axios from 'axios'
 import {
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_REFERRAL_BY_EMAIL,
   NEXT_REFERRAL_INFO,
   NEXT_REFERRAL_INVITE_SENT,
@@ -24,7 +23,6 @@ import {
 } from '@heroicons/react/24/outline'
 import Spinner from '@components/ui/Spinner'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -385,7 +383,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!))
     },
   }
 }

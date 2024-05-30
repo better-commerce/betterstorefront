@@ -1,7 +1,5 @@
 import axios from 'axios'
 import getFeed from '@framework/api/content/getFeed'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE } from '@components/utils/constants'
 
 export default function FeedComposer({ feed }: any) {
   return (
@@ -24,7 +22,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       feed: {
-        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       },
     },
   }
