@@ -4,14 +4,13 @@ import getAllStores from '@framework/store-locator/get-all-stores'
 import dynamic from 'next/dynamic';
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MapWithMarker from '@components/ui/Map/Marker';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer';
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider';
 import { getPagePropType, PagePropType } from '@framework/page-props';
@@ -153,7 +152,6 @@ export async function getStaticProps({ params, locale }: GetStaticPropsContext) 
     props: {
       ...pageProps,
       data: response,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }

@@ -14,7 +14,6 @@ import NextHead from 'next/head'
 import cookie from 'cookie'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   CURRENT_THEME,
   DeliveryType,
   EmptyGuid,
@@ -55,12 +54,8 @@ import compact from 'lodash/compact'
 import size from 'lodash/size'
 import { GetServerSideProps } from 'next'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Cookie } from '@framework/utils/constants'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import commerce from '@lib/api/commerce'
-import { Redis } from '@framework/utils/redis-constants'
-import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -1242,7 +1237,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       basketId,
     }
   }

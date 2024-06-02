@@ -18,14 +18,12 @@ import {
   NEXT_CANCEL_REASON,
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
 } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -310,7 +308,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       orderId: ids?.length > 0 ? ids[0] : Guid.empty,
       itemId: ids?.length > 1 ? ids[1] : Guid.empty,
     }, // will be passed to the page component as props

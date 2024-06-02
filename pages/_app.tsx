@@ -46,6 +46,8 @@ import CustomerReferral from '@components/customer/Referral';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
+import { I18nProvider } from '@components/ui/i18nContext';
+import { i18nLocalization } from 'framework/utils/app-util';
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const tagManagerArgs: any = {
@@ -118,6 +120,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       Cookies.set(Cookie.Key.CLIENT_IP_ADDRESS, pageProps?.clientIPAddress)
     }
   }
+  const i18n = i18nLocalization(pageProps?.locale || EmptyString)
 
   const setNavTree = useCallback(async () => {
     const { data: navResult }: any = await axios.get(NEXT_GET_NAVIGATION)
@@ -359,34 +362,34 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
               <BrowserNavigation deviceInfo={deviceInfo} />
             )
           }
-          <ErrorBoundary>
-            <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
-              <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
-              <OverlayLoader />
-              <CustomerReferral router={router} />
-              <SessionProvider session={pageProps?.session}>
-                <Component
-                  {...pageProps}
-                  campaignData={campaignData}
-                  location={location}
-                  ipAddress={location.Ip}
-                  config={appConfig}
-                  pluginConfig={pluginConfig}
-                  deviceInfo={deviceInfo}
-                />
-              </SessionProvider>
-              <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
-            </Layout>
-          </ErrorBoundary>
+          <I18nProvider value={i18n}>
+            <ErrorBoundary>
+              <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
+                <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
+                <OverlayLoader />
+                <CustomerReferral router={router} />
+                <SessionProvider session={pageProps?.session}>
+                  <Component
+                    {...pageProps}
+                    campaignData={campaignData}
+                    location={location}
+                    ipAddress={location.Ip}
+                    config={appConfig}
+                    pluginConfig={pluginConfig}
+                    deviceInfo={deviceInfo}
+                  />
+                </SessionProvider>
+                <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
+              </Layout>
+            </ErrorBoundary>
+          </I18nProvider>
         </PasswordProtectedRoute>
       </ManagedUIContext>
     </>
   )
 }
 
-MyApp.getInitialProps = async (
-  context: AppContext
-): Promise<AppInitialProps> => {
+MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> => {
 
   const { ctx, Component } = context
   const { locale } = ctx

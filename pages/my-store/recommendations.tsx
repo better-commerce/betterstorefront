@@ -1,7 +1,6 @@
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes } from "@components/utils/constants";
+import { EngageEventTypes } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import EngageProductCard from "@components/SectionEngagePanels/ProductCard";
@@ -24,7 +23,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
   }
 }

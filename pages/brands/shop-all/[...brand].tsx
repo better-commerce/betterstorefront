@@ -13,12 +13,11 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { postData } from '@components/utils/clientFetcher'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
@@ -553,7 +552,6 @@ export async function getStaticProps({
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: EmptyObject, //context.query,
       params: params,
     }, // will be passed to the page component as props

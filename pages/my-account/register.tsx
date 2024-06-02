@@ -4,7 +4,7 @@ import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
 import Link from 'next/link'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
@@ -19,7 +19,6 @@ import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
 import { AlertType } from '@framework/utils/enums'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -330,7 +329,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

@@ -7,8 +7,6 @@ import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constan
 import { notFoundRedirect } from '@framework/utils/app-util'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject } from '@components/utils/constants'
 import ProductView from '@components/Product/ProductView'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -34,7 +32,6 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
