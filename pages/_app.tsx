@@ -417,4 +417,4 @@ MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> =>
   }
 }
 
-export default appWithTranslation(MyApp)
+export default MyApp
