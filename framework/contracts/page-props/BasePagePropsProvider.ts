@@ -212,7 +212,8 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getNavTree({ cookies }: any) {
-    const key = Redis.Key.NavTree
+    return EmptyObject
+    /*const key = Redis.Key.NavTree
     const cachedData = await getDataByUID([
         key,
     ])
@@ -225,7 +226,7 @@ export abstract class BasePagePropsProvider {
         await setData([{ key, value: navTreeUIDData }])
       }
     }
-    return navTreeUIDData || EmptyObject
+    return navTreeUIDData || EmptyObject*/
   }
 
   protected async getKeywords({ cookies }: any) {
