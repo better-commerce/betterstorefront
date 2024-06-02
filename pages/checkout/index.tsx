@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Cookies from 'js-cookie'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
 import ShippingAddressForm from '@components/SectionCheckoutJourney/checkout/ShippingAddressForm'
@@ -14,6 +15,7 @@ import NextHead from 'next/head'
 import cookie from 'cookie'
 import {
   BETTERCOMMERCE_DEFAULT_COUNTRY,
+  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   CURRENT_THEME,
   DeliveryType,
   EmptyGuid,
@@ -61,6 +63,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
+import { appWithTranslation } from 'next-i18next'
 
 export enum BasketStage {
   CREATED = 0,
@@ -1237,14 +1240,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...pageProps,
+      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       basketId,
     }
   }
 }
 const PAGE_TYPE = PAGE_TYPES['Checkout']
-export default withDataLayer(
+export default appWithTranslation(withDataLayer(
   CheckoutPage,
   PAGE_TYPE,
   true,
   CheckoutLayoutV2
-)
+))
