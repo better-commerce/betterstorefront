@@ -10,7 +10,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL, SITE_NAME
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, SITE_ORIGIN_URL, SITE_NAME
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
@@ -23,7 +23,6 @@ import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@fram
 import NonHeadContentSnippet from '@old-components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
 import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -816,7 +815,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import Layout from '@components/Layout/Layout'
 import {
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
   NEXT_GET_ALL_STORES,
   NEXT_GOOGLE_AUTOCOMPLETE_API,
   NEXT_PLACE_DETAILS_API,
@@ -19,7 +18,6 @@ import { useDebounce } from 'hooks/useDebounce'
 import { StoreList } from '@components/StoreLocator/StoreList'
 import { removeQueryString } from '@commerce/utils/uri-util'
 import { GetServerSideProps } from 'next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -42,9 +40,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(
-        locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!
-      )),
     },
   }
 }

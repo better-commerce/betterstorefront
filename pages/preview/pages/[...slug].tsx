@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyObject, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL, } from '@components/utils/constants'
+import { EmptyObject, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import Layout from '@components/Layout/Layout'
@@ -13,7 +13,6 @@ const PromotionBanner = dynamic(
   () => import('@old-components/home/PromotionBanner')
 )
 import BestSellerProduct from '@old-components/product/BestSellerProduct'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -119,7 +118,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       slug: slug,
       pageContents: pageContents || {},
       dealOfTheWeekProductPromoDetails,
