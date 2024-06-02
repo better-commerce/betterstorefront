@@ -140,11 +140,11 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
           <button onClick={toggleDiv} title="Enable Demo" className={isVisible ? 'btn btn-primary btn-fixed shadow-2xl demo-open-btn' : 'btn btn-primary btn-fixed shadow-2xl'}>
             {isVisible ? (
               <>
-                Disable Demo <ChevronDoubleDownIcon className='w-6 h-6 ml-3 text-white' />
+                Hide Demo Elements <ChevronDoubleDownIcon className='w-6 h-6 ml-3 text-white' />
               </>
             ) : (
               <>
-                Enable Demo <ChevronDoubleUpIcon className='w-6 h-6 ml-3 text-white' />
+                Show Demo Elements <ChevronDoubleUpIcon className='w-6 h-6 ml-3 text-white' />
               </>
             )}
 
