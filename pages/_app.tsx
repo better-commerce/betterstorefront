@@ -102,7 +102,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     deviceType: DeviceType.UNKNOWN,
     isOnlyMobile: undefined,
   })
-  const [updatedPageProps, setUpdatedPageProps] = useState(pageProps)
+  const [updatedPageProps, setUpdatedPageProps] = useState({ ...pageProps, featureToggle })
   const [campaignData, setCampaignData] = useState()
 
   const keywordsData = pageProps?.keywords || []
@@ -370,7 +370,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
                 <CustomerReferral router={router} />
                 <SessionProvider session={pageProps?.session}>
                   <Component
-                    {...pageProps}
+                    {...{...pageProps, featureToggle}}
                     campaignData={campaignData}
                     location={location}
                     ipAddress={location.Ip}
@@ -412,7 +412,6 @@ MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> =>
       navTree: navTreeResult,
       clientIPAddress,
       locale,
-      featureToggle,
     },
   }
 }
