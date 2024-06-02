@@ -28,7 +28,7 @@ import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framew
 import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN } from '@components/utils/constants'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN, NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
@@ -119,6 +119,16 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }
 
+  const setNavTree = useCallback(async () => {
+    const { data: navResult }: any = await axios.get(NEXT_GET_NAVIGATION)
+    const { nav = [], footer = [] } = navResult
+    if (nav?.length || footer?.length) {
+      const newPageProps = { ...updatedPageProps, navTree: navResult }
+      setUpdatedPageProps(newPageProps)
+    }
+  }, [])
+
+
   const fetchEngageCampaigns = useCallback(async () => {
     try {
       const campaignRes = await fetchCampaignsByPagePath(router.asPath)
@@ -181,6 +191,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
+    setNavTree()
     initializeGTM()
     document.body.classList?.remove('loading')
     if (appConfig) {
@@ -382,6 +393,7 @@ MyApp.getInitialProps = async (
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
+  let navTreeResult = { nav: new Array(), footer: new Array(), }
   let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']
   if (!clientIPAddress && forwardedFor) {
@@ -394,6 +406,7 @@ MyApp.getInitialProps = async (
     pageProps: {
       serverHost,
       urlReferrer,
+      navTree: navTreeResult,
       clientIPAddress,
       locale,
       featureToggle,
