@@ -304,7 +304,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
-    categoryId: category.id,
+    categoryId: category?.id,
   }
   const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -319,7 +319,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         total: 0,
         currentPage: 1,
         filters: state?.filters || [],
-        categoryId: category.id,
+        categoryId: category?.id,
       },
     },
     error,
@@ -342,7 +342,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       total: 0,
       currentPage: 1,
       filters: [],
-      categoryId: category.id,
+      categoryId: category?.id,
       sortBy: null,
     },
   })
@@ -367,7 +367,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
 
   useEffect(() => {
     if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_page_view_before({ item_id: category?.name || EmptyString })

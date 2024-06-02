@@ -23,8 +23,7 @@ const Prices = dynamic(() => import('@components/Prices'))
 const ModalQuickView = dynamic(() => import('@components/ModalQuickView'))
 const ButtonSecondary = dynamic(() => import('@components/shared/Button/ButtonSecondary'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-import { CURRENT_THEME } from "@components/utils/constants";
-const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
+
 export interface ProductCardProps {
   readonly className?: string;
   readonly data?: any;
