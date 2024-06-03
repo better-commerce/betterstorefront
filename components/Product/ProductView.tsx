@@ -69,7 +69,7 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
@@ -100,6 +100,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o?.fieldName))
     setAttributeNames(mappedAttribsArrStr)
   }, [compareProductsAttributes])
+
+  useEffect(()=>{ closeSidebar() },[config])
 
   const fetchRelatedProducts = async (productId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })

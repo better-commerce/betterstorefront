@@ -17775,7 +17775,6 @@ body:has(.engage-announcement-bar){
   background: rgba(0, 0, 0, 0);
   height: 100vh !important;
   width: 100% !important;
-  content: "";
   left: 0 !important;
 }
 

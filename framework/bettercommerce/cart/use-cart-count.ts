@@ -6,7 +6,7 @@ interface Props {
   cookies?: any
 }
 
-export default function useAddItem() {
+export default function useCartItemCount() {
   return async function handler({ basketId, cookies }: Props) {
     const data = {
       basketId,

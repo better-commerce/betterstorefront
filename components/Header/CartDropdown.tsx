@@ -212,6 +212,9 @@ export default function CartDropdown() {
       if (count > 0) {
         setBasketItemsCount(count)
       }
+      else{
+        setBasketItemsCount(0)
+      }
     }
 
     if (basketId && basketId !== Guid.empty) {
