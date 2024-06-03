@@ -33,7 +33,7 @@ const BestSellerProduct: FC<React.PropsWithChildren<Props>> = ({ config, deviceI
   return (
     <>
       <div className="flex justify-between gap-1 mb-2 lg:gap-3 sm:mb-0">
-        <h2 className="flex items-center pb-6 text-2xl font-semibold md:text-3xl sm:pb-6 h2-heading-text">{translate('label.product.compareSameRangeText')}</h2>
+        <h2 className="flex items-center pb-6 text-2xl font-semibold md:text-3xl sm:pb-6 h2-heading-text">{translate('label.product.compareSameRangeText')}<span className='sr-only'>{' '}of {activeProduct?.name}</span></h2>
         <div className="flex gap-4">
           <button aria-label="Arrow Left" onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center rounded arrow-container hover:border-2">
             <i className="sprite-icons sprite-left-arrow"></i>

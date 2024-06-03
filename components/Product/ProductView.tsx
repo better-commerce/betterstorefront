@@ -862,7 +862,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {product.shortDescription != "" &&
           <>
             <hr className="pt-10 mt-10 sm:pt-10 border-slate-200 dark:border-slate-700" />
-            <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}</h2>
+            <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}<span className='sr-only'>{' '}of {product?.name}</span></h2>
             <div dangerouslySetInnerHTML={{ __html: product.shortDescription, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
           </>
         }
@@ -905,7 +905,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       <>
         <hr className="pt-5 mt-5 sm:pt-5 border-slate-200 dark:border-slate-700" />
         <div className="" id='productReview'>
-          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl dark:text-black">Rating & Review</h2>
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl dark:text-black">Rating & Review<span className='sr-only'>{' '}of {product?.name}</span></h2>
           <h2 className="flex items-center mt-4 text-2xl font-semibold sm:mt-8">
             <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
             <span className="ml-1.5 dark:text-black"> {reviews?.review?.ratingAverage} <span className='text-sm font-normal text-gray-500'>({reviews?.review?.productReviews?.length} Reviews)</span></span>
@@ -1019,7 +1019,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
         }
         {promotions?.promotions?.availablePromotions?.length > 0 && (
-          <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
+          <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
         )}
         {
           openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
@@ -1190,7 +1190,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {product?.componentProducts && (
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
-            <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} product={product} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </>
         )}
         {alternativeProducts?.length > 0 && (

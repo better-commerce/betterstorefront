@@ -331,8 +331,8 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
             <title>{seoInfo?.metaTitle}</title>
             {
               router.asPath.startsWith('/products/') && (
-                <link rel="canonical" href={(seoInfo?.canonicalTags != "" || seoInfo?.canonicalTags != null) ? (!hasBaseUrl(seoInfo?.canonicalTags) ? SITE_ORIGIN_URL + "/" + seoInfo?.canonicalTags : seoInfo?.canonicalTags) : SITE_ORIGIN_URL +  cleanPath} />
-                // <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
+                // <link rel="canonical" href={(seoInfo?.canonicalTags != "" || seoInfo?.canonicalTags != null) ? (!hasBaseUrl(seoInfo?.canonicalTags) ? SITE_ORIGIN_URL + "/" + seoInfo?.canonicalTags : seoInfo?.canonicalTags) : SITE_ORIGIN_URL +  cleanPath} />
+                <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
               )
             }
             <meta name="title" content={seoInfo?.metaTitle} />
