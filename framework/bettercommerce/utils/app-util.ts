@@ -463,6 +463,45 @@ export const cartItemsValidateAddToCart = (
   }
   return true
 }
+
+export const processCartData = (payload: any) => {
+  const { lineItems }: any = payload;
+  const childrenMap = new Map();
+  const rootProducts: any[] = [];
+
+  // Organize items into root products and child items
+  lineItems?.forEach((item: any) => {
+    if (!item?.parentProductId || item?.parentProductId === Guid.empty) {
+      if (!item?.children) item.children = [];
+      rootProducts.push(item);
+    } else {
+      if (!childrenMap.has(item?.parentProductId)) {
+        childrenMap.set(item?.parentProductId, []);
+      }
+      childrenMap.get(item?.parentProductId).push(item);
+    }
+  });
+
+  // Update line items with children and promo items
+  const updatedLineItems: any[] = [];
+  if (lineItems && lineItems?.length > 0) {
+    rootProducts?.forEach((item: any) => {
+      updatedLineItems?.push(item);
+      const childItems = childrenMap?.get(item.productId);
+      if (childItems) {
+        childItems?.forEach((child: any) => {
+          if (!child?.isPromo) item?.children.push(child);
+          else updatedLineItems.push(child);
+        });
+      }
+    });
+  }
+
+  // Create new cart data with updated line items
+  const newCartData: any = { ...payload, lineItems: updatedLineItems };
+  return newCartData;
+}
+
 export const getCurrency = () => {
   const currencyCode =
     Cookies.get(Cookie.Key.CURRENCY) ||

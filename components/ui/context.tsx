@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
 import { DeviceType } from '@commerce/utils/use-device'
 import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
-import { resetBasket } from '@framework/utils/app-util'
+import { processCartData, resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -761,42 +761,12 @@ export const UIProvider: React.FC<any> = (props) => {
   
   const setCartItems = useCallback(
     (payload: any) => {
-      const { lineItems }: any = payload
-      const childrenMap = new Map()
-      const rootProducts: any = []
+      
+      const newCartData = processCartData(payload);
+      setItem('cartItems', newCartData)
 
-      lineItems?.forEach((item: any) => {
-        if (!item?.parentProductId || item?.parentProductId === Guid.empty) {
-          if (!item?.children) item.children = []
-          rootProducts.push(item)
-        } else {
-          if (!childrenMap.has(item?.parentProductId)) {
-            childrenMap.set(item?.parentProductId, [])
-          }
-          childrenMap.get(item?.parentProductId).push(item)
-        }
-      })
-
-      const updatedLineItems: any[] = []
-      if (lineItems && lineItems?.length > 0) {
-        rootProducts?.forEach((item: any) => {
-          updatedLineItems?.push(item)
-          const childItems = childrenMap?.get(item.productId)
-          if (childItems) {
-            childItems?.forEach((child: any) => {
-              if (!child?.isPromo) item?.children.push(child)
-              else updatedLineItems.push(child)
-            })
-          }
-        })
-      }
-
-      const newCartData: any = { ...payload, lineItems: updatedLineItems }
-
-    setItem('cartItems', newCartData)
-
-    if (newCartData?.lineItems?.length == 0) {
-      resetBasket(setBasketId, basketId)
+      if (newCartData?.lineItems?.length == 0) {
+        resetBasket(setBasketId, basketId)
         /*const user = {
           ...state?.user,
           ...{

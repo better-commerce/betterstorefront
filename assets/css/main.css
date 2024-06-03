@@ -17771,6 +17771,14 @@ body:has(.engage-announcement-bar){
   z-index: -1;
 }
 
+.menu-overlay {
+  background: rgba(0, 0, 0, 0);
+  height: 100vh !important;
+  width: 100% !important;
+  content: "";
+  left: 0 !important;
+}
+
 #payment-form {
   width: 100% !important;
   background-color: white !important;
