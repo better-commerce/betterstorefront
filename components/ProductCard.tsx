@@ -295,18 +295,15 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
 const ButtonLink = (props: any) => {
   const { isComparedEnabled, children, href, handleHover, itemPrice, productName, onClick, } = props
-  const { closeSidebar } = useUI()
   if (isComparedEnabled) {
     return (
       <div className="flex flex-col w-full" onClick={onClick}>{children}</div>
     )
   }
   return (
-    <div onClick={closeSidebar}>
-      <Link passHref href={href} className="img-link-display" title={`${productName} \t ${itemPrice}`}>
-        {children}
-      </Link>
-    </div>
+    <Link passHref href={href} className="img-link-display" title={`${productName} \t ${itemPrice}`}>
+      {children}
+    </Link>
   )
 }
 
