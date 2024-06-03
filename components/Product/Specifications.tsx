@@ -23,7 +23,7 @@ export default function ProductSpecifications({
         <div className={`${imageTagGroup?.specification?.length > 0 ? 'sm:col-span-7' : 'sm:col-span-12'}`}>
           <div className="flex-1 pb-0 pr-4 sm:pb-4">
             <h2 className="flex items-center pb-2 text-2xl font-semibold md:text-3xl sm:pb-2 h2-heading-text dark:text-black">
-              Product Details
+              Product Details<span className='sr-only'>{' '}of {product?.name}</span>
             </h2>
             {attrGroup['whyweloveit']?.length > 0 && (
               <div className="pt-2 mt-1 border-t border-gray-200 sm:pt-3 sm:mt-3">

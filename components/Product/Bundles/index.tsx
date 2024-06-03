@@ -4,7 +4,7 @@ import BundleCard from './BundleCard'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductCard from '@components/ProductCard'
 
-export default function Bundles({ onClose = () => { }, price = '', products = [], productBundleUpdate = () => { }, deviceInfo, onBundleAddToCart = () => { }, featureToggle, defaultDisplayMembership, }: any) {
+export default function Bundles({ onClose = () => { }, price = '',product, products = [], productBundleUpdate = () => { }, deviceInfo, onBundleAddToCart = () => { }, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const [productData, setProductData] = useState(null)
   const handleProduct = (product: any) => {
@@ -63,7 +63,7 @@ export default function Bundles({ onClose = () => { }, price = '', products = []
     <section aria-labelledby="bundle" className="container px-4 mx-auto sm:px-0" >
       <div className="flex items-center justify-between w-full p-0 mb-6 sm:mb-10">
         <h2 id="bundle" className="flex items-center text-2xl font-semibold md:text-3xl h2-heading-text">
-          {translate('label.product.bundles.buyTogetherText')}
+          {translate('label.product.bundles.buyTogetherText')}<span className='sr-only'>{' '}of {product?.name}</span>
         </h2>
         <div className="flex gap-2">
           <span className="flex-col font-semibold text-right text-black text-md align-right item-right"> {translate('label.orderSummary.totalText')} </span>
