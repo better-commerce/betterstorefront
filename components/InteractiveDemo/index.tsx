@@ -7,6 +7,7 @@ import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/
 import { matchStrings } from '@framework/utils/parse-util';
 import { useUI } from '@components/ui';
 import { useTranslation } from '@commerce/utils/use-translation';
+import { uriParams } from '@commerce/utils/uri-util';
 
 declare const window: any
 
@@ -89,6 +90,30 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
       }
     }
   }, [websites]);
+
+  useEffect(() => {
+    const onRouteChangeStart = (ev: any) => {
+      const currentUrl = new URL(window.location.href)
+      const currentUrlParams = uriParams(currentUrl.search)
+      const url = new URL(`${window.location.origin}${ev}`)
+      const params = uriParams(url.search)
+      if (!params?.demo) {
+        const storecode = currentUrlParams?.storecode
+        let redirectUrl = `${window.location.origin}${ev}`
+        if (params) {
+          redirectUrl = Object.keys(params)?.length === 0 ? `${redirectUrl}?demo=1&storecode=${storecode}`: `${redirectUrl}&demo=1&storecode=${storecode}`
+        } else {
+          redirectUrl = `${redirectUrl}?demo=1&storecode=${storecode}`
+        }
+        router.replace(redirectUrl)
+      }
+    }
+    router.events.on("routeChangeStart", onRouteChangeStart)
+
+    return () => {
+      router.events.off("routeChangeStart", onRouteChangeStart)
+    }
+  }, [router.events])
 
   const setRouteOnFeatureChange = useCallback(({ feature, store }: any) => {
     const qs = new URLSearchParams();
