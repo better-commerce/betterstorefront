@@ -91,7 +91,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                       </h3>
                     </section>
                     <div className="mt-6">
-                      <h3 className="sr-only">{translate('label.product.bundles.descriptionText')}</h3>
+                      <h3 className="sr-only">{translate('common.label.descriptionText')}</h3>
 
                       <div
                         className="space-y-6 text-sm text-gray-700"

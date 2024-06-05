@@ -566,7 +566,6 @@
       },
       "bundles": {
         "productInformationText": "Produktinformationen",
-        "descriptionText": "Beschreibung",
         "optionsText": "Produktoptionen",
         "seeMoreText": "Weitere Details anzeigen",
         "skuText": "Artikelnummer: ",
@@ -926,6 +925,7 @@
     },
     "label": {
       "homeText": "Startseite",
+      "descriptionText": "Beschreibung",
       "postText": "Beitrag",
       "reviews": "Bewertungen",
       "backToHomepageText": "Zurück zur Startseite",

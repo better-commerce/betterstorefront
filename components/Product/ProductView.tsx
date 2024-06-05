@@ -897,7 +897,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
   const detailsConfig = [
-    { name: translate('label.product.bundles.descriptionText'), content: productDesc },
+    { name: "Description", content: productDesc },
     { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
     { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
   ]
