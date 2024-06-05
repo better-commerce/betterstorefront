@@ -56,20 +56,15 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
   )
 
   useEffect(() => {
-    if (voucher && voucher.validFrom && voucher.validTo) {
-      const validFrom = (new Date(voucher.validFrom)).getTime();
+    let validityDaysLeft = 0 
+    if (voucher && voucher?.validTo) {
+      const today = new Date().getTime();
       const validTo = (new Date(voucher.validTo)).getTime();
-      
-      if (!isNaN(validFrom) && !isNaN(validTo)) { 
-        const days = (validTo - validFrom) / (1000 * 60 * 60 * 24);
-        setValidityDays(days);
-      } else {
-        console.error("Invalid date format", { validFrom, validTo });
-        setValidityDays(0);
+      if (!isNaN(today) && !isNaN(validTo)) { 
+        validityDaysLeft = Math.ceil((validTo - today) / (1000 * 60 * 60 * 24));
       }
-    } else {
-      setValidityDays(0);
-    }
+    } 
+    setValidityDays(validityDaysLeft)
   }, [voucher]);
 
   return (
