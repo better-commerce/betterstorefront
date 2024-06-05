@@ -566,7 +566,6 @@
       },
       "bundles": {
         "productInformationText": "Product information",
-        "descriptionText": "Description",
         "optionsText": "Product options",
         "seeMoreText": "See more details",
         "skuText": "SKU: ",
@@ -926,6 +925,7 @@
     },
     "label": {
       "homeText": "Home",
+      "descriptionText": "Description",
       "postText": "Post",
       "reviews": "reviews",
       "optionalPlaceHolderText": "(Optional)",
