@@ -17,7 +17,7 @@ import { Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_R
 import ProductTag from "@components/Product/ProductTag";
 import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
+import { cartItemsValidateAddToCart, getCurrentPage, logError } from "@framework/utils/app-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
 import cartHandler from "@components/services/cart";
 import { recordGA4Event } from "@components/services/analytics/ga4";
@@ -81,7 +81,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       setQuickViewData(data)
       setReviewData(reviewData?.review)
       if (data) {
-        setSelectedAttrData({ productId: data?.recordId, stockCode: data?.stockCode, ...data, })
+        setSelectedAttrData({ ...data, productId: data?.recordId, stockCode: data?.stockCode, })
       }
     }
     if (productSlug) loadView(productSlug)
@@ -102,10 +102,10 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
 
         const data = productQuickViewData?.product
         fetchRelatedProducts(data?.recordId)
-        setQuickViewData(productQuickViewData?.product)
+        setQuickViewData(data)
         setReviewData(reviewData?.review)
         if (data) {
-          setSelectedAttrData({ productId: data?.recordId, stockCode: data?.stockCode, ...data, })
+          setSelectedAttrData({ ...data, productId: data?.recordId, stockCode: data?.stockCode, })
         }
         // console.log('QUICKVIEW_PRODUCTDATA:',productQuickViewData?.product)
       }
@@ -413,7 +413,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         showEngravingModal(false)
         openCart()
       } catch (error) {
-        console.log(error, 'err')
+        logError(error)
       }
     }
     asyncHandler()
@@ -493,7 +493,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           })
           insertToLocalWishlist()
         } catch (error) {
-          console.log(error, 'error')
+          logError(error)
         }
       }
       createWishlist()

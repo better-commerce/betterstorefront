@@ -8,6 +8,7 @@ import isString from 'lodash/isString'
 
 import { matchStrings } from '@framework/utils/parse-util'
 import SizeAttribute from '@old-components/product/ProductView/sizeAttribute.json'
+import { EmptyObject } from '@components/utils/constants'
 
 function RenderRadioOptions({
    items,
@@ -145,7 +146,7 @@ export default function SizeInline({
          stockCode: getStockPerAttrData.stockCode,
       })
       handleSetProductVariantInfo({ clothSize: currentAttribute })
-      setSelectedAttrData(getStockPerAttrData);
+      setSelectedAttrData({ ...(variant || EmptyObject), ...getStockPerAttrData });
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [currentAttribute])
