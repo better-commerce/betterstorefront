@@ -146,7 +146,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
               </p>
               { validityDays && <p className="px-5 text-center font-bold">
                 {translate('common.label.validitytext')}:{' '}
-                {translate('label.referral.offerValidText')} {`${validityDays}`} {translate('common.label.daysText')}
+                {translate('label.referral.offerValidText')} { validityDays === 1 ?  translate('common.label.todayText') : `${validityDays} ${translate('common.label.daysText')}`}
               </p>}
               <p className="px-12 text-center">
                 {translate('common.label.availGiftText')}
