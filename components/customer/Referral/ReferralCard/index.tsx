@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import s from './index.module.css'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { Button, LoadingDots } from '@components/ui'
 import { ClipboardIcon } from '@heroicons/react/24/outline'
@@ -36,6 +36,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
   const translate = useTranslation()
   const [show, setShow] = useState(hide||!!voucher)
   const [copied, setCopied] = useState(false)
+  const [validityDays, setValidityDays] = useState(0)
   const handleCopyClick = async () => {
     try {
       await navigator.clipboard.writeText(voucher?.voucherCode)
@@ -53,6 +54,24 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
     },
     className
   )
+
+  useEffect(() => {
+    if (voucher && voucher.validFrom && voucher.validTo) {
+      const validFrom = (new Date(voucher.validFrom)).getTime();
+      const validTo = (new Date(voucher.validTo)).getTime();
+      
+      if (!isNaN(validFrom) && !isNaN(validTo)) { 
+        const days = (validTo - validFrom) / (1000 * 60 * 60 * 24);
+        setValidityDays(days);
+      } else {
+        console.error("Invalid date format", { validFrom, validTo });
+        setValidityDays(0);
+      }
+    } else {
+      setValidityDays(0);
+    }
+  }, [voucher]);
+
   return (
     <div className={classNames(show ? 'block' : 'hidden', '')}>
       <div className={rootClassName}>
@@ -130,10 +149,10 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
               <p className="px-5 text-center font-bold">
                 {translate('label.checkout.offerText')}: {voucher?.promoName}
               </p>
-              <p className="px-5 text-center font-bold">
+              { validityDays && <p className="px-5 text-center font-bold">
                 {translate('common.label.validitytext')}:{' '}
-                {translate('label.referral.offerValidText')} {`${voucher?.validityDays}`} {translate('common.label.daysText')}
-              </p>
+                {translate('label.referral.offerValidText')} {`${validityDays}`} {translate('common.label.daysText')}
+              </p>}
               <p className="px-12 text-center">
                 {translate('common.label.availGiftText')}
               </p>
