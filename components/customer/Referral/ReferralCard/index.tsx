@@ -60,7 +60,7 @@ const ReferralCard: React.FC<React.PropsWithChildren<ReferralCardProps>> = ({
     if (voucher && voucher?.validTo) {
       const today = new Date().getTime();
       const validTo = (new Date(voucher.validTo)).getTime();
-      if (!isNaN(today) && !isNaN(validTo)) { 
+      if (!isNaN(today) && !isNaN(validTo) && validTo > today) {
         validityDaysLeft = Math.ceil((validTo - today) / (1000 * 60 * 60 * 24));
       }
     } 
