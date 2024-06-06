@@ -1,0 +1,25 @@
+{
+  "features": {
+    "enableLanguage": true,
+    "enablePriceIncVatToggle": false,
+    "enableQuickOrderPad": true,
+    "enableCompare": true,
+    "enableStoreLocator": true,
+    "enableCollectDeliveryOption": true,
+    "enableEngage":true,      
+    "enableMyStoreFeature": true,
+    "enableAddToBagPlp": false,
+    "enableMembership": true,
+    "isImageGallery": false,
+    "enableHeaderWishlist": false,
+    "enableProductSpecification": true,
+    "enableTrendingCategory": true,
+    "enableDemoToggle": true
+  },
+  "social":[
+    { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
+    { "name": "Youtube", "icon": "images/socials/twitter.svg", "href": "", "enable":false },
+    { "name": "Telegram", "icon": "images/socials/telegram.svg", "href": "", "enable":false },
+    { "name": "Twitter", "icon": "images/socials/youtube.svg", "href": "", "enable":true }
+  ]
+}
