@@ -1,6 +1,9 @@
+import { useTranslation } from '@commerce/utils/use-translation';
+import { stringFormat } from '@framework/utils/parse-util';
 import React from 'react'
 
 const BenefitItems = ({ discountPerc }:any) => {
+  const translate = useTranslation()
   const benefitItems = [
     {
       icon: (
@@ -19,7 +22,7 @@ const BenefitItems = ({ discountPerc }:any) => {
           />
         </svg>
       ),
-      description: "Unlimited FREE* delivery",
+      description: translate('label.membership.whatYouGetOptionText.option1Text'),
     },
     {
       icon: (
@@ -38,7 +41,7 @@ const BenefitItems = ({ discountPerc }:any) => {
           />
         </svg>
       ),
-      description: "Member-only offers and sales",
+      description: translate('label.membership.whatYouGetOptionText.option2Text'),
     },
   ];
 
@@ -60,7 +63,7 @@ const BenefitItems = ({ discountPerc }:any) => {
           />
         </svg>
       ),
-      description: `${discountPerc}% off whenever you want*`,
+      description: stringFormat(translate('label.membership.whatYouGetOptionText.option3Text'), { discountPerc }),
     });
   }
 

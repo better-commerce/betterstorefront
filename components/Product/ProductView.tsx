@@ -900,7 +900,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {({ open }) => (
             <>
               <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
-                <span className="text-accordion dark:text-black">Technical Specification</span>
+                <span className="text-accordion dark:text-black">{translate('label.product.technicalSpecificationText')}</span>
                 {!open ? (
                   <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                 ) : (
@@ -918,7 +918,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
   const detailsConfig = [
-    { name: "Description", content: productDesc },
+    { name: translate('common.label.descriptionText'), content: productDesc },
     { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
     { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
   ]

@@ -9,6 +9,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
+import { useTranslation } from '@commerce/utils/use-translation'
 const PLPQuickView = dynamic(() => import('@old-components/product/QuickView/PLPQuickView'))
 const ProductCard = dynamic(() => import('@old-components/product/ProductCard/ProductCard'))
 
@@ -31,6 +32,7 @@ export default function RelatedProducts({
   deviceInfo,
   maxBasketItemsCount,
 }: any) {
+  const translate = useTranslation()
   const { basketId, setCartItems, user } = useUI()
   const [quickViewProduct, setQuickViewProduct] = useState<any>(undefined)
   const [relatedProductsData, setRelatedProductsData] = useState<any>(null)
@@ -187,14 +189,14 @@ export default function RelatedProducts({
                     <div className="flex flex-col mb-3">
                       <h2 className="text-lg font-medium text-gray-900">
                         {key == 'You May Also Like'
-                          ? 'Frequent Bought Together'
+                          ? translate('label.product.frequentlyBoughtTogetherText')
                           : key == 'undefined'
-                          ? 'Frequent Bought Together'
+                          ? translate('label.product.frequentlyBoughtTogetherText')
                           : key == 'Upgrade'
-                          ? 'Quick Add'
+                          ? translate('label.product.quickAddText')
                           : key == 'Basket Group'
-                          ? 'Frequent Bought Together'
-                          : key}
+                          ? translate('label.product.frequentlyBoughtTogetherText')
+                          : translate(`key.${key}`)}
                       </h2>
                     </div>
                   </div>

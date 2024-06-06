@@ -599,7 +599,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-200"></hr>
-        {quickViewData && <AccordionInfo data={[{ name: "Description", content: selectedAttrData?.description }]} />}
+        {quickViewData && <AccordionInfo data={[{ name: translate('common.label.descriptionText'), content: selectedAttrData?.description }]} />}
       </div>
     );
   };
