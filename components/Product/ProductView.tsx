@@ -222,8 +222,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.seoAvailability || EmptyString,
           metadata: {
-            color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
-            size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
+            color: (product?.customAttributes?.length >= 2) 
+              ? product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString
+              : EmptyString,
+            size: (product?.customAttributes?.length >= 4) 
+              ? product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString
+              : EmptyString,
             weight: 0,
             weight_unit: EmptyString,
             make: EmptyString,
