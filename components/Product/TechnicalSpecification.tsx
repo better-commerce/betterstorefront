@@ -45,15 +45,15 @@ export default function TechnicalSpecifications({
       <div className="flex flex-col border border-gray-200 divide-y rounded-2xl">
         <AttributeGroup title={translate('label.product.specifications.collarText')} attributes={attrGroup['product.collar']} />
         <AttributeGroup title={translate('label.product.specifications.fabricText')} attributes={attrGroup['fabric.type']} />
-        <AttributeGroup title="Occasion" attributes={attrGroup['occasion.type']} />
-        <AttributeGroup title="Occasion" attributes={attrGroup['occasion']} />
+        <AttributeGroup title={translate('label.product.specifications.occasionText')} attributes={attrGroup['occasion.type']} />
+        <AttributeGroup title={translate('label.product.specifications.occasionText')} attributes={attrGroup['occasion']} />
         <AttributeGroup title="Event Type" attributes={attrGroup['event.type']} />
-        <AttributeGroup title="Type" attributes={attrGroup['edit.type']} />
-        <AttributeGroup title="Categories" attributes={attrGroup['Categories']} />
-        <AttributeGroup title="Sleeve Style" attributes={attrGroup['product.sleevestyle']} />
-        <AttributeGroup title="Print" attributes={attrGroup['product.print']} />
-        <AttributeGroup title="Collection Type" attributes={attrGroup['Collection.Type']} />
-        <AttributeGroup title="Fabric" attributes={attrGroup['product.fabric']} />
+        <AttributeGroup title={translate('label.product.specifications.typeText')} attributes={attrGroup['edit.type']} />
+        <AttributeGroup title={translate('label.product.specifications.categoriesText')} attributes={attrGroup['Categories']} />
+        <AttributeGroup title={translate('label.product.specifications.sleeveStyleText')} attributes={attrGroup['product.sleevestyle']} />
+        <AttributeGroup title={translate('label.product.specifications.printText')} attributes={attrGroup['product.print']} />
+        <AttributeGroup title={translate('label.product.specifications.collectionTypeText')} attributes={attrGroup['Collection.Type']} />
+        <AttributeGroup title={translate('label.product.specifications.fabricText')} attributes={attrGroup['product.fabric']} />
         <AttributeGroup title={translate('label.product.specifications.fitText')} attributes={attrGroup['clothing.size']} />
         <AttributeGroup title={translate('label.product.specifications.dressStyleText')} attributes={attrGroup['dress.style']} />
         <AttributeGroup title={translate('label.product.specifications.clothingText')} attributes={attrGroup['clothing.type']} />
