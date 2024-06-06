@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
@@ -16,10 +16,14 @@ const Logo = ({ className = '', ...props }) => {
       }
     }
   }
+  const logoSrc = useMemo(() => {
+    const fileExtension = CURRENT_THEME === 'schbang' ? 'gif' : 'png';
+    return `/theme/${CURRENT_THEME}/image/logo.${fileExtension}?fm=webp&h=200`;
+  }, [CURRENT_THEME]);
 
   return (
     <div className='logo-container'>
-      <img onClick={logoClick} src={`/theme/${CURRENT_THEME}/image/logo.png?fm=webp&h=200`} width={60} height={60} alt="Store" className="brand-logo" />
+      <img onClick={logoClick} src={logoSrc} width={60} height={60} alt="Store" className="brand-logo" />
     </div>
   )
 }
