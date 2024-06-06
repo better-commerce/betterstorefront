@@ -21,8 +21,8 @@ const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership,
     if (results?.length < 4) {
       return (
         <Swiper spaceBetween={20} slidesPerView={4}>
-          {results?.map((product: any, index: number) => (
-            <SwiperSlide key={index}>
+          {results?.map((product: any) => (
+            <SwiperSlide key={product?.recordId || product?.productId}>
                 <ProductCard data={product} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
             </SwiperSlide>
           ))}
@@ -37,8 +37,8 @@ const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership,
         <div className="grid grid-rows-2 space-x-4">
           <div className="row-span-1">
             <Swiper spaceBetween={20} slidesPerView={4} className="mb-4">
-              {upperChunk?.map((product:any, index:number) => (
-                <SwiperSlide key={index}>
+              {upperChunk?.map((product:any) => (
+                <SwiperSlide key={product?.recordId || product?.productId}>
                   <ProductCard
                     data={product}
                     deviceInfo={deviceInfo}
@@ -52,8 +52,8 @@ const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership,
           <div className="row-span-1 space-x-4">
             {lowerChunk?.length > 0 && (
               <Swiper spaceBetween={20} slidesPerView={4} >
-                {lowerChunk?.map((product:any, index:number) => (
-                  <SwiperSlide key={index}>
+                {lowerChunk?.map((product:any) => (
+                  <SwiperSlide key={product?.recordId || product?.productId}>
                     <ProductCard
                       data={product}
                       deviceInfo={deviceInfo}

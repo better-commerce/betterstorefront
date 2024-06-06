@@ -13,7 +13,6 @@ export default function getLookbook(stockcode: string, cookies?: any) {
       })
       return response.result
     } catch (error: any) {
-      // throw new Error(error.message)
       logError(error)
     }
   }

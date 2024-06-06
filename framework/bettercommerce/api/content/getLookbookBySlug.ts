@@ -13,7 +13,6 @@ export default function getSingleLookbook(slug: string, cookies?: any) {
       })
       return { ...response.result, ...{ snippets: response?.snippets } };
     } catch (error: any) {
-      // throw new Error(error.message)
       logError(error)
     }
   }
