@@ -11,17 +11,17 @@ interface Props {
   featureToggle: any
 }
 
-const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership, featureToggle, }) => {
+const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership, featureToggle }: Props) => {
   if (!lookbookData) { return <></> }
 
   const { products } = lookbookData
   const { results, deviceInfo } = products
 
   const renderProducts = () => {
-    if (results.length < 4) {
+    if (results?.length < 4) {
       return (
         <Swiper spaceBetween={20} slidesPerView={4}>
-          {results.map((product: any, index: number) => (
+          {results?.map((product: any, index: number) => (
             <SwiperSlide key={index}>
                 <ProductCard data={product} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
             </SwiperSlide>
@@ -29,15 +29,15 @@ const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership,
         </Swiper>
       )
     } else {
-      const mid = results.length < 8 ?  4 : Math.ceil(results.length / 2);
-      const upperChunk = results.slice(0, mid);
-      const lowerChunk = results.slice(mid);
+      const mid = results?.length < 8 ?  4 : Math.ceil(results?.length / 2);
+      const upperChunk = results?.slice(0, mid);
+      const lowerChunk = results?.slice(mid);
 
       return (
         <div className="grid grid-rows-2 space-x-4">
           <div className="row-span-1">
             <Swiper spaceBetween={20} slidesPerView={4} className="mb-4">
-              {upperChunk.map((product:any, index:number) => (
+              {upperChunk?.map((product:any, index:number) => (
                 <SwiperSlide key={index}>
                   <ProductCard
                     data={product}
@@ -50,9 +50,9 @@ const LookbookGrid: React.FC<Props> = ({ lookbookData, defaultDisplayMembership,
             </Swiper>
           </div>  
           <div className="row-span-1 space-x-4">
-            {lowerChunk.length > 0 && (
+            {lowerChunk?.length > 0 && (
               <Swiper spaceBetween={20} slidesPerView={4} >
-                {lowerChunk.map((product:any, index:number) => (
+                {lowerChunk?.map((product:any, index:number) => (
                   <SwiperSlide key={index}>
                     <ProductCard
                       data={product}

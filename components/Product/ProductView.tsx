@@ -801,7 +801,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       const slug : string = lookbookData?.data?.[0]?.slug
       if(slug){
         const lookbookBySlug :any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, {slug})
-        console.log(lookbookBySlug , "lookbookBySlug")
         if(lookbookBySlug?.status === 200){
           setLookbookData(lookbookBySlug?.data)
         }
@@ -1204,7 +1203,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {/* {LookBook} */}
-        {!!lookbookData && (
+        { lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
         )}
         {/* DETAIL AND REVIEW */}
