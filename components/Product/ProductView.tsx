@@ -10,7 +10,8 @@ import ImageGallery from 'react-image-gallery'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
@@ -88,11 +89,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
   const [openStoreLocatorModal, setOpenStockCheckModal] = useState(false)
   const [showDetails, setShowGwpDetail] = useState(false)
+  const [lookbookData, setLookbookData] = useState<any>(null)
   const [newImages, setImages] = useState([]);
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
-
 
   useEffect(() => {
     if (compareProductsAttributes?.length < 0) return
@@ -794,6 +795,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     };
   }, []);
 
+  useEffect(()=>{
+    const fetchLookbook = async(stockcode: string) => {
+      const lookbookData:any = await axios.post(NEXT_GET_LOOKBOOK, {stockcode})
+      const slug : string = lookbookData?.data?.[0]?.slug
+      if(slug){
+        const lookbookBySlug :any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, {slug})
+        console.log(lookbookBySlug , "lookbookBySlug")
+        if(lookbookBySlug?.status === 200){
+          setLookbookData(lookbookBySlug?.data)
+        }
+      }
+    }
+    if(product?.stockCode){
+      fetchLookbook(product.stockCode)
+    }
+  },[product])
+
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
   let recentProduct = []
@@ -1185,6 +1203,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {renderSectionContent()}
           </div>
         </div>
+        {/* {LookBook} */}
+        {!!lookbookData && (
+          <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
+        )}
         {/* DETAIL AND REVIEW */}
         {featureToggle?.features?.enableEngage &&
           <>
