@@ -25,6 +25,7 @@ import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import { IDeviceInfo, useUI } from '@components/ui/context'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
+import InteractiveDemoSideBar from '@components/InteractiveDemo'
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
     <LoadingDots />
@@ -157,6 +158,8 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
     }, 50)
   }
 
+  const isInteractiveDemo = stringToBoolean((router?.query?.demo || false) as string)
+
   return (
     <>
       <Head>
@@ -177,6 +180,7 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
+        {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         <div className={`text-base sm:pt-24 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
           <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
