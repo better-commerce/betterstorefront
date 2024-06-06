@@ -8,7 +8,7 @@ const ProductSocialProof = ({ data = [], featureToggle }: any) => {
   }
 
   return (
-    <div className={`${featureToggle?.features?.enableDemoToggle ? 'bottom-0 right-0' : 'bottom-0 left-0'}fixed m-4 overflow-hidden z-99 max-w-[280px] w-full social-proof-box-shadow rounded-full`}>
+    <div className={`${featureToggle?.features?.enableDemoToggle ? ' bottom-0 right-0 ' : ' bottom-0 left-0 '} fixed m-4 overflow-hidden z-99 max-w-[280px] w-full social-proof-box-shadow rounded-full`}>
       <Swiper
         effect='fade'
         spaceBetween={30}
