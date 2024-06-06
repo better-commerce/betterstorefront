@@ -131,6 +131,8 @@ export const NEXT_CANCEL_REASON = `/api/cancel-reason`
 export const NEXT_CANCEL_ORDER = `/api/order/cancel`
 export const NEXT_CANCEL_ORDER_LINE = `/api/order/cancel-order-line`
 export const NEXT_RETURN_REASON = `/api/return-reason`
+export const NEXT_GET_LOOKBOOK = `/api/get-lookbook`
+export const NEXT_GET_LOOKBOOK_BY_SLUG = `/api/get-lookbook-by-slug`
 
 export const NEXT_GET_REVIEW_SUMMARY = `/api/reviews/get-review-summary`
 export const NEXT_CREATE_REVIEW = `/api/create-review`
