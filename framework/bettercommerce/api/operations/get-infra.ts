@@ -1,10 +1,18 @@
-import { INFRA_ENDPOINT } from '@components/utils/constants'
-import { cachedGetData } from '../utils/cached-fetch';
+import { EmptyObject, INFRA_ENDPOINT } from '@components/utils/constants'
+import fetcher from '@framework/fetcher';
 
 export default function getInfraOperation() {
-  async function getInfra() {
+  async function getInfra(cookies = EmptyObject) {
     try {
-      const response: any = await cachedGetData(INFRA_ENDPOINT);
+      const headers = {
+        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
+      };
+      const response = await fetcher({
+        url: INFRA_ENDPOINT,
+        method: 'get',
+        cookies,
+        headers,
+      })
       return response?.result;
     } catch (error) {
       console.log(error);
