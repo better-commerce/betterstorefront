@@ -8,6 +8,7 @@ import { matchStrings } from '@framework/utils/parse-util';
 import { useUI } from '@components/ui';
 import { useTranslation } from '@commerce/utils/use-translation';
 import { uriParams } from '@commerce/utils/uri-util';
+import { EmptyString } from '@components/utils/constants';
 
 declare const window: any
 
@@ -45,6 +46,18 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
     }
     setIsOpen(false);
   };
+
+  const getFiltersQuery = useCallback(() => {
+    let qsFilters = EmptyString
+    const search = window.location.search
+    if (search) {
+      const searchQueryParams = uriParams(search)
+      if (searchQueryParams?.filters) {
+        qsFilters = searchQueryParams?.filters
+      }
+    }
+    return qsFilters
+  }, [])
 
   useEffect(() => {
     if (websites?.length) {
@@ -123,6 +136,11 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
       qs.set('storecode', store?.code || 'fashion');
       qs.set('urlcode', feature?.urlCode || 'home');
     }
+
+    const filtersQuery = getFiltersQuery()
+    if (filtersQuery) {
+      qs.set('filters', filtersQuery)
+    }
     const newUrl = `${window.location.pathname}?${qs.toString()}`;
     window.history.replaceState(null, '', newUrl);
     return newUrl;
@@ -132,7 +150,9 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
     const website = websites.find(w => w.name === e.target.value);
     if (website) {
       setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
-      window.location.href = `${website?.url}?demo=1`
+
+      const filtersQuery = getFiltersQuery()
+      window.location.href = `${website?.url}?demo=1${filtersQuery ? `&filters=${filtersQuery}`: EmptyString}`
       //setSelectedWebsite(website);
       //setRouteOnFeatureChange({ store: website });
     }
@@ -152,7 +172,13 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
       if (!targetUrl?.search)
         redirectUrl = `${redirectUrl}?demo=1`
       else
-      redirectUrl = `${redirectUrl}&demo=1`
+        redirectUrl = `${redirectUrl}&demo=1`
+
+      const filtersQuery = getFiltersQuery()
+      if (filtersQuery) {
+        redirectUrl = `${redirectUrl}&filters=${filtersQuery}`
+      }
+
       router.push(redirectUrl).then(() => setRouteOnFeatureChange({ feature, store: selectedWebsite }));
     } else {
       router.push(feature?.url).then(() => setRouteOnFeatureChange({ feature, store: selectedWebsite }));
