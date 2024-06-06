@@ -80,7 +80,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                       </div>
                     </div>
                   </div>
-                  {!!hoveredItemIndex && <div className="menu-overlay" onMouseEnter={handleMouseLeave}/> }
+                  <div className="menu-overlay" onMouseEnter={handleMouseLeave}/>
                 </div>
               )}
             </div>
