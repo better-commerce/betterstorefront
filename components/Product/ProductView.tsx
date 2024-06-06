@@ -1107,7 +1107,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
       {featureToggle?.features?.enableEngage &&
-        <ProductSocialProof data={analyticsData} />
+        <ProductSocialProof data={analyticsData} featureToggle={featureToggle} />
       }
       <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 dark:bg-white">
         <div className='flex flex-1 px-4 mb-1 sm:px-0 sm:mb-4 '>
