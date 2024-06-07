@@ -2,7 +2,7 @@
   "features": {
     "enableLanguage": true,
     "enablePriceIncVatToggle": false,
-    "enableQuickOrderPad": true,
+    "enableQuickOrderPad": false,
     "enableCompare": true,
     "enableStoreLocator": true,
     "enableCollectDeliveryOption": true,
@@ -13,8 +13,8 @@
     "isImageGallery": false,
     "enableHeaderWishlist": false,
     "enableProductSpecification": true,
-    "enableTrendingCategory": true,
-    "enableDemoToggle": true
+    "enableTrendingCategory": false,
+    "enableDemoToggle": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

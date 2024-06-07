@@ -178,7 +178,6 @@
 .image-gallery-slide-wrapper.image-gallery-thumbnails-right {
 	display: inline-block;
 	width: calc(100% - 180px);
-  margin-left: 40px;
 }
 
 @media(max-width: 768px) {
@@ -482,4 +481,8 @@
 		font-size: .8em;
 		padding: 5px 10px
 	}
+}
+.image-gallery-thumbnail.active, .image-gallery-thumbnail:focus,
+.image-gallery-thumbnail{
+	border: 0px !important;
 }
