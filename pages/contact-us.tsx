@@ -76,7 +76,7 @@ function Contact({
   const translate = useTranslation()
   const ContactPageContents = isMobile
     ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value ||
-      []
+    []
     : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(ContactPageContents)
 
@@ -132,7 +132,7 @@ function Contact({
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
           <title> {pageContents?.metatitle || translate('common.message.ContactUsText')} </title>
-          <meta name="title" content={ pageContents?.metatitle || translate('common.message.ContactUsText') } />
+          <meta name="title" content={pageContents?.metatitle || translate('common.message.ContactUsText')} />
           {pageContents?.metadescription && (
             <meta name="description" content={pageContents?.metadescription} />
           )}
@@ -159,6 +159,7 @@ function Contact({
                   <p className="text-6xl transition-colors duration-300 hover:text-blue">
                     {head?.heading_herotitle}
                   </p>
+                  <div className="my-4 text-2xl font-medium text-white" dangerouslySetInnerHTML={{ __html: head.heading_herodescription }}></div>
                   <p className="text-2xl transition-colors duration-300 hover:text-blue">
                     {translate('label.contactUs.homeContactUsText')} </p>
                 </div>
