@@ -166,7 +166,9 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
       setIsIncludeVATState(value)
     }, 50)
   }
-  const isInteractiveDemo = stringToBoolean((router?.query?.demo || false) as string)
+  const isDemo = stringToBoolean((router?.query?.demo as string) || 'false')
+  const isStoreCode = (router?.query?.storecode !== null)
+  const isInteractiveDemo = isDemo || isStoreCode
   
   return (
     <>
