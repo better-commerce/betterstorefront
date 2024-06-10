@@ -220,7 +220,7 @@ export default function CartDropdown() {
     if (basketId && basketId !== Guid.empty) {
       getBasketCount()
     }
-  },[basketId])
+  },[basketId, cartItems?.lineItems?.length])
 
   useEffect(() => {
     if (basketIdToDelete !== Guid.empty) {

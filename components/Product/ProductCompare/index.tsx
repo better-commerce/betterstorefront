@@ -58,7 +58,7 @@ export default function ProductCompare({ products, isCompare, closeCompareProduc
                       </div>
                     </div>
                   </div>
-                  <div className="container py-2 mx-auto mt-2 sm:px-0 !max-h-[504px] sm:!max-h-[215px] md:!max-h-[215px] lg:!max-h-[70vh] 2xl:!max-h-[700px] overflow-y-auto custom-scroll">
+                  <div className="container py-2 mx-auto mt-2 sm:px-0 !max-h-[504px] sm:!max-h-[215px] md:!max-h-[215px] lg:!max-h-[70vh] 2xl:!max-h-[70vh] overflow-y-auto custom-scroll">
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-12 md:grid-cols-12 sm:grid-cols-3">
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
