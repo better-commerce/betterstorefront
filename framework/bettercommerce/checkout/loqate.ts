@@ -11,7 +11,7 @@ export default function loqateAddress() {
   return async function handler({ postCode, country }: any) {
     const findAddressUrl =
       url +
-      `?Key=${process.env.LOQATE_KEY}&Text=${postCode}&Countries=${country}`
+      `?Key=${process.env.FIND_ADDRESS_KEY}&Text=${postCode}&Countries=${country}`
     try {
       const response: any = await axios.post(findAddressUrl)
       // console.log(response.data.Items)
@@ -47,11 +47,10 @@ export const retrieveAddress = () => {
     try {
       const retrieveAddress =
         retrieveUrl +
-        `?Key=${process.env.LOQATE_KEY}&Id=${encodeURIComponent(id)}`
+        `?Key=${process.env.FIND_ADDRESS_KEY}&Id=${encodeURIComponent(id)}`
       const address: any = await axios.post(retrieveAddress)
       return { response: { message: '', data: address?.data?.Items } }
     } catch (error: any) {
-      console.log(error)
       throw new Error(error.message)
     }
   }

@@ -14,7 +14,8 @@
     "enableHeaderWishlist": true,
     "enableProductSpecification": false,
     "enableTrendingCategory": false,
-    "enableDemoToggle": false
+    "enableDemoToggle": false,
+    "enableFindAddress": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
