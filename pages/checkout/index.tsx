@@ -346,8 +346,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
   const checkIfCNCBasketUpdated = async (addressList: any, basket: any) => {
     let redirectToStep: any = CheckoutStep.ADDRESS
-    const defaultDeliveryAddr = addressList?.find((address: any) => address.isDefaultDelivery)
-    const defaultBillingAddr = addressList?.find((address: any) => address.isDefaultBilling)
+    const defaultDeliveryAddr = addressList?.find((address: any) => address.isDefaultDelivery || address.isDefault)
+    const defaultBillingAddr = addressList?.find((address: any) => address.isDefaultBilling || address.isDefault)
     const hasShippingAddress = basket?.shippingAddress?.id > 0 || defaultDeliveryAddr?.id > 0
     const hasBillingAddress = basket?.billingAddress?.id > 0 || defaultBillingAddr?.id > 0
     const hasStoreId = basket?.storeId !== EmptyGuid
