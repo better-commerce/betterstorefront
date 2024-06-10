@@ -1,13 +1,50 @@
-import { Logo } from "@components/ui";
-import React, { useEffect, useState } from "react";
+import { Logo, useUI } from "@components/ui";
+import React, { useCallback, useEffect, useState } from "react";
 import SocialsList1 from "@components/shared/SocialsList1/SocialsList1";
 import Link from "next/link";
 import { sanitizeHtmlContent } from "framework/utils/app-util";
 import Newsletter from "../Newsletter";
+import { Guid } from "@commerce/types";
+import Router from "next/router";
 
 
 const Footer = ({ navItems = [] }: any) => {
   const [domLoaded, setDOMLoaded] = useState<boolean>(false)
+  const { user, isGuestUser, openLoginSideBar } = useUI()
+
+  const manageMyAccountLinks = useCallback(() => {
+    const selector = "li.text-footer-clr a[href*='/my-account']";
+    const lnkMyAccountLinks: NodeListOf<HTMLAnchorElement> = document.querySelectorAll(selector);
+
+    lnkMyAccountLinks.forEach(lnkMyAccount => {
+      const userLoggedIn = user?.userId && user?.userId !== Guid.empty && !isGuestUser;
+
+      if (!userLoggedIn) {
+        lnkMyAccount.setAttribute("href", "#");
+      }
+
+      lnkMyAccount.addEventListener("click", (ev: MouseEvent) => {
+        if (!userLoggedIn) {
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+          openLoginSideBar();
+        } else {
+          // Do nothing, the default action will proceed
+        }
+      });
+    });
+  }, [user]);
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      manageMyAccountLinks()
+    }, 50);
+  }, [])
+
+  useEffect(() => {
+    manageMyAccountLinks();
+  }, [manageMyAccountLinks]);
 
   const renderWidgetMenuItem = (item: any, index: number) => {
     return (
