@@ -32,7 +32,6 @@ const ShippingAddressForm: React.FC<any> = ({
   currentStep,
   featureToggle
 }) => {
-  console.log({featureToggle})
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
   const translate = useTranslation()
@@ -101,9 +100,9 @@ const ShippingAddressForm: React.FC<any> = ({
     if (!address?.id) return
     const foundAddress: any = await retrieveAddress(address?.id)
     if (foundAddress) {
+      setSearchedAddresses([])
       formik.setValues(foundAddress)
       addressFinderFormik.setValues({ postCode: foundAddress?.postCode })
-      setSearchedAddresses([])
     }
   }
 
