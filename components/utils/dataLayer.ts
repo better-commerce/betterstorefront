@@ -61,7 +61,7 @@ const DataLayerSingleton = function () {
       visitorAffiliate: EmptyString,
       visitorEmail: visitorData?.email || EmptyString,
       visitorExistingCustomer: Boolean(visitorData?.username),
-      visitorId: visitorData?.userId || EmptyString,
+      visitorId: visitorData?.userId || EmptyGuid,
       visitorLoggedIn: Boolean(visitorData?.email),
       visitorSegment: EmptyString,
     }
