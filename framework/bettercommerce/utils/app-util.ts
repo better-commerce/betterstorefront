@@ -20,6 +20,9 @@ import {
   LOQATE_ADDRESS,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   CURRENT_THEME,
+  RETRIEVE_LOQATE_ADDRESS,
+  GET_ADDRESS_IO_ADDRESS,
+  RETRIEVE_GET_ADDRESS_IO_ADDRESS,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-payment'
@@ -31,6 +34,7 @@ import { Guid } from '@commerce/types'
 import { Cookie } from './constants'
 import { sumBy } from 'lodash'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { FindAddressProvider } from './enums'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
@@ -850,26 +854,78 @@ export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
   )
 }
 
+const IS_ADDRESS_IO_AVAILABLE = matchStrings(process.env.FIND_ADDRESS_PROVIDER!, FindAddressProvider.GET_ADDRESS_IO)
+const IS_LOQATE_AVAILABLE = matchStrings(process.env.FIND_ADDRESS_PROVIDER!, FindAddressProvider.LOCATE)
+
 export const loqateAddress = async (postCode: string) => {
   try {
-    const cartItems: any = getItem('cartItems') || {}
-    const deliveryMethod = cartItems?.shippingMethods?.find(
-      (method: any) => method?.id === cartItems?.shippingMethodId
-    )
-    const response = await axios.post(LOQATE_ADDRESS, {
-      postCode,
-      country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-    })
-
-    const responseData = response?.data?.response?.data || []
-    return responseData?.map((item: any) => ({
-      text: item?.Text,
-      id: item?.Id,
-      description: item?.Description,
-    }))
+    // when Loqate is Enabled
+    if(IS_LOQATE_AVAILABLE) {
+      const cartItems: any = getItem(LocalStorage.Key.CART_ITEMS) || {}
+      const deliveryMethod = cartItems?.shippingMethods?.find(
+        (method: any) => method?.id === cartItems?.shippingMethodId
+      )
+      const response = await axios.post(LOQATE_ADDRESS, {
+        postCode,
+        country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      })
+  
+      const responseData = response?.data?.response?.data || []
+      return responseData?.map((item: any) => ({
+        text: item?.Text,
+        id: item?.Id,
+        description: item?.Description,
+      }))
+    } 
+    // when GetAddressIo is enabled 
+    else if (IS_ADDRESS_IO_AVAILABLE) {
+      const response: any = await axios.post(GET_ADDRESS_IO_ADDRESS, {
+        postCode
+      })
+      if (response.data) {
+        return response?.data?.response?.data?.map((item: any) => {
+          return {
+            id: item?.id,
+            description: item?.address,
+          }
+        })
+      } else return []
+    }
   } catch (error) {
     logError(error)
     return []
+  }
+}
+
+export const retrieveAddress = async (id: string) => {
+  // when Loqate is Enabled
+  if (IS_LOQATE_AVAILABLE) {
+    const response: any = await axios.post(RETRIEVE_LOQATE_ADDRESS, {
+      id,
+    })
+    return {
+      postCode: response.data.response.data[0].PostalCode,
+      address1: response.data.response.data[0].Line1,
+      city: response.data.response.data[0].City,
+      country: BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: BETTERCOMMERCE_DEFAULT_COUNTRY,
+    }
+  } 
+  // when GetAddressIo is enabled
+  else if (IS_ADDRESS_IO_AVAILABLE) {
+    const response: any = await axios.post(RETRIEVE_GET_ADDRESS_IO_ADDRESS, {
+      id,
+    })
+    return {
+      postCode: response?.data?.response?.data?.postcode,
+      address1: response?.data?.response?.data?.line_1,
+      address2: response?.data?.response?.data?.line_2,
+      address3: response?.data?.response?.data?.line_3 && (response?.data?.response?.data?.line_3 + (response?.data?.response?.data?.line_4 ? ' ,' + response?.data?.response?.data?.line_4 : '')),
+      city: response?.data?.response?.data?.town_or_city,
+      country: response?.data?.response?.data?.country || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: BETTERCOMMERCE_DEFAULT_COUNTRY,
+      state: response?.data?.response?.data?.county,
+    }
   }
 }
 

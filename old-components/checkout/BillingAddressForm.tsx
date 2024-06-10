@@ -5,10 +5,10 @@ import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
   EmptyString,
 } from '@components/utils/constants'
-import { retrieveAddress } from '@components/SectionCheckoutJourney/checkout/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { retrieveAddress } from '@framework/utils/app-util'
 
 export const DEFAULT_COUNTRY = 'United Kingdom'
 
