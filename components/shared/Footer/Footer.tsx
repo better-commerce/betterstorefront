@@ -13,27 +13,27 @@ const Footer = ({ navItems = [] }: any) => {
   const { user, isGuestUser, openLoginSideBar } = useUI()
 
   const manageMyAccountLinks = useCallback(() => {
-  const selector = "li.text-footer-clr a[href*='/my-account']";
-  const lnkMyAccountLinks: NodeListOf<HTMLAnchorElement> = document.querySelectorAll(selector);
-  
-  lnkMyAccountLinks.forEach(lnkMyAccount => {
-    const userLoggedIn = user?.userId && user?.userId !== Guid.empty && !isGuestUser;
-    
-    if (!userLoggedIn) {
-      lnkMyAccount.setAttribute("href", "#");
-    }
-    
-    lnkMyAccount.addEventListener("click", (ev: MouseEvent) => {
+    const selector = "li.text-footer-clr a[href*='/my-account']";
+    const lnkMyAccountLinks: NodeListOf<HTMLAnchorElement> = document.querySelectorAll(selector);
+
+    lnkMyAccountLinks.forEach(lnkMyAccount => {
+      const userLoggedIn = user?.userId && user?.userId !== Guid.empty && !isGuestUser;
+
       if (!userLoggedIn) {
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
-        openLoginSideBar();
-      } else {
-        // Do nothing, the default action will proceed
+        lnkMyAccount.setAttribute("href", "#");
       }
+
+      lnkMyAccount.addEventListener("click", (ev: MouseEvent) => {
+        if (!userLoggedIn) {
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+          openLoginSideBar();
+        } else {
+          // Do nothing, the default action will proceed
+        }
+      });
     });
-  });
-}, [user]);
+  }, [user]);
 
 
   useEffect(() => {
@@ -43,8 +43,8 @@ const Footer = ({ navItems = [] }: any) => {
   }, [])
 
   useEffect(() => {
-  manageMyAccountLinks();
-}, [manageMyAccountLinks]);
+    manageMyAccountLinks();
+  }, [manageMyAccountLinks]);
 
   const renderWidgetMenuItem = (item: any, index: number) => {
     return (
