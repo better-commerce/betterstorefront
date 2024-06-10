@@ -22,7 +22,7 @@ const withAddressSelection = (Component: any) => (props: any) => {
         return <></>
       }
     }
-  }, [addressBookProps?.addressList, deliveryTypeMethod])
+  }, [addressBookProps?.addressList, deliveryTypeMethod, addressBookProps?.selectedAddress])
 
   return (
     <>
