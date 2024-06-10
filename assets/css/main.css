@@ -17811,4 +17811,8 @@ margin-top: -0.6rem;
 }
 .menu-top-padding {
   padding-top: 20px;
-  }
+}
+.description-text pre,
+.delivery-method-desc pre {
+  text-wrap: wrap;
+}
