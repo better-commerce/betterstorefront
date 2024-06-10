@@ -68,7 +68,7 @@ export default function AttributesHandler({
 
   const router = useRouter()
 
-  const slug = useMemo(() => productSlug || variant?.slug || variant?.link || `products/${router.query?.slug}`, [productSlug, variant?.slug, variant?.link, router.query?.slug])
+  const slug = useMemo(() => productSlug || product?.link || variant?.slug || variant?.link || `products/${router.query?.slug}`, [productSlug, product?.link, variant?.slug, variant?.link, router.query?.slug])
   const originalAttributes = useMemo(() => getAttributesFromSlug(slug, variantProducts) || {}, [slug, variantProducts])
   const [attrCombination, setAttrCombination] = useState<any>({})
 
