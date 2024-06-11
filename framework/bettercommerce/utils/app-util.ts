@@ -904,11 +904,13 @@ export const retrieveAddress = async (id: string) => {
       id,
     })
     return {
-      postCode: response.data.response.data[0].PostalCode,
-      address1: response.data.response.data[0].Line1,
-      city: response.data.response.data[0].City,
-      country: BETTERCOMMERCE_DEFAULT_COUNTRY,
-      countryCode: BETTERCOMMERCE_DEFAULT_COUNTRY,
+      postCode: response?.data?.response?.data[0]?.PostalCode,
+      address1: response?.data?.response?.data[0]?.Line1,
+      address2: response?.data?.response?.data[0]?.Line2,
+      city: response?.data?.response?.data[0]?.City,
+      state: response?.data?.response?.data[0]?.ProvinceName,
+      country: response?.data?.response?.data[0]?.CountryName || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: response?.data?.response?.data[0]?.CountryIso2 || BETTERCOMMERCE_DEFAULT_COUNTRY,
     }
   } 
   // when GetAddressIo is enabled
