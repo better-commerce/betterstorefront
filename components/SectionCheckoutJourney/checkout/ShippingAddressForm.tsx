@@ -9,12 +9,12 @@ import {
   DeliveryType,
   EmptyString,
 } from '@components/utils/constants'
-import { retrieveAddress } from '@components/SectionCheckoutJourney/checkout/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
 import BillingAddressForm from './BillingAddressForm'
 import { CheckoutStep } from '@framework/utils/enums'
+import { retrieveAddress } from '@framework/utils/app-util'
 
 const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -30,6 +30,7 @@ const ShippingAddressForm: React.FC<any> = ({
   deliveryTypeMethod,
   billingCountries,
   currentStep,
+  featureToggle
 }) => {
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
@@ -100,7 +101,10 @@ const ShippingAddressForm: React.FC<any> = ({
     const foundAddress: any = await retrieveAddress(address?.id)
     if (foundAddress) {
       setSearchedAddresses([])
-      formik.setValues(foundAddress)
+      formik.setValues((prevValues:any) => ({
+        ...prevValues,
+        ...foundAddress, // foundAddress contains the address fields
+      }))
       addressFinderFormik.setValues({ postCode: foundAddress?.postCode })
     }
   }
@@ -167,7 +171,7 @@ const ShippingAddressForm: React.FC<any> = ({
           </h5>
           <div className="p-0 mb-4 rounded-md sm:bg-transparent sm:border-0 sm:rounded-none sm:mb-0">
             {/* address finder form */}
-            {!editAddressValues && (
+            {(!editAddressValues && (featureToggle?.features?.enableLoqateSearch || featureToggle?.features?.enableAddressIOSearch)) && (
               <form
                 onSubmit={addressFinderFormik.handleSubmit}
                 className="flex items-start w-full gap-2 mt-1 sm:gap-4 sm:mt-4"

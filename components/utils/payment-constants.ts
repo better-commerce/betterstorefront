@@ -120,6 +120,7 @@ export module LocalStorage {
     export const PAGE_SCROLL = 'pscr'
     export const NAVIGATION_STACK = 'nvs'
     export const BACKSPACE_PRESSED = 'bsp'
+    export const CART_ITEMS = 'cartItems'
   }
 }
 
