@@ -862,8 +862,8 @@ export const getFeaturesConfig = () => {
   }
 }
 
-const IS_ADDRESS_IO_AVAILABLE = getFeaturesConfig()?.features?.enableLoqateSearch
-const IS_LOQATE_AVAILABLE = getFeaturesConfig()?.features?.enableAddressIOSearch
+const IS_ADDRESS_IO_AVAILABLE = getFeaturesConfig()?.features?.enableAddressIOSearch
+const IS_LOQATE_AVAILABLE = getFeaturesConfig()?.features?.enableLoqateSearch
 
 export const loqateAddress = async (postCode: string) => {
   try {
