@@ -104,7 +104,7 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
     const newTextFromIp = e.target.value
     newTextFromIp.toUpperCase()
     // const newText = `${text}${newTextFromIp}`
-    if (counter < 7) {
+    if (newTextFromIp?.length <= 7) {
       setText(newTextFromIp)
     }
   }
