@@ -34,7 +34,6 @@ import { Guid } from '@commerce/types'
 import { Cookie } from './constants'
 import { sumBy } from 'lodash'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { FindAddressProvider } from './enums'
 
 export const isCartAssociated = (cartItems: any) => {
   if (cartItems?.userId && cartItems?.userId !== Guid.empty) {
@@ -854,8 +853,17 @@ export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
   )
 }
 
-const IS_ADDRESS_IO_AVAILABLE = matchStrings(process.env.FIND_ADDRESS_PROVIDER!, FindAddressProvider.GET_ADDRESS_IO)
-const IS_LOQATE_AVAILABLE = matchStrings(process.env.FIND_ADDRESS_PROVIDER!, FindAddressProvider.LOCATE)
+export const getFeaturesConfig = () => {
+  try {
+    const config = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`)
+    return config || {}
+  } catch (error) {
+    return {}
+  }
+}
+
+const IS_ADDRESS_IO_AVAILABLE = getFeaturesConfig()?.features?.enableLoqateSearch
+const IS_LOQATE_AVAILABLE = getFeaturesConfig()?.features?.enableAddressIOSearch
 
 export const loqateAddress = async (postCode: string) => {
   try {
@@ -928,15 +936,6 @@ export const retrieveAddress = async (id: string) => {
       countryCode: BETTERCOMMERCE_DEFAULT_COUNTRY,
       state: response?.data?.response?.data?.county,
     }
-  }
-}
-
-export const getFeaturesConfig = () => {
-  try {
-    const config = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`)
-    return config || {}
-  } catch (error) {
-    return {}
   }
 }
 

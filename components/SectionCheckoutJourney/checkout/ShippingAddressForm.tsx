@@ -168,7 +168,7 @@ const ShippingAddressForm: React.FC<any> = ({
           </h5>
           <div className="p-0 mb-4 rounded-md sm:bg-transparent sm:border-0 sm:rounded-none sm:mb-0">
             {/* address finder form */}
-            {(!editAddressValues && featureToggle?.features?.enableFindAddress) && (
+            {(!editAddressValues && (featureToggle?.features?.enableLoqateSearch || featureToggle?.features?.enableAddressIOSearch)) && (
               <form
                 onSubmit={addressFinderFormik.handleSubmit}
                 className="flex items-start w-full gap-2 mt-1 sm:gap-4 sm:mt-4"
