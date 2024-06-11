@@ -5,10 +5,10 @@ import {
   BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE,
   EmptyString,
 } from '@components/utils/constants'
-import { retrieveAddress } from '@components/SectionCheckoutJourney/checkout/CheckoutForm'
 import { LoadingDots, useUI } from '@components/ui'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { retrieveAddress } from '@framework/utils/app-util'
 
 export const DEFAULT_COUNTRY = 'United Kingdom'
 
@@ -21,6 +21,7 @@ const BillingAddressForm: React.FC<any> = ({
   billingCountries,
   useSameForBilling,
   shouldDisplayEmail = true,
+  featureToggle
 }) => {
   const translate = useTranslation()
   const BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA = billingAddressWithPhoneCheckout2Schema();
@@ -112,7 +113,8 @@ const BillingAddressForm: React.FC<any> = ({
         <h5 className="font-medium font-18 dark:text-black">{translate('label.addressBook.BillingAddressHeadingText')}</h5>
         {/* address finder form */}
         <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4">
-          <form
+          {(featureToggle?.features?.enableLoqateSearch || featureToggle?.features?.enableAddressIOSearch) && (
+            <form
             onSubmit={addressFinderFormik.handleSubmit}
             className="flex items-start w-full gap-4 sm:mt-4"
           >
@@ -164,7 +166,8 @@ const BillingAddressForm: React.FC<any> = ({
                 translate('common.label.findAddressText')
               )}
             </button>
-          </form>
+            </form>
+          )}
           {/* address form */}
           <form
             onSubmit={formik.handleSubmit}
