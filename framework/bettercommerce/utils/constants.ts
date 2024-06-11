@@ -100,3 +100,15 @@ export module UserAuthType {
   export const OTP = 2
   export const LOGIN_TOKEN = 3
 }
+export module AddressFinder {
+  export module LoqateUrl {
+    export const BASE_URL = 'https://services.postcodeanywhere.co.uk'
+    export const FIND = `${BASE_URL}/Capture/Interactive/Find/v1.10/json3.ws`
+    export const RETRIEVE = `${BASE_URL}/Capture/Interactive/Retrieve/v1.00/json3.ws`
+  }
+  export module AddressIOUrl {
+    export const BASE_URL = 'https://api.getAddress.io'
+    export const FIND = `${BASE_URL}/autocomplete`
+    export const RETRIEVE = `${BASE_URL}/get`
+  }
+}
