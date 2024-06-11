@@ -15,7 +15,7 @@
     "enableProductSpecification": false,
     "enableTrendingCategory": false,
     "enableDemoToggle": false,
-    "enableLoqateSearch": true,
+    "enableLoqateSearch": false,
     "enableAddressIOSearch":false
   },
   "social":[
