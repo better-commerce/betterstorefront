@@ -9,8 +9,6 @@ import axios from 'axios'
 import {
   NEXT_UPDATE_CHECKOUT_ADDRESS,
   NEXT_PAYMENT_METHODS,
-  LOQATE_ADDRESS,
-  RETRIEVE_ADDRESS,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   NEXT_ADDRESS,
   AddressPageAction,
@@ -30,6 +28,7 @@ import {
   loqateAddress,
   parseFullName,
   resetSubmitData,
+  retrieveAddress,
   submitData,
 } from '@framework/utils/app-util'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
@@ -48,17 +47,6 @@ const Spinner = () => {
       </div>
     </main>
   )
-}
-
-export const retrieveAddress = async (id: string) => {
-  const response: any = await axios.post(RETRIEVE_ADDRESS, {
-    id,
-  })
-  return {
-    postCode: response.data.response.data[0].PostalCode,
-    address1: response.data.response.data[0].Line1,
-    city: response.data.response.data[0].City,
-  }
 }
 
 export default function CheckoutForm({
