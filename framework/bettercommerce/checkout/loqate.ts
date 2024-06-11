@@ -1,16 +1,11 @@
 import { logError } from '@framework/utils/app-util'
+import { AddressFinder } from '@framework/utils/constants'
 import axios from 'axios'
-
-const url =
-  'https://services.postcodeanywhere.co.uk/Capture/Interactive/Find/v1.10/json3.ws'
-
-const retrieveUrl =
-  'https://services.postcodeanywhere.co.uk/Capture/Interactive/Retrieve/v1.00/json3.ws'
 
 export default function loqateAddress() {
   return async function handler({ postCode, country }: any) {
     const findAddressUrl =
-      url +
+      AddressFinder.LoqateUrl.FIND +
       `?Key=${process.env.FIND_ADDRESS_KEY}&Text=${postCode}&Countries=${country}`
     try {
       const response: any = await axios.post(findAddressUrl)
@@ -46,7 +41,7 @@ export const retrieveAddress = () => {
   return async function handler(id: string, cookies?: any) {
     try {
       const retrieveAddress =
-        retrieveUrl +
+      AddressFinder.LoqateUrl.RETRIEVE +
         `?Key=${process.env.FIND_ADDRESS_KEY}&Id=${encodeURIComponent(id)}`
       const address: any = await axios.post(retrieveAddress)
       return { response: { message: '', data: address?.data?.Items } }
