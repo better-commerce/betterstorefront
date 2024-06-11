@@ -158,7 +158,9 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
     }, 50)
   }
 
-  const isInteractiveDemo = stringToBoolean((router?.query?.demo || false) as string)
+  const isDemo = stringToBoolean(router?.query?.demo as string)
+  const isDemoStoreCode = stringToBoolean(router?.query?.storecode ? '1': '0')
+  const isInteractiveDemo = !isDemo? isDemoStoreCode : isDemo
 
   return (
     <>
