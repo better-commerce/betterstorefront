@@ -14,7 +14,8 @@
     "enableProductSpecification": true,
     "enableTrendingCategory": true,
     "enableDemoToggle": false,
-    "enableFindAddress": false
+    "enableLoqateSearch": true,
+    "enableAddressIOSearch":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
