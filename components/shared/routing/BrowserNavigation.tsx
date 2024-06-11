@@ -52,7 +52,7 @@ const BrowserNavigation = memo(({ deviceInfo }: any) => {
             const searchTerm = getNavigationStackSearchTerm(window)
             if (searchTerm) {
                 const searchBtn: any = document.querySelector('button.search-mob-btn')
-                if (searchBtn.click || searchBtn.onClick) {
+                if (searchBtn?.click || searchBtn?.onClick) {
                     if (searchBtn.click) {
                         searchBtn.click();
                     } else if (searchBtn.onClick) {
