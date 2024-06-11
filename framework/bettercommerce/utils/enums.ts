@@ -33,8 +33,3 @@ export enum CheckoutStep {
   DELIVERY_TYPE_SELECT = 'select-delivery-type',
   REVIEW = 'review',
 }
-
-export enum FindAddressProvider {
-  LOCATE = 'locate',
-  GET_ADDRESS_IO = 'getAddressIo',
-}

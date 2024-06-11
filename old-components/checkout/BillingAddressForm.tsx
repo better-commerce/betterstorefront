@@ -113,7 +113,7 @@ const BillingAddressForm: React.FC<any> = ({
         <h5 className="font-medium font-18 dark:text-black">{translate('label.addressBook.BillingAddressHeadingText')}</h5>
         {/* address finder form */}
         <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4">
-          {featureToggle?.features?.enableFindAddress && (
+          {(featureToggle?.features?.enableLoqateSearch || featureToggle?.features?.enableAddressIOSearch) && (
             <form
             onSubmit={addressFinderFormik.handleSubmit}
             className="flex items-start w-full gap-4 sm:mt-4"
