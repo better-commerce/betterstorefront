@@ -26,7 +26,7 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
-import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { getAppliedFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -103,11 +103,10 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   })
 
   const router = useRouter()
-  const qsFilters = router?.query?.filters
-  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
+  const [isFiltersApplied, setIsFiltersApplied] = useState(false)
 
   const {
     data = {
@@ -123,7 +122,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, excludeOOSProduct, filters: filters || [] }],
+    ['/api/catalog/products', { ...state, excludeOOSProduct }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -134,6 +133,23 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     }
   )
 
+  useEffect(() => {
+    if (isFiltersApplied || data?.products?.filters?.length < 1) return
+    const filters = getAppliedFilters(data?.products?.filters)
+    setFilter(filters || [])
+    setIsFiltersApplied(true)
+  }, [isFiltersApplied, router.query, data?.products?.filters])
+  
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      const filters = getAppliedFilters(data?.products?.filters)
+      if (filters?.length) {
+        routeToPLPWithSelectedFilters(router, filters, true)
+      }
+    }
+  }, [state?.filters])
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
@@ -256,23 +272,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   const setFilter = (filters: any) => {
     dispatch({ type: SET_FILTERS, payload: filters })
   }
-
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
