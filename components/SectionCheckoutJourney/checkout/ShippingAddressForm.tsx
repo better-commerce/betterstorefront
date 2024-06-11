@@ -101,7 +101,10 @@ const ShippingAddressForm: React.FC<any> = ({
     const foundAddress: any = await retrieveAddress(address?.id)
     if (foundAddress) {
       setSearchedAddresses([])
-      formik.setValues(foundAddress)
+      formik.setValues((prevValues:any) => ({
+        ...prevValues,
+        ...foundAddress, // foundAddress contains the address fields
+      }))
       addressFinderFormik.setValues({ postCode: foundAddress?.postCode })
     }
   }
