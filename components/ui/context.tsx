@@ -201,6 +201,7 @@ type Action =
   payload: any
 }
 | { type: 'SET_CART_ITEMS'; payload: any }
+| { type: 'SET_CART_ITEMS_COUNT'; payload: any }
 | {
   type: 'SET_USER'
   payload: any
@@ -405,6 +406,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         cartItems: action.payload,
+      }
+    }
+    case 'SET_CART_ITEMS_COUNT': {
+      return {
+        ...state,
+        cartItemsCount: action.payload,
       }
     }
     case 'REMOVE_FROM_CART': {
@@ -776,6 +783,7 @@ export const UIProvider: React.FC<any> = (props) => {
         setUser(user);*/
       }
       dispatch({ type: 'SET_CART_ITEMS', payload: newCartData })
+      dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: newCartData?.lineItems?.length })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
@@ -785,6 +793,7 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload?: any) => {
       setItem('cartItems', { lineItems: [] })
       dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+      dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
     },
     [dispatch]
   )
@@ -873,6 +882,7 @@ export const UIProvider: React.FC<any> = (props) => {
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+        dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
         Cookies.remove(Cookie.Key.COMPANY_ID)
         const basketIdRef = uuid()
         Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {

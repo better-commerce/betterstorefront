@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie'
-
 import { NEXT_GET_BASKET_PROMOS, NEXT_MEMBERSHIP_BENEFITS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
 import { formatFromToDates } from '@framework/utils/parse-util'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
@@ -16,8 +14,6 @@ import OptMembershipModal from '@components/membership/OptMembershipModal'
 import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
 import { useTranslation } from '@commerce/utils/use-translation'
 import SplitDeliveryBasketItems from '../cart/SplitDeliveryBasketItems'
-import cartHandler from '@components/services/cart'
-import { Cookie } from '@framework/utils/constants'
 
 interface BasketItem {
   id: string
@@ -28,7 +24,7 @@ interface BasketItem {
 
 const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, setBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { isGuestUser , user } = useUI()
+  const { isGuestUser , user, cartItemsCount } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
   const [referralInfo, setReferralInfo] = useState<any>(null)
@@ -45,17 +41,6 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
   const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
   const [openOMM, setOpenOMM] = useState(false)
-  const [basketItemsCount, setBasketItemsCount] = useState(0)
-  const { getCartItemsCount } = cartHandler()
-
-  useEffect(() => {
-    const getBasketCount = async () => {
-      const basketId = Cookies.get(Cookie.Key.BASKET_ID)
-      const basketItemsCount = await getCartItemsCount({ basketId })
-      setBasketItemsCount(basketItemsCount || 0)
-    }
-    getBasketCount()
-  }, [])
 
   const handleReferralRegisterUser = async (referralId: any) => {
     let { data: voucherInfo } = await axios.post(
@@ -166,8 +151,8 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                     <div className="w-full px-4 py-0 cart-items ">
                       <div className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                         <span className="font-semibold text-black">
-                          {basketItemsCount}{' '}
-                          {basketItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
+                          {cartItemsCount}{' '}
+                          {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
                         </span>
                       </div>
                       <div className="w-full px-0 pt-3 pb-2">
@@ -211,8 +196,8 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                   <>
                     <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                       <span className="font-semibold text-black">
-                        {basketItemsCount}{' '}
-                        {basketItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
+                        {cartItemsCount}{' '}
+                        {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
                       </span>
                       <i
                         className={`${open ? 'rotate-180 transform' : ''
