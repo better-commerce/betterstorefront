@@ -24,7 +24,7 @@ interface BasketItem {
 
 const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, setBasket, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { isGuestUser , user } = useUI()
+  const { isGuestUser , user, cartItemsCount } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
   const [referralInfo, setReferralInfo] = useState<any>(null)
@@ -151,12 +151,12 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                     <div className="w-full px-4 py-0 cart-items ">
                       <div className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                         <span className="font-semibold text-black">
-                          {basket?.lineItems?.length}{' '}
-                          {basket?.lineItems?.length > 1 ? 'items' : 'item'}
+                          {cartItemsCount}{' '}
+                          {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
                         </span>
                       </div>
                       <div className="w-full px-0 pt-3 pb-2">
-                        <BasketItems userCartItems={basket?.lineItems} />
+                        <BasketItems />
                       </div>
                     </div>
                     {referralAvailable &&
@@ -196,8 +196,8 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                   <>
                     <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                       <span className="font-semibold text-black">
-                        {basket?.lineItems?.length}{' '}
-                        {basket?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
+                        {cartItemsCount}{' '}
+                        {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
                       </span>
                       <i
                         className={`${open ? 'rotate-180 transform' : ''
@@ -206,7 +206,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                     </Disclosure.Button>
                     <Disclosure.Panel className="px-0 pt-3 pb-2">
                       <div className="w-full max-basket-panel">
-                        <BasketItems userCartItems={basket?.lineItems} />
+                        <BasketItems />
                       </div>
                     </Disclosure.Panel>
                   </>

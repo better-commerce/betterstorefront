@@ -26,7 +26,7 @@ import Engraving from '@components/Product/Engraving'
 import Router from 'next/router'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -550,8 +550,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <div className="sticky top-0 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow z-99 sm:px-6">
                         <Dialog.Title className="text-lg font-medium text-gray-900 ">
                           {translate('label.basket.shoppingCartText')}
-                          {itemsInBag() > 0 ? (
-                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {itemsInBag()}{' '} {itemsInBag() > 1 ? translate('common.label.itemSingularText') : translate('common.label.itemPluralText')}{' '} </span>
+                          {cartItemsCount > 0 ? (
+                            <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '} {cartItemsCount}{' '} {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}{' '} </span>
                           ) : (
                             <span className="pl-2 mt-3 text-xs font-normal text-gray-400 dark:text-black"> {' '}{translate('common.label.emptyText')}{' '} </span>
                           )}

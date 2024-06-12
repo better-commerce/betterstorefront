@@ -1,19 +1,24 @@
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@components/Prices'
+import cartHandler from '@components/services/cart'
 import wishlistHandler from '@components/services/wishlist'
 import { useUI } from '@components/ui'
-import { NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { CartProductType, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { getCartValidateMessages, vatIncluded } from '@framework/utils/app-util'
+import { getCartValidateMessages, processCartData, vatIncluded } from '@framework/utils/app-util'
+import { Cookie } from '@framework/utils/constants'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import axios from 'axios'
-import Link from 'next/link'
-import { useState } from 'react'
+import BundleProductCard from '@components/BundleProductCard'
 
-const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, }: any) => {
+const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
@@ -21,6 +26,18 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { isInWishList } = wishlistHandler()
+  const [basket, setBasket] = useState<any>(null)
+  const { getCart } = cartHandler()
+
+  useEffect(() => {
+    const getBasket = async () => {
+      const basketId = Cookies.get(Cookie.Key.BASKET_ID)
+      const basketRes: any = await getCart({ basketId })
+      setBasket(processCartData(basketRes))
+    }
+    getBasket()
+  }, [])
+
   const getUserId = () => {
     return user?.userId && user?.userId != Guid.empty ? user?.userId : cartItems?.userId
   }
@@ -106,7 +123,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
   return (
     <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
       <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-        {userCart.lineItems?.map((product: any, productIdx: number) => {
+        {basket?.lineItems?.map((product: any, productIdx: number) => {
           const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
           return (
             <>
@@ -139,7 +156,7 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
                                 <span className='dark:text-slate-600'>{product?.colorName}</span>
                               </div>
                             }
-                            {product?.size != "" &&
+                            {product?.size != "" || product?.size != "n/a" &&
                               <>
                                 <span className="mx-4 border-l border-slate-200 dark:border-slate-700 "></span>
                                 <div className="flex items-center space-x-1.5">
@@ -207,6 +224,10 @@ const CartItems = ({ userCart, reValidateData, handleItem, openModal, featureTog
                         </>
                       }
                     </div>
+                    {product?.children
+                      ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
+                      ?.map((child: any, index: number) => <BundleProductCard key={index} product={child}/>
+                    )}
                   </div>
                   <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
                     {product?.shippingPlan?.shippingSpeed}
