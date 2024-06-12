@@ -176,7 +176,7 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
           {product?.children
             ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
             ?.map((child: any, index: number) => (
-              <BundleProductCard key={index} subProduct={child} andleRedirectToPDP={handleRedirectToPDP} handleClose={handleClose} />
+              <BundleProductCard key={index} product={child} andleRedirectToPDP={handleRedirectToPDP} handleClose={handleClose} />
             ))}
         </div>
       </div>

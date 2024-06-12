@@ -490,11 +490,17 @@ export const processCartData = (payload: any) => {
   if (lineItems && lineItems?.length > 0) {
     rootProducts?.forEach((item: any) => {
       updatedLineItems?.push(item);
-      const childItems = childrenMap?.get(item.productId);
+      const childItems = childrenMap?.get(item?.productId);
       if (childItems) {
         childItems?.forEach((child: any) => {
-          if (!child?.isPromo) item?.children.push(child);
-          else updatedLineItems.push(child);
+          const existingChild = item?.children?.find(
+            (c: any) => c?.productId === child?.productId
+          );
+          if (!existingChild) {
+            // If the child doesn't exist, add it to the children array
+            if (!child?.isPromo) item?.children.push(child);
+            else updatedLineItems.push(child);
+          }
         });
       }
     });
