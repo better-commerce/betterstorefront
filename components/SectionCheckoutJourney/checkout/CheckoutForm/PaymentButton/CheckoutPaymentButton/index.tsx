@@ -277,7 +277,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext, t: translate } = this.props
+    const { uiContext, translate } = this.props
     const publicKey = super.getPaymentMethodSetting(
       this?.state?.paymentMethod,
       'accountcode'

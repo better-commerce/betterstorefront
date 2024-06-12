@@ -103,7 +103,7 @@ export class CheckoutPaymentButton extends BasePaymentButton {
   }
 
   private onCardSubmitted(): void {
-    const { uiContext }: any = this.props
+    const { uiContext, translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
   }
 
