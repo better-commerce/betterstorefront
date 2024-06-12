@@ -81,7 +81,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
 
   private onScriptReady(): void {
     const that = this
-    const { uiContext, dispatchState, t: translate } = this.props
+    const { uiContext, dispatchState, translate } = this.props
     const redirectionUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
     if (AfterPay) {
       const shippingMethodId = uiContext?.cartItems?.shippingMethodId

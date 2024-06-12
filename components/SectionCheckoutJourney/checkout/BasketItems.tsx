@@ -11,20 +11,29 @@ import { CartProductType } from '@components/utils/constants'
 import BundleProductCard from '@components/BundleProductCard'
 import cartHandler from '@components/services/cart'
 
-const BasketItems = () => {
+interface Props {
+  readonly userBasket?: any
+}
+
+const BasketItems = (props: Props) => {
+  const { userBasket } = props
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const [basket, setBasket] = useState<any>(null)
   const { getCart } = cartHandler()
 
   useEffect(() => {
-    const getBasket = async () => {
-      const basketId = Cookies.get(Cookie.Key.BASKET_ID)
-      const basketRes: any = await getCart({ basketId })
-      setBasket(processCartData(basketRes))
+    if (!userBasket) {
+        const getBasket = async () => {
+        const basketId = Cookies.get(Cookie.Key.BASKET_ID)
+        const basketRes: any = await getCart({ basketId })
+        setBasket(processCartData(basketRes))
+      }
+      getBasket()
+    } else {
+      setBasket(processCartData(userBasket))
     }
-    getBasket()
-  }, [])
+  }, [userBasket])
 
   return (
     <>

@@ -156,7 +156,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                         </span>
                       </div>
                       <div className="w-full px-0 pt-3 pb-2">
-                        <BasketItems />
+                        <BasketItems userBasket={basket} />
                       </div>
                     </div>
                     {referralAvailable &&
@@ -206,7 +206,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                     </Disclosure.Button>
                     <Disclosure.Panel className="px-0 pt-3 pb-2">
                       <div className="w-full max-basket-panel">
-                        <BasketItems />
+                        <BasketItems userBasket={basket} />
                       </div>
                     </Disclosure.Panel>
                   </>
