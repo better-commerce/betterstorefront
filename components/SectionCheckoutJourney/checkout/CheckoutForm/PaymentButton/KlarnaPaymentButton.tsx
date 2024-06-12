@@ -46,7 +46,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -90,7 +90,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     const gatewayName = this.state.paymentMethod?.systemName
     const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
@@ -276,7 +276,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
 
     const shippingMethodId = uiContext?.cartItems?.shippingMethodId
     const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
-    const { t: translate } = this.props
+    const { translate }: any = this.props
 
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
@@ -339,7 +339,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
    */
   public render() {
     let that = this
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     return (
       <>
         {!this.state.confirmed ? (

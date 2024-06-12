@@ -6,7 +6,6 @@ import PaymentGatewayNotification from '@components/SectionCheckoutJourney/check
 
 // Other Imports
 import { EmptyString } from '@components/utils/constants'
-import { useTranslation } from '@commerce/utils/use-translation'
 
 export class ChequePaymentButton extends BasePaymentButton {
   /**
@@ -45,7 +44,7 @@ export class ChequePaymentButton extends BasePaymentButton {
     dispatchState: Function,
     chequeNumber: string
   ) {
-    const translate = useTranslation()
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: translate('common.label.pleaseWaitText'),
@@ -118,13 +117,14 @@ export class ChequePaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext }: any = this.props
+    const { uiContext, translate }: any = this.props
 
     return (
       <>
         <div className="w-full">
           <dl className="w-2/5 space-y-2 sm:space-y-2 py-2">
             <ChequePayment
+            translate={translate}
               onSubmit={async (data: any) => await that.onChequeSubmit(data)}
             />
           </dl>

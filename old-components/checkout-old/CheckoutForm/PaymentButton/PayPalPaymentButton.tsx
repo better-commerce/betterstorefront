@@ -3,7 +3,6 @@ import React from 'react'
 
 // Package Imports
 import Router from 'next/router'
-import { t as translate } from "i18next";
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, } from '@paypal/paypal-js/types/components/buttons'
 
@@ -52,6 +51,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -220,6 +220,7 @@ export class PayPalPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
+    const { translate }: any = this.props
     const currency = getCurrency()
     const { dispatchState } = this.props
     const clientId = super.getPaymentMethodSetting(

@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 
 // Component Imports
 import ChequePaymentForm from './ChequePaymentForm'
-import { t as translate } from "i18next";
+
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IChequePaymentProps } from 'framework/contracts/payment/IChequePaymentProps'
@@ -24,8 +24,7 @@ const CHEQUE_PAYMENT_FORM_SCHEMA = Yup.object().shape({
 })
 
 const ChequePayment = (props: IChequePaymentProps) => {
-  const { onSubmit } = props
-  const translate = useTranslation()
+  const { onSubmit, translate }: any = props
 
   const CHEQUE_PAYMENT_FORM_FIELDS = [
     {

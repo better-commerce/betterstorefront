@@ -1,6 +1,3 @@
-// Package Imports
-//import { useTranslation } from 'next-i18next'
-
 // Other Imports
 import { useI18n } from '@components/ui/i18nContext';
 import { EmptyString } from '@components/utils/constants';

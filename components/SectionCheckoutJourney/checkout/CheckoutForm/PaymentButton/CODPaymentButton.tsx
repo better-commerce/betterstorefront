@@ -34,7 +34,7 @@ class CODPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: 'Please wait...',

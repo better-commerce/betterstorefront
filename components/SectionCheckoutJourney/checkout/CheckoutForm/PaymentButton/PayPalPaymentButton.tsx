@@ -52,7 +52,7 @@ class PayPalPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -119,7 +119,7 @@ class PayPalPaymentButton extends BasePaymentButton {
    * @returns
    */
   private getOrderInputPayload() {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     if (orderResult) {
@@ -222,7 +222,7 @@ class PayPalPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     const currency = getCurrency()
     const { dispatchState } = this.props
     const clientId = super.getPaymentMethodSetting(
