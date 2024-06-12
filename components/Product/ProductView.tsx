@@ -116,7 +116,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       setCompareProductAttribute(compareDataResult)
     }
   }
-  const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
+  const [selectedAttrData, setSelectedAttrData] = useState<any>()
+
+  useEffect(()=>{ 
+    if(product?.recordId){
+      setSelectedAttrData({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
+    } 
+  },[product?.recordId])
+
   useEffect(() => {
     if (allProductsByCategory?.length < 0) return
     let mappedAttribsArrStr = allProductsByCategory?.map((o: any) => o.attributes).flat()
