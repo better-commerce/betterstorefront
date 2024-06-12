@@ -17,7 +17,6 @@ import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
-import { t as translate } from "i18next";
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -32,6 +31,7 @@ export interface IPaymentButtonProps {
   readonly contactDetails?: any
   onScrollToSection?: any
   recordEvent?: any
+  translate?: any
 }
 
 export interface IApplePaymentProps {
@@ -74,6 +74,7 @@ export default abstract class BasePaymentButton
     isCOD: boolean = false,
     paymentInfo?: IPaymentInfo
   ): Promise<{ status: boolean; state: any; result?: any }> {
+    const { translate }: any = this.props
     try {
       let convertOrderInput: any = !isCOD
         ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)

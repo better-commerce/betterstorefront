@@ -4,7 +4,6 @@ import "styles/index.scss";
 import 'swiper/css/bundle'
 import '@assets/css/algolia-instant-search.css'
 import React, { FC, useCallback, useEffect, useState } from 'react'
-import { appWithTranslation } from 'next-i18next'
 import NextHead from 'next/head'
 import Cookies from 'js-cookie'
 import TagManager from 'react-gtm-module'

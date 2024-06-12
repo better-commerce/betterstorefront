@@ -8,7 +8,6 @@ import PaymentGatewayNotification from '@components/SectionCheckoutJourney/check
 import { EmptyString, Messages } from '@components/utils/constants'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { matchStrings } from '@framework/utils/parse-util'
-import { t as translate } from "i18next";
 
 export class AccountPaymentButton extends BasePaymentButton {
   /**
@@ -39,6 +38,7 @@ export class AccountPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { translate }: any = this.props
     if (uiContext?.user?.userId) {
       const userId = uiContext?.user?.userId
       uiContext?.setOverlayLoaderState({
@@ -148,7 +148,7 @@ export class AccountPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext }: any = this.props
+    const { uiContext, translate }: any = this.props
     const orderTotalGrThAvailableCredit = (this?.state?.orderTotal > this?.state?.availableCredit)
 
     return (
