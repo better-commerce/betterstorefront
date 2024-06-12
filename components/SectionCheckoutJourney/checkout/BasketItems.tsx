@@ -1,19 +1,14 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-import BundleProductCard from '@components/BundleProductCard'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { processCartData, vatIncluded } from '@framework/utils/app-util'
+import { vatIncluded } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
-import { CartProductType } from '@components/utils/constants'
-import { useMemo } from 'react'
 
 const BasketItems = ({ userCartItems }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
-  const lineItems:any = useMemo(()=> processCartData({lineItems:userCartItems})?.lineItems,[]) 
-
   return (
     <>
-      {lineItems?.map((product: any, index: number) => {
+      {userCartItems?.map((product: any, index: number) => {
         const voltageAttr: any = tryParseJson(product?.attributesJson)
         const electricVoltAttrLength = voltageAttr?.Attributes?.filter(
           (x: any) => x?.FieldCode == 'electrical.voltage'
@@ -96,11 +91,6 @@ const BasketItems = ({ userCartItems }: any) => {
                 </div>
               </div>
             </div>
-            {product?.children
-            ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
-            ?.map((child: any, index: number) => (
-              <BundleProductCard key={index} product={child}/>
-            ))}
           </div>
         )
       })}
