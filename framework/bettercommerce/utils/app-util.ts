@@ -474,14 +474,15 @@ export const processCartData = (payload: any) => {
 
   // Organize items into root products and child items
   lineItems?.forEach((item: any) => {
-    if (!item?.parentProductId || item?.parentProductId === Guid.empty) {
+    const parentProductId = item?.parentProductId?.toLowerCase()
+    if (!parentProductId || parentProductId === Guid.empty) {
       if (!item?.children) item.children = [];
       rootProducts.push(item);
     } else {
-      if (!childrenMap.has(item?.parentProductId)) {
-        childrenMap.set(item?.parentProductId, []);
+      if (!childrenMap.has(parentProductId)) {
+        childrenMap.set(parentProductId, []);
       }
-      childrenMap.get(item?.parentProductId).push(item);
+      childrenMap.get(parentProductId).push(item);
     }
   });
 
@@ -490,13 +491,15 @@ export const processCartData = (payload: any) => {
   if (lineItems && lineItems?.length > 0) {
     rootProducts?.forEach((item: any) => {
       updatedLineItems?.push(item);
-      const childItems = childrenMap?.get(item.productId);
+      const childLineItems: any = {}
+      const childItems = childrenMap?.get(item?.productId?.toLowerCase());
       if (childItems) {
         childItems?.forEach((child: any) => {
-          if (!child?.isPromo) item?.children.push(child);
+          if (!child?.isPromo) childLineItems[child.productId] = child
           else updatedLineItems.push(child);
         });
       }
+      item.children = Object.values(childLineItems);
     });
   }
 
