@@ -44,7 +44,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { getAppliedFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -110,6 +110,8 @@ function CollectionPage(props: any) {
 
   const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
   const [isFiltersApplied, setIsFiltersApplied] = useState(false)
@@ -159,7 +161,7 @@ function CollectionPage(props: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -183,21 +185,10 @@ function CollectionPage(props: any) {
 
   const [productDataToPass, setProductDataToPass] = useState(props?.products)
 
-  useEffect(() => {
-    if (isFiltersApplied || data?.products?.filters?.length < 1) return
-    const filters = getAppliedFilters(data?.products?.filters)
-    setFilter(filters || [])
-    setIsFiltersApplied(true)
-  }, [isFiltersApplied, router.query, data?.products?.filters])
   
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      const filters = getAppliedFilters(data?.products?.filters)
-      if (filters?.length) {
-        routeToPLPWithSelectedFilters(router, filters, true)
-      }
     }
   }, [state?.filters])
 

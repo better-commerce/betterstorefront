@@ -256,21 +256,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+    if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
   }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   const handleClick = () => {
     setShowLandingPage(false)
