@@ -323,6 +323,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
 
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
+
   useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
     entity: JSON.stringify({
       id: category?.id,
@@ -364,26 +370,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     //}
   }, [data?.products?.results?.length, data])
 
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
 
   const setFilter = (filters: any) => {
     dispatch({ type: SET_FILTERS, payload: filters })
   }
 
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   useEffect(() => {
     const dataToPass = IS_INFINITE_SCROLL

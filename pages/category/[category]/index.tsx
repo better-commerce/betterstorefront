@@ -348,6 +348,12 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
 
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
+
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
     clearAll()
@@ -435,22 +441,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     dispatch({ type: SET_FILTERS, payload: filters })
   }
 
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value }))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value })))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
