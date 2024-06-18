@@ -83,6 +83,7 @@ export interface State {
   isCompared: string
   compareProductList: any
   isPaymentLink: boolean
+  isGhostUser: boolean
 }
 
 const initialState = {
@@ -128,6 +129,7 @@ const initialState = {
   compareProductList: getItem('compareProductList') || {},
   isPaymentLink: getItem('isPaymentLink') || false,
   productInfo: undefined,
+  isGhostUser: getItem('isGhostUser') || false,
 }
 
 type Action =
@@ -242,6 +244,10 @@ type Action =
   | { type: 'SET_CURRENCY'; payload: any }
   | { type: 'SET_PRODUCT_INFO'; payload: any }
   | { type: 'CHANGE_TAB'; payload: string}
+  | {
+      type: 'SET_IS_GHOST_USER'
+      payload: boolean
+    }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -565,6 +571,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         productInfo: action.payload,
+      }
+    }
+    case 'SET_IS_GHOST_USER': {
+      return {
+        ...state,
+        isGhostUser: action.payload,
       }
     }
   }
@@ -1108,6 +1120,14 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsGhostUser = useCallback(
+    (payload: boolean) => {
+      setItem('isGhostUser', payload)
+      dispatch({ type: 'SET_IS_GHOST_USER', payload })
+    },
+    [dispatch]
+  )
+
   const setProductInfo = useCallback(
     (payload: any) => {
       dispatch({ type: 'SET_PRODUCT_INFO', payload })
@@ -1169,6 +1189,7 @@ export const UIProvider: React.FC<any> = (props) => {
       resetCompareProducts,
       setCurrency,
       setProductInfo,
+      setIsGhostUser,
     }),
 
     [state]
