@@ -1,3 +1,5 @@
+import { NextRouter } from 'next/router'
+
 import { uriParams } from '@commerce/utils/uri-util'
 import {
   DataSubmit,
@@ -41,7 +43,28 @@ export const parsePLPFilters = (qsFilters: string) => {
   return new Array<any>()
 }
 
-export const routeToPLPWithSelectedFilters = (router: any, currentFilters: Array<any>) => {
+export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
+  console.log({ shouldRemove, currentFilters })
+  const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
+    const parsedKey = cur?.Key?.replace('attributes.value~', '')?.replace('brandNoAnlz', 'brand')?.toLowerCase()
+    const parsedValue = cur?.Value?.toLowerCase()
+    acc[parsedKey] = acc[parsedKey] ? [acc[parsedKey], parsedValue].join(',') : parsedValue
+    return acc
+  }, {})
+  console.log(modifiedFiltersObj)
+  const url = new URL(window.location.href) //window.location.origin + window.location.pathname
+  for (let key in modifiedFiltersObj) {
+    if (shouldRemove) {
+      url.searchParams.delete(key)
+    } else {
+      url.searchParams.set(key, modifiedFiltersObj[key])
+    }
+  }
+  
+  router.replace(decodeURIComponent(url.toString()), undefined, { shallow: true })
+}
+
+export const routeToPLPWithSelectedFiltersOld = (router: any, currentFilters: Array<any>) => {
   const getFilterQuery = () => {
     let qs = EmptyString
     if (currentFilters?.length) {
@@ -102,4 +125,36 @@ export const flattenObject = (obj: any, parentKey = '', result: any = {}) => {
     }
   }
   return result;
+}
+
+export const getAppliedFilters = (filters: any[]) => {
+  const url = new URL(window.location.href)
+
+  if (filters?.length < 1 || url.searchParams.size < 1) return
+
+  let appliedFilters: any = {}
+
+  url.searchParams.forEach((filterValues: any, filterKey: any) => {
+    const selectedFilter = filters?.find(o => o?.key?.toLowerCase()?.includes(filterKey))
+    
+    if (!selectedFilter) return
+
+    filterValues = filterValues.split(',')
+
+    filterValues?.forEach((filterValue: string) => {
+      const selectedFilterName = selectedFilter?.items?.find((o: any) => o?.name?.toLowerCase() === filterValue)?.name
+
+      appliedFilters[selectedFilter?.key] = [
+        ...(appliedFilters?.[selectedFilter?.key] || []),
+        {
+          Key: selectedFilter?.key,
+          Value: selectedFilterName,
+          IsSelected: true,
+          Name: selectedFilter?.name
+        }
+      ]
+    })
+  })
+
+  return Object.values(appliedFilters).flat()
 }
