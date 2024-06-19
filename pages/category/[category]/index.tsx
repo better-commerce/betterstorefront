@@ -289,7 +289,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
-  const qsFilters = router?.query?.filters
+  const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
@@ -347,6 +347,12 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
+
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
@@ -435,22 +441,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     dispatch({ type: SET_FILTERS, payload: filters })
   }
 
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value }))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value })))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {

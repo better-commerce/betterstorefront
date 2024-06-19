@@ -35,23 +35,31 @@ export const sanitizeHtmlContent = (html: any) => {
 }
 
 export const parsePLPFilters = (qsFilters: string) => {
-  const queryFilters = decodeURIComponent(qsFilters as string)
-  if (queryFilters) {
-    const filters: any = tryParseJson(queryFilters) || []
-    return filters
+  if (qsFilters) {
+    const filters = new Array<{Key: string, Value: string}>()
+    const params = uriParams(qsFilters)
+    if (params) {
+      for(var key in params) {
+        const paramValue = params[key]
+        if (paramValue) {
+          const paramValues = paramValue?.split(',')
+          paramValues.forEach((value: string) => {
+            filters.push({ Key: key, Value: value })
+          })
+        }
+      }
+      return filters
+    }
   }
   return new Array<any>()
 }
 
 export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
-  console.log({ shouldRemove, currentFilters })
   const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
-    const parsedKey = cur?.Key?.replace('attributes.value~', '')?.replace('brandNoAnlz', 'brand')?.toLowerCase()
-    const parsedValue = cur?.Value?.toLowerCase()
-    acc[parsedKey] = acc[parsedKey] ? [acc[parsedKey], parsedValue].join(',') : parsedValue
+    acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
     return acc
   }, {})
-  console.log(modifiedFiltersObj)
+
   const url = new URL(window.location.href) //window.location.origin + window.location.pathname
   for (let key in modifiedFiltersObj) {
     if (shouldRemove) {
