@@ -1,6 +1,6 @@
 {
   "features": {
-    "enableLanguage": true,
+    "enableLanguage": false,
     "enablePriceIncVatToggle": false,
     "enableQuickOrderPad": false,
     "enableCompare": true,
@@ -9,13 +9,13 @@
     "enableEngage":true,      
     "enableMyStoreFeature": true,
     "enableAddToBagPlp": false,
-    "enableMembership": true,
+    "enableMembership": false,
     "isImageGallery": false,
     "enableHeaderWishlist": false,
     "enableProductSpecification": true,
     "enableTrendingCategory": false,
     "enableDemoToggle": false,
-    "enableLoqateSearch": true,
+    "enableLoqateSearch": false,
     "enableAddressIOSearch":false
   },
   "social":[
