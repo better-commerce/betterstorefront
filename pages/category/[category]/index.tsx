@@ -289,7 +289,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
-  const qsFilters = router?.query?.filters
+  const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
