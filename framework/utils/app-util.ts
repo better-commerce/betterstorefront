@@ -55,7 +55,6 @@ export const parsePLPFilters = (qsFilters: string) => {
 }
 
 export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
-  console.log({ shouldRemove, currentFilters })
   const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
     acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
     return acc
