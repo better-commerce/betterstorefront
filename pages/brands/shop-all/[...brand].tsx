@@ -171,7 +171,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   })
 
   const router = useRouter()
-  const qsFilters = router?.query?.filters
+  const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [manufacturerStateVideoName, setManufacturerStateVideoName] =
