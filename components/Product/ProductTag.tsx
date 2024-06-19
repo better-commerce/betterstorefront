@@ -67,16 +67,16 @@ export default function ProductTag({ product }: Props) {
     )
   }
   if (tagValues?.newLaunch) {
-    return <div className='px-2.5 py-1.5 text-xs bg-emerald-200 dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.newInText')}</div></div>
+    return <div className='px-2.5 py-1.5 text-xs bg-emerald-200 dark:bg-emerald-200 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'><SparklesIcon className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.newInText')}</div></div>
   }
 
   if (tagValues?.onSale) {
-    return <div className='px-2.5 py-1.5 text-xs bg-red-500 dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-white dark:text-slate-900'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.onSaleText')}</div></div>
+    return <div className='px-2.5 py-1.5 text-xs bg-red-500 dark:bg-red-500 nc-shadow-lg rounded-full flex items-center justify-center text-white dark:text-white'><IconDiscount className="w-3.5 h-3.5" /><div className="leading-none ms-1">{translate('label.filters.onSaleText')}</div></div>
   }
 
   if (tagValues?.bestSeller) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-yellow-200 dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
+      <div className='px-2.5 py-1.5 text-xs bg-yellow-200 dark:bg-yellow-200 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <StarIcon className="w-3.5 h-3.5 " />
         <div className="leading-none ms-1">
         {translate('label.product.bestSellerText')}
@@ -87,7 +87,7 @@ export default function ProductTag({ product }: Props) {
 
   if (tagValues?.trending) {
     return (
-      <div className='px-2.5 py-1.5 text-xs bg-lime-200 dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
+      <div className='px-2.5 py-1.5 text-xs bg-lime-200 dark:bg-lime-200 nc-shadow-lg rounded-full flex items-center justify-center text-slate-900 dark:text-slate-900'>
         <TagIcon className="w-3.5 h-3.5 " />
         <div className="leading-none ms-1">
         {translate('label.product.trendingText')}

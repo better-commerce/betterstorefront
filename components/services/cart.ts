@@ -6,6 +6,7 @@ import {
   NEXT_ASSOCIATE_CART,
   NEXT_MERGE_CART,
   NEXT_DELETE_CART,
+  NEXT_GET_CART_COUNT,
 } from '@components/utils/constants'
 import axios from 'axios'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
@@ -92,6 +93,7 @@ export default function cartHandler() {
             productName: x.name,
             parentProductId: isComplementary ? Guid.empty : productId,
             qty: 1,
+            customInfo2: x.image 
           }
         })
         const products = isComplementary
@@ -202,6 +204,10 @@ export default function cartHandler() {
 
       eventDispatcher(BasketItemAdded, eventData)
       return response.data
+    },
+    getCartItemsCount: async ({ basketId }: GetCart) => {
+      const response = await axios.get(`${NEXT_GET_CART_COUNT}?basketId=${basketId}`)
+      return response?.data
     },
     getCart: async ({ basketId }: GetCart) => {
       const response = await axios.get(`${NEXT_GET_CART}?basketId=${basketId}`)

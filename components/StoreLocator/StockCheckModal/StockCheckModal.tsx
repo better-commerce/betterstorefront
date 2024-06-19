@@ -195,7 +195,7 @@ const StockCheckModal = ({
                         />
                       )}
                       <XMarkIcon
-                        className="absolute w-8 h-8 top-5 right-5 hover:cursor-pointer"
+                        className="absolute w-8 h-8 top-5 right-5 hover:cursor-pointer dark:text-black"
                         onClick={() => setOpenStockCheckModal(false)}
                       />
                     </div>

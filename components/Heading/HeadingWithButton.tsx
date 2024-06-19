@@ -43,7 +43,7 @@ const HeadingWithButton: React.FC<HeadingProps> = ({
           {rightDescText && (
             <>
               <span className=""> </span>
-              <span className="text-neutral-500 dark:text-neutral-400">
+              <span className="text-neutral-500 dark:text-neutral-500">
                 {rightDescText}
               </span>
             </>

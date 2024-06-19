@@ -80,7 +80,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
           value={postCode}
           onChange={handlePostCode}
         />
-        <button className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4">
+        <button className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn" disabled={!postCode || loading}>
           {loading ? <LoadingDots /> : translate('label.store.findStoresText')}
         </button>
       </form>

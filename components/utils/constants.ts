@@ -50,7 +50,9 @@ export const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/
 export const INFRA_PLUGIN_CATEGORY_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config/plugin/category`
 export const KEYWORDS_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/keyword-redirections`
 export const LOQATE_ADDRESS = '/api/loqate'
-export const RETRIEVE_ADDRESS = '/api/retrieve-address'
+export const RETRIEVE_LOQATE_ADDRESS = '/api/retrieve-address'
+export const GET_ADDRESS_IO_ADDRESS = '/api/get-address'
+export const RETRIEVE_GET_ADDRESS_IO_ADDRESS = '/api/retrieve-get-address-io'
 export const PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/`
 export const PRODUCT_PROMOTION_API_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/promotion/product-promotions`
 export const INFRA_LOG_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/log`
@@ -92,6 +94,7 @@ export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
 export const NEXT_GET_ORDER_DETAILS = '/api/customer/order-details'
 export const NEXT_GET_CART = `/api/get-cart`
+export const NEXT_GET_CART_COUNT = `/api/get-cart-count`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
 export const NEXT_MERGE_CART = '/api/merge-cart'
 export const STATIC_BRAND_PATHS = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/staticpath/brand`
@@ -130,6 +133,8 @@ export const NEXT_CANCEL_REASON = `/api/cancel-reason`
 export const NEXT_CANCEL_ORDER = `/api/order/cancel`
 export const NEXT_CANCEL_ORDER_LINE = `/api/order/cancel-order-line`
 export const NEXT_RETURN_REASON = `/api/return-reason`
+export const NEXT_GET_LOOKBOOK = `/api/get-lookbook`
+export const NEXT_GET_LOOKBOOK_BY_SLUG = `/api/get-lookbook-by-slug`
 
 export const NEXT_GET_REVIEW_SUMMARY = `/api/reviews/get-review-summary`
 export const NEXT_CREATE_REVIEW = `/api/create-review`
@@ -649,4 +654,8 @@ export enum MembershipType {
   GOLD = 'Gold',
   PLATINUM = 'Platinum',
   DEFAULT = 'Default',
+}
+
+export enum CartProductType {
+  ENGRAVING = 10,
 }

@@ -118,13 +118,14 @@ export class ChequePaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext }: any = this.props
+    const { uiContext, translate }: any = this.props
 
     return (
       <>
         <div className="w-full">
           <dl className="w-2/5 space-y-2 sm:space-y-2 py-2">
             <ChequePayment
+              translate={translate}
               onSubmit={async (data: any) => await that.onChequeSubmit(data)}
             />
           </dl>

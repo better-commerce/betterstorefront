@@ -12,12 +12,15 @@ export default class MyDocument extends NextDocument {
   }
 
   render() {
-    
+
     return (
       <Html>
         <Head>
           <link rel="preload" href={`/theme/${CURRENT_THEME}/css/global.css`} as="style" />
-          <link rel="stylesheet" href={`/theme/${CURRENT_THEME}/css/global.css`} />         
+          <link rel="stylesheet" href={`/theme/${CURRENT_THEME}/css/global.css`} />
+          {CURRENT_THEME == 'green' &&
+            <meta name="google-site-verification" content="i3Ml0CsxqOuXaxdHhzOQ5AG2jTHgKcjT1oM9oMPbxJo" />
+          }
         </Head>
         <body className={`custom_class promo-banner-inactive`}>
           <Main />

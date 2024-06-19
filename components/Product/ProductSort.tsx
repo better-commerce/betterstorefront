@@ -54,7 +54,7 @@ export default function ProductSort({ products, action, routerSortOption, featur
       {featureToggle?.features?.enableCompare &&
         <div>
           <div className="flex items-center justify-end w-full px-0 pt-0 mx-auto sm:pt-1 sm:px-4">
-            <div className="flex flex-col py-0 pr-1 text-xs font-normal text-black font-14 whitespace-nowrap dark:text-white">
+            <div className="flex flex-col py-0 pr-1 text-xs font-normal text-black font-14 whitespace-nowrap dark:text-black">
               {translate('label.product.compareItemsText')}
             </div>
             <div className="flow-root w-10 px-2 sm:w-14">

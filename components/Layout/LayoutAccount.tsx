@@ -28,17 +28,18 @@ import { CURRENT_THEME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
 import MembershipBanner from '@components/membership/MyMembership/MembershipBanner'
-
+import InteractiveDemoSideBar from '@components/InteractiveDemo'
 const primaryButtonStyle = { backgroundColor: 'black' }
 const secondaryButtonStyle = { backgroundColor: 'gray' }
 const Content = () => {
   const translate = useTranslation()
   return (
-  <>
-    <h3></h3>
-    <p>{translate('common.message.cookiesText')}</p>
-  </>
-)}
+    <>
+      <h3></h3>
+      <p>{translate('common.message.cookiesText')}</p>
+    </>
+  )
+}
 interface Props {
   children: any
   pageProps: {
@@ -107,7 +108,7 @@ export interface IExtraProps {
 const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: { categories = [], navTree, reviewData = {}, featureToggle = {}, ...pageProps }, keywords, isLocationLoaded, deviceInfo, maxBasketItemsCount = 0, nav, pluginConfig = [] }) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const { setIsCompared , myAccountActiveTab } = useUI()
+  const { setIsCompared, myAccountActiveTab } = useUI()
   const { displayAlert, includeVAT, setIncludeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [isIncludeVATState, setIsIncludeVATState] = useState<boolean>(isIncludeVAT)
@@ -157,6 +158,9 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
       setIsIncludeVATState(value)
     }, 50)
   }
+  const isDemo = stringToBoolean(router?.query?.demo as string)
+  const isDemoStoreCode = stringToBoolean(router?.query?.storecode ? '1': '0')
+  const isInteractiveDemo = !isDemo? isDemoStoreCode : isDemo
 
   return (
     <>
@@ -178,6 +182,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
       </Head>
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
+        {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
@@ -197,12 +202,12 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
               <meta property="og:description" content={myAccountActiveTab} key="ogdesc" />
             </NextHead>
             <MembershipBanner user={user} />
-            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container">              
+            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-                <div className='sticky top-0 border-r sm:col-span-3 border-slate-200'>
+                <div className='sticky top-12 sm:border-r sm:col-span-3 border-slate-200 z-10 bg-white'>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
-                <div className='pt-0 sm:col-span-9 sm:pt-8'>
+                <div className='pt-0 sm:col-span-9 sm:pt-8 z-1'>
                   {children}
                 </div>
               </div>

@@ -31,8 +31,8 @@ const Button = dynamic(() => import('@components/ui/IndigoButton'))
 interface Props {
   product: any
   hideWishlistCTA?: any
-  attributesCount?: number
   defaultDisplayMembership: any
+  compareAttributes?: any
 }
 
 interface Attribute {
@@ -53,9 +53,9 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   hideWishlistCTA = false,
   deviceInfo,
   maxBasketItemsCount,
-  attributesCount = 0,
   featureToggle,
   defaultDisplayMembership,
+  compareAttributes = {},
 }) => {
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
@@ -78,7 +78,6 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
-  const [attribs, setAttribs] = useState<any>([])
 
   const handleUpdateWishlistItem = useCallback(() => {
     if (wishListItems.length < 1) return
@@ -96,17 +95,6 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   useEffect(() => {
     setProduct(productData)
-    if (productData.attributes?.length > 0) {
-      if (productData.attributes?.length !== attributesCount) {
-        const emptySetCount = attributesCount - productData.attributes?.length
-        const emptyCompareSet = Array(emptySetCount).fill(EMPTY_COMPARE_SET)
-        setAttribs([...productData.attributes, ...emptyCompareSet])
-        return
-      }
-      setAttribs([...productData.attributes])
-    } else {
-      setAttribs(Array(attributesCount).fill(EMPTY_COMPARE_SET))
-    }
   }, [productData])
 
   useEffect(() => {
@@ -280,32 +268,6 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const itemPrice = product?.price?.formatted?.withTax
 
-  const getAttribValue = (val: any) => {
-    const parsed = tryParseJson(val)
-    switch (parsed) {
-      case true:
-        return (
-          <img
-            alt="check_circle"
-            width={36}
-            height={36}
-            src="/assets/images/check_circle.svg"
-          />
-        )
-      case false:
-        return (
-          <img
-            alt="cross_icon"
-            width={36}
-            height={36}
-            src="/assets/images/cross_icon.svg"
-          />
-        )
-      default:
-        return val
-    }
-  }
-
   const isOutOfStock = (product: any) => {
     if (
       product?.hasOwnProperty('preOrder') &&
@@ -338,7 +300,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`} >
-          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] nc-ProductCard__title text-left  ">
+          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] dark:text-black nc-ProductCard__title text-left  ">
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
@@ -365,10 +327,10 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
           <span className="font-normal text-black font-14">{product?.brand}</span>
         </div>
-        {attribs?.map((attrib: any, idx: number) => (
+        {Object.values(compareAttributes)?.map((attrib: any, idx: number) => (
           <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
-            {getAttribValue(attrib.value).includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: getAttribValue(attrib.value) }}></span>) : (<span>{getAttribValue(attrib.value)}</span>)}
-          </div>
+          {attrib?.includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: attrib }}></span>) : (<span className='dark:text-black'>{attrib}</span>)}
+        </div>
         ))}
       </div>
     </>

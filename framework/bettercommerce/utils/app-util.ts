@@ -20,6 +20,9 @@ import {
   LOQATE_ADDRESS,
   BETTERCOMMERCE_DEFAULT_COUNTRY,
   CURRENT_THEME,
+  RETRIEVE_LOQATE_ADDRESS,
+  GET_ADDRESS_IO_ADDRESS,
+  RETRIEVE_GET_ADDRESS_IO_ADDRESS,
 } from '@components/utils/constants'
 import { stringToBoolean, tryParseJson, matchStrings } from './parse-util'
 import { ILogRequestParams } from '@framework/api/operations/log-payment'
@@ -463,6 +466,48 @@ export const cartItemsValidateAddToCart = (
   }
   return true
 }
+
+export const processCartData = (payload: any) => {
+  const { lineItems }: any = payload;
+  const childrenMap = new Map();
+  const rootProducts: any[] = [];
+
+  // Organize items into root products and child items
+  lineItems?.forEach((item: any) => {
+    const parentProductId = item?.parentProductId?.toLowerCase()
+    if (!parentProductId || parentProductId === Guid.empty) {
+      if (!item?.children) item.children = [];
+      rootProducts.push(item);
+    } else {
+      if (!childrenMap.has(parentProductId)) {
+        childrenMap.set(parentProductId, []);
+      }
+      childrenMap.get(parentProductId).push(item);
+    }
+  });
+
+  // Update line items with children and promo items
+  const updatedLineItems: any[] = [];
+  if (lineItems && lineItems?.length > 0) {
+    rootProducts?.forEach((item: any) => {
+      updatedLineItems?.push(item);
+      const childLineItems: any = {}
+      const childItems = childrenMap?.get(item?.productId?.toLowerCase());
+      if (childItems) {
+        childItems?.forEach((child: any) => {
+          if (!child?.isPromo) childLineItems[child.productId] = child
+          else updatedLineItems.push(child);
+        });
+      }
+      item.children = Object.values(childLineItems);
+    });
+  }
+
+  // Create new cart data with updated line items
+  const newCartData: any = { ...payload, lineItems: updatedLineItems };
+  return newCartData;
+}
+
 export const getCurrency = () => {
   const currencyCode =
     Cookies.get(Cookie.Key.CURRENCY) ||
@@ -811,35 +856,89 @@ export const getEnabledSocialLogins = (pluginSettings: Array<any>): string => {
   )
 }
 
-export const loqateAddress = async (postCode: string) => {
-  try {
-    const cartItems: any = getItem('cartItems') || {}
-    const deliveryMethod = cartItems?.shippingMethods?.find(
-      (method: any) => method?.id === cartItems?.shippingMethodId
-    )
-    const response = await axios.post(LOQATE_ADDRESS, {
-      postCode,
-      country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
-    })
-
-    const responseData = response?.data?.response?.data || []
-    return responseData?.map((item: any) => ({
-      text: item?.Text,
-      id: item?.Id,
-      description: item?.Description,
-    }))
-  } catch (error) {
-    logError(error)
-    return []
-  }
-}
-
 export const getFeaturesConfig = () => {
   try {
     const config = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`)
     return config || {}
   } catch (error) {
     return {}
+  }
+}
+
+const IS_ADDRESS_IO_AVAILABLE = getFeaturesConfig()?.features?.enableAddressIOSearch
+const IS_LOQATE_AVAILABLE = getFeaturesConfig()?.features?.enableLoqateSearch
+
+export const loqateAddress = async (postCode: string) => {
+  try {
+    // when Loqate is Enabled
+    if(IS_LOQATE_AVAILABLE) {
+      const cartItems: any = getItem(LocalStorage.Key.CART_ITEMS) || {}
+      const deliveryMethod = cartItems?.shippingMethods?.find(
+        (method: any) => method?.id === cartItems?.shippingMethodId
+      )
+      const response = await axios.post(LOQATE_ADDRESS, {
+        postCode,
+        country: deliveryMethod?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      })
+  
+      const responseData = response?.data?.response?.data || []
+      return responseData?.map((item: any) => ({
+        text: item?.Text,
+        id: item?.Id,
+        description: item?.Description,
+      }))
+    } 
+    // when GetAddressIo is enabled 
+    else if (IS_ADDRESS_IO_AVAILABLE) {
+      const response: any = await axios.post(GET_ADDRESS_IO_ADDRESS, {
+        postCode
+      })
+      if (response.data) {
+        return response?.data?.response?.data?.map((item: any) => {
+          return {
+            id: item?.id,
+            description: item?.address,
+          }
+        })
+      } else return []
+    }
+  } catch (error) {
+    logError(error)
+    return []
+  }
+}
+
+export const retrieveAddress = async (id: string) => {
+  // when Loqate is Enabled
+  if (IS_LOQATE_AVAILABLE) {
+    const response: any = await axios.post(RETRIEVE_LOQATE_ADDRESS, {
+      id,
+    })
+    return {
+      postCode: response?.data?.response?.data[0]?.PostalCode,
+      address1: response?.data?.response?.data[0]?.Line1,
+      address2: response?.data?.response?.data[0]?.Line2,
+      city: response?.data?.response?.data[0]?.City,
+      state: response?.data?.response?.data[0]?.ProvinceName,
+      country: response?.data?.response?.data[0]?.CountryName || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: response?.data?.response?.data[0]?.CountryIso2 || BETTERCOMMERCE_DEFAULT_COUNTRY,
+    }
+  } 
+  // when GetAddressIo is enabled
+  else if (IS_ADDRESS_IO_AVAILABLE) {
+    const response: any = await axios.post(RETRIEVE_GET_ADDRESS_IO_ADDRESS, {
+      id,
+    })
+    return {
+      postCode: response?.data?.response?.data?.postcode,
+      address1: response?.data?.response?.data?.line_1,
+      address2: response?.data?.response?.data?.line_2,
+      address3: response?.data?.response?.data?.line_3 && (response?.data?.response?.data?.line_3 + (response?.data?.response?.data?.line_4 ? ' ,' + response?.data?.response?.data?.line_4 : '')),
+      city: response?.data?.response?.data?.town_or_city,
+      country: response?.data?.response?.data?.country || BETTERCOMMERCE_DEFAULT_COUNTRY,
+      countryCode: BETTERCOMMERCE_DEFAULT_COUNTRY,
+      state: response?.data?.response?.data?.county,
+    }
   }
 }
 

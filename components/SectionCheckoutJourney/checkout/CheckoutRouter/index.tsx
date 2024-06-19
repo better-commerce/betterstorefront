@@ -11,6 +11,8 @@ import GuestForm from './GuestForm'
 import Link from 'next/link'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Form from '@components/customer'
+import { uriParams } from '@commerce/utils/uri-util'
+import { stringToBoolean } from '@framework/utils/parse-util'
 const config = [
   {
     title: "Log in",
@@ -66,7 +68,17 @@ export default function CheckoutRouter({
         setUser(userObj)
         fetchAddress(userObj?.userId)
         // getWishlist(result.data.userId, wishlistItems)
-        Router.push('/checkout')
+
+        let redirectUrl = '/checkout'
+        const search = window.location.search
+        const params = uriParams(search)
+        const isDemo = stringToBoolean(params?.demo)
+        const isDemoStoreCode = stringToBoolean(params?.storecode ? '1': '0')
+        const isInteractiveDemo = !isDemo? isDemoStoreCode : isDemo
+        if (isInteractiveDemo) {
+          redirectUrl = `${redirectUrl}?demo=1`
+        }
+        Router.push(redirectUrl)
       }
     }
     asyncLoginUser()

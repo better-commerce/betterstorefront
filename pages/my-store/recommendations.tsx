@@ -1,7 +1,6 @@
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes } from "@components/utils/constants";
+import { EngageEventTypes } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import EngageProductCard from "@components/SectionEngagePanels/ProductCard";
@@ -24,7 +23,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
   }
 }
@@ -64,7 +62,7 @@ function Recommendations({  campaignData, featureToggle }: any) {
   }, [router]);
   return (
     <>
-      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('label.store.yourRecommendationsText')}</h2>
+      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-black">{translate('label.store.yourRecommendationsText')}</h2>
       <div className="mx-auto cart-recently-viewed mob-padding-0">
         <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} title="Top picks for you" isSlider={false} productPerRow={4} forceDisplay={true} />
         <EngageProductCard productLimit={15} type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} title="Style Spotlight: Editor's Choice" isSlider={true} productPerRow={4} forceDisplay={true} />

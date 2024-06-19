@@ -10,7 +10,8 @@ import ImageGallery from 'react-image-gallery'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG } from '@components/utils/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
@@ -69,7 +70,7 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo } = useUI()
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const isIncludeVAT = vatIncluded()
@@ -88,10 +89,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [showMobileCaseButton, setShowMobileCaseButton] = useState(false);
   const [openStoreLocatorModal, setOpenStockCheckModal] = useState(false)
   const [showDetails, setShowGwpDetail] = useState(false)
+  const [lookbookData, setLookbookData] = useState<any>(null)
+  const [newImages, setImages] = useState([]);
   let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
-
 
   useEffect(() => {
     if (compareProductsAttributes?.length < 0) return
@@ -99,6 +101,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     mappedAttribsArrStr = _.uniq(mappedAttribsArrStr?.map((o: any) => o?.fieldName))
     setAttributeNames(mappedAttribsArrStr)
   }, [compareProductsAttributes])
+
+  useEffect(()=>{ closeSidebar() },[config])
 
   const fetchRelatedProducts = async (productId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
@@ -178,11 +182,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         omniImg: response?.data?.product?.image,
       })
       setUpdatedProduct(response.data.product)
-      // setSelectedAttrData({
-      //   productId: response?.data?.product?.recordId,
-      //   stockCode: response?.data?.product?.stockCode,
-      //   ...response?.data?.product,
-      // })
+      setSelectedAttrData({
+        productId: response?.data?.product?.recordId,
+        stockCode: response?.data?.product?.stockCode,
+        ...response?.data?.product,
+      })
       if (typeof window !== "undefined" && window?.ch_session) {
         window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
@@ -219,8 +223,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.seoAvailability || EmptyString,
           metadata: {
-            color: product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString,
-            size: product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString,
+            color: (product?.customAttributes?.length >= 2) 
+              ? product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString
+              : EmptyString,
+            size: (product?.customAttributes?.length >= 4) 
+              ? product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString
+              : EmptyString,
             weight: 0,
             weight_unit: EmptyString,
             make: EmptyString,
@@ -276,17 +284,28 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const productImages = product?.images || []
   const productVideos = product?.videos || []
-  let content = [{ image: selectedAttrData.image }, ...productImages].filter(
-    (value: any, index: number, self: any) =>
-      index === self.findIndex((t: any) => t.image === value.image)
-  )
 
-  if (product?.videos && product?.videos?.length > 0) {
-    content = [...productImages, ...productVideos].filter(
+  let content = useMemo(() => {
+    let images = [ ...productImages ]
+
+    if (selectedAttrData?.image) {
+      images.push({ image: selectedAttrData?.image })
+    }
+
+    let data = [...images].filter(
       (value: any, index: number, self: any) =>
         index === self.findIndex((t: any) => t.image === value.image)
     )
-  }
+
+    if (product?.videos && product?.videos?.length > 0) {
+      data = [...productImages, ...productVideos].filter(
+        (value: any, index: number, self: any) =>
+          index === self.findIndex((t: any) => t.image === value.image)
+      )
+    }
+
+    return data
+  }, [selectedAttrData?.image, product, productImages])
 
   const handleTogglePersonalizationDialog = () => {
     if (!isPersonalizeLoading) showEngravingModal((v) => !v)
@@ -705,6 +724,30 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   })
 
+
+  const fetchData = async () => {
+    const data = content.map((image: any) => {
+      return {
+        original: image.image,
+        thumbnail: image.image,
+      }
+    })
+
+    const truncateFirstEmptyArray = (arr: any) => {
+      if (arr.length > 0 && Object.keys(arr[0]).length === 0) {
+        return arr.slice(1);
+      }
+      return arr;
+    };
+
+    // Process data
+    let processedData = truncateFirstEmptyArray(data);
+    setImages(processedData);
+  };
+
+
+
+
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
       {
@@ -751,6 +794,22 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       window?.removeEventListener(CUSTOM_EVENTS.ProductViewed, handleSetAnalyticsData);
     };
   }, []);
+
+  useEffect(()=>{
+    const fetchLookbook = async(stockcode: string) => {
+      const lookbookData:any = await axios.post(NEXT_GET_LOOKBOOK, {stockcode})
+      const slug : string = lookbookData?.data?.[0]?.slug
+      if(slug){
+        const lookbookBySlug :any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, {slug})
+        if(lookbookBySlug?.status === 200){
+          setLookbookData(lookbookBySlug?.data)
+        }
+      }
+    }
+    if(product?.stockCode){
+      fetchLookbook(product.stockCode)
+    }
+  },[product])
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
@@ -826,7 +885,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {product.shortDescription != "" &&
           <>
             <hr className="pt-10 mt-10 sm:pt-10 border-slate-200 dark:border-slate-700" />
-            <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}</h2>
+            <h2 className="text-2xl font-semibold">{translate('label.product.productDetailsText')}<span className='sr-only'>{' '}of {product?.name}</span></h2>
             <div dangerouslySetInnerHTML={{ __html: product.shortDescription, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
           </>
         }
@@ -841,7 +900,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {({ open }) => (
             <>
               <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
-                <span className="text-accordion dark:text-black">Technical Specification</span>
+                <span className="text-accordion dark:text-black">{translate('label.product.technicalSpecificationText')}</span>
                 {!open ? (
                   <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                 ) : (
@@ -859,7 +918,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
   const detailsConfig = [
-    { name: translate('label.product.bundles.descriptionText'), content: productDesc },
+    { name: translate('common.label.descriptionText'), content: productDesc },
     { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
     { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
   ]
@@ -869,10 +928,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       <>
         <hr className="pt-5 mt-5 sm:pt-5 border-slate-200 dark:border-slate-700" />
         <div className="" id='productReview'>
-          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl">Rating & Review</h2>
+          <h2 className="flex-1 pb-0 pr-4 mb-2 text-xl font-semibold md:text-4xl dark:text-black">Rating & Review<span className='sr-only'>{' '}of {product?.name}</span></h2>
           <h2 className="flex items-center mt-4 text-2xl font-semibold sm:mt-8">
             <StarIcon className="w-7 h-7 mb-0.5 text-yellow-500" />
-            <span className="ml-1.5"> {reviews?.review?.ratingAverage} <span className='text-sm font-normal text-gray-500'>({reviews?.review?.productReviews?.length} Reviews)</span></span>
+            <span className="ml-1.5 dark:text-black"> {reviews?.review?.ratingAverage} <span className='text-sm font-normal text-gray-500'>({reviews?.review?.productReviews?.length} Reviews)</span></span>
           </h2>
 
           <div className="my-10">
@@ -898,14 +957,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
             <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             {reviews?.review?.totalRecord > 0 &&
-              <>                
+              <>
                 <div className="flex w-64">
                   <Link href={`#productReview`} className="flex text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
-                      <span>{reviews?.review?.ratingAverage}</span>
-                      <span className="block mx-2">·</span>
-                      <span className="underline text-slate-600 dark:text-slate-400">
+                      <span className='dark:text-black'>{reviews?.review?.ratingAverage}</span>
+                      <span className="block mx-2 dark:text-black">·</span>
+                      <span className="underline text-slate-600 dark:text-slate-600">
                         {reviews?.review?.totalRecord} {translate('common.label.reviews')}
                       </span>
                     </div>
@@ -983,7 +1042,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
         }
         {promotions?.promotions?.availablePromotions?.length > 0 && (
-          <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
+          <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
         )}
         {
           openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
@@ -991,7 +1050,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {featureToggle?.features?.enableStoreLocator &&
           <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
             <MyLocationIcon className='w-4 h-4' />
-            <span className='cursor-pointer hover:underline' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+            <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
           </div>
         }
         <div id="add-to-cart-button">
@@ -1065,7 +1124,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
       {featureToggle?.features?.enableEngage &&
-        <ProductSocialProof data={analyticsData} />
+        <ProductSocialProof data={analyticsData} featureToggle={featureToggle} />
       }
       <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 dark:bg-white">
         <div className='flex flex-1 px-4 mb-1 sm:px-0 sm:mb-4 '>
@@ -1088,7 +1147,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     item?.tag != "specification" &&
                     <SwiperSlide key={index}>
                       <div className="relative">
-                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
                       </div>
                     </SwiperSlide>
                   )
@@ -1143,6 +1202,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {renderSectionContent()}
           </div>
         </div>
+        {/* {LookBook} */}
+        { lookbookData && (
+          <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
+        )}
         {/* DETAIL AND REVIEW */}
         {featureToggle?.features?.enableEngage &&
           <>
@@ -1154,7 +1217,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {product?.componentProducts && (
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
-            <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} product={product} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </>
         )}
         {alternativeProducts?.length > 0 && (
@@ -1179,7 +1242,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
               <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
-                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10"> {translate('label.product.youMayAlsoLikeText')} </h3>
+                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3>
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
               </div>
             </>

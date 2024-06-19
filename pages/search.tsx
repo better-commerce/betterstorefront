@@ -8,14 +8,13 @@ import NextHead from 'next/head'
 import { GetServerSideProps } from 'next'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useUI } from '@components/ui/context'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -27,7 +26,7 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
-import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { getAppliedFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -104,11 +103,10 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   })
 
   const router = useRouter()
-  const qsFilters = router?.query?.filters
-  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
+  const [isFiltersApplied, setIsFiltersApplied] = useState(false)
 
   const {
     data = {
@@ -124,7 +122,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, excludeOOSProduct, filters: filters || [] }],
+    ['/api/catalog/products', { ...state, excludeOOSProduct }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -135,6 +133,23 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     }
   )
 
+  useEffect(() => {
+    if (isFiltersApplied || data?.products?.filters?.length < 1) return
+    const filters = getAppliedFilters(data?.products?.filters)
+    setFilter(filters || [])
+    setIsFiltersApplied(true)
+  }, [isFiltersApplied, router.query, data?.products?.filters])
+  
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      const filters = getAppliedFilters(data?.products?.filters)
+      if (filters?.length) {
+        routeToPLPWithSelectedFilters(router, filters, true)
+      }
+    }
+  }, [state?.filters])
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
@@ -258,23 +273,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     dispatch({ type: SET_FILTERS, payload: filters })
   }
 
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
-
   const removeFilter = (key: string) => {
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
@@ -369,7 +367,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-1 sm:mb-1 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
@@ -433,7 +431,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context.query,
     }, // will be passed to the page component as props
   }

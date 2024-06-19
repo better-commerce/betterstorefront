@@ -227,7 +227,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", feature
                 <div className="ml-1.5 flex">
                   <span>4.9</span>
                   <span className="block mx-2">·</span>
-                  <span className="underline text-slate-600 dark:text-slate-400">
+                  <span className="underline text-slate-600 dark:text-slate-600">
                     {translate('common.label.142-reviewsText')} 
                   </span>
                 </div>

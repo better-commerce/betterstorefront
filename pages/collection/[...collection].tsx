@@ -20,7 +20,7 @@ import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, } from '@commerce/utils/uri-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -30,7 +30,6 @@ import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
@@ -45,7 +44,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { getAppliedFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -111,10 +110,9 @@ function CollectionPage(props: any) {
 
   const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
-  const qsFilters = router?.query?.filters
-  const filters: any = parsePLPFilters(qsFilters as string)
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
+  const [isFiltersApplied, setIsFiltersApplied] = useState(false)
   const adaptedQuery: any = { ...router.query }
   const translate = useTranslation()
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
@@ -142,7 +140,7 @@ function CollectionPage(props: any) {
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
-  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], collectionId: props?.id, }
+  const initialState = { ...DEFAULT_STATE, collectionId: props?.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
@@ -161,7 +159,7 @@ function CollectionPage(props: any) {
     },
     error,
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
+    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -184,6 +182,24 @@ function CollectionPage(props: any) {
   })
 
   const [productDataToPass, setProductDataToPass] = useState(props?.products)
+
+  useEffect(() => {
+    if (isFiltersApplied || data?.products?.filters?.length < 1) return
+    const filters = getAppliedFilters(data?.products?.filters)
+    setFilter(filters || [])
+    setIsFiltersApplied(true)
+  }, [isFiltersApplied, router.query, data?.products?.filters])
+  
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      const filters = getAppliedFilters(data?.products?.filters)
+      if (filters?.length) {
+        routeToPLPWithSelectedFilters(router, filters, true)
+      }
+    }
+  }, [state?.filters])
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
@@ -399,23 +415,6 @@ function CollectionPage(props: any) {
     setAppliedFilters(currentFilters)
   }, [state?.filters, data?.products?.filters])
 
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value }))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest }: any) => ({ Key, Value })))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
-
   const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
   const handleTogglePLPSidebar = () => {
@@ -551,7 +550,7 @@ function CollectionPage(props: any) {
           }
         </div>
         <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
+          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
@@ -665,7 +664,6 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       query: context,
       hostName: obfuscateHostName(hostName!),
     },

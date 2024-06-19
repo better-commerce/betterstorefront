@@ -194,7 +194,7 @@ const Coupon = (props: IPromotionInputProps) => {
                               aria-hidden="true"
                             />
                           </button>
-                          <h3 className="font-display text-md sm:text-lg">
+                          <h3 className="font-display text-md sm:text-lg dark:text-black">
                             {translate('label.basket.applyCouponsText')}
                           </h3>
                         </div>
@@ -262,7 +262,7 @@ const Coupon = (props: IPromotionInputProps) => {
                               <div className="flex flex-col mb-4">
                                 <div className="grid grid-cols-1">
                                   <div>
-                                    <h4 className="text-lg font-semibold text-dark-brown">
+                                    <h4 className="text-lg font-semibold text-dark-brown dark:text-black">
                                       {translate('label.basket.multiplePromoSelectionText')}
                                     </h4>
                                   </div>

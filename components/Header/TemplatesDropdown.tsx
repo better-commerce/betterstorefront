@@ -53,7 +53,7 @@ export default function TemplatesDropdown() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute z-20 w-full mt-3.5 inset-x-0">
-                <div className="bg-white shadow-lg dark:bg-neutral-900">
+                <div className="bg-white shadow-lg dark:bg-white">
                   <div className="container">
                     <div className="flex py-6 text-sm border-t border-slate-200 dark:border-slate-700">
                       <div className="grid flex-1 grid-cols-4 gap-6 pr-6 xl:gap-8 xl:pr-8">

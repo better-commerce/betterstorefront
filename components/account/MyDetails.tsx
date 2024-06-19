@@ -73,7 +73,7 @@ export default function MyDetails() {
   },[])
 
   return (
-    <main className="pb-6 space-y-10 sm:space-y-12 sm:pb-10">
+    <main className="pb-6 space-y-5 sm:space-y-12 sm:pb-10">
       <div className=''>
         <h2 className="text-2xl font-semibold sm:text-3xl dark:text-black">
           Account infomation
@@ -84,11 +84,11 @@ export default function MyDetails() {
       </div>
       <div className="mx-2">
         <div className="max-w-4xl lg:mx-12 xs:ml-6">
-          <div className="pt-5 lg:px-0 sm:px-0">
+          <div className="sm:pt-5 lg:px-0 sm:px-0">
           </div>
         </div>
         <div className='flex flex-col md:flex-row'>
-          <div className="flex items-start flex-shrink-0">
+          <div className="flex items-start flex-shrink-0 hidden sm:block">
             {/* AVATAR */}
             <div className="relative flex overflow-hidden border rounded-full">
               <img
@@ -96,11 +96,11 @@ export default function MyDetails() {
                 alt="avatar"
                 width={128}
                 height={128}
-                className="z-0 object-cover w-32 h-32 rounded-full"
+                className="z-0 object-cover w-20 h-20 sm:w-32 sm:h-32 rounded-full"
               />
             </div>
           </div>
-          <div className='flex-grow max-w-3xl mt-10 space-y-6 md:mt-0 md:pl-16'>
+          <div className='flex-grow max-w-3xl sm:mt-10 sm:space-y-6 md:mt-0 md:pl-16'>
             <Formik
               enableReinitialize={true}
               validationSchema={schema}
@@ -117,7 +117,7 @@ export default function MyDetails() {
                   isSubmitting,
                 }: any = context
                 return (
-                  <Form className="flex-grow w-full max-w-3xl mt-10 space-y-6 font-normal md:mt-0">
+                  <Form className="flex-grow w-full max-w-3xl sm:mt-10 space-y-4 sm:space-y-6 font-normal md:mt-0">
                     {formConfig?.map((formItem: any, idx: number) => {
                       return (
                         formItem.type !== 'singleSelectButtonGroup' && (
@@ -160,16 +160,16 @@ export default function MyDetails() {
                     )?.map((item: any, idx: number) => (
                       <div
                         key={item?.name}
-                        className="w-full py-4 address-type"
+                        className="w-full sm:py-4 address-type"
                       >
                         {<FormField context={context} item={item} />}
                       </div>
                     ))}
-                    <div className="flex mt-10 sm:flex-col1 w-60">
+                    <div className="flex sm:mt-10 sm:flex-col1 sm:w-48">
                       <Button
                         type="submit"
                         onClick={handleSubmit}
-                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-black hover:bg-slate-800 dark:hover:bg-slate-800 text-slate-50 dark:!text-white shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-black hover:bg-slate-800 dark:hover:bg-slate-800 text-slate-50 dark:!text-white shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 !w-full"
                         loading={isSubmitting}
                         disabled={isSubmitting}
                       >

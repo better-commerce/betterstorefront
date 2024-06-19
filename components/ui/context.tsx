@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
 import { DeviceType } from '@commerce/utils/use-device'
 import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
-import { resetBasket } from '@framework/utils/app-util'
+import { processCartData, resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -83,6 +83,7 @@ export interface State {
   isCompared: string
   compareProductList: any
   isPaymentLink: boolean
+  isGhostUser: boolean
 }
 
 const initialState = {
@@ -128,6 +129,7 @@ const initialState = {
   compareProductList: getItem('compareProductList') || {},
   isPaymentLink: getItem('isPaymentLink') || false,
   productInfo: undefined,
+  isGhostUser: getItem('isGhostUser') || false,
 }
 
 type Action =
@@ -201,6 +203,7 @@ type Action =
   payload: any
 }
 | { type: 'SET_CART_ITEMS'; payload: any }
+| { type: 'SET_CART_ITEMS_COUNT'; payload: any }
 | {
   type: 'SET_USER'
   payload: any
@@ -241,6 +244,10 @@ type Action =
   | { type: 'SET_CURRENCY'; payload: any }
   | { type: 'SET_PRODUCT_INFO'; payload: any }
   | { type: 'CHANGE_TAB'; payload: string}
+  | {
+      type: 'SET_IS_GHOST_USER'
+      payload: boolean
+    }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -407,6 +414,12 @@ function uiReducer(state: State, action: Action) {
         cartItems: action.payload,
       }
     }
+    case 'SET_CART_ITEMS_COUNT': {
+      return {
+        ...state,
+        cartItemsCount: action.payload,
+      }
+    }
     case 'REMOVE_FROM_CART': {
       return {
         ...state,
@@ -558,6 +571,12 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         productInfo: action.payload,
+      }
+    }
+    case 'SET_IS_GHOST_USER': {
+      return {
+        ...state,
+        isGhostUser: action.payload,
       }
     }
   }
@@ -758,22 +777,14 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload: any) => dispatch({ type: 'SHOW_SEARCH_BAR', payload }),
     [dispatch]
   )
+  
   const setCartItems = useCallback(
     (payload: any) => {
-      const newCartDataClone: any = { ...payload }
-      newCartDataClone?.lineItems?.forEach((element: any, idx: number) => {
-        newCartDataClone?.lineItems?.forEach((i: any) => {
-          if (element.parentProductId === i.productId) {
-            i.children = i.children ? [...i.children, element] : [element]
-            newCartDataClone.lineItems.splice(idx, 1)
-          }
-        })
-      })
+      
+      const newCartData = processCartData(payload);
+      setItem('cartItems', newCartData)
 
-      const cart = { ...payload }
-      setItem('cartItems', cart)
-
-      if (cart?.lineItems?.length == 0) {
+      if (newCartData?.lineItems?.length == 0) {
         resetBasket(setBasketId, basketId)
         /*const user = {
           ...state?.user,
@@ -783,7 +794,8 @@ export const UIProvider: React.FC<any> = (props) => {
         };
         setUser(user);*/
       }
-      dispatch({ type: 'SET_CART_ITEMS', payload: newCartDataClone })
+      dispatch({ type: 'SET_CART_ITEMS', payload: newCartData })
+      dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: newCartData?.lineItems?.length })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
@@ -793,6 +805,7 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload?: any) => {
       setItem('cartItems', { lineItems: [] })
       dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+      dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
     },
     [dispatch]
   )
@@ -881,6 +894,7 @@ export const UIProvider: React.FC<any> = (props) => {
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
+        dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
         Cookies.remove(Cookie.Key.COMPANY_ID)
         const basketIdRef = uuid()
         Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
@@ -1106,6 +1120,14 @@ export const UIProvider: React.FC<any> = (props) => {
     [dispatch]
   )
 
+  const setIsGhostUser = useCallback(
+    (payload: boolean) => {
+      setItem('isGhostUser', payload)
+      dispatch({ type: 'SET_IS_GHOST_USER', payload })
+    },
+    [dispatch]
+  )
+
   const setProductInfo = useCallback(
     (payload: any) => {
       dispatch({ type: 'SET_PRODUCT_INFO', payload })
@@ -1167,6 +1189,7 @@ export const UIProvider: React.FC<any> = (props) => {
       resetCompareProducts,
       setCurrency,
       setProductInfo,
+      setIsGhostUser,
     }),
 
     [state]

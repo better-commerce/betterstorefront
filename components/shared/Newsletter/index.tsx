@@ -34,12 +34,12 @@ export default function Newsletter() {
     <>
       <div className='flex w-full py-4 bg-gray-100 border sm:py-6 border-top'>
         <div className='container mx-auto'>
-          <div className='flex flex-col sm:flex-row items-center justify-between'>
+          <div className='flex flex-col sm:flex-row sm:items-center justify-between'>
             <div className='flex flex-col'>
               <h4 className="my-4 text-xl font-semibold text-black uppercase sm:text-2xl sm:my-0 text-footer-clr ">
                 {translate('label.newsLetter.signupText')}
               </h4>
-              <p className="mt-1 text-sm text-gray-600 text-footer-clr ">
+              <p className="sm:mt-1 text-sm text-gray-600 text-footer-clr ">
                 {translate('label.newsLetter.signupTitle')}
               </p>
             </div>

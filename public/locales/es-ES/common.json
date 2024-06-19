@@ -554,19 +554,21 @@
       "rangePricesText": "Precios del Rango"
     },
     "product": {
+      "frequentlyBoughtTogetherText": "Frecuentemente Comprados Juntos",
+      "quickAddText": "Añadir Rápidamente",
       "notifyMeText": "Notificarme",
       "viewProductText": "Ver Producto",
       "relatedProductsText": "Productos Relacionados",
       "updateSizeText": "Actualizar Talla",
       "sizeSelectiontext": "Seleccionar una talla",
       "notifyDescText": "Sé el primero en saber cuando tu talla vuelva a estar en stock",
+      "technicalSpecificationText": "Especificación Técnica",
       "bestSeller": {
         "h2": "A CADA UNO SU TIBURÓN",
         "h3": "DESCUBRE NUESTROS NUEVOS PRODUCTOS"
       },
       "bundles": {
         "productInformationText": "Información del Producto",
-        "descriptionText": "Descripción",
         "optionsText": "Opciones del Producto",
         "seeMoreText": "Ver más detalles",
         "skuText": "SKU: ",
@@ -606,7 +608,11 @@
         "perfectForText": "Perfecto Para",
         "fabricCareText": "Cuidado de la Tela",
         "washCareText": "Instrucciones de Lavado",
-        "collarText": "Cuello"
+        "collarText": "Cuello",
+        "categoriesText": "Categorías",
+        "printText": "Imprimir",
+        "collectionTypeText": "Tipo de Colección",
+        "sleeveStyleText": "Estilo de Manga"
       },
       "productPersonalisation": {
         "engravingPersonalisedBottleText": "Agrega Caracteres con un clic. Escribe nombres, iniciales o números. Por solo ",
@@ -825,6 +831,8 @@
       "createText": "Crear"
     },
     "membership": {
+      "memberPriceText": "(Precio para miembros)",
+      "nonMemberPriceText": "(Precio para no miembros)",
       "benefits": {
         "name1": "¡20% de descuento cuando quieras*!",
         "desc1": "¡Empieza a ahorrar hoy mismo y elige cuántos cupones de descuento del 20% deseas según el nivel que elijas!",
@@ -834,6 +842,11 @@
         "desc3": "¡Obtén ventajas exclusivas adaptadas para ti y acceso temprano a increíbles ofertas!",
         "name4": "Actualiza cuando quieras",
         "desc4": "¡Paga la diferencia para actualizar tu plan en cualquier momento y seguir ahorrando!"
+      },
+      "whatYouGetOptionText": {
+        "option1Text": "Entrega GRATIS ilimitada*",
+        "option2Text": "Ofertas y ventas exclusivas para miembros",
+        "option3Text": "¡{discountPerc}% de descuento cuando quieras*"
       },
       "unlimitedDeliveryText": "Envío estándar GRATIS ilimitado*",
       "alreadyMemberText": "¿Ya eres miembro?",
@@ -926,6 +939,7 @@
     },
     "label": {
       "homeText": "Inicio",
+      "descriptionText": "Descripción",
       "optionalPlaceHolderText": "(Opcional)",
       "postText": "Publicar",
       "reviews": "opiniones",
@@ -957,6 +971,7 @@
       "chatWithUsText": "Chatea con nosotros",
       "problemPlansText": "Planes de solución de problemas",
       "replyText": "Responder",
+      "saveAndContinueBtnText": "Guardar y Continuar",
       "continueBtnText": "Continuar",
       "reportAbuseText": "Informar abuso",
       "shareText": "Compartir",
@@ -1014,6 +1029,7 @@
       "viewPersonalisationText": "Ver Personalización",
       "applyPromoText": "Aplicar Promoción",
       "daysText": "Días",
+      "todayText": "Hoy",
       "findText": "Buscar",
       "findAddressText": "Buscar dirección",
       "enterYourPostCodePlaceholder": "Introduce tu código postal",
@@ -1331,5 +1347,8 @@
       "priceHightToLowText": "Precio Alto - Bajo",
       "priceLowToHighText": "Precio Bajo - Alto"
     }
+  },
+  "key": {
+    "Compare with other similar products": "Comparar con otros productos similares"
   }
 }

@@ -1,14 +1,43 @@
+import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
+
+import { processCartData, vatIncluded } from '@framework/utils/app-util'
+import { tryParseJson } from '@framework/utils/parse-util'
+import { Cookie } from '@framework/utils/constants'
+
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { vatIncluded } from '@framework/utils/app-util'
-import { tryParseJson } from '@framework/utils/parse-util'
+import { CartProductType } from '@components/utils/constants'
+import BundleProductCard from '@components/BundleProductCard'
+import cartHandler from '@components/services/cart'
 
-const BasketItems = ({ userCartItems }: any) => {
+interface Props {
+  readonly userBasket?: any
+}
+
+const BasketItems = (props: Props) => {
+  const { userBasket } = props
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
+  const [basket, setBasket] = useState<any>(null)
+  const { getCart } = cartHandler()
+
+  useEffect(() => {
+    if (!userBasket) {
+        const getBasket = async () => {
+        const basketId = Cookies.get(Cookie.Key.BASKET_ID)
+        const basketRes: any = await getCart({ basketId })
+        setBasket(processCartData(basketRes))
+      }
+      getBasket()
+    } else {
+      setBasket(processCartData(userBasket))
+    }
+  }, [userBasket])
+
   return (
     <>
-      {userCartItems?.map((product: any, index: number) => {
+      {basket?.lineItems?.map((product: any, index: number) => {
         const voltageAttr: any = tryParseJson(product?.attributesJson)
         const electricVoltAttrLength = voltageAttr?.Attributes?.filter(
           (x: any) => x?.FieldCode == 'electrical.voltage'
@@ -53,7 +82,7 @@ const BasketItems = ({ userCartItems }: any) => {
                   <div className="justify-start text-left">
                     {product?.price?.raw?.withTax > 0 ? (
                       <>
-                        <span className="block font-semibold text-black font-14">
+                        <span className="block font-semibold text-black font-14 dark:text-black">
                           {isIncludeVAT
                             ? product?.price?.formatted?.withTax
                             : product?.price?.formatted?.withoutTax}
@@ -89,6 +118,10 @@ const BasketItems = ({ userCartItems }: any) => {
                     </span>
                   </div>
                 </div>
+                {product?.children
+                  ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
+                  ?.map((child: any, index: number) => <BundleProductCard key={index} product={child}/>
+                )}
               </div>
             </div>
           </div>

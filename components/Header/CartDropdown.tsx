@@ -23,7 +23,7 @@ const TransferBasketModal = dynamic(() => import('@components/TransferBasketModa
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function CartDropdown() {
-  const { getUserCarts, deleteCart } = useCart()
+  const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert} = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
   const translate = useTranslation()
@@ -32,6 +32,7 @@ export default function CartDropdown() {
   const [isCreateBasketModalOpen, setIsCreateBasketModalOpen] = useState<boolean>(false)
   const [isTransferBasketModalOpen, setIsTransferBasketModalOpen] = useState<boolean>(false)
   const [isDeleteBasketModalOpen, setIsDeleteBasketModalOpen] = useState<boolean>(false)
+  const [basketItemsCount, setBasketItemsCount] = useState(0)
   const [userCarts, setUserCarts] = useState<any>()
   let currentPage = getCurrentPage()
 
@@ -206,6 +207,22 @@ export default function CartDropdown() {
   }, [user?.userId])
 
   useEffect(() => {
+    const getBasketCount = async() => {
+      const count = await getCartItemsCount({basketId})
+      if (count > 0) {
+        setBasketItemsCount(count)
+      }
+      else{
+        setBasketItemsCount(0)
+      }
+    }
+
+    if (basketId && basketId !== Guid.empty) {
+      getBasketCount()
+    }
+  },[basketId, cartItems?.lineItems?.length])
+
+  useEffect(() => {
     if (basketIdToDelete !== Guid.empty) {
       openDeleteBasketModal()
     }
@@ -225,7 +242,7 @@ export default function CartDropdown() {
                       {cartItems?.lineItems?.length}
                     </div>
                   )}*/}
-                    <img alt="" src="/images/cartIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5" />
+                    <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
                   </>
 
                 </Popover.Button>
@@ -283,13 +300,13 @@ export default function CartDropdown() {
               </>
             ) : (
               <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
-                {cartItems?.lineItems?.length > 0 && (
+                {basketItemsCount > 0 && (
                   <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                    {cartItems?.lineItems?.length}
+                    {basketItemsCount}
                   </div>
                 )}
                 <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
-                <img alt="" src="/images/cartIcon.svg" className="2xl:w-6 2xl:h-6 h-5 w-5" />
+                <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
               </Popover.Button>
             )}
           </>

@@ -10,7 +10,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import BankOfferIcon from '@components/BankOfferIcon'
 declare const window: any
 SwiperCore.use([Navigation])
-export default function AvailableOffers({ currency, offers, key }: any) {
+export default function AvailableOffers({ currency, offers, key, product }: any) {
   const translate = useTranslation()
   const [isOffers, setOffers] = useState(false)
   const [isCopied, showCopied] = useState(false)
@@ -40,14 +40,14 @@ export default function AvailableOffers({ currency, offers, key }: any) {
       <div className="flex flex-col pt-4 pb-4 border-b border-gray-200 gap-y-4 mob-gap-y-4 mob-border-none-pdp">
         <div className="grid w-full grid-cols-12 px-0 sm:grid-cols-6 sm:px-0 mob-promo-grid">
           <div className="col-span-7 sm:col-span-3 mob-left-7">
-            <h2 className="font-semibold font-16 text-16 dark:text-black">
-              <span className="font-medium opacity_056 text-primary dark:text-white font-label-14">
+            <h3 className="font-semibold font-16 text-16 dark:text-black">
+              <span className="font-medium opacity_056 text-primary dark:text-black font-label-14">
                 {translate('label.product.bestPriceText')}{' '}
               </span>
-              <span className="inline-block pl-1 text-sm text-black dark:text-white font-label-14">
+              <span className="inline-block pl-1 text-sm text-black dark:text-black font-label-14">
                 {priceFormat(bestprice, undefined, currency?.currencySymbol)}
               </span>
-            </h2>
+            </h3>
             <p className="text-xs font-medium text-gray-900">
               {offers?.bestAvailablePromotion?.code} {translate('label.product.applyOnCheckoutText')}
             </p>
@@ -71,8 +71,8 @@ export default function AvailableOffers({ currency, offers, key }: any) {
         </div>
       </div>
       <div className="flex flex-col px-0 py-2 pr-0 mt-2 sm:pr-4 gap-x-4 sm:px-0 offeres m-hide-navigation">
-        <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-white offer-heading-text">
-          {translate('label.basket.moreOffersText')}
+        <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-black offer-heading-text">
+          {translate('label.basket.moreOffersText')} <span className='sr-only'>{' '}of {product?.name}</span>
         </h2>
         <Swiper
           className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0 h-60"
@@ -103,7 +103,7 @@ export default function AvailableOffers({ currency, offers, key }: any) {
                       <div className="flex">
                         <BankOfferIcon />
                         <div className="pl-2">
-                          <p className="font-semibold text-md">{translate('label.basket.moreOffersText')}</p>
+                          <p className="font-semibold text-md dark:text-black">{translate('label.basket.moreOffersText')}</p>
                           <p className="font-semibold text-left text-black uppercase font-10 break-word-text"> {saving.name} </p>
                           {saving?.promoType == 1 && (
                             <span>

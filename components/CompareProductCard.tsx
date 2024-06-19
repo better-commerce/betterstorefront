@@ -235,7 +235,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
                   <><img alt={attrib?.value || 'icon-cross'} src="/assets/images/cross_icon.svg" width={2} height={2} className='w-4 h-4 icon-small' /></>
                   : attrib?.value == "True" || attrib?.value == "Yes" || attrib?.value == true || attrib?.value == "true" ?
                     <><img alt={attrib?.value || 'icon-check'} src="/assets/images/check_circle.svg" width={2} height={2} className='w-4 h-4 icon-small icon-small-green' /></>
-                    : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value }}></span> : attrib?.value :
+                    : attrib?.value?.includes('#') ? <span className={`w-4 h-4 ml-1 rounded-full`} style={{ background: attrib?.value.split('|')[0] }}></span> : attrib?.value :
                   <span className='pl-1 font-bold text-gray-900 capitalize'>{'-'}</span>}
               </span>
             ))}
