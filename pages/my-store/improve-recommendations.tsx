@@ -1,7 +1,6 @@
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EngageEventTypes } from "@components/utils/constants";
+import { EngageEventTypes } from "@components/utils/constants";
 import withDataLayer, { PAGE_TYPES } from "@components/withDataLayer";
 import { GetServerSideProps } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import LayoutAccount from "@components/Layout/LayoutAccount";
 import { useEffect, useState } from "react";
@@ -24,7 +23,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     },
   }
 }
@@ -65,7 +63,7 @@ function ImproveRecommendations({ campaignData, featureToggle }: any) {
  
   return (
     <>
-      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-white">{translate('label.store.improveRecommendationsText')}</h2>
+      <h2 className="text-3xl font-semibold xl:text-4xl dark:text-black">{translate('label.store.improveRecommendationsText')}</h2>
       <div className="mx-auto cart-recently-viewed mob-padding-0">
         <EngageRecommendationCard productLimit={15} type={EngageEventTypes.PURCHASE_HISTORY} campaignData={campaignData} title="Improve Your Recommendation" isSlider={false} productPerRow={5} forceDisplay={true} />
       </div>

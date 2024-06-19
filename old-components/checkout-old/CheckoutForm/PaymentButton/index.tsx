@@ -1,5 +1,5 @@
 // Base Imports
-import React, { useEffect } from 'react'
+import React from 'react'
 
 // Package Imports
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'

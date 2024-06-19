@@ -3,7 +3,7 @@ import getCollections from '@framework/api/content/getCollections'
 import Layout from '@components/Layout/Layout'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyGuid, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { EmptyGuid, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -12,7 +12,6 @@ import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -106,7 +105,6 @@ export async function getStaticProps({
     return {
       props: {
         ...pageProps,
-        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         data: collectionUIDData,
       },
       revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
@@ -124,7 +122,6 @@ export async function getStaticProps({
       return {
         props: {
           ...pageProps,
-          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           data: collectionUIDData,
         },
         redirect: {

@@ -54,7 +54,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
@@ -81,7 +81,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
 
   private onScriptReady(): void {
     const that = this
-    const { uiContext, dispatchState, t: translate } = this.props
+    const { uiContext, dispatchState, translate } = this.props
     const redirectionUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
     if (AfterPay) {
       const shippingMethodId = uiContext?.cartItems?.shippingMethodId

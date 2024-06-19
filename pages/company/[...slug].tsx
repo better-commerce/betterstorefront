@@ -2,13 +2,14 @@ import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import Layout from '@components/Layout/Layout'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { PAGE_PREVIEW_CONTENT_ENDPOINT, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { notFoundRedirect } from '@framework/utils/app-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Company
@@ -79,20 +80,16 @@ export async function getServerSideProps(context: any) {
     return notFoundRedirect();
   }
 
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
+      ...pageProps,
       slug: slug,
       pageContents: pageContents || {},
     },
   };
-
-  return {
-    props: {
-      slug: slug,
-      pageContents: pageContents || {},
-    },
-  }
 }
 
 CompanyPages.Layout = Layout

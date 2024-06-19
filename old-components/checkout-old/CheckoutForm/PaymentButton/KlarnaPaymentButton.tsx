@@ -2,7 +2,6 @@
 import Router from 'next/router'
 import Script from 'next/script'
 import Cookies from 'js-cookie'
-import { t as translate } from "i18next";
 import { KlarnaOrderLine } from '@better-commerce/bc-payments-sdk'
 
 // Component Imports
@@ -46,6 +45,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -89,6 +89,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    * @param dispatchState {Function} Method for dispatching state changes.
    */
   private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     const gatewayName = this.state.paymentMethod?.systemName
     const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
@@ -239,7 +240,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    */
   private onScriptReady(): void {
     let that = this
-    const { uiContext, dispatchState }: any = this.props
+    const { uiContext, dispatchState, translate, }: any = this.props
     const clientToken = this.state?.clientSession?.client_token
     if (clientToken) {
       Klarna.Payments.init({
@@ -336,6 +337,7 @@ export class KlarnaPaymentButton extends BasePaymentButton {
    */
   public render() {
     let that = this
+    const { translate }: any = this.props
     return (
       <>
         {!this.state.confirmed ? (

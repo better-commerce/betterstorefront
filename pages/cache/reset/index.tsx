@@ -4,7 +4,6 @@ import { BETTERCOMMERCE_DEFAULT_LANGUAGE, INFRA_ENDPOINT, KEYWORDS_ENDPOINT, NAV
 import { GetServerSideProps } from 'next';
 import commerce from '@lib/api/commerce';
 import { resetRedisCache } from '@framework/utils/redis-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider';
 import { getPagePropType, PagePropType } from '@framework/page-props';
 
@@ -31,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
         props: {
             ...pageProps,
-            ...(await serverSideTranslations(context?.locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         },
     }
 };

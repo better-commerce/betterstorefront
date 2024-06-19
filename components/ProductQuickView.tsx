@@ -17,7 +17,7 @@ import { Messages, NEXT_BULK_ADD_TO_CART, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_R
 import ProductTag from "@components/Product/ProductTag";
 import { useUI } from "@components/ui";
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-import { cartItemsValidateAddToCart, getCurrentPage } from "@framework/utils/app-util";
+import { cartItemsValidateAddToCart, getCurrentPage, logError } from "@framework/utils/app-util";
 import { matchStrings, stringFormat } from "@framework/utils/parse-util";
 import cartHandler from "@components/services/cart";
 import { recordGA4Event } from "@components/services/analytics/ga4";
@@ -81,7 +81,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       setQuickViewData(data)
       setReviewData(reviewData?.review)
       if (data) {
-        setSelectedAttrData({ productId: data?.recordId, stockCode: data?.stockCode, ...data, })
+        setSelectedAttrData({ ...data, productId: data?.recordId, stockCode: data?.stockCode, })
       }
     }
     if (productSlug) loadView(productSlug)
@@ -102,10 +102,10 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
 
         const data = productQuickViewData?.product
         fetchRelatedProducts(data?.recordId)
-        setQuickViewData(productQuickViewData?.product)
+        setQuickViewData(data)
         setReviewData(reviewData?.review)
         if (data) {
-          setSelectedAttrData({ productId: data?.recordId, stockCode: data?.stockCode, ...data, })
+          setSelectedAttrData({ ...data, productId: data?.recordId, stockCode: data?.stockCode, })
         }
         // console.log('QUICKVIEW_PRODUCTDATA:',productQuickViewData?.product)
       }
@@ -413,7 +413,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         showEngravingModal(false)
         openCart()
       } catch (error) {
-        console.log(error, 'err')
+        logError(error)
       }
     }
     asyncHandler()
@@ -493,7 +493,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           })
           insertToLocalWishlist()
         } catch (error) {
-          console.log(error, 'error')
+          logError(error)
         }
       }
       createWishlist()
@@ -547,9 +547,9 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                   <Link href={`/${product?.slug}`} onClick={onCloseModalQuickView} className="flex items-center text-sm font-medium" >
                     <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
                     <div className="ms-1.5 flex">
-                      <span>{selectedAttrData?.rating}</span>
-                      <span className="block mx-2">·</span>
-                      <span className="underline text-slate-600 dark:text-slate-400">
+                      <span className="dark:text-black">{selectedAttrData?.rating}</span>
+                      <span className="block mx-2 dark:text-black">·</span>
+                      <span className="underline text-slate-600 dark:text-slate-600">
                         {selectedAttrData?.reviewCount} {translate('common.label.reviews')}
                       </span>
                     </div>
@@ -598,8 +598,8 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             </>
           )}
         </div>
-        <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {quickViewData && <AccordionInfo data={[{ name: translate('label.product.bundles.descriptionText'), content: selectedAttrData?.description }]} />}
+        <hr className=" border-slate-200 dark:border-slate-200"></hr>
+        {quickViewData && <AccordionInfo data={[{ name: translate('common.label.descriptionText'), content: selectedAttrData?.description }]} />}
       </div>
     );
   };

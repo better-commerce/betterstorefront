@@ -47,7 +47,7 @@ class StripePaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: translate('common.label.initiatingOrderText'),
@@ -125,7 +125,7 @@ class StripePaymentButton extends BasePaymentButton {
     stripe: Stripe,
     elements: StripeElements
   ) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     // Block native form submission.
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -178,7 +178,7 @@ class StripePaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { t: translate } = this.props
+    const { translate }: any = this.props
 
     return (
       <>

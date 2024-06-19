@@ -4,7 +4,7 @@ import Form from '@components/customer'
 import NextHead from 'next/head'
 import axios from 'axios'
 import Link from 'next/link'
-import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, BETTERCOMMERCE_DEFAULT_LANGUAGE, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
+import { NEXT_SIGN_UP, NEXT_VALIDATE_EMAIL, NEXT_SIGN_UP_TRADING_ACCOUNT, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, SITE_ORIGIN_URL, EmptyString } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
@@ -19,7 +19,6 @@ import { GetServerSideProps } from 'next'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
 import { AlertType } from '@framework/utils/enums'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -70,7 +69,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
         <div className="w-full px-10 font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-800">{translate('label.addressBook.emailText')}</label>
           <input
-            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11"
+            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black"
             value={value}
             type="email"
             onChange={onChange}
@@ -330,7 +329,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

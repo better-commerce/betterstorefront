@@ -1,11 +1,6 @@
 // Package Imports
-import { t as translate } from "i18next";
 import { Stripe, StripeElements } from '@stripe/stripe-js'
-import {
-  Elements,
-  ElementsConsumer,
-  PaymentElement,
-} from '@stripe/react-stripe-js'
+import { Elements, ElementsConsumer, PaymentElement, } from '@stripe/react-stripe-js'
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
@@ -47,6 +42,7 @@ export class StripePaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({
       visible: true,
       message: translate('common.label.initiatingOrderText'),
@@ -124,6 +120,8 @@ export class StripePaymentButton extends BasePaymentButton {
     stripe: Stripe,
     elements: StripeElements
   ) {
+    const { translate }: any = this.props
+
     // Block native form submission.
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -176,6 +174,7 @@ export class StripePaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
+    const { translate }: any = this.props
 
     return (
       <>

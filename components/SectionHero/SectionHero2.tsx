@@ -100,7 +100,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
 
           <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container mob-hero-container">
             <div>
-              <div className="w-full mob-heroinner-container">
+              <div className="w-full mob-hero inner-container">
                 <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
                   <div className="space-y-5 sm:space-y-6 text-info-inner">
                     <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">

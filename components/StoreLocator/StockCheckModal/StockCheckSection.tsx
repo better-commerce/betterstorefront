@@ -29,11 +29,11 @@ const StockCheckSection = ({
 
     return (
         <div className='flex flex-col'>
-            <div className='flex flex-col p-4 border-b border-gray-200'>
+            <div className='flex flex-col p-4 border-b border-gray-200 dark:text-black'>
                 <h4 className="font-semibold">{translate('label.store.checkStoreStockText')}</h4>
             </div>
 
-            <span className='px-4 pt-4 font-medium text-md'>{translate('label.store.stockCheckDescText')}</span>
+            <span className='px-4 pt-4 font-medium text-md dark:text-black'>{translate('label.store.stockCheckDescText')}</span>
             <form className='flex flex-row mx-4 mt-4 mb-10 gap-x-4' onSubmit={stockCheckFormik.handleSubmit}>
                 <input
                     name="postCode"

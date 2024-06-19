@@ -30,5 +30,6 @@ export enum CheckoutStep {
   EDIT_ADDRESS = 'edit-address',
   BILLING_ADDRESS = 'billing-address',
   DELIVERY = 'delivery',
+  DELIVERY_TYPE_SELECT = 'select-delivery-type',
   REVIEW = 'review',
 }

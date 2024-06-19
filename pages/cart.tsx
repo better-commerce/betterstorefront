@@ -24,14 +24,13 @@ import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
 import { vatIncluded, } from '@framework/utils/app-util'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import CartItems from '@components/SectionCheckoutJourney/checkout/CartItem'
 import wishlistHandler from '@components/services/wishlist'
@@ -1025,7 +1024,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
       cart: response,
       snippets: response?.snippets || [],
     }, // will be passed to the page component as props

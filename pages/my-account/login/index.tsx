@@ -5,11 +5,10 @@ import Layout from '@components/Layout/Layout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useUI } from '@components/ui/context'
 import Login from '@components/account/Login'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { decrypt } from '@framework/utils/cipher'
 import { matchStrings } from '@framework/utils/parse-util'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -78,7 +77,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   return {
     props: {
       ...pageProps,
-      ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
     }, // will be passed to the page component as props
   }
 }

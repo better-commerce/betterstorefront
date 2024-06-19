@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import Head from 'next/head'
 // Package Imports
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 
 // Component Imports
 import AlertRibbon from '@components/ui/AlertRibbon'
@@ -12,8 +12,12 @@ import { useUI } from '@components/ui'
 import { CURRENT_THEME } from '@components/utils/constants'
 import { ISnippet } from '@framework/content/use-content-snippet'
 import { IScriptSnippet } from '@components/shared/Snippet/ScriptContentSnippet'
+import InteractiveDemoSideBar from '@components/InteractiveDemo'
+import { stringToBoolean } from '@framework/utils/parse-util'
+const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const CheckoutLayoutV2: FC<any> = ({ children }) => {
+  const router = useRouter()
   const { displayAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
   const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
@@ -88,6 +92,10 @@ const CheckoutLayoutV2: FC<any> = ({ children }) => {
       Router.events.off('routeChangeComplete', () => { })
     }
   }, [])
+
+  const isDemo = stringToBoolean(router?.query?.demo as string)
+  const isDemoStoreCode = stringToBoolean(router?.query?.storecode ? '1': '0')
+  const isInteractiveDemo = !isDemo? isDemoStoreCode : isDemo
 
   return (
     <>
@@ -167,6 +175,7 @@ const CheckoutLayoutV2: FC<any> = ({ children }) => {
       </Head>
       <main className="sm:fit gradient">
         {displayAlert && <AlertRibbon />}
+        {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         {children}
       </main>
     </>

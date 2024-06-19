@@ -438,6 +438,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                 <>
                   <div className="flex flex-col justify-center w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
                     <PaymentButton
+                      translate={translate}
                       btnTitle={translate('common.label.confirmText')}
                       paymentMethod={selectedPaymentMethod}
                       basketOrderInfo={basketOrderInfo}

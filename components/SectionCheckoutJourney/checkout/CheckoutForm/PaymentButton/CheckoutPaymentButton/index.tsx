@@ -60,7 +60,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
     uiContext: any,
     dispatchState: Function
   ) {
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(
@@ -140,7 +140,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
     dispatchState: Function
   ) {
     let that = this
-    const { t: translate } = this.props
+    const { translate }: any = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     const redirectConfirmUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
@@ -277,7 +277,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext, t: translate } = this.props
+    const { uiContext, translate } = this.props
     const publicKey = super.getPaymentMethodSetting(
       this?.state?.paymentMethod,
       'accountcode'

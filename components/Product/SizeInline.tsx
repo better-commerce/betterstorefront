@@ -8,6 +8,7 @@ import isString from 'lodash/isString'
 
 import { matchStrings } from '@framework/utils/parse-util'
 import SizeAttribute from '@old-components/product/ProductView/sizeAttribute.json'
+import { EmptyObject } from '@components/utils/constants'
 
 function RenderRadioOptions({
    items,
@@ -66,7 +67,7 @@ function RenderRadioOptions({
                      className={({ active, checked }) => 
                         `
                            ${checked ? 'bg-white border-black border-2 text-black' : 'bg-white border-gray-300 text-gray-600'}
-                           relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-neutral-700
+                           relative h-10 sm:h-11 attr-box rounded-2xl px-3 min-w-16 border flex items-center justify-center text-sm font-semibold select-none overflow-hidden z-0 cursor-pointer dark:border-slate-600 hover:bg-primary-700  dark:hover:bg-primary-700
                         `
                      }
                   >
@@ -145,7 +146,7 @@ export default function SizeInline({
          stockCode: getStockPerAttrData.stockCode,
       })
       handleSetProductVariantInfo({ clothSize: currentAttribute })
-      setSelectedAttrData(getStockPerAttrData);
+      setSelectedAttrData({ ...(variant || EmptyObject), ...getStockPerAttrData });
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [currentAttribute])
@@ -228,9 +229,7 @@ export default function SizeInline({
          <div className="flex items-center justify-between my-2" id="productSize">
             <h4 className="text-gray-700 capitalize font-14">
                {label}:
-               <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700">
-                  {currentAttribute}
-               </span>
+               <span className="pl-1 font-light text-gray-700 text-ms dark:text-gray-700"> {selected?.fieldValue} </span>
                <span className="pl-1 text-xs font-bold text-black sm:text-sm">
                   {product?.mappedCategories?.length > 0 && SizeAttribute?.sizes?.map((attr: any, aid: number) => (matchStrings(attr.name, product?.mappedCategories[0].categoryName, true) && (
                      <div className="inline-block" key={aid}>

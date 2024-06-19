@@ -130,7 +130,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
         )}
       </label>
       {sectionKey != FILTER_KEYS.COLOR && CURRENT_THEME != 'green' &&
-        <span className="px-1 text-xs font-semibold text-black dark:text-white">
+        <span className="px-1 text-xs font-semibold text-black dark:text-black">
           ({option.count})
         </span>
       }

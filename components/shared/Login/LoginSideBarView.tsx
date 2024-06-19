@@ -29,14 +29,14 @@ const LoginSideBarView: React.FC<LoginSideBarViewProps> = ({pluginConfig = []}) 
       aria-labelledby="trending-heading"
       className="bg-white h-screen overflow-y-auto"
     >
-      <div className="flex pt-5 justify-end pr-14 sm:pr-18 lg:pr-8">
+      <div className="flex pt-5 justify-end pr-5">
         <button
           type="button"
           className="text-gray-400 transition hover:text-gray-500"
           onClick={handleClose}
         >
           <span className="sr-only">{translate('common.label.closePanelText')}</span>
-          <XMarkIcon className="w-5 h-5" aria-hidden="true" />
+          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
         </button>
       </div>
       <Login isLoginSidebarOpen={true} pluginConfig={pluginConfig} closeSideBar={closeSidebar}/>

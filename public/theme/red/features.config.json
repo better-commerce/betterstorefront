@@ -12,7 +12,10 @@
     "enableMembership": true,
     "enableHeaderWishlist": false,
     "enableProductSpecification": true,
-    "enableTrendingCategory": true
+    "enableTrendingCategory": true,
+    "enableDemoToggle": false,
+    "enableLoqateSearch": true,
+    "enableAddressIOSearch":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

@@ -554,19 +554,21 @@
       "rangePricesText": "Range Prices"
     },
     "product": {
+      "frequentlyBoughtTogetherText":"Frequently Bought Together",
+      "quickAddText": "Quick Add",
       "notifyMeText": "Notify me",
       "viewProductText": "View Product",
       "relatedProductsText": "Related Products",
       "updateSizeText": "Update size",
       "sizeSelectiontext": "Select a size",
       "notifyDescText": "Be the first to know when your size is back in stock",
+      "technicalSpecificationText": "Technical Specification",
       "bestSeller": {
         "h2": "TO EACH HIS OWN SHARK",
         "h3": "DISCOVER OUR NEW PRODUCTS"
       },
       "bundles": {
         "productInformationText": "Product information",
-        "descriptionText": "Description",
         "optionsText": "Product options",
         "seeMoreText": "See more details",
         "skuText": "SKU: ",
@@ -606,7 +608,11 @@
         "perfectForText": "Perfect For",
         "fabricCareText": "Fabric Care",
         "washCareText": "Wash Care",
-        "collarText": "Collar"
+        "collarText": "Collar",
+        "categoriesText": "Categories",
+        "printText": "Print",
+        "collectionTypeText": "Collection Type",
+        "sleeveStyleText": "Sleeve Style"
       },
       "productPersonalisation": {
         "engravingPersonalisedBottleText": "Add Characters with a click. Type in names, initials or numbers. For just ",
@@ -825,6 +831,8 @@
       "createText": "Create"
     },
     "membership": {
+      "memberPriceText": "(Member Price)",
+      "nonMemberPriceText": "(Non-Member Price)",
       "benefits": {
         "name1": "20% off whenever you want*",
         "desc1": "Start saving today and choose how many 20% off vouchers you fancy based on the tier you choose.",
@@ -834,6 +842,11 @@
         "desc3": "Get exclusive perks tailored to you plus early access to amazing offers.",
         "name4": "Upgrade whenever you like",
         "desc4": "Pay the difference to upgrade your plan at any time to keep on saving."
+      },
+      "whatYouGetOptionText": {
+        "option1Text": "Unlimited FREE* delivery",
+        "option2Text": "Member-only offers and sales",
+        "option3Text": "{discountPerc}% off whenever you want*"
       },
       "unlimitedDeliveryText": "FREE unlimited* standard delivery",
       "alreadyMemberText": "Already a Member?",
@@ -926,6 +939,7 @@
     },
     "label": {
       "homeText": "Home",
+      "descriptionText": "Description",
       "postText": "Post",
       "reviews": "reviews",
       "optionalPlaceHolderText": "(Optional)",
@@ -957,6 +971,7 @@
       "chatWithUsText": "Chat with us",
       "problemPlansText": "Problem Plans",
       "replyText": "Reply",
+      "saveAndContinueBtnText": "Save and Continue",
       "continueBtnText": "Continue",
       "reportAbuseText": "Report Abuse",
       "shareText": "Share",
@@ -1014,6 +1029,7 @@
       "viewPersonalisationText": "View Personalisation",
       "applyPromoText": "Apply Promo",
       "daysText": "Days",
+      "todayText": "Today",
       "findText": "Find",
       "findAddressText": "Find Address",
       "enterYourPostCodePlaceholder": "Enter your postcode",
@@ -1331,5 +1347,8 @@
       "priceHightToLowText": "Price Hight - Low",
       "priceLowToHighText": "Price Low - Hight"
     }
+  },
+  "key": {
+    "Compare with other similar products": "Compare with other similar products"
   }
 }

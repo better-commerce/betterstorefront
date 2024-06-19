@@ -20,13 +20,12 @@ import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError, sanitiz
 import commerce from '@lib/api/commerce'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { BETTERCOMMERCE_DEFAULT_LANGUAGE, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -151,7 +150,6 @@ export async function getStaticProps(context: any) {
 
         props: {
           ...pageProps,
-          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -165,7 +163,6 @@ export async function getStaticProps(context: any) {
       return {
         props: {
           ...pageProps,
-          ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
           category: categorySlugUIDData,
           slug,
           products: categoryProductUIDData,
@@ -180,7 +177,6 @@ export async function getStaticProps(context: any) {
     return {
       props: {
         ...pageProps,
-        ...(await serverSideTranslations(locale ?? BETTERCOMMERCE_DEFAULT_LANGUAGE!)),
         category: categorySlugUIDData,
         slug,
         products: null,
@@ -308,7 +304,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const initialState = {
     ...DEFAULT_STATE,
     filters: adaptedQuery.filters || [],
-    categoryId: category.id,
+    categoryId: category?.id,
   }
   const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -323,7 +319,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         total: 0,
         currentPage: 1,
         filters: state?.filters || [],
-        categoryId: category.id,
+        categoryId: category?.id,
       },
     },
     error,
@@ -346,7 +342,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       total: 0,
       currentPage: 1,
       filters: [],
-      categoryId: category.id,
+      categoryId: category?.id,
       sortBy: null,
     },
   })
@@ -371,7 +367,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
 
   useEffect(() => {
     if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
+      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_page_view_before({ item_id: category?.name || EmptyString })
@@ -639,7 +635,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
               {productDataToPass?.results?.length > 0 &&
                 <>
                   <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                    <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-white result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                    <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
                     <div className="flex justify-end align-bottom">
                       <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
                     </div>
