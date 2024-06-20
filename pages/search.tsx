@@ -277,6 +277,13 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   const clearAll = () => dispatch({ type: CLEAR })
 
   useEffect(() => {
+
+    setTimeout(() => {
+      if (!state?.filters?.length && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     const entity = {
       allowFacet: true,
       brand: null,
@@ -312,7 +319,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     })
 
     recordEvent(EVENTS.FreeText)
-  })
+  }, [])
 
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory?.products
