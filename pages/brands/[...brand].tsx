@@ -258,6 +258,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -312,6 +314,13 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   useEffect(() => {
+    // Setting initial filters from query string
+    setTimeout(() => {
+      if (!state?.filters?.length && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     const entity = {
       allowFacet: true,
       brand: null,

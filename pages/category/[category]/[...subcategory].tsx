@@ -326,6 +326,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -390,6 +392,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   }
 
   useEffect(() => {
+    // Setting initial filters from query string
+    setTimeout(() => {
+      if (!state?.filters?.length && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     const trackScroll = (ev: any) => {
       setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
