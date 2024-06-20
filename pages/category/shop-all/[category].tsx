@@ -408,7 +408,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   useEffect(() => {
     // Setting initial filters from query string
     setTimeout(() => {
-      if (!state?.filters?.length && filters?.length) {
+      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
         dispatch({ type: SET_FILTERS, payload: filters })
       }
     }, 800)
