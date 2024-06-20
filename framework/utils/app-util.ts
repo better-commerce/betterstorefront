@@ -5,7 +5,7 @@ import {
   DataSubmit,
   ISubmitStateInterface,
 } from '@commerce/utils/use-data-submit'
-import { EmptyObject, EmptyString } from '@components/utils/constants'
+import { EmptyObject, EmptyString, IGNORE_QUERY_KEYS } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import enGBLocalization from '../../public/locales/en-GB/common.json'
@@ -38,9 +38,10 @@ export const parsePLPFilters = (qsFilters: string) => {
   if (qsFilters) {
     const filters = new Array<{Key: string, Value: string}>()
     const params = uriParams(qsFilters)
-    const keysToIgnore = ['iref', 'ireftp']; // Define the keys to ignore
+    const keysToIgnore = IGNORE_QUERY_KEYS; // Define the keys to ignore
     if (params) {
       for(var key in params) {
+        // Exclude ignore query key if exists for Filter
         if(!keysToIgnore?.includes(key)){
           const paramValue = params[key]
           if (paramValue) {
@@ -58,6 +59,7 @@ export const parsePLPFilters = (qsFilters: string) => {
 }
 
 export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
+  const keysToIgnore = IGNORE_QUERY_KEYS
   const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
     acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
     return acc
@@ -71,6 +73,14 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
       url.searchParams.set(key, modifiedFiltersObj[key])
     }
   }
+
+   const currentSearchParams = new URLSearchParams(window.location.search);
+   // Include ignore query key if exists for URL
+   currentSearchParams?.forEach((value, key) => {
+     if (keysToIgnore?.includes(key)) {
+       url.searchParams?.set(key, value);
+     }
+   });
   
   router.replace(decodeURIComponent(url.toString()), undefined, { shallow: true })
 }
