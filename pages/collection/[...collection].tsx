@@ -189,6 +189,8 @@ function CollectionPage(props: any) {
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -346,6 +348,13 @@ function CollectionPage(props: any) {
   const [position, setPosition] = useState(defaultYOffset())
 
   useEffect(() => {
+    // Setting initial filters from query string
+    setTimeout(() => {
+      if (!state?.filters?.length && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
         let moving = window.pageYOffset
