@@ -60,7 +60,7 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
     return acc
   }, {})
 
-  const url = new URL(window.location.href) //window.location.origin + window.location.pathname
+  const url = new URL(window.location.origin + window.location.pathname) //new URL(window.location.href)
   for (let key in modifiedFiltersObj) {
     if (shouldRemove) {
       url.searchParams.delete(key)
