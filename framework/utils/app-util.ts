@@ -38,14 +38,17 @@ export const parsePLPFilters = (qsFilters: string) => {
   if (qsFilters) {
     const filters = new Array<{Key: string, Value: string}>()
     const params = uriParams(qsFilters)
+    const keysToIgnore = ['iref', 'ireftp']; // Define the keys to ignore
     if (params) {
       for(var key in params) {
-        const paramValue = params[key]
-        if (paramValue) {
-          const paramValues = paramValue?.split(',')
-          paramValues.forEach((value: string) => {
-            filters.push({ Key: key, Value: value })
-          })
+        if(!keysToIgnore?.includes(key)){
+          const paramValue = params[key]
+          if (paramValue) {
+            const paramValues = paramValue?.split(',')
+            paramValues.forEach((value: string) => {
+              filters.push({ Key: key, Value: value?.replaceAll('+', ' ') }) // Replacing plus with space
+            })
+          }
         }
       }
       return filters
