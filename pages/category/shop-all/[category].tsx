@@ -352,6 +352,8 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
+    } else {
+      routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -404,6 +406,13 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
+    // Setting initial filters from query string
+    setTimeout(() => {
+      if (!state?.filters?.length && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     let CSVCollection: any = []
     if (category.featuredProductCSV != '' && category.featuredProductCSV) {
       CSVCollection = category?.featuredProductCSV?.split(',')
