@@ -326,9 +326,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      if (filters?.length == 1)
-        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -443,6 +440,9 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   }
 
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
       payload: filter,
@@ -461,9 +461,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     })
   }
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (category === null) {
