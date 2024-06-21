@@ -189,9 +189,6 @@ function CollectionPage(props: any) {
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      if (filters?.length == 1)
-        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -264,6 +261,9 @@ function CollectionPage(props: any) {
     dispatch({ type: SET_FILTERS, payload: filters })
   }
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
@@ -319,6 +319,9 @@ function CollectionPage(props: any) {
   }
 
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
       payload: filter,
@@ -336,7 +339,10 @@ function CollectionPage(props: any) {
       payload: payload,
     })
   }
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
   const css = { maxWidth: '100%', height: 'auto' }
 
   const defaultYOffset = () => {
