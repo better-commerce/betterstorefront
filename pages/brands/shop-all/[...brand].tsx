@@ -409,7 +409,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [productDataToPass])
 
   useEffect(() => {
-    if (state?.filters?.length > initialState?.filters?.length) {
+    if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
   }, [state?.filters])
