@@ -352,7 +352,8 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     } else {
-      routeToPLPWithSelectedFilters(router, [])
+      if (filters?.length == 1)
+        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 

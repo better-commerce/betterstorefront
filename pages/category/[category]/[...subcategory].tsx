@@ -327,7 +327,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     } else {
-      routeToPLPWithSelectedFilters(router, [])
+      if (filters?.length == 1)
+        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
