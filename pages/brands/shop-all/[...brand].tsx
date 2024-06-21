@@ -284,6 +284,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   const clearAll = () => {
+    if (filters?.length){
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
     dispatch({ type: CLEAR })
     dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, })
   }
@@ -406,11 +409,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [productDataToPass])
 
   useEffect(() => {
-    if (state?.filters?.length) {
+    if (state?.filters?.length > initialState?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      if (filters?.length == 1)
-        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 

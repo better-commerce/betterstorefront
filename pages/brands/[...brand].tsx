@@ -256,11 +256,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    if (state?.filters?.length) {
+    if (state?.filters?.length > initialState?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      if (filters?.length == 1)
-        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -299,6 +296,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   const clearAll = () => {
     dispatch({ type: CLEAR })
+    if (filters?.length){
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
     dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, })
   }
 
@@ -450,6 +450,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
   }
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == ( 1 + initialState?.filters?.length) && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
     dispatch({
       type,
       payload: filter,
@@ -460,6 +463,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     dispatch({ type: SET_FILTERS, payload: filters })
   }
   const removeFilter = (key: string) => {
+    if (filters?.length == ( 1 + initialState?.filters?.length)){
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
   return (
