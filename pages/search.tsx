@@ -138,7 +138,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     } else {
-      routeToPLPWithSelectedFilters(router, [])
+      if (filters?.length == 1)
+        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
