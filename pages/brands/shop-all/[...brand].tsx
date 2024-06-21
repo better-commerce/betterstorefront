@@ -409,7 +409,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     } else {
-      routeToPLPWithSelectedFilters(router, [])
+      if (filters?.length == 1)
+        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
