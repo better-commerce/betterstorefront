@@ -137,9 +137,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      if (filters?.length == 1)
-        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -266,10 +263,16 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   }
 
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
       payload: filter,
@@ -277,7 +280,10 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     dispatch({ type: PAGE, payload: 1 })
   }
 
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
 
   useEffect(() => {
     // Setting initial filters from query string

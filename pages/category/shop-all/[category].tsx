@@ -266,7 +266,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, currentPage: 1, sortOrder: payload }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
@@ -352,9 +352,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      if (filters?.length == 1)
-        routeToPLPWithSelectedFilters(router, [])
     }
   }, [state?.filters])
 
@@ -487,6 +484,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
       payload: filter,
@@ -500,7 +500,10 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       payload: payload,
     })
   }
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (category === null) {
@@ -517,6 +520,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
