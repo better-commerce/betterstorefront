@@ -46,6 +46,7 @@ import FeaturedBanner from '@components/category/FeaturedBanner'
 import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
 import FeaturedBrand from '@components/category/FeaturedBrand'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
+import Loader from '@components/Loader'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -323,6 +324,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       },
     },
     error,
+    isValidating
   } = useSwr(
     [
       `/api/catalog/products`,
@@ -649,44 +651,50 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                   <hr className='border-slate-200 dark:border-slate-200' />
                 </>
               }
-              {productDataToPass?.results?.length > 0 ? (
-                <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
-                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
-                    <>
-                      {isMobile ? (
-                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+              {isValidating ? (
+                <Loader />  
+                ) : (
+                <>
+                  {productDataToPass?.results?.length > 0 ? (
+                    <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
+                      {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                        <>
+                          {isMobile ? (
+                            <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                          ) : (
+                            <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                          )}
+                          <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                            {isMobile ? null : (
+                              <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            )}
+                            <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          </div>
+                        </>
                       ) : (
-                        <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                      )}
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                        {isMobile ? null : (
+                        <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
                           <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                        )}
-                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        </div>
+                      ))}
+                      <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+                      <div className='flex flex-col w-full col-span-12 overflow-hidden'>
+                        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                        <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                        <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                        <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                        <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                        <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
                       </div>
-                    </>
-                  ) : (
-                    <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     </div>
-                  ))}
-                  <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-                  <div className='flex flex-col w-full col-span-12 overflow-hidden'>
-                    <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                    <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                  </div>
-                </div>
-              ) : (
-                <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
-                  <h4 className="text-3xl font-bold text-gray-300">
-                    {translate('common.label.noProductAvailableText')} {category?.name}
-                  </h4>
-                </div>
+                  ) : (
+                    <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
+                      <h4 className="text-3xl font-bold text-gray-300">
+                        {translate('common.label.noProductAvailableText')} {category?.name}
+                      </h4>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

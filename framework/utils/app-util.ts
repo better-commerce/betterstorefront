@@ -37,7 +37,7 @@ export const sanitizeHtmlContent = (html: any) => {
 export const parsePLPFilters = (qsFilters: string) => {
   if (qsFilters) {
     const filters = new Array<{Key: string, Value: string}>()
-    const params = uriParams(qsFilters)
+    const params = uriParams(decodeURIComponent(qsFilters))
     const keysToIgnore = IGNORE_QUERY_KEYS; // Define the keys to ignore
     if (params) {
       for(var key in params) {
