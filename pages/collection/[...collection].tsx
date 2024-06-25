@@ -106,7 +106,8 @@ function CollectionPage(props: any) {
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
-    return <></>
+    console.log('collection', JSON.stringify(props))
+    //return <></>
   }
 
   const { isOnlyMobile, isMobile } = deviceInfo
