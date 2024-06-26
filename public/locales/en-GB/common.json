@@ -383,6 +383,7 @@
       "emailAddressRequiredText": "Email Address*",
       "emailAddressplaceholderText": "example@example.com",
       "referAFriendText": "Refer a Friend",
+      "dataPackText": "Data Pack",
       "myCompanyText": "My Company",
       "recommendedForYouText": "Recommended For You",
       "browsingHistoryText": "Browsing History",
@@ -1180,7 +1181,11 @@
       "addMsg3Text": "Add message 3",
       "addMsg2Text": "Add message 2",
       "addMsg1Text": "Add message 1",
-      "distanceText": "Distance"
+      "distanceText": "Distance",
+      "generatedOnText": "Generated On",
+      "imagesText": "Images",
+      "nameText": "Name",
+      "noResultDatapackText": "No Datapack Generated Yet"
     },
     "message": {
       "authenticationFailedText": "Email Authentication failed",

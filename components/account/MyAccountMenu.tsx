@@ -2,7 +2,7 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
-import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon } from '@heroicons/react/24/outline'
+import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
 import Link from 'next/link'
 
@@ -43,6 +43,14 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           newConfig.splice(i, 1)
         }
       }
+      newConfig.push({
+        type: 'tab',
+        text: translate('label.myAccount.dataPackText'),
+        mtext: translate('label.myAccount.dataPackText'),
+        props: 'data-pack',
+        head: <ServerIcon className="text-gray-500 w-7 h-7" />,
+        href: "/my-account/data-pack"
+      })
     }
     if (!isB2B) {
       if (referralProgramActive) {
