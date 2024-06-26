@@ -57,6 +57,7 @@ export const ACTION_TYPES = {
   SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
+  RESET_STATE: 'RESET_STATE'
 }
 
 interface actionInterface {
@@ -72,7 +73,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
@@ -90,6 +91,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -147,6 +150,7 @@ function CollectionPage(props: any) {
   const initialState = { ...DEFAULT_STATE, collectionId: props?.id, }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const {
     data: collection,
     data = {
@@ -164,12 +168,29 @@ function CollectionPage(props: any) {
     error,
     isValidating 
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
+    ['/api/catalog/products', { ...state, ...{ collectionId: props?.id , slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   const [swrLoading, setSwrLoading] = useState(!error && !collection)
 
