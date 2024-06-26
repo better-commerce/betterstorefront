@@ -42,11 +42,11 @@ function SplitDeliveryOrderItems({ order }: any) {
     <div>
       {deliveryPlans?.map((plan: any, idx: number) => (
         <div key={idx} className={`${idx > 0 ? 'mt-4' : ''}`}>
-          <span className="font-semibold text-black w-full flex items-center">
+          <span className="flex items-center w-full font-semibold text-black">
             <span>Delivery {idx + 1} of {deliveryPlans?.length}</span>
             <span className='ml-2 text-xs font-medium'>Expected date: {moment(new Date(plan?.deliveryDateTarget)).format(DATE_FORMAT)}</span>
           </span>
-          {processedLineItems(plan?.items)?.map((product: any) => (
+          {processedLineItems(plan?.items)?.filter((x: any) => x?.isMembership == false)?.map((product: any) => (
             <div key={idx} className="flex py-10 space-x-6 border-b border-gray-200">
               <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
                 <img style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
@@ -78,8 +78,8 @@ function SplitDeliveryOrderItems({ order }: any) {
                   <div>
                     {product?.children
                       ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
-                      ?.map((child: any, index: number) => <BundleProductCard key={index} product={child}/>
-                    )}
+                      ?.map((child: any, index: number) => <BundleProductCard key={index} product={child} />
+                      )}
                   </div>
                 )}
               </div>
@@ -121,8 +121,8 @@ function SplitDeliveryOrderItems({ order }: any) {
                   <div>
                     {product?.children
                       ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
-                      ?.map((child: any, index: number) => <BundleProductCard key={index} product={child}/>
-                    )}
+                      ?.map((child: any, index: number) => <BundleProductCard key={index} product={child} />
+                      )}
                   </div>
                 )}
               </div>
