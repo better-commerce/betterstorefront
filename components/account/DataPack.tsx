@@ -16,25 +16,26 @@ export default function DataPack() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch data packs 
-  useEffect(() => {
-    const fetchDataPacks = async () => {
-      setIsLoading(true); 
-      try {
-        const response: any = await axios.post(NEXT_GET_DATA_PACK, {
-          companyId: user?.companyId,
-        })
-        setIsLoading(false); 
-        if (response?.data) {
-          setData(response.data);
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.error(error);
+  const fetchDataPacks = async () => {
+    setIsLoading(true); 
+    try {
+      const response: any = await axios.post(NEXT_GET_DATA_PACK, {
+        companyId: user?.companyId,
+      })
+      setIsLoading(false); 
+      if (response?.data) {
+        setData(response.data);
       }
-    };
-
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
     fetchDataPacks();
   }, [user?.companyId]);
+
   
   // Function to download products CSV
   const onDownloadProductsCSV = useCallback(async (companyId: string, id: string) => {
