@@ -183,3 +183,21 @@ export const getAppliedFilters = (filters: any[]) => {
 
   return Object.values(appliedFilters).flat()
 }
+
+export const downloadBase64AsFile = (base64: string, fileName: string, fileMime: string) => {
+    const downloadFileObject = (base64: string, fileName: string) => {
+        const linkSource = base64
+        const downloadLink: any = document.createElement("a")
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        if (downloadLink?.click) {
+            downloadLink.click()
+        } else if (downloadLink?.onClick) {
+            downloadLink.onClick()
+        }
+    }
+ 
+    const base64String = `data:${fileMime};base64,` + base64
+    downloadFileObject(base64String, fileName)
+}
+ 

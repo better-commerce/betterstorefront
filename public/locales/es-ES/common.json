@@ -387,6 +387,7 @@
       "recommendedForYouText": "Recomendado para ti",
       "browsingHistoryText": "Historial de navegación",
       "improveRecommendationText": "Mejora tu recomendación",
+      "dataPackText": "Paquete de datos",
       "myCompanyMenus": {
         "user": "Usuarios",
         "order": "Órdenes",
@@ -1180,7 +1181,11 @@
       "addMsg3Text": "Agregar mensaje 3",
       "addMsg2Text": "Agregar mensaje 2",
       "addMsg1Text": "Agregar mensaje 1",
-      "distanceText": "Distancia"
+      "distanceText": "Distancia",
+      "generatedOnText": "Generado el",
+      "imagesText": "Imágenes",
+      "nameText": "Nombre",
+      "noResultDatapackText": "Aún no se ha generado un paquete de datos"
     },
     "message": {
       "authenticationFailedText": "Falló la autenticación por correo electrónico",
