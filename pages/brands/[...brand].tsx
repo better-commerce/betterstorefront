@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import Link from 'next/link'
 import useSwr from 'swr'
-import commerce from '@lib/api/commerce'
 import SwiperCore, { Navigation } from 'swiper'
 import Glide from '@glidejs/glide'
 import 'swiper/swiper.min.css'
@@ -45,7 +44,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import Loader from '@components/Loader'
 
-export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
 interface actionInterface {
   type?: string
@@ -60,7 +59,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -79,6 +78,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -93,6 +94,10 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const translate = useTranslation()
+  const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const faq = useFaqData();
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -153,17 +158,18 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...{
-      filters: [
-        {
-          Key: 'brandNoAnlz',
-          Value: brandDetails?.name,
-          IsSelected: true,
-        },
-      ],
-    },
+    // Setting initial filters if present in query string
+    filters: filters.length > 0
+      ? filters
+      : [
+          {
+            Key: 'brand',
+            Value: brandDetails?.name
+          },
+        ],
   }
-
+ const [state, dispatch] = useReducer(reducer, initialState)
+  
   const [productListMemory, setProductListMemory] = useState({
     products: {
       results: [],
@@ -175,11 +181,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       sortBy: null,
     },
   })
-
-  const router = useRouter()
-  const qsFilters = router.asPath
-  const filters: any = parsePLPFilters(qsFilters as string)
-  const [state, dispatch] = useReducer(reducer, initialState)
   const [manufacturerStateVideoName, setManufacturerStateVideoName] =
     useState('')
   const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] =
@@ -218,12 +219,30 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     error,
     isValidating
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct, filters: filters || [] } }],
+    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+  
+  // reset state on slug change
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
@@ -301,7 +320,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     if (filters?.length){
       routeToPLPWithSelectedFilters(router, initialState?.filters)
     }
-    dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, })
+    dispatch({ type: ADD_FILTERS, payload: { Key: 'brand', Value: brandDetails?.name }, })
   }
 
 
@@ -317,13 +336,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const entity = {
       allowFacet: true,
       brand: null,

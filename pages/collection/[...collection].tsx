@@ -119,7 +119,6 @@ function CollectionPage(props: any) {
   const filters: any = parsePLPFilters(qsFilters as string)
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
-  const [isFiltersApplied, setIsFiltersApplied] = useState(false)
   const adaptedQuery: any = { ...router.query }
   const translate = useTranslation()
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
@@ -147,7 +146,12 @@ function CollectionPage(props: any) {
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
-  const initialState = { ...DEFAULT_STATE, collectionId: props?.id, }
+  const initialState = { 
+    ...DEFAULT_STATE, 
+    collectionId: props?.id,
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
+  }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
@@ -168,7 +172,7 @@ function CollectionPage(props: any) {
     error,
     isValidating 
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ collectionId: props?.id , slug: props?.slug, excludeOOSProduct, filters: filters || [] } }],
+    ['/api/catalog/products', { ...state, ...{ collectionId: props?.id , slug: props?.slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -383,13 +387,6 @@ function CollectionPage(props: any) {
   const [position, setPosition] = useState(defaultYOffset())
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
         let moving = window.pageYOffset
