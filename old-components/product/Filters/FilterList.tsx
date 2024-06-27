@@ -3,7 +3,7 @@ import { ACTION_TYPES } from 'pages/search'
 import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 
-const FILTER_KEYS = {
+export const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
   CATEGORY: 'classification.category',
   PRICE: 'price.raw.withTax',
@@ -14,6 +14,7 @@ const FILTER_KEYS = {
   GENDER: 'attributes.value~global.gender',
   OCCASION: 'attributes.value~occasion.type',
   SIZE: 'attributes.value~clothing.size',
+  ONLY_PRICE: 'price'
 }
 
 const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
