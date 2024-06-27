@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import axios from 'axios'
-import { NEXT_DOWNLOAD_DATA_PACK, NEXT_GET_DATA_PACK } from '@components/utils/constants'
+import { DATE_TIME_FORMAT, NEXT_DOWNLOAD_DATA_PACK, NEXT_GET_DATA_PACK } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import { downloadBase64AsFile } from 'framework/utils/app-util'
 import { ArrowDownIcon } from '@heroicons/react/24/outline'
 import Loader from '@components/Loader'
 import Spinner from '@components/ui/Spinner'
+import moment from 'moment'
 
 export default function DataPack() {
   const { user } = useUI()
@@ -101,7 +102,7 @@ const DataPackDetailTable = ({ rows, onDownloadProductsCSV, onDownloadImagesCSV 
               {rows?.map((data: any) => (
                   <tr key={data?.dataPackId}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-base font-semibold text-gray-900">{data?.dataPackName}</td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{data?.created}</td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{moment(new Date(data?.created)).format(DATE_TIME_FORMAT)}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-right justify-end text-gray-500">
                           {
                             data?.productDataPackUrl && (
