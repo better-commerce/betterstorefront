@@ -1,9 +1,8 @@
 import { Disclosure } from '@headlessui/react'
-import FilterList from './FilterList'
+import FilterList, { FILTER_KEYS } from './FilterList'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import PriceFilterSlider from '@components/Product/Filters/PriceFilterSlider'
 import { CURRENT_THEME } from '@components/utils/constants'
-import { FILTER_KEYS } from '@old-components/product/Filters/FilterList'
 
 interface Props {
   products: any

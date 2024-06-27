@@ -4,13 +4,14 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { getCurrencySymbol } from '@framework/utils/app-util'
 import { CURRENT_THEME } from '@components/utils/constants'
 
-const FILTER_KEYS = {
+export const FILTER_KEYS = {
   BRAND: 'brandNoAnlz',
   CATEGORY: 'classification.category',
   PRICE: 'price.raw.withTax',
+  ONLY_PRICE: 'price',
   RATING: 'rating',
   CLOTHING_TYPE: 'attributes.value~clothing.type',
-  COLOR: 'attributes.value~global.colour',
+  COLOR: '_global.colour',
   DRESS_STYLE: 'attributes.value~dress.style',
   GENDER: 'attributes.value~global.gender',
   OCCASION: 'attributes.value~occasion.type',
