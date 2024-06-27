@@ -387,6 +387,7 @@
       "recommendedForYouText": "Empfohlen für dich",
       "browsingHistoryText": "Browserverlauf",
       "improveRecommendationText": "Verbessere deine Empfehlung",
+      "dataPackText": "Datenpaket",
       "myCompanyMenus": {
         "user": "Benutzer",
         "order": "Bestellungen",
@@ -1179,7 +1180,11 @@
       "addMsg3Text": "Nachricht 3 hinzufügen",
       "addMsg2Text": "Nachricht 2 hinzufügen",
       "addMsg1Text": "Nachricht 1 hinzufügen",
-      "distanceText": "Entfernung"
+      "distanceText": "Entfernung",
+      "generatedOnText": "Generiert am",
+      "imagesText": "Bilder",
+      "nameText": "Name",
+      "noResultDatapackText": "Noch kein Datenpaket generiert"
     },
     "message": {
       "authenticationFailedText": "E-Mail-Authentifizierung fehlgeschlagen",
