@@ -21,7 +21,6 @@ import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_UR
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
-import { ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 const Heading = dynamic(() => import('@components/Heading/Heading'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
@@ -31,15 +30,12 @@ const ProductSort = dynamic(() => import('@components/Product/ProductSort'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 import useFaqData from '@components/SectionBrands/faqData'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import Slider from '@components/SectionBrands/Slider'
-import BrandDisclosure from '@components/SectionBrands/Disclosure'
-import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 
-export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
 interface actionInterface {
   type?: string
@@ -54,7 +50,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -73,6 +69,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -87,16 +85,12 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
-  const faq = useFaqData();
+  const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
-  const { isMobile, isOnlyMobile } = deviceInfo
-  let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
-  let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
-  let imgFeatureCollection: any = collections.imgFeatureCollection
-  let offerBannerResult: any = collections.offerBannerResult
-  let productCollectionRes: any = collections.productCollection
-  let saleProductCollectionRes: any = collections.saleProductCollection
   const sliderRef = useRef(null);
   const sliderRefNew = useRef(null);
   const [isShow, setIsShow] = useState(false);
@@ -147,15 +141,15 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...{
-      filters: [
-        {
-          Key: 'brandNoAnlz',
-          Value: brandDetails?.name,
-          IsSelected: true,
-        },
-      ],
-    },
+    // Setting initial filters from query string
+    filters: filters.length > 0
+      ? filters
+      : [
+          {
+            Key: 'brand',
+            Value: brandDetails?.name
+          },
+        ],
   }
 
   const [productListMemory, setProductListMemory] = useState({
@@ -170,9 +164,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     },
   })
 
-  const router = useRouter()
-  const qsFilters = router.asPath
-  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [manufacturerStateVideoName, setManufacturerStateVideoName] =
     useState('')
@@ -217,6 +208,24 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       revalidateOnFocus: false,
     }
   )
+
+  // reset state on slug change
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
@@ -304,13 +313,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const entity = {
       allowFacet: true,
       brand: null,
