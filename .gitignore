@@ -44,8 +44,11 @@ framework/bettercommerce/locales.json
 tw.ecommerce
 tsconfig.tsbuildinfo
 
-# npm build output
+# Package Dependencies
 #.npmrc
+#.yarnrc
+
+# npm build output
 .env.dev
 .env.prod
 .vscode/settings.json
