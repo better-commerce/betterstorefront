@@ -75,6 +75,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
     }
     return (
       <div className="group home-banner-group-mob" key={`hero-banner-${index}`}>
+        <h1 className='sr-only'>{item?.name}</h1>
         <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative sm:!pt-0 ${className}`}>
           <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
             {data?.map((_: any, index: number) => {
