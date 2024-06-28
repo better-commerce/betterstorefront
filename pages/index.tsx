@@ -162,7 +162,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
-      {hostName && <input className="inst" type="hidden" value={hostName} />}
+      {hostName && <input className="inst" type="hidden" value={hostName} />}      
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         <SectionHero2 data={pageContents?.banner} />
         {pageContents?.shopbygender?.length > 0 &&

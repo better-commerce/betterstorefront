@@ -75,9 +75,9 @@ export default function MyDetails() {
   return (
     <main className="pb-6 space-y-5 sm:space-y-12 sm:pb-10">
       <div className=''>
-        <h2 className="text-2xl font-semibold sm:text-3xl dark:text-black">
-          Account infomation
-        </h2>
+        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+          Account information
+        </h1>
         <p className="mt-2 text-sm font-normal text-black dark:text-black">
           {translate('label.myAccount.editYourDetailsText')}
         </p>
@@ -96,7 +96,7 @@ export default function MyDetails() {
                 alt="avatar"
                 width={128}
                 height={128}
-                className="z-0 object-cover w-20 h-20 sm:w-32 sm:h-32 rounded-full"
+                className="z-0 object-cover w-20 h-20 rounded-full sm:w-32 sm:h-32"
               />
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function MyDetails() {
                   isSubmitting,
                 }: any = context
                 return (
-                  <Form className="flex-grow w-full max-w-3xl sm:mt-10 space-y-4 sm:space-y-6 font-normal md:mt-0">
+                  <Form className="flex-grow w-full max-w-3xl space-y-4 font-normal sm:mt-10 sm:space-y-6 md:mt-0">
                     {formConfig?.map((formItem: any, idx: number) => {
                       return (
                         formItem.type !== 'singleSelectButtonGroup' && (

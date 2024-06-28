@@ -78,7 +78,7 @@ function OrderDetail({ deviceInfo }: any) {
         entityType: EVENTS_MAP.ENTITY_TYPES.Page,
         eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
     })
-    
+
     useEffect(() => {
         const orderId = router.query?.orderId[0]
         fetchOrderDetailById(orderId)
@@ -267,6 +267,7 @@ function OrderDetail({ deviceInfo }: any) {
                             <meta property="og:description" content={`Order Detail : ${orderData?.orderNo}`} key="ogdesc" />
                         </NextHead>
                         <div className='w-full bg-white'>
+                            <h1 className='sr-only'>Order Detail : {orderData?.orderNo}</h1>
                             <div className=''> <OrderDetailHeader details={orderData} showDetailedOrder={true} />
                                 <div className="w-full">
                                     {orderData?.deliveryPlans?.length > 0 ? (

@@ -95,7 +95,7 @@ const MembershipBanner = ({ user }: any) => {
         <span className="block mt-2 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
           <span className="font-semibold text-slate-900 dark:text-slate-900"> {user?.firstName}, </span>{" "} {user?.email}
         </span>
-        <hr className="sm:mt-6 border-slate-200 dark:border-slate-200 hidden sm:block"></hr>
+        <hr className="hidden sm:mt-6 border-slate-200 dark:border-slate-200 sm:block"></hr>
       </div>
     </>
   }
