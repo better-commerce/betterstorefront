@@ -47,6 +47,7 @@ import LandingFeaturedCategory from '@components/category/LandingFeaturedCategor
 import FeaturedBrand from '@components/category/FeaturedBrand'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
+import Loader from '@components/Loader'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -266,7 +267,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
     case SORT_ORDER:
       return { ...state, sortOrder: payload }
     case CLEAR:
-      return { ...state, currentPage: 1, sortOrder: payload }
+      return { ...state, currentPage: 1, filters: [] }
     case HANDLE_FILTERS_UI:
       return { ...state, areFiltersOpen: payload }
     case SET_CATEGORY_ID:
@@ -290,7 +291,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
-  const qsFilters = router?.query?.filters
+  const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
@@ -324,6 +325,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       },
     },
     error,
+    isValidating
   } = useSwr(
     [
       `/api/catalog/products`,
@@ -348,6 +350,13 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
+ 
+  useEffect(() => {
+    if (state?.filters?.length) {
+      routeToPLPWithSelectedFilters(router, state?.filters)
+    }
+  }, [state?.filters])
+
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
@@ -397,6 +406,13 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
+    // Setting initial filters from query string
+    setTimeout(() => {
+      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     let CSVCollection: any = []
     if (category.featuredProductCSV != '' && category.featuredProductCSV) {
       CSVCollection = category?.featuredProductCSV?.split(',')
@@ -441,22 +457,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     dispatch({ type: SET_FILTERS, payload: filters })
   }
 
-  useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
-    }
-  }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   const handlePageChange = (page: any, redirect = true) => {
     if (redirect) {
@@ -486,6 +486,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
       payload: filter,
@@ -499,7 +502,10 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       payload: payload,
     })
   }
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
 
   // IMPLEMENT HANDLING FOR NULL OBJECT
   if (category === null) {
@@ -516,6 +522,9 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
@@ -631,26 +640,32 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           }
           {productDataToPass?.results?.length > 0 ? (
             <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
-              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+              {isValidating ? (
+                <Loader />  
+                ) : (
                 <>
-                  {isMobile ? (
-                    <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                    <>
+                      {isMobile ? (
+                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                      ) : (
+                        <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                      )}
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                        {isMobile ? null : (
+                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                        )}
+                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </div>
+                    </>
                   ) : (
-                    <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                  )}
-                  <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                    {isMobile ? null : (
+                    <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
                       <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    )}
-                    <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  </div>
+                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    </div>
+                  ))}
                 </>
-              ) : (
-                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                  <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                  <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                </div>
-              ))}
+              )}
               <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
               <div className='flex flex-col w-full col-span-12 overflow-hidden'>
                 <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

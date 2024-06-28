@@ -44,7 +44,8 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { getAppliedFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import Loader from '@components/Loader'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -56,6 +57,7 @@ export const ACTION_TYPES = {
   SET_FILTERS: 'SET_FILTERS',
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
+  RESET_STATE: 'RESET_STATE'
 }
 
 interface actionInterface {
@@ -71,7 +73,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
@@ -89,6 +91,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -105,14 +109,16 @@ function CollectionPage(props: any) {
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
-    return <></>
+    console.log('collection', JSON.stringify(props))
+    //return <></>
   }
 
   const { isOnlyMobile, isMobile } = deviceInfo
   const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [paddingTop, setPaddingTop] = useState('0')
   const [isProductCompare, setProductCompare] = useState(false)
-  const [isFiltersApplied, setIsFiltersApplied] = useState(false)
   const adaptedQuery: any = { ...router.query }
   const translate = useTranslation()
   const [plpFilterState, setPLPFilterState] = useState<IPLPFilterState>({
@@ -140,9 +146,15 @@ function CollectionPage(props: any) {
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
-  const initialState = { ...DEFAULT_STATE, collectionId: props?.id, }
+  const initialState = { 
+    ...DEFAULT_STATE, 
+    collectionId: props?.id,
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
+  }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const {
     data: collection,
     data = {
@@ -158,13 +170,31 @@ function CollectionPage(props: any) {
       },
     },
     error,
+    isValidating 
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: props?.slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ collectionId: props?.id , slug: props?.slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   const [swrLoading, setSwrLoading] = useState(!error && !collection)
 
@@ -183,21 +213,10 @@ function CollectionPage(props: any) {
 
   const [productDataToPass, setProductDataToPass] = useState(props?.products)
 
-  useEffect(() => {
-    if (isFiltersApplied || data?.products?.filters?.length < 1) return
-    const filters = getAppliedFilters(data?.products?.filters)
-    setFilter(filters || [])
-    setIsFiltersApplied(true)
-  }, [isFiltersApplied, router.query, data?.products?.filters])
   
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      const filters = getAppliedFilters(data?.products?.filters)
-      if (filters?.length) {
-        routeToPLPWithSelectedFilters(router, filters, true)
-      }
     }
   }, [state?.filters])
 
@@ -270,6 +289,9 @@ function CollectionPage(props: any) {
     dispatch({ type: SET_FILTERS, payload: filters })
   }
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
@@ -324,10 +346,17 @@ function CollectionPage(props: any) {
     }
   }
 
-  const handleFilters = (filter: null, type: string) => {
+  const handleFilters = (filter: any, type: string) => {
+    const filterObj = {
+      ...filter,
+      Key: filter?.Key?.replace('brandNoAnlz', 'brand')
+    }
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
-      payload: filter,
+      payload: filterObj,
     })
     dispatch({ type: PAGE, payload: 1 })
   }
@@ -342,7 +371,10 @@ function CollectionPage(props: any) {
       payload: payload,
     })
   }
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
   const css = { maxWidth: '100%', height: 'auto' }
 
   const defaultYOffset = () => {
@@ -558,25 +590,31 @@ function CollectionPage(props: any) {
         <hr className='border-slate-200 dark:border-slate-200' />
         {
           <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
-            {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
-              <>
-                {isMobile ? (
-                  <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                ) : (
-                  <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
-                )}
-                <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
-                  {isMobile ? null : (
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                  )}
-                  {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-                </div>
-              </>
+            {isValidating ? (
+              <Loader />  
             ) : (
-              <div className="col-span-12">
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-              </div>
+              <>
+                {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
+                  <>
+                    {isMobile ? (
+                      <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    ) : (
+                      <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                    )}
+                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                      {isMobile ? null : (
+                        <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                      )}
+                      {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                    </div>
+                  </>
+                ) : (
+                  <div className="col-span-12">
+                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                  </div>
+                )}
+              </>
             )}
           </div>
         }

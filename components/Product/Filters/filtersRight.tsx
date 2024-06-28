@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react'
-import FilterList from './FilterList'
+import FilterList, { FILTER_KEYS } from './FilterList'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import PriceFilterSlider from '@components/Product/Filters/PriceFilterSlider'
 import { CURRENT_THEME } from '@components/utils/constants'
@@ -26,7 +26,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
                     <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5 dark:text-black`} />
                   </Disclosure.Button>
                   <Disclosure.Panel className="px-0 pt-0 pb-2">
-                    {section?.key === "price.raw.withTax" ? <PriceFilterSlider handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} /> :
+                    {(section?.key === FILTER_KEYS.PRICE || section?.key === FILTER_KEYS.ONLY_PRICE) ? <PriceFilterSlider handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} /> :
                       <FilterList handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />}
                   </Disclosure.Panel>
                 </>

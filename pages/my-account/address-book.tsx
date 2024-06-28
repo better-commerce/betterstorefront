@@ -55,7 +55,7 @@ function AddressBookPage() {
 
   return (
     <>
-      <h2 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.addressBook.addressBookTitleText')}</h2>
+      <h1 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.addressBook.addressBookTitleText')}</h1>
       <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
         <AddressBook />
       </div>

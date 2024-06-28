@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import Link from 'next/link'
 import useSwr from 'swr'
-import commerce from '@lib/api/commerce'
 import SwiperCore, { Navigation } from 'swiper'
 import Glide from '@glidejs/glide'
 import 'swiper/swiper.min.css'
@@ -43,8 +42,9 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import Loader from '@components/Loader'
 
-export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', }
+export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
 interface actionInterface {
   type?: string
@@ -59,7 +59,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -78,6 +78,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -92,6 +94,10 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const translate = useTranslation()
+  const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const faq = useFaqData();
   const adaptedQuery = { ...query }
   const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
@@ -152,16 +158,17 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...{
-      filters: [
+    // Setting initial filters if present in query string
+    filters: filters.length > 0
+      ? filters
+      : [
         {
-          Key: 'brandNoAnlz',
-          Value: brandDetails?.name,
-          IsSelected: true,
+          Key: 'brand',
+          Value: brandDetails?.name
         },
       ],
-    },
   }
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
@@ -174,11 +181,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       sortBy: null,
     },
   })
-
-  const router = useRouter()
-  const qsFilters = router?.query?.filters
-  const filters: any = parsePLPFilters(qsFilters as string)
-  const [state, dispatch] = useReducer(reducer, initialState)
   const [manufacturerStateVideoName, setManufacturerStateVideoName] =
     useState('')
   const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] =
@@ -215,13 +217,32 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       },
     },
     error,
+    isValidating
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct, filters: filters || [] } }],
+    ['/api/catalog/products', { ...state, ...{ slug: slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  // reset state on slug change
+  useEffect(() => {
+    const handleRouteChange = (url: any) => {
+      const currentSlug = url?.split('?')[0];
+      if (currentSlug !== previousSlug) {
+        dispatch({ type: RESET_STATE })
+        setPreviousSlug(currentSlug);
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
@@ -256,21 +277,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    if (state?.filters?.length || (qsFilters && !state?.filters?.length)) {
+    if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
   }, [state?.filters])
-
-  useEffect(() => {
-    if (qsFilters) {
-      const filters = parsePLPFilters(qsFilters as string)
-      if (JSON.stringify(state?.filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value}))) !== JSON.stringify(filters?.map(({ Key, Value, ...rest}: any) => ({ Key, Value})))) {
-        setFilter(filters)
-      }
-    } else {
-      setFilter([])
-    }
-  }, [qsFilters])
 
   const handleClick = () => {
     setShowLandingPage(false)
@@ -307,7 +317,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   const clearAll = () => {
     dispatch({ type: CLEAR })
-    dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, })
+    if (filters?.length) {
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
+    dispatch({ type: ADD_FILTERS, payload: { Key: 'brand', Value: brandDetails?.name }, })
   }
 
 
@@ -451,6 +464,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
   }
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == (1 + initialState?.filters?.length) && type == REMOVE_FILTERS) {
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
     dispatch({
       type,
       payload: filter,
@@ -461,6 +477,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     dispatch({ type: SET_FILTERS, payload: filters })
   }
   const removeFilter = (key: string) => {
+    if (filters?.length == (1 + initialState?.filters?.length)) {
+      routeToPLPWithSelectedFilters(router, initialState?.filters)
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
   return (
@@ -481,6 +500,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>
+          <h1 className={`block text-2xl sr-only capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+            {brandDetails?.name}
+          </h1>
           <div className="container w-full pb-0 mx-auto bg-white md:pb-4">
             <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-12">
               <div className="flex md:col-span-9 flex-col items-center px-4 sm:px-10 py-4 sm:py-10 rounded-xl brand-rounded-xl bg-teal-500 min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
@@ -495,7 +517,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
                   <div className='flex justify-between my-4'>
                     <HeadingWithButton className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All" >
-                    {translate('label.product.recommendedProductText')}
+                      {translate('label.product.recommendedProductText')}
                     </HeadingWithButton>
                   </div>
                   <div className="glide__track" data-glide-el="track">
@@ -532,7 +554,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <div ref={sliderRefNew} className={`flow-root`}>
                   <div className='flex justify-between'>
                     <HeadingWithButton className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All"
-                     >
+                    >
                       {translate('label.product.saleProductText')}
                     </HeadingWithButton>
                   </div>
@@ -573,7 +595,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </span>
               </li>
               <li className='flex items-center text-10-mob sm:text-sm'>
-              <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
+                <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
               </li>
             </ol>
           </div>
@@ -598,28 +620,34 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           <hr className='border-slate-200 dark:border-slate-200' />
           {
             <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
-              {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
-                <>
-                  {isMobile ? (
-                    <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                  ) : (
-                    <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} isBrandPLP={true} />
-                  )}
-                  <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
-                    {isMobile ? null : (
-                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
-                    )}
-                    {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-                  </div>
-                </>
+              {isValidating ? (
+                <Loader />
               ) : (
-                <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                  <div className="flex justify-end w-full py-4">
-                    <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
-                  </div>
-                  <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                </div>
-              ))}
+                <>
+                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                    <>
+                      {isMobile ? (
+                        <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                      ) : (
+                        <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} isBrandPLP={true} />
+                      )}
+                      <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                        {isMobile ? null : (
+                          <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
+                        )}
+                        {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                      <div className="flex justify-end w-full py-4">
+                        <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
+                      </div>
+                      <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    </div>
+                  ))}
+                </>
+              )}
               <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
           }

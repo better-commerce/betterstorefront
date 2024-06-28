@@ -46,7 +46,9 @@ import {
   getCountries,
   getReviewSummary,
   getMembershipPlans,
-  getMembershipBenefits
+  getMembershipBenefits,
+  getDataPack,
+  downloadDataPack
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -105,6 +107,8 @@ const operations = {
   getReviewSummary,
   getMembershipPlans,
   getMembershipBenefits,
+  getDataPack,
+  downloadDataPack
 }
 
 export const provider = { config, operations }

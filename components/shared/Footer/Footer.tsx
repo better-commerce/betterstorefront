@@ -60,7 +60,7 @@ const Footer = ({ navItems = [] }: any) => {
                 <>
                   {menu?.navItems?.map((navItem: any, navItemIdx: number) => (
                     <li key={navItemIdx + 'navItem'} className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight" >
-                      <Link passHref href={`/men/${navItem?.itemLink}`} >
+                      <Link legacyBehavior passHref href={`/men/${navItem?.itemLink}`} >
                         <a href={`/men/${navItem?.itemLink}`} className="text-xs dark:text-white" >
                           {navItem?.caption}
                         </a>

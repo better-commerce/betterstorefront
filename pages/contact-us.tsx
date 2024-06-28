@@ -156,11 +156,11 @@ function Contact({
               <div className="relative flex items-center justify-center">
                 <img className="object-cover min-h-[225px]" src={head?.heading_heroimage} alt={head?.heading_herotitle} />
                 <div className="absolute text-center text-white">
-                  <p className="text-6xl transition-colors duration-300 hover:text-blue">
+                  <h1 className="text-6xl transition-colors duration-300">
                     {head?.heading_herotitle}
-                  </p>
+                  </h1>
                   <div className="my-4 text-2xl font-medium text-white" dangerouslySetInnerHTML={{ __html: head.heading_herodescription }}></div>
-                  <p className="text-2xl transition-colors duration-300 hover:text-blue">
+                  <p className="text-2xl transition-colors duration-300">
                     {translate('label.contactUs.homeContactUsText')} </p>
                 </div>
               </div>
