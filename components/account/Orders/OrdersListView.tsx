@@ -50,7 +50,7 @@ function OrdersListView({
                     {ordersList?.length > 0 ? (
                       <>
                         <section aria-labelledby="recent-heading" className="pt-5 mt-2" >
-                          <h2 id="recent-heading" className="sr-only"> {translate('label.orderDetails.recentOrdersText')} </h2>
+                          <h1 id="recent-heading" className="sr-only"> {translate('label.orderDetails.recentOrdersText')} </h1>
                           <div className="w-full mx-auto overflow-hidden sm:px-4 lg:px-0 paged-orders">
                             <InfiniteScroll
                               fetchData={handleInfiniteScroll}

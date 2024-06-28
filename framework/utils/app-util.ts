@@ -5,7 +5,7 @@ import {
   DataSubmit,
   ISubmitStateInterface,
 } from '@commerce/utils/use-data-submit'
-import { EmptyObject, EmptyString } from '@components/utils/constants'
+import { EmptyObject, EmptyString, IGNORE_QUERY_KEYS } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
 import enGBLocalization from '../../public/locales/en-GB/common.json'
@@ -35,24 +35,41 @@ export const sanitizeHtmlContent = (html: any) => {
 }
 
 export const parsePLPFilters = (qsFilters: string) => {
-  const queryFilters = decodeURIComponent(qsFilters as string)
-  if (queryFilters) {
-    const filters: any = tryParseJson(queryFilters) || []
-    return filters
+  if (qsFilters) {
+    const filters = new Array<{Key: string, Value: string}>()
+    const params = uriParams(decodeURIComponent(qsFilters))
+    const keysToIgnore = IGNORE_QUERY_KEYS; // Define the keys to ignore
+    if (params) {
+      for(var key in params) {
+        // Exclude ignore query key if exists for Filter
+        if(!keysToIgnore?.includes(key)){
+          const paramValue = params[key]
+          if (paramValue) {
+            const paramValues = paramValue?.split(',')
+            paramValues.forEach((value: string) => {
+              filters.push({ Key: key, Value: value?.replaceAll('+', ' ') }) // Replacing plus with space
+            })
+          }
+        }
+      }
+      return filters
+    }
   }
   return new Array<any>()
 }
 
 export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
-  console.log({ shouldRemove, currentFilters })
+  const keysToIgnore = IGNORE_QUERY_KEYS
   const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
-    const parsedKey = cur?.Key?.replace('attributes.value~', '')?.replace('brandNoAnlz', 'brand')?.toLowerCase()
-    const parsedValue = cur?.Value?.toLowerCase()
-    acc[parsedKey] = acc[parsedKey] ? [acc[parsedKey], parsedValue].join(',') : parsedValue
+    if(cur?.Key === 'brandNoAnlz'){
+      acc['brand'] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
+    } else {
+      acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
+    }
     return acc
   }, {})
-  console.log(modifiedFiltersObj)
-  const url = new URL(window.location.href) //window.location.origin + window.location.pathname
+
+  const url = new URL(window.location.origin + window.location.pathname) //new URL(window.location.href)
   for (let key in modifiedFiltersObj) {
     if (shouldRemove) {
       url.searchParams.delete(key)
@@ -60,6 +77,14 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
       url.searchParams.set(key, modifiedFiltersObj[key])
     }
   }
+
+   const currentSearchParams = new URLSearchParams(window.location.search);
+   // Include ignore query key if exists for URL
+   currentSearchParams?.forEach((value, key) => {
+     if (keysToIgnore?.includes(key)) {
+       url.searchParams?.set(key, value);
+     }
+   });
   
   router.replace(decodeURIComponent(url.toString()), undefined, { shallow: true })
 }
@@ -158,3 +183,21 @@ export const getAppliedFilters = (filters: any[]) => {
 
   return Object.values(appliedFilters).flat()
 }
+
+export const downloadBase64AsFile = (base64: string, fileName: string, fileMime: string) => {
+    const downloadFileObject = (base64: string, fileName: string) => {
+        const linkSource = base64
+        const downloadLink: any = document.createElement("a")
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        if (downloadLink?.click) {
+            downloadLink.click()
+        } else if (downloadLink?.onClick) {
+            downloadLink.onClick()
+        }
+    }
+ 
+    const base64String = `data:${fileMime};base64,` + base64
+    downloadFileObject(base64String, fileName)
+}
+ 

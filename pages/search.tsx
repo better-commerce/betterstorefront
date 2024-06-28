@@ -26,7 +26,7 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
-import { getAppliedFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -103,10 +103,11 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   })
 
   const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
-  const [isFiltersApplied, setIsFiltersApplied] = useState(false)
 
   const {
     data = {
@@ -121,8 +122,9 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
       },
     },
     error,
+    isValidating
   } = useSwr(
-    ['/api/catalog/products', { ...state, excludeOOSProduct }],
+    ['/api/catalog/products', { ...state, excludeOOSProduct, filters: filters || [] }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -132,22 +134,10 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
       },
     }
   )
-
-  useEffect(() => {
-    if (isFiltersApplied || data?.products?.filters?.length < 1) return
-    const filters = getAppliedFilters(data?.products?.filters)
-    setFilter(filters || [])
-    setIsFiltersApplied(true)
-  }, [isFiltersApplied, router.query, data?.products?.filters])
   
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
-    } else {
-      const filters = getAppliedFilters(data?.products?.filters)
-      if (filters?.length) {
-        routeToPLPWithSelectedFilters(router, filters, true)
-      }
     }
   }, [state?.filters])
 
@@ -274,10 +264,16 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   }
 
   const removeFilter = (key: string) => {
+    if(filters?.length == 1){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
   const handleFilters = (filter: null, type: string) => {
+    if (filters?.length == 1 && type == REMOVE_FILTERS){
+      routeToPLPWithSelectedFilters(router, [])
+    }
     dispatch({
       type,
       payload: filter,
@@ -285,9 +281,19 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     dispatch({ type: PAGE, payload: 1 })
   }
 
-  const clearAll = () => dispatch({ type: CLEAR })
+  const clearAll = () => {
+    routeToPLPWithSelectedFilters(router, [])
+    dispatch({ type: CLEAR })
+  }
 
   useEffect(() => {
+    // Setting initial filters from query string
+    setTimeout(() => {
+      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
+        dispatch({ type: SET_FILTERS, payload: filters })
+      }
+    }, 800)
+
     const entity = {
       allowFacet: true,
       brand: null,
@@ -323,7 +329,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     })
 
     recordEvent(EVENTS.FreeText)
-  })
+  }, [])
 
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory?.products
@@ -373,22 +379,29 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <hr className="border-slate-200 dark:border-slate-200" />
-        {!!productDataToPass?.results?.length ? (
-          <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
-            {isMobile ? (
-              <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-            ) : (
-              <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
-                <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+       {isValidating ? (
+         <Loader />  
+        ) : (
+          <>
+          {!!productDataToPass?.results?.length ? (
+            <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+              {isMobile ? (
+                <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+              ) : (
+                <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
+                  <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                </div>
+              )}
+              <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                {isLoading && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
               </div>
-            )}
-            <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-              {isLoading && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-            </div>
-            <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-          </div>)
-          : <NoProductFound />}
+              <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+            </div>)
+            : <NoProductFound />}
+          </>
+        )}
+
 
         <div className='flex flex-col w-full'>
           <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

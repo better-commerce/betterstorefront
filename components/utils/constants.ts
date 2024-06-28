@@ -118,6 +118,8 @@ export const NEXT_SSO_AUTHENTICATE = `/api/login/sso`
 export const NEXT_UPDATE_DETAILS = `/api/customer/update-details`
 export const NEXT_SUBSCRIBE = `/api/customer/subscribe`
 export const NEXT_GET_ORDERS = `/api/customer/orders`
+export const NEXT_GET_DATA_PACK = `/api/customer/data-pack`
+export const NEXT_DOWNLOAD_DATA_PACK = `/api/customer/download-dataPack`
 export const NEXT_GET_WISHLIST = `/api/customer/get-wishlist`
 export const NEXT_CREATE_WISHLIST = `/api/customer/create-wishlist`
 export const NEXT_REMOVE_WISHLIST = `/api/customer/remove-item-from-wishlist`
@@ -505,6 +507,7 @@ export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'
 export const CLOTH_COLOUR_ATTRIB_NAME = 'global.colour'
+export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage']
 
 export enum OrderStatus {
   PENDING = 'Pending',

@@ -188,10 +188,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
           {displayAlert && <AlertRibbon />}
           <>
             <NextHead>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1, maximum-scale=1"
-              />
+              <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
               <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
               <title>{myAccountActiveTab}</title>
               <meta name="title" content={myAccountActiveTab} />
@@ -204,7 +201,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
             <MembershipBanner user={user} />
             <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-                <div className='sticky top-12 sm:border-r sm:col-span-3 border-slate-200 z-10 bg-white'>
+                <div className='sticky z-10 bg-white top-12 sm:border-r sm:col-span-3 border-slate-200'>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
                 <div className='pt-0 sm:col-span-9 sm:pt-8 z-1'>

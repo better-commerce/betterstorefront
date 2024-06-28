@@ -387,6 +387,7 @@
       "recommendedForYouText": "Recommandé pour vous",
       "browsingHistoryText": "Historique de navigation",
       "improveRecommendationText": "Améliorez votre recommandation",
+      "dataPackText": "Pack de données",
       "myCompanyMenus": {
         "user": "Utilisateurs",
         "order": "Commandes",
@@ -1179,7 +1180,11 @@
       "addMsg3Text": "Ajouter un message 3",
       "addMsg2Text": "Ajouter un message 2",
       "addMsg1Text": "Ajouter un message 1",
-      "distanceText": "Distance"
+      "distanceText": "Distance",
+      "generatedOnText": "Généré le",
+      "imagesText": "Images",
+      "nameText": "Nom",
+      "noResultDatapackText": "Aucun pack de données généré"
     },
     "message": {
       "authenticationFailedText": "Échec de l'authentification par e-mail",
