@@ -61,11 +61,7 @@ export const parsePLPFilters = (qsFilters: string) => {
 export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
   const keysToIgnore = IGNORE_QUERY_KEYS
   const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
-    if(cur?.Key === 'brandNoAnlz'){
-      acc['brand'] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
-    } else {
-      acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
-    }
+    acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
     return acc
   }, {})
 
