@@ -282,6 +282,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const userRes: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       cb()
       if (!userRes?.data) {
+        setIsLoggedIn(false)
         return setAlert({ type: AlertType.ERROR, msg: translate('common.message.invalidAccountMsg') })
       }
       setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.loginSuccessMsg') })
