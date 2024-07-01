@@ -124,7 +124,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     error,
     isValidating
   } = useSwr(
-    ['/api/catalog/products', { ...state, excludeOOSProduct, filters: filters || [] }],
+    ['/api/catalog/products', { ...state, excludeOOSProduct }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
