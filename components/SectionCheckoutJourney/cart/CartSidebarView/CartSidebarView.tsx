@@ -559,7 +559,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         <div className="flex items-center ml-3 h-7">
                           <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={handleClose} >
                             <span className="sr-only">{translate('common.label.closePanelText')}</span>
-                            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                             <i className='sprite-icon cross-icon'></i>
+                             {/* <XMarkIcon className="w-6 h-6" aria-hidden="true" /> */}
                           </button>
                         </div>
                       </div>
