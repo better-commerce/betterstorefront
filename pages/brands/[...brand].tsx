@@ -283,8 +283,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [state?.filters])
 
   const handleClick = () => {
-    setShowLandingPage(false)
-    window.scrollTo(0, 0)
+    router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
   }
 
   const handlePageChange = (page: any, redirect = true) => {
