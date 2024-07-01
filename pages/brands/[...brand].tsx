@@ -43,6 +43,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import Loader from '@components/Loader'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -482,11 +483,12 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
   const emptyHtmlString = "<html>\n<head>\n\t<title></title>\n</head>\n<body></body>\n</html>\n"
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
         <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
@@ -496,7 +498,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         <meta property="og:title" content={brandDetails?.metaTitle || brandDetails?.name} key="ogtitle" />
         <meta property="og:description" content={brandDetails?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <>

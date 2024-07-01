@@ -16,7 +16,7 @@ import { parsePLPFilters, routeToPLPWithSelectedFilters, } from 'framework/utils
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { postData } from '@components/utils/clientFetcher'
@@ -56,8 +56,8 @@ export async function getStaticProps(context: any) {
     '/' +
     context.params[childSlugName].join('/')
 
-    const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-    const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
@@ -442,7 +442,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   }
 
   const handleFilters = (filter: null, type: string) => {
-    if (filters?.length == 1 && type == REMOVE_FILTERS){
+    if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
@@ -463,7 +463,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     })
   }
   const removeFilter = (key: string) => {
-    if(filters?.length == 1){
+    if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
@@ -499,11 +499,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{category?.name || translate('label.category.categoryText')}</title>
         <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
@@ -530,7 +531,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
             }
           </div>
           <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text"> {productDataToPass?.total} {productDataToPass?.total >1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text"> {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -564,8 +565,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         ) : null}
         <div className={`container mx-auto ${products?.total > 0 ? ' py-0' : 'py-6'}`}>
           {isValidating ? (
-            <Loader />  
-            ) : (
+            <Loader />
+          ) : (
             <>
               {productDataToPass?.results?.length > 0 ? (
                 <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
