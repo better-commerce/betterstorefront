@@ -507,7 +507,7 @@ export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'
 export const CLOTH_COLOUR_ATTRIB_NAME = 'global.colour'
-export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage']
+export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage', 'freeText']
 
 export enum OrderStatus {
   PENDING = 'Pending',
