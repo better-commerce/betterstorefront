@@ -197,3 +197,7 @@ export const downloadBase64AsFile = (base64: string, fileName: string, fileMime:
     downloadFileObject(base64String, fileName)
 }
  
+
+export function removeTitleTags(html: string): string {
+  return html.replace(/<title[^>]*>.*?<\/title>/g, '');
+}

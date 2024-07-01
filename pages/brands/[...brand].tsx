@@ -481,6 +481,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
+  const emptyHtmlString = "<html>\n<head>\n\t<title></title>\n</head>\n<body></body>\n</html>\n"
   return (
     <>
       <NextHead>
@@ -506,7 +507,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-12">
               <div className="flex md:col-span-9 flex-col items-center px-4 sm:px-10 py-4 sm:py-10 rounded-xl brand-rounded-xl bg-teal-500 min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
                 <img alt="Brand Logo" src={brandDetails.logoImageName || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto rounded-2xl" />
-                <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription, }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
+                {brandDetails?.shortDescription != emptyHtmlString &&
+                  <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
+                }
                 <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
               </div>
               <ImageCollection range={1} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
