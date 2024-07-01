@@ -13,7 +13,7 @@ import { useUI } from '@components/ui'
 // Other Imports
 import { findByFieldName } from '@framework/utils/app-util'
 import { ISubmitStateInterface } from '@commerce/utils/use-data-submit'
-import { Messages } from '@components/utils/constants'
+import { EmptyString, Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 export const NEW_ADDRESS_FORM_ID = 'newAddressForm'
@@ -54,7 +54,7 @@ export const useNewAddressFormFields = () => {
       label: translate('common.label.stateText'),
       className: 'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-sm shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black',
       labelClassName: 'text-gray-700 text-sm dark:text-black',
-      required: true,
+      required: false,
       disabled: false,
     },
     {
@@ -253,11 +253,21 @@ export const useDefaultAddressValues = () => {
           city: Yup.string()
             .required(translate('common.message.address.cityRequiredMsg'))
             .min(3),
-          state: Yup.string().min(3)
-          .required(translate('common.message.address.stateRequiredMsg')),
+          state: Yup.string().nullable(),
+          // .required(translate('common.message.address.stateRequiredMsg')),
           address1: Yup.string()
-            .min(15)
-            .required(translate('common.message.address.address1RequiredMsg'))
+            .trim()
+            .min(3, translate('common.message.address.addressMinLengthMsg'))
+            .required(translate('common.message.address.addressRequiredMsg'))
+            .test(
+              'no-whitespace',
+              translate('common.message.address.address1RequiredMsg'),
+              (value: any) => {
+                return Messages.Validations.RegularExpressions.EMPTY_SPACE.test(
+                  value || EmptyString
+                )
+              }
+            )
             .matches(Messages.Validations.RegularExpressions.ADDRESS_LINE, {
               message: translate('common.message.address.address1InputMsg'),
             }),
