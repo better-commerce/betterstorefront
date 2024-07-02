@@ -347,16 +347,12 @@ function CollectionPage(props: any) {
   }
 
   const handleFilters = (filter: any, type: string) => {
-    const filterObj = {
-      ...filter,
-      Key: filter?.Key?.replace('brandNoAnlz', 'brand')
-    }
     if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
       type,
-      payload: filterObj,
+      payload: filter,
     })
     dispatch({ type: PAGE, payload: 1 })
   }

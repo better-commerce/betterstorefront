@@ -314,7 +314,7 @@ export module Messages {
       export const FIND_EMPTY_CHARACTERS = /\s/g
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
       export const CHARACTERS_AND_ALPHABETS =
-        /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
+        /([a-zA-Z/!#\$@^%&*()=;\'\]"{:<>\\\\,.?|[~_`}/])/g
       export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
       export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
       export const QUANTITY = /^[1-9]{1}[0-9]*$/g

@@ -70,15 +70,16 @@ export const useSchema = () => {
     lastName: Yup.string().required(translate('common.message.lastNameRequiredMsg')),
     email: Yup.string().email().required(translate('common.message.emailAddressRequiredMsg')),
     mobile: Yup.string()
-      .max(10)
-      .min(10)
+      .max(15)
+      .min(7)
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.mobileNumInputMsg'),
       })
       .nullable()  // Allows null values for mobile
       ,
     telephone: Yup.string()
-      .max(10)
+      .max(15)
+      .min(7)
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.phoneNumInputMsg'),
       })

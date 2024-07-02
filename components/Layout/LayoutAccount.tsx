@@ -201,7 +201,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
             <MembershipBanner user={user} />
             <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-                <div className='sticky z-10 bg-white top-12 sm:border-r sm:col-span-3 border-slate-200'>
+                <div className='sticky bg-white top-12 sm:border-r sm:col-span-3 border-slate-200'>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
                 <div className='pt-0 sm:col-span-9 sm:pt-8 z-1'>
