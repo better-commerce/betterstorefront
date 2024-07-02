@@ -47,6 +47,7 @@ import LandingFeaturedCategory from '@components/category/LandingFeaturedCategor
 import FeaturedBrand from '@components/category/FeaturedBrand'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 import Loader from '@components/Loader'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -479,7 +480,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const handleFilters = (filter: null, type: string) => {
-    if (filters?.length == 1 && type == REMOVE_FILTERS){
+    if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
@@ -515,7 +516,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const removeFilter = (key: string) => {
-    if(filters?.length == 1){
+    if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
@@ -545,12 +546,12 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     clearAll()
     dispatch({ type: PAGE, payload: 1 })
   }
-
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{category?.name || translate('label.category.categoryText')}</title>
         <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
@@ -652,8 +653,8 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                 </>
               }
               {isValidating ? (
-                <Loader />  
-                ) : (
+                <Loader />
+              ) : (
                 <>
                   {productDataToPass?.results?.length > 0 ? (
                     <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">

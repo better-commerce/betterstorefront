@@ -15,15 +15,22 @@ export default function getProductOperation({
     query?: string
     cookies?: any
   } = {}): Promise<any> {
-    const response: any = await fetcher({
-      url: `${PRODUCT_PREVIEW_API_ENDPOINT}?slug=products/${query}`,
-      method: 'post',
-      cookies,
-    })
-    //console.log(response)
-    return {
-      product: response.result,
-      snippets: response?.snippets ?? [],
+    try {
+      const response: any = await fetcher({
+        url: `${PRODUCT_PREVIEW_API_ENDPOINT}?slug=products/${query}`,
+        method: 'post',
+        cookies,
+      })
+      //console.log(response)
+      return {
+        product: response.result,
+        snippets: response?.snippets ?? [],
+      }
+    } catch (error: any) {
+      return {
+        product: null,
+        snippets: [],
+      }
     }
   }
 
