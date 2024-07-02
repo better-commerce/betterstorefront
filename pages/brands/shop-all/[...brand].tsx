@@ -34,6 +34,7 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -145,11 +146,11 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     filters: filters.length > 0
       ? filters
       : [
-          {
-            Key: 'brand',
-            Value: brandDetails?.name
-          },
-        ],
+        {
+          Key: 'brand',
+          Value: brandDetails?.name
+        },
+      ],
   }
 
   const [productListMemory, setProductListMemory] = useState({
@@ -211,19 +212,19 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   // reset state on slug change
   useEffect(() => {
-    const handleRouteChange = (url:any) => {
-        const currentSlug = url?.split('?')[0];
-        if (currentSlug !== previousSlug) {
-          dispatch({ type: RESET_STATE })
-          setPreviousSlug(currentSlug);
-        }
+    const handleRouteChange = (url: any) => {
+      const currentSlug = url?.split('?')[0];
+      if (currentSlug !== previousSlug) {
+        dispatch({ type: RESET_STATE })
+        setPreviousSlug(currentSlug);
+      }
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
 
     // Cleanup the event listener on unmount
     return () => {
-        router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [previousSlug, router]);
 
@@ -293,7 +294,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   const clearAll = () => {
-    if (filters?.length){
+    if (filters?.length) {
       routeToPLPWithSelectedFilters(router, initialState?.filters)
     }
     dispatch({ type: CLEAR })
@@ -448,12 +449,12 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }
 
   const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
-
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{brandDetails?.metaTitle || brandDetails?.name}</title>
         <meta name="title" content={brandDetails?.metaTitle || brandDetails?.name} />
         <meta name="title" content={brandDetails?.name || translate('common.label.brandsText')} />
@@ -463,7 +464,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         <meta property="og:title" content={brandDetails?.metaTitle || brandDetails?.name} key="ogtitle" />
         <meta property="og:description" content={brandDetails?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       <div className="container pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
         <div className="max-w-screen-sm">
@@ -489,7 +490,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               </span>
             </li>
             <li className='flex items-center text-10-mob sm:text-sm'>
-            <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {brandDetails?.name}</span>
+              <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {brandDetails?.name}</span>
             </li>
           </ol>
         </div>

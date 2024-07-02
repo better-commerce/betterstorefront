@@ -24,7 +24,7 @@ import Heading from '@components/Heading/Heading'
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -147,12 +147,13 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       slider.destroy();
     };
   }, [sliderRef]);
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + router.asPath} />
+          <link rel="canonical" id="canonical" href={pageContents?.canonical || SITE_ORIGIN_URL + cleanPath} />
           <title>{pageContents?.metatitle || translate('common.label.homeText')}</title>
           <meta name="title" content={pageContents?.metatitle || translate('common.label.homeText')} />
           {pageContents?.metadescription && (<meta name="description" content={pageContents?.metadescription} />)}
@@ -162,7 +163,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
-      {hostName && <input className="inst" type="hidden" value={hostName} />}      
+      {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         <SectionHero2 data={pageContents?.banner} />
         {pageContents?.shopbygender?.length > 0 &&

@@ -19,7 +19,7 @@ import Layout from '@components/Layout/Layout'
 import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri, } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString, } from '@commerce/utils/uri-util'
 import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
@@ -146,8 +146,8 @@ function CollectionPage(props: any) {
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
-  const initialState = { 
-    ...DEFAULT_STATE, 
+  const initialState = {
+    ...DEFAULT_STATE,
     collectionId: props?.id,
     // Setting initial filters from query string
     filters: filters ? filters : [],
@@ -170,9 +170,9 @@ function CollectionPage(props: any) {
       },
     },
     error,
-    isValidating 
+    isValidating
   } = useSwr(
-    ['/api/catalog/products', { ...state, ...{ collectionId: props?.id , slug: props?.slug, excludeOOSProduct } }],
+    ['/api/catalog/products', { ...state, ...{ collectionId: props?.id, slug: props?.slug, excludeOOSProduct } }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
@@ -180,19 +180,19 @@ function CollectionPage(props: any) {
   )
 
   useEffect(() => {
-    const handleRouteChange = (url:any) => {
-        const currentSlug = url?.split('?')[0];
-        if (currentSlug !== previousSlug) {
-          dispatch({ type: RESET_STATE })
-          setPreviousSlug(currentSlug);
-        }
+    const handleRouteChange = (url: any) => {
+      const currentSlug = url?.split('?')[0];
+      if (currentSlug !== previousSlug) {
+        dispatch({ type: RESET_STATE })
+        setPreviousSlug(currentSlug);
+      }
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
 
     // Cleanup the event listener on unmount
     return () => {
-        router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [previousSlug, router]);
 
@@ -213,7 +213,7 @@ function CollectionPage(props: any) {
 
   const [productDataToPass, setProductDataToPass] = useState(props?.products)
 
-  
+
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
@@ -289,7 +289,7 @@ function CollectionPage(props: any) {
     dispatch({ type: SET_FILTERS, payload: filters })
   }
   const removeFilter = (key: string) => {
-    if(filters?.length == 1){
+    if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
@@ -351,7 +351,7 @@ function CollectionPage(props: any) {
       ...filter,
       Key: filter?.Key?.replace('brandNoAnlz', 'brand')
     }
-    if (filters?.length == 1 && type == REMOVE_FILTERS){
+    if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
@@ -464,12 +464,12 @@ function CollectionPage(props: any) {
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
-
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" id="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{props?.metaTitle || props?.name}</title>
         <meta name="title" content={props?.metaTitle || props?.name} />
         <meta name="description" content={props?.metaDescription} />
@@ -478,7 +478,7 @@ function CollectionPage(props: any) {
         <meta property="og:title" content={props?.metaTitle || props?.name} key="ogtitle" />
         <meta property="og:description" content={props?.metaDescription} key="ogdesc" />
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
-        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
+        <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
       <div className='flex flex-col dark:bg-white'>
@@ -563,7 +563,7 @@ function CollectionPage(props: any) {
             </span>
           </li>
           <li className='flex items-center text-10-mob sm:text-sm'>
-          <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+            <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
           </li>
         </ol>
       </div>
@@ -591,7 +591,7 @@ function CollectionPage(props: any) {
         {
           <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
             {isValidating ? (
-              <Loader />  
+              <Loader />
             ) : (
               <>
                 {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (

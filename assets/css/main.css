@@ -17816,3 +17816,14 @@ margin-top: -0.6rem;
 .delivery-method-desc pre {
   text-wrap: wrap;
 }
+.sprite-icon {
+	background: url(/assets//icons/sprite-new-v2.png) no-repeat;
+	background-repeat: no-repeat;
+	position: relative;
+	display: inline-block;
+}
+.cross-icon {
+	background-position:-343px -400px;
+	width: 16px;
+	height: 16px;
+}
