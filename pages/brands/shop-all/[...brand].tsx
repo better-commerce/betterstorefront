@@ -298,7 +298,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       routeToPLPWithSelectedFilters(router, initialState?.filters)
     }
     dispatch({ type: CLEAR })
-    dispatch({ type: ADD_FILTERS, payload: { Key: 'brandNoAnlz', Value: brandDetails?.name, IsSelected: true, }, })
+    dispatch({ type: ADD_FILTERS, payload: { Key: 'brand', Value: brandDetails?.name }, })
   }
 
 
