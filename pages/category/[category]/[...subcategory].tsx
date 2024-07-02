@@ -370,8 +370,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   })
 
   useEffect(() => {
-    if (category?.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_page_view_before({ item_id: category?.name || EmptyString })
@@ -419,13 +417,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   }
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const trackScroll = (ev: any) => {
       setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
