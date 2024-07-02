@@ -43,12 +43,12 @@ function CompanyPages({ slug, pageContents, deviceInfo, config, hostName }: any)
         {pageContents?.heading?.length > 0 &&
           pageContents?.heading?.map((head: any, Idx: any) => (
             <div key={Idx}>
-              <h1 className="text-2xl sm:text-4xl mt-20 mb-10 text-center font-semibold heading-alignment dark:text-black">{head?.heading_herotitle}</h1>
+              <h1 className="mt-20 mb-10 text-2xl font-semibold text-center sm:text-4xl heading-alignment dark:text-black">{head?.heading_herotitle}</h1>
               <div
                 dangerouslySetInnerHTML={{
                   __html: head?.heading_herodescription,
                 }}
-                className="terms-text mt-10 break-all dark:text-black"
+                className="mt-10 break-all terms-text dark:text-black"
               />
             </div>
           ))}
@@ -66,7 +66,7 @@ export async function getServerSideProps(context: any) {
     method: 'get',
     params: {
       id: '',
-      slug: slug.join('/'),
+      slug: 'company/'+slug.join("/"),
       workingVersion: false,
       cachedCopy: true,
     },
