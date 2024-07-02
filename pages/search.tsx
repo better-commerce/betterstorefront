@@ -76,6 +76,9 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
+  const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
@@ -86,7 +89,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...adaptedQuery,
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
   }
 
   const { user } = useUI()
@@ -102,9 +106,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     },
   })
 
-  const router = useRouter()
-  const qsFilters = router.asPath
-  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
@@ -287,13 +288,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   }
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const entity = {
       allowFacet: true,
       brand: null,
