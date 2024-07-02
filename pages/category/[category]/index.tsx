@@ -4,8 +4,6 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import useSwr from 'swr'
-import axios from 'axios'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -222,6 +220,7 @@ export const ACTION_TYPES = {
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
+  RESET_STATE: 'RESET_STATE'
 }
 
 interface actionInterface {
@@ -249,6 +248,7 @@ const {
   ADD_FILTERS,
   REMOVE_FILTERS,
   SET_CATEGORY_ID,
+  RESET_STATE
 } = ACTION_TYPES
 const DEFAULT_STATE = {
   sortBy: '',
@@ -276,6 +276,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -293,6 +295,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage
@@ -305,12 +308,13 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
+    // if featuredProductCSV
+    stockCodes: category?.featuredProductCSV ? category?.featuredProductCSV?.split(',') : [] ,
     categoryId: category?.id,
   }
-  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [minimalProd, setMinimalProd] = useState<any>([])
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data = {
@@ -329,13 +333,30 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, categoryId: category?.id, } },
     ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
@@ -375,8 +396,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   })
 
   useEffect(() => {
-    if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_page_view_before({ item_id: category?.name || EmptyString })
@@ -405,30 +424,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
-    let CSVCollection: any = []
-    if (category.featuredProductCSV != '' && category.featuredProductCSV) {
-      CSVCollection = category?.featuredProductCSV?.split(',')
-      async function handleApiCall() {
-        const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
-          sortBy: '',
-          sortOrder: '',
-          currentPage: 1,
-          filters: [],
-          stockCodes: CSVCollection || '',
-        })
-        setMinimalProd(res?.data.products)
-        return res?.data.products
-      }
-      handleApiCall()
-    }
-
     const trackScroll = (ev: any) => {
       setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
@@ -606,14 +601,14 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                   {category?.featuredBrand?.length > 0 &&
                     <FeaturedBrand featuredBrand={category?.featuredBrand} filterBrandData={filterBrandData} />
                   }
-                  {minimalProd?.results?.length > 0 &&
+                  {productDataToPass?.results?.length > 0 &&
                     <>
                       <div className='flex justify-between mb-2'>
                         <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">Featured Products</h2>
                         <button onClick={onToggleBrandListPage} className='text-lg font-medium text-black hover:underline'>See All</button>
                       </div>
                       <div className={`${CURRENT_THEME != 'green' ? 'grid grid-cols-1 gap-4 sm:grid-cols-3' : 'grid grid-cols-1 gap-4 sm:grid-cols-5'}`}>
-                        {minimalProd?.results?.map((product: any, pIdx: number) => (
+                        {productDataToPass?.results?.map((product: any, pIdx: number) => (
                           <div key={pIdx}>
                             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </div>

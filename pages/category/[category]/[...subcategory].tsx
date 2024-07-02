@@ -228,6 +228,7 @@ export const ACTION_TYPES = {
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
+  RESET_STATE: 'RESET_STATE'
 }
 
 interface actionInterface {
@@ -244,7 +245,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], categoryId: '', }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -265,6 +266,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return { ...state, filters: state.filters.filter((item: any) => item.Value !== payload.Value), }
     default:
@@ -277,6 +280,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
@@ -284,7 +288,13 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const { isCompared } = useUI()
-  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], categoryId: category?.id, }
+  const initialState = { 
+    ...DEFAULT_STATE, 
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
+    // if featuredProductCSV
+    stockCodes: category?.featuredProductCSV ? category?.featuredProductCSV?.split(',') : [] ,
+    categoryId: category?.id, }
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -304,13 +314,30 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, categoryId: category?.id } },
     ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
