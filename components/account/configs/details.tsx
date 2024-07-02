@@ -74,12 +74,15 @@ export const useSchema = () => {
       .min(10)
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.mobileNumInputMsg'),
-      }),
+      })
+      .nullable()  // Allows null values for mobile
+      ,
     telephone: Yup.string()
       .max(10)
       .matches(Messages.Validations.RegularExpressions.MOBILE_NUMBER, {
         message: translate('common.message.phoneNumInputMsg'),
-      }),
+      })
+      .nullable()  // Allows null values for telephone
   })
   return schema;
 }
