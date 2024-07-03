@@ -8,13 +8,13 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
+interface ContactPreferencesProps {
+  notifyByEmail: boolean;
+  notifyByPost: boolean;
+  notifyBySMS: boolean;
+}
 
 export default function ContactPreferences() {
-  interface NotificationPreferences {
-    notifyByEmail: boolean;
-    notifyByPost: boolean;
-    notifyBySMS: boolean;
-}
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
   const [title, setTitle] = useState('Contact')
@@ -24,7 +24,7 @@ export default function ContactPreferences() {
     checked: false,
     id: 2,
   })
-  const [data, setData] = useState<NotificationPreferences>()
+  const [data, setData] = useState<ContactPreferencesProps>()
   const [defaultData, setDefaultData] = useState({})
   const config = useContactPrefConfig();
   const radioBtnsConfig = [
