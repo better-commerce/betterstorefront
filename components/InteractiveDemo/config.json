@@ -254,37 +254,6 @@
               "active": 1
             }
           ]
-      },
-      {
-          "name": "Multi-brand",
-          "code": "multi-brand",
-          "url": "https://multibrand.bettercommerce.tech",
-          "features": [
-            {
-              "group": "Global",
-              "urlCode": "home",
-              "name": "Home Page",
-              "url": "https://multibrand.bettercommerce.tech",
-              "displayOrder": 6,
-              "active": 1
-            },
-            {
-              "group": "PLP",
-              "urlCode": "plp-product-listing",
-              "name": "Product Listing",
-              "url": "https://multibrand.bettercommerce.tech/search",
-              "displayOrder": 7,
-              "active": 1
-            },
-            {
-              "group": "PDP",
-              "urlCode": "pdp-type-simple-product",
-              "name": "Type Simple Product",
-              "url": "https://multibrand.bettercommerce.tech/products/hugo-boss-hugo-boss-regular-fit-sweater-mens-hbs1191-black-xxl",
-              "displayOrder": 11,
-              "active": 1
-            }
-          ]
       }
   ]
 }
