@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
 import { useUI } from '@components/ui'
+
 import { useTranslation } from '@commerce/utils/use-translation'
 export default function Newsletter() {
   const translate = useTranslation()
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
-  const { setAlert } = useUI()
+  const { setAlert, user, setUser, isGuestUser } = useUI()
   const handleChange = (e: any) => {
     setValue(e.target.value)
   }
+  console.log({isGuestUser})
   const submitSubscription = async (data: any) => {
     const regex = Messages.Validations.RegularExpressions.EMAIL
     if (regex.test(data.toString())) {
@@ -18,6 +20,10 @@ export default function Newsletter() {
         email: data,
         notifyByEmail: true,
       })
+      // if loggedIn user
+      if(!isGuestUser && user?.userId){
+        setUser({ ...user, notifyByEmail: true })
+      }
       setValue('')
       setAlert({
         type: 'success',
