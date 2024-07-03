@@ -31,17 +31,11 @@ export default function CategoryGrid({
 }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
-    Router.events.on('routeChangeComplete', () => {
-      const currentPage: any = Router?.query?.currentPage
-      if (currentPage) {
-        handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
-      }
-    })
-
-    return () => {
-      Router.events.off('routeChangeComplete', () => { })
+    const currentPage: any = Router?.query?.currentPage
+    if (currentPage) {
+      handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
     }
-  }, [Router.events])
+  }, [Router?.query?.currentPage])
 
   let gridClass = 'lg:grid-cols-4'
   if (CURRENT_THEME == 'green') {
