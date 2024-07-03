@@ -78,7 +78,7 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
    // Include ignore query key if exists for URL
    currentSearchParams?.forEach((value, key) => {
      if (keysToIgnore?.includes(key)) {
-       url.searchParams?.set(key, value);
+      url.searchParams.set(key, key === 'currentPage' ? '1' : value);  //set currentPage to 1
      }
    });
   
