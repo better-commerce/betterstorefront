@@ -8,6 +8,11 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
+interface ContactPreferencesProps {
+  notifyByEmail: boolean;
+  notifyByPost: boolean;
+  notifyBySMS: boolean;
+}
 
 export default function ContactPreferences() {
   const handleSubmit = useHandleSubmit();
@@ -19,7 +24,7 @@ export default function ContactPreferences() {
     checked: false,
     id: 2,
   })
-  const [data, setData] = useState({})
+  const [data, setData] = useState<ContactPreferencesProps>()
   const [defaultData, setDefaultData] = useState({})
   const config = useContactPrefConfig();
   const radioBtnsConfig = [
@@ -100,20 +105,22 @@ export default function ContactPreferences() {
   }
 
   const handleDataSubmit = async () => {
-    await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
-    eventDispatcher(CustomerUpdated, {
-      entity: JSON.stringify({
-        id: user.userId,
-        name: user.username,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        email: user.email,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      eventType: CustomerUpdated,
-    })
+    if(data?.notifyByEmail != user?.notifyByEmail || data?.notifyByPost != user?.notifyByPost || data?.notifyBySMS != user?.notifyBySMS){
+      await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
+      eventDispatcher(CustomerUpdated, {
+        entity: JSON.stringify({
+          id: user.userId,
+          name: user.username,
+          dateOfBirth: user.yearOfBirth,
+          gender: user.gender,
+          email: user.email,
+          postCode: user.postCode,
+        }),
+        entityId: user.userId,
+        entityName: user.firstName + user.lastName,
+        eventType: CustomerUpdated,
+      })
+    }
   }
 
   const handleCheckbox = (key: string) => {
