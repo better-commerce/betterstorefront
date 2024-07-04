@@ -45,8 +45,8 @@ tw.ecommerce
 tsconfig.tsbuildinfo
 
 # Package Dependencies
-#.npmrc
-#.yarnrc
+.npmrc
+.yarnrc
 
 # npm build output
 .env.dev
