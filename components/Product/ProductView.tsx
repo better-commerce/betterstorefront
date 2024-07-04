@@ -615,10 +615,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     openWishlist()
   }
   const handleWishList = () => {
-    const productIdentification = selectedAttrData?.productId || selectedAttrData?.recordId
-    if (isInWishList(productIdentification)) {
-      deleteWishlistItem(user?.userId, productIdentification)
-      removeFromWishlist(productIdentification)
+    const productId = selectedAttrData?.productId || selectedAttrData?.recordId
+    if (isInWishList(productId)) {
+      deleteWishlistItem(user?.userId, productId)
+      removeFromWishlist(productId)
       openWishlist()
       return
     }
@@ -681,7 +681,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user?.userId,
-            productId: productIdentification,
+            productId: productId,
             flag: true,
           })
           insertToLocalWishlist()
