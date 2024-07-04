@@ -1,24 +1,20 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-
+import {  useState } from 'react'
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@components/Prices'
-import cartHandler from '@components/services/cart'
 import wishlistHandler from '@components/services/wishlist'
 import { useUI } from '@components/ui'
 import { CartProductType, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { getCartValidateMessages, processCartData, vatIncluded } from '@framework/utils/app-util'
-import { Cookie } from '@framework/utils/constants'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import BundleProductCard from '@components/BundleProductCard'
 
-const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, }: any) => {
+const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, basket }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
@@ -26,17 +22,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defau
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { isInWishList } = wishlistHandler()
-  const [basket, setBasket] = useState<any>(null)
-  const { getCart } = cartHandler()
 
-  useEffect(() => {
-    const getBasket = async () => {
-      const basketId = Cookies.get(Cookie.Key.BASKET_ID)
-      const basketRes: any = await getCart({ basketId })
-      setBasket(processCartData(basketRes))
-    }
-    getBasket()
-  }, [])
 
   const getUserId = () => {
     return user?.userId && user?.userId != Guid.empty ? user?.userId : cartItems?.userId
