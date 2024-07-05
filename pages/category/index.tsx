@@ -55,7 +55,7 @@ function CategoryPage(props: any) {
             <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl dark:text-black">{translate('label.category.shopByCategoryText')}</h1>
             {props?.data?.length > 0 && (
               <div className="box-content relative grid grid-cols-2 my-8 gap-x-6 gap-y-6 md:grid-cols-5 lg:grid-cols-4 sm:my-10">
-                {props?.data?.map((category: any, key: number) => (
+                {props?.data?.sort((a: any, b: any) => a?.name?.localeCompare(b?.name))?.map((category: any, key: number) => (
                   category?.link != null &&
                   <div key={key} className="relative border bg-slate-100 rounded-2xl border-slate-200 hover:border-slate-300 group">
                     <Link key={key} href={`/${category?.link}`}>
