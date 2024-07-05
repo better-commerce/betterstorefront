@@ -54,7 +54,6 @@ export default function TechnicalSpecifications({
         <AttributeGroup title={translate('label.product.specifications.printText')} attributes={attrGroup['product.print']} />
         <AttributeGroup title={translate('label.product.specifications.collectionTypeText')} attributes={attrGroup['Collection.Type']} />
         <AttributeGroup title={translate('label.product.specifications.fabricText')} attributes={attrGroup['product.fabric']} />
-        <AttributeGroup title={translate('label.product.specifications.fitText')} attributes={attrGroup['clothing.size']} />
         <AttributeGroup title={translate('label.product.specifications.dressStyleText')} attributes={attrGroup['dress.style']} />
         <AttributeGroup title={translate('label.product.specifications.clothingText')} attributes={attrGroup['clothing.type']} />
       </div>

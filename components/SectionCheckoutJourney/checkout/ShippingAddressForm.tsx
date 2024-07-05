@@ -151,13 +151,6 @@ const ShippingAddressForm: React.FC<any> = ({
 
   return (
     <>
-      {!isGuest && (
-        <div className="flex flex-col gap-0 p-2 my-2 border border-gray-200 rounded-md sm:my-4 sm:p-4 bg-gray-50">
-          <span className="font-semibold text-black font-14 mob-font-12 dark:text-black">
-            {user?.userEmail || user?.email}
-          </span>
-        </div>
-      )}
       {isDeliverTypeSelected && (
         <div
           className={`flex flex-col gap-2 sm:mt-4 mt-3 sm:rounded-md sm:border ${

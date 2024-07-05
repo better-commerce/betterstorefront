@@ -261,7 +261,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               <h2 className="text-base text-left font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
             </div>
             <div className='flex justify-between mt-1'>
-              <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.mainCategoryName}</p>
+              <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.category}</p>
               {data?.reviewCount > 0 &&
                 <div className="flex items-center mb-0.5 w-40 justify-end">
                   <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />

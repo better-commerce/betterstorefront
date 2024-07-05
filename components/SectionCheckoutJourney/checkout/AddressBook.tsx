@@ -98,13 +98,6 @@ const AddressBook: React.FC<AddressBookProps> = ({
 
   return (
     <>
-      {currentStep !== CheckoutStep.DELIVERY_TYPE_SELECT && (
-        <div className="flex flex-col gap-0 p-2 my-2 border border-gray-200 rounded-md sm:my-4 sm:p-4 bg-gray-50">
-          <span className="font-semibold text-black font-14 mob-font-12 dark:text-black">
-            {user?.userEmail || user?.email}
-          </span>
-        </div>
-      )}
       {!shouldHideView ? (
         <>
           <div className="flex flex-col gap-0 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
