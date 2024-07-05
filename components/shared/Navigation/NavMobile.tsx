@@ -28,7 +28,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
         {item?.navBlocks?.map((i: any, index: number) => (
           <Disclosure key={index} as="li">
             <div className={`flex text-sm rounded-lg capitalize hover:bg-neutral-100 dark:hover:bg-neutral-100 mt-0.5 pr-4 ${itemClass}`} >
-              <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`} onClick={onClickClose} >
+              <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`}>
                 {i?.boxTitle.toLowerCase()}
               </span>
               {i?.navItems?.length > 0 && (

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import rangeMap from '@lib/range-map'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -29,13 +29,14 @@ export default function CategoryGrid({
   featureToggle,
   defaultDisplayMembership,
 }: Props & IExtraProps) {
+  const router = useRouter()
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
-    const currentPage: any = Router?.query?.currentPage
+    const currentPage: any = router?.query?.currentPage
     if (currentPage) {
       handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
     }
-  }, [Router?.query?.currentPage])
+  }, [router?.query?.currentPage])
 
   let gridClass = 'lg:grid-cols-4'
   if (CURRENT_THEME == 'green') {
@@ -90,10 +91,10 @@ export default function CategoryGrid({
             <Pagination
               currentPage={currentPage}
               onPageChange={(page: any) => {
-                Router.push(
+                router.push(
                   {
-                    pathname: Router.pathname,
-                    query: { ...Router.query, currentPage: page.selected + 1 },
+                    pathname: router.pathname,
+                    query: { ...router.query, currentPage: page.selected + 1 },
                   },
                   undefined,
                   { shallow: true }
