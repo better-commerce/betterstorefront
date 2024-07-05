@@ -62,6 +62,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
+import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
 
 export enum BasketStage {
   CREATED = 0,
@@ -1206,6 +1207,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
               {steps.map((step: any) => renderStepIndicator(step))}
             </div>
           </div>
+          <CheckoutEmailHeader user={user} currentStep={currentStep} goToStep={goToStep} isLoggedIn={isLoggedIn} />
           <div className="grid gap-6 px0 sm:grid-cols-12 sm:px-0">
             <div className="sm:col-span-12">{renderCurrentStep()}</div>
           </div>

@@ -615,9 +615,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     openWishlist()
   }
   const handleWishList = () => {
-    if (isInWishList(product?.recordId)) {
-      deleteWishlistItem(user?.userId, product?.recordId)
-      removeFromWishlist(product?.recordId)
+    const productId = selectedAttrData?.productId || selectedAttrData?.recordId
+    if (isInWishList(productId)) {
+      deleteWishlistItem(user?.userId, productId)
+      removeFromWishlist(productId)
       openWishlist()
       return
     }
@@ -680,7 +681,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user?.userId,
-            productId: product?.recordId,
+            productId: productId,
             flag: true,
           })
           insertToLocalWishlist()
@@ -895,27 +896,29 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderProductSpecification = () => {
     return (
       product.customAttributes.length > 0 &&
-      <div className="w-full rounded-2xl sm:space-y-2.5">
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
-                <h2 className="text-accordion dark:text-black">{translate('label.product.technicalSpecificationText')}<span className='sr-only'>{' '}of {product?.name}</span></h2>
-                {!open ? (
-                  <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                ) : (
-                  <MinusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                )}
-              </Disclosure.Button>
-              <Disclosure.Panel className={` description-text dark:text-black`} as="div" >
-                <TechnicalSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      </div>
-
+      !product.customAttributes.some((attr: { key: string }) => attr.key === 'clothing.size' || attr.key === 'global.colour') && (
+        <div className="w-full rounded-2xl sm:space-y-2.5">
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
+                  <h2 className="text-accordion dark:text-black">{translate('label.product.technicalSpecificationText')}<span className='sr-only'>{' '}of {product?.name}</span></h2>
+                  {!open ? (
+                    <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                  ) : (
+                    <MinusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                  )}
+                </Disclosure.Button>
+                <Disclosure.Panel className={` description-text dark:text-black`} as="div" >
+                  <TechnicalSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        </div>
+      )
     );
+    
   };
   const detailsConfig = [
     { name: translate('common.label.descriptionText'), content: productDesc },

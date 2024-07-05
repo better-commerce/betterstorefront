@@ -53,7 +53,20 @@ export default function CustomerForm({
   const registerSchema = Yup.object({
     firstName: Yup.string().required(translate('common.message.profile.firstNameRequiredMsg')),
     lastName: Yup.string().required(translate('common.message.profile.lastNameRequiredMsg')),
-    password: Yup.string().min(8,translate('common.message.profile.passwordMinLenghtMsg')).max(24,translate('common.message.profile.passwordMaxLengthMsg')).required(translate('common.message.profile.passwordRequiredMsg')),
+    password: Yup.string().min(8,translate('common.message.profile.passwordMinLenghtMsg')).max(24,translate('common.message.profile.passwordMaxLengthMsg'))
+    .matches(
+      /^.*(?=.*\d).*$/, //for min 13 chars (?=.{13,}) for special char validation ((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1}) , for lowercase char validation ((?=.*[a-z]){1})
+      translate('common.message.profile.passwordMustOneNumberMsg')
+    )
+    .matches(
+      /^.*((?=.*[A-Z]){1}).*$/,
+      translate('common.message.profile.passwordMustOneUpperCaseMsg')
+    )
+    .matches(
+      /^.*((?=.*[a-z]){1}).*$/,
+      translate('common.message.profile.passwordMustOneLowerCaseMsg')
+    )
+    .required(translate('common.message.profile.passwordRequiredMsg')),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password')],translate('label.myAccount.passwordMustMatchText'))
       .required(),
