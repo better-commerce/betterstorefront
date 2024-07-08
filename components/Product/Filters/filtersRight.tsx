@@ -12,13 +12,27 @@ interface Props {
 }
 
 export default function FiltersRightOpen({ products = { filters: [] }, handleFilters, routerFilters, isBrandPLP = false }: Props) {
+  // Generate appliedFilters correctly
+  const appliedFilters = products?.filters?.reduce((acc: any, obj: any) => {
+    if (routerFilters.some((filter: any) => filter.Key === obj.key)) {
+      acc.push({
+        ...obj,
+        ...routerFilters.find((filter: any) => filter.Key === obj.key)
+      });
+    }
+    return acc;
+  }, []);
+
   return (
     <div key="new" className={`relative flex-col hidden w-full h-full max-w-xs pr-4 ml-auto overflow-y-auto bg-white dark:bg-transparent sm:flex sm:px-0 2xl:px-0 ${CURRENT_THEME == 'green' ? ' sm:col-span-2 filter-panel-3' : ' sm:col-span-3'}`}>
       {products.filters?.map((section: any, sectionIdx: number) => {
-        if (isBrandPLP && section?.name === "Brand") return <></>
+        if (isBrandPLP && section?.name === "Brand") return null;
+
+        // Check if section.key is in appliedFilters
+        const isFilterApplied = appliedFilters.some((filter: any) => filter.Key === section?.key);
         return (
-          <div key={`applied-filter-right-${sectionIdx}-${section?.key}`} className='border-b border-slate-300'>
-            <Disclosure defaultOpen={sectionIdx === 0 || (isBrandPLP && sectionIdx === 1)}>
+          <div key={`filter-right-${sectionIdx}-${section?.key}`} className='border-b border-slate-300'>
+            <Disclosure defaultOpen={sectionIdx === 0 || (isBrandPLP && sectionIdx === 1) || isFilterApplied}>
               {({ open }) => (
                 <>
                   <Disclosure.Button className={`flex items-center justify-between w-full gap-2 px-0 py-3 text-left text-black bg-white rounded-lg outline-none dark:bg-transparent hover:bg-white dark:hover:bg-transparent active:outline-none hover:outline-none ${CURRENT_THEME == 'green' ? 'text-xl font-medium' : 'uppercase text-sm font-semibold'}`}>
@@ -35,7 +49,6 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
           </div>
         )
       })}
-
     </div>
   )
 }
