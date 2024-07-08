@@ -780,7 +780,10 @@ export const UIProvider: React.FC<any> = (props) => {
   
   const setCartItems = useCallback(
     (payload: any) => {
-      
+      // Don't set empty payloads to basket items
+      if (!payload) {
+        return
+      }
       const newCartData = processCartData(payload);
       setItem('cartItems', newCartData)
 
