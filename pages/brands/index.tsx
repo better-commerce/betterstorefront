@@ -1,10 +1,9 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Layout from '@components/Layout/Layout'
 import getBrands from '@framework/api/endpoints/catalog/brands'
-import { useState } from 'react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -22,7 +21,6 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
 const dataNormalize = (data: any = []) => {
-
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
       (i: any) =>
@@ -50,17 +48,21 @@ function BrandsPage({ brands }: any) {
   const translate = useTranslation()
   const [normalizedBrands, setNormalizedBrands] = useState(data)
   const handleSearch = (value: any) => {
-    const filteredData = data.filter((item: any) => {
-      const result = item.results.find((brand: any) =>
+    if (!value) {
+      setNormalizedBrands(data)
+      return
+    }
+
+    const filteredData = data.map((item: any) => {
+      const matchedResults = item.results.filter((brand: any) =>
         brand.manufacturerName.toLowerCase().includes(value.toLowerCase())
       )
-      if (result) {
-        return {
-          title: item.title,
-          results: [result],
-        }
+      return {
+        title: item.title,
+        results: matchedResults,
       }
-    })
+    }).filter((item: any) => item.results.length > 0)
+
     setNormalizedBrands(filteredData)
   }
   const { BrandViewed } = EVENTS_MAP.EVENT_TYPES
