@@ -94,7 +94,7 @@ export default function Search(props: any) {
             </div>
           </div>
         </div>
-        <div className="w-full mt-6 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search">
+        <div className="w-full mt-6 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10">
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >

@@ -569,7 +569,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 {isInWishList(selectedAttrData?.productId) ? (
                   <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                 ) : (
-                  <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
+                  <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
                 )}
                 <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
               </button>
