@@ -31,6 +31,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
         // Check if section.key is in appliedFilters
         const isFilterApplied = appliedFilters.some((filter: any) => filter.Key === section?.key);
         return (
+          section?.key != "rating" && CURRENT_THEME === 'green' &&
           <div key={`filter-right-${sectionIdx}-${section?.key}`} className='border-b border-slate-300'>
             <Disclosure defaultOpen={sectionIdx === 0 || (isBrandPLP && sectionIdx === 1) || isFilterApplied}>
               {({ open }) => (
