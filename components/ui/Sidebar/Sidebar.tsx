@@ -33,8 +33,11 @@ const Sidebar: FC<React.PropsWithChildren<SidebarProps & IExtraProps>> = ({
     const contentElement = contentRef.current
 
     if (contentElement) {
-      disableBodyScroll(contentElement, { reserveScrollBarGap: true })
+      if (!(isMobile || isIPadorTablet)) {
+        disableBodyScroll(contentElement, { reserveScrollBarGap: true })
+      }
     }
+
 
     return () => {
       if (contentElement) enableBodyScroll(contentElement)
