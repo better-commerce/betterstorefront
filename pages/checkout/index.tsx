@@ -1166,17 +1166,17 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-2 sm:py-4 bg-gray-100 border-b border-gray-300 checkout-header">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 border-b border-gray-300 sm:py-4 checkout-header">
         <div className="flex justify-between container-storefront gap-x-5 small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88">
             <Logo />
           </Link>
-          <h2 className="flex items-center justify-center text-lg sm:text-2xl font-semibold mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
+          <h1 className="flex items-center justify-center text-lg font-semibold sm:text-2xl mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
             {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
               <i className="ml-4 sprite-icons sprite-secure"></i>
             </span>
-          </h2>
+          </h1>
         </div>
       </div>
 
