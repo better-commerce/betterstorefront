@@ -2185,7 +2185,7 @@ p {
   @media screen and (max-width:900px) {
     .mobile-left-center-info{
       position: absolute !important;
-      bottom: 70px !important;
+      bottom: 35% !important;
       z-index: 99;
       left: 50%;
       transform: translateX(-50%);
