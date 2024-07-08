@@ -17832,3 +17832,9 @@ margin-top: -0.6rem;
 line-height: 0 !important;
 }
 }
+.menu-html > h3 {
+  @apply dark:text-black;
+}
+.menu-html > p {
+  @apply dark:text-black text-nowrap;
+}
