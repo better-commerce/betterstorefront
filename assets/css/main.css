@@ -17708,6 +17708,19 @@ body:has(.engage-announcement-bar){
   border-radius: 6px;
 }
 
+@media screen and (max-width:767px) {
+  .banner-prev button, .banner-next button {
+    background-color: #ffffff !important;
+    height: 50px !important;
+    width: 40px !important;
+    border-radius: 10px !important;
+    left: 0;
+    right: 0;
+    inset-inline-start: 0rem !important;
+    inset-inline-end: 0rem !important;
+  }
+}
+
 .image-name-overlay{
   width: 94%;
   left: 3%;

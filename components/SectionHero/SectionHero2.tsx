@@ -92,8 +92,8 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
             })}
           </div>
 
-          <Prev className="absolute start-1 sm:start-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700 banner-prev opacity-0 group-hover:opacity-100 transition-opacity ease-in	" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
-          <Next className="absolute end-1 sm:end-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700 banner-next opacity-0 group-hover:opacity-100 ease-in	" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
+          <Prev className="absolute start-1 sm:start-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-prev sm:opacity-0 sm:group-hover:opacity-100 transition-opacity ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
+          <Next className="absolute end-1 sm:end-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-next sm:opacity-0 sm:group-hover:opacity-100 ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
           <div className="absolute inset-0 bg-banner mob-bg-banner-height">
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
@@ -102,7 +102,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container mob-hero-container">
             <div>
               <div className="w-full mob-hero inner-container">
-                <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
+                <div className={`relative z-[99] w-full max-w-3xl space-y-4 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
                   <div className="space-y-5 sm:space-y-6 text-info-inner">
                     <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
                       {item?.subTitle}
