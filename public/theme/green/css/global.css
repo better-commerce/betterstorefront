@@ -2516,3 +2516,11 @@ display: none !important;
 .image-gallery-thumbnails-container{
     transform: translate3d(0px, 0px, 0px) !important;
 }
+
+.menu-html {
+  display: flex;
+  flex-direction: column !important;
+  gap: 1rem;
+  max-width: 300px; 
+  margin-bottom: 20px;
+}
