@@ -17845,9 +17845,13 @@ margin-top: -0.6rem;
 line-height: 0 !important;
 }
 }
-.menu-html > h3 {
-  @apply dark:text-black;
+.menu-data > h3 {
+  @apply dark:!text-black;
 }
-.menu-html > p {
-  @apply dark:text-black text-nowrap;
+.menu-data > div > p {
+  @apply dark:!text-black text-nowrap;
+}
+@media screen and (max-width: 767px) {
+  .menu-data {
+    width: 400px !important  }
 }

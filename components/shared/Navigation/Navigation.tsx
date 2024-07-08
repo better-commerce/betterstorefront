@@ -71,7 +71,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                                       ))}
                                     </ul>
                                   ) : (
-                                    <div className="w-full menu-html" dangerouslySetInnerHTML={{ __html: removeTitleTags(navItem?.contentBody), }} ></div>
+                                    <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: removeTitleTags(navItem?.contentBody), }} ></div>
                                   )}
                                 </div>
                               ))}

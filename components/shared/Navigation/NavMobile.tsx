@@ -12,6 +12,7 @@ import ButtonPrimary from "../Button/ButtonPrimary";
 import { Logo, useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { removePrecedingSlash, sanitizeRelativeUrl } from "@framework/utils/app-util";
+import { removeTitleTags } from "framework/utils/app-util";
 
 export interface NavMobileProps {
   data?: NavItemType[];
@@ -31,7 +32,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
               <span className={`py-2.5 ${!i?.children ? "block w-full" : ""}`}>
                 {i?.boxTitle.toLowerCase()}
               </span>
-              {i?.navItems?.length > 0 && (
+              {(i?.navItems?.length > 0 || i?.contentBody?.length > 0) && (
                 <span className="flex items-center flex-grow" onClick={(e) => e.preventDefault()} >
                   <Disclosure.Button as="span" className="flex justify-end flex-grow" >
                     <ChevronDownIcon className="w-4 h-4 ml-2 text-slate-500" aria-hidden="true" />
@@ -41,7 +42,7 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
             </div>
             {i?.navItems && (
               <Disclosure.Panel>
-                <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level">
+                <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level w-full">
                   {i?.navItems?.map((child: any, cIdx: number) => (
                     <li key={cIdx} className={`${child?.itemType ? "menuIsNew" : ""}`} onClick={onClickClose}>
                       <Link className="font-normal capitalize text-slate-600 font-14 hover:text-black dark:text-slate-600 dark:hover:text-black " href={i?.navBlockType == 9 ? `collection${sanitizeRelativeUrl(`/${child?.itemLink}`)}` : `${sanitizeRelativeUrl(`/${child?.itemLink}`)}`} >
@@ -49,6 +50,13 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
                       </Link>
                     </li>
                   ))}
+                </ul>
+              </Disclosure.Panel>
+            )}
+               {i?.contentBody && (
+              <Disclosure.Panel>
+                <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level">
+                <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: removeTitleTags(i?.contentBody), }} ></div>
                 </ul>
               </Disclosure.Panel>
             )}
