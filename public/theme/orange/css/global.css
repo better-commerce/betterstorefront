@@ -1832,5 +1832,6 @@ p {
 @media screen and (max-width:2000px) and (min-width:1280px) {
   .cls-fix-banner{
     min-height: 715px !important;
+    max-height: 715px !important;
   }
 }
