@@ -192,7 +192,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                         <div className="flex items-center justify-between ">
                           <div className="font-semibold font-14 text-green">
                             {currencyCode}
-                            {roundToDecimalPlaces(item?.sale_price, 2)}
+                            {roundToDecimalPlaces(item?.price, 2)}
                           </div>
                         </div>
                       </div>
