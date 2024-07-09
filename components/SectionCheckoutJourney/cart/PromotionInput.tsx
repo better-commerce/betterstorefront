@@ -43,8 +43,8 @@ const PromotionInput = (props: IPromotionInputProps) => {
     basketPromos,
     // paymentOffers,
     items,
-    getBasketPromoses = () => {},
-    setBasket = () => {},
+    getBasketPromoses = () => { },
+    setBasket = () => { },
     membership = [],
   } = props
   const [error, setError] = useState(false)
@@ -84,13 +84,13 @@ const PromotionInput = (props: IPromotionInputProps) => {
   }, [asPath])
 
   const fetchMemberShipBenefits = async () => {
-    if(!!membership?.benefits?.length){
+    if (!!membership?.benefits?.length) {
       if (!cartItems?.lineItems?.length) return
       setAppliedBenefit(false)
       try {
         const membershipVouchers: Array<string> = membership?.benefits?.map((plan: any) => plan?.voucher)
         if (membershipVouchers?.length) {
-          const findAppliedVouchersInBasket = cartItems?.promotionsApplied?.find((promo:any)=> membershipVouchers?.includes(promo?.promoCode))
+          const findAppliedVouchersInBasket = cartItems?.promotionsApplied?.find((promo: any) => membershipVouchers?.includes(promo?.promoCode))
           if (findAppliedVouchersInBasket) {
             setAppliedBenefit(membership?.benefits?.find((plan: any) => plan?.voucher === findAppliedVouchersInBasket?.promoCode))
           }
@@ -106,7 +106,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
     if (cartItems?.lineItems?.length) {
       fetchMemberShipBenefits()
     }
-  }, [ membership, cartItems, cartItems?.id, cartItems?.lineItems])
+  }, [membership, cartItems, cartItems?.id, cartItems?.lineItems])
 
   useEffect(() => {
     if (error) {
@@ -204,127 +204,70 @@ const PromotionInput = (props: IPromotionInputProps) => {
     (x: any) => x?.promoType != 22
   )
 
-  const PromotionsCount = basketPromos?.applicablePromotions?.length +  basketPromos?.availablePromotions?.length
+  const PromotionsCount = basketPromos?.applicablePromotions?.length + basketPromos?.availablePromotions?.length
   return (
     <>
-      <div
-        onSubmit={(e) => {
-          e.preventDefault()
-          handleSubmit('apply')
-        }}
-        className="grid content-center w-full px-0 sm:px-0"
-      >
+      <div onSubmit={(e) => { e.preventDefault(); handleSubmit('apply'); }} className="grid content-center w-full px-0 sm:px-0">
         {basketPromos && (
-          <>
-          <BasketPromo PromotionsCount={PromotionsCount} items={items} promoTypeNot22={promoTypeNot22} viewCoupons={viewCoupons} basketPromos={basketPromos}/>
-          </>
+          <BasketPromo PromotionsCount={PromotionsCount} items={items} promoTypeNot22={promoTypeNot22} viewCoupons={viewCoupons} basketPromos={basketPromos} />
         )}
       </div>
 
       <div className="text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
         {(cartItems?.promotionsApplied?.length > 0) ? cartItems?.promotionsApplied?.map((promo: any, key: number) => {
-              return (
-                <div
-                  className="pt-2 mt-2"
-                  key={`promo-${key}`}
-                >
-                  <div
-                    className="flex justify-between gap-4 pb-2 my-1"
-                    key={key}
-                  >
-                    <div className="flex">
-                      <h5 className="text-sm text-gray-600">
-                        {' '}
-                        { appliedBenefit ? promo?.name : promo?.promoCode }
-                      </h5>
-                    </div>
-                    <div className="flex justify-end">
-                      <h5 className="font-semibold text-black text-md">
-                        {promo?.discountAmt?.raw?.withTax > 0 ? (
-                          <div className="flex">
-                            <span>
-                              -{promo?.discountAmt?.formatted?.withTax}
-                            </span>
-                            <TrashIcon
-                              className="h-5 max-w-xs ml-5 text-black cursor-pointer hover:text-gray-700"
-                              onClick={() =>
-                                handleSubmit(
-                                  'remove',
-                                  cartItems?.promotionsApplied[0]?.promoCode
-                                )
-                              }
-                            />
-                          </div>
-                        ) : (
-                          <span className='text-emerald-600'>{translate('label.basket.freeGiftAddedText')}</span>
-                        )}
-                        {!promo?.autoApply && (
-                          <a href="javascript: void(0);">
-                            <span
-                              className="relative ml-2 sprite-icon cross-icon top-0.5"
-                              onClick={() =>
-                                handleSubmit('remove', promo.promoCode)
-                              }
-                            ></span>
-                          </a>
-                        )}
-                      </h5>
-                    </div>
-                  </div>
+          return (
+            <div className="pt-2 mt-2" key={`promo-${key}`} >
+              <div className="flex justify-between gap-4 pb-2 my-1" key={key} >
+                <div className="flex">
+                  <h5 className="text-sm text-gray-600"> {appliedBenefit ? promo?.name : promo?.promoCode} </h5>
                 </div>
-              )
-            }): null }
+                <div className="flex justify-end">
+                  <h5 className="font-semibold text-black text-md">
+                    {promo?.discountAmt?.raw?.withTax > 0 ? (
+                      <div className="flex">
+                        <span> -{promo?.discountAmt?.formatted?.withTax} </span>
+                        <TrashIcon className="h-5 max-w-xs ml-5 text-black cursor-pointer hover:text-gray-700" onClick={() => handleSubmit('remove', cartItems?.promotionsApplied[0]?.promoCode)} />
+                      </div>
+                    ) : (
+                      <span className='text-emerald-600'>{translate('label.basket.freeGiftAddedText')}</span>
+                    )}
+                    {!promo?.autoApply && (
+                      <a href="javascript: void(0);">
+                        <span className="relative ml-2 top-0.5" onClick={() => handleSubmit('remove', promo.promoCode)} ></span>
+                      </a>
+                    )}
+                  </h5>
+                </div>
+              </div>
+            </div>
+          )
+        }) : null}
       </div>
 
       {/* More Offer MSG */}
       <div className="flex flex-col gap-2 my-2">
-        {basketPromos?.availablePromotions?.length > 0 &&
-          basketPromos?.availablePromotions
-            ?.filter((x: any) => !!x?.croMessage)
-            ?.map((promo: any, crdx: number) => {
-              return (
-                <div
-                  className="relative px-2 py-1 font-semibold border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 offer-m-sec text-secondary-full-opacity"
-                  key={crdx}
-                >
-                  <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                    <img
-                      className="w-auto"
-                      src="/assets/icons/more-offer-icon.svg"
-                      alt=""
-                      width={15}
-                      height={10}
-                    />
-                  </span>{' '}
-                  {promo.croMessage}
-                </div>
-              )
-            })}
+        {basketPromos?.availablePromotions?.length > 0 && basketPromos?.availablePromotions?.filter((x: any) => !!x?.croMessage)?.map((promo: any, crdx: number) => {
+          return (
+            <div className="relative px-2 py-1 font-semibold border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 offer-m-sec text-secondary-full-opacity" key={crdx} >
+              <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
+                <img className="w-auto" src="/assets/icons/more-offer-icon.svg" alt="" width={15} height={10} />
+              </span>{' '}
+              {promo.croMessage}
+            </div>
+          )
+        })}
 
         {basketPromos?.applicablePromotions?.length > 0 && (
-          <>
-            {basketPromos?.applicablePromotions
-              ?.filter((x: any) => x?.promoType == 21 && !!x?.croMessage)
-              ?.map((promo: any, crdx: number) => {
-                return (
-                  <div
-                    className="relative pl-16 my-1 m-offer-info bg-sky-offer offer-m-sec text-secondary-full-opacity"
-                    key={`promo-sec-${crdx}`}
-                  >
-                    <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
-                      <img
-                        className="w-auto"
-                        src="/assets/icons/more-offer-icon.svg"
-                        alt=""
-                        width={15}
-                        height={10}
-                      />
-                    </span>{' '}
-                    {promo.croMessage}
-                  </div>
-                )
-              })}
-          </>
+          basketPromos?.applicablePromotions?.filter((x: any) => x?.promoType == 21 && !!x?.croMessage)?.map((promo: any, crdx: number) => {
+            return (
+              <div className="relative pl-16 my-1 m-offer-info bg-sky-offer offer-m-sec text-secondary-full-opacity" key={`promo-sec-${crdx}`} >
+                <span className="absolute leading-none top-img-15 -translate-y-2/4 left-2">
+                  <img className="w-auto" src="/assets/icons/more-offer-icon.svg" alt="" width={15} height={10} />
+                </span>{' '}
+                {promo.croMessage}
+              </div>
+            )
+          })
         )}
       </div>
       {/* More Offer MSG */}
@@ -334,23 +277,8 @@ const PromotionInput = (props: IPromotionInputProps) => {
           <div className="w-full">
             <div className="flex flex-col mt-0">
               <div className="flex items-center justify-between gap-2 mb-2 -mt-1 font-normal text-left cursor-text text">
-                <input
-                  name={'promotion-code'}
-                  placeholder={translate('label.promotion.applyPromotionText')}
-                  onChange={handleChange}
-                  value={value}
-                  className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md dark:text-black"
-                  required
-                />
-
-                <button
-                  onClick={async () =>
-                    await applyCouponInput('applyInput', value)
-                  }
-                  type="submit"
-                  title={translate('common.label.applyText')}
-                  className={`flex items-center justify-center btn btn-secondary w-full !font-medium`}
-                >
+                <input name={'promotion-code'} placeholder={translate('label.promotion.applyPromotionText')} onChange={handleChange} value={value} className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md dark:text-black" required />
+                <button onClick={async () => await applyCouponInput('applyInput', value)} type="submit" title={translate('common.label.applyText')} className={`flex items-center justify-center btn btn-secondary w-full !font-medium`} >
                   {translate('common.label.applyText')}
                 </button>
               </div>
