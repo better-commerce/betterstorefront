@@ -3,10 +3,11 @@ import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from '../base/api-route-guard'
 
 const searchProductsApiMiddleware = async (req: any, res: any) => {
-  const { value }: any = req.body
+  const { value, sortBy }: any = req.body
   try {
     const response = await searchProducts()({
       value,
+      sortBy,
       cookies: req?.cookies,
     })
     res.status(200).json(response)

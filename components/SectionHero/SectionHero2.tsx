@@ -74,7 +74,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
       return null;
     }
     return (
-      <div className="group home-banner-group-mob" key={`hero-banner-${index}`}>
+      <div className="group home-banner-group-mob cls-fix-banner" key={`hero-banner-${index}`}>
         <h1 className='sr-only'>{item?.name}</h1>
         <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative sm:!pt-0 ${className}`}>
           <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
@@ -95,7 +95,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Prev className="absolute start-1 sm:start-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-prev sm:opacity-0 sm:group-hover:opacity-100 transition-opacity ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
           <Next className="absolute end-1 sm:end-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-next sm:opacity-0 sm:group-hover:opacity-100 ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
-          <div className="absolute inset-0 bg-banner mob-bg-banner-height">
+          <div className="absolute inset-0 bg-banner mob-bg-banner-height cls-fix-banner">
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
 
