@@ -12,9 +12,9 @@ export default function getAllProductPathsOperation() {
         url: CATALOG_SEARCH,
         method: 'post',
       })
+      const products = response.result.products.map(({ slug }: any) => ({ slug: !slug?.startsWith("products/") ? `products/${slug}` : slug })) || []
       return {
-        products:
-          response.result.products.map(({ slug }: any) => ({ slug })) || [],
+        products,
       }
     } catch (error: any) {
       throw new Error(error)
