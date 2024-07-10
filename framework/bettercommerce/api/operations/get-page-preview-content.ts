@@ -10,6 +10,7 @@ export default function getPagePreviewContentOperation() {
     channel,
     cachedCopy = true,
     language = 'en-GB',
+    currency,
   }: any) {
     try {
       const response: any = await fetcher({
@@ -25,8 +26,10 @@ export default function getPagePreviewContentOperation() {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
           Channel: channel,
           language: language,
+          Currency: currency,
         },
         baseUrl: BETTERCMS_BASE_URL,
+        //logRequest: true,
       })
       return response.result
     } catch (error) {
