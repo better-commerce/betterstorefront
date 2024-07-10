@@ -7,16 +7,7 @@ import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
 export default function Engraving({ engravingPrice = '5.99', show = false, handleToggleDialog, submitForm, product, isPersonalizeLoading, readOnly = false, isLoading }: any) {
   const [data, setData] = useState<any>(null)
   const translate = useTranslation();
-  const getData = async () => {
-    const productSlug = product.slug || product.link || null
-    if (!productSlug) return
-  }
 
-  useEffect(() => {
-    getData()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product])
 
   useEffect(() => {
     if (readOnly) {
