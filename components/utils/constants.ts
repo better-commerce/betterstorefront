@@ -320,6 +320,7 @@ export module Messages {
       export const QUANTITY = /^[1-9]{1}[0-9]*$/g
       export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
       export const EMPTY_SPACE = /\S/
+      export const EXTRACT_SLUG = /^https?:\/\/[^\/]+\/(products\/[^?]+)/
     }
 
     export const Login: any = {
