@@ -14,10 +14,9 @@ import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import BundleProductCard from '@components/BundleProductCard'
 
-const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, basket }: any) => {
+const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemClicked, setItemClicked, defaultDisplayMembership, basket }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
-  const [itemClicked, setItemClicked] = useState<any | Array<any>>()
   const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
