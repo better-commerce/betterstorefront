@@ -194,8 +194,8 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                           <div
                             key={product?.id}
                             className={`w-full px-2 py-2 mb-2 border rounded items-list ${product?.price?.raw?.withTax > 0
-                                ? 'bg-white'
-                                : 'bg-emerald-50 border-emerald-400'
+                              ? 'bg-white'
+                              : 'bg-emerald-50 border-emerald-400'
                               }`}
                           >
                             <div className="grid grid-cols-12 gap-2">
@@ -381,10 +381,10 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
                       </dt>
                       <dd className="font-semibold text-black text-md">
-                        {data?.subTotal?.formatted?.withoutTax}
+                        {isIncludeVAT ? data?.subTotal?.formatted?.withTax : data?.subTotal?.formatted?.withoutTax}
                       </dd>
                     </div>
-                    {data?.grandTotal?.raw?.tax > 0 &&
+                    {!isIncludeVAT && data?.grandTotal?.raw?.tax > 0 &&
                       <div className="flex items-center justify-between pt-2 sm:pt-1">
                         <dt className="flex items-center text-black font-18">
                           <span>{translate('label.orderSummary.totalVATText')}</span>
