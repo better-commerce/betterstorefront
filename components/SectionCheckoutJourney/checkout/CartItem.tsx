@@ -14,10 +14,10 @@ import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import BundleProductCard from '@components/BundleProductCard'
 
-const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemClicked, setItemClicked, defaultDisplayMembership, basket }: any) => {
+const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemClicked, setItemClicked, defaultDisplayMembership }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
-  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const { setCartItems, cartItems,  isGuestUser, user,  openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { isInWishList } = wishlistHandler()
@@ -108,7 +108,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemC
   return (
     <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
       <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-        {basket?.lineItems?.map((product: any, productIdx: number) => {
+        {cartItems?.lineItems?.map((product: any, productIdx: number) => {
           const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
           return (
             <>
