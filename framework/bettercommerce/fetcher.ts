@@ -104,6 +104,7 @@ const fetcher = async (props: IFetcherProps | any) => {
   const computedUrl = new URL(url, baseUrl || BASE_URL)
   const newConfig = {
     Currency:
+      headers.Currency ||
       cookies.Currency ||
       store.get('Currency') ||
       BETTERCOMMERCE_CURRENCY ||
