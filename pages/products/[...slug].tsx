@@ -21,10 +21,15 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   }
 
   if (pageProps?.isRedirect) {
+    if (process.env.npm_lifecycle_event === 'build')
+      return {
+        notFound: true
+      }
+
     return {
       redirect: {
-          destination: pageProps?.redirect,
-          permanent: false,
+        destination: pageProps?.redirect,
+        permanent: false,
       },
     }
   }
