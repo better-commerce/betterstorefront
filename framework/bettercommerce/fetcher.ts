@@ -91,40 +91,15 @@ export const setGeneralParams = (param: any, value: any) => {
 }
 
 const fetcher = async (props: IFetcherProps | any) => {
-  const {
-    url = '',
-    method = 'post',
-    data = {},
-    params = {},
-    headers = {},
-    cookies = {},
-    baseUrl = '',
-    logRequest = false,
-  } = props
+  const { url = '', method = 'post', data = {}, params = {}, headers = {}, cookies = {}, baseUrl = '', logRequest = false, } = props
   const computedUrl = new URL(url, baseUrl || BASE_URL)
   const newConfig = {
-    Currency:
-      cookies.Currency ||
-      store.get('Currency') ||
-      BETTERCOMMERCE_CURRENCY ||
-      BETTERCOMMERCE_DEFAULT_CURRENCY ||
-      EmptyString,
-    Language:
-      cookies.Language ||
-      store.get('Language') ||
-      BETTERCOMMERCE_LANGUAGE ||
-      BETTERCOMMERCE_DEFAULT_LANGUAGE ||
-      EmptyString,
-    Country:
-      cookies.Country ||
-      store.get('Country') ||
-      BETTERCOMMERCE_COUNTRY ||
-      BETTERCOMMERCE_DEFAULT_COUNTRY ||
-      EmptyString,
+    Currency: headers?.Currency || cookies.Currency || store.get('Currency') || BETTERCOMMERCE_CURRENCY || BETTERCOMMERCE_DEFAULT_CURRENCY || EmptyString,
+    Language: headers?.Language || cookies.Language || store.get('Language') || BETTERCOMMERCE_LANGUAGE || BETTERCOMMERCE_DEFAULT_LANGUAGE || EmptyString,
+    Country: cookies.Country || store.get('Country') || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY || EmptyString,
     DeviceId: cookies?.deviceId || EmptyString,
     SessionId: cookies?.sessionId || EmptyString,
-    CompanyId:
-      cookies?.CompanyId && cookies?.CompanyId != Guid.empty
+    CompanyId: cookies?.CompanyId && cookies?.CompanyId != Guid.empty
         ? cookies?.CompanyId
         : Guid.empty,
     ClientIP: cookies?.ClientIP ?? null,
@@ -155,11 +130,7 @@ const fetcher = async (props: IFetcherProps | any) => {
     let errorBody = error.data
 
     if (errorStatusCode === 400) {
-      return {
-        hasError: true,
-        status: errorStatusCode,
-        message: errorBody?.message,
-      }
+      return { hasError: true, status: errorStatusCode, message: errorBody?.message, }
     } else {
       throw error
     }
