@@ -182,11 +182,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         omniImg: response?.data?.product?.image,
       })
       setUpdatedProduct(response.data.product)
-      setSelectedAttrData({
-        productId: response?.data?.product?.recordId,
-        stockCode: response?.data?.product?.stockCode,
-        ...response?.data?.product,
-      })
+      // Commenting it, as it override selectedAttribute from attributesHandler
+      // setSelectedAttrData({
+      //   productId: response?.data?.product?.recordId,
+      //   stockCode: response?.data?.product?.stockCode,
+      //   ...response?.data?.product,
+      // })
       if (typeof window !== "undefined" && window?.ch_session) {
         window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
