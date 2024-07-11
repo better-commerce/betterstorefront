@@ -2362,10 +2362,10 @@ p {
   .theme-top .nc-SectionHero2Item__left {
     float: none !important;
   }
-  .banner-prev,
+  /* .banner-prev,
   .banner-next {
     display: none !important;
-  }
+  } */
   .theme-account-container {
     max-width: 100% !important;
     margin-left: auto !important;
