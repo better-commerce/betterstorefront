@@ -17,6 +17,8 @@ import { cartItemsValidateAddToCart, getFeaturesConfig, sanitizeRelativeUrl } fr
 import { useTranslation } from "@commerce/utils/use-translation";
 import uniqBy from 'lodash/uniqBy';
 import { isMobile } from 'react-device-detect';
+import { Guid } from '@commerce/types';
+import { AlertType } from '@framework/utils/enums';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -36,7 +38,7 @@ export interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
-
+  const { deleteWishlistItem, isInWishList: isInWishlistItem, addToWishlist: addToWishlistItem } = wishlistHandler()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
   const { basketId, cartItems, isGuestUser, setCartItems, user, setAlert, removeFromWishlist, addToWishlist, openWishlist, wishListItems, compareProductList, openLoginSideBar, isCompared, setCompareProducts } = useUI()
@@ -44,7 +46,6 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const [product, setProduct] = useState(data || {})
   const [compareAttributes, setCompareAttributes] = useState<any>([])
   const translate = useTranslation()
-  const { deleteWishlistItem } = wishlistHandler()
   const [quantity, setQuantity] = useState(1)
   const handleQuickViewData = (data: any) => {
     setShowModalQuickView(true);
@@ -76,12 +77,12 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
     })
   }, [data, compareProductList])
   useEffect(() => {
-    if (wishListItems?.some((x: any) => x?.stockCode === data?.stockCode)) {
+    if(isInWishlistItem(data?.recordId)) {
       setIsInWishList(true)
     } else {
       setIsInWishList(false)
     }
-  }, [])
+  }, [wishListItems])
 
   const insertToLocalWishlist = () => {
     if (isInWishList) {
@@ -97,42 +98,23 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   }
 
   const handleWishList = async () => {
-    if (isInWishList) {
-      deleteWishlistItem(user?.userId, data?.recordId)
-      removeFromWishlist(data?.recordId)
-      openWishlist()
-      return
-    }
-    const objUser = localStorage.getItem('user')
-    if (!objUser || isGuestUser) {
-      openLoginSideBar()
-      return
-    }
-    if (objUser) {
+    if(!isGuestUser && user?.userId && user?.id != Guid.empty){
       const createWishlist = async () => {
         try {
           if (isInWishList) {
-            await axios.post(NEXT_REMOVE_WISHLIST, {
-              id: user?.userId,
-              productId: data?.recordId,
-              flag: true,
-            })
-            insertToLocalWishlist()
+            await deleteWishlistItem(user?.userId, data?.recordId, insertToLocalWishlist)
           }
           else {
-            await axios.post(NEXT_CREATE_WISHLIST, {
-              id: user?.userId,
-              productId: data?.recordId,
-              flag: true,
-            })
-            insertToLocalWishlist()
+            await addToWishlistItem(user?.userId, data?.recordId, insertToLocalWishlist)
           }
         } catch (error) {
-          console.log(error, 'error')
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
         }
       }
       createWishlist()
-    } else insertToLocalWishlist()
+    } else {
+      openLoginSideBar()
+    }
   }
 
   const buttonTitle = () => {

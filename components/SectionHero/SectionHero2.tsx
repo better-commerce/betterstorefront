@@ -74,7 +74,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
       return null;
     }
     return (
-      <div className="group home-banner-group-mob" key={`hero-banner-${index}`}>
+      <div className="group home-banner-group-mob cls-fix-banner" key={`hero-banner-${index}`}>
         <h1 className='sr-only'>{item?.name}</h1>
         <div className={`nc-SectionHero2Item nc-SectionHero2Item--animation flex flex-col-reverse lg:flex-col z-[0] relative sm:!pt-0 ${className}`}>
           <div className="flex justify-center -translate-x-1/2 bottom-4 start-1/2 rtl:translate-x-1/2 absolute z-[999]">
@@ -92,17 +92,17 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
             })}
           </div>
 
-          <Prev className="absolute start-1 sm:start-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700 banner-prev opacity-0 group-hover:opacity-100 transition-opacity ease-in	" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
-          <Next className="absolute end-1 sm:end-5 top-3/4 sm:top-1/2 sm:-translate-y-1/2 z-10 !text-slate-700 banner-next opacity-0 group-hover:opacity-100 ease-in	" btnClassName="w-12 h-12 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
+          <Prev className="absolute start-1 sm:start-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-prev sm:opacity-0 sm:group-hover:opacity-100 transition-opacity ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickPrev={handleClickPrev} />
+          <Next className="absolute end-1 sm:end-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-next sm:opacity-0 sm:group-hover:opacity-100 ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
-          <div className="absolute inset-0 bg-banner mob-bg-banner-height">
+          <div className="absolute inset-0 bg-banner mob-bg-banner-height cls-fix-banner">
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
 
-          <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container mob-hero-container">
+          <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container cls-fix-banner mob-hero-container">
             <div>
               <div className="w-full mob-hero inner-container">
-                <div className={`relative z-[99] w-full max-w-3xl space-y-8 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
+                <div className={`relative z-[99] w-full max-w-3xl space-y-4 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
                   <div className="space-y-5 sm:space-y-6 text-info-inner">
                     <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
                       {item?.subTitle}

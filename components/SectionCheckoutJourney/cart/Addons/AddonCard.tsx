@@ -24,6 +24,9 @@ import cn from 'classnames'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ButtonNotifyMe from '@components/Product/ButtonNotifyMe'
 import PLPQuickView from '@components/Product/PLPQuickView'
+import { Guid } from '@commerce/types'
+import { AlertType } from '@framework/utils/enums'
+import wishlistHandler from '@components/services/wishlist'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
@@ -68,6 +71,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   const [quickViewData, setQuickViewData] = useState(null)
+  const { deleteWishlistItem, isInWishList: isInWishlistItem, addToWishlist: addToWishlistItem } = wishlistHandler()
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
   const [quantity, setQuantity] = useState(1)
@@ -121,7 +125,7 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   useEffect(() => {
-    if (wishListItems?.some((x: any) => x?.stockCode === product?.stockCode)) {
+    if (isInWishlistItem(product?.recordId)) {
       setIsInWishList(true)
     } else {
       setIsInWishList(false)
@@ -140,37 +144,23 @@ const AddonCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   }
 
   const handleWishList = async () => {
-    const objUser = localStorage.getItem('user')
-    if (!objUser || isGuestUser) {
-      //  setAlert({ type: 'success', msg:" Please Login "})
-      openLoginSideBar()
-      return
-    }
-    if (objUser) {
+    if(!isGuestUser && user?.userId && user?.id != Guid.empty){
       const createWishlist = async () => {
         try {
           if (isInWishList) {
-            await axios.post(NEXT_REMOVE_WISHLIST, {
-              id: user?.userId,
-              productId: product?.recordId,
-              flag: true,
-            })
-            insertToLocalWishlist()
+            await deleteWishlistItem(user?.userId, product?.recordId, insertToLocalWishlist)
           }
           else {
-            await axios.post(NEXT_CREATE_WISHLIST, {
-              id: user?.userId,
-              productId: product?.recordId,
-              flag: true,
-            })
-            insertToLocalWishlist()
+            await addToWishlistItem(user?.userId, product?.recordId, insertToLocalWishlist)
           }
         } catch (error) {
-          console.log(error, 'error')
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
         }
       }
       createWishlist()
-    } else insertToLocalWishlist()
+    } else {
+      openLoginSideBar()
+    }
   }
 
   useEffect(() => {
