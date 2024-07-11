@@ -47,7 +47,8 @@ export const parsePLPFilters = (qsFilters: string) => {
           if (paramValue) {
             const paramValues = paramValue?.split(',')
             paramValues.forEach((value: string) => {
-              filters.push({ Key: key, Value: value?.replaceAll('+', ' ') }) // Replacing plus with space
+              // Special handling for ampersand in query params
+              filters.push({ Key: key, Value: value?.replaceAll('&amp;', '&')?.replaceAll(encodeURIComponent('&'), '&')?.replaceAll('+', ' ') }) // Replacing plus with space
             })
           }
         }
@@ -70,7 +71,8 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
     if (shouldRemove) {
       url.searchParams.delete(key)
     } else {
-      url.searchParams.set(key, modifiedFiltersObj[key])
+      // Special handling for ampersand in query params
+      url.searchParams.set(key, modifiedFiltersObj[key]?.replaceAll('&', '&amp;'))
     }
   }
 
