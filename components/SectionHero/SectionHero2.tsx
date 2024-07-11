@@ -99,7 +99,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
             <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
           </div>
 
-          <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container cls-fix-banner mob-hero-container">
+          <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative pb-0 pt-14 sm:pt-20 lg:py-44 hero-container cls-fix-banner mob-hero-container z-0">
             <div>
               <div className="w-full mob-hero inner-container">
                 <div className={`relative z-[99] w-full max-w-3xl space-y-4 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
