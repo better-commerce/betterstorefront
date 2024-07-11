@@ -216,7 +216,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className={`pb-5 mt-1 max-panel ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'grid grid-cols-4' : ''}`}>
+      <div className={`pb-3 mt-1 max-panel ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'grid grid-cols-4' : ''}`}>
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
