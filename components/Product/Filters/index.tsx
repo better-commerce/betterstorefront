@@ -82,7 +82,7 @@ export default function Filters({
                           <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')} aria-hidden="true" />
                         </span>
                       </Disclosure.Button>
-                      <Disclosure.Panel className="px-4 pt-4 space-y-3 bg-white">
+                      <Disclosure.Panel className="px-4 pt-0 space-y-3 bg-white">
                         <FilterList handleFilters={handleFilters} sectionKey={section.key} items={section.items} routerFilters={routerFilters} closeSidebar={() => setOpen(false)} />
                       </Disclosure.Panel>
                     </>

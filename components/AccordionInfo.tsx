@@ -70,7 +70,7 @@ const AccordionInfo: FC<Props> = ({
           <Disclosure key={index} defaultOpen={index < 2}>
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
+                <Disclosure.Button className="flex items-center mt-2 mb-2 justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
                   <h2 className="text-accordion dark:text-black">{item.name}<span className='sr-only'>{' '}of {product?.name}</span></h2>
                   {!open ? (
                     <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />

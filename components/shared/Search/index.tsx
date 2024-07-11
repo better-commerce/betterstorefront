@@ -82,11 +82,11 @@ export default function Search(props: any) {
       </div>
       <div className="absolute z-10 flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10 top-5">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
-          <div className="flex flex-row px-1 rounded-sm mob-center-align">
+          <div className="flex flex-row px-1 rounded-sm mob-center-align justify-center items-center">
             <label className="hidden" htmlFor={'search-bar'}>
               {translate('label.search.searchText')}
             </label>
-            <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
+            <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible mt-2" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
             <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
@@ -95,7 +95,7 @@ export default function Search(props: any) {
             </div>
           </div>
         </div>
-        <div className="w-full mt-6 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10">
+        <div className="w-full mt-10 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10">
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >

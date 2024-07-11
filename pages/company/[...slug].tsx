@@ -48,7 +48,7 @@ function CompanyPages({ slug, pageContents, deviceInfo, config, hostName }: any)
                 dangerouslySetInnerHTML={{
                   __html: head?.heading_herodescription,
                 }}
-                className="mt-10 break-all terms-text dark:text-black"
+                className="mt-10 break-words terms-text dark:text-black"
               />
             </div>
           ))}
