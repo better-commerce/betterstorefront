@@ -272,7 +272,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
       </div>
       {/* More Offer MSG */}
 
-      {SHOW_APPLY_COUPON_SECTION && !(isMobile || isIPadorTablet) && (
+      {SHOW_APPLY_COUPON_SECTION && (
         <div className="flex items-center w-full pt-0 mt-3">
           <div className="w-full">
             <div className="flex flex-col mt-0">
