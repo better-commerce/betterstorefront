@@ -1,42 +1,27 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-
+import {  useState } from 'react'
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@components/Prices'
-import cartHandler from '@components/services/cart'
 import wishlistHandler from '@components/services/wishlist'
 import { useUI } from '@components/ui'
 import { CartProductType, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { getCartValidateMessages, processCartData, vatIncluded } from '@framework/utils/app-util'
-import { Cookie } from '@framework/utils/constants'
 import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import BundleProductCard from '@components/BundleProductCard'
 
-const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defaultDisplayMembership, }: any) => {
+const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemClicked, setItemClicked, defaultDisplayMembership }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
-  const [itemClicked, setItemClicked] = useState<any | Array<any>>()
-  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const { setCartItems, cartItems,  isGuestUser, user,  openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
   const [isWishlistClicked, setIsWishlistClicked] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const { isInWishList } = wishlistHandler()
-  const [basket, setBasket] = useState<any>(null)
-  const { getCart } = cartHandler()
 
-  useEffect(() => {
-    const getBasket = async () => {
-      const basketId = Cookies.get(Cookie.Key.BASKET_ID)
-      const basketRes: any = await getCart({ basketId })
-      setBasket(processCartData(basketRes))
-    }
-    getBasket()
-  }, [])
 
   const getUserId = () => {
     return user?.userId && user?.userId != Guid.empty ? user?.userId : cartItems?.userId
@@ -123,7 +108,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, defau
   return (
     <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
       <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-        {basket?.lineItems?.map((product: any, productIdx: number) => {
+        {cartItems?.lineItems?.map((product: any, productIdx: number) => {
           const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
           return (
             <>

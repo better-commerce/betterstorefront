@@ -267,8 +267,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-          </div>
-          <SectionPromo3 data={pageContents?.subscription} />
+          </div>          
         </div>
       </div>
     </>

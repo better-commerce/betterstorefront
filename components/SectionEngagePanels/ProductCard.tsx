@@ -12,13 +12,19 @@ import { roundToDecimalPlaces, stringToBoolean, tryParseJson } from '@framework/
 import { useUI } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_COUPON, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_TRENDING, EmptyString, EngageEventTypes } from '@components/utils/constants'
+import { ENGAGE_QUERY_COLLABORATIVE, ENGAGE_QUERY_COUPON, ENGAGE_QUERY_INTEREST, ENGAGE_QUERY_USER_EVENTS, ENGAGE_QUERY_USER_ITEMS, ENGAGE_QUERY_SEARCH, ENGAGE_QUERY_TRENDING, EmptyString, EngageEventTypes, NEXT_GET_PRODUCT_QUICK_VIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, Messages } from '@components/utils/constants'
 import { Cookie } from '@framework/utils/constants'
 import withOmnilytics from '@components/shared/withOmnilytics'
 import { getReqPayload } from '@components/utils/engageQuery'
+import dynamic from 'next/dynamic'
+import ButtonSecondary from '@components/shared/Button/ButtonSecondary'
+import { ArrowsPointingOutIcon } from '@heroicons/react/24/solid'
+import { AlertType } from '@framework/utils/enums'
+const ModalQuickView = dynamic(() => import('@components/ModalQuickView'))
+import { useTranslation } from "@commerce/utils/use-translation";
 
 export interface SectionSliderProductCardProps {
-  product: any
+  product?: any
   type: any
   heading?: any
   campaignData: any
@@ -28,9 +34,12 @@ export interface SectionSliderProductCardProps {
   productPerRow?: any
   productLimit?: any
   forceDisplay?: boolean
+  deviceInfo?: any
+  defaultDisplayMembership?:any
+  featureToggle?: any
 }
 
-const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit, forceDisplay = false }) => {
+const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, heading, campaignData, subHeading, title, isSlider, productPerRow, productLimit, forceDisplay = false, deviceInfo = {}, defaultDisplayMembership = {}, featureToggle = {}}) => {
 
   /**
    * Do not render if campaigns were not found for this page.
@@ -40,7 +49,11 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
   }
 
   const [productList, setProductList] = useState<any>(undefined)
-  const { isCompared, user } = useUI()
+  const isMobile = deviceInfo?.isMobile
+  const translate = useTranslation()
+  const [showModalQuickView, setShowModalQuickView] = useState(false);
+  const [quickViewData, setQuickViewData] = useState(null)
+  const { isCompared, user, setAlert } = useUI()
   const currencyCode = getCurrencySymbol()
   const swiperRef: any = useRef(null)
   const [campaignDetails, setCampaignDetails] = useState<any>(undefined)
@@ -152,6 +165,16 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
     return <></>
   }
 
+  const handleQuickViewData = (data: any) => {  
+    const match = data?.product_url?.match(Messages.Validations.RegularExpressions.EXTRACT_SLUG);
+    if (match) {
+        setShowModalQuickView(true);
+        setQuickViewData({...data, slug : match[1], name: data?.title, image : data?.image_url});
+    } else {
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
+    }
+  }
+
   return (
     <>
       <hr className="border-slate-200 dark:border-slate-700" />
@@ -181,6 +204,26 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                           <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
                         </div>
                       </ButtonLink>
+                      {/* Quick view Button */}
+                      {isMobile ? (
+                        <>
+                          <div className={`grid-cols-1 absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+                            <ButtonSecondary className="ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(item)} >
+                              <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+                              <span className="ms-1">{translate('common.label.quickViewText')}</span>
+                            </ButtonSecondary>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className={`grid-cols-1 absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+                            <ButtonSecondary className="ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(item)} >
+                              <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+                              <span className="ms-1">{translate('common.label.quickViewText')}</span>
+                            </ButtonSecondary>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     <ButtonLink isComparedEnabled={isComparedEnabled} href={`${cleanUrl(item?.product_url)}`} itemPrice={item?.price} productName={item?.title}>
@@ -192,7 +235,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                         <div className="flex items-center justify-between ">
                           <div className="font-semibold font-14 text-green">
                             {currencyCode}
-                            {roundToDecimalPlaces(item?.sale_price, 2)}
+                            {roundToDecimalPlaces(item?.price, 2)}
                           </div>
                         </div>
                       </div>
@@ -212,6 +255,26 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
                           <img src={generateUri(item?.image_url, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={item?.title} />
                         </div>
                       </ButtonLink>
+                      {/* Quick view Button */}
+                      {isMobile ? (
+                        <>
+                          <div className={`grid-cols-1 absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+                            <ButtonSecondary className="ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(item)} >
+                              <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+                              <span className="ms-1">{translate('common.label.quickViewText')}</span>
+                            </ButtonSecondary>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className={`grid-cols-1 absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+                            <ButtonSecondary className="ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(item)} >
+                              <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+                              <span className="ms-1">{translate('common.label.quickViewText')}</span>
+                            </ButtonSecondary>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     <ButtonLink isComparedEnabled={isComparedEnabled} href={`${cleanUrl(item?.product_url)}`} itemPrice={item?.price} productName={item?.title}>
@@ -235,6 +298,8 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
           )}
         </div>
       </div>
+       {/* Quick view Modal */}
+       <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
     </>
   )
 }

@@ -108,8 +108,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
-  const [isLoading, setIsLoading] = useState(true)
-
   const {
     data = {
       products: {
@@ -131,7 +129,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
       revalidateOnFocus: false,
       onSuccess: (data) => {
         setFetchedData(data);
-        setIsLoading(false)
       },
     }
   )
@@ -200,7 +197,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         { shallow: true }
       )
     }
-    setIsLoading(true)
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -388,7 +384,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
               )}
               <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                {isLoading && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
               </div>
               <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
             </div>)

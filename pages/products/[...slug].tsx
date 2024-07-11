@@ -17,14 +17,19 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   const pageProps = await props.getPageProps({ slug, cookies: {} })
 
   if (pageProps?.notFound) {
+    if (process.env.npm_lifecycle_event === 'build') {
+      return {
+        notFound: true
+      }
+    }
     return notFoundRedirect();
   }
 
   if (pageProps?.isRedirect) {
     return {
       redirect: {
-          destination: pageProps?.redirect,
-          permanent: false,
+        destination: pageProps?.redirect,
+        permanent: false,
       },
     }
   }

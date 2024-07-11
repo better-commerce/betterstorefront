@@ -151,12 +151,12 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
-            productId: selectedAttrData.productId,
+            productId: selectedAttrData?.productId,
             qty: 1,
-            manualUnitPrice: product.price.raw.withTax,
-            stockCode: selectedAttrData.stockCode,
-            userId: user.userId,
-            isAssociated: user.isAssociated,
+            manualUnitPrice: product?.price?.raw?.withTax,
+            stockCode: selectedAttrData?.stockCode,
+            userId: user?.userId,
+            isAssociated: user?.isAssociated,
           },
           'ADD',
           { product: selectedAttrData }
@@ -258,12 +258,12 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             const item = await cartHandler().addToCart(
               {
                 basketId: basketId,
-                productId: selectedAttrData.productId,
+                productId: selectedAttrData?.productId,
                 qty: 1,
-                manualUnitPrice: product.price.raw.withTax,
-                stockCode: selectedAttrData.stockCode,
-                userId: user.userId,
-                isAssociated: user.isAssociated,
+                manualUnitPrice: product?.price?.raw?.withTax,
+                stockCode: selectedAttrData?.stockCode,
+                userId: user?.userId,
+                isAssociated: user?.isAssociated,
               },
               'ADD',
               { product: selectedAttrData }
@@ -569,7 +569,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
                 {isInWishList(selectedAttrData?.productId) ? (
                   <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                 ) : (
-                  <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
+                  <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
                 )}
                 <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
               </button>
