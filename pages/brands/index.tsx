@@ -143,6 +143,7 @@ function BrandsPage({ brands }: any) {
                 </h2>
                 <div className="flex flex-col gap-3">
                   {brand.results.map((brands: any, brandIdx: number) => (
+                    brands?.isActive &&
                     <div key={`brand-list-${brandIdx}`} className="flex w-full text-gray-900 sm:inline-flex" >
                       <Link passHref href={brands.link}>
                         <span className="w-full text-sm capitalize cursor-pointer sm:text-lg hover:text-sky-700 hover:underline hover:font-medium">
@@ -155,8 +156,8 @@ function BrandsPage({ brands }: any) {
               </div>
             ))}
           </div>
-        </main>
-      </div>
+        </main >
+      </div >
     </>
   )
 }
