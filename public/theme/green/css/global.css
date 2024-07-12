@@ -1932,21 +1932,22 @@ p {
 .pdp-right-section .product-name-h2{
   font-size:26px;
 }
+
 .price-div .text-gray-400{
-  font-size: 30px !important;
+  font-size: 16px;
   font-weight: 700;
   color: #00b18a;
   align-items: baseline;
 }
 
 .price-div .text-gray-400.list-price{
-  font-size: 18px !important;
+  font-size: 12px;
   font-weight: 500;
   color: #848484;
 }
 
 .price-div .text-gray-400.ex-vat-text{
-  font-size: 16px !important;
+  font-size: 10px;
   font-weight: 500;
   color: #848484;
 }

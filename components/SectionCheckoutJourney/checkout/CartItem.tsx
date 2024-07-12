@@ -156,7 +156,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemC
                               </>
                             }
                           </div>
-                          <div className="relative flex items-center justify-between w-full mt-3 sm:hidden">
+                          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between w-full mt-3 sm:hidden gap-2">
                             {!product?.isMembership && product?.price?.raw?.withTax > 0 ?
                               <div className='relative block text-left'>
                                 <div className='inline-block'>
