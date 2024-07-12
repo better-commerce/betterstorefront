@@ -74,17 +74,17 @@ const RecentlyViewedProduct = ({ deviceInfo, config, productPerRow, featureToggl
       {recentlyViewedState?.length > 0 && (
         <div className="flex flex-col pt-5 sm:pt-10">
           <div className="flex items-center justify-between gap-1 pb-2 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0 sm:pb-4">
-            <h2 className="flex items-center text-2xl font-semibold md:text-3xl">
+            <h2 className="flex items-center text-2xl font-semibold md:text-3xl dark:text-black">
               {translate('common.label.recentlyViewedText')}
             </h2>
             <div className="flex flex-row gap-2">
-              <button onClick={() => swiperRefBasket.current.swiper.slidePrev()} className="relative flex items-center justify-center rounded arrow-container group" >
+              <button onClick={() => swiperRefBasket.current.swiper.slidePrev()} className="relative flex items-center justify-center rounded arrow-container group dark:text-black" >
                 <svg className="w-10 h-10 p-2 ml-2 transition-transform -rotate-90 border rounded-full left-full group-hover:scale-110 border-slate-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
                   <path d="M18.0701 9.57L12.0001 3.5L5.93005 9.57" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M12 20.4999V3.66992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-              <button onClick={() => swiperRefBasket.current.swiper.slideNext()} className="relative flex items-center justify-center rounded arrow-container group" >
+              <button onClick={() => swiperRefBasket.current.swiper.slideNext()} className="relative flex items-center justify-center rounded arrow-container group dark:text-black" >
                 <svg className="w-10 h-10 p-2 ml-2 transition-transform rotate-90 border rounded-full left-full group-hover:scale-110 border-slate-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
                   <path d="M18.0701 9.57L12.0001 3.5L5.93005 9.57" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M12 20.4999V3.66992" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />

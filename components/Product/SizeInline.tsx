@@ -137,7 +137,7 @@ export default function SizeInline({
 
    useEffect(() => {
       SetvalidationState(true)
-      const getStockPerAttrData = getStockPerAttribute(fieldCode, currentAttribute, variant?.slug ?? variant?.link)
+      const getStockPerAttrData = getStockPerAttribute(fieldCode, currentAttribute, product?.slug ?? product?.link)
       setProductData(getStockPerAttrData)
       setSelected({
          fieldValue: currentAttribute,
@@ -149,7 +149,7 @@ export default function SizeInline({
       setSelectedAttrData({ ...(variant || EmptyObject), ...getStockPerAttrData });
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [currentAttribute])
+   }, [currentAttribute, product])
 
    useEffect(() => {
       const getStockPerAttrData = getStockPerAttribute(

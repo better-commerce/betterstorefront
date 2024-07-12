@@ -292,8 +292,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     ...DEFAULT_STATE, 
     // Setting initial filters from query string
     filters: filters ? filters : [],
-    // if featuredProductCSV
-    stockCodes: category?.featuredProductCSV ? category?.featuredProductCSV?.split(',') : [] ,
     categoryId: category?.id, }
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -412,7 +410,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
-    clearAll()
+    // clearAll()
     dispatch({ type: PAGE, payload: 1 })
   }
 

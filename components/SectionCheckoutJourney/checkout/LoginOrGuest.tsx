@@ -152,7 +152,7 @@ const LoginOrGuest: React.FC<any> = ({
               </h5>
             </div>
             <div>
-              <span className="font-12">
+              <span className="font-12 dark:text-black">
                 {translate('label.checkout.checkoutWithoutLoginText')} 
               <button
                   className="py-4 pl-1 font-semibold text-orange-600"
@@ -213,7 +213,7 @@ const LoginOrGuest: React.FC<any> = ({
               </h5>
             </div>
             <div>
-              <span className="font-12">
+              <span className="font-12 dark:text-black">
                 {translate('label.checkout.haveAnAccountText')} 
                 <button
                   className="py-4 pl-1 font-semibold text-orange-600"
