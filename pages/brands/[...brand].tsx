@@ -250,7 +250,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
-    clearAll()
+    // clearAll()
     dispatch({ type: PAGE, payload: 1 })
   }
 
