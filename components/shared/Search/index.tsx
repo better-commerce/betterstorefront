@@ -129,7 +129,7 @@ export default function Search(props: any) {
 
                 <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                   <div>
-                    <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] nc-ProductCard__title">{product?.name}</h2>
+                    <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] dark:text-black nc-ProductCard__title">{product?.name}</h2>
                     <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
                   </div>
                   <div className="flex items-end justify-between product-card-panel">

@@ -1065,7 +1065,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="container p-4 mx-auto max-w-7xl">
                     <div className="flex justify-end">
                       <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
                         {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
@@ -1083,7 +1083,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               {!isEngravingAvailable && (
                 <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
                     {isInWishList(selectedAttrData?.productId) ? (
                       <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                     ) : (
