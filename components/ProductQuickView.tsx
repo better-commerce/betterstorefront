@@ -22,6 +22,8 @@ import { matchStrings, stringFormat } from "@framework/utils/parse-util";
 import cartHandler from "@components/services/cart";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import wishlistHandler from "@components/services/wishlist";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
 import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { PRODUCTS } from "./Product/data";
@@ -34,11 +36,13 @@ export interface ProductQuickViewProps {
   onCloseModalQuickView?: any
   featureToggle: any
   defaultDisplayMembership: any
+  deviceInfo: any
 }
 
-const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView, featureToggle, defaultDisplayMembership }) => {
+const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, maxBasketItemsCount, onCloseModalQuickView, featureToggle, defaultDisplayMembership, deviceInfo }) => {
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
+  const { isMobile, isIPadorTablet } = deviceInfo
   const { openNotifyUser, basketId, cartItems, setCartItems, user, openCart, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
@@ -607,23 +611,83 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   return (
     <div className={`nc-ProductQuickView ${className}`}>
       <div className="lg:flex">
-        <div className="w-full lg:w-[50%] ">
-          <div className="relative">
-            <div className="aspect-w-16 aspect-h-16">
-              <img src={generateUri(selectedAttrData?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={selectedAttrData?.name} />
+        {isMobile ? (
+            <div className="w-full lg:w-[55%]">
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={30}
+                navigation
+                loop
+                className="mySwiper"
+              >
+                <SwiperSlide>
+                  <div className="relative">
+                    <img
+                      src={
+                        generateUri(product?.image, 'h=1000&fm=webp') ||
+                        IMG_PLACEHOLDER
+                      }
+                      className="object-cover object-top w-full"
+                      alt={product?.name}
+                    />
+                    {renderStatus()}
+                  </div>
+                </SwiperSlide>
+                {product?.images?.map((item: any, index: number) => {
+                  return (
+                    item?.tag != 'specification' && (
+                      <SwiperSlide key={index}>
+                        <div className="relative">
+                          <img
+                            src={
+                              generateUri(item?.image, 'h=500&fm=webp') ||
+                              IMG_PLACEHOLDER
+                            }
+                            className="object-cover w-full"
+                            alt={product?.name}
+                          />
+                        </div>
+                      </SwiperSlide>
+                    )
+                  )
+                })}
+              </Swiper>
             </div>
-            {renderStatus()}            
-          </div>
-          <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
-            {selectedAttrData?.images?.slice(0, 2).map((item: any, index: number) => {
-              return (
-                <div key={index} className="aspect-w-3 aspect-h-4">
-                  <img src={generateUri(item?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-xl" alt={item?.name} />
+          ) : (
+            <div className="w-full lg:w-[50%] ">
+              <div className="relative">
+                <div className="aspect-w-16 aspect-h-16">
+                  <img
+                    src={
+                      generateUri(selectedAttrData?.image, 'h=1000&fm=webp') ||
+                      IMG_PLACEHOLDER
+                    }
+                    className="object-cover object-top w-full rounded-xl"
+                    alt={selectedAttrData?.name}
+                  />
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                {renderStatus()}
+              </div>
+              <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
+                {selectedAttrData?.images
+                  ?.slice(0, 2)
+                  .map((item: any, index: number) => {
+                    return (
+                      <div key={index} className="aspect-w-3 aspect-h-4">
+                        <img
+                          src={
+                            generateUri(item?.image, 'h=400&fm=webp') ||
+                            IMG_PLACEHOLDER
+                          }
+                          className="object-cover object-top w-full rounded-xl"
+                          alt={item?.name}
+                        />
+                      </div>
+                    )
+                  })}
+              </div>
+            </div>
+          )}
         {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
           )}

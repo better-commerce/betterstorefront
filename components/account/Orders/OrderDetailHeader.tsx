@@ -90,15 +90,15 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
           </div>
           <div className="flex justify-between py-4 mt-4 border-t sm:pl-16 xsm:pl-16 sm:hidden full-m-ex-header">
             <div className="">
-              <h3 className="font-10 text-black-light uppercase !text-sm">
+              <h3 className="font-10 text-black-light uppercase !text-sm dark:text-black">
                 {translate('label.orderDetails.orderPlacedOnHeadingText')} </h3>
-              <p className="text-sm text-primary">
+              <p className="text-sm text-primary dark:text-gray-700">
                 {moment(new Date(details?.orderDate)).format(DATE_FORMAT)}
               </p>
             </div>
             <div className="">
-              <h3 className="font-10 text-black-light !text-sm">{translate('label.orderDetails.orderTotalHeadingText')}</h3>
-              <p className="text-sm text-primary">
+              <h3 className="font-10 text-black-light !text-sm dark:text-black">{translate('label.orderDetails.orderTotalHeadingText')}</h3>
+              <p className="text-sm text-primary dark:text-gray-700">
                 {details?.grandTotal?.formatted?.withTax}
               </p>
             </div>

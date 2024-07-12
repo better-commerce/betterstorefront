@@ -194,7 +194,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       <>
         {isMobile ? (
           <>
-            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center px-2 transition-all sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1`}>
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               }
