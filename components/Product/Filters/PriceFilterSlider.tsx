@@ -31,16 +31,16 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
   const marks = useMemo(() => {
     const validMin = !isNaN(limits?.minFrom) ? limits?.minFrom : 0;
     const validMax = !isNaN(limits?.maxTo) ? limits?.maxTo : 100;
-    
+
     return {
-      [validMin]: `${validMin}`, 
+      [validMin]: `${validMin}`,
       [validMax]: `${validMax}`,
     };
   }, [limits?.minFrom, limits?.maxTo]);
-  
+
   const [selectedRange, setSelectedRange] = useState<[number, any]>([
     priceFilter ? parseInt(priceFilter?.Value?.split('-')[0]) : limits?.minFrom,
-    priceFilter ? (priceFilter?.Value?.split('-')[1])==='*'? limits?.maxTo + step : (parseInt(priceFilter?.Value?.split('-')[1])) : limits?.maxTo + step,
+    priceFilter ? (priceFilter?.Value?.split('-')[1]) === '*' ? limits?.maxTo + step : (parseInt(priceFilter?.Value?.split('-')[1])) : limits?.maxTo + step,
   ])
 
   // Debounce the entire slider change function
@@ -51,7 +51,7 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
       }
     });
     handleFilters(range, 'ADD_FILTERS');
-  }, 500),[])
+  }, 500), [])
 
   function onSliderChange(value: any) {
     setSelectedRange(value);
@@ -88,24 +88,22 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
             style={{ width: '', marginTop: '20px' }}
             handleRender={(node, handleProps) => {
               return (
-                <Tooltip
-                  overlayInnerStyle={{ minHeight: 'auto' }}
-                  overlay={handleProps.value}
-                  placement="top"
-                  mouseLeaveDelay={0}
-                >
+                <Tooltip overlayInnerStyle={{ minHeight: 'auto' }} overlay={handleProps.value} placement="top" mouseLeaveDelay={0} >
                   {node}
                 </Tooltip>
               )
             }}
           />
         </div>
-        <br />
-        <p className="relative ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-black">
-          {translate('label.product.priceFilterSlider.minText')}: {selectedRange[0]}
-          <br />
-          {translate('label.product.priceFilterSlider.maxText')}:{' '}
-          {selectedRange[1] > limits?.maxTo || selectedRange[1] === '*' ? translate('label.product.priceFilterSlider.noLimitText') : selectedRange[1]}
+        <p className="relative flex justify-between px-2 mt-6 ml-0 text-sm text-gray-500 cursor-pointer filter-label dark:text-black">
+          <span className='text-sm font-bold text-black'>{translate('label.product.priceFilterSlider.minText')}:
+            <span className='font-medium text-gray-600'>{selectedRange[0]}</span>
+          </span>
+          <span className='text-sm font-bold text-black'>
+            {translate('label.product.priceFilterSlider.maxText')}:{' '}
+            <span className='font-medium text-gray-600'>{selectedRange[1] > limits?.maxTo || selectedRange[1] === '*' ? translate('label.product.priceFilterSlider.noLimitText') : selectedRange[1]}</span>
+          </span>
+
         </p>
       </div>
     )

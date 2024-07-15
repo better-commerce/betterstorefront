@@ -321,7 +321,7 @@ export const useDefaultAddressValues = () => {
           <>
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-999999" onClose={onCloseModal}>
-          <div className="fixed inset-0 left-0 bg-gray-900/20" />
+          <div className="fixed inset-0 left-0 bg-black/70 z-999" />
           <div className="fixed inset-0 overflow-hidden z-999">
             <div className="absolute inset-0 overflow-hidden">
               <div className="fixed inset-y-0 right-0 flex max-w-full pointer-events-none">
@@ -338,12 +338,12 @@ export const useDefaultAddressValues = () => {
                     <div className="relative z-50 flex flex-col h-full bg-white shadow-xl">
                       <div className="z-10 px-4 py-6 pb-2 border-b sm:px-6 left-1 top-1">
                         <div className="flex justify-between pb-2 mb-0">
-                          <h3 className="font-bold text-black text-20 dark:text-black flex items-center">
+                          <h3 className="flex items-center font-bold text-black text-20 dark:text-black">
                             <a
                               onClick={onCloseModal}
                               className="inline-block cursor-pointer sm:hidden"
                             >
-                              <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>
+                              <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500'/>
                             </a>
                             {selectedAddressId ? (
                               <>{translate('common.label.editAddressText')}</>
