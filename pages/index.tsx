@@ -231,7 +231,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           }
           {pageContents?.newarrivals?.length > 0 &&
-            <SectionSliderProductCard data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
           <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
             <BackgroundSection />
@@ -248,7 +248,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           }
           {pageContents?.nevermisssale?.length > 0 &&
-            <SectionSliderProductCard data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
@@ -258,7 +258,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           }
           {pageContents?.popular?.length > 0 &&
-            <SectionSliderProductCard data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
           <div className='flex flex-col w-full engage-product-card-section'>
             <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
