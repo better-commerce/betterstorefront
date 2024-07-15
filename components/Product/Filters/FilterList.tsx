@@ -107,7 +107,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
               width: bw,
               borderRadius: bw,
               background: checkboxBgColor,
-              border: '1px solid #cccccc',
+              border: isCheckboxChecked && sectionKey === FILTER_KEYS.COLOR ?'3px solid #000000':'1px solid #cccccc',
               position: 'relative',
               marginRight: mr,
             }}
