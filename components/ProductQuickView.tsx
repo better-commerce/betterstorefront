@@ -569,7 +569,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           {!isEngravingAvailable && (
             <div className="flex mt-6 sm:mt-4 !text-sm w-full">
               <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 dark:border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
+              <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full dark:border-gray-300 hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
                 {isInWishList(selectedAttrData?.productId) ? (
                   <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                 ) : (
@@ -603,7 +603,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-200"></hr>
-        {quickViewData && <AccordionInfo data={[{ name: translate('common.label.descriptionText'), content: selectedAttrData?.description }]} />}
+        {quickViewData && <AccordionInfo data={[{ name: translate('common.label.descriptionText'), content: product?.description }]} />}
       </div>
     );
   };
