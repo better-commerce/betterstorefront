@@ -3,7 +3,7 @@ import { Autoplay, EffectFade } from 'swiper';
 import 'swiper/swiper-bundle.css'
 
 const ProductSocialProof = ({ data = [], featureToggle }: any) => {
-  if (!data || data?.length < 1) {
+  if (!data || !Array.isArray(data) ) {
     return <></>
   }
 
@@ -20,7 +20,7 @@ const ProductSocialProof = ({ data = [], featureToggle }: any) => {
         autoplay={{ delay: 2500 }}
         speed={500}
       >
-        {data?.length > 0 && data?.map((item: any, index: any) => (
+       {data?.map((item: any, index: any) => (
           <SwiperSlide key={index}>
             <div className="flex items-center gap-3 px-6 py-2 bg-white">
               {item?.ImageUrl && (
