@@ -72,7 +72,7 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
         <div className="w-full px-4">
           <Range
             min={limits?.minFrom}
-            max={limits?.maxTo + step}
+            max={limits?.maxTo}
             marks={marks}
             step={step}
             range
