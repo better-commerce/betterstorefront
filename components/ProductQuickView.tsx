@@ -27,6 +27,7 @@ import 'swiper/swiper-bundle.min.css';
 import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { PRODUCTS } from "./Product/data";
+import { Guid } from '@commerce/types';
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
 
 export interface ProductQuickViewProps {
@@ -43,7 +44,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
   const LIST_IMAGES_DEMO = [detail1JPG, detail2JPG, detail3JPG];
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { openNotifyUser, basketId, cartItems, setCartItems, user, openCart, setAlert, removeFromWishlist, addToWishlist, openWishlist } = useUI()
+  const { openNotifyUser, basketId, cartItems, setCartItems, user, openCart, setAlert, removeFromWishlist, addToWishlist, openWishlist, openLoginSideBar, isGuestUser } = useUI()
   const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
@@ -431,11 +432,13 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     openWishlist()
   }
   const handleWishList = () => {
+    if(!isGuestUser && user?.userId && user?.id != Guid.empty){
     const product = { ...quickViewData, productId: selectedAttrData.productId, stockCode: selectedAttrData.stockCode, }
     if (isInWishList(product?.productId)) {
       deleteWishlistItem(user?.userId, product?.productId)
       removeFromWishlist(product?.productId)
       openWishlist()
+      onCloseModalQuickView()
       return
     }
     let productAvailability = 'Yes'
@@ -501,8 +504,14 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         }
       }
       createWishlist()
+      onCloseModalQuickView()
     } else insertToLocalWishlist()
+  } else {
+    onCloseModalQuickView()
+    openLoginSideBar()
   }
+  }
+
   const renderVariants = () => {
     return (
       <div>
