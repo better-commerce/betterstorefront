@@ -291,9 +291,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               ))}
               <div className='grid items-center grid-cols-4 gap-4 text-center'>
                 {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                  <div key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
+                  <Link href={item?.brands_link} passHref  key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
                     <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-10' />
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
