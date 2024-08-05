@@ -229,11 +229,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     key={`category-${itemIdx}`}
                   >
                     <div className='flex flex-col w-full'>
-                      <img
-                        src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
-                        alt={item?.category_title}
-                        className='w-full h-full'
-                      />
+                      <img src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.category_title} className='w-full h-full' />
                     </div>
                     <div className='flex flex-col gap-5'>
                       <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded sm:h-auto sm:p-2 sm:text-sm'>
@@ -251,7 +247,6 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </Link>
                 ))}
               </div>
-
             </div>
           </div>
         }
