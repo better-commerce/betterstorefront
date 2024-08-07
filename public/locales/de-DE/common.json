@@ -55,9 +55,7 @@
       }
     },
     "basket": {
-      "addToBasketText": "In den Warenkorb legen",
-      "addTocartText": "In den Warenkorb legen",
-      "addToBagText": "In die Tasche legen",
+      "addToBagText": "In den Warenkorb legen",
       "addBundleText": "Bundle hinzufügen",  
       "outOfStockText": "Ausverkauft",
       "promoCodeText": "Aktionscode",
@@ -1143,7 +1141,7 @@
       "142-reviewsText": "142 Bewertungen",
       "quickViewText": "Schnellansicht",
       "viewCartText": "Warenkorb anzeigen",
-      "addToCartText": "Zum Warenkorb hinzugefügt!",
+      "successAddToCart": "Zum Warenkorb hinzugefügt!",
       "initiatingOrderText": "Bestellung wird bearbeitet...",
       "pleaseWaitText": "Bitte warten...",
       "validatingAccountText": "Konto wird überprüft...",

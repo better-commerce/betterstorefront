@@ -40,7 +40,7 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
 
   const [selectedRange, setSelectedRange] = useState<[number, any]>([
     priceFilter ? parseInt(priceFilter?.Value?.split('-')[0]) : limits?.minFrom,
-    priceFilter ? (priceFilter?.Value?.split('-')[1]) === '*' ? limits?.maxTo + step : (parseInt(priceFilter?.Value?.split('-')[1])) : limits?.maxTo + step,
+    priceFilter ? (priceFilter?.Value?.split('-')[1]) === '*' ? limits?.maxTo : (parseInt(priceFilter?.Value?.split('-')[1])) : limits?.maxTo,
   ])
 
   // Debounce the entire slider change function
@@ -72,7 +72,7 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
         <div className="w-full px-4">
           <Range
             min={limits?.minFrom}
-            max={limits?.maxTo + step}
+            max={limits?.maxTo}
             marks={marks}
             step={step}
             range
@@ -101,7 +101,7 @@ const PriceFilterSlider: React.FC<PriceFilterSliderProps> = ({
           </span>
           <span className='text-sm font-bold text-black'>
             {translate('label.product.priceFilterSlider.maxText')}:{' '}
-            <span className='font-medium text-gray-600'>{selectedRange[1] > limits?.maxTo || selectedRange[1] === '*' ? translate('label.product.priceFilterSlider.noLimitText') : selectedRange[1]}</span>
+            <span className='font-medium text-gray-600'>{selectedRange[1] > limits?.maxTo || selectedRange[1] === '*' ? selectedRange[1] : selectedRange[1]}</span>
           </span>
 
         </p>

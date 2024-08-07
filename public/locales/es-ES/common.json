@@ -55,8 +55,6 @@
       }
     },
     "basket": {
-      "addToBasketText": "Agregar al carrito",
-      "addTocartText": "Agregar al carrito",
       "addToBagText": "Agregar a la bolsa",
       "addBundleText": "Agregar paquete",  
       "outOfStockText": "Sin stock",
@@ -1144,7 +1142,7 @@
       "142-reviewsText": "142 opiniones",
       "quickViewText": "Vista rápida",
       "viewCartText": "Ver carrito",
-      "addToCartText": "¡Agregado al carrito!",
+      "successAddToCart": "¡Agregado al carrito!",
       "initiatingOrderText": "Iniciando pedido...",
       "pleaseWaitText": "Por favor, espera...",
       "validatingAccountText": "Validando cuenta...",
