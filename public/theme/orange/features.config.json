@@ -14,6 +14,7 @@
     "enableHeaderWishlist": false,
     "enableProductSpecification": true,
     "enableTrendingCategory": true,
+    "enableCategory": false,
     "enableDemoToggle": true,
     "enableLoqateSearch": true,
     "enableAddressIOSearch":false

@@ -181,7 +181,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                       <li className="px-0 pb-2 my-4">
                         <div className="flex gap-3 py-6 sm:gap-6 max-w-fit">
                           <div className="flex-shrink-0">
-                            <Image width={72} height={128} layout="fixed" src={itemData?.image} alt="image" className="basket-image" />
+                            <img width={72} height={128} src={itemData?.image} alt="image" className="basket-image" />
                           </div>
                           <div className="flex flex-col flex-1">
                             <div>

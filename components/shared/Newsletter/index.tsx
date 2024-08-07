@@ -3,11 +3,12 @@ import axios from 'axios'
 import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { Guid } from '@commerce/types'
 export default function Newsletter() {
   const translate = useTranslation()
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
-  const { setAlert } = useUI()
+  const { setAlert, user, setUser, isGuestUser } = useUI()
   const handleChange = (e: any) => {
     setValue(e.target.value)
   }
@@ -18,6 +19,10 @@ export default function Newsletter() {
         email: data,
         notifyByEmail: true,
       })
+      // if loggedIn user
+      if(!isGuestUser && user?.userId && user?.id != Guid.empty){
+        setUser({ ...user, notifyByEmail: true })
+      }
       setValue('')
       setAlert({
         type: 'success',

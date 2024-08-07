@@ -87,7 +87,7 @@ const NotifyAddTocart: FC<Props> = ({
       leaveTo="opacity-0 translate-x-20"
     >
       <p className="block text-base font-semibold leading-none">
-        {translate('common.label.addToCartText')} 
+        {translate('common.label.successAddToCart')} 
       </p>
       <hr className="my-4 border-slate-200 dark:border-slate-700" />
       {renderProductCartOnNotify()}

@@ -504,6 +504,20 @@ export default function OrderConfirmation({ config }: any) {
                       </address>
                     </dd>
                   </div>
+                  <div>
+                    <dt className="font-bold text-gray-900">
+                      {translate('label.addressBook.BillingAddressHeadingText')}
+                    </dt>
+                    <dd className="mt-2 text-gray-700">
+                      <address className="not-italic">
+                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName ? order?.billingAddress?.lastName : ""}`}</span>
+                        <span className="block">{`${order?.billingAddress?.phoneNo}`}</span>
+                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
+                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
+                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
+                      </address>
+                    </dd>
+                  </div>
                 </dl>
 
                 <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
@@ -527,7 +541,7 @@ export default function OrderConfirmation({ config }: any) {
                       <p>
                         {translate('label.thankyou.deliverdText')}:{' '}
                         {order?.deliveryPlans?.length >= 1 ? (
-                          <p className="font-semibold uppercase font-24 dark:text-black">
+                          <p className="font-semibold uppercase font-14 dark:text-black">
                             {eddDateFormat(
                               order?.deliveryPlans[0].deliveryDateTarget
                             )}
@@ -601,7 +615,7 @@ export default function OrderConfirmation({ config }: any) {
                       {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax}
                     </dd>
                   </div>
-                  {order?.grandTotal.raw?.tax > 0 &&
+                  {!isIncludeVAT && order?.grandTotal.raw?.tax > 0 &&
                     <div className="flex justify-between">
                       <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
                       <dd className="text-gray-700">

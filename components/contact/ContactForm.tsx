@@ -228,6 +228,15 @@ function ContactForm() {
               type="submit"
               className="block w-full rounded-md bg-black px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               disabled={formik?.isSubmitting}
+              onClick={async () => {
+                const errors = await formik.validateForm()
+                const firstErrorMessage = Object.values(errors)[0] || 'No errors';
+                setAlert({
+                  type: AlertType.ERROR,
+                  msg:firstErrorMessage,
+                })
+                // errors object first value
+              }}
             >
               {formik?.isSubmitting ? <LoadingDots /> : translate('common.label.submitText')}
             </button>

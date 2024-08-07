@@ -91,17 +91,9 @@ const Summary = ({
               <span>{isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '}</span>
             </dt>
             <dd className="font-semibold text-black text-md">
-              {basket?.subTotal?.formatted?.withoutTax}
+              {isIncludeVAT ? basket?.subTotal?.formatted?.withTax: basket?.subTotal?.formatted?.withoutTax}
             </dd>
           </div>
-          {/*<div className="flex items-center justify-between pt-2 sm:pt-1">
-            <dt className="flex items-center text-black font-14">
-              <span>{translate('label.orderSummary.subTotalVATIncText')}</span>
-            </dt>
-            <dd className="font-semibold text-black text-md">
-              {basket?.subTotal?.formatted?.withTax}
-            </dd>
-          </div>*/}
           {basket?.promotionsApplied?.length > 0 && (
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-900">
@@ -114,7 +106,7 @@ const Summary = ({
               </dd>
             </div>
           )}
-          {basket?.grandTotal?.raw?.tax > 0 &&
+          {!isIncludeVAT && basket?.grandTotal?.raw?.tax > 0 &&
             <div className="flex items-center justify-between pt-2 sm:pt-1">
               <dt className="flex items-center text-black font-14">
                 <span>{translate('label.orderSummary.totalVATText')}</span>

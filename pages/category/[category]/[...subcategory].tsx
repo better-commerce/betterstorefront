@@ -16,7 +16,7 @@ import { parsePLPFilters, routeToPLPWithSelectedFilters, } from 'framework/utils
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { postData } from '@components/utils/clientFetcher'
@@ -56,8 +56,8 @@ export async function getStaticProps(context: any) {
     '/' +
     context.params[childSlugName].join('/')
 
-    const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-    const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
+  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
@@ -228,6 +228,7 @@ export const ACTION_TYPES = {
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
+  RESET_STATE: 'RESET_STATE'
 }
 
 interface actionInterface {
@@ -244,7 +245,7 @@ interface stateInterface {
 }
 
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, } = ACTION_TYPES
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, SET_CATEGORY_ID, RESET_STATE } = ACTION_TYPES
 const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], categoryId: '', }
 
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
@@ -265,6 +266,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return { ...state, filters: state.filters.filter((item: any) => item.Value !== payload.Value), }
     default:
@@ -277,6 +280,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
@@ -284,7 +288,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const { isCompared } = useUI()
-  const initialState = { ...DEFAULT_STATE, filters: adaptedQuery.filters || [], categoryId: category?.id, }
+  const initialState = { 
+    ...DEFAULT_STATE, 
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
+    categoryId: category?.id, }
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -304,13 +312,30 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, categoryId: category?.id } },
     ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
@@ -343,8 +368,6 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   })
 
   useEffect(() => {
-    if (category?.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category?.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_page_view_before({ item_id: category?.name || EmptyString })
@@ -387,18 +410,11 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
-    clearAll()
+    // clearAll()
     dispatch({ type: PAGE, payload: 1 })
   }
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const trackScroll = (ev: any) => {
       setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
@@ -442,7 +458,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   }
 
   const handleFilters = (filter: null, type: string) => {
-    if (filters?.length == 1 && type == REMOVE_FILTERS){
+    if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
@@ -463,7 +479,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     })
   }
   const removeFilter = (key: string) => {
-    if(filters?.length == 1){
+    if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
@@ -499,11 +515,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const closeCompareProducts = () => {
     setProductCompare(false)
   }
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{category?.name || translate('label.category.categoryText')}</title>
         <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
@@ -530,7 +547,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
             }
           </div>
           <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
-            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text"> {productDataToPass?.total} {productDataToPass?.total >1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+            <span className="inline-block mt-2 text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text"> {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
             <div className="flex justify-end align-bottom">
               <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
             </div>
@@ -564,8 +581,8 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
         ) : null}
         <div className={`container mx-auto ${products?.total > 0 ? ' py-0' : 'py-6'}`}>
           {isValidating ? (
-            <Loader />  
-            ) : (
+            <Loader />
+          ) : (
             <>
               {productDataToPass?.results?.length > 0 ? (
                 <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">

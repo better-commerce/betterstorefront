@@ -200,14 +200,14 @@ export const ProductPersonaliser: FC<ProductPersonaliserProps> = ({
                   {product?.images?.map((val: any, valId: number) => {
                     return (
                       <SwiperSlide className={cn('py-0 border border-grey-40', isImageCLick && '')} key={valId} >
-                        <img src={generateUri(val.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} width={400} height={500} alt={val.image || 'product'} className={cn('max-h-md w-full', !!selectedImage && selectedImage === val.image && 'border-2 border-blue')} onClick={(e: any) => { handleImageCLick(e) }} />
+                        <img src={generateUri(val?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} width={400} height={500} alt={val?.image || 'product'} className={cn('max-h-md w-full', !!selectedImage && selectedImage === val?.image && 'border-2 border-blue')} onClick={(e: any) => { handleImageCLick(e) }} />
                       </SwiperSlide>
                     )
                   })}
                 </Swiper>
               </div>
             ) : (
-              <img src={generateUri(product.images[0].image, 'h=500&fm=webp') || IMG_PLACEHOLDER} width={400} height={500} title="Engraving" alt="Engraving" className="w-full max-h-md" />
+              <img src={generateUri(product?.images[0]?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} width={400} height={500} title="Engraving" alt="Engraving" className="w-full max-h-md" />
             )}
           </div>
 

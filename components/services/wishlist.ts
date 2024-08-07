@@ -10,10 +10,10 @@ export default function wishlistHandler() {
   }
 
   return {
-    addToWishlist: (
+    addToWishlist: async (
       userId: string,
       productId: any,
-      insertToLocalWishlist: any
+      insertToLocalWishlist: () => void
     ) => {
       if (accessToken) {
         const createWishlist = async () => {
@@ -64,13 +64,16 @@ export default function wishlistHandler() {
         console.log(error, 'err')
       }
     },
-    deleteWishlistItem: async (userId: string, productId: string) => {
+    deleteWishlistItem: async (userId: string, productId: string, insertToLocalWishlist?: any) => {
       try {
         await axios.post(NEXT_REMOVE_WISHLIST, {
           id: userId,
           productId,
           flag: true,
         })
+        if(insertToLocalWishlist){
+          insertToLocalWishlist()
+        }
       } catch (error: any) {
         console.log(error, 'err')
         throw new Error(error)

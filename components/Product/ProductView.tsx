@@ -182,11 +182,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         omniImg: response?.data?.product?.image,
       })
       setUpdatedProduct(response.data.product)
-      setSelectedAttrData({
-        productId: response?.data?.product?.recordId,
-        stockCode: response?.data?.product?.stockCode,
-        ...response?.data?.product,
-      })
+      // Commenting it, as it override selectedAttribute from attributesHandler
+      // setSelectedAttrData({
+      //   productId: response?.data?.product?.recordId,
+      //   stockCode: response?.data?.product?.stockCode,
+      //   ...response?.data?.product,
+      // })
       if (typeof window !== "undefined" && window?.ch_session) {
         window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
@@ -615,9 +616,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     openWishlist()
   }
   const handleWishList = () => {
-    if (isInWishList(product?.recordId)) {
-      deleteWishlistItem(user?.userId, product?.recordId)
-      removeFromWishlist(product?.recordId)
+    const productId = selectedAttrData?.productId || selectedAttrData?.recordId
+    if (isInWishList(productId)) {
+      deleteWishlistItem(user?.userId, productId)
+      removeFromWishlist(productId)
       openWishlist()
       return
     }
@@ -680,7 +682,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: user?.userId,
-            productId: product?.recordId,
+            productId: productId,
             flag: true,
           })
           insertToLocalWishlist()
@@ -895,27 +897,29 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderProductSpecification = () => {
     return (
       product.customAttributes.length > 0 &&
-      <div className="w-full rounded-2xl sm:space-y-2.5">
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
-                <span className="text-accordion dark:text-black">{translate('label.product.technicalSpecificationText')}</span>
-                {!open ? (
-                  <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                ) : (
-                  <MinusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
-                )}
-              </Disclosure.Button>
-              <Disclosure.Panel className={` description-text dark:text-black`} as="div" >
-                <TechnicalSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-      </div>
-
+      !product.customAttributes.some((attr: { key: string }) => attr.key === 'clothing.size' || attr.key === 'global.colour') && (
+        <div className="w-full rounded-2xl sm:space-y-2.5">
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex items-center justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-slate-100/80 hover:bg-slate-200/60 dark:bg-slate-100/80 dark:hover:bg-slate-200/60 focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75 ">
+                  <h2 className="text-accordion dark:text-black">{translate('label.product.technicalSpecificationText')}<span className='sr-only'>{' '}of {product?.name}</span></h2>
+                  {!open ? (
+                    <PlusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                  ) : (
+                    <MinusIcon className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                  )}
+                </Disclosure.Button>
+                <Disclosure.Panel className={` description-text dark:text-black`} as="div" >
+                  <TechnicalSpecifications attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        </div>
+      )
     );
+    
   };
   const detailsConfig = [
     { name: translate('common.label.descriptionText'), content: productDesc },
@@ -1061,11 +1065,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="container p-4 mx-auto max-w-7xl">
                     <div className="flex justify-end">
                       <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
                         {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                         ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
+                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
                         )}
                         <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                       </button>
@@ -1079,11 +1083,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               {!isEngravingAvailable && (
                 <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn">
+                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
                     {isInWishList(selectedAttrData?.productId) ? (
                       <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
                     ) : (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:text-black" />
+                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
                     )}
                     <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                   </button>
@@ -1111,7 +1115,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {product && <AccordionInfo data={detailsConfig} />}
+        {product && <AccordionInfo product={product} data={detailsConfig} />}
         {renderProductSpecification()}
         <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
           <DeliveryInfo product={product} grpData={attrGroup} config={config} />
@@ -1209,8 +1213,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {/* DETAIL AND REVIEW */}
         {featureToggle?.features?.enableEngage &&
           <>
-            <EngageProductCard productLimit={12} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
-            <EngageProductCard productLimit={12} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+            <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.ALSO_BOUGHT} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+            <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.BOUGHT_TOGETHER} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
           </>
         }
 
@@ -1249,14 +1253,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
           {featureToggle?.features?.enableEngage &&
             <>
-              <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_USER_ITEMS_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_BY_CATEGORIES} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
-              <EngageProductCard productLimit={12} type={EngageEventTypes.CROSS_SELL_ITEMS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} product={product} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.SIMILAR_PRODUCTS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.COLLAB_ITEM_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.COLLAB_USER_ITEMS_VIEW} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.COLLAB_ITEM_PURCHASE} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.CROSS_SELL_BY_CATEGORIES} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
+              <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.CROSS_SELL_ITEMS_SORTED} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} />
             </>
           }
           <div className={`${ELEM_ATTR}${PDP_ELEM_SELECTORS[0]}`}></div>

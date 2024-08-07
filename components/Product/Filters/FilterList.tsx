@@ -107,7 +107,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
               width: bw,
               borderRadius: bw,
               background: checkboxBgColor,
-              border: '1px solid #cccccc',
+              border: isCheckboxChecked && sectionKey === FILTER_KEYS.COLOR ?'3px solid #000000':'1px solid #cccccc',
               position: 'relative',
               marginRight: mr,
             }}
@@ -216,7 +216,7 @@ export default function FilterList({
   return (
     <>
       {getCustomComponent(sectionKey)({ ...PROPS_LIST[sectionKey] })}
-      <div className={`pb-5 mt-1 max-panel ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'grid grid-cols-4' : ''}`}>
+      <div className={`pb-3 mt-1 max-panel ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'grid grid-cols-4' : ''}`}>
         {filterItems.map((option: any, optionIdx: number) => {
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (

@@ -559,7 +559,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         <div className="flex items-center ml-3 h-7">
                           <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={handleClose} >
                             <span className="sr-only">{translate('common.label.closePanelText')}</span>
-                            <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                             <i className='sprite-icon cross-icon'></i>
+                             {/* <XMarkIcon className="w-6 h-6" aria-hidden="true" /> */}
                           </button>
                         </div>
                       </div>
@@ -573,6 +574,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                   <li key={product.id} className="mb-2">
                                     <CartSideBarProductCard 
                                       openModal={openModal}
+                                      isIncludeVAT={isIncludeVAT}
                                       product={product} 
                                       handleClose={handleClose} 
                                       handleItem={handleItem}
@@ -638,7 +640,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
-                          <p className='text-sm'> {' '} {cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax: cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'>{translate('label.orderSummary.shippingText')}</p>
@@ -651,7 +653,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
-                        {cartItems.grandTotal?.raw?.tax > 0 &&
+
+                        {!isIncludeVAT && cartItems.grandTotal?.raw?.tax > 0 &&
                           <div className="flex justify-between py-2 text-sm text-gray-900">
                             <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
                             <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>

@@ -14,12 +14,13 @@ import { EmptyString, SocialMediaType } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import DataLayerInstance from '@components/utils/dataLayer';
+import { AlertType } from "@framework/utils/enums";
 
 export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any) {
   const translate = useTranslation()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
-  const { isGuestUser, user, deleteUser } = useUI()
+  const { isGuestUser, user, deleteUser, setAlert } = useUI()
   const socialMediaConfigs = [
     {
       type: SocialMediaType.GOOGLE,
@@ -146,6 +147,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
       onClick: async () => {
         DataLayerInstance.setItemInDataLayer('visitorId', EmptyString)
         deleteUser({ router: Router })
+        setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.logoutSuccessfulText') })
         if (user?.socialData?.socialMediaType) {
           await signOut()
         }

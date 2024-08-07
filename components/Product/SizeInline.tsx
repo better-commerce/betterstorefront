@@ -137,7 +137,7 @@ export default function SizeInline({
 
    useEffect(() => {
       SetvalidationState(true)
-      const getStockPerAttrData = getStockPerAttribute(fieldCode, currentAttribute)
+      const getStockPerAttrData = getStockPerAttribute(fieldCode, currentAttribute, product?.slug ?? product?.link)
       setProductData(getStockPerAttrData)
       setSelected({
          fieldValue: currentAttribute,
@@ -149,7 +149,7 @@ export default function SizeInline({
       setSelectedAttrData({ ...(variant || EmptyObject), ...getStockPerAttrData });
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [currentAttribute])
+   }, [currentAttribute, product])
 
    useEffect(() => {
       const getStockPerAttrData = getStockPerAttribute(
@@ -206,10 +206,11 @@ export default function SizeInline({
    const handleOnChange = (value: any) => {
       let selectedVariant = items?.find((o: any) => o?.fieldValue === value);
       const slug = selectedVariant?.slug || `products/${router.query?.slug}`;
-      selectedVariant = getStockPerAttribute(fieldCode, value)
+      selectedVariant = getStockPerAttribute(fieldCode, value, slug)
       setSelected({ fieldValue: value, ...selectedVariant });
       setAttrCombination(fieldCode, value);
-      setSelectedAttrData(selectedVariant);
+      // Don't remove other field values  
+      setSelectedAttrData({ ...(variant || EmptyObject), ...selectedVariant });
       if (value?.stock === 0 && !isPreOrderEnabled) {
          openNotifyUser(selectedVariant.productId);
       }

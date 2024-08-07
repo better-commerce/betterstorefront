@@ -19,7 +19,7 @@ import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
 
 export default function Search(props: any) {
-  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, } = props;
+  const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, searchDefaultSortBy } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
@@ -35,6 +35,7 @@ export default function Search(props: any) {
       try {
         const response: any = await axios.post(NEXT_SEARCH_PRODUCTS, {
           value: inputValue,
+          sortBy: searchDefaultSortBy
         })
         setProducts(response?.data?.results)
         setIsLoading(false)
@@ -58,12 +59,14 @@ export default function Search(props: any) {
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Enter') {
-      Router.push(`search?freeText=${encodeURIComponent(inputValue.trim())}`);
+      Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
+      closeWrapper()
     }
   };
 
   const handleClickSearch = () => {
-    Router.push(`search?freeText=${encodeURIComponent(inputValue.trim())}`);
+    Router.push(`/search?freeText=${encodeURIComponent(inputValue.trim())}`);
+    closeWrapper()
   }
 
   useEffect(() => {
@@ -81,20 +84,20 @@ export default function Search(props: any) {
       </div>
       <div className="absolute z-10 flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10 top-5">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
-          <div className="flex flex-row px-1 rounded-sm mob-center-align">
+          <div className="flex flex-row items-center justify-center px-1 rounded-sm mob-center-align">
             <label className="hidden" htmlFor={'search-bar'}>
               {translate('label.search.searchText')}
             </label>
-            <div className="hidden text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
+            <div className="hidden mt-2 text-gray-900 cursor-pointer h-9 w-9 desktop-hidden mobile-visible" onClick={closeWrapper} >
               <ChevronLeftIcon />
             </div>
             <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
             <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
-              <MagnifyingGlassIcon onClick={handleClickSearch} className="w-6 h-6" aria-hidden="true"/>
+              <MagnifyingGlassIcon onClick={handleClickSearch} className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>
         </div>
-        <div className="w-full mt-6 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search">
+        <div className="w-full mt-10 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10">
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
@@ -128,7 +131,7 @@ export default function Search(props: any) {
 
                 <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                   <div>
-                    <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] nc-ProductCard__title">{product?.name}</h2>
+                    <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] dark:text-black nc-ProductCard__title">{product?.name}</h2>
                     <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
                   </div>
                   <div className="flex items-end justify-between product-card-panel">

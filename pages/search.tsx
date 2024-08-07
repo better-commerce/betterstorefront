@@ -76,6 +76,9 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
+  const router = useRouter()
+  const qsFilters = router.asPath
+  const filters: any = parsePLPFilters(qsFilters as string)
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
@@ -86,7 +89,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 
   const initialState = {
     ...DEFAULT_STATE,
-    ...adaptedQuery,
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
   }
 
   const { user } = useUI()
@@ -102,13 +106,8 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     },
   })
 
-  const router = useRouter()
-  const qsFilters = router.asPath
-  const filters: any = parsePLPFilters(qsFilters as string)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [fetchedData, setFetchedData] = useState<any>({})
-  const [isLoading, setIsLoading] = useState(true)
-
   const {
     data = {
       products: {
@@ -124,13 +123,12 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     error,
     isValidating
   } = useSwr(
-    ['/api/catalog/products', { ...state, excludeOOSProduct, filters: filters || [] }],
+    ['/api/catalog/products', { ...state, excludeOOSProduct }],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
       onSuccess: (data) => {
         setFetchedData(data);
-        setIsLoading(false)
       },
     }
   )
@@ -160,7 +158,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
-    clearAll()
+    // clearAll()
     dispatch({ type: PAGE, payload: 1 })
   }
 
@@ -199,7 +197,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         { shallow: true }
       )
     }
-    setIsLoading(true)
     dispatch({ type: PAGE, payload: page.selected + 1 })
     if (typeof window !== 'undefined') {
       window.scroll({
@@ -287,13 +284,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   }
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
     const entity = {
       allowFacet: true,
       brand: null,
@@ -373,7 +363,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-1 sm:mb-1 align-center'>
-          <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
+          <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
           <div className="flex justify-end align-bottom">
             <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
           </div>
@@ -394,7 +384,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
               )}
               <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                {isLoading && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
               </div>
               <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
             </div>)

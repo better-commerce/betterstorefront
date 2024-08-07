@@ -34,6 +34,8 @@ interface Props {
 const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
+  const searchSetting = configSettings?.find((x: any) => matchStrings(x?.configType, 'SearchSettings', true))?.configKeys || []
+  const searchDefaultSortBy = searchSetting?.length ? searchSetting?.find((x: any) => x?.key === 'SearchSettings.DefaultSortBy')?.value : "3"
   const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems, openLoginSideBar } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [visible, setVisible] = useState(true);
@@ -64,7 +66,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   }
   const renderMagnifyingGlassIcon = () => {
     return (
-      <SearchBar onClick={setShowSearchBar} keywords={keywords} />
+      <SearchBar onClick={setShowSearchBar} keywords={keywords} searchDefaultSortBy={searchDefaultSortBy} />
     );
   };
   function handleWishlist() {
@@ -139,12 +141,12 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
-              <button className="items-center justify-center w-7 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+              <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                 {renderMagnifyingGlassIcon()}
               </button>
 
               {featureToggle?.features?.enableHeaderWishlist &&
-                <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
+                <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
                   <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                     <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (

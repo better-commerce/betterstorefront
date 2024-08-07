@@ -14,16 +14,16 @@ import { useTranslation } from '@commerce/utils/use-translation'
 export default function MyDetails() {
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
-  const schema = useSchema();
+  const schema:any = useSchema();
   const formConfig = useDetailsFormConfig();
   const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
   const { user, setUser, changeMyAccountTab } = useUI()
   const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
-  const ContactNumberLenCheck: any = 10
+  const ContactNumberLenCheck: any =  schema?.fields?.mobile?.tests?.find((t:any) => t?.OPTIONS?.name === 'max').OPTIONS?.params?.max;
 
   const formikHandleChange = (e: any, handleFunction: any) => {
-    if (e.target.name === 'phone' || e.target.name === 'mobile') {
+    if (e.target.name === 'telephone' || e.target.name === 'mobile') {
       //Regex to check if the value consists of an alphabet or a character
       e.target.value = e.target.value
         ? e.target.value.replace(

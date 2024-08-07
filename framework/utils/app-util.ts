@@ -47,7 +47,8 @@ export const parsePLPFilters = (qsFilters: string) => {
           if (paramValue) {
             const paramValues = paramValue?.split(',')
             paramValues.forEach((value: string) => {
-              filters.push({ Key: key, Value: value?.replaceAll('+', ' ') }) // Replacing plus with space
+              // Special handling for ampersand in query params
+              filters.push({ Key: key, Value: value?.replaceAll('&amp;', '&')?.replaceAll(encodeURIComponent('&'), '&')?.replaceAll('+', ' ') }) // Replacing plus with space
             })
           }
         }
@@ -61,11 +62,7 @@ export const parsePLPFilters = (qsFilters: string) => {
 export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters: Array<any>, shouldRemove = false) => {
   const keysToIgnore = IGNORE_QUERY_KEYS
   const modifiedFiltersObj = currentFilters?.reduce((acc: any, cur: { Key: string, Value: string }) => {
-    if(cur?.Key === 'brandNoAnlz'){
-      acc['brand'] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
-    } else {
-      acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
-    }
+    acc[cur?.Key] = acc[cur?.Key] ? [acc[cur?.Key], cur?.Value].join(',') : cur?.Value
     return acc
   }, {})
 
@@ -74,7 +71,8 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
     if (shouldRemove) {
       url.searchParams.delete(key)
     } else {
-      url.searchParams.set(key, modifiedFiltersObj[key])
+      // Special handling for ampersand in query params
+      url.searchParams.set(key, modifiedFiltersObj[key]?.replaceAll('&', '&amp;'))
     }
   }
 
@@ -82,7 +80,7 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
    // Include ignore query key if exists for URL
    currentSearchParams?.forEach((value, key) => {
      if (keysToIgnore?.includes(key)) {
-       url.searchParams?.set(key, value);
+      url.searchParams.set(key, key === 'currentPage' ? '1' : value);  //set currentPage to 1
      }
    });
   
@@ -201,3 +199,7 @@ export const downloadBase64AsFile = (base64: string, fileName: string, fileMime:
     downloadFileObject(base64String, fileName)
 }
  
+
+export function removeTitleTags(html: string): string {
+  return html.replace(/<title[^>]*>.*?<\/title>/g, '');
+}

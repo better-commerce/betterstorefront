@@ -185,7 +185,7 @@
               "group": "Brand",
               "urlCode": "brand-brand-rich-landing-page",
               "name": "Brand Rich Landing Page",
-              "url": "https://fashion.bettercommerce.tech/brands/signature",
+              "url": "https://fashion.bettercommerce.tech/brands/signature-6940",
               "displayOrder": 29,
               "active": 1
             },
@@ -193,7 +193,7 @@
               "group": "Brand",
               "urlCode": "brand-brand-standard-plp",
               "name": "Brand Standard PLP",
-              "url": "https://fashion.bettercommerce.tech/brands/uc-6942",
+              "url": "https://fashion.bettercommerce.tech/brands/unitycraft-6942",
               "displayOrder": 30,
               "active": 1
             },
@@ -251,37 +251,6 @@
               "name": "Special Pricing on PDP",
               "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
               "displayOrder": 43,
-              "active": 1
-            }
-          ]
-      },
-      {
-          "name": "Multi-brand",
-          "code": "multi-brand",
-          "url": "https://multibrand.bettercommerce.tech",
-          "features": [
-            {
-              "group": "Global",
-              "urlCode": "home",
-              "name": "Home Page",
-              "url": "https://multibrand.bettercommerce.tech",
-              "displayOrder": 6,
-              "active": 1
-            },
-            {
-              "group": "PLP",
-              "urlCode": "plp-product-listing",
-              "name": "Product Listing",
-              "url": "https://multibrand.bettercommerce.tech/search",
-              "displayOrder": 7,
-              "active": 1
-            },
-            {
-              "group": "PDP",
-              "urlCode": "pdp-type-simple-product",
-              "name": "Type Simple Product",
-              "url": "https://multibrand.bettercommerce.tech/products/hugo-boss-hugo-boss-regular-fit-sweater-mens-hbs1191-black-xxl",
-              "displayOrder": 11,
               "active": 1
             }
           ]

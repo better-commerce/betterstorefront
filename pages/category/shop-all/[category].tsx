@@ -48,6 +48,7 @@ import FeaturedBrand from '@components/category/FeaturedBrand'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 import Loader from '@components/Loader'
+import { removeQueryString } from '@commerce/utils/uri-util'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -222,6 +223,7 @@ export const ACTION_TYPES = {
   ADD_FILTERS: 'ADD_FILTERS',
   REMOVE_FILTERS: 'REMOVE_FILTERS',
   SET_CATEGORY_ID: 'SET_CATEGORY_ID',
+  RESET_STATE: 'RESET_STATE'
 }
 
 interface actionInterface {
@@ -249,6 +251,7 @@ const {
   ADD_FILTERS,
   REMOVE_FILTERS,
   SET_CATEGORY_ID,
+  RESET_STATE
 } = ACTION_TYPES
 const DEFAULT_STATE = {
   sortBy: '',
@@ -276,6 +279,8 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
       return { ...state, filters: payload }
     case ADD_FILTERS:
       return { ...state, filters: [...state.filters, payload] }
+    case RESET_STATE:
+      return DEFAULT_STATE
     case REMOVE_FILTERS:
       return {
         ...state,
@@ -293,6 +298,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const translate = useTranslation()
   const adaptedQuery: any = { ...router.query }
   adaptedQuery.currentPage
@@ -305,12 +311,11 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const { isCompared } = useUI()
   const initialState = {
     ...DEFAULT_STATE,
-    filters: adaptedQuery.filters || [],
+    // Setting initial filters from query string
+    filters: filters ? filters : [],
     categoryId: category.id,
   }
-  const [isLoading, setIsLoading] = useState(true)
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [minimalProd, setMinimalProd] = useState<any>([])
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const {
     data = {
@@ -329,13 +334,30 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, filters: filters || [] } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct,  categoryId: category.id } },
     ],
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
     }
   )
+
+  useEffect(() => {
+    const handleRouteChange = (url:any) => {
+        const currentSlug = url?.split('?')[0];
+        if (currentSlug !== previousSlug) {
+          dispatch({ type: RESET_STATE })
+          setPreviousSlug(currentSlug);
+        }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener on unmount
+    return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [previousSlug, router]);
 
   const [productListMemory, setProductListMemory] = useState({
     products: {
@@ -350,7 +372,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     },
   })
   const [productDataToPass, setProductDataToPass] = useState(data?.products)
- 
+
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
@@ -360,7 +382,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
-    clearAll()
+    // clearAll()
     dispatch({ type: PAGE, payload: 1 })
   }
 
@@ -376,8 +398,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   })
 
   useEffect(() => {
-    if (category.id !== state.categoryId)
-      dispatch({ type: SET_CATEGORY_ID, payload: category.id })
     // for Engage
     if (typeof window !== "undefined" && window?.ch_session) {
       window.ch_page_view_before({ item_id: category?.name || EmptyString })
@@ -406,30 +426,6 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    // Setting initial filters from query string
-    setTimeout(() => {
-      if (!(state?.filters?.length > initialState?.filters?.length) && filters?.length) {
-        dispatch({ type: SET_FILTERS, payload: filters })
-      }
-    }, 800)
-
-    let CSVCollection: any = []
-    if (category.featuredProductCSV != '' && category.featuredProductCSV) {
-      CSVCollection = category?.featuredProductCSV?.split(',')
-      async function handleApiCall() {
-        const res = await axios.post(NEXT_GET_CATALOG_PRODUCTS, {
-          sortBy: '',
-          sortOrder: '',
-          currentPage: 1,
-          filters: [],
-          stockCodes: CSVCollection || '',
-        })
-        setMinimalProd(res?.data.products)
-        return res?.data.products
-      }
-      handleApiCall()
-    }
-
     const trackScroll = (ev: any) => {
       setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
     }
@@ -486,7 +482,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const handleFilters = (filter: null, type: string) => {
-    if (filters?.length == 1 && type == REMOVE_FILTERS){
+    if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
@@ -522,7 +518,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   }
 
   const removeFilter = (key: string) => {
-    if(filters?.length == 1){
+    if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
@@ -562,12 +558,12 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       }
     }
   ]
-
+  const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
+        <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
         <title>{category?.name || translate('label.category.categoryText')}</title>
         <meta name="title" content={category?.name || translate('label.category.categoryText')} />
         <meta name="description" content={category?.metaDescription} />
@@ -641,8 +637,8 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           {productDataToPass?.results?.length > 0 ? (
             <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
               {isValidating ? (
-                <Loader />  
-                ) : (
+                <Loader />
+              ) : (
                 <>
                   {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                     <>

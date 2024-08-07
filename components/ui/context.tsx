@@ -780,7 +780,10 @@ export const UIProvider: React.FC<any> = (props) => {
   
   const setCartItems = useCallback(
     (payload: any) => {
-      
+      // Don't set empty payloads to basket items
+      if (!payload) {
+        return
+      }
       const newCartData = processCartData(payload);
       setItem('cartItems', newCartData)
 
@@ -904,10 +907,6 @@ export const UIProvider: React.FC<any> = (props) => {
         dispatch({ type: 'REMOVE_USER', payload: {} })
         removeItem('isPaymentLink')
         Cookies.remove(Cookie.Key.IS_PAYMENT_LINK)
-
-        if (!isSilentLogout) {
-          setAlert({ type: 'success', msg: translate('common.message.logoutSuccessfulText') })
-        }
       }
 
       if (payload?.router) {

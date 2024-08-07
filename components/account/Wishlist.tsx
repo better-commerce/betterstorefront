@@ -1,40 +1,18 @@
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import axios from 'axios'
 import Button from '@components/ui/Button'
-import { NEXT_GET_WISHLIST } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import { maxBasketItemsCount, sanitizeRelativeUrl } from '@framework/utils/app-util'
-import { LoadingDots } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 export default function Wishlist({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
-  const [data, setData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const { user, setWishlist } = useUI()
+  const { wishListItems } = useUI()
 
-  const fetchItems = async () => {
-    !isLoading && setIsLoading(true)
-    try {
-      const response: any = await axios.post(NEXT_GET_WISHLIST, { id: user.userId, flag: true, })
-      setIsLoading(false)
-      setData(response.data)
-      setWishlist(response.data)
-    } catch (error) {
-      console.log(error, 'err')
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchItems()
-  }, [])
 
   return (
     <section aria-labelledby="recent-heading" className="max-w-4xl">
-      {!data.length && !isLoading && (
+      {!wishListItems?.length && (
         <div className="flex flex-col w-full py-2 max-acc-container sm:px-0">
           <div className="my-0 font-semibold text-secondary-full-opacity text-m-16 text-24 dark:text-black">{translate('label.wishlist.emptyWishlistText')}</div>
           <p className="mt-3 text-xs sm:text-sm text-primary opacity-60 dark:text-black">{translate('label.wishlist.saveItemsText')}.{' '}</p>
@@ -45,9 +23,8 @@ export default function Wishlist({ deviceInfo, featureToggle, defaultDisplayMemb
           </div>
         </div>
       )}
-      {isLoading && <LoadingDots />}
       <div className="grid grid-cols-1 sm:gap-5 sm:mx-0 md:grid-cols-2 product-listing-main lg:grid-cols-3">
-        {data?.map((product: any, wid: number) => (
+        {wishListItems?.map((product: any, wid: number) => (
           <div key={`wishlist-${wid}`}>
             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>

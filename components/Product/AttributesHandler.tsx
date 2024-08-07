@@ -136,7 +136,7 @@ export default function AttributesHandler({
 
     setFieldData(updatedFieldData);
   }
-  const getStockPerAttribute = (key: string, variant: string) => {
+  const getStockPerAttribute = (key: string, variant: string, variantSlug: string) => {
     let productData = {
       stock: 0,
       productId: '',
@@ -144,7 +144,7 @@ export default function AttributesHandler({
       sellWithoutInventory: false,
       stockCode: '',
     }
-    const slug = `products/${router.query.slug}`
+    const slug = variantSlug || `products/${router.query.slug}`
     variantProducts?.find((product: any) => {
       product?.attributes?.forEach((attr: any) => {
         if (matchStrings(key, attr?.fieldCode, true) && matchStrings(attr?.fieldValue, variant) && matchStrings(product?.slug, slug)) {

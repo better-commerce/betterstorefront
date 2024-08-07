@@ -9,6 +9,7 @@ export default function getPagePreviewContentOperation() {
     workingVersion = false,
     channel,
     cachedCopy = true,
+    currency,
     language = 'en-GB',
   }: any) {
     try {
@@ -24,7 +25,8 @@ export default function getPagePreviewContentOperation() {
         headers: {
           DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
           Channel: channel,
-          language: language,
+          Language: language,
+          Currency: currency,
         },
         baseUrl: BETTERCMS_BASE_URL,
       })

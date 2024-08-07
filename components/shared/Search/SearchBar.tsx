@@ -36,9 +36,10 @@ interface ISearchBarProps {
   keywords?: any
   maxBasketItemsCount?: any
   deviceInfo?: any
+  searchDefaultSortBy?:any
 }
 
-const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({ id = 'search', onClick, keywords, maxBasketItemsCount, deviceInfo, }) => {
+const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({ id = 'search', onClick, keywords, maxBasketItemsCount, deviceInfo, searchDefaultSortBy}) => {
   const { showSearchBar, setShowSearchBar } = useUI()
   const defaultSearch = (
     <>
@@ -46,7 +47,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({ id = 'search'
         <img alt='' src="/images/searchIcon.svg" className="w-6 h-6" />
       </div>
       {showSearchBar && (
-        <SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />
+        <SearchWrapper searchDefaultSortBy={searchDefaultSortBy} keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />
       )}
     </>
   )
@@ -58,7 +59,7 @@ const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({ id = 'search'
         </div>
       </div>
       {showSearchBar && (
-        <SearchWrapper keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />
+        <SearchWrapper searchDefaultSortBy={searchDefaultSortBy} keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />
       )}
     </SearchProvider>
   )

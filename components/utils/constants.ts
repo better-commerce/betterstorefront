@@ -314,12 +314,14 @@ export module Messages {
       export const FIND_EMPTY_CHARACTERS = /\s/g
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
       export const CHARACTERS_AND_ALPHABETS =
-        /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
+        /([a-zA-Z/!#\$@^%&*()=;\'\]"{:<>\\\\,.?|[~_`}/])/g
       export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
       export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
       export const QUANTITY = /^[1-9]{1}[0-9]*$/g
       export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
       export const EMPTY_SPACE = /\S/
+      // Extract language and product slug in Quick view URL on EngageProductCard
+      export const EXTRACT_SLUG = /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/;
     }
 
     export const Login: any = {
@@ -507,7 +509,7 @@ export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'
 export const CLOTH_COLOUR_ATTRIB_NAME = 'global.colour'
-export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage']
+export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage', 'freeText']
 
 export enum OrderStatus {
   PENDING = 'Pending',

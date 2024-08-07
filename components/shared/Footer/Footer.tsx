@@ -10,7 +10,7 @@ import Router from "next/router";
 
 const Footer = ({ navItems = [] }: any) => {
   const [domLoaded, setDOMLoaded] = useState<boolean>(false)
-  const { user, isGuestUser, openLoginSideBar } = useUI()
+  const { user, isGuestUser, openLoginSideBar } = useUI();
 
   const manageMyAccountLinks = useCallback(() => {
     const selector = "li.text-footer-clr a[href*='/my-account']";
@@ -33,18 +33,18 @@ const Footer = ({ navItems = [] }: any) => {
         }
       });
     });
-  }, [user]);
-
-
-  useEffect(() => {
-    setTimeout(() => {
-      manageMyAccountLinks()
-    }, 50);
-  }, [])
+  
+  }, [user, isGuestUser, openLoginSideBar]);
 
   useEffect(() => {
-    manageMyAccountLinks();
-  }, [manageMyAccountLinks]);
+    if (domLoaded) {
+      manageMyAccountLinks();
+    }
+  }, [domLoaded, manageMyAccountLinks]);
+
+  useEffect(() => {
+    setDOMLoaded(true);
+  }, []);
 
   const renderWidgetMenuItem = (item: any, index: number) => {
     return (

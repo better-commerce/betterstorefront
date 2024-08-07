@@ -26,7 +26,8 @@ export const sanitizeUri = (uri: string) => {
 export const uriParams = (uri: string) => {
    if (!uri)
       return EmptyObject
-   let url = decodeURI(uri);
+   // Special handling to detect ampersand in query params.
+   let url = decodeURI(uri?.replaceAll('&amp;', encodeURIComponent('&')));
    url = url.substring(url.indexOf("?") + 1);
    const params = url.replace('?', '')
       .split('&')

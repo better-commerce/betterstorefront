@@ -1932,21 +1932,22 @@ p {
 .pdp-right-section .product-name-h2{
   font-size:26px;
 }
+
 .price-div .text-gray-400{
-  font-size: 30px !important;
+  font-size: 16px;
   font-weight: 700;
   color: #00b18a;
   align-items: baseline;
 }
 
 .price-div .text-gray-400.list-price{
-  font-size: 18px !important;
+  font-size: 12px;
   font-weight: 500;
   color: #848484;
 }
 
 .price-div .text-gray-400.ex-vat-text{
-  font-size: 16px !important;
+  font-size: 10px;
   font-weight: 500;
   color: #848484;
 }
@@ -2185,7 +2186,7 @@ p {
   @media screen and (max-width:900px) {
     .mobile-left-center-info{
       position: absolute !important;
-      bottom: 70px !important;
+      bottom: 35% !important;
       z-index: 99;
       left: 50%;
       transform: translateX(-50%);
@@ -2362,10 +2363,10 @@ p {
   .theme-top .nc-SectionHero2Item__left {
     float: none !important;
   }
-  .banner-prev,
+  /* .banner-prev,
   .banner-next {
     display: none !important;
-  }
+  } */
   .theme-account-container {
     max-width: 100% !important;
     margin-left: auto !important;
@@ -2515,4 +2516,12 @@ display: none !important;
 
 .image-gallery-thumbnails-container{
     transform: translate3d(0px, 0px, 0px) !important;
+}
+
+.menu-html {
+  display: flex;
+  flex-direction: column !important;
+  gap: 1rem;
+  max-width: 300px; 
+  margin-bottom: 20px;
 }

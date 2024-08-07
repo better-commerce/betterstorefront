@@ -169,7 +169,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
                           onClick={handleClose}
                         >
                           <span className="sr-only">{translate('common.label.closePanelText')}</span>
-                          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                          <i className='sprite-icon cross-icon'></i>
+                          {/* <XMarkIcon className="w-6 h-6" aria-hidden="true" /> */}
                         </button>
                       </div>
                     </div>

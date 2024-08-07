@@ -15,8 +15,7 @@ export default function LandingFeaturedCategory({ featuredCategory, deviceInfo }
   }
   return (
     <div className="py-6">
-      {/* <h2 className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl"> {translate('label.category.popularCategoriesText')} </h2> */}
-      <Swiper spaceBetween={10} slidesPerView={2.3} navigation={!isMobile} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: spv, }, 1400: { slidesPerView: spv, }, }} className="mySwiper center-content swiper-center" >
+      <Swiper spaceBetween={10} slidesPerView={2.3} navigation={!isMobile} loop={false} breakpoints={{ 640: { slidesPerView: 2, }, 768: { slidesPerView: 4, }, 1024: { slidesPerView: spv, }, 1400: { slidesPerView: spv, }, }} className="mySwiper" >
         {featuredCategory?.map((featured: any, featuredIdx: number) => (
           <div key={featuredIdx}>
             {featured?.isFeatured == true && (

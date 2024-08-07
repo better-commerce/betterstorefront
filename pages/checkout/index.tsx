@@ -62,6 +62,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
+import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
 
 export enum BasketStage {
   CREATED = 0,
@@ -282,6 +283,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const userRes: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
       cb()
       if (!userRes?.data) {
+        setIsLoggedIn(false)
         return setAlert({ type: AlertType.ERROR, msg: translate('common.message.invalidAccountMsg') })
       }
       setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.loginSuccessMsg') })
@@ -1149,32 +1151,32 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <meta name="title" content="BetterStore Checkout" />
         <meta name="description" content="BetterStore Checkout" />
         <meta name="keywords" content="BetterStore Checkout" />
-        <link rel="apple-touch-icon" sizes="57x57" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
-        <link rel="apple-touch-icon" sizes="60x60" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
-        <link rel="apple-touch-icon" sizes="72x72" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
-        <link rel="apple-touch-icon" sizes="76x76" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
-        <link rel="apple-touch-icon" sizes="114x114" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`} />
-        <link rel="apple-touch-icon" sizes="120x120" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`} />
-        <link rel="apple-touch-icon" sizes="144x144" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`} />
-        <link rel="apple-touch-icon" sizes="152x152" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`} />
-        <link rel="apple-touch-icon" sizes="180x180" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`} />
-        <link rel="icon" type="image/png" sizes="192x192" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`} />
-        <link rel="icon" type="image/png" sizes="32x32" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`} />
-        <link rel="icon" type="image/png" sizes="96x96" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`} />
-        <link rel="icon" type="image/png" sizes="16x16" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
-        <link rel="icon" href={`https://cdnbs.bettercommerce.tech/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
+        <link rel="apple-touch-icon" sizes="57x57" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-57x57.png`} />
+        <link rel="apple-touch-icon" sizes="60x60" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-60x60.png`} />
+        <link rel="apple-touch-icon" sizes="72x72" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-72x72.png`} />
+        <link rel="apple-touch-icon" sizes="76x76" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-76x76.png`} />
+        <link rel="apple-touch-icon" sizes="114x114" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-114x114.png`} />
+        <link rel="apple-touch-icon" sizes="120x120" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-120x120.png`} />
+        <link rel="apple-touch-icon" sizes="144x144" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-144x144.png`} />
+        <link rel="apple-touch-icon" sizes="152x152" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-152x152.png`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`/theme/${CURRENT_THEME}/favicon/apple-icon-180x180.png`} />
+        <link rel="icon" type="image/png" sizes="192x192" href={`/theme/${CURRENT_THEME}/favicon/android-icon-192x192.png`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`/theme/${CURRENT_THEME}/favicon/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="96x96" href={`/theme/${CURRENT_THEME}/favicon/favicon-96x96.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
+        <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-2 sm:py-4 bg-gray-100 border-b border-gray-300 checkout-header">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 border-b border-gray-300 sm:py-4 checkout-header">
         <div className="flex justify-between container-storefront gap-x-5 small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88">
             <Logo />
           </Link>
-          <h2 className="flex items-center justify-center text-lg sm:text-2xl font-semibold mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
+          <h1 className="flex items-center justify-center text-lg font-semibold sm:text-2xl mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
             {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
               <i className="ml-4 sprite-icons sprite-secure"></i>
             </span>
-          </h2>
+          </h1>
         </div>
       </div>
 
@@ -1205,6 +1207,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
               {steps.map((step: any) => renderStepIndicator(step))}
             </div>
           </div>
+          <CheckoutEmailHeader user={user} currentStep={currentStep} goToStep={goToStep} isLoggedIn={isLoggedIn} />
           <div className="grid gap-6 px0 sm:grid-cols-12 sm:px-0">
             <div className="sm:col-span-12">{renderCurrentStep()}</div>
           </div>

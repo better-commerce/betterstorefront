@@ -111,19 +111,22 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
 
   return (
     <>
-      <div className="flex flex-col sm:hidden">
-        <div className="section-devider"></div>
-      </div>
+      
       <section
         aria-labelledby="details-heading"
         className="mt-0"
       >
-        {isFreeShippingOverXEnabled && (
-          <DeliveryMessage
-            product={product}
-            currencySymbol={getCurrencySymbol()}
-            freeShippingOverXValue={freeShippingOverXValue}
-          />
+         {isFreeShippingOverXEnabled && (
+          <>
+            <div className="flex flex-col sm:hidden">
+              <div className="section-devider"></div>
+            </div>
+            <DeliveryMessage
+              product={product}
+              currencySymbol={getCurrencySymbol()}
+              freeShippingOverXValue={freeShippingOverXValue}
+            />
+          </>
         )}
 
         {(grpData['product.exchangeeligibilitydays']?.length ||

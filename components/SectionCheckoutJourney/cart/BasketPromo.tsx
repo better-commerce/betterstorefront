@@ -48,7 +48,7 @@ const BasketPromo = (props: IPromotionInputProps) => {
             </h3>
           ) : (
             <>
-              {(isMobile || isIPadorTablet) && (
+              {/* {(isMobile || isIPadorTablet) && (
                 <div className="flex justify-end col-span-4">
                   <h3
                     className="text-sm font-semibold text-orange-500 truncate cursor-pointer mob-font-small-screen"
@@ -64,7 +64,7 @@ const BasketPromo = (props: IPromotionInputProps) => {
                     {translate('label.basket.applyCouponsText')}
                   </h3>
                 </div>
-              )}
+              )} */}
             </>
           )}
         </div>
