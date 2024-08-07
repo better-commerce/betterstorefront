@@ -25,6 +25,7 @@ import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
+import { Hero } from '@components/ui'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -165,7 +166,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       )}
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        <SectionHero2 data={pageContents?.banner} />
+        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
         {pageContents?.shopbygender?.length > 0 &&
           <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
@@ -215,12 +216,111 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           </div>
         }
+        {featureToggle?.features?.enableCategory && pageContents?.category?.length > 0 &&
+          <div className='flex flex-col justify-center gap-4 py-6 text-center bg-white sm:py-10'>
+            <div className='container flex flex-col justify-center gap-4 mx-auto text-center'>
+              {pageContents?.categoryheading?.length > 0 && pageContents?.categoryheading?.map((heading: any, hIdx: number) => (
+                <h3 className='mb-4 text-xl font-semibold sm:text-3xl text-sky-700 sm:mb-6' key={`heading-${hIdx}`}>{heading?.categoryheading_title}</h3>
+              ))}
+              <div className='grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-6'>
+                {pageContents?.category?.map((item: any, itemIdx: number) => (
+                  <Link href={item?.category_link} passHref
+                    className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section'
+                    key={`category-${itemIdx}`}
+                  >
+                    <div className='flex flex-col w-full'>
+                      <img src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.category_title} className='w-full h-full' />
+                    </div>
+                    <div className='flex flex-col gap-5'>
+                      <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded sm:h-auto sm:p-2 sm:text-sm'>
+                        {item?.category_title}
+                      </h3>
+                      <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>
+                        {item?.category_subtitle}
+                      </p>
+                    </div>
+                    <div className='items-end justify-center flex-1'>
+                      <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-sky-600 group-hover:bg-sky-500'>
+                        {item?.category_buttontext}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        }
+        {pageContents?.bannerimage && pageContents?.bannerimage != "" &&
+          <div className='flex flex-col w-full'>
+            <img src={pageContents?.bannerimage} className='w-full h-full' alt='Promotion' />
+          </div>
+        }
+        {pageContents?.brandcategory?.length > 0 &&
+          <div className='flex flex-col justify-center gap-4 py-6 text-center bg-gray-50 sm:py-10'>
+            <div className='container grid grid-cols-2 gap-2 mx-auto sm:grid-cols-4 sm:gap-6'>
+              {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
+                <Link href={item?.brandcategory_link} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
+                  <div className='flex flex-col w-full'>
+                    <img src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.brandcategory_title} className='w-full h-full' />
+                  </div>
+                  <div className='flex flex-col gap-5'>
+                    <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded'>{item?.brandcategory_title}</h3>
+                    <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>{item?.brandcategory_subtitle}</p>
+                  </div>
+                  <div className='items-end justify-center flex-1'>
+                    <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-sky-600 group-hover:bg-sky-500'>
+                      {item?.brandcategory_buttontext}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.promobanner && pageContents?.promobanner != "" &&
+          <div className='flex flex-col w-full'>
+            <img src={pageContents?.promobanner} className='w-full h-full' alt='Promotion' />
+          </div>
+        }
+
+        {pageContents?.brands?.length > 0 &&
+          <div className='flex flex-col w-full py-6 bg-gray-50 sm:py-10'>
+            <div className='container flex flex-col gap-4 mx-auto'>
+              {pageContents?.brandheading?.length > 0 && pageContents?.brandheading?.map((heading: any, hIdx: number) => (
+                <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6' key={hIdx}>{heading?.brandheading_title}</h3>
+              ))}
+              <div className='grid items-center grid-cols-4 gap-4 text-center'>
+                {pageContents?.brands?.map((item: any, itemIdx: number) => (
+                  <Link href={item?.brands_link} passHref  key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
+                    <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-10' />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        }
         {featureToggle?.features?.enableTrendingCategory &&
           <div className="mt-14 sm:mt-24 lg:mt-32">
             <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
           </div>
         }
-        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} container relative my-16 sm:my-24 lg:my-32 product-collections`}>
+        {pageContents?.range?.length > 0 && pageContents?.range?.map((heading: any, hIdx: number) => (
+          <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
+            <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
+            {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
+              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals || pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            }
+          </div>
+        ))}
+        {pageContents?.branddescription && pageContents?.branddescription != "" &&
+          <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
+            <div className='flex flex-col w-full'>
+              <div className='pt-4 text-xs font-normal text-gray-500 border-t border-gray-200 sm:pt-6 cms-para' dangerouslySetInnerHTML={{ __html: pageContents?.branddescription }}></div>
+            </div>
+          </div>
+        }
+
+        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' :''} ${CURRENT_THEME === 'cam' ? 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0' :''}  container relative my-16 sm:my-24 lg:my-32 product-collections`}>
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
               {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
@@ -230,13 +330,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               ))}
             </div>
           }
-          {pageContents?.newarrivals?.length > 0 &&
-            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          {pageContents?.departments?.length > 0 &&
+            <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
+              <BackgroundSection />
+              <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
+            </div>
           }
-          <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
-            <BackgroundSection />
-            <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
-          </div>
           {pageContents?.newlookbook?.length > 0 &&
             <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
           }
@@ -267,7 +366,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-          </div>          
+          </div>
         </div>
       </div>
     </>

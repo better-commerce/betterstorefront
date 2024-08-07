@@ -258,7 +258,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", feature
             onClick={notifyAddTocart}
           >
             <BagIcon className="hidden sm:inline-block w-5 h-5 mb-0.5" />
-            <span className="ml-3">{translate('label.basket.addTocartText')}</span>
+            <span className="ml-3">{translate('label.basket.addToBagText')}</span>
           </ButtonPrimary>
         </div>
 

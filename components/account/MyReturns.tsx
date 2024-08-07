@@ -113,10 +113,26 @@ export default function MyReturns() {
                       </dd>
                     </div>
                     <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
-                      <dt className="text-lg font-bold text-gray-900">{translate('label.orderDetails.refundAmtText')}</dt>
-                      <dd className="md:mt-1">
-                        {order.refundAmount?.formatted?.withTax}
-                      </dd>
+                      {order?.lineItems?.map((product: any) => (
+                          <>
+                            <dt className="text-lg font-bold text-gray-900">
+                              {translate('label.orderDetails.refundAmtText')}
+                            </dt>
+                            <dd className="md:mt-1">
+                              {product?.price?.raw?.withTax > 0 ? (
+                                isIncludeVAT ? (
+                                  product?.price?.formatted?.withTax
+                                ) : (
+                                  product?.price?.formatted?.withoutTax
+                                )
+                                ) : (
+                                  <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                                    {translate('label.orderSummary.freeText')}
+                                  </span>
+                              )}
+                            </dd>
+                          </>
+                      ))}
                     </div>
                   </dl>
                 </div>
@@ -139,7 +155,7 @@ export default function MyReturns() {
                                   <p className="mt-1 font-semibold text-gray-900 sm:mt-0">
                                     {product?.price?.raw?.withTax > 0 ?
                                       (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax)
-                                      : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>
+                                      : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'> {translate('label.orderSummary.freeText')}</span>
                                     }
                                   </p>
                                 </div>
