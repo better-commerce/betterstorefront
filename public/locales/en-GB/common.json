@@ -1142,7 +1142,7 @@
       "142-reviewsText": "142 reviews",
       "quickViewText": "Quick view",
       "viewCartText": "View cart",
-      "addToBagText": "Added to cart!",
+      "successAddToCart": "Added to cart!",
       "initiatingOrderText": "Initiating order...",
       "pleaseWaitText": "Please wait...",
       "validatingAccountText": "Validating account...",

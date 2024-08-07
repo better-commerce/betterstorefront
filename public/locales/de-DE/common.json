@@ -1141,7 +1141,7 @@
       "142-reviewsText": "142 Bewertungen",
       "quickViewText": "Schnellansicht",
       "viewCartText": "Warenkorb anzeigen",
-      "addToBagText": "Zum Warenkorb hinzugefügt!",
+      "successAddToCart": "Zum Warenkorb hinzugefügt!",
       "initiatingOrderText": "Bestellung wird bearbeitet...",
       "pleaseWaitText": "Bitte warten...",
       "validatingAccountText": "Konto wird überprüft...",

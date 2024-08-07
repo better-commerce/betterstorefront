@@ -1141,7 +1141,7 @@
       "142-reviewsText": "142 avis",
       "quickViewText": "Vue rapide",
       "viewCartText": "Voir le panier",
-      "addToBagText": "Ajouté au panier !",
+      "successAddToCart": "Ajouté au panier !",
       "initiatingOrderText": "Initialisation de la commande...",
       "pleaseWaitText": "Veuillez patienter...",
       "validatingAccountText": "Validation du compte...",
