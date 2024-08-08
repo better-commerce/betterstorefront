@@ -10,9 +10,8 @@ import { maxBasketItemsCount, sanitizeRelativeUrl } from '@framework/utils/app-u
 import commerce from '@lib/api/commerce'
 import { Hero } from '@components/ui'
 const PromotionBanner = dynamic(
-  () => import('@old-components/home/PromotionBanner')
+  () => import('@components/home/PromotionBanner')
 )
-import BestSellerProduct from '@old-components/product/BestSellerProduct'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -28,10 +27,10 @@ import SectionSliderCategories from '@components/SectionSliderCategories/Section
 import SectionSliderLargeProduct from '@components/SectionSliderLargeProduct'
 import { useEffect, useRef, useState } from 'react'
 import Glide from '@glidejs/glide'
-const Heading = dynamic(() => import('@old-components/home/Heading'))
-const Categories = dynamic(() => import('@old-components/home/Categories'))
-const Collections = dynamic(() => import('@old-components/home/Collections'))
-const ProductSlider = dynamic(() => import('@old-components/home/ProductSlider'))
+const Heading = dynamic(() => import('@components/home/Heading'))
+const Categories = dynamic(() => import('@components/home/Categories'))
+const Collections = dynamic(() => import('@components/home/Collections'))
+const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Home

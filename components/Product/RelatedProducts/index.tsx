@@ -9,8 +9,9 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
-import ProductCard from '@components/ProductCard'
 import { useTranslation } from '@commerce/utils/use-translation'
+const PLPQuickView = dynamic(() => import('@components/Product/QuickView/PLPQuickView'))
+const ProductCard = dynamic(() => import('@components/Product/ProductCard/ProductCard'))
 
 declare const window: any
 interface Attribute {
@@ -30,9 +31,6 @@ export default function RelatedProducts({
   handleQuickAddToBag,
   deviceInfo,
   maxBasketItemsCount,
-  config,
-  featureToggle, 
-  defaultDisplayMembership,
 }: any) {
   const translate = useTranslation()
   const { basketId, setCartItems, user } = useUI()
@@ -190,16 +188,40 @@ export default function RelatedProducts({
                   <div>
                     <div className="flex flex-col mb-3">
                       <h2 className="text-lg font-medium text-gray-900">
-                        {key == 'You May Also Like' ? translate('label.product.frequentlyBoughtTogetherText') : key == 'undefined' ? translate('label.product.frequentlyBoughtTogetherText') : key == 'Upgrade' ? translate('label.product.quickAddText') : key == 'Basket Group' ? translate('label.product.frequentlyBoughtTogetherText') : translate(`key.${key}`)}
+                        {key == 'You May Also Like'
+                          ? translate('label.product.frequentlyBoughtTogetherText')
+                          : key == 'undefined'
+                          ? translate('label.product.frequentlyBoughtTogetherText')
+                          : key == 'Upgrade'
+                          ? translate('label.product.quickAddText')
+                          : key == 'Basket Group'
+                          ? translate('label.product.frequentlyBoughtTogetherText')
+                          : translate(`key.${key}`)}
                       </h2>
                     </div>
                   </div>
                   <div className="mb-8 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-8">
-                    <Swiper slidesPerView={2.3} spaceBetween={8} navigation={true} loop={false} breakpoints={{ 640: { slidesPerView: 1.8, spaceBetween: 4 }, 768: { slidesPerView: 1.8, spaceBetween: 15 }, 1024: { slidesPerView: 1.8, spaceBetween: 15 }, }} className="mySwiper" >
+                    <Swiper
+                      slidesPerView={2.3}
+                      spaceBetween={8}
+                      navigation={true}
+                      loop={false}
+                      breakpoints={{
+                        640: { slidesPerView: 2.3, spaceBetween: 4 },
+                        768: { slidesPerView: 2.3, spaceBetween: 15 },
+                        1024: { slidesPerView: 2.3, spaceBetween: 15 },
+                      }}
+                      className="mySwiper"
+                    >
                       {values?.map((product: any, pid: number) => {
                         return (
                           <SwiperSlide key={pid}>
-                            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                            <ProductCard
+                              product={product}
+                              hideWishlistCTA={true}
+                              deviceInfo={deviceInfo}
+                              maxBasketItemsCount={maxBasketItemsCount}
+                            />
                           </SwiperSlide>
                         )
                       })}
@@ -211,6 +233,14 @@ export default function RelatedProducts({
           }
         )}
       </section>
+      <PLPQuickView
+        isQuickview={Boolean(quickViewProduct)}
+        setQuickview={() => {}}
+        productData={quickViewProduct}
+        isQuickviewOpen={Boolean(quickViewProduct)}
+        setQuickviewOpen={handleCloseQuickView}
+        maxBasketItemsCount={maxBasketItemsCount}
+      />
     </>
   )
 }

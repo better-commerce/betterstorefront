@@ -1,4 +1,4 @@
-import { TwMainColor } from "@old-components/data/types";
+import { TwMainColor } from "@components/data/types";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 

@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import Checkbox from '@old-components/account/Address/Checkbox'
+import Checkbox from '@components/account/Address/Checkbox'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const COMPONENTS_MAP: any = {

@@ -5,7 +5,7 @@ import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Layout from '@components/Layout/Layout'
-const ProductGrid = dynamic(() => import('@old-components/product/Grid/ProductGrid'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
@@ -20,7 +20,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CompareSelectionBar from '@old-components/product/ProductCompare/compareSelectionBar'
+import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { Redis } from '@framework/utils/redis-constants'

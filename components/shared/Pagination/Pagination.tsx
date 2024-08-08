@@ -2,7 +2,7 @@
 import React, { FC } from "react";
 import twFocusClass from "@components/shared/utils/twFocusClass";
 import Link from "next/link";
-import { CustomLink } from "@old-components/data/types";
+import { CustomLink } from "@components/data/types";
 
 const DEMO_PAGINATION: CustomLink[] = [
   {

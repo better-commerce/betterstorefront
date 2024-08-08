@@ -22,17 +22,19 @@ import { hideElement, showElement } from '@framework/utils/ui-util'
 import { matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { StarIcon } from '@heroicons/react/24/solid'
 import classNames from 'classnames'
+import ButtonNotifyMe from '../ButtonNotifyMe'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Prices from '@components/Prices'
-import ButtonNotifyMe from '../ButtonNotifyMe'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const PLPQuickView = dynamic(() => import('@components/Product/QuickView/PLPQuickView')
+)
 
 interface Props {
   product: any
   hideWishlistCTA?: any
+  attributesCount?: number
   defaultDisplayMembership: any
-  compareAttributes?: any
 }
 
 interface Attribute {
@@ -53,9 +55,9 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   hideWishlistCTA = false,
   deviceInfo,
   maxBasketItemsCount,
-  featureToggle,
+  attributesCount = 0,
+  featureToggle, 
   defaultDisplayMembership,
-  compareAttributes = {},
 }) => {
   const [currentProductData, setCurrentProductData] = useState({
     image: productData.image,
@@ -78,6 +80,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   const [quickViewData, setQuickViewData] = useState(null)
   const [sizeValues, setSizeValues] = useState([])
   const [product, setProduct] = useState(productData || {})
+  const [attribs, setAttribs] = useState<any>([])
 
   const handleUpdateWishlistItem = useCallback(() => {
     if (wishListItems.length < 1) return
@@ -95,6 +98,17 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   useEffect(() => {
     setProduct(productData)
+    if (productData.attributes?.length > 0) {
+      if (productData.attributes?.length !== attributesCount) {
+        const emptySetCount = attributesCount - productData.attributes?.length
+        const emptyCompareSet = Array(emptySetCount).fill(EMPTY_COMPARE_SET)
+        setAttribs([...productData.attributes, ...emptyCompareSet])
+        return
+      }
+      setAttribs([...productData.attributes])
+    } else {
+      setAttribs(Array(attributesCount).fill(EMPTY_COMPARE_SET))
+    }
   }, [productData])
 
   useEffect(() => {
@@ -268,6 +282,32 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   const itemPrice = product?.price?.formatted?.withTax
 
+  const getAttribValue = (val: any) => {
+    const parsed = tryParseJson(val)
+    switch (parsed) {
+      case true:
+        return (
+          <img
+            alt="check_circle"
+            width={36}
+            height={36}
+            src="/assets/images/check_circle.svg"
+          />
+        )
+      case false:
+        return (
+          <img
+            alt="cross_icon"
+            width={36}
+            height={36}
+            src="/assets/images/cross_icon.svg"
+          />
+        )
+      default:
+        return val
+    }
+  }
+
   const isOutOfStock = (product: any) => {
     if (
       product?.hasOwnProperty('preOrder') &&
@@ -290,7 +330,10 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14 " key={product.id} >
+      <div
+        className="sticky top-0 z-10 flex flex-col bg-white prod-group md:pb-0 pb-14 lg:pb-14"
+        key={product.id}
+      >
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
           <Link passHref href={`/${currentProductData.link}`} onMouseEnter={(ev: any) => handleHover(ev, 'enter')} onMouseLeave={(ev: any) => handleHover(ev, 'leave')} title={`${product.name} \t ${itemPrice}`} >
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12">
@@ -300,7 +343,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
 
         <Link passHref href={`/${currentProductData.link}`} title={`${product.name} \t ${itemPrice}`} >
-          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] dark:text-black nc-ProductCard__title text-left  ">
+          <div className="font-12 mt-2 font-semibold transition-colors min-h-[60px] nc-ProductCard__title text-left  ">
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
@@ -316,7 +359,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
         </div>
       </div>
       <div className="mt-2 bg-white border-t border-gray-200 lg:mt-4">
-        <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
+        <div className="flex items-center justify-center w-full pb-4 my-4 text-center border-b border-gray-200">
           {[0, 1, 2, 3, 4].map((rating) => (
             <StarIcon key={rating} aria-hidden="true" className={classNames(product?.rating > rating ? 'text-yellow-400 h-3 w-3' : 'text-gray-300 h-4 w-4', 'flex-shrink-0')} />
           ))}
@@ -324,13 +367,13 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.rating}
           </label>
         </div>
-        <div className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
+        <div className="flex items-center justify-center w-full pb-3 my-3 text-center border-b border-gray-200">
           <span className="font-normal text-black font-14">{product?.brand}</span>
         </div>
-        {Object.values(compareAttributes)?.map((attrib: any, idx: number) => (
-          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14">
-          {attrib?.includes("#") ? (<span className={`w-6 h-6 rounded-full border border-slate-100 block`} style={{ backgroundColor: attrib }}></span>) : (<span className='dark:text-black'>{attrib}</span>)}
-        </div>
+        {attribs?.map((attrib: any, idx: number) => (
+          <div key={idx} className="flex items-center justify-center w-full h-[48px] text-center  border-b border-gray-200 font-14" >
+            <span>{getAttribValue(attrib.value)}</span>
+          </div>
         ))}
       </div>
     </>

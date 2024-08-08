@@ -35,7 +35,6 @@ import Link from 'next/link'
 import ContactForm from '@components/contact/ContactForm'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-// import ContactUsForm from '@old-components/contact/ContactUsForm'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({

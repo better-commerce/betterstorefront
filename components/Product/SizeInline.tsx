@@ -7,7 +7,7 @@ import { getProductFromAttributes } from '@components/utils/attributesGenerator'
 import isString from 'lodash/isString'
 
 import { matchStrings } from '@framework/utils/parse-util'
-import SizeAttribute from '@old-components/product/ProductView/sizeAttribute.json'
+import SizeAttribute from '@components/Product/ProductView/sizeAttribute.json'
 import { EmptyObject } from '@components/utils/constants'
 
 function RenderRadioOptions({

@@ -1,5 +1,3 @@
-// import CartFreeGift from "@old-components/cart/CartSidebarView/FreeGift";
-// import ReplacementItem from "@old-components/cart/CartSidebarView/ReplacementItem";
 import { DATE_FORMAT } from '@components/utils/constants'
 import Link from 'next/link'
 import {

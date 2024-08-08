@@ -9,7 +9,7 @@ import { signOut } from 'next-auth/react'
 
 // Component Imports
 import Spinner from '@components/ui/Spinner'
-import BasicLayout from '@old-components/common/Layout/BasicLayout'
+import BasicLayout from '@components/common/Layout/BasicLayout'
 
 // Other Imports
 import { Guid } from '@commerce/types'

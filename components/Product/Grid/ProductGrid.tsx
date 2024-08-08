@@ -1,21 +1,20 @@
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import rangeMap from '@lib/range-map'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
-import { IExtraProps } from '@components/Layout/Layout'
-import Pagination from '../Pagination'
-import { CURRENT_THEME } from '@components/utils/constants'
+const Pagination = dynamic(() => import('@components/Product/Pagination'))
+import { IExtraProps } from '@components/common/Layout/Layout'
 
 interface Props {
-  readonly products: any
-  readonly currentPage: number | string
+  products: any
+  currentPage: number | string
   handlePageChange?: any
   handleInfiniteScroll: any
-  readonly isCompared: any
-  readonly featureToggle?: any
-  readonly defaultDisplayMembership: any
+  isCompared: any
+  featureToggle: any;
+  defaultDisplayMembership: any;
 }
 
 export default function CategoryGrid({
@@ -26,23 +25,21 @@ export default function CategoryGrid({
   deviceInfo,
   maxBasketItemsCount,
   isCompared,
-  featureToggle,
-  defaultDisplayMembership,
+  featureToggle, defaultDisplayMembership,
 }: Props & IExtraProps) {
-  const router = useRouter()
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
-    const currentPage: any = router?.query?.currentPage
-    if (currentPage) {
-      handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
+    Router.events.on('routeChangeComplete', () => {
+      const currentPage: any = Router?.query?.currentPage
+      if (currentPage) {
+        handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
+      }
+    })
+
+    return () => {
+      Router.events.off('routeChangeComplete', () => { })
     }
-  }, [router?.query?.currentPage])
-
-  let gridClass = 'lg:grid-cols-4'
-  if (CURRENT_THEME == 'green') {
-    gridClass = 'lg:grid-cols-5 product-card-4'
-  }
-
+  }, [Router.events])
 
   return (
     <>
@@ -53,7 +50,7 @@ export default function CategoryGrid({
           total={products.total}
           currentNumber={products?.results?.length}
           component={
-            <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? gridClass : gridClass}`} >
+            <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
               {!products?.results?.length && rangeMap(12, (i) => (
                 <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                   <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -72,7 +69,7 @@ export default function CategoryGrid({
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 5 ? gridClass : gridClass}`} >
+          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
             {!products?.results?.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -83,7 +80,7 @@ export default function CategoryGrid({
               </div>
             ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             ))}
           </div>
 
@@ -91,10 +88,10 @@ export default function CategoryGrid({
             <Pagination
               currentPage={currentPage}
               onPageChange={(page: any) => {
-                router.push(
+                Router.push(
                   {
-                    pathname: router.pathname,
-                    query: { ...router.query, currentPage: page.selected + 1 },
+                    pathname: Router.pathname,
+                    query: { ...Router.query, currentPage: page.selected + 1 },
                   },
                   undefined,
                   { shallow: true }

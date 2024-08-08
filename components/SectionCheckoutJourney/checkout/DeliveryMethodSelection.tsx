@@ -12,7 +12,7 @@ import { Guid } from '@commerce/types'
 import FindStore from './FindStore'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { DeliveryType } from '@components/utils/constants'
-import { LoadingDots } from '@old-components/ui'
+import { LoadingDots } from '@components/ui'
 
 interface ShippingMethod {
   id: string

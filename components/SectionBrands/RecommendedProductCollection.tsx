@@ -9,7 +9,7 @@ import 'swiper/css/scrollbar'
 import dynamic from 'next/dynamic'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 
-const ProductCard = dynamic(() => import('@old-components/product/ProductCard/ProductCard'))
+const ProductCard = dynamic(() => import('@components/Product/ProductCard/ProductCard'))
 
 const RecommendedProductCollection = ({
   recommendedProducts,

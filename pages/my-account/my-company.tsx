@@ -10,7 +10,6 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import NextHead from 'next/head'
 import React from 'react'
-// import MyOrders from '@old-components/account/MyOrders'
 import axios from 'axios'
 import {
   NEXT_ADDRESS,

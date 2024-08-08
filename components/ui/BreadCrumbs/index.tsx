@@ -36,7 +36,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
 
   const flattenedItems = createBreadcrumbs(items)
   return (
-    <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+    <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
       <li className='flex items-center text-10-mob sm:text-sm'>
         <Link href="/" passHref>
           <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {translate('common.label.homeText')} </span>
@@ -48,27 +48,16 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
         </span>
       </li>
       {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
-        <li key={breadcrumbIdx} className={`flex items-center text-10-mob sm:text-sm ${breadcrumbIdx === flattenedItems.length - 1 ? 'truncate' : ''}`} >
-        {breadcrumb.isCurrent ? (
-          <>
-          <div className={`${breadcrumbIdx === flattenedItems.length - 1 ? 'truncate' : ''}`}>
-            <span className={`font-light hover:text-gray-900 capitalize  ${breadcrumb.isCurrent ? ' font-medium text-black dark:text-black' : 'text-slate-500 dark:text-slate-500'}`} >
-              {breadcrumb?.title?.toLowerCase()}
-            </span>
-          </div>
-          </>
-        ):(
-          <>
-          <Link href={`/${breadcrumb.slug}`} className={`${breadcrumbIdx === flattenedItems.length - 1 ? 'truncate' : ''}`} passHref>
-            <span className={`font-light hover:text-gray-900 capitalize  ${breadcrumb.isCurrent ? ' font-medium text-black dark:text-black' : 'text-slate-500 dark:text-slate-500'}`} >
-              {breadcrumb?.title?.toLowerCase()}
+        <li key={breadcrumbIdx} className="flex items-center text-10-mob sm:text-sm" >
+          <Link href={`/${breadcrumb.slug}`} passHref>
+            <span className={`font-light hover:text-gray-900 capitalize dark:text-black  ${breadcrumb.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
+              {breadcrumb.title.toLowerCase()}
             </span>
           </Link>
-          </>
-        )}
-          
           {breadcrumbIdx !== flattenedItems.length - 1 && (
-            <ChevronRightIcon className='w-3 h-3 mx-1 dark:text-black'></ChevronRightIcon>
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" className="flex-shrink-0 w-4 h-4 ml-0 text-gray-300 sm:ml-0" >
+              <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+            </svg>
           )}
         </li>
       ))}
