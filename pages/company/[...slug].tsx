@@ -10,6 +10,8 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { notFoundRedirect } from '@framework/utils/app-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { generateUri } from '@commerce/utils/uri-util'
+import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Company
@@ -40,6 +42,26 @@ function CompanyPages({ slug, pageContents, deviceInfo, config, hostName }: any)
       </NextHead>
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="container mb-10">
+        {pageContents?.dummydata?.length > 0 &&
+          <div className={`flex w-full flex-col sm:mt-6 mt-6`}>
+            {pageContents?.dummydata?.map((item: any, itemIdx: number) => (
+              <div key={itemIdx} className={`flex flex-col p-4 rounded-md gap-10 ${item?.dummydata_background}`}>
+                <h2 className='text-2xl font-semibold text-black'>{item?.dummydata_title}</h2>
+                <div className='flex flex-1 rounded-sm'>
+                  <img src={generateUri(item?.dummydata_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.dummydata_image_imgalttxt} className='flex-1 w-40 h-auto rounded-sm' />
+                </div>
+                <div className='frame-class' dangerouslySetInnerHTML={{ __html: item?.dummydata_description?.replaceAll("&lt;", "<")?.replaceAll("&gt;", ">") }}></div>
+                <div className='grid grid-cols-4 gap-4'>
+                  {item?.dummydata_multipleimage?.map((data: any, index: number) => (
+                    <div key={index} className='items-center justify-center w-full bg-white border border-gray-200 rounded-md'>
+                      <img src={data} className='w-full h-full p-2 rounded-md' alt={item?.title} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        }
         {pageContents?.heading?.length > 0 &&
           pageContents?.heading?.map((head: any, Idx: any) => (
             <div key={Idx}>
@@ -66,7 +88,7 @@ export async function getServerSideProps(context: any) {
     method: 'get',
     params: {
       id: '',
-      slug: 'company/'+slug.join("/"),
+      slug: 'company/' + slug.join("/"),
       workingVersion: false,
       cachedCopy: true,
     },

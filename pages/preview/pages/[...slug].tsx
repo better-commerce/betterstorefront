@@ -271,6 +271,26 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
           {pageContents?.popular?.length > 0 &&
             <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
+          {pageContents?.dummydata?.length > 0 &&
+            <div className={`flex w-full flex-col sm:mt-6 mt-6`}>
+              {pageContents?.dummydata?.map((item: any, itemIdx: number) => (
+                <div key={itemIdx} className={`flex flex-col p-4 rounded-md gap-10 ${item?.dummydata_background}`}>
+                  <h2 className='text-2xl font-semibold text-black'>{item?.dummydata_title}</h2>
+                  <div className='flex flex-1 rounded-sm'>
+                    <img src={generateUri(item?.dummydata_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.dummydata_image_imgalttxt} className='flex-1 w-40 h-auto rounded-sm' />
+                  </div>
+                  <div className='frame-class' dangerouslySetInnerHTML={{ __html: item?.dummydata_description?.replaceAll("&lt;", "<")?.replaceAll("&gt;", ">") }}></div>
+                  <div className='grid grid-cols-4 gap-4'>
+                    {item?.dummydata_multipleimage?.map((data: any, index: number) => (
+                      <div key={index} className='items-center justify-center w-full bg-white border border-gray-200 rounded-md'>
+                        <img src={data} className='w-full h-full p-2 rounded-md' alt={item?.title} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          }
         </div>
       </div>
     </>

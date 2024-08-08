@@ -1853,3 +1853,8 @@ p {
     object-position: 40% 40% !important;
   }
 }
+.frame-class iframe{
+  width: 100% !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
