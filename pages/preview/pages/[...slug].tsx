@@ -293,7 +293,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
               ))}
             </div>
           }
-          <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />
+          {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
         </div>
       </div>
     </>
