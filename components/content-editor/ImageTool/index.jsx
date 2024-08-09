@@ -62,7 +62,7 @@ export default class ImageTool {
    * Renders react loader component
    */
   _renderImgLoader() {
-    ReactDOM.render(<p>Loading image...</p>, this.rootNode);
+    createRoot(<p>Loading image...</p>, this.rootNode);
   }
 
   /**
