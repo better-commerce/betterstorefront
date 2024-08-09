@@ -31,6 +31,9 @@ const Heading = dynamic(() => import('@components/home/Heading'))
 const Categories = dynamic(() => import('@components/home/Categories'))
 const Collections = dynamic(() => import('@components/home/Collections'))
 const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
+const ContentEditorJS = dynamic(() => import("@components/content-editor"), {
+  ssr: false,
+});
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 const PAGE_TYPE = PAGE_TYPES.Home
@@ -290,6 +293,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
               ))}
             </div>
           }
+          <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />
         </div>
       </div>
     </>

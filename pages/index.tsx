@@ -34,7 +34,9 @@ const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSlide
 const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
 const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
-
+const ContentEditorJS = dynamic(() => import("@components/content-editor"), {
+  ssr: false,
+});
 declare const window: any
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
@@ -291,7 +293,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               ))}
               <div className='grid items-center grid-cols-4 gap-4 text-center'>
                 {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                  <Link href={item?.brands_link} passHref  key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
+                  <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
                     <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-10' />
                   </Link>
                 ))}
@@ -304,7 +306,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
           </div>
         }
-        {pageContents?.range?.length > 0 && pageContents?.range?.map((heading: any, hIdx: number) => (
+        {(pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0) && pageContents?.range?.map((heading: any, hIdx: number) => (
           <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
             <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
             {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
@@ -320,7 +322,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
 
-        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' :''} ${CURRENT_THEME === 'cam' ? 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0' :''}  container relative my-16 sm:my-24 lg:my-32 product-collections`}>
+        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} ${CURRENT_THEME === 'cam' ? 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0' : ''}  container relative my-16 sm:my-24 lg:my-32 product-collections`}>
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
               {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
@@ -359,6 +361,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.popular?.length > 0 &&
             <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
+          {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
           <div className='flex flex-col w-full engage-product-card-section'>
             <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
