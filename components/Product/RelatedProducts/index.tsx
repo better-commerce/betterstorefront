@@ -11,7 +11,7 @@ import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 const PLPQuickView = dynamic(() => import('@components/Product/QuickView/PLPQuickView'))
-const ProductCard = dynamic(() => import('@components/Product/ProductCard/ProductCard'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 
 declare const window: any
 interface Attribute {
@@ -31,6 +31,8 @@ export default function RelatedProducts({
   handleQuickAddToBag,
   deviceInfo,
   maxBasketItemsCount,
+  featureToggle,
+  defaultDisplayMembership
 }: any) {
   const translate = useTranslation()
   const { basketId, setCartItems, user } = useUI()
@@ -191,12 +193,12 @@ export default function RelatedProducts({
                         {key == 'You May Also Like'
                           ? translate('label.product.frequentlyBoughtTogetherText')
                           : key == 'undefined'
-                          ? translate('label.product.frequentlyBoughtTogetherText')
-                          : key == 'Upgrade'
-                          ? translate('label.product.quickAddText')
-                          : key == 'Basket Group'
-                          ? translate('label.product.frequentlyBoughtTogetherText')
-                          : translate(`key.${key}`)}
+                            ? translate('label.product.frequentlyBoughtTogetherText')
+                            : key == 'Upgrade'
+                              ? translate('label.product.quickAddText')
+                              : key == 'Basket Group'
+                                ? translate('label.product.frequentlyBoughtTogetherText')
+                                : translate(`key.${key}`)}
                       </h2>
                     </div>
                   </div>
@@ -217,11 +219,9 @@ export default function RelatedProducts({
                         return (
                           <SwiperSlide key={pid}>
                             <ProductCard
-                              product={product}
-                              hideWishlistCTA={true}
+                              data={product}
                               deviceInfo={deviceInfo}
-                              maxBasketItemsCount={maxBasketItemsCount}
-                            />
+                              maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </SwiperSlide>
                         )
                       })}
@@ -235,7 +235,7 @@ export default function RelatedProducts({
       </section>
       <PLPQuickView
         isQuickview={Boolean(quickViewProduct)}
-        setQuickview={() => {}}
+        setQuickview={() => { }}
         productData={quickViewProduct}
         isQuickviewOpen={Boolean(quickViewProduct)}
         setQuickviewOpen={handleCloseQuickView}

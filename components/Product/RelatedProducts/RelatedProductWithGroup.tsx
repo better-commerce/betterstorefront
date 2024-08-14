@@ -7,10 +7,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import cartHandler from '@components/services/cart'
 import 'swiper/css'
 import 'swiper/css/navigation'
-const ProductCard = dynamic(() => import('@components/Product/ProductCard/ProductCard'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
 
-export default function RelatedProductWithGroup({ products, productPerColumn, deviceInfo, maxBasketItemsCount }: any) {
+export default function RelatedProductWithGroup({ products, productPerColumn, deviceInfo, maxBasketItemsCount, defaultDisplayMembership, featureToggle }: any) {
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
   let currentPage = getCurrentPage()
@@ -112,13 +112,11 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
         }}
       >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId} className="height-auto-slide relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer group lg:w-auto h-100">
+          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer height-auto-slide group lg:w-auto h-100">
             <ProductCard
-              product={product}
-              hideWishlistCTA={true}
+              data={product}
               deviceInfo={deviceInfo}
-              maxBasketItemsCount={maxBasketItemsCount}
-            />
+              maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}            />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -28,9 +28,6 @@ import SectionSliderLargeProduct from '@components/SectionSliderLargeProduct'
 import { useEffect, useRef, useState } from 'react'
 import Glide from '@glidejs/glide'
 const Heading = dynamic(() => import('@components/home/Heading'))
-const Categories = dynamic(() => import('@components/home/Categories'))
-const Collections = dynamic(() => import('@components/home/Collections'))
-const ProductSlider = dynamic(() => import('@components/home/ProductSlider'))
 const ContentEditorJS = dynamic(() => import("@components/content-editor"), {
   ssr: false,
 });
