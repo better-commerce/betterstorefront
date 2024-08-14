@@ -112,11 +112,8 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
         }}
       >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 text-left border border-gray-200 rounded shadow cursor-pointer height-auto-slide group lg:w-auto h-100">
-            <ProductCard
-              data={product}
-              deviceInfo={deviceInfo}
-              maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}            />
+          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 text-left cursor-pointer height-auto-slide group lg:w-auto h-100">
+            <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}            />
           </SwiperSlide>
         ))}
       </Swiper>
