@@ -102,7 +102,7 @@ const MembershipBanner = ({ user }: any) => {
 
   return (
     <>
-      <div className={`${getBackgroundColor(membership?.membershipName)} p-5 header-space`}>
+      <div className={`${getBackgroundColor(membership?.membershipName)} p-5 header-space sm:mt-14 mt-10`}>
         <div className="container flex">
           <div className="w-2/4">
             <h2

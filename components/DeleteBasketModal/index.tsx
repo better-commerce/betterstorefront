@@ -46,12 +46,12 @@ const DeleteBasketModal = ({ isOpen, closeModal, loadingAction, handleDeleteBask
                             <Dialog.Panel className="w-full max-w-md pb-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                                 <Dialog.Title
                                     as="div"
-                                    className="flex justify-between items-center w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
+                                    className="flex items-center justify-between w-full px-6 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50"
                                 >
                                     {translate('label.b2b.basket.removeBasketHeadingText')}
                                     {loadingAction === LoadingActionType.NONE && (
                                         <XMarkIcon
-                                            className="w-5 h-5 text-gray-500 hover:text-gray-400 cursor-pointer"
+                                            className="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-400"
                                             onClick={closeModal}
                                         ></XMarkIcon>
                                     )}
@@ -66,10 +66,10 @@ const DeleteBasketModal = ({ isOpen, closeModal, loadingAction, handleDeleteBask
                                             setLoadingAction(LoadingActionType.REMOVE_BASKET)
                                             handleDeleteBasket()
                                         }}
-                                        className="flex items-center justify-center w-full  text-red-700 border border-gray-300 shadow-sm btn btn btn-primary md:w-full"
+                                        className="flex items-center justify-center w-full text-red-700 border border-gray-300 rounded-full shadow-sm btn btn-primary md:w-full"
                                     >
                                         {loadingAction === LoadingActionType.REMOVE_BASKET ? (
-                                            <LoadingDots />
+                                            <><LoadingDots /><span>{translate('common.label.removeText')}</span></>
                                         ) : (
                                             <>{translate('common.label.removeText')}</>
                                         )}

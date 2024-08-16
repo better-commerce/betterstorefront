@@ -387,13 +387,15 @@
       "improveRecommendationText": "Mejora tu recomendación",
       "dataPackText": "Paquete de datos",
       "myCompanyMenus": {
+        "companyDetail": "Company Details",
         "user": "Usuarios",
         "order": "Órdenes",
         "quote": "Cotizaciones",
         "address": "Direcciones",
-        "invoice": "Facturas"
+        "invoice": "Facturas",
+        "shoppingList": "Shopping List"
       },
-      "myDetailsHeadingText": "Mis Detalles",
+      "myDetailsHeadingText": "Mis Profile",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
       "myOrders": {
         "fetchReturnsErrorMsg": "¡Vaya! Error al recuperar devoluciones"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Motivo de Devolución",
       "proceedToReturnText": "Continuar con la Devolución",
       "selectQuantityText": "Seleccionar Cantidad",
-      "myReturnText": "Mi Devolución",
-      "myReturnsText": "Mis Devoluciones",
+      "myReturnText": "Devolución",
+      "myReturnsText": "Devoluciones",
       "noLookbookAvaiableText": "No hay Lookbook Disponible",
       "shopTheLookText": "Compra el look",
       "confirmPasswordText": "Confirmar Contraseña"

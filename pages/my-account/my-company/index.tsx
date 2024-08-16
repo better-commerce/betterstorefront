@@ -34,6 +34,7 @@ import { CompanyTabs, companyMenuTabs } from '@components/account/configs/compan
 import { matchStrings } from '@framework/utils/parse-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import CompanyDetails from '@components/account/CompanyDetails'
 
 function MyCompany({ deviceInfo }: any) {
   const { user, changeMyAccountTab, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
@@ -61,7 +62,7 @@ function MyCompany({ deviceInfo }: any) {
     })
     return options
   }, [translate, user])
-  
+
   const onSelectTab = (tab: any) => {
     router.replace({ query: { tab: tab?.value } }, undefined, { shallow: true })
   }
@@ -147,18 +148,16 @@ function MyCompany({ deviceInfo }: any) {
     //api logic
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyText'))
-  },[])
+  }, [])
 
   useEffect(() => {
     const { tab: selectedTab } = router.query
     if (selectedTab) {
+      if (selectedTab === CompanyTabs.COMPANYDETAIL) fetchB2BUsers()
       if (selectedTab === CompanyTabs.USER) fetchB2BUsers()
-      if (selectedTab === CompanyTabs.ORDER) fetchOrders(user?.userId)
-      if (selectedTab === CompanyTabs.QUOTE) fetchB2BUserQuotes()
       if (selectedTab === CompanyTabs.ADDRESS) fetchB2BAddressBook()
-      if (selectedTab === CompanyTabs.INVOICE) fetchB2BInvoices()
     } else {
       router.replace({ query: { tab: optionsConfig[0]?.value } }, undefined, { shallow: true })
     }
@@ -207,70 +206,47 @@ function MyCompany({ deviceInfo }: any) {
   return (
     <>
       {!isB2BUser(user) ? (
-        <>
-          <Spinner />
-        </>
+        <Spinner />
       ) : (
-        <>
-          <section className="relative pb-10 text-gray-900 header-space">
-            <div className="container w-full bar">
-              <div className="max-w-4xl pt-4 pb-24 mx-auto sm:pt-6 lg:pb-32">
-                <div className="relative col-span-12 mob-tab-full" >
-                  <div className={'orders bg-white dark:bg-transparent'}>
-                    <Tab.Group selectedIndex={selectedTabIndex}>
-                      <Tab.List className={'flex space-x-1 rounded-2xl bg-slate-100 p-1 mx-0 '} >
-                        {optionsConfig?.map((option: any, id: any) => (
-                          <Tab as={Fragment} key={id}>
-                            {({ selected }) => (
-                              <button
-                                className={classNames(
-                                  'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
-                                  'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
-                                  selected
-                                    ? 'bg-white shadow hover:bg-gray-50'
-                                    : 'text-blue-100 hover:bg-white/[0.32] '
-                                )}
-                                onClick={() => onSelectTab({ ...option, id })}
-                              >
-                                {option?.name}
-                              </button>
-                            )}
-                          </Tab>
-                        ))}
-                      </Tab.List>
-                      <Tab.Panels>
-                        {user?.companyUserRole === UserRoleType.ADMIN && (
-                          <Tab.Panel>
-                            <CompanyUsers users={b2bUsers} />
-                          </Tab.Panel>
+        <section className="relative pb-10 text-gray-900 header-space">
+          <div className="relative col-span-12 mob-tab-full" >
+            <Tab.Group selectedIndex={selectedTabIndex}>
+              <Tab.List className={'flex space-x-1 rounded-2xl bg-slate-100 p-1 mx-0 '} >
+                {optionsConfig?.map((option: any, id: any) => (
+                  <Tab as={Fragment} key={id}>
+                    {({ selected }) => (
+                      <button
+                        className={classNames(
+                          'w-full rounded-2xl py-2.5 text-xs sm:text-md uppercase font-medium leading-5 text-blue-700 hover:\bg-slate-100/70',
+                          'ring-white/40 ring-opacity-60 transition-all delay-600 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:\ring-2',
+                          selected
+                            ? 'bg-white shadow hover:bg-gray-50'
+                            : 'text-blue-100 hover:bg-white/[0.32] '
                         )}
-                        <Tab.Panel>
-                          <B2BOrders
-                            deviceInfo={deviceInfo}
-                            isShowDetailedOrder={isShowDetailedOrder}
-                            setIsShowDetailedOrder={setIsShowDetailedOrder}
-                            isAdmin={isAdmin}
-                            userOrderIdMap={userOrderIdMap}
-                          />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                          <B2BQuotes quotes={b2bQuotes} />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                          <AddressBook />
-                        </Tab.Panel>
-                        <Tab.Panel>
-                          <div className="py-20 font-medium text-center font-24 text-slate-300">{`No Invoices Generated Yet`}</div>
-                        </Tab.Panel>
-                      </Tab.Panels>
-                    </Tab.Group>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-        </>
+                        onClick={() => onSelectTab({ ...option, id })}
+                      >
+                        {option?.name}
+                      </button>
+                    )}
+                  </Tab>
+                ))}
+              </Tab.List>
+              <Tab.Panels>
+                <Tab.Panel>
+                  <CompanyDetails user={user?.userId} />
+                </Tab.Panel>
+                {user?.companyUserRole === UserRoleType.ADMIN && (
+                  <Tab.Panel>
+                    <CompanyUsers users={b2bUsers} />
+                  </Tab.Panel>
+                )}
+                <Tab.Panel>
+                  <AddressBook />
+                </Tab.Panel>
+              </Tab.Panels>
+            </Tab.Group>
+          </div>
+        </section>
       )}
     </>
   )

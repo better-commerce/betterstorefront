@@ -158,14 +158,11 @@ export default function MyDetails() {
                       ])
                       : []
                     )?.map((item: any, idx: number) => (
-                      <div
-                        key={item?.name}
-                        className="w-full sm:py-4 address-type"
-                      >
+                      <div key={item?.name} className="w-full sm:py-4 address-type" >
                         {<FormField context={context} item={item} />}
                       </div>
                     ))}
-                    <div className="flex sm:mt-10 sm:flex-col1 sm:w-48">
+                    <div className="flex w-full sm:mt-10 sm:flex-col sm:w-6/12">
                       <Button
                         type="submit"
                         onClick={handleSubmit}

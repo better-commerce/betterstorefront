@@ -111,7 +111,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
       isEnable: true
     },
     {
-      href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders',
+      href: user?.companyId !== Guid?.empty ? '/my-account/my-company/orders' : '/my-account/orders',
       title: translate('label.order.myOrdersText'),
       className: 'text-left p-2 cursor-pointer',
       head: (

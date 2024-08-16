@@ -9,22 +9,22 @@ import { getCurrentPage, isB2BUser } from "@framework/utils/app-util";
 import { recordGA4Event } from "@components/services/analytics/ga4";
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET , NEXT_TRANSFER_BASKET } from "@components/utils/constants";
+import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_TRANSFER_BASKET } from "@components/utils/constants";
 import axios from "axios";
 import { matchStrings } from "@framework/utils/parse-util";
 import { Guid } from "@commerce/types";
 import { AlertType } from '@framework/utils/enums';
 import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import BasketList from "./BasketList";
 import TransferBasket from "@components/TransferBasket";
 
-const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
-export default function CartDropdown() {
+export default function B2BBaskets() {
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
-  const { isGuestUser, user, basketId, cartItems, openCart, setAlert} = useUI()
+  const { isGuestUser, user, basketId, cartItems, openCart, setAlert } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
   const translate = useTranslation()
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
@@ -88,19 +88,19 @@ export default function CartDropdown() {
       },
       enabled: true
     },
-    {
-      id: 'transferBasket',
-      href: '#',
-      title: translate('label.b2b.basket.transferBasketLinkText'),
-      className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
-      head: <TransferIcon />,
-      onClick: (ev: any) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        openTransferBasketModal();
-      },
-      enabled: true,
-    },
+    // {
+    //   id: 'transferBasket',
+    //   href: '#',
+    //   title: translate('label.b2b.basket.transferBasketLinkText'),
+    //   className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    //   head: <TransferIcon />,
+    //   onClick: (ev: any) => {
+    //     ev.preventDefault();
+    //     ev.stopPropagation();
+    //     openTransferBasketModal();
+    //   },
+    //   enabled: true,
+    // },
     {
       id: 'deleteBasket',
       href: '#',
@@ -139,7 +139,7 @@ export default function CartDropdown() {
       const newBasketId = generateBasketId(true)
       const { data }: any = await axios.post(NEXT_CREATE_BASKET, { basketId: newBasketId, basketName, userId: user?.userId })
       setLoadingAction(LoadingActionType.NONE)
-      
+
       if (data?.recordId !== EmptyGuid) {
         closeCreateBasketModal()
         setAlert({ type: AlertType.SUCCESS, msg: data?.message })
@@ -147,12 +147,12 @@ export default function CartDropdown() {
           getBaskets(user?.userId)
         }
       } else {
-        setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg')})
+        setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg') })
       }
     }
   }
 
-  const handleTransferBasket = async (basketId: string, transitUserId : string) => {
+  const handleTransferBasket = async (basketId: string, transitUserId: string) => {
     setLoadingAction(LoadingActionType.TRANSFER_BASKET)
     const payload = {
       basketId,
@@ -162,7 +162,7 @@ export default function CartDropdown() {
     }
     const { data }: any = await axios.post(NEXT_TRANSFER_BASKET, payload)
     setLoadingAction(LoadingActionType.NONE)
-    
+
     if (data?.recordId !== EmptyGuid) {
       closeTransferBasketModal()
       setAlert({ type: AlertType.SUCCESS, msg: data?.message })
@@ -170,7 +170,7 @@ export default function CartDropdown() {
         getBaskets(user?.userId)
       }
     } else {
-      setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg')})
+      setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg') })
     }
   }
   const deleteBasket = async (basketId: string) => {
@@ -207,12 +207,12 @@ export default function CartDropdown() {
   }, [user?.userId])
 
   useEffect(() => {
-    const getBasketCount = async() => {
-      const count = await getCartItemsCount({basketId})
+    const getBasketCount = async () => {
+      const count = await getCartItemsCount({ basketId })
       if (count > 0) {
         setBasketItemsCount(count)
       }
-      else{
+      else {
         setBasketItemsCount(0)
       }
     }
@@ -220,7 +220,7 @@ export default function CartDropdown() {
     if (basketId && basketId !== Guid.empty) {
       getBasketCount()
     }
-  },[basketId, cartItems?.lineItems?.length])
+  }, [basketId, cartItems?.lineItems?.length])
 
   useEffect(() => {
     if (basketIdToDelete !== Guid.empty) {
@@ -230,89 +230,58 @@ export default function CartDropdown() {
 
   return (
     <>
-      <Popover className="relative">
-        {({ open, close }) => (
-          <>
-            {b2bUser ? (
-              <>
-                <Popover.Button className={`w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`} >
-                  <>
-                    {/*{cartItems?.lineItems?.length > 0 && (
-                    <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                      {cartItems?.lineItems?.length}
-                    </div>
-                  )}*/}
-                    <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
-                  </>
+      {b2bUser ? (
+        <>
+          <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7">
+            {
+              b2bBasketConfig?.filter((item: any) => item?.enabled)?.map((item: any) => {
+                if (item?.id === 'listBasket' && !userCarts?.length) {
+                  return
+                }
 
-                </Popover.Button>
-                <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
-                  <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
-                    <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
-                      <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-neutral-800 py-7">
-                        {
-                          b2bBasketConfig?.filter((item: any) => item?.enabled)?.map((item: any) => {
+                return (
+                  <Link key={item?.title} title={item?.id} passHref href="#" className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
+                    if (item?.onClick) {
+                      item?.onClick(ev)
+                    }
 
-                            if (item?.id === 'listBasket' && !userCarts?.length) {
-                              return
-                            }
-
-                            return (
-                              <Link key={item?.title} title={item?.id} passHref href="#" className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
-                                if (item?.onClick) {
-                                  item?.onClick(ev)
-                                }
-
-                                if (item?.id !== 'listBasket') {
-                                  close()
-                                }
-                              }}>
-                                {item?.head && (
-                                  <div className={`flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300 ${item?.id === 'deleteBasket' ? '' : ''}`}>
-                                    {item?.head}
-                                  </div>
-                                )}
-
-                                <div className={item?.head ? 'ml-4' : ''}>
-                                  <p className="text-sm font-medium capitalize">
-                                    {item?.title}
-                                    {/*{item?.id === 'listBasket' && (
-                                      <div className="w-6 h-6 flex items-center justify-center bg-primary-500  rounded-full text-[14px] leading-none text-white font-medium">
-                                        {userCarts?.length}
-                                      </div>
-                                    )}*/}
-                                  </p>
-                                </div>
-                              </Link>
-                            )
-                          })
-                        }
-
-                        {
-                          (userCarts?.length > 0) && (
-                            <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} deleteBasket={deleteBasket} />
-                          )
-                        }
+                    if (item?.id !== 'listBasket') {
+                      close()
+                    }
+                  }}>
+                    {item?.head && (
+                      <div className={`flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300 ${item?.id === 'deleteBasket' ? '' : ''}`}>
+                        {item?.head}
                       </div>
-                    </div>
-                  </Popover.Panel>
-                </Transition>
-              </>
-            ) : (
-              <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
-                {basketItemsCount > 0 && (
-                  <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                    {basketItemsCount}
-                  </div>
-                )}
-                <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
-                <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
-              </Popover.Button>
-            )}
-          </>
-        )}
-      </Popover>
+                    )}
 
+                    <div className={item?.head ? 'ml-4' : ''}>
+                      <p className="text-sm font-medium capitalize">
+                        {item?.title}
+                      </p>
+                    </div>
+                  </Link>
+                )
+              })
+            }
+          </div>
+          <div className="flex flex-col gap-2 -mx-2">
+            {(userCarts?.length > 0) && (
+              <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} deleteBasket={deleteBasket} openTransferBasketModal={openTransferBasketModal} />
+            )}
+          </div>
+        </>
+      ) : (
+        <Popover.Button onClick={() => openMiniBasket(cartItems)} className={`group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
+          {basketItemsCount > 0 && (
+            <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
+              {basketItemsCount}
+            </div>
+          )}
+          <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
+          <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
+        </Popover.Button>
+      )}
       <AddBasketModal isOpen={isCreateBasketModalOpen} closeModal={closeCreateBasketModal} loadingAction={loadingAction} handleCreateBasket={handleCreateBasket} setLoadingAction={setLoadingAction} />
       <TransferBasket isOpen={isTransferBasketModalOpen} userCarts={userCarts} closeModal={closeTransferBasketModal} loadingAction={loadingAction} handleTransferBasket={handleTransferBasket} setLoadingAction={setLoadingAction} />
       <DeleteBasketModal isOpen={isDeleteBasketModalOpen} closeModal={closeDeleteBasketModal} loadingAction={loadingAction} handleDeleteBasket={handleDeleteBasket} setLoadingAction={setLoadingAction} />

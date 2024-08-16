@@ -387,13 +387,15 @@
       "improveRecommendationText": "Verbessere deine Empfehlung",
       "dataPackText": "Datenpaket",
       "myCompanyMenus": {
+        "companyDetail": "Company Details",
         "user": "Benutzer",
         "order": "Bestellungen",
         "quote": "Angebote",
         "address": "Adressen",
-        "invoice": "Rechnungen"
+        "invoice": "Rechnungen",
+        "shoppingList": "Shopping List"
       },
-      "myDetailsHeadingText": "Meine Details",
+      "myDetailsHeadingText": "Meine Profile",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Hoppla! Fehler beim Abrufen von Rücksendungen"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Grund für die Rücksendung",
       "proceedToReturnText": "Zur Rücksendung",
       "selectQuantityText": "Menge auswählen",
-      "myReturnText": "Meine Rücksendung",
-      "myReturnsText": "Meine Rücksendungen",
+      "myReturnText": "Rücksendung",
+      "myReturnsText": "Rücksendungen",
       "noLookbookAvaiableText": "Kein Lookbook verfügbar",
       "shopTheLookText": "Shoppen Sie den Look",
       "confirmPasswordText": "Passwort bestätigen"

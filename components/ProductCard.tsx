@@ -77,7 +77,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
     })
   }, [data, compareProductList])
   useEffect(() => {
-    if(isInWishlistItem(data?.recordId)) {
+    if (isInWishlistItem(data?.recordId)) {
       setIsInWishList(true)
     } else {
       setIsInWishList(false)
@@ -98,7 +98,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   }
 
   const handleWishList = async () => {
-    if(!isGuestUser && user?.userId && user?.id != Guid.empty){
+    if (!isGuestUser && user?.userId && user?.id != Guid.empty) {
       const createWishlist = async () => {
         try {
           if (isInWishList) {

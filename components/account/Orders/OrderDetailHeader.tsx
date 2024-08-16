@@ -22,7 +22,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                 className="absolute left-0 top-2/4 -translate-y-2/4 dark:text-gray-900"
                 onClick={() => {
                   isB2B ?
-                    router.push('/my-account/my-company?tab=orders')
+                    router.push('/my-account/my-company/orders')
                     : router.push('/my-account/orders');
                 }}
               >

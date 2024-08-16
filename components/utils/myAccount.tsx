@@ -10,6 +10,7 @@ export const useConfig: any = () => {
       props: 'details',
       head: <UserIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account',
+      displayOrder: 2
     },
     {
       type: 'tab',
@@ -18,6 +19,7 @@ export const useConfig: any = () => {
       props: 'orders',
       head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/orders',
+      displayOrder: 3
     },
     {
       type: 'tab',
@@ -26,6 +28,7 @@ export const useConfig: any = () => {
       props: 'returns',
       head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/MyReturns',
+      displayOrder: 11
     },
     {
       type: 'tab',
@@ -34,6 +37,7 @@ export const useConfig: any = () => {
       props: 'wishlist',
       head: <HeartIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/wishlist',
+      displayOrder: 6
     },
     {
       type: 'tab',
@@ -42,14 +46,7 @@ export const useConfig: any = () => {
       props: 'address-book',
       head: <BookOpenIcon className="text-gray-500 w-7 h-7" />,
       href: '/my-account/address-book',
-    },
-    {
-      type: 'tab',
-      text: translate('label.contactPreferences.contactPreferencesText'),
-      mtext: translate('label.contactPreferences.contactPreferencesText'),
-      props: 'contact',
-      head: <EnvelopeIcon className="text-gray-500 w-7 h-7" />,
-      href: '/my-account/contact',
+      displayOrder: 7
     }
   ]
 }

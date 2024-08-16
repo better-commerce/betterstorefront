@@ -102,7 +102,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setAttributeNames(mappedAttribsArrStr)
   }, [compareProductsAttributes])
 
-  useEffect(()=>{ closeSidebar() },[config])
+  useEffect(() => { closeSidebar() }, [config])
 
   const fetchRelatedProducts = async (productId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
@@ -224,10 +224,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.seoAvailability || EmptyString,
           metadata: {
-            color: (product?.customAttributes?.length >= 2) 
+            color: (product?.customAttributes?.length >= 2)
               ? product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString
               : EmptyString,
-            size: (product?.customAttributes?.length >= 4) 
+            size: (product?.customAttributes?.length >= 4)
               ? product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString
               : EmptyString,
             weight: 0,
@@ -287,7 +287,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const productVideos = product?.videos || []
 
   let content = useMemo(() => {
-    let images = [ ...productImages ]
+    let images = [...productImages]
 
     if (selectedAttrData?.image) {
       images.push({ image: selectedAttrData?.image })
@@ -416,6 +416,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       buttonConfig.type = 'button'
     } else if (product?.componentProducts?.length > 0) {
       buttonConfig.title = "Add Bundle"
+    } else if (product?.price?.raw?.withTax == 0) {
+      buttonConfig.title = translate('label.product.notifyMeText')
+      buttonConfig.action = async () => handleNotification()
+      buttonConfig.type = 'button'
     } else if (
       product?.preOrder?.isEnabled &&
       selectedAttrData?.currentStock <= 0
@@ -797,21 +801,21 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     };
   }, []);
 
-  useEffect(()=>{
-    const fetchLookbook = async(stockcode: string) => {
-      const lookbookData:any = await axios.post(NEXT_GET_LOOKBOOK, {stockcode})
-      const slug : string = lookbookData?.data?.[0]?.slug
-      if(slug){
-        const lookbookBySlug :any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, {slug})
-        if(lookbookBySlug?.status === 200){
+  useEffect(() => {
+    const fetchLookbook = async (stockcode: string) => {
+      const lookbookData: any = await axios.post(NEXT_GET_LOOKBOOK, { stockcode })
+      const slug: string = lookbookData?.data?.[0]?.slug
+      if (slug) {
+        const lookbookBySlug: any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, { slug })
+        if (lookbookBySlug?.status === 200) {
           setLookbookData(lookbookBySlug?.data)
         }
       }
     }
-    if(product?.stockCode){
+    if (product?.stockCode) {
       fetchLookbook(product.stockCode)
     }
-  },[product])
+  }, [product])
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
@@ -919,7 +923,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     );
-    
+
   };
   const detailsConfig = [
     { name: translate('common.label.descriptionText'), content: productDesc },
@@ -1207,7 +1211,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {/* {LookBook} */}
-        { lookbookData && (
+        {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
         )}
         {/* DETAIL AND REVIEW */}

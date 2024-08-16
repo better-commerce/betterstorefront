@@ -143,14 +143,14 @@ export default function ContactPreferences() {
           {/* <h1 className="font-extrabold tracking-tight text-gray-900">
             {title}
           </h1> */}
-          <p className="mt-2 text-sm flex flex-col text-black dark:text-black">
+          <p className="flex flex-col mt-2 text-sm text-black dark:text-black">
             <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescTitle')}</span>
             <span className="font-medium"> {translate('label.contactPreferences.contactPrefDescText')}</span>
           </p>
         </div>
       </div>
-      <div className="max-w-4xl flex flex-col mt-10">
-        <div className="lg:w-1/2 lg:flex justify-between lg:align-center">
+      <div className="flex flex-col max-w-4xl mt-10">
+        <div className="justify-between lg:w-1/2 lg:flex lg:align-center">
           {items.map((btn: any, idx: number) => {
             return (
               <div className="flex" key={`${idx}-radio-btn`}>
@@ -162,11 +162,11 @@ export default function ContactPreferences() {
                   onClick={() => {
                     handleRadioButton(btn.unsubscribe, btn.id)
                   }}
-                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                  className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
                 />
                 <label
                   htmlFor={`radio-btn-${idx}`}
-                  className="ml-3 block text-sm font-medium text-black dark:text-black"
+                  className="block ml-3 text-sm font-medium text-black dark:text-black"
                 >
                   {btn.title}
                 </label>
@@ -177,18 +177,18 @@ export default function ContactPreferences() {
         <div className="flex flex-row">
           {activeItem.items.map((box: any, idx: number) => {
             return (
-              <div className="w-1/2 py-5 flex items-center" key={idx}>
+              <div className="flex items-center w-1/2 py-5" key={idx}>
                 <input
                   name={`${idx}-input[]`}
                   defaultValue={box.key}
                   type="checkbox"
-                  className="h-4 w-4 border-gray-300 rounded filter-input"
+                  className="w-4 h-4 border-gray-300 rounded filter-input"
                 />
 
                 <label
                   htmlFor={`${idx}-input[]`}
                   onClick={() => handleCheckbox(box.key)}
-                  className="cursor-pointer text-sm text-gray-500 relative filter-label"
+                  className="relative text-sm text-gray-500 cursor-pointer filter-label"
                 >
                   {box.checked && (
                     <div
@@ -228,7 +228,7 @@ export default function ContactPreferences() {
         <Formik initialValues={initialValues} onSubmit={handleDataSubmit}>
           {({ handleSubmit, isSubmitting }: any) => {
             return (
-              <div className="mt-10 flex sm:flex-col1 w-60">
+              <div className="flex mt-10 sm:flex-col1 w-60">
                 <Button
                   type="submit"
                   onClick={handleSubmit}

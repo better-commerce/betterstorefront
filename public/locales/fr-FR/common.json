@@ -387,13 +387,15 @@
       "improveRecommendationText": "Améliorez votre recommandation",
       "dataPackText": "Pack de données",
       "myCompanyMenus": {
+        "companyDetail": "Company Details",
         "user": "Utilisateurs",
         "order": "Commandes",
         "quote": "Devis",
         "address": "Adresses",
-        "invoice": "Factures"
+        "invoice": "Factures",
+        "shoppingList": "Shopping List"
       },
-      "myDetailsHeadingText": "Mes détails",
+      "myDetailsHeadingText": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Oups ! Erreur lors de la récupération des retours"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Motif du retour",
       "proceedToReturnText": "Procéder au retour",
       "selectQuantityText": "Sélectionnez la quantité",
-      "myReturnText": "Mon retour",
-      "myReturnsText": "Mes retours",
+      "myReturnText": "retour",
+      "myReturnsText": "retours",
       "noLookbookAvaiableText": "Aucun Lookbook disponible",
       "shopTheLookText": "Achetez le look",
       "confirmPasswordText": "Confirmer le mot de passe"

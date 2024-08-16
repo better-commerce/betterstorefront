@@ -146,7 +146,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
 
   const accountDropDownConfigAuthorized: any = [
     { href: '/my-account', title: translate('common.label.myAccountText'), className: 'text-left p-2 cursor-pointer', },
-    { href: user?.companyId !== Guid?.empty ? '/my-account/my-company?tab=orders' : '/my-account/orders', title: translate('label.order.myOrdersText'), className: 'text-left p-2 cursor-pointer', },
+    { href: user?.companyId !== Guid?.empty ? '/my-account/my-company/orders' : '/my-account/orders', title: translate('label.order.myOrdersText'), className: 'text-left p-2 cursor-pointer', },
     {
       href: '/',
       onClick: async () => {

@@ -72,7 +72,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   }
   const productSlug: any = product?.slug;
 
-  const fetchRelatedProducts = async (recordId : string) => {
+  const fetchRelatedProducts = async (recordId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId })
     setRelatedProducts(relatedProducts)
   }
@@ -216,6 +216,10 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       shortMessage: '',
     }
     if (selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory) {
+      buttonConfig.title = translate('label.product.notifyMeText')
+      buttonConfig.action = async () => handleNotification()
+      buttonConfig.type = 'button'
+    } else if (product?.price?.raw?.withTax == 0) {
       buttonConfig.title = translate('label.product.notifyMeText')
       buttonConfig.action = async () => handleNotification()
       buttonConfig.type = 'button'
@@ -432,84 +436,84 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     openWishlist()
   }
   const handleWishList = () => {
-    if(!isGuestUser && user?.userId && user?.id != Guid.empty){
-    const product = { ...quickViewData, productId: selectedAttrData.productId, stockCode: selectedAttrData.stockCode, }
-    if (isInWishList(product?.productId)) {
-      deleteWishlistItem(user?.userId, product?.productId)
-      removeFromWishlist(product?.productId)
-      openWishlist()
-      onCloseModalQuickView()
-      return
-    }
-    let productAvailability = 'Yes'
-    if (product?.currentStock > 0) {
-      productAvailability = 'Yes'
-    } else {
-      productAvailability = 'No'
-    }
+    if (!isGuestUser && user?.userId && user?.id != Guid.empty) {
+      const product = { ...quickViewData, productId: selectedAttrData.productId, stockCode: selectedAttrData.stockCode, }
+      if (isInWishList(product?.productId)) {
+        deleteWishlistItem(user?.userId, product?.productId)
+        removeFromWishlist(product?.productId)
+        openWishlist()
+        onCloseModalQuickView()
+        return
+      }
+      let productAvailability = 'Yes'
+      if (product?.currentStock > 0) {
+        productAvailability = 'Yes'
+      } else {
+        productAvailability = 'No'
+      }
 
-    if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'wishlist', {
-        ecommerce: {
-          header: 'PLP',
-          current_page: 'Quick view ',
-        },
-      })
-      recordGA4Event(window, 'add_to_wishlist', {
-        ecommerce: {
-          items: [
-            {
-              item_name: product?.name,
-              item_brand: product?.brand,
-              item_variant: product?.variantGroupCode,
-              quantity: 1,
-              stockCode: product?.stockCode,
-              price: product?.price?.raw?.withTax,
-              item_list_name: product?.mappedCategories[0]?.categoryName,
-              item_id: product?.productCode,
-              item_var_id: product?.stockCode,
-            },
-          ],
-          item_var_id: product?.stockCode,
-          header: 'Quick View',
-          current_page: 'Quick View',
-          availability: productAvailability,
-        },
-      })
-    }
-
-    if (currentPage) {
       if (typeof window !== 'undefined') {
         recordGA4Event(window, 'wishlist', {
           ecommerce: {
+            header: 'PLP',
+            current_page: 'Quick view ',
+          },
+        })
+        recordGA4Event(window, 'add_to_wishlist', {
+          ecommerce: {
+            items: [
+              {
+                item_name: product?.name,
+                item_brand: product?.brand,
+                item_variant: product?.variantGroupCode,
+                quantity: 1,
+                stockCode: product?.stockCode,
+                price: product?.price?.raw?.withTax,
+                item_list_name: product?.mappedCategories[0]?.categoryName,
+                item_id: product?.productCode,
+                item_var_id: product?.stockCode,
+              },
+            ],
+            item_var_id: product?.stockCode,
             header: 'Quick View',
-            current_page: currentPage,
+            current_page: 'Quick View',
+            availability: productAvailability,
           },
         })
       }
-    }
 
-    const accessToken = localStorage.getItem('user')
-    if (accessToken) {
-      const createWishlist = async () => {
-        try {
-          await axios.post(NEXT_CREATE_WISHLIST, {
-            id: user.userId,
-            productId: product?.productId,
-            flag: true,
+      if (currentPage) {
+        if (typeof window !== 'undefined') {
+          recordGA4Event(window, 'wishlist', {
+            ecommerce: {
+              header: 'Quick View',
+              current_page: currentPage,
+            },
           })
-          insertToLocalWishlist()
-        } catch (error) {
-          logError(error)
         }
       }
-      createWishlist()
+
+      const accessToken = localStorage.getItem('user')
+      if (accessToken) {
+        const createWishlist = async () => {
+          try {
+            await axios.post(NEXT_CREATE_WISHLIST, {
+              id: user.userId,
+              productId: product?.productId,
+              flag: true,
+            })
+            insertToLocalWishlist()
+          } catch (error) {
+            logError(error)
+          }
+        }
+        createWishlist()
+        onCloseModalQuickView()
+      } else insertToLocalWishlist()
+    } else {
       onCloseModalQuickView()
-    } else insertToLocalWishlist()
-  } else {
-    onCloseModalQuickView()
-    openLoginSideBar()
-  }
+      openLoginSideBar()
+    }
   }
 
   const renderVariants = () => {
@@ -621,85 +625,85 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
     <div className={`nc-ProductQuickView ${className}`}>
       <div className="lg:flex">
         {isMobile ? (
-            <div className="w-full lg:w-[55%]">
-              <Swiper
-                slidesPerView={1}
-                spaceBetween={30}
-                navigation
-                loop
-                className="mySwiper"
-              >
-                <SwiperSlide>
-                  <div className="relative">
-                    <img
-                      src={
-                        generateUri(product?.image, 'h=1000&fm=webp') ||
-                        IMG_PLACEHOLDER
-                      }
-                      className="object-cover object-top w-full"
-                      alt={product?.name}
-                    />
-                    {renderStatus()}
-                  </div>
-                </SwiperSlide>
-                {product?.images?.map((item: any, index: number) => {
-                  return (
-                    item?.tag != 'specification' && (
-                      <SwiperSlide key={index}>
-                        <div className="relative">
-                          <img
-                            src={
-                              generateUri(item?.image, 'h=500&fm=webp') ||
-                              IMG_PLACEHOLDER
-                            }
-                            className="object-cover w-full"
-                            alt={product?.name}
-                          />
-                        </div>
-                      </SwiperSlide>
-                    )
-                  )
-                })}
-              </Swiper>
-            </div>
-          ) : (
-            <div className="w-full lg:w-[50%] ">
-              <div className="relative">
-                <div className="aspect-w-16 aspect-h-16">
+          <div className="w-full lg:w-[55%]">
+            <Swiper
+              slidesPerView={1}
+              spaceBetween={30}
+              navigation
+              loop
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <div className="relative">
                   <img
                     src={
-                      generateUri(selectedAttrData?.image, 'h=1000&fm=webp') ||
+                      generateUri(product?.image, 'h=1000&fm=webp') ||
                       IMG_PLACEHOLDER
                     }
-                    className="object-cover object-top w-full rounded-xl"
-                    alt={selectedAttrData?.name}
+                    className="object-cover object-top w-full"
+                    alt={product?.name}
                   />
+                  {renderStatus()}
                 </div>
-                {renderStatus()}
-              </div>
-              <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
-                {selectedAttrData?.images
-                  ?.slice(0, 2)
-                  .map((item: any, index: number) => {
-                    return (
-                      <div key={index} className="aspect-w-3 aspect-h-4">
+              </SwiperSlide>
+              {product?.images?.map((item: any, index: number) => {
+                return (
+                  item?.tag != 'specification' && (
+                    <SwiperSlide key={index}>
+                      <div className="relative">
                         <img
                           src={
-                            generateUri(item?.image, 'h=400&fm=webp') ||
+                            generateUri(item?.image, 'h=500&fm=webp') ||
                             IMG_PLACEHOLDER
                           }
-                          className="object-cover object-top w-full rounded-xl"
-                          alt={item?.name}
+                          className="object-cover w-full"
+                          alt={product?.name}
                         />
                       </div>
-                    )
-                  })}
+                    </SwiperSlide>
+                  )
+                )
+              })}
+            </Swiper>
+          </div>
+        ) : (
+          <div className="w-full lg:w-[50%] ">
+            <div className="relative">
+              <div className="aspect-w-16 aspect-h-16">
+                <img
+                  src={
+                    generateUri(selectedAttrData?.image, 'h=1000&fm=webp') ||
+                    IMG_PLACEHOLDER
+                  }
+                  className="object-cover object-top w-full rounded-xl"
+                  alt={selectedAttrData?.name}
+                />
               </div>
+              {renderStatus()}
             </div>
-          )}
+            <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
+              {selectedAttrData?.images
+                ?.slice(0, 2)
+                .map((item: any, index: number) => {
+                  return (
+                    <div key={index} className="aspect-w-3 aspect-h-4">
+                      <img
+                        src={
+                          generateUri(item?.image, 'h=400&fm=webp') ||
+                          IMG_PLACEHOLDER
+                        }
+                        className="object-cover object-top w-full rounded-xl"
+                        alt={item?.name}
+                      />
+                    </div>
+                  )
+                })}
+            </div>
+          </div>
+        )}
         {isEngravingAvailable && (
-            <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
-          )}
+          <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
+        )}
         <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0">
           {renderSectionContent()}
         </div>
