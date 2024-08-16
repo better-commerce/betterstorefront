@@ -31,7 +31,7 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket, openTransferBasketM
           index = index + 1
         }
         return (
-          <div className='flex justify-between p-2 transition duration-150 ease-in-out bg-white rounded-lg group hover:bg-neutral-100'>
+          <div className='flex justify-between p-2 transition duration-150 ease-in-out bg-white rounded-lg group hover:bg-neutral-100' key={`basket-${basket?.id}`}>
             <Link key={basket?.id} title={basketName} passHref href="#" className="flex items-center justify-between w-full rounded-lg dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => {
               ev.preventDefault()
               ev.stopPropagation()
