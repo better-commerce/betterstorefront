@@ -40,7 +40,7 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
                         <div className='flex items-center gap-2'>
                             <div className={`flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300`}>
                                 <div className="w-6 h-6 flex items-center justify-center bg-primary-500 top-1.5 right-1.5 rounded-full text-[14px] leading-none text-white font-medium">
-                                    {basket?.lineItems?.length}
+                                    {basket?.lineItems?.filter((item: any) => item?.price?.raw?.withTax > 0)?.length ?? 0}
                                 </div>
                             </div>
                             <p className="text-sm font-medium capitalize w-28">{basketName}</p>

@@ -24,7 +24,7 @@ const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function B2BBaskets() {
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
-  const { isGuestUser, user, basketId, cartItems, openCart, setAlert } = useUI()
+  const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
   const translate = useTranslation()
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
@@ -132,6 +132,12 @@ export default function B2BBaskets() {
     setUserCarts(userCarts)
   }
 
+  useEffect(()=>{
+    if(user?.userId && user?.userId !== Guid.empty){
+      getBaskets(user?.userId)
+    }
+  },[cartItems?.lineItems?.length])
+
   const handleCreateBasket = async (basketName: string) => {
     if (basketName) {
       setLoadingAction(LoadingActionType.CREATE_BASKET)
@@ -141,6 +147,7 @@ export default function B2BBaskets() {
       setLoadingAction(LoadingActionType.NONE)
 
       if (data?.recordId !== EmptyGuid) {
+        setBasketId(data?.recordId)
         closeCreateBasketModal()
         setAlert({ type: AlertType.SUCCESS, msg: data?.message })
         if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
