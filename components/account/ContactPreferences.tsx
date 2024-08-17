@@ -9,12 +9,18 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 interface ContactPreferencesProps {
+  hideSubmitBtn?: boolean;
+  customSubmit?: boolean;
+  setCustomSubmit?: any;
+}
+
+interface FormStates {
   notifyByEmail: boolean;
   notifyByPost: boolean;
   notifyBySMS: boolean;
 }
 
-export default function ContactPreferences() {
+export default function ContactPreferences({hideSubmitBtn = false, customSubmit = false, setCustomSubmit }: ContactPreferencesProps) {
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
   const [title, setTitle] = useState('Contact')
@@ -24,7 +30,7 @@ export default function ContactPreferences() {
     checked: false,
     id: 2,
   })
-  const [data, setData] = useState<ContactPreferencesProps>()
+  const [data, setData] = useState<FormStates>()
   const [defaultData, setDefaultData] = useState({})
   const config = useContactPrefConfig();
   const radioBtnsConfig = [
@@ -104,6 +110,12 @@ export default function ContactPreferences() {
     setData(tempObj)
   }
 
+  useEffect(()=>{
+    if(customSubmit){
+      handleDataSubmit()
+    }
+  },[customSubmit])
+
   const handleDataSubmit = async () => {
     if(data?.notifyByEmail != user?.notifyByEmail || data?.notifyByPost != user?.notifyByPost || data?.notifyBySMS != user?.notifyBySMS){
       await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
@@ -120,6 +132,7 @@ export default function ContactPreferences() {
         entityName: user.firstName + user.lastName,
         eventType: CustomerUpdated,
       })
+      if(hideSubmitBtn) setCustomSubmit(false)
     }
   }
 
@@ -229,7 +242,7 @@ export default function ContactPreferences() {
           {({ handleSubmit, isSubmitting }: any) => {
             return (
               <div className="flex mt-10 sm:flex-col1 w-60">
-                <Button
+                {!hideSubmitBtn && <Button
                   type="submit"
                   onClick={handleSubmit}
                   className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-black shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
@@ -237,7 +250,7 @@ export default function ContactPreferences() {
                   disabled={isSubmitting}
                 >
                   {!isSubmitting && translate('common.label.saveChangesText')}
-                </Button>
+                </Button>}
               </div>
             )
           }}
