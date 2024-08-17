@@ -387,13 +387,13 @@
       "improveRecommendationText": "Verbessere deine Empfehlung",
       "dataPackText": "Datenpaket",
       "myCompanyMenus": {
-        "companyDetail": "Company Details",
+        "companyDetail": "Firmendetails",
         "user": "Benutzer",
         "order": "Bestellungen",
         "quote": "Angebote",
         "address": "Adressen",
         "invoice": "Rechnungen",
-        "shoppingList": "Shopping List"
+        "shoppingList": "Einkaufsliste"
       },
       "myDetailsHeadingText": "Meine Profile",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
@@ -471,7 +471,7 @@
       "cancelOrderText": "Bestellung stornieren",
       "NoOrderFoundText": "Keine Bestellungen gefunden",
       "noOrderFoundDisplayText": "Biskuit-Ostkuchen Waffel Zuckerguss Eiscreme Tiramisu Pudding Cupcake.",
-      "myOrdersText": "Meine Bestellungen",
+      "myOrdersText": "Bestellungen",
       "forOrderText": "für Bestellung",
       "orderCancelledSuccessfullyText": "Bestellung erfolgreich storniert"
     },

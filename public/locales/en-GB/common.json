@@ -471,7 +471,7 @@
       "cancelOrderText": "Cancel Order",
       "NoOrderFoundText": "No orders found",
       "noOrderFoundDisplayText": "Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.",
-      "myOrdersText": "My Orders",
+      "myOrdersText": "Orders",
       "forOrderText": "for order",
       "orderCancelledSuccessfullyText": "Order Cancelled Successfully"
     },

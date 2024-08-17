@@ -387,13 +387,13 @@
       "improveRecommendationText": "Mejora tu recomendación",
       "dataPackText": "Paquete de datos",
       "myCompanyMenus": {
-        "companyDetail": "Company Details",
+        "companyDetail": "Datos de la empresa",
         "user": "Usuarios",
         "order": "Órdenes",
         "quote": "Cotizaciones",
         "address": "Direcciones",
         "invoice": "Facturas",
-        "shoppingList": "Shopping List"
+        "shoppingList": "Lista de compras"
       },
       "myDetailsHeadingText": "Mis Profile",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
@@ -471,7 +471,7 @@
       "cancelOrderText": "Cancelar Pedido",
       "NoOrderFoundText": "No se encontraron pedidos",
       "noOrderFoundDisplayText": "Pastel de galleta de avena de bizcocho glaseado con helado de tiramisú pastelito.",
-      "myOrdersText": "Mis Pedidos",
+      "myOrdersText": "Pedidos",
       "forOrderText": "para el pedido",
       "orderCancelledSuccessfullyText": "Pedido Cancelado Exitosamente"
     },

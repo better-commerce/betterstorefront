@@ -387,13 +387,13 @@
       "improveRecommendationText": "Améliorez votre recommandation",
       "dataPackText": "Pack de données",
       "myCompanyMenus": {
-        "companyDetail": "Company Details",
+        "companyDetail": "Détails de l'entreprise",
         "user": "Utilisateurs",
         "order": "Commandes",
         "quote": "Devis",
         "address": "Adresses",
         "invoice": "Factures",
-        "shoppingList": "Shopping List"
+        "shoppingList": "Liste de courses"
       },
       "myDetailsHeadingText": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
@@ -471,7 +471,7 @@
       "cancelOrderText": "Annuler la commande",
       "NoOrderFoundText": "Aucune commande trouvée",
       "noOrderFoundDisplayText": "Gâteau aux biscuits à l'avoine, gaufrette glacée, glace au tiramisu, cupcake au pudding.",
-      "myOrdersText": "Mes commandes",
+      "myOrdersText": "commandes",
       "forOrderText": "pour la commande",
       "orderCancelledSuccessfullyText": "Commande annulée avec succès"
     },

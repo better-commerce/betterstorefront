@@ -24,15 +24,6 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
     newConfig = [
       {
         type: 'tab',
-        text: translate('label.myAccount.myDetailsHeadingText'),
-        mtext: translate('label.myAccount.myDetailsHeadingText'),
-        props: 'details',
-        head: <UserIcon className="text-gray-500 w-7 h-7" />,
-        href: '/my-account',
-        displayOrder: 9
-      },
-      {
-        type: 'tab',
         text: translate('label.order.myOrdersText'),
         mtext: translate('label.order.myOrdersText'),
         props: 'orders',
@@ -65,6 +56,15 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         props: 'address-book',
         head: <BookOpenIcon className="text-gray-500 w-7 h-7" />,
         href: '/my-account/address-book',
+        displayOrder: 8
+      },
+      {
+        type: 'tab',
+        text: translate('label.myAccount.myDetailsHeadingText'),
+        mtext: translate('label.myAccount.myDetailsHeadingText'),
+        props: 'details',
+        head: <UserIcon className="text-gray-500 w-7 h-7" />,
+        href: '/my-account',
         displayOrder: 9
       }
     ]
@@ -98,7 +98,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         props: 'data-pack',
         head: <ServerIcon className="text-gray-500 w-7 h-7" />,
         href: "/my-account/data-pack",
-        displayOrder: 8
+        displayOrder: 6
       })
     }
     if (!isB2B) {
@@ -111,22 +111,15 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
             mtext: translate('label.myAccount.referAFriendText'),
             props: 'refer-a-friend',
             head: <EllipsisHorizontalCircleIcon className="text-gray-500 w-7 h-7" />,
-            href: "/my-account/refer-a-friend"
+            href: "/my-account/refer-a-friend",
+            displayOrder: 11
           })
         }
       } else {
         newConfig = [...config]
       }
     } else if (!hasMyCompany) {
-      newConfig.push({
-        type: 'tab',
-        text: translate('label.myAccount.myCompanyText'),
-        mtext: translate('label.myAccount.myCompanyText'),
-        props: 'my-company',
-        head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
-        href: '/my-account/my-company',
-        displayOrder: 8
-      },
+      newConfig.push(
         {
           type: 'tab',
           text: translate('label.myAccount.myCompanyMenus.order'),
@@ -153,15 +146,26 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/invoices',
           displayOrder: 4
-        },{
+        },
+        {
           type: 'tab',
           text: translate('label.myAccount.myCompanyMenus.shoppingList'),
           mtext: translate('label.myAccount.myCompanyMenus.shoppingList'),
           props: 'shopping-list',
           head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/shopping-list',
-          displayOrder: 6
-        })
+          displayOrder: 5
+        },
+        {
+          type: 'tab',
+          text: translate('label.myAccount.myCompanyText'),
+          mtext: translate('label.myAccount.myCompanyText'),
+          props: 'my-company',
+          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          href: '/my-account/my-company',
+          displayOrder: 10
+        }
+      )
     }
     if (featureToggle?.features?.enableMyStoreFeature) {
       newConfig.push({
@@ -209,7 +213,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'myStore',
           head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="Membership" />,
           href: '/my-account/membership',
-          displayOrder: 10
+          displayOrder: 13
         })
       }
     }
