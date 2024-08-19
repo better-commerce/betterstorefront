@@ -6,7 +6,6 @@ import PaymentGatewayNotification from '@components/SectionCheckoutJourney/check
 
 // Other Imports
 import { EmptyString } from '@components/utils/constants'
-import { useTranslation } from '@commerce/utils/use-translation'
 
 export class ChequePaymentButton extends BasePaymentButton {
   /**
@@ -45,11 +44,8 @@ export class ChequePaymentButton extends BasePaymentButton {
     dispatchState: Function,
     chequeNumber: string
   ) {
-    const translate = useTranslation()
-    uiContext?.setOverlayLoaderState({
-      visible: true,
-      message: translate('common.label.pleaseWaitText'),
-    })
+    const { translate } = this.props
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     const paymentInfo = {
       paymentInfo1: null,
       paymentInfo2: null,
@@ -101,15 +97,8 @@ export class ChequePaymentButton extends BasePaymentButton {
   }
 
   private async onChequeSubmit(data: any): Promise<void> {
-    const { paymentMethod, basketOrderInfo, uiContext, dispatchState } =
-      this.props
-    await this.onPay(
-      this.state.paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState,
-      data?.chequeNo
-    )
+    const { paymentMethod, basketOrderInfo, uiContext, dispatchState } = this.props
+    await this.onPay(this.state.paymentMethod, basketOrderInfo, uiContext, dispatchState, data?.chequeNo)
   }
 
   /**

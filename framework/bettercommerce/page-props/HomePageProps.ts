@@ -45,7 +45,7 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
                         currency: currencyCode,
                         cachedCopy: true,
                         })
-                        const pageContent = await pageContentsPromise
+                        const pageContent = await pageContentsPromise || null
                         pageContentUIDData.push({ key: currencyCode, value: pageContent })
                         await setData([{ key: pageContentUIDKey, value: pageContentUIDData }])
                         resolve()
