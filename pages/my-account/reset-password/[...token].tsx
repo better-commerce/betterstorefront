@@ -154,7 +154,7 @@ function ResetPasswordPage() {
               return (
                 <div key={Idx} className="w-full mt-6 sm:w-1/2">
                   <label className="text-sm text-gray-700">{field.label}</label>
-                  <input className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" name={field.name} type={field.type} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values[field.name]} />
+                  <input className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700" name={field.name} type={field.type} onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values[field.name]} />
                   {formik.errors[field.name] && formik.touched[field.name] && (
                     <p className="text-red-500">
                       <>{formik.errors[field.name]}</>

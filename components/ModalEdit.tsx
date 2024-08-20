@@ -47,7 +47,7 @@ const ModalEdit: FC<ModalEditProps> = ({ show, onCloseModalEdit }) => {
             <select
               id="currency"
               name="currency"
-              className="h-full py-0 pl-2 bg-transparent border-transparent rounded-md focus:ring-indigo-500 focus:border-indigo-500 pr-7 text-neutral-500 dark:text-neutral-300 sm:text-sm"
+              className="h-full py-0 pl-2 bg-transparent border-transparent rounded-md focus:ring-gray-700 focus:border-indigo-500 pr-7 text-neutral-500 dark:text-neutral-300 sm:text-sm"
             >
               <option>{translate('label.modalEdit.ethText')}</option>
               <option>{translate('label.modalEdit.btcText')}</option>

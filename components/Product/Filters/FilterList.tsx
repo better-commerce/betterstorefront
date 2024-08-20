@@ -149,7 +149,7 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label className="sr-only">{translate('label.search.searchText')}</label>
-      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={translate('label.search.searchText')} placeholder={translate('label.search.searchText')} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={translate('label.search.searchText')} placeholder={translate('label.search.searchText')} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700" />
     </>
   )
 }

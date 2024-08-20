@@ -1341,9 +1341,9 @@ body {
 .main-custom-check-label {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.14);
-  border-radius: 2px;
   color: #000;
   padding: 11px 15px;
+  border-radius: 1rem !important;
 }
 
 .main-custom-check {
@@ -1351,16 +1351,18 @@ body {
 }
 
 .main-custom-check:checked + .main-custom-check-label {
-  background: transparent;
-  border: 1.5px solid #000;
+  background: #e5e7eb;
+  color: #000000;
+  border: 1px solid #a2aaba;
+  border-radius: 1rem !important;
 }
 
 .main-custom-check + .main-custom-check-label {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.14);
-  border-radius: 2px;
   color: #000;
   padding: 11px 15px;
+  border-radius: 1rem !important;
 }
 
 /* custom checkbox */

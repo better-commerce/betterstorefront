@@ -127,7 +127,7 @@ export default function BundleCard({ productData, closeModal }: any) {
                         <Link href={`/${productData?.link}`}>
                           <button
                             type="submit"
-                            className="flex items-center justify-center w-full px-8 py-3 mt-6 font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="flex items-center justify-center w-full px-8 py-3 mt-6 font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700"
                           >
                             {translate('label.product.bundles.seeMoreText')}
                           </button>

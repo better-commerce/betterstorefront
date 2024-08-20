@@ -1025,7 +1025,7 @@ const PRICE_RANGE = [1, 500];
                                     name="minPrice"
                                     disabled
                                     id="minPrice"
-                                    className="block w-full pr-3 rounded-full focus:ring-indigo-500 focus:border-indigo-500 pl-7 sm:text-sm border-neutral-200 text-neutral-900"
+                                    className="block w-full pr-3 rounded-full focus:ring-gray-700 focus:border-indigo-500 pl-7 sm:text-sm border-neutral-200 text-neutral-900"
                                     value={rangePrices[0]}
                                   />
                                 </div>
@@ -1048,7 +1048,7 @@ const PRICE_RANGE = [1, 500];
                                     disabled
                                     name="maxPrice"
                                     id="maxPrice"
-                                    className="block w-full pr-3 rounded-full focus:ring-indigo-500 focus:border-indigo-500 pl-7 sm:text-sm border-neutral-200 text-neutral-900"
+                                    className="block w-full pr-3 rounded-full focus:ring-gray-700 focus:border-indigo-500 pl-7 sm:text-sm border-neutral-200 text-neutral-900"
                                     value={rangePrices[1]}
                                   />
                                 </div>

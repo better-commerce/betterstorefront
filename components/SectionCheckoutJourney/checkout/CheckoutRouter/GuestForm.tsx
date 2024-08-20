@@ -82,7 +82,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
                       onChange={handleChange}
                       value={values[formItem.key]}
                       type={formItem.type}
-                      className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                      className="w-full min-w-0 px-4 py-2 mt-2 mb-2 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700 "
                     />
                     <h3 className="py-2 text-sm text-center text-gray-600">
                     {translate('label.checkout.getLatestPromoText')}

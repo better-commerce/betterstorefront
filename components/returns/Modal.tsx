@@ -180,7 +180,7 @@ export default function ReturnModal({
                                           onBlur={handleBlur}
                                           name={item.name}
                                           value={values[item.name]}
-                                          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 "
+                                          className="mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700 "
                                         >
                                           {sortedItems.map(
                                             (i: any, sortedIdx: number) => {
@@ -211,7 +211,7 @@ export default function ReturnModal({
                                 })}
                               <button
                                 type="submit"
-                                className="my-4 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                                className="my-4 max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
                               >
                                 {isSubmitting ? <LoadingDots /> : translate('common.label.submitText')}
                               </button>

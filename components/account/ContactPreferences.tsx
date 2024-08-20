@@ -175,7 +175,7 @@ export default function ContactPreferences({hideSubmitBtn = false, customSubmit 
                   onClick={() => {
                     handleRadioButton(btn.unsubscribe, btn.id)
                   }}
-                  className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                  className="w-4 h-4 text-black border-gray-300 focus:ring-gray-700"
                 />
                 <label
                   htmlFor={`radio-btn-${idx}`}

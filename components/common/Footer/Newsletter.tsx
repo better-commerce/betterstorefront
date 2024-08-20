@@ -56,7 +56,7 @@ export default function Newsletter() {
           placeholder={translate('common.message.enterEmailText')}
           value={value}
           onChange={handleChange}
-          className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-sm shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700"
         />
         <div className="flex-shrink-0 ml-4">
           <button
