@@ -17458,7 +17458,7 @@ body:has(.px-4.pt-16.pb-24.bg-white.sm\:px-6.sm\:pt-24.lg\:px-8.lg\:py-32) {
 }
 body:has(.engage-announcement-bar){
   .header-space {
-    padding-top: 4rem !important;
+    padding-top: 3rem !important;
   }
   .sub-menu {
     top: 84px !important;
