@@ -12,6 +12,10 @@ import enGBLocalization from '../../public/locales/en-GB/common.json'
 import deDELocalization from '../../public/locales/de-DE/common.json'
 import esESLocalization from '../../public/locales/es-ES/common.json'
 import frFRLocalization from '../../public/locales/fr-FR/common.json'
+import { getCookie, removeCookie } from '@framework/utils'
+import { Cookie } from '@framework/utils/constants'
+import { decrypt, encrypt } from '@framework/utils/cipher'
+import { setCookie } from '@components/utils/cookieHandler'
 
 const localizations = [{ locale: 'en-GB', data: enGBLocalization }, { locale: 'de-DE', data: deDELocalization }, { locale: 'es-ES', data: esESLocalization }, { locale: 'fr-FR', data: frFRLocalization }]
 
@@ -85,6 +89,33 @@ export const routeToPLPWithSelectedFilters = (router: NextRouter, currentFilters
    });
   
   router.replace(decodeURIComponent(url.toString()), undefined, { shallow: true })
+}
+
+export const setPLPFilterSelection = (currentFilters: Array<any>) => {
+  const cookieKey = Cookie.Key.APPLIED_PLP_FILTERS
+  let filters = new Array<any>()
+  if (currentFilters?.length) {
+    filters = currentFilters?.map((x: any) => ({ name: x?.Key || x?.Name || x?.name, value: x?.Value }))
+    setCookie(cookieKey, encrypt(JSON.stringify(filters)))
+  } else {
+    if (getCookie(cookieKey)) {
+      removeCookie(cookieKey)
+    }
+  }
+}
+export const getPLPFilterSelection = () => {
+  const cookieKey = Cookie.Key.APPLIED_PLP_FILTERS
+  if (getCookie(cookieKey)) {
+    const filters: any = tryParseJson(decrypt(getCookie(cookieKey)!))
+    return filters
+  }
+  return new Array<any>()
+}
+export const resetPLPFilterSelection = () => {
+  const cookieKey = Cookie.Key.APPLIED_PLP_FILTERS
+  if (getCookie(cookieKey)) {
+    removeCookie(cookieKey)
+  }
 }
 
 export const routeToPLPWithSelectedFiltersOld = (router: any, currentFilters: Array<any>) => {

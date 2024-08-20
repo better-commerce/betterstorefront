@@ -10,6 +10,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import ProductView from '@components/Product/ProductView'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { getPLPFilterSelection } from 'framework/utils/app-util'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
@@ -56,6 +57,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 }
 function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
+  const selectedFilters = getPLPFilterSelection()
   const translate = useTranslation()
 
   const productViewProps = {
@@ -75,6 +77,7 @@ function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabel
     campaignData,
     featureToggle,
     defaultDisplayMembership,
+    selectedFilters
   }
 
   return router.isFallback ? (

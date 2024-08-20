@@ -11,7 +11,7 @@ import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent, setPLPFilterSelection } from 'framework/utils/app-util'
 import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
@@ -281,6 +281,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
+    setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
   const handleClick = () => {

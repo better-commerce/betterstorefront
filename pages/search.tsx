@@ -26,7 +26,7 @@ const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/F
 const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
-import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -137,6 +137,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
+    setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
   const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES

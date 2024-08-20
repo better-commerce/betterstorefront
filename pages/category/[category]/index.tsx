@@ -12,7 +12,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
-import { parsePLPFilters, routeToPLPWithSelectedFilters, } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, } from 'framework/utils/app-util'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError, sanitizeRelativeUrl } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
@@ -376,6 +376,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
+    setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
   const onEnableOutOfStockItems = (val: boolean) => {

@@ -67,7 +67,7 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership }: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership,  selectedFilters = [] }: any) {
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
@@ -141,8 +141,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   }
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
+    const filteredProduct = getFilteredProduct()
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
-    const response: any = await axios.post(url, { slug: slug })
+    const currentSlug = filteredProduct?.slug ? filteredProduct?.slug?.replaceAll('products/', '') : slug
+    const response: any = await axios.post(url, { slug: currentSlug })
     if (response?.data?.product) {
       fetchRelatedProducts(response?.data?.product?.recordId)
       const recentlyViewedProduct: any = response?.data?.product?.stockCode;
@@ -278,6 +280,35 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const getFilteredProduct = () => {
+    if (selectedFilters?.length) {
+      const productSupportedAttributes = product?.customAttributes?.map((x: any) => x?.display) || []
+      const matchingAttrFilters = selectedFilters?.filter((x: any) => productSupportedAttributes.includes(x?.name))
+      const variantProducts = product?.variantProducts
+      if (variantProducts?.length) {
+        let filteredProducts = new Array<any>()
+        matchingAttrFilters?.forEach((attrFilter: any) => {
+          if (filteredProducts?.length === 0) {
+            filteredProducts = variantProducts?.filter((x: any) => {
+              const findAttr = x?.attributes?.find((y: any) => matchStrings(y?.fieldName, attrFilter?.name, true) && matchStrings(y?.fieldValue, attrFilter?.value, true))
+              return (findAttr != null)
+            })
+          } else {
+            filteredProducts = filteredProducts?.filter((x: any) => {
+              const findAttr = x?.attributes?.find((y: any) => matchStrings(y?.fieldName, attrFilter?.name, true) && matchStrings(y?.fieldValue, attrFilter?.value, true))
+              return (findAttr != null)
+            })
+          }
+        })
+
+        if (filteredProducts?.length) {
+          return { productId: filteredProducts[0]?.recordId || filteredProducts[0]?.productId, stockCode: filteredProducts[0]?.stockCode, slug: filteredProducts[0]?.slug || filteredProducts[0]?.link }
+        }
+      }
+    }
+    return null
+  }
 
   const handleNotification = () => {
     openNotifyUser(product?.recordId)
