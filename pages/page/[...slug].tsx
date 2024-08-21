@@ -309,13 +309,14 @@ export async function getServerSideProps(context: any) {
       DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
     },
     baseUrl: BETTERCMS_BASE_URL,
+    cookies: context?.req?.cookies || {}
   })
 
   let dealOfTheWeekProductPromoDetails: any = EmptyObject
   if (pageContents) {
     const dealOfTheWeekProducts = pageContents?.featureproduct
     if (dealOfTheWeekProducts?.length && dealOfTheWeekProducts[0]?.recordId) {
-      dealOfTheWeekProductPromoDetails = await commerce.getProductPromos({ query: dealOfTheWeekProducts[0]?.recordId, cookies: {} })
+      dealOfTheWeekProductPromoDetails = await commerce.getProductPromos({ query: dealOfTheWeekProducts[0]?.recordId, cookies: context?.req?.cookies })
     }
   }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })

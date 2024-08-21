@@ -35,12 +35,12 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
       let collectionUIDData: any = parseDataValue(cachedData, cachedDataUID.collectionUID)
     
       if (!brandBySlugUIDData) {
-        brandBySlugUIDData = await getBrandBySlug(slug, {})
+        brandBySlugUIDData = await getBrandBySlug(slug, cookies)
         await setData([{ key: cachedDataUID.brandSlugUID, value: brandBySlugUIDData }])
       }
     
       if (!infraUIDData) {
-        infraUIDData = await commerce.getInfra()
+        infraUIDData = await commerce.getInfra(cookies)
         await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
       }
     
@@ -70,9 +70,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    collections.imageBannerCollection = await getCollectionById(
-                      widget.recordId
-                    )
+                    collections.imageBannerCollection = await getCollectionById(widget.recordId, cookies)
                   } catch (error: any) { }
                   resolve()
                 })
@@ -84,7 +82,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    const res = await getCollectionById(widget.recordId)
+                    const res = await getCollectionById(widget.recordId, cookies)
                     collections.imageCategoryCollection = res?.images
                   } catch (error: any) { }
                   resolve()
@@ -97,9 +95,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    collections.imgFeatureCollection = await getCollectionById(
-                      widget.recordId
-                    )
+                    collections.imgFeatureCollection = await getCollectionById(widget.recordId, cookies)
                   } catch (error: any) { }
                   resolve()
                 })
@@ -111,7 +107,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    const res = await getCollectionById(widget.recordId)
+                    const res = await getCollectionById(widget.recordId, cookies)
                     collections.offerBannerCollection = res.images
                   } catch (error: any) { }
                   resolve()
@@ -124,7 +120,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    const res = await getCollectionById(widget.recordId)
+                    const res = await getCollectionById(widget.recordId, cookies)
                     collections.productCollection = res.products.results
                   } catch (error: any) { }
                   resolve()
@@ -137,7 +133,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    const res = await getCollectionById(widget.recordId)
+                    const res = await getCollectionById(widget.recordId, cookies)
                     collections.saleProductCollection = res.products.results
                   } catch (error: any) { }
                   resolve()
@@ -159,7 +155,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
     const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

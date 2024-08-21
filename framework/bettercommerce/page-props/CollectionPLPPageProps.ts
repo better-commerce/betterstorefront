@@ -34,11 +34,11 @@ export class CollectionPLPPageProps extends BasePagePropsProvider implements IPa
     
       try {
         if (!collectionUIDData) {
-          collectionUIDData = await getCollectionBySlug(slug)
+          collectionUIDData = await getCollectionBySlug(slug, cookies)
           await setData([{ key: cachedDataUID.collectionUID, value: collectionUIDData }])
         }
         if (!infraUIDData) {
-          const infraPromise = commerce.getInfra()
+          const infraPromise = commerce.getInfra(cookies)
           infraUIDData = await infraPromise
           await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
         }
@@ -66,7 +66,7 @@ export class CollectionPLPPageProps extends BasePagePropsProvider implements IPa
     const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

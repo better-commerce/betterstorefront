@@ -13,7 +13,7 @@ import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError, sanitizeRelativeUrl } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -56,7 +56,7 @@ export async function getStaticProps(context: any) {
   const slug = slugName + '/' + context.params[slugName]
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
@@ -77,11 +77,11 @@ export async function getStaticProps(context: any) {
 
   try {
     if (!categorySlugUIDData) {
-      categorySlugUIDData = await getCategoryBySlug(slug)
+      categorySlugUIDData = await getCategoryBySlug(slug, { [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: cachedDataUID.categorySlugUID, value: categorySlugUIDData }])
     }
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra({ [Cookie.Key.LANGUAGE]: locale })
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
@@ -119,7 +119,7 @@ export async function getStaticProps(context: any) {
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: {} })
+    const membershipPlansPromise = commerce.getMembershipPlans({ data, cookies: { [Cookie.Key.LANGUAGE]: locale } })
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -130,7 +130,7 @@ export async function getStaticProps(context: any) {
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion = await commerce.getPromotion(promoCode)
+        const promotion = await commerce.getPromotion(promoCode, { [Cookie.Key.LANGUAGE]: locale })
         defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
       }
     }
@@ -144,7 +144,7 @@ export async function getStaticProps(context: any) {
 
   if (categorySlugUIDData && categorySlugUIDData?.id) {
     if (!categoryProductUIDData) {
-      const categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id)
+      const categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id, { [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
 

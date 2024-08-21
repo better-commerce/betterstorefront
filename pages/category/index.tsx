@@ -6,7 +6,7 @@ import NextHead from 'next/head'
 import Layout from '@components/Layout/Layout'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { BETTERCOMMERCE_DEFAULT_LANGUAGE, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
@@ -107,7 +107,7 @@ export async function getStaticProps({
     const cachedData = await getDataByUID([categoryUID])
     categoryUIDData = parseDataValue(cachedData, categoryUID)
     if (!containsArrayData(categoryUIDData)) {
-      categoryUIDData = await getAllCategories()
+      categoryUIDData = await getAllCategories({ [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: categoryUID, value: categoryUIDData }])
     }
   } catch (error: any) {
@@ -129,7 +129,7 @@ export async function getStaticProps({
   }
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: {} })
+  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   return {
     props: {

@@ -35,6 +35,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { removeQueryString } from '@commerce/utils/uri-util'
+import { Cookie } from '@framework/utils/constants'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -548,7 +549,7 @@ export async function getStaticProps({
   }
   const slug = `brands/${brandSlug}`
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: {} })
+  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

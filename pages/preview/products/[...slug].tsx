@@ -5,14 +5,14 @@ import Layout from '@components/Layout/Layout'
 import { ProductView } from '@components/Product'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string }>) {
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PDP_PREVIEW })
-  const pageProps = await props.getPageProps({ slug: params!.slug[0], cookies: {} })
+  const pageProps = await props.getPageProps({ slug: params!.slug[0], cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   return {
     props: {

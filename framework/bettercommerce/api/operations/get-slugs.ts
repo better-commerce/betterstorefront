@@ -1,12 +1,13 @@
 import fetcher from '../../fetcher'
-import { SITEVIEW_ENDPOINT } from '@components/utils/constants'
+import { EmptyObject, SITEVIEW_ENDPOINT } from '@components/utils/constants'
 
 export default function getSlugsOperation() {
-  async function getSlugs({ slug = '/' }: any) {
+  async function getSlugs({ slug = '/', cookies = EmptyObject }: any) {
     try {
       const response: any = await fetcher({
         url: `${SITEVIEW_ENDPOINT}/slug?slug=${slug}`,
         method: 'post',
+        cookies
       })
       return { ...response?.result, snippets: response?.snippets ?? [] };
       //return response?.result

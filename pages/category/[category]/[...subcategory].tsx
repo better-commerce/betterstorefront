@@ -13,7 +13,7 @@ import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util
 import { getCategoryBySlug } from '@framework/category'
 import { getCategoryProducts } from '@framework/api/operations'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, } from 'framework/utils/app-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
 import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
@@ -57,7 +57,7 @@ export async function getStaticProps(context: any) {
     context.params[childSlugName].join('/')
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
@@ -79,12 +79,12 @@ export async function getStaticProps(context: any) {
 
   try {
     if (!categorySlugUIDData) {
-      categorySlugUIDData = await getCategoryBySlug(slug)
+      categorySlugUIDData = await getCategoryBySlug(slug, { [Cookie.Key.LANGUAGE]: locale })
       // save to redis
       await setData([{ key: cachedDataUID.categorySlugUID, value: categorySlugUIDData }])
     }
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra({ [Cookie.Key.LANGUAGE]: locale })
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
@@ -145,7 +145,7 @@ export async function getStaticProps(context: any) {
   }
   if (categorySlugUIDData && categorySlugUIDData?.id) {
     if (!categoryProductUIDData) {
-      categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id)
+      categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id, { [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
         props: {

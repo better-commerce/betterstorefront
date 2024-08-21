@@ -6,7 +6,7 @@ import Link from 'next/link'
 import NextHead from 'next/head'
 import type { GetStaticPropsContext } from 'next'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutError from '@components/Layout/LayoutError'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -22,7 +22,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: {} })
+  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   return {
     props: {
