@@ -32,23 +32,14 @@ export default function Engraving({ engravingPrice = '5.99', show = false, handl
   }
 
   return (
-    <Dialog open={show} onClose={() => handleToggleDialog()} className="z-999">
-      <div
-        className="fixed inset-0 top-0 right-0"
-        aria-hidden="true"
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-      />
+    <Dialog open={show} onClose={() => handleToggleDialog()} className="relative z-999">
+      <div className="fixed inset-0 top-0 right-0" aria-hidden="true" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
       <div className="fixed inset-0 overflow-auto xsm:overflow-hidden">
         <div className="flex items-center justify-center min-h-full p-4 xsm:p-0 ">
           <Dialog.Panel>
             <div className="relative flex flex-col items-center max-w-full px-4 pb-8 overflow-hidden bg-white shadow-2xl pt-14 sm:px-6 sm:pt-8 md:p-6 lg:p-8 rounded-xl">
               <Dialog.Title className="block py-2 transition cursor-pointer select-none">
-                <XMarkIcon
-                  onClick={() => handleToggleDialog()}
-                  title="Close Panel"
-                  className="absolute right-0 w-6 h-6 mr-6 text-gray-400 hover:text-gray-600"
-                  aria-hidden="true"
-                />
+                <XMarkIcon onClick={() => handleToggleDialog()} title="Close Panel" className="absolute right-0 w-6 h-6 mr-6 text-gray-400 hover:text-gray-600" aria-hidden="true" />
               </Dialog.Title>
               <ProductPersonaliser
                 canvasWidth={280}
