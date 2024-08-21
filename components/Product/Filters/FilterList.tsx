@@ -18,7 +18,7 @@ export const FILTER_KEYS = {
   SIZE: 'attributes.value~clothing.size',
 }
 
-const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
+const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
   const currencySymbol = getCurrencySymbol()
 
@@ -28,7 +28,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 
   const handleCheckbox = () => {
     setCheckbox(!isCheckboxChecked)
-    let obj = { Key: sectionKey, Value: option.name, IsSelected: true, }
+    let obj = { Key: sectionKey, Name: sectionName, Value: option.name, IsSelected: true, }
     let type = !isCheckboxChecked ? ACTION_TYPES.ADD_FILTERS : ACTION_TYPES.REMOVE_FILTERS
     onSelect(obj, type)
     closeSidebar()
@@ -171,6 +171,7 @@ const getCustomComponent = (type: string) => {
 
 export default function FilterList({
   items = [],
+  sectionName,
   sectionKey,
   handleFilters,
   routerFilters,
@@ -221,6 +222,7 @@ export default function FilterList({
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
             <FilterItem
+              sectionName={sectionName}
               sectionKey={sectionKey}
               option={option}
               onSelect={handleFilters}

@@ -44,7 +44,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
 
 declare const window: any
@@ -218,6 +218,7 @@ function CollectionPage(props: any) {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
+    setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
   const onEnableOutOfStockItems = (val: boolean) => {

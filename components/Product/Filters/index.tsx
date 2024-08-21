@@ -83,7 +83,7 @@ export default function Filters({
                         </span>
                       </Disclosure.Button>
                       <Disclosure.Panel className="px-4 pt-0 space-y-3 bg-white">
-                        <FilterList handleFilters={handleFilters} sectionKey={section.key} items={section.items} routerFilters={routerFilters} closeSidebar={() => setOpen(false)} />
+                        <FilterList handleFilters={handleFilters} sectionName={section?.name} sectionKey={section.key} items={section.items} routerFilters={routerFilters} closeSidebar={() => setOpen(false)} />
                       </Disclosure.Panel>
                     </>
                   )}
