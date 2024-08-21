@@ -306,11 +306,18 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
           </div>
         }
-        {(pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0) && pageContents?.range?.map((heading: any, hIdx: number) => (
+
+        {pageContents?.newarrivals?.length > 0 && 
+          <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
+             <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          </div>
+        }
+
+        {pageContents?.shoprange?.length > 0 && pageContents?.range?.map((heading: any, hIdx: number) => (
           <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
             <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
             {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
-              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals || pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             }
           </div>
         ))}
