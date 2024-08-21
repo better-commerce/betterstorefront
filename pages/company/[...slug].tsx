@@ -81,7 +81,6 @@ function CompanyPages({ slug, pageContents, deviceInfo, config, hostName }: any)
 
 export async function getServerSideProps(context: any) {
   const slug = context.query.slug
-  const { locale } = context;
 
   const { result: pageContents } = await fetcher({
     url: `${PAGE_PREVIEW_CONTENT_ENDPOINT}`,
@@ -96,6 +95,7 @@ export async function getServerSideProps(context: any) {
       DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
     },
     baseUrl: BETTERCMS_BASE_URL,
+    cookies: context?.req?.cookies
   })
 
   if (pageContents?.slug === 'contact-us') {

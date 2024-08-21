@@ -10,7 +10,7 @@ export default function FeedComposer({ feed }: any) {
 export async function getServerSideProps(context: any) {
   const { res, query, locale } = context
   if (query?.feed && (query?.feed[0]?.includes('xml') || query?.feed[0]?.includes('aspx'))) {
-    const feed = await getFeed(query?.feed[0])
+    const feed = await getFeed(query?.feed[0], context?.req?.cookies)
     if (feed?.downloadLink) {
       const response = await axios.get(feed?.downloadLink)
       res.setHeader("content-type", "application/xml")

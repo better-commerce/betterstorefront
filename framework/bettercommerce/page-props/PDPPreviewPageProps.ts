@@ -31,14 +31,14 @@ export class PDPPreviewPageProps extends BasePagePropsProvider implements IPageP
     ])
     let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
 
     let productPreviewSlugUID: any = parseDataValue(cachedData, cachedDataUID.productPreviewSlugUID)
     if (!productPreviewSlugUID) {
-        const productPromise = commerce.getProductPreview({ query: slug })
+        const productPromise = commerce.getProductPreview({ query: slug, cookies })
         productPreviewSlugUID = await productPromise
         await setData([{ key: cachedDataUID.productPreviewSlugUID, value: productPreviewSlugUID }])
     }
@@ -50,6 +50,7 @@ export class PDPPreviewPageProps extends BasePagePropsProvider implements IPageP
               // GET SELECTED PRODUCT ALL REVIEWS
               const pdpCachedImagesPromise = commerce.getPdpCachedImage({
                 query: productPreviewSlugUID?.product?.productCode,
+                cookies
               })
         
               productImagesUID = await pdpCachedImagesPromise
@@ -61,7 +62,7 @@ export class PDPPreviewPageProps extends BasePagePropsProvider implements IPageP
     const pdpCachedImages = productImagesUID?.images ? JSON.parse(productImagesUID?.images) : []
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

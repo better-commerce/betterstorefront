@@ -22,7 +22,7 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
     const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.TermspageMobileWeb) || []
 
     if (!infraUIDData) {
-        const infraPromise = commerce.getInfra()
+        const infraPromise = commerce.getInfra(cookies)
         infraUIDData = await infraPromise
         await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
     }
@@ -45,6 +45,7 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
                                 channel: channel,
                                 currency: currencyCode,
                                 cachedCopy: true,
+                                language: cookies?.Language,
                             })
                             const pageContent = await pageContentsPromise
                             pageContentUIDData.push({
@@ -66,11 +67,11 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
     fetchData(pageContentMobileWebUIDData, Redis.Key.TermspageMobileWeb, 'MobileWeb')
 
     await Promise.all(promises)
-    const slugsPromise = commerce.getSlugs({ slug });
+    const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

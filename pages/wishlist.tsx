@@ -12,6 +12,7 @@ import { PagePropType, getPagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { Cookie } from '@framework/utils/constants'
 
 
 export async function getStaticProps({
@@ -28,7 +29,7 @@ export async function getStaticProps({
 
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: {} })
+  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   return {
     props: {

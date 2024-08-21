@@ -14,6 +14,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import {
   CONTACT_PAGE_DEFAULT_SLUG,
+  Cookie,
   STATIC_PAGE_CACHE_INVALIDATION_IN_MINS,
 } from '@framework/utils/constants'
 import {
@@ -44,7 +45,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.CONTACT_US })
-  const pageProps = await props.getPageProps({ slug: CONTACT_PAGE_DEFAULT_SLUG, cookies: {} })
+  const pageProps = await props.getPageProps({ slug: CONTACT_PAGE_DEFAULT_SLUG, cookies: {[Cookie.Key.LANGUAGE]: locale } })
   const hostName = os.hostname()
 
   return {

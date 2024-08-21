@@ -6,7 +6,7 @@ import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import { GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
@@ -146,7 +146,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params, locale }: GetStaticPropsContext) {
   const response = await getAllStores()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: {} })
+  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   return {
     props: {

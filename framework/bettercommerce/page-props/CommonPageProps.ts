@@ -20,17 +20,17 @@ export class CommonPageProps extends BasePagePropsProvider implements IPageProps
     ])
     let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
       await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
     }
 
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
 
     let slugs
     if (slug) {
-        const slugsPromise = commerce.getSlugs({ slug: slug })
+        const slugsPromise = commerce.getSlugs({ slug, cookies })
         slugs = await slugsPromise
     }
     const navTreeUIDData = await this.getNavTree({ cookies })

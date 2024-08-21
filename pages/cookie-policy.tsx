@@ -16,6 +16,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import {
   COOKIES_PAGE_DEFAULT_SLUG,
   STATIC_PAGE_CACHE_INVALIDATION_IN_MINS,
+  Cookie as Cookies
 } from '@framework/utils/constants'
 import {
   getCurrency,
@@ -36,7 +37,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PRIVACY_POLICY })
-  const pageProps = await props.getPageProps({ slug: COOKIES_PAGE_DEFAULT_SLUG, cookies: {} })
+  const pageProps = await props.getPageProps({ slug: COOKIES_PAGE_DEFAULT_SLUG, cookies: { [Cookies.Key.LANGUAGE]: locale } })
   const hostName = os.hostname()
 
   return {

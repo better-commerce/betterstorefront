@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
 import ProductLayout from '@components/Layout/ProductLayout'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { notFoundRedirect } from '@framework/utils/app-util'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -15,7 +15,7 @@ import { getPLPFilterSelection } from 'framework/utils/app-util'
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PDP })
-  const pageProps = await props.getPageProps({ slug, cookies: {} })
+  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   if (pageProps?.notFound) {
     if (process.env.npm_lifecycle_event === 'build') {
