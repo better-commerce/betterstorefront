@@ -255,7 +255,7 @@
       "productAvailableText": "Products available",
       "collectionsText": "Collections",
       "backToCollectionsText": "Back to collections",
-      "noItemAvailableText": "No Item Availabe in",
+      "noItemAvailableText": "No Item Available in",
       "collectionsTextWithExclamationMark": "Collection!"
     },
     "companyUsers": {
@@ -1072,7 +1072,7 @@
       "priceText": "Price",
       "yourInfoText": "Your information",
       "badUrlText": "This is a bad url. please go back to",
-      "noProductAvailableText": "No Products availabe in",
+      "noProductAvailableText": "No Products available in",
       "clickHereText": "Click Here",
       "sizeText": "Size:",
       "removeItemConfirmText": "Remove this Item?",
