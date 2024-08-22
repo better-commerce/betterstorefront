@@ -19,6 +19,9 @@ import OrderDeliveryPlanItems from '@components/account/Orders/OrderDeliveryPlan
 import { Disclosure } from '@headlessui/react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Spinner from '@components/ui/Spinner'
+import {
+    NEXT_BULK_ADD_TO_CART,
+  } from '@components/utils/constants'
 
 // Other Imports
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
@@ -39,7 +42,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 function OrderDetail({ deviceInfo }: any) {
     const router: any = useRouter();
-    const { user } = useUI();
+    const { user, setCartItems, openCart, basketId } = useUI();
     const translate = useTranslation();
     const { isMobile, isIPadorTablet } = deviceInfo
     const [isHelpOpen, setIsHelpOpen] = useState(false)
@@ -250,6 +253,27 @@ function OrderDetail({ deviceInfo }: any) {
             orderData?.discount?.raw?.withoutTax
         ).toFixed(2)
 
+
+        const handleReOrder = async () => {
+            const computedProducts = orderData?.items?.reduce((acc: any, obj: any) => {
+              acc.push({
+                ProductId: obj?.recordId || obj?.productId,
+                Qty: obj?.qty || 1,
+                StockCode: obj?.stockCode,
+                ProductName: obj?.name,
+                ManualUnitPrice: obj?.manualUnitPrice || 0.0,
+              })
+              return acc
+            }, [])
+            const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
+              basketId,
+              products: computedProducts,
+            })
+            if (newCart?.data) {
+              setCartItems(newCart?.data)
+              openCart()
+            }
+          }
     return (
         <>
             {
@@ -316,7 +340,7 @@ function OrderDetail({ deviceInfo }: any) {
                                         </>
                                     )}
                                 </div>
-                                <OrderSummary details={orderData} subTotalAmount={subTotalAmount} openOrderHelpModal={openOrderHelpModal} />
+                                <OrderSummary details={orderData} subTotalAmount={subTotalAmount} openOrderHelpModal={openOrderHelpModal} handleReOrder={handleReOrder}   />
                             </div>
                         </div>
                         <HelpModal details={orderData} isHelpOpen={isHelpOpen} closeHelpModal={closeHelpModal} isHelpStatus={isHelpStatus} chooseHelpMode={chooseHelpMode} onExchangeItem={onExchangeItem} onReturnItem={onReturnItem} onCancelItem={onCancelItem} onCancelOrder={onCancelOrder} isHelpOrderOpen={isHelpOrderOpen} closeOrderHelpModal={closeOrderHelpModal} returnRequestedItems={returnRequestedItems} />
