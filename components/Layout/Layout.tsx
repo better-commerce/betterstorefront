@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { CookieBanner } from '@schlomoh/react-cookieconsent'
@@ -23,7 +23,7 @@ const LoginSideBarView = dynamic(() => import('@components/shared/Login/LoginSid
 const Footer = dynamic(() => import('@components/shared/Footer/Footer'))
 import { Sidebar, Modal, LoadingDots } from '@components/ui'
 import { IDeviceInfo, useUI } from '@components/ui/context'
-import { CURRENT_THEME } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyString } from '@components/utils/constants'
 import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
 import ProductMembershipOfferModal from '@components/membership/ProductMembershipOfferModal'
@@ -172,6 +172,23 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
   const isDemoStoreCode = stringToBoolean(router?.query?.storecode ? '1': '0')
   const isInteractiveDemo = !isDemo? isDemoStoreCode : isDemo
 
+  const getDefaultLanguage = useMemo(() => {
+    const regionalSettingsConfigKeys = config?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
+    if (regionalSettingsConfigKeys?.length) {
+      const defaultLanguageCode = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultLanguageCode")
+      return defaultLanguageCode?.value || EmptyString
+    }
+  }, [config])
+
+  const getDefaultCountry = useMemo(() => {
+    const regionalSettingsConfigKeys = config?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
+    if (regionalSettingsConfigKeys?.length) {
+      const defaultCountry = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultCountry")
+      return  defaultCountry?.value || EmptyString
+    }
+  }, [config])
+  
+
   return (
     <>
       <Head>
@@ -195,7 +212,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <ProductMembershipOfferModal {...productMembershipModalData} />
-          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={getDefaultLanguage} defaultCountry={getDefaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           {children}
           <Footer navItems={navTree?.footer} />
