@@ -35,7 +35,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
         {navItems?.map((item: any, itemIdx: number) => (
           <li className="flex-shrink-0 mt-0 menu-item menu-megamenu menu-megamenu--large group" onMouseEnter={() => handleMouseEnter(itemIdx)} onMouseLeave={handleMouseLeave} key={`to-nav-${itemIdx}`} >
             <div className="flex items-center flex-shrink-0 h-20">
-              <Link href={`${sanitizeRelativeUrl(item?.hyperlink)}`} className="inline-flex items-center capitalize text-sm lg:text-[12px] 2xl:text-[14px] menu-font-size font-semibold text-slate-700 dark:text-slate-700 py-2.5 px-4 xl:px-4 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:text-slate-900 group-hover:bg-slate-100" >
+              <Link href={`${sanitizeRelativeUrl(item?.hyperlink)}`} className="inline-flex items-center capitalize text-sm lg:!text-[12px] 2xl:text-[14px] menu-font-size font-semibold text-slate-700 dark:text-slate-700 py-2.5 px-4 xl:px-4 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:text-slate-900 group-hover:bg-slate-100" >
                 {item?.caption.toLowerCase()}
               </Link>
               {item?.navBlocks?.length > 0 && (
