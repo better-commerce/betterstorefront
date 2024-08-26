@@ -9,11 +9,12 @@ import { useUI } from '@components/ui';
 import { Guid } from '@commerce/types';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from '@commerce/utils/use-translation'
+import { TransferIcon } from '@components/shared/icons';
 
 const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
     const { setBasketId } = useUI()
     const translate = useTranslation()
-    
+
     if (!baskets || (baskets && !baskets?.length)) {
         return null
     }
@@ -28,7 +29,7 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
                     index = index + 1
                 }
                 return (
-                    <Link key={basket?.id} title={basketName} passHref href="#" className="flex justify-between items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => {
+                    <Link key={basket?.id} title={basketName} passHref href="#" className="flex items-center justify-between p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50" onClick={(ev: any) => {
                         ev.preventDefault()
                         ev.stopPropagation()
                         if (basket?.id && basket?.id !== Guid.empty) {
@@ -36,10 +37,10 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
                             openMiniBasket(basket)
                         }
                     }}>
-                        <div className='flex gap-2 items-center'>
+                        <div className='flex items-center gap-2'>
                             <div className={`flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300`}>
                                 <div className="w-6 h-6 flex items-center justify-center bg-primary-500 top-1.5 right-1.5 rounded-full text-[14px] leading-none text-white font-medium">
-                                    {basket?.lineItems?.length}
+                                    {basket?.lineItems?.filter((item: any) => item?.price?.raw?.withTax > 0)?.length ?? 0}
                                 </div>
                             </div>
                             <p className="text-sm font-medium capitalize w-28">{basketName}</p>
@@ -47,7 +48,7 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket }: any) => {
 
                         {!basket?.isLocked && (
                             <div className='flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300 z-99'>
-                                <TrashIcon className="w-5 h-5 text-black stroke-2" onClick={(ev: any) => {
+                                <TrashIcon className="w-4 h-4 text-gray-400 stroke-2 hover:text-red-500" onClick={(ev: any) => {
                                     ev.preventDefault()
                                     ev.stopPropagation()
                                     deleteBasket(basket?.id)

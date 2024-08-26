@@ -85,6 +85,7 @@ export module Cookie {
     export const PASSWORD_PROTECTION_AUTH = 'ppa'
     export const ENGAGE_SESSION = 'ch_cookie'
     export const GEO_ENDPOINT_DATA_CACHED = 'gedc'
+    export const APPLIED_PLP_FILTERS = 'aplpf'
   }
 }
 

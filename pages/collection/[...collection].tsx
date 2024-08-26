@@ -25,7 +25,7 @@ import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes, } from '@framework/utils/parse-util'
@@ -44,7 +44,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { parsePLPFilters, routeToPLPWithSelectedFilters } from 'framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
 
 declare const window: any
@@ -218,6 +218,7 @@ function CollectionPage(props: any) {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
+    setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
   const onEnableOutOfStockItems = (val: boolean) => {
@@ -680,7 +681,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   let hostName = EmptyString
   hostName = os.hostname()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COLLECTION_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: context?.req?.cookies })
+  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

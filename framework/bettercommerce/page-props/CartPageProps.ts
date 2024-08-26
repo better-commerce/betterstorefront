@@ -19,7 +19,7 @@ export class CartPageProps extends BasePagePropsProvider implements IPagePropsPr
     const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG,])
     let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
       await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
     }
@@ -27,7 +27,7 @@ export class CartPageProps extends BasePagePropsProvider implements IPagePropsPr
     const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

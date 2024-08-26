@@ -67,7 +67,7 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership }: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership,  selectedFilters = [] }: any) {
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
@@ -102,7 +102,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setAttributeNames(mappedAttribsArrStr)
   }, [compareProductsAttributes])
 
-  useEffect(()=>{ closeSidebar() },[config])
+  useEffect(() => { closeSidebar() }, [config])
 
   const fetchRelatedProducts = async (productId: string) => {
     const { data: relatedProducts }: any = await axios.post(NEXT_GET_ORDER_RELATED_PRODUCTS, { recordId: productId, })
@@ -141,8 +141,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   }
   const { Product } = EVENTS_MAP.ENTITY_TYPES
   const fetchProduct = async () => {
+    const filteredProduct = getFilteredProduct()
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
-    const response: any = await axios.post(url, { slug: slug })
+    const currentSlug = filteredProduct?.slug ? filteredProduct?.slug?.replaceAll('products/', '') : slug
+    const response: any = await axios.post(url, { slug: currentSlug })
     if (response?.data?.product) {
       fetchRelatedProducts(response?.data?.product?.recordId)
       const recentlyViewedProduct: any = response?.data?.product?.stockCode;
@@ -224,10 +226,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           sale_price: product?.price?.minPrice?.toFixed(2)?.toString() || EmptyString,
           availability: product?.seoAvailability || EmptyString,
           metadata: {
-            color: (product?.customAttributes?.length >= 2) 
+            color: (product?.customAttributes?.length >= 2)
               ? product?.customAttributes[0]?.key == "global.colour" ? product?.customAttributes[0]?.value : product?.customAttributes[1]?.value || EmptyString
               : EmptyString,
-            size: (product?.customAttributes?.length >= 4) 
+            size: (product?.customAttributes?.length >= 4)
               ? product?.customAttributes[2]?.key == "clothing.size" ? product?.customAttributes[2]?.value : product?.customAttributes[3]?.value || EmptyString
               : EmptyString,
             weight: 0,
@@ -279,6 +281,35 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const getFilteredProduct = () => {
+    if (selectedFilters?.length) {
+      const productSupportedAttributes = product?.customAttributes?.map((x: any) => x?.display) || []
+      const matchingAttrFilters = selectedFilters?.filter((x: any) => productSupportedAttributes.includes(x?.name))
+      const variantProducts = product?.variantProducts
+      if (variantProducts?.length) {
+        let filteredProducts = new Array<any>()
+        matchingAttrFilters?.forEach((attrFilter: any) => {
+          if (filteredProducts?.length === 0) {
+            filteredProducts = variantProducts?.filter((x: any) => {
+              const findAttr = x?.attributes?.find((y: any) => matchStrings(y?.fieldName, attrFilter?.name, true) && matchStrings(y?.fieldValue, attrFilter?.value, true))
+              return (findAttr != null)
+            })
+          } else {
+            filteredProducts = filteredProducts?.filter((x: any) => {
+              const findAttr = x?.attributes?.find((y: any) => matchStrings(y?.fieldName, attrFilter?.name, true) && matchStrings(y?.fieldValue, attrFilter?.value, true))
+              return (findAttr != null)
+            })
+          }
+        })
+
+        if (filteredProducts?.length) {
+          return { productId: filteredProducts[0]?.recordId || filteredProducts[0]?.productId, stockCode: filteredProducts[0]?.stockCode, slug: filteredProducts[0]?.slug || filteredProducts[0]?.link }
+        }
+      }
+    }
+    return null
+  }
+
   const handleNotification = () => {
     openNotifyUser(product?.recordId)
   }
@@ -287,7 +318,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const productVideos = product?.videos || []
 
   let content = useMemo(() => {
-    let images = [ ...productImages ]
+    let images = [...productImages]
 
     if (selectedAttrData?.image) {
       images.push({ image: selectedAttrData?.image })
@@ -416,6 +447,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       buttonConfig.type = 'button'
     } else if (product?.componentProducts?.length > 0) {
       buttonConfig.title = "Add Bundle"
+    } else if (product?.price?.raw?.withTax == 0) {
+      buttonConfig.title = translate('label.product.notifyMeText')
+      buttonConfig.action = async () => handleNotification()
+      buttonConfig.type = 'button'
     } else if (
       product?.preOrder?.isEnabled &&
       selectedAttrData?.currentStock <= 0
@@ -797,21 +832,21 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     };
   }, []);
 
-  useEffect(()=>{
-    const fetchLookbook = async(stockcode: string) => {
-      const lookbookData:any = await axios.post(NEXT_GET_LOOKBOOK, {stockcode})
-      const slug : string = lookbookData?.data?.[0]?.slug
-      if(slug){
-        const lookbookBySlug :any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, {slug})
-        if(lookbookBySlug?.status === 200){
+  useEffect(() => {
+    const fetchLookbook = async (stockcode: string) => {
+      const lookbookData: any = await axios.post(NEXT_GET_LOOKBOOK, { stockcode })
+      const slug: string = lookbookData?.data?.[0]?.slug
+      if (slug) {
+        const lookbookBySlug: any = await axios.post(NEXT_GET_LOOKBOOK_BY_SLUG, { slug })
+        if (lookbookBySlug?.status === 200) {
           setLookbookData(lookbookBySlug?.data)
         }
       }
     }
-    if(product?.stockCode){
+    if (product?.stockCode) {
       fetchLookbook(product.stockCode)
     }
-  },[product])
+  }, [product])
 
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
@@ -919,7 +954,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     );
-    
+
   };
   const detailsConfig = [
     { name: translate('common.label.descriptionText'), content: productDesc },
@@ -1207,7 +1242,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {/* {LookBook} */}
-        { lookbookData && (
+        {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
         )}
         {/* DETAIL AND REVIEW */}

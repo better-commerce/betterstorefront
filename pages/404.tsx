@@ -3,7 +3,7 @@ import NextHead from 'next/head'
 import Link from 'next/link'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutError from '@components/Layout/LayoutError'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -19,7 +19,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: {} })
+  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
 
   return {
     props: {

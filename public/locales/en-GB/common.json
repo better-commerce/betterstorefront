@@ -255,7 +255,7 @@
       "productAvailableText": "Products available",
       "collectionsText": "Collections",
       "backToCollectionsText": "Back to collections",
-      "noItemAvailableText": "No Item Availabe in",
+      "noItemAvailableText": "No Item Available in",
       "collectionsTextWithExclamationMark": "Collection!"
     },
     "companyUsers": {
@@ -387,13 +387,15 @@
       "browsingHistoryText": "Browsing History",
       "improveRecommendationText": "Improve Your Recommendation",
       "myCompanyMenus": {
+        "companyDetail": "Company Details",
         "user": "Users",
         "order": "Orders",
         "quote": "Quotes",
         "address": "Addresses",
-        "invoice": "Invoices"
+        "invoice": "Invoice",
+        "shoppingList": "Shopping List"
       },
-      "myDetailsHeadingText": "My Details",
+      "myDetailsHeadingText": "My Profile",
       "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Woops! Error fetching returns"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Reason for Return",
       "proceedToReturnText": "Proceed to Return",
       "selectQuantityText": "Select Quantity",
-      "myReturnText": "My Return",
-      "myReturnsText": "My Returns",
+      "myReturnText": "Return",
+      "myReturnsText": "Returns",
       "noLookbookAvaiableText": "No Lookbook Available",
       "shopTheLookText": "Shop the look",
       "confirmPasswordText": "Confirm Password"
@@ -469,7 +471,7 @@
       "cancelOrderText": "Cancel Order",
       "NoOrderFoundText": "No orders found",
       "noOrderFoundDisplayText": "Biscuit oat cake wafer icing ice cream tiramisu pudding cupcake.",
-      "myOrdersText": "My Orders",
+      "myOrdersText": "Orders",
       "forOrderText": "for order",
       "orderCancelledSuccessfullyText": "Order Cancelled Successfully"
     },
@@ -493,6 +495,7 @@
       "noOrderFoundHeadingText": "No Order Available",
       "startShoppingBtnText": "Start Shopping",
       "needHelpWithOrderBtnText": "Need Help with Your Order?",
+      "reOrderText": "Reorder",
       "itemRefundText1": "Refund of",
       "itemRefundText2": "will be processed within 3-5 business days after the item is received and inspected.",
       "courierPartnerHeadingText": "COURIER PARTNER",
@@ -615,7 +618,6 @@
       },
       "productPersonalisation": {
         "engravingPersonalisedBottleText": "Add Characters with a click. Type in names, initials or numbers. For just ",
-        "personaliseProductText": "Personalise your Product. ",
         "personaliseProductReadOnlyText": "Personalised Product",
         "selectImageText": "Please select an Image before proceeding!",
         "yourEngravingText": "Your Engraving",
@@ -1070,7 +1072,7 @@
       "priceText": "Price",
       "yourInfoText": "Your information",
       "badUrlText": "This is a bad url. please go back to",
-      "noProductAvailableText": "No Products availabe in",
+      "noProductAvailableText": "No Products available in",
       "clickHereText": "Click Here",
       "sizeText": "Size:",
       "removeItemConfirmText": "Remove this Item?",

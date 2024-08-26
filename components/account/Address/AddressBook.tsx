@@ -61,7 +61,7 @@ export default function AddressBook({ deviceInfo }: any) {
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
 
-  const { user, isGuestUser, cartItems, setAddressId, setAlert } = useUI()
+  const { user, isGuestUser, cartItems, setAddressId ,setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
@@ -189,11 +189,11 @@ export default function AddressBook({ deviceInfo }: any) {
     }
   }
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchCountries = async () => {
       try {
         const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-        if (data?.result?.length > 0) {
+        if ( data?.result?.length > 0) {
           setCountries(data?.result)
         } else {
           setCountries([])
@@ -340,7 +340,7 @@ export default function AddressBook({ deviceInfo }: any) {
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
-
+    
               fetchAddress()
               const values = {
                 ...newValues,
@@ -350,11 +350,12 @@ export default function AddressBook({ deviceInfo }: any) {
               if (callback) {
                 callback()
               }
-              setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.addressAddedSuccessfullyMsg') })
+
               closeNewAddressModal()
+              // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
+              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
               closeNewAddressModal()
             })
         } else {
@@ -374,13 +375,13 @@ export default function AddressBook({ deviceInfo }: any) {
           // });
           fetchAddress()
 
-          if (callback) { callback() }
-          else { setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') }) }
+          if (callback) { callback()}
+          else{ setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})}
           closeNewAddressModal()
-          setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.addressUpdatedSuccessfullyMsg') })
+          // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
           closeNewAddressModal()
         })
     }
@@ -429,10 +430,20 @@ export default function AddressBook({ deviceInfo }: any) {
       addressId =
         lookupAddress && lookupAddress.length ? lookupAddress[0].id : 0
     }
+
     return addressId
   }
   return (
     <>
+      {/* <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
+        <h3 className="max-w-4xl mx-auto text-xl font-semibold text-black">
+          <Link href="/my-account">
+            <span className="mr-2 leading-none">
+              <i className="sprite-icon sprite-left-arrow"></i>
+            </span>
+          </Link>
+          {translate('label.checkout.addressesText')} </h3>
+      </div> */}
       <main className="mt-4">
         <div className="max-w-4xl mx-auto">
           {!data.length && !isLoading && (
@@ -441,7 +452,11 @@ export default function AddressBook({ deviceInfo }: any) {
           {isLoading ? <LoadingDots /> : null}
         </div>
         {isNewFormMode && (
-          <Form initialValues={{}} closeEditMode={() => setNewFormMode(false)} onSubmit={addNewAddress} />
+          <Form
+            initialValues={{}}
+            closeEditMode={() => setNewFormMode(false)}
+            onSubmit={addNewAddress}
+          />
         )}
         {!isNewFormMode && (
           <>
@@ -466,8 +481,19 @@ export default function AddressBook({ deviceInfo }: any) {
               })}
 
               <div className="sticky bottom-0 z-10 flex flex-col justify-center w-full mt-12 bg-white sm:hidden">
+                {/* {
+                displayAlert ? (
+                    <div className="mb-3 m-[-40px] w-auto sm:hidden">
+                      <AlertRibbon />
+                    </div>
+                ) : null
+              } */}
                 <div className="flex flex-col mb-3 sm:my-0">
-                  <button type="submit" onClick={(ev: any) => handleOpenNewAddressModal()} className="w-full p-4 font-semibold text-center text-black border border-gray-200 cursor-pointer" >
+                  <button
+                    type="submit"
+                    onClick={(ev: any) => handleOpenNewAddressModal()}
+                    className="w-full p-4 font-semibold text-center text-black border border-gray-200 cursor-pointer"
+                  >
                     <span className="hidden sm:inline-block">
                       {translate('label.addressBook.addNewAddressText')}{' '}
                     </span>
@@ -483,7 +509,11 @@ export default function AddressBook({ deviceInfo }: any) {
             </div>
             <div className="flex items-start">
               <div className="items-center justify-center hidden text-white sm:flex add-list-div">
-                <button type="submit" onClick={(ev: any) => handleOpenNewAddressModal()} className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" >
+                <button
+                  type="submit"
+                  onClick={(ev: any) => handleOpenNewAddressModal()}
+                  className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                >
                   {translate('label.addressBook.addNewAddressText')}{' '}
                   <span className="inline-block ml-2 leading-none align-middle">
                     <i className="sprite-icon icon-location-orange"></i>
@@ -497,7 +527,7 @@ export default function AddressBook({ deviceInfo }: any) {
           selectedAddress={selectedAddress}
           submitState={submitState}
           isOpen={isNewAddressModalOpen}
-          countries={countries}
+          countries = {countries}
           onSubmit={(data: any) => {
             submitData(submitDispatch, AddressPageAction.SAVE)
             handleNewAddress(data, () => {
@@ -506,7 +536,7 @@ export default function AddressBook({ deviceInfo }: any) {
           }}
           onCloseModal={closeNewAddressModal}
           isRegisterAsGuestUser={isRegisterAsGuestUser()}
-          btnTitle={translate('label.addressBook.saveAddressBtnText')}
+          btnTitle="Save Address"
         />
       </main>
     </>

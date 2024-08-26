@@ -42,7 +42,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
                   </Disclosure.Button>
                   <Disclosure.Panel className="px-0 pt-0 pb-2">
                     {(section?.key === FILTER_KEYS.PRICE || section?.key === FILTER_KEYS.ONLY_PRICE) ? <PriceFilterSlider handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} /> :
-                      <FilterList handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />}
+                      <FilterList handleFilters={handleFilters} sectionName={section?.name} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />}
                   </Disclosure.Panel>
                 </>
               )}

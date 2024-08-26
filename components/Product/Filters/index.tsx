@@ -64,7 +64,7 @@ export default function Filters({
             <div className="relative flex flex-col w-full h-full max-w-xs py-2 pb-2 ml-auto overflow-y-auto bg-white shadow-xl sm:py-4 sm:pb-6 z-9999">
               <div className="flex items-center justify-between px-4 py-4">
                 <h2 className="text-lg font-medium text-gray-900"> {translate('label.filters.filtersText')} </h2>
-                <button type="button" onClick={() => setOpen(false)} className="flex items-center justify-center w-10 h-6 p-2 -mr-2 text-gray-400 bg-white rounded-md sm:h-10 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500" >
+                <button type="button" onClick={() => setOpen(false)} className="flex items-center justify-center w-10 h-6 p-2 -mr-2 text-gray-400 bg-white rounded-md sm:h-10 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-700" >
                   <span className="sr-only">{translate('common.label.closeText')}</span>
                   <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                 </button>
@@ -83,7 +83,7 @@ export default function Filters({
                         </span>
                       </Disclosure.Button>
                       <Disclosure.Panel className="px-4 pt-0 space-y-3 bg-white">
-                        <FilterList handleFilters={handleFilters} sectionKey={section.key} items={section.items} routerFilters={routerFilters} closeSidebar={() => setOpen(false)} />
+                        <FilterList handleFilters={handleFilters} sectionName={section?.name} sectionKey={section.key} items={section.items} routerFilters={routerFilters} closeSidebar={() => setOpen(false)} />
                       </Disclosure.Panel>
                     </>
                   )}

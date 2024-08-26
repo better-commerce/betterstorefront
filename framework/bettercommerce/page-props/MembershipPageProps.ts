@@ -24,7 +24,7 @@ export class MembershipPageProps extends BasePagePropsProvider implements IPageP
     ])
     let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
@@ -32,7 +32,7 @@ export class MembershipPageProps extends BasePagePropsProvider implements IPageP
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

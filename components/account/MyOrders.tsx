@@ -10,7 +10,7 @@ import cartHandler from '@components/services/cart'
 import {
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
-import ReturnModal from '@old-components/returns/Modal'
+import ReturnModal from '@components/returns/Modal'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import Image from 'next/image'
 import { generateUri } from '@commerce/utils/uri-util'

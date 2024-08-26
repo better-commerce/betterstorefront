@@ -9,12 +9,12 @@ import 'swiper/css/scrollbar'
 import dynamic from 'next/dynamic'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 
-const ProductCard = dynamic(() => import('@old-components/product/ProductCard/ProductCard'))
+const ProductCard = dynamic(() => import('@components/ProductCard'))
 
 const RecommendedProductCollection = ({
   recommendedProducts,
   deviceInfo,
-  config,
+  config, defaultDisplayMembership, featureToggle
 }: any) => {
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
@@ -44,10 +44,9 @@ const RecommendedProductCollection = ({
             key={`brand-landing-${productIdx}`}
           >
             <ProductCard
-              product={product}
+              data={product}
               deviceInfo={deviceInfo}
-              maxBasketItemsCount={maxBasketItemsCount(config)}
-            />
+              maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}            />
           </SwiperSlide>
         ))}
       </Swiper>

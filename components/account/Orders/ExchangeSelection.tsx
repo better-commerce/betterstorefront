@@ -17,8 +17,6 @@ import {
   PRODUCTS_SLUG_PREFIX,
 } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-// import Spinner from '@components/ui/Spinner';
-// import SubmitButton from '@old-components/common/SubmitButton';
 
 const ExchangeSelection = ({
   btnTitle,

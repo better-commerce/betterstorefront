@@ -7,8 +7,8 @@ import Router from 'next/router'
 import Link from 'next/link'
 
 // Component Imports
-import CancelReason from '@old-components/account/Orders/CancelReason'
-import ConfirmDialog from '@old-components/common/ConfirmModal/ConfirmDialog'
+import CancelReason from '@components/account/Orders/CancelReason'
+import ConfirmDialog from '@components/common/ConfirmModal/ConfirmDialog'
 
 // Other Imports
 import { Button, useUI } from '@components/ui'

@@ -9,7 +9,7 @@ import Router from 'next/router'
 
 // Component Imports
 import CancelReason from '../../../components/account/Orders/CancelReason'
-import ConfirmDialog from '@old-components/common/ConfirmModal/ConfirmDialog'
+import ConfirmDialog from '@components/common/ConfirmModal/ConfirmDialog'
 
 // Other Imports
 import { useUI } from '@components/ui'

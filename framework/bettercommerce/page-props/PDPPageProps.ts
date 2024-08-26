@@ -41,7 +41,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
     ])
     let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
     if (!infraUIDData) {
-      const infraPromise = commerce.getInfra()
+      const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
@@ -57,7 +57,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
     try {
 
         if (!productSlugUIDData) {
-            const productPromise = commerce.getProduct({ query: slug })
+            const productPromise = commerce.getProduct({ query: slug, cookies })
             productSlugUIDData = await productPromise
             await setData([{ key: cachedDataUID.productSlugUID, value: productSlugUIDData }])
         }
@@ -66,7 +66,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
             return { notFound: true }
         }
         if(!productCategoryUIDData){
-            const allProductsByCategoryRes = await commerce.getAllProducts({ query: { categoryId: productSlugUIDData?.product?.classification?.categoryCode, pageSize: 50, }, })
+            const allProductsByCategoryRes = await commerce.getAllProducts({ query: { categoryId: productSlugUIDData?.product?.classification?.categoryCode, pageSize: 50, }, cookies })
             if (allProductsByCategoryRes?.products?.results?.length > 0) {
                 productCategoryUIDData = allProductsByCategoryRes?.products?.results
             }
@@ -74,12 +74,12 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
         }
 
         if(!availablePromoUIDData){
-            const availablePromotionsPromise = commerce.getProductPromos({ query: productSlugUIDData?.product?.recordId, })
+            const availablePromotionsPromise = commerce.getProductPromos({ query: productSlugUIDData?.product?.recordId, cookies })
             availablePromoUIDData = await availablePromotionsPromise
             await setData([{ key: cachedDataUID.availablePromoUID, value: availablePromoUIDData }])
         }
         if(!relatedProductUIDData){
-            const relatedProductsPromise = commerce.getRelatedProducts({ query: productSlugUIDData?.product?.recordId, })
+            const relatedProductsPromise = commerce.getRelatedProducts({ query: productSlugUIDData?.product?.recordId, cookies })
             relatedProductUIDData = await relatedProductsPromise
             await setData([{ key: cachedDataUID.relatedProductUID, value: relatedProductUIDData }])
         }
@@ -87,14 +87,14 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
         
         
         if(!productReviewUIDData){
-            const reviewPromise = commerce.getProductReview({ query: productSlugUIDData?.product?.recordId, })
+            const reviewPromise = commerce.getProductReview({ query: productSlugUIDData?.product?.recordId, cookies })
             productReviewUIDData = await reviewPromise
             await setData([{ key: cachedDataUID.productReviewUID, value: productReviewUIDData }])
         }
 
         // GET SELECTED PRODUCT ALL REVIEWS
         if(!pdpLookBookUIDData){
-            const pdpLookbookPromise = commerce.getPdpLookbook({ query: productSlugUIDData?.product?.stockCode, })
+            const pdpLookbookPromise = commerce.getPdpLookbook({ query: productSlugUIDData?.product?.stockCode, cookies })
             const pdpLookbook = await pdpLookbookPromise
             if (pdpLookbook?.lookbooks?.length > 0) {
                 const pdpLookbookProductsPromise = commerce.getPdpLookbookProduct({ query: pdpLookbook?.lookbooks[0]?.slug, })
@@ -108,6 +108,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
                 // GET SELECTED PRODUCT ALL REVIEWS
                 const pdpCachedImagesPromise = commerce.getPdpCachedImage({
                     query: productSlugUIDData?.product?.productCode,
+                    cookies
                 })
 
                 pdpCacheImageUIDData = await pdpCachedImagesPromise
@@ -130,7 +131,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
     const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

@@ -159,7 +159,7 @@ const EngageProductCard: FC<SectionSliderProductCardProps> = ({ product, type, h
     if (campaignData) {
       fetchCampaignProducts()
     }
-  }, [campaignData])
+  }, [campaignData, product])
 
   if (!productList || productList?.length < 1) {
     return <></>

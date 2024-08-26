@@ -137,7 +137,7 @@ export default function AddressItem({
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
                 <div className='flex items-center justify-between w-full'>
-                  <span className="font-semibold uppercase font-20 dark:text-black">
+                  <span className="font-semibold uppercase font-20">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
@@ -155,7 +155,7 @@ export default function AddressItem({
                 </div>
               </div>
               <div className="flex flex-col items-center justify-betweenlg:flex-row">
-                <div className="flex flex-col w-full text-md font-regular dark:text-black">
+                <div className="flex flex-col w-full text-md font-regular">
                   <span className='mt-2'>{item?.address1}</span>
                   <span>{item?.address2}</span>
                   <span>
@@ -169,13 +169,13 @@ export default function AddressItem({
                       onClick={() => {
                         onEditAddress(item?.id)
                       }}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
                     >
                       {translate('common.label.editText')}
                     </button>
                     <button
                       onClick={deleteOpenModal}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
                     >
                       {translate('common.label.deleteText')}
                     </button>
@@ -188,7 +188,7 @@ export default function AddressItem({
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
                 <div className='flex items-center justify-between w-full'>
-                  <span className="font-semibold uppercase font-20 dark:text-black">
+                  <span className="font-semibold uppercase font-20">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
@@ -206,7 +206,7 @@ export default function AddressItem({
                 </div>
               </div>
               <div className="flex flex-col items-center justify-between lg:flex-row">
-                <div className="flex flex-col w-full text-md font-regular dark:text-black">
+                <div className="flex flex-col w-full text-md font-regular">
                   <span className='mt-2'>{item?.address1}</span>
                   <span>{item?.address2}</span>
                   <span>{item?.address3}</span>
@@ -220,13 +220,13 @@ export default function AddressItem({
                       onClick={() => {
                         onEditAddress(item?.id)
                       }}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
                     >
                       {translate('common.label.editText')}
                     </button>
                     <button
                       onClick={deleteOpenModal}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
                     >
                       {translate('common.label.deleteText')}
                     </button>

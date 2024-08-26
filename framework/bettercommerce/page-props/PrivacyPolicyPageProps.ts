@@ -22,7 +22,7 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
     let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
 
     if (!infraUIDData) {
-        const infraPromise = commerce.getInfra()
+        const infraPromise = commerce.getInfra(cookies)
         infraUIDData = await infraPromise
         await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
     }
@@ -44,11 +44,11 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
                         const pageContentsPromise = commerce.getPagePreviewContent({
                         id: '',
                         slug,
-                        workingVersion:
-                            process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                        workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
                         channel: channel,
                         currency: currencyCode,
                         cachedCopy: true,
+                        language: cookies?.Language,
                         })
                         const pageContent = await pageContentsPromise
                         pageContentUIDData.push({
@@ -71,11 +71,11 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
     fetchData(pageContentMobileWebUIDData, Redis.Key.PrivacypageMobileWeb, 'MobileWeb')
 
     await Promise.all(promises)
-    const slugsPromise = commerce.getSlugs({ slug });
+    const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
-    const appConfig = await this.getAppConfig(infraUIDData)
+    const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
     const props = {

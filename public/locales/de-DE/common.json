@@ -387,13 +387,15 @@
       "improveRecommendationText": "Verbessere deine Empfehlung",
       "dataPackText": "Datenpaket",
       "myCompanyMenus": {
+        "companyDetail": "Firmendetails",
         "user": "Benutzer",
         "order": "Bestellungen",
         "quote": "Angebote",
         "address": "Adressen",
-        "invoice": "Rechnungen"
+        "invoice": "Rechnungen",
+        "shoppingList": "Einkaufsliste"
       },
-      "myDetailsHeadingText": "Meine Details",
+      "myDetailsHeadingText": "Meine Profile",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Hoppla! Fehler beim Abrufen von Rücksendungen"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Grund für die Rücksendung",
       "proceedToReturnText": "Zur Rücksendung",
       "selectQuantityText": "Menge auswählen",
-      "myReturnText": "Meine Rücksendung",
-      "myReturnsText": "Meine Rücksendungen",
+      "myReturnText": "Rücksendung",
+      "myReturnsText": "Rücksendungen",
       "noLookbookAvaiableText": "Kein Lookbook verfügbar",
       "shopTheLookText": "Shoppen Sie den Look",
       "confirmPasswordText": "Passwort bestätigen"
@@ -469,7 +471,7 @@
       "cancelOrderText": "Bestellung stornieren",
       "NoOrderFoundText": "Keine Bestellungen gefunden",
       "noOrderFoundDisplayText": "Biskuit-Ostkuchen Waffel Zuckerguss Eiscreme Tiramisu Pudding Cupcake.",
-      "myOrdersText": "Meine Bestellungen",
+      "myOrdersText": "Bestellungen",
       "forOrderText": "für Bestellung",
       "orderCancelledSuccessfullyText": "Bestellung erfolgreich storniert"
     },
@@ -493,6 +495,7 @@
       "noOrderFoundHeadingText": "Keine Bestellung verfügbar",
       "startShoppingBtnText": "Einkaufen starten",
       "needHelpWithOrderBtnText": "Brauchen Sie Hilfe bei Ihrer Bestellung?",
+      "reOrderText": "Neu anordnen",
       "itemRefundText1": "Rückerstattung von",
       "itemRefundText2": "wird innerhalb von 3-5 Werktagen nach Erhalt und Prüfung des Artikels bearbeitet.",
       "courierPartnerHeadingText": "KURIERPARTNER",
@@ -615,7 +618,6 @@
       },
       "productPersonalisation": {
         "engravingPersonalisedBottleText": "Fügen Sie Zeichen mit einem Klick hinzu. Geben Sie Namen, Initialen oder Zahlen ein. Für nur ",
-        "personaliseProductText": "Personalisieren Sie Ihr Produkt.",
         "personaliseProductReadOnlyText": "Personalisiertes Produkt",
         "selectImageText": "Bitte wählen Sie ein Bild, bevor Sie fortfahren!",
         "yourEngravingText": "Ihre Gravur",

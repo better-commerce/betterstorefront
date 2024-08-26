@@ -1,12 +1,13 @@
 import { logError } from '@framework/utils/app-util';
 import fetcher from '../fetcher'
-import { CATEGORY_ENDPOINT } from '@components/utils/constants'
+import { CATEGORY_ENDPOINT, EmptyObject } from '@components/utils/constants'
 
-export default async function getCategoryBySlug(slug: string) {
+export default async function getCategoryBySlug(slug: string, cookies = EmptyObject) {
   try {
     const response: any = await fetcher({
       url: CATEGORY_ENDPOINT + `/slug?slug=${slug}`,
       method: 'post',
+      cookies
     });
     //console.log(response);
     return {

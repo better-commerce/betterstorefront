@@ -183,7 +183,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
-        <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
+        <div className={`text-base lg:pt-10 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           <>
@@ -199,7 +199,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
               <meta property="og:description" content={myAccountActiveTab} key="ogdesc" />
             </NextHead>
             <MembershipBanner user={user} />
-            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container">
+            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-32">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
                 <div className='sticky z-10 top-12 sm:border-r sm:col-span-3 border-slate-200'>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />

@@ -192,7 +192,7 @@ export default function AddressForm({
                             onClick={() => {
                             onEditAddress(item?.id)
                             }}
-                            className="flex items-end justify-end w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:w-auto"
+                            className="flex items-end justify-end w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
                             >
                             {translate('common.label.editText')}
                             </button> */}
@@ -242,7 +242,7 @@ export default function AddressForm({
                           type={formItem.type}
                           className={
                             formItem.className ||
-                            'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 '
+                            'relative mb-2 mt-2 appearance-none min-w-0 w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 text-gray-900 placeholder-gray-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700 '
                           }
                         >
                           {formItem.options?.map((option: any, idx: number) => {
@@ -356,7 +356,7 @@ export default function AddressForm({
                 <button
                   type="button"
                   onClick={closeEditMode}
-                  className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 ml-5 font-medium text-white bg-gray-500 border border-transparent rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 ml-5 font-medium text-white bg-gray-500 border border-transparent rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700 sm:w-full"
                 >
                   {translate('common.label.cancelText')}
                 </button>

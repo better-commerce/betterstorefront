@@ -3,7 +3,7 @@ import { vatIncluded } from '@framework/utils/app-util'
 import { priceFormat } from '@framework/utils/parse-util'
 import React from 'react'
 
-const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
+const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal,handleReOrder}: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
   return (
@@ -64,9 +64,12 @@ const OrderSummary = ({ details, subTotalAmount, openOrderHelpModal }: any) => {
         </div>
       </div>
       {/* Item Total INFO END */}
-      <div className="flex justify-center mx-auto my-3">
+      <div className="flex gap-4 mx-auto my-3 justify-end">  
         <button type="button" onClick={() => openOrderHelpModal(details)} className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
           {translate('label.orderDetails.needHelpWithOrderBtnText')}
+        </button>
+        <button type="button" onClick={() => handleReOrder()} className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
+            {translate('label.orderDetails.reOrderText')}
         </button>
       </div>
     </>

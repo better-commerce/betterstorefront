@@ -26,6 +26,7 @@ export const setCookie = (
 }
 
 export const getCookie = (name: string) => Cookies.get(name)
+export const removeCookie = (name: string) => Cookies.remove(name)
 
 export function getError(errors: any[], status: number) {
   errors = errors ?? [{ message: 'Failed to fetch BetterCommerce API' }]

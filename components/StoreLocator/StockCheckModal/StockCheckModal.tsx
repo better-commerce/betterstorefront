@@ -89,6 +89,7 @@ const StockCheckModal = ({
           'ADD',
           { product }
         )
+        setOpenStockCheckModal(false)
         setCartItems(item)
       },
       shortMessage: '',

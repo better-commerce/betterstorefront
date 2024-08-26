@@ -387,13 +387,15 @@
       "improveRecommendationText": "Améliorez votre recommandation",
       "dataPackText": "Pack de données",
       "myCompanyMenus": {
+        "companyDetail": "Détails de l'entreprise",
         "user": "Utilisateurs",
         "order": "Commandes",
         "quote": "Devis",
         "address": "Adresses",
-        "invoice": "Factures"
+        "invoice": "Factures",
+        "shoppingList": "Liste de courses"
       },
-      "myDetailsHeadingText": "Mes détails",
+      "myDetailsHeadingText": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Oups ! Erreur lors de la récupération des retours"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Motif du retour",
       "proceedToReturnText": "Procéder au retour",
       "selectQuantityText": "Sélectionnez la quantité",
-      "myReturnText": "Mon retour",
-      "myReturnsText": "Mes retours",
+      "myReturnText": "retour",
+      "myReturnsText": "retours",
       "noLookbookAvaiableText": "Aucun Lookbook disponible",
       "shopTheLookText": "Achetez le look",
       "confirmPasswordText": "Confirmer le mot de passe"
@@ -469,7 +471,7 @@
       "cancelOrderText": "Annuler la commande",
       "NoOrderFoundText": "Aucune commande trouvée",
       "noOrderFoundDisplayText": "Gâteau aux biscuits à l'avoine, gaufrette glacée, glace au tiramisu, cupcake au pudding.",
-      "myOrdersText": "Mes commandes",
+      "myOrdersText": "commandes",
       "forOrderText": "pour la commande",
       "orderCancelledSuccessfullyText": "Commande annulée avec succès"
     },
@@ -493,6 +495,7 @@
       "noOrderFoundHeadingText": "Aucune commande disponible",
       "startShoppingBtnText": "Commencer les achats",
       "needHelpWithOrderBtnText": "Besoin d'aide pour votre commande ?",
+      "reOrderText": "Réorganiser",
       "itemRefundText1": "Remboursement de",
       "itemRefundText2": "sera traité dans les 3 à 5 jours ouvrables après réception et inspection de l'article.",
       "courierPartnerHeadingText": "PARTENAIRE DE COURSIER",
@@ -615,7 +618,6 @@
       },
       "productPersonalisation": {
         "engravingPersonalisedBottleText": "Ajoutez des caractères en un clic. Tapez des noms, des initiales ou des chiffres. Pour seulement ",
-        "personaliseProductText": "Personnalisez votre produit. ",
         "personaliseProductReadOnlyText": "Produit personnalisé",
         "selectImageText": "Veuillez sélectionner une image avant de continuer !",
         "yourEngravingText": "Votre gravure",

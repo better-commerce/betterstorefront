@@ -10,11 +10,13 @@ import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import ContactPreferences from './ContactPreferences'
 
 export default function MyDetails() {
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
   const schema:any = useSchema();
+  const [submitContactPreferences, setSubmitContactPreferences] = useState(false)
   const formConfig = useDetailsFormConfig();
   const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
   const { user, setUser, changeMyAccountTab } = useUI()
@@ -66,6 +68,7 @@ export default function MyDetails() {
       entityName: user.firstName + user.lastName,
       eventType: CustomerUpdated,
     })
+    setSubmitContactPreferences(true)
   }
 
   useEffect(()=>{
@@ -117,66 +120,66 @@ export default function MyDetails() {
                   isSubmitting,
                 }: any = context
                 return (
-                  <Form className="flex-grow w-full max-w-3xl space-y-4 font-normal sm:mt-10 sm:space-y-6 md:mt-0">
-                    {formConfig?.map((formItem: any, idx: number) => {
-                      return (
-                        formItem.type !== 'singleSelectButtonGroup' && (
-                          <div key={`${formItem.label}_${idx}`}>
-                            <label className="text-base font-medium nc-Label text-neutral-900 dark:text-neutral-900 ">
-                              {formItem.label}
-                            </label>
-                            <div className="mt-1.5 flex icon-input-form">
-                              <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-50 text-neutral-500 dark:text-neutral-500 text-sm">
-                                <i className={`${formItem.placeholder} text-2xl las`}></i>
-                              </span>
-                              <Field
-                                key={idx}
-                                name={formItem.name}
-                                placeholder={formItem.placeholder}
-                                onChange={(e: any) =>
-                                  formikHandleChange(e, handleChange)
-                                }
-                                value={values[formItem.name]}
-                                type={formItem.type}
-                                maxLength={formItem.maxLength}
-                                className="block !rounded-l-none mt-0 w-full border outline-none border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 bg-white dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white dark:text-black disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl text-sm font-normal h-11 px-4 py-3"
-                              />
+                  <>
+                    <Form className="flex-grow w-full max-w-3xl space-y-4 font-normal sm:mt-10 sm:space-y-6 md:mt-0">
+                      {formConfig?.map((formItem: any, idx: number) => {
+                        return (
+                          formItem.type !== 'singleSelectButtonGroup' && (
+                            <div key={`${formItem.label}_${idx}`}>
+                              <label className="text-base font-medium nc-Label text-neutral-900 dark:text-neutral-900 ">
+                                {formItem.label}
+                              </label>
+                              <div className="mt-1.5 flex icon-input-form">
+                                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-50 text-neutral-500 dark:text-neutral-500 text-sm">
+                                  <i className={`${formItem.placeholder} text-2xl las`}></i>
+                                </span>
+                                <Field
+                                  key={idx}
+                                  name={formItem.name}
+                                  placeholder={formItem.placeholder}
+                                  onChange={(e: any) =>
+                                    formikHandleChange(e, handleChange)
+                                  }
+                                  value={values[formItem.name]}
+                                  type={formItem.type}
+                                  maxLength={formItem.maxLength}
+                                  className="block !rounded-l-none mt-0 w-full border outline-none border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 bg-white dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white dark:text-black disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl text-sm font-normal h-11 px-4 py-3"
+                                />
 
-                              {errors[formItem.name] && touched[formItem.name] && (
-                                <div className="mb-2 text-xs text-red-400">
-                                  {errors[formItem.name]}
-                                </div>
-                              )}
+                                {errors[formItem.name] && touched[formItem.name] && (
+                                  <div className="mb-2 text-xs text-red-400">
+                                    {errors[formItem.name]}
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
+                          )
                         )
-                      )
-                    })}
-                    {(formConfig?.length
-                      ? Array.from<any>([]).concat([
-                        findByFieldName(formConfig, 'gender'),
-                      ])
-                      : []
-                    )?.map((item: any, idx: number) => (
-                      <div
-                        key={item?.name}
-                        className="w-full sm:py-4 address-type"
-                      >
-                        {<FormField context={context} item={item} />}
+                      })}
+                      {(formConfig?.length
+                        ? Array.from<any>([]).concat([
+                          findByFieldName(formConfig, 'gender'),
+                        ])
+                        : []
+                      )?.map((item: any, idx: number) => (
+                        <div key={item?.name} className="w-full sm:py-4 address-type" >
+                          {<FormField context={context} item={item} />}
+                        </div>
+                      ))}
+                      <ContactPreferences hideSubmitBtn={true} customSubmit={submitContactPreferences} setCustomSubmit={setSubmitContactPreferences}/>
+                      <div className="flex w-full sm:mt-10 sm:flex-col sm:w-6/12">
+                        <Button
+                          type="submit"
+                          onClick={handleSubmit}
+                          className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-black hover:bg-slate-800 dark:hover:bg-slate-800 text-slate-50 dark:!text-white shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 !w-full"
+                          loading={isSubmitting}
+                          disabled={isSubmitting}
+                        >
+                          {!isSubmitting && translate('common.label.saveChangesText')}
+                        </Button>
                       </div>
-                    ))}
-                    <div className="flex sm:mt-10 sm:flex-col1 sm:w-48">
-                      <Button
-                        type="submit"
-                        onClick={handleSubmit}
-                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:!bg-black hover:bg-slate-800 dark:hover:bg-slate-800 text-slate-50 dark:!text-white shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 !w-full"
-                        loading={isSubmitting}
-                        disabled={isSubmitting}
-                      >
-                        {!isSubmitting && translate('common.label.saveChangesText')}
-                      </Button>
-                    </div>
-                  </Form>
+                    </Form>
+                  </>
                 )
               }}
             </Formik>

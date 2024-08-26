@@ -1,4 +1,4 @@
-import BasketGroupProduct from '@old-components/cart/BasketGroupProduct'
+import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 import { EmptyString, NEXT_GET_BASKET_PROMOS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { vatIncluded } from '@framework/utils/app-util'

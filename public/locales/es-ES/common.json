@@ -387,13 +387,15 @@
       "improveRecommendationText": "Mejora tu recomendación",
       "dataPackText": "Paquete de datos",
       "myCompanyMenus": {
+        "companyDetail": "Datos de la empresa",
         "user": "Usuarios",
         "order": "Órdenes",
         "quote": "Cotizaciones",
         "address": "Direcciones",
-        "invoice": "Facturas"
+        "invoice": "Facturas",
+        "shoppingList": "Lista de compras"
       },
-      "myDetailsHeadingText": "Mis Detalles",
+      "myDetailsHeadingText": "Mis Profile",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
       "myOrders": {
         "fetchReturnsErrorMsg": "¡Vaya! Error al recuperar devoluciones"
@@ -430,8 +432,8 @@
       "reasonForReturn": "Motivo de Devolución",
       "proceedToReturnText": "Continuar con la Devolución",
       "selectQuantityText": "Seleccionar Cantidad",
-      "myReturnText": "Mi Devolución",
-      "myReturnsText": "Mis Devoluciones",
+      "myReturnText": "Devolución",
+      "myReturnsText": "Devoluciones",
       "noLookbookAvaiableText": "No hay Lookbook Disponible",
       "shopTheLookText": "Compra el look",
       "confirmPasswordText": "Confirmar Contraseña"
@@ -469,7 +471,7 @@
       "cancelOrderText": "Cancelar Pedido",
       "NoOrderFoundText": "No se encontraron pedidos",
       "noOrderFoundDisplayText": "Pastel de galleta de avena de bizcocho glaseado con helado de tiramisú pastelito.",
-      "myOrdersText": "Mis Pedidos",
+      "myOrdersText": "Pedidos",
       "forOrderText": "para el pedido",
       "orderCancelledSuccessfullyText": "Pedido Cancelado Exitosamente"
     },
@@ -493,6 +495,7 @@
       "noOrderFoundHeadingText": "No hay Pedido Disponible",
       "startShoppingBtnText": "Comenzar a Comprar",
       "needHelpWithOrderBtnText": "¿Necesitas Ayuda con tu Pedido?",
+      "reOrderText": "Reordenar",
       "itemRefundText1": "Reembolso de",
       "itemRefundText2": "se procesará dentro de 3-5 días hábiles después de recibir e inspeccionar el artículo.",
       "courierPartnerHeadingText": "SOCIO DE MENSAJERÍA",
@@ -615,7 +618,6 @@
       },
       "productPersonalisation": {
         "engravingPersonalisedBottleText": "Agrega Caracteres con un clic. Escribe nombres, iniciales o números. Por solo ",
-        "personaliseProductText": "Personaliza tu Producto. ",
         "personaliseProductReadOnlyText": "Producto Personalizado",
         "selectImageText": "Por favor selecciona una Imagen antes de continuar!",
         "yourEngravingText": "Tu Grabado",

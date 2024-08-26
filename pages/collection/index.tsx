@@ -6,7 +6,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EmptyGuid, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { logError } from '@framework/utils/app-util'
@@ -93,13 +93,13 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext) {
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: {} })
+  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
   const collectionUID = Redis.Key.Collection
   const cachedData = await getDataByUID([collectionUID])
   let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []
   try {
     if (!containsArrayData(collectionUIDData)) {
-      collectionUIDData = await getCollections()
+      collectionUIDData = await getCollections({ [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: collectionUID, value: collectionUIDData }])
     }
     return {

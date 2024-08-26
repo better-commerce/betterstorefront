@@ -1,10 +1,10 @@
 .root {
-  @apply inline-flex items-center justify-center px-10 py-3 text-sm font-semibold leading-6 tracking-wide text-center uppercase transition duration-150 ease-in-out border border-transparent shadow-sm cursor-pointer rounded-2xl bg-accent-9 dark:disabled:!bg-white dark:bg-black dark:text-white text-accent-0;
+  @apply inline-flex items-center rounded-full justify-center px-10 py-3 text-sm font-semibold leading-6 tracking-wide text-center uppercase transition duration-150 ease-in-out border border-transparent shadow-sm cursor-pointer bg-black dark:disabled:!bg-white dark:bg-black dark:text-white text-accent-0;
   max-height: 64px;
 }
 
 .root:hover {
-  @apply border-accent-9 bg-accent-6;
+  @apply bg-black border-accent-9;
 }
 
 .root:focus {
@@ -12,7 +12,7 @@
 }
 
 .root[data-active] {
-  @apply bg-accent-6;
+  @apply bg-black;
 }
 
 .loading {
@@ -24,11 +24,11 @@
 }
 
 .ghost {
-  @apply text-sm border border-accent-2 bg-accent-0 text-accent-9;
+  @apply text-sm bg-black border border-accent-2 text-accent-9;
 }
 
 .ghost:hover {
-  @apply border-accent-9 bg-accent-9 text-accent-0;
+  @apply bg-black border-accent-9 text-accent-0;
 }
 
 .naked {
@@ -37,12 +37,12 @@
 
 .naked:hover,
 .naked:focus {
-  @apply bg-transparent border-none;
+  @apply bg-black border-none;
 }
 
 .disabled,
 .disabled:hover {
-  @apply cursor-not-allowed text-accent-4 border-accent-2 bg-accent-1;
+  @apply bg-black cursor-not-allowed text-accent-4 border-accent-2;
   filter: grayscale(1);
   -webkit-transform: translateZ(0);
   -webkit-perspective: 1000;

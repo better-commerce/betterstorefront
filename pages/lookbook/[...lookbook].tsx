@@ -5,7 +5,7 @@ import getSingleLookbook from '@framework/api/content/singleLookbook'
 import { useRouter } from 'next/router'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Layout from '@components/Layout/Layout'
-const ProductGrid = dynamic(() => import('@old-components/product/Grid/ProductGrid'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import {
@@ -20,8 +20,8 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import CompareSelectionBar from '@old-components/product/ProductCompare/compareSelectionBar'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -161,7 +161,7 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext) {
   const slug: any = params!.lookbook
-  const response = await getSingleLookbook(slug[0])
+  const response = await getSingleLookbook(slug[0], { [Cookie.Key.LANGUAGE]: locale })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
@@ -174,7 +174,7 @@ export async function getStaticProps({
 
   let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
   if (!infraUIDData) {
-    const infraPromise = commerce.getInfra()
+    const infraPromise = commerce.getInfra({ [Cookie.Key.LANGUAGE]: locale })
     infraUIDData = await infraPromise
     await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
   }
@@ -195,7 +195,7 @@ export async function getStaticProps({
       "CurrentPage": 0,
       "PageSize": 0
     }
-    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: {}})
+    const membershipPlansPromise = commerce.getMembershipPlans({data, cookies: { [Cookie.Key.LANGUAGE]: locale }})
     allMembershipsUIDData = await membershipPlansPromise
     await setData([{ key: cachedDataUID.allMembershipsUID, value: allMembershipsUIDData }])
   }
@@ -206,7 +206,7 @@ export async function getStaticProps({
     if (membershipPlan) {
       const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
       if (promoCode) {
-        const promotion= await commerce.getPromotion(promoCode)
+        const promotion= await commerce.getPromotion(promoCode, { [Cookie.Key.LANGUAGE]: locale })
         defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1) , membershipPrice : membershipPlan?.price?.raw?.withTax}
       }
     }

@@ -18,7 +18,7 @@ export const FILTER_KEYS = {
   SIZE: 'attributes.value~clothing.size',
 }
 
-const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
+const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
   const currencySymbol = getCurrencySymbol()
 
@@ -28,7 +28,7 @@ const FilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isCheckb
 
   const handleCheckbox = () => {
     setCheckbox(!isCheckboxChecked)
-    let obj = { Key: sectionKey, Value: option.name, IsSelected: true, }
+    let obj = { Key: sectionKey, Name: sectionName, Value: option.name, IsSelected: true, }
     let type = !isCheckboxChecked ? ACTION_TYPES.ADD_FILTERS : ACTION_TYPES.REMOVE_FILTERS
     onSelect(obj, type)
     closeSidebar()
@@ -149,7 +149,7 @@ const SearchInput = ({ placeholder, handleSearch }: any) => {
   return (
     <>
       <label className="sr-only">{translate('label.search.searchText')}</label>
-      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={translate('label.search.searchText')} placeholder={translate('label.search.searchText')} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" />
+      <input type="text" onChange={(e) => handleSearch(e.target.value)} autoComplete={translate('label.search.searchText')} placeholder={translate('label.search.searchText')} className="w-full min-w-0 px-4 py-1 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-md shadow-sm appearance-none focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700" />
     </>
   )
 }
@@ -171,6 +171,7 @@ const getCustomComponent = (type: string) => {
 
 export default function FilterList({
   items = [],
+  sectionName,
   sectionKey,
   handleFilters,
   routerFilters,
@@ -221,6 +222,7 @@ export default function FilterList({
           const isChecked = isDefaultChecked(sectionKey, option.name)
           return (
             <FilterItem
+              sectionName={sectionName}
               sectionKey={sectionKey}
               option={option}
               onSelect={handleFilters}

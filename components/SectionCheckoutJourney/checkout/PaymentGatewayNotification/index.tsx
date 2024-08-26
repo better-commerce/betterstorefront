@@ -18,6 +18,7 @@ import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
+import { EmptyString } from '@components/utils/constants'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 
@@ -151,15 +152,12 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       setCartItems(newCart.data)
       setOrderId(paymentResponseRequest?.orderId)
 
-      const defaultCulture = `${config?.defaultLanguage}-${config?.defaultCountry}`
+      const defaultCulture = config?.defaultLanguage && config?.defaultCountry ? `${config?.defaultLanguage}-${config?.defaultCountry}` : EmptyString
       const redirectionLocale = getRedirectionLocale(defaultCulture)
       if (IS_RESPONSE_REDIRECT_ENABLED) {
         setRedirectUrl(`${redirectionLocale}/thank-you`)
       }
-    } else if (
-      paymentResponseResult === PaymentStatus.PENDING ||
-      paymentResponseResult === PaymentStatus.DECLINED
-    ) {
+    } else if (paymentResponseResult === PaymentStatus.PENDING || paymentResponseResult === PaymentStatus.DECLINED) {
       setOrderId(paymentResponseRequest?.orderId)
       if (IS_RESPONSE_REDIRECT_ENABLED) {
         setRedirectUrl(`/payment-failed`) // TODO: Show order failed screen.
