@@ -1476,7 +1476,7 @@ p {
   max-height: 80px !important;
 }
 .brand-logo{
-  width: 180px;
+  width: 180px !important;
   height: auto;
 }
 
@@ -2528,4 +2528,21 @@ display: none !important;
   gap: 1rem;
   max-width: 300px; 
   margin-bottom: 20px;
+}
+
+@media screen and (max-width:1620px) {
+  .custom-padding-nav{
+    margin-left: .5rem !important;
+    margin-right: 0rem !important;
+  }
+   .menu-custom-padding {
+    padding-left: 0.6rem !important;
+    padding-right: 0.6rem !important;
+  }
+  .theme-top .nc-Navigation {
+    gap: 0px !important;
+  }
+  .header-nav-font{
+    font-size: 15px !important;
+  }
 }

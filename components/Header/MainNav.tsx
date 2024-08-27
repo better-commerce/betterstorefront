@@ -132,7 +132,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </Link>
             </div>
             {!isMobile &&
-              <div className="flex-[2] justify-center mx-4 lg:flex">
+              <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
                 <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
               </div>
             }
