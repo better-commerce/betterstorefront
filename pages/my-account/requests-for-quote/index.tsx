@@ -40,6 +40,13 @@ function RequestQuote({ deviceInfo }: any) {
       dnslt: "N/A",
       createdAt: "8/23/2024, 10:30 AM",
       owner: "Finance Manager"
+    },    {
+      rfqNumber: 3,
+      status: "Approved",
+      poNumber: "PO1234567",
+      dnslt: "N/A",
+      createdAt: "8/23/2024, 10:30 AM",
+      owner: "Finance Manager"
     }
   ];
   return (
@@ -71,7 +78,7 @@ function RequestQuote({ deviceInfo }: any) {
         </div>
       </div>
 
-      <div className="border rounded-lg overflow-hidden shadow-sm">
+      <div className="border overflow-hidden shadow-sm">
         <table className="min-w-full text-left">
           <thead>
             <tr className="bg-gray-100 text-xs text-gray-600">
