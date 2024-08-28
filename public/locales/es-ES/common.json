@@ -393,7 +393,8 @@
         "quote": "Cotizaciones",
         "address": "Direcciones",
         "invoice": "Facturas",
-        "shoppingList": "Lista de compras"
+        "shoppingList": "Lista de compras",
+        "requestQuote":"Solicitudes de cotización"
       },
       "myDetailsHeadingText": "Mis Profile",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",

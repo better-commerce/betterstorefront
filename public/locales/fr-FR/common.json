@@ -393,7 +393,8 @@
         "quote": "Devis",
         "address": "Adresses",
         "invoice": "Factures",
-        "shoppingList": "Liste de courses"
+        "shoppingList": "Liste de courses",
+         "requestQuote":"Demandes de devis"
       },
       "myDetailsHeadingText": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",

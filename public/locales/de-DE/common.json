@@ -393,7 +393,9 @@
         "quote": "Angebote",
         "address": "Adressen",
         "invoice": "Rechnungen",
-        "shoppingList": "Einkaufsliste"
+        "shoppingList": "Einkaufsliste",
+        "requestQuote":"Demandes de devis"
+        
       },
       "myDetailsHeadingText": "Meine Profile",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",

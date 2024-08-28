@@ -35,6 +35,7 @@ export const PAGE_TYPES = {
   AddressBook: 'address-book',
   ContactDetail: 'contact-detail',
   MyCompany: 'my-company',
+  RequestQuote: 'requests-for-quote',
   ReferFriend: 'refer-friend',
   Wishlist: 'wishlist',
   Company: 'Company',
@@ -56,6 +57,7 @@ export const PAGE_TYPES = {
   OrderCancel: 'order-cancel-detail',
   OrderReturns: 'order-returns',
   OrderReturn: 'order-return-detail',
+
 }
 export default function withDataLayer(
   Component: any,

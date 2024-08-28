@@ -158,6 +158,15 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         },
         {
           type: 'tab',
+          text: translate('label.myAccount.myCompanyMenus.requestQuote'),
+          mtext: translate('label.myAccount.myCompanyMenus.requestQuote'),
+          props: 'requests-for-quotes',
+          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          href: '/my-account/requests-for-quote',
+          displayOrder: 5
+        },
+        {
+          type: 'tab',
           text: translate('label.myAccount.myCompanyText'),
           mtext: translate('label.myAccount.myCompanyText'),
           props: 'my-company',

@@ -393,7 +393,8 @@
         "quote": "Quotes",
         "address": "Addresses",
         "invoice": "Invoice",
-        "shoppingList": "Shopping List"
+        "shoppingList": "Shopping List",
+        "requestQuote":"Requests For Quote"
       },
       "myDetailsHeadingText": "My Profile",
       "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
