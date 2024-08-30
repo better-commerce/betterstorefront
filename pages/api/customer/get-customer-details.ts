@@ -7,6 +7,7 @@ const getCustomerDetailsApiMiddleware = async (req: any, res: any) => {
     const response: any = await fetcher({
       url: CUSTOMER_BASE_API + `${req.query.customerId}`,
       method: 'get',
+      cookies: req?.cookies,
     })
     res.status(200).json(response.result)
   } catch (error) {

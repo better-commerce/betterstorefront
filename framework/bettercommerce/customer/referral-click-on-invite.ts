@@ -1,4 +1,4 @@
-import { REFERRAL_REFEREE_ENDPOINT } from "@components/utils/constants";
+import { EmptyObject, REFERRAL_REFEREE_ENDPOINT } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 import { logError } from "@framework/utils/app-util";
 
@@ -7,7 +7,7 @@ interface props{
 }
 
 export default function useReferralClickOnInvite(){
-    return async function handler(referralId?:any){
+    return async function handler(referralId?:any, cookies = EmptyObject){
         const url = REFERRAL_REFEREE_ENDPOINT + `/${referralId}/capture-clicks`
         try {
             const response: any = await fetcher({
@@ -16,6 +16,7 @@ export default function useReferralClickOnInvite(){
                 headers: {
                     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
                 },
+                cookies
             })
             return response
         } catch (error: any) {
