@@ -12,7 +12,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
 import { generateUri } from '@commerce/utils/uri-util'
-import { STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -116,7 +116,7 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext) {
-  const lookbookData = await getLookbooks()
+  const lookbookData = await getLookbooks({[Cookie.Key.LANGUAGE]: locale})
 
   const cachedDataUID = {
     infraUID: Redis.Key.INFRA_CONFIG,
