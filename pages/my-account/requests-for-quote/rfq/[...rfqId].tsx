@@ -122,7 +122,7 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, onClose, title, children }) => 
 
 const RFQDetailsPage: any = ({}) => {
   const router = useRouter();
-  const  rfqId  = router?.query?.rfqId?.[0];
+  const rfqId = router?.query?.rfqId?.[0];
   const translate = useTranslation();
   const { setAlert } = useUI();
   const [rfqData, setRfqData] = useState<RFQData | null>(null);
@@ -131,7 +131,6 @@ const RFQDetailsPage: any = ({}) => {
   const [cancelComment, setCancelComment] = useState('');
 
   useEffect(() => {
-
     if (rfqId) {
       fetchRFQData();
     }
@@ -140,10 +139,10 @@ const RFQDetailsPage: any = ({}) => {
   const fetchRFQData = async () => {
     setIsLoading(true);
     try {
-      const response:any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId });
+      const response: any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId });
       setRfqData(response?.data);
     } catch (err) {
-      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
+      setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') });
     } finally {
       setIsLoading(false);
     }
@@ -151,23 +150,25 @@ const RFQDetailsPage: any = ({}) => {
 
   const handleCancelRFQ = async () => {
     if (!cancelComment.trim()) {
-      alert('Please provide a comment for cancellation.');
+      alert(translate('label.myAccount.rfq.provideCommentForCancellation'));
       return;
     }
 
     try {
-      const response  = await axios.post(NEXT_UPDATE_STATUS_RFQ,{
-        id : rfqId,
+      const response = await axios.post(NEXT_UPDATE_STATUS_RFQ, {
+        id: rfqId,
         status: 'Cancelled',
         Comment: cancelComment,
         Reason: '',
-      })
-      if(response?.data?.message){ setAlert({ type: AlertType.SUCCESS, msg: response?.data?.message })}
+      });
+      if (response?.data?.message) {
+        setAlert({ type: AlertType.SUCCESS, msg: response?.data?.message });
+      }
       await fetchRFQData();
       setIsDialogOpen(false);
       setCancelComment('');
     } catch (err) {
-      setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
+      setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') });
     }
   };
 
@@ -176,67 +177,68 @@ const RFQDetailsPage: any = ({}) => {
   }
 
   if (!rfqData) {
-    setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
-    return <>NO DATA</>
+    setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') });
+    return <>NO DATA</>;
   }
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Request For Quotes {(rfqData?.RFQNumber) && "#" + rfqData?.RFQNumber}</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {translate('label.myAccount.rfq.requestForQuote')} {rfqData?.RFQNumber && "#" + rfqData?.RFQNumber}
+      </h1>
       <div className="bg-gray-100 p-4 rounded-md mb-4">
-        <p><strong>Status:</strong> {rfqData?.status}</p>
-        <p><strong>Name:</strong> {rfqData?.firstName} {rfqData?.lastName}</p>
-        <p><strong>Email:</strong> {rfqData?.email || 'N/A'}</p>
-        <p><strong>Company:</strong> {rfqData?.companyName}</p>
-        <p><strong>Notes:</strong> {rfqData?.notes}</p>
+        <p><strong>{translate('label.myAccount.rfq.status')}:</strong> {rfqData?.status}</p>
+        <p><strong>{translate('label.myAccount.rfq.name')}:</strong> {rfqData?.firstName} {rfqData?.lastName}</p>
+        <p><strong>{translate('label.myAccount.rfq.email')}:</strong> {rfqData?.email || translate('label.myAccount.rfq.notAvailable')}</p>
+        <p><strong>{translate('label.myAccount.rfq.company')}:</strong> {rfqData?.companyName}</p>
+        <p><strong>{translate('label.myAccount.rfq.notes')}:</strong> {rfqData?.notes}</p>
       </div>
 
-      <h2 className="text-xl font-semibold mb-2">Line Items</h2>
+      <h2 className="text-xl font-semibold mb-2">{translate('label.myAccount.rfq.lineItems')}</h2>
       <table className="w-full mb-4">
         <thead>
           <tr className="bg-gray-200">
-            <th className="p-2 text-left">Stock Code</th>
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Quantity</th>
-            <th className="p-2 text-left">Price</th>
-            <th className="p-2 text-left">Target Price</th>
-
+            <th className="p-2 text-left">{translate('label.myAccount.rfq.stockCode')}</th>
+            <th className="p-2 text-left">{translate('label.myAccount.rfq.productName')}</th>
+            <th className="p-2 text-left">{translate('label.myAccount.rfq.quantity')}</th>
+            <th className="p-2 text-left">{translate('label.myAccount.rfq.price')}</th>
+            <th className="p-2 text-left">{translate('label.myAccount.rfq.targetPrice')}</th>
           </tr>
         </thead>
         <tbody>
           {rfqData?.lines?.map?.((item, index) => (
             <tr key={index} className="border-b">
-              <td className="p-2">{item?.stockCode} </td>
-              <td className="p-2">{item?.productName} </td>
-              <td className="p-2">{item?.qty} </td>
-              <td className="p-2">{item?.price ? `$${item?.price.toFixed(2)}` : 'N/A'} </td>
-              <td className="p-2">{item?.targetPrice ? `$${item?.targetPrice.toFixed(2)}` : 'N/A'}</td>
+              <td className="p-2">{item?.stockCode}</td>
+              <td className="p-2">{item?.productName}</td>
+              <td className="p-2">{item?.qty}</td>
+              <td className="p-2">{item?.price ? `$${item?.price.toFixed(2)}` : translate('label.myAccount.rfq.notAvailable')}</td>
+              <td className="p-2">{item?.targetPrice ? `$${item?.targetPrice.toFixed(2)}` : translate('label.myAccount.rfq.notAvailable')}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       <div className="flex justify-between">
-        <Button onClick={() => router.back()}>Back to List</Button>
-        <Button onClick={() => setIsDialogOpen(true)} variant="danger">Cancel RFQ</Button>
+        <Button onClick={() => router.back()}>{translate('label.myAccount.rfq.backToList')}</Button>
+        <Button onClick={() => setIsDialogOpen(true)} variant="danger">{translate('label.myAccount.rfq.cancelRFQ')}</Button>
       </div>
 
-      <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title="Cancel RFQ">
+      <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={translate('label.myAccount.rfq.cancelRFQ')}>
         <Input
-          label="Comment (required):"
+          label={translate('label.myAccount.rfq.commentRequired')}
           id="cancelComment"
           value={cancelComment}
           onChange={(e) => setCancelComment(e.target.value)}
-          placeholder="Enter reason for cancellation"
+          placeholder={translate('label.myAccount.rfq.enterReason')}
         />
         <div className="flex justify-end space-x-2 mt-4">
-          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-          <Button variant="danger" onClick={handleCancelRFQ}>Confirm Cancellation</Button>
+          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>{translate('label.myAccount.rfq.cancel')}</Button>
+          <Button variant="danger" onClick={handleCancelRFQ}>{translate('label.myAccount.rfq.confirmCancellation')}</Button>
         </div>
       </Dialog>
     </div>
   );
 };
 
-RFQDetailsPage.LayoutAccount = LayoutAccount
-export default withDataLayer(withAuth(RFQDetailsPage), PAGE_TYPES.RequestQuote, true, LayoutAccount)
+RFQDetailsPage.LayoutAccount = LayoutAccount;
+export default withDataLayer(withAuth(RFQDetailsPage), PAGE_TYPES.RequestQuote, true, LayoutAccount);

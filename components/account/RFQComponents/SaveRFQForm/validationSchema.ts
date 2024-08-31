@@ -1,17 +1,23 @@
 import * as Yup from 'yup';
+import { useTranslation } from '@commerce/utils/use-translation';
 
-// Define the validation schema according to formConfig
-export const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required('First Name is required'),
-  lastName: Yup.string().required('Last Name is required'),
-  userName: Yup.string().required('userName is Required'),
-  email: Yup.string().email('Invalid email address').required('Email Address is required'),
-  phoneNumber: Yup.string().required('Phone Number is required'), 
-  companyName: Yup.string().required('Company Name is required'),
-  role: Yup.string().required('Role is required'),
-  poNumber: Yup.string().required('PO Number is required'),
-  validUntil: Yup.date().required('Do Not Ship Later Than is required'), 
-  assignedTo: Yup.string().required('Assigned To is required'),
-  notes: Yup.string().nullable(),
-  lines: Yup.array().min(1, 'At least one product is required'),
-});
+export const useValidationSchema : () => any = () => {
+  const translate = useTranslation();
+
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string().required(translate('label.myAccount.rfq.firstNameRequired')),
+    lastName: Yup.string().required(translate('label.myAccount.rfq.lastNameRequired')),
+    userName: Yup.string().required(translate('label.myAccount.rfq.userNameRequired')),
+    email: Yup.string().email(translate('label.myAccount.rfq.emailInvalid')).required(translate('label.myAccount.rfq.emailRequired')),
+    phoneNumber: Yup.string().required(translate('label.myAccount.rfq.phoneNumberRequired')),
+    companyName: Yup.string().required(translate('label.myAccount.rfq.companyNameRequired')),
+    role: Yup.string().required(translate('label.myAccount.rfq.roleRequired')),
+    poNumber: Yup.string().required(translate('label.myAccount.rfq.poNumberRequired')),
+    validUntil: Yup.date().required(translate('label.myAccount.rfq.validUntilRequired')),
+    assignedTo: Yup.string().required(translate('label.myAccount.rfq.assignedToRequired')),
+    notes: Yup.string().nullable(),
+    lines: Yup.array().min(1, translate('label.myAccount.rfq.productRequired')),
+  });
+
+  return validationSchema;
+};

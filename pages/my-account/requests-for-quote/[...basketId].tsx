@@ -16,11 +16,10 @@ function SaveRFQ() {
   const basketId = router?.query?.basketId?.[0]
   const translate = useTranslation()
 
-  // useEffect(() => {
-  //   changeMyAccountTab(translate('label.myAccount.myCompanyMenus.requestQuote'))
-  // }, [translate])
+  useEffect(() => {
+    changeMyAccountTab(translate('label.myAccount.myCompanyMenus.requestQuote'))
+  }, [])
 
-  
   const calculateValidDays = (validUntilDate :any) => {
     const today:any = new Date();
     const validUntil:any = new Date(validUntilDate);

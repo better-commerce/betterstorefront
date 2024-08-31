@@ -12,8 +12,6 @@ import axios from 'axios'
 import { NEXT_GET_ALL_RFQ } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 
-
-
 function formatISODate(date:any) {
   return date.toISOString();
 }
@@ -25,6 +23,7 @@ fromDate.setDate(today.getDate() - 15);
 
 const toDate = new Date(today);
 toDate.setDate(today.getDate() + 15);
+
 function RequestQuote() {
   const { user, changeMyAccountTab } = useUI()
   const [isLoading, setIsLoading] = useState(true)
@@ -62,25 +61,25 @@ function RequestQuote() {
       router.push('/')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [user])
 
- if (isLoading) { return (<Spinner/>)}
+  if (isLoading) { return (<Spinner/>)}
 
   return (
     rfqData?.length > 0 ? (
       <div className="p-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-lg font-semibold">ALL REQUESTS FOR QUOTE</h2>
+          <h2 className="text-lg font-semibold">{translate('label.myAccount.rfq.allRequestsForQuote')}</h2>
           {/* <button className="bg-transoarent border text-sm text-black py-2 px-4 rounded border-gray-800">
-            + New Quote
+            {translate('label.myAccount.rfq.newQuote')}
           </button> */}
         </div>
         <div className="my-4 flex justify-between">
           {/* <button className="flex items-center text-black">
             <FunnelIcon className="h-5 w-5 mr-1" />
-            Filter
+            {translate('label.myAccount.rfq.filter')}
           </button> */}
-          <p className="text-sm text-gray-600">{rfqData?.length} Total Request For Quote</p>
+          <p className="text-sm text-gray-600">{translate('label.myAccount.rfq.totalRequestForQuote', { count: rfqData.length })}</p>
           {/* <div className="flex space-x-2">
             <button>
               <ArrowPathIcon className="h-5 w-5" />
@@ -94,11 +93,11 @@ function RequestQuote() {
           <table className="min-w-full text-left">
             <thead>
               <tr className="bg-gray-100 text-xs text-gray-600">
-                {/* <th className="py-2 px-4">RFQ #</th> */}
-                <th className="py-2 px-4">Status</th>
-                <th className="py-2 px-4">PO Number</th>
-                <th className="py-2 px-4">Created At</th>
-                {/* <th className="py-2 px-4">Owner</th> */}
+                {/* <th className="py-2 px-4">{translate('label.myAccount.rfq.rfqNumber')}</th> */}
+                <th className="py-2 px-4">{translate('label.myAccount.rfq.status')}</th>
+                <th className="py-2 px-4">{translate('label.myAccount.rfq.poNumber')}</th>
+                <th className="py-2 px-4">{translate('label.myAccount.rfq.createdAt')}</th>
+                {/* <th className="py-2 px-4">{translate('label.myAccount.rfq.owner')}</th> */}
                 <th className="py-2 px-4"></th>
               </tr>
             </thead>
@@ -113,7 +112,7 @@ function RequestQuote() {
                   <td className="py-2 px-4">
                     <button className="flex items-center text-black">
                       <EyeIcon className="h-5 w-5 mr-1" onClick={() => navigateToRFQ(rfq?.recordId)}/>
-                      View
+                      {translate('label.myAccount.rfq.view')}
                     </button>
                   </td>
                 </tr>
@@ -121,10 +120,8 @@ function RequestQuote() {
             </tbody>
           </table>
         </div>
-      </div>) : <div className="text-center p-4">No Request For Quote Found</div>)
+      </div>) : <div className="text-center p-4">{translate('label.myAccount.rfq.noRequestForQuoteFound')}</div>)
 }
-
-
 
 RequestQuote.LayoutAccount = LayoutAccount
 export default withDataLayer(withAuth(RequestQuote), PAGE_TYPES.RequestQuote, true, LayoutAccount)

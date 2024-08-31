@@ -1,84 +1,88 @@
-// formConfig.ts
-export const formConfig:any = {
+import { useTranslation } from "@commerce/utils/use-translation";
+
+export const useFormConfig = () => {
+
+  const translate = useTranslation();
+
+  const formConfig : any = {
     fields: {
       firstName: {
-        label: 'First Name *',
-        placeholder: 'First Name',
+        label: translate('label.myAccount.rfq.firstName'),
+        placeholder: translate('label.myAccount.rfq.firstName'),
         type: 'text',
         required: true,
       },
       lastName: {
-        label: 'Last Name *',
-        placeholder: 'Last Name',
+        label: translate('label.myAccount.rfq.lastName'),
+        placeholder: translate('label.myAccount.rfq.lastName'),
         type: 'text',
         required: true,
       },
-      userName : {
-        label: 'User Name *',
-        placeholder: 'User Name',
+      userName: {
+        label: translate('label.myAccount.rfq.userName'),
+        placeholder: translate('label.myAccount.rfq.userName'),
         type: 'text',
         required: true,
       },
       email: {
-        label: 'Email Address *',
-        placeholder: 'Email Address',
+        label: translate('label.myAccount.rfq.email'),
+        placeholder: translate('label.myAccount.rfq.email'),
         type: 'email',
         required: true,
       },
       phoneNumber: {
-        label: 'Phone Number',
-        placeholder: 'Phone Number',
+        label: translate('label.myAccount.rfq.phoneNumber'),
+        placeholder: translate('label.myAccount.rfq.phoneNumber'),
         type: 'tel',
         required: false,
       },
       companyName: {
-        label: 'Company Name*',
-        placeholder: 'Company Name',
+        label: translate('label.myAccount.rfq.companyName'),
+        placeholder: translate('label.myAccount.rfq.companyName'),
         type: 'text',
         required: true,
       },
       role: {
-        label: 'Role',
-        placeholder: 'Role',
+        label: translate('label.myAccount.rfq.role'),
+        placeholder: translate('label.myAccount.rfq.role'),
         type: 'text',
         required: false,
       },
-
       poNumber: {
-        label: 'PO Number',
-        placeholder: 'PO Number',
+        label: translate('label.myAccount.rfq.poNumber'),
+        placeholder: translate('label.myAccount.rfq.poNumber'),
         type: 'text',
         required: false,
       },
       validUntil: {
-        label: 'Do Not Ship Later Than',
+        label: translate('label.myAccount.rfq.validUntil'),
         type: 'date',
         required: true,
       },
       assignedTo: {
-        label: 'Assigned To',
+        label: translate('label.myAccount.rfq.assignedTo'),
         type: 'select',
         options: [], 
         required: true,
       },
-    notes: {
-        label: 'Notes',
-        placeholder: 'Notes',
+      notes: {
+        label: translate('label.myAccount.rfq.notes'),
+        placeholder: translate('label.myAccount.rfq.notes'),
         type: 'textarea',
         required: false,
       },
     },
-
     lines: {
       headers: {
-        productId: 'Product ID',
-        productName: 'Product Name',
-        stockCode: 'Stock Code',
-        qty: 'Quantity',
-        price: 'Price',
-        targetPrice: 'Target Price',
+        productId: translate('label.myAccount.rfq.productId'),
+        productName: translate('label.myAccount.rfq.productName'),
+        stockCode: translate('label.myAccount.rfq.stockCode'),
+        qty: translate('label.myAccount.rfq.qty'),
+        price: translate('label.myAccount.rfq.price'),
+        targetPrice: translate('label.myAccount.rfq.targetPrice'),
       },
       initialValues: []
     },
   };
-  
+  return formConfig
+};
