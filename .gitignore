@@ -55,3 +55,4 @@ tsconfig.tsbuildinfo
 .env-demostore
 .env-forever
 .env-tagdeal
+.scannerwork/
