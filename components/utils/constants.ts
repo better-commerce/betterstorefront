@@ -195,6 +195,13 @@ export const NEXT_LOG_ACTIVITY = '/api/log/activity'
 export const NEXT_LOG_PAYMENT = '/api/log/payment'
 export const NEXT_GET_SUBJECTS = '/api/subjects'
 
+//refer for quote
+export const NEXT_SAVE_RFQ = '/api/b2b/refer-for-quote/save-rfq'
+export const NEXT_GET_ALL_RFQ = '/api/b2b/refer-for-quote/get-all-rfq'
+export const NEXT_GET_DETAILS_RFQ = '/api/b2b/refer-for-quote/get-details'
+export const NEXT_UPDATE_STATUS_RFQ = '/api/b2b/refer-for-quote/status-update'
+
+
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'

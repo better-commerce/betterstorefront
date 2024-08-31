@@ -9,12 +9,14 @@ import { useUI } from '@components/ui';
 import { Guid } from '@commerce/types';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from '@commerce/utils/use-translation'
-import { TransferIcon } from '@components/shared/icons';
+import { TransferIcon, } from '@components/shared/icons';
 import TransferSm from '@components/shared/icons/TransferSm';
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/solid';
+import { ArrowPathRoundedSquareIcon, PencilSquareIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/router';
 
 const BasketList = ({ baskets, openMiniBasket, deleteBasket, openTransferBasketModal }: any) => {
   const { setBasketId } = useUI()
+  const router = useRouter()
   const translate = useTranslation()
 
   if (!baskets || (baskets && !baskets?.length)) {
@@ -50,7 +52,13 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket, openTransferBasketM
               </div>
             </Link>
             {!basket?.isLocked && (
-              <div className='flex items-center justify-center flex-shrink-0 gap-4 capitalize text-neutral-500 dark:text-neutral-300 z-99'>               
+              <div className='flex items-center justify-center flex-shrink-0 gap-4 capitalize text-neutral-500 dark:text-neutral-300 z-99'> 
+                <PencilSquareIcon className="w-5 h-5 text-sm font-semibold cursor-pointer text-sky-600 hover:text-sky-800" onClick={(ev: any) => {
+                  ev.preventDefault()
+                  ev.stopPropagation()
+
+                  router.push(`/my-account/requests-for-quote/${basket?.id}`)
+                }}/>        
                 <ArrowPathRoundedSquareIcon  className="w-5 h-5 text-sm font-semibold cursor-pointer text-sky-600 hover:text-sky-800" onClick={(ev: any) => {
                   ev.preventDefault()
                   ev.stopPropagation()
