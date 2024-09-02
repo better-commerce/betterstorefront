@@ -18,7 +18,6 @@ export default function useLogin() {
       password,
       authType,
     }
-
     try {
       const response: any = await fetcher({
         url: `${AUTHENTICATE_CUSTOMER}`,

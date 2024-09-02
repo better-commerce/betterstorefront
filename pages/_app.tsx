@@ -401,7 +401,7 @@ MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> =>
   if (!clientIPAddress && forwardedFor) {
     clientIPAddress = forwardedFor.split(',').at(0) ?? ''
   }
-  const serverHost = os.hostname()
+  const serverHost = os?.hostname?.()
   const urlReferrer = req?.headers?.referer
 
   return {
