@@ -1,6 +1,6 @@
 import { useTranslation } from "@commerce/utils/use-translation";
 
-export const useFormConfig = () => {
+export const useSaveFormConfig = () => {
 
   const translate = useTranslation();
 

@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useTranslation } from '@commerce/utils/use-translation';
 
-export const useValidationSchema : () => any = () => {
+export const useSaveFormValidationSchema : () => any = () => {
   const translate = useTranslation();
 
   const validationSchema = Yup.object().shape({

@@ -35,7 +35,7 @@ export const PAGE_TYPES = {
   AddressBook: 'address-book',
   ContactDetail: 'contact-detail',
   MyCompany: 'my-company',
-  RequestQuote: 'requests-for-quote',
+  RequestQuote: 'request-quote',
   ReferFriend: 'refer-friend',
   Wishlist: 'wishlist',
   Company: 'Company',

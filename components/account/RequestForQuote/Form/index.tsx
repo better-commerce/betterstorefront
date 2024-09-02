@@ -1,7 +1,7 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useValidationSchema } from "./validationSchema";
-import { useFormConfig } from "./formConfig";
+import { useSaveFormValidationSchema } from "../SaveFormValidationSchema";
+import { useSaveFormConfig } from "../SaveFormConfig";
 import { useFormik } from "formik";
 import { useUI } from "@components/ui";
 import useCart from '@components/services/cart';
@@ -24,8 +24,8 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [newTargetPrice, setNewTargetPrice] = useState<string>('');
   const translate = useTranslation();
-  const formConfig = useFormConfig();
-  const validationSchema = useValidationSchema();
+  const formConfig = useSaveFormConfig();
+  const validationSchema = useSaveFormValidationSchema();
 
   useEffect(() => { if (!isClient) setIsClient(true) }, []);
   useEffect(() => { if (isClient && cartItems?.lineItems) setLines(restructureProductLines(cartItems?.lineItems)) }, [isIncludeVAT, isClient]);
