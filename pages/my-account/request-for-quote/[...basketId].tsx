@@ -53,7 +53,7 @@ function SaveRFQ() {
     else{
       setAlert({ type: 'success', msg: result?.data?.message })
       const rfqId = result?.data?.recordId
-      router.push('/my-account/requests-for-quote/rfq/' + rfqId)
+      router.push('/my-account/request-for-quote/rfq/' + rfqId)
     }
     
   }

@@ -32,7 +32,7 @@ function RequestQuote() {
   const router = useRouter()
 
   const navigateToRFQ = (recordId:any) => {
-    router.push(`/my-account/requests-for-quote/rfq/${recordId}`);
+    router.push(`/my-account/request-for-quote/rfq/${recordId}`);
   }
 
   useEffect(() => {
