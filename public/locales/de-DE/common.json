@@ -442,6 +442,7 @@
         "companyName": "Firmenname *",
         "role": "Rolle",
         "validUntil": "Nicht später als versenden",
+        "generalETAText": "ETA",
         "assignedTo": "Zugewiesen an",
         "productId": "Produkt-ID",
         "qty": "Menge",

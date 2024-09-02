@@ -57,7 +57,6 @@ export const PAGE_TYPES = {
   OrderCancel: 'order-cancel-detail',
   OrderReturns: 'order-returns',
   OrderReturn: 'order-return-detail',
-
 }
 export default function withDataLayer(
   Component: any,

@@ -13,7 +13,7 @@ import { useTranslation } from "@commerce/utils/use-translation";
 
 export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const router = useRouter();
-  const { user } = useUI();
+  const { user, setCartItems } = useUI();
   const isIncludeVAT = vatIncluded();
   const [isClient, setIsClient] = useState(false);
   const { addToCart } = useCart();
@@ -103,7 +103,9 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       qty: 0,
     };
     const item: any = await addToCart(data, 'delete', { product });
-    setLines(restructureProductLines(item?.lineItems));
+    setCartItems(item);
+    const restructuredLines = restructureProductLines(item?.lineItems);
+    setLines(restructuredLines);
   };
 
   const handleSaveTargetPrice = () => {
@@ -148,7 +150,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                     value={formik?.values[fieldKey]}
                     onBlur={formik?.handleBlur}
                   >
-                    <option value="">{translate('label.myAccount.rfq.filter')}</option>
+                    <option value="">{translate('label.search.searchText')}</option>
                     {b2bUsers?.map((option: any) => (
                       <option key={option?.email} value={option?.email}>
                         {option?.firstName + ' ' + option?.lastName}
@@ -230,7 +232,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
             type="submit"
             className="px-4 py-2 btn btn-primary text-white rounded-md"
           >
-            {translate('label.myAccount.rfq.newQuote')}
+            {translate('label.myAccount.rfq.save')}
           </button>
         </div>
       </form>
@@ -279,16 +281,14 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
               <>
                 <p className="mb-4 text-gray-600">{translate('label.myAccount.rfq.removeProductConfirmation')}</p>
                 <div className="flex justify-end space-x-4">
-                  <button
-                    type="button"
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  <div
+                    className="flex items-center justify-center  border border-gray-300 rounded-full shadow-sm btn"
                     onClick={() => setIsRemoveModalOpen(false)} // Close the modal without removing
                   >
                     {translate('label.myAccount.rfq.cancel')}
-                  </button>
-                  <button
-                    type="button"
-                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
+                  </div>
+                  <div
+                    className="flex items-center justify-center  border border-gray-300 rounded-full shadow-sm btn btn-primary"
                     onClick={() => {
                       if (selectedProduct) {
                         removeFromCart({ product: selectedProduct });
@@ -296,8 +296,8 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                       }
                     }}
                   >
-                    {translate('label.myAccount.rfq.remove')}
-                  </button>
+                    {translate('label.myAccount.rfq.removeProduct')}
+                  </div>
                 </div>
               </>
             )}

@@ -441,6 +441,7 @@
         "companyName": "Company Name*",
         "role": "Role",
         "validUntil": "Do Not Ship Later Than",
+        "generalETAText" : "ETA",
         "assignedTo": "Assigned To",
         "productId": "Product ID",
         "qty": "Quantity",
@@ -453,7 +454,7 @@
         "companyNameRequired": "Company Name is required",
         "roleRequired": "Role is required",
         "poNumberRequired": "PO Number is required",
-        "validUntilRequired": "Do Not Ship Later Than is required",
+        "ETA": "ETA",
         "assignedToRequired": "Assigned To is required",
         "productRequired": "At least one product is required"
       },

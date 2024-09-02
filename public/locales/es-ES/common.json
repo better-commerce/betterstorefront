@@ -441,6 +441,7 @@
         "companyName": "Nombre de la Empresa *",
         "role": "Rol",
         "validUntil": "No Enviar Después de",
+        "generalETAText": "ETA",
         "assignedTo": "Asignado a",
         "productId": "ID de Producto",
         "qty": "Cantidad",

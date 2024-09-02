@@ -6,23 +6,21 @@ import React from 'react'
 import { isB2BUser } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
-import { FunnelIcon, TrashIcon, ArrowPathIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { NEXT_GET_ALL_RFQ } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 
-function formatISODate(date:any) {
-  return date.toISOString();
-}
+function formatISODate(date:any) { return date.toISOString(); }
 
 // Calculate default dates
 const today = new Date();
 const fromDate = new Date(today);
-fromDate.setDate(today.getDate() - 15);
+fromDate.setDate(today.getDate() - 30);
 
 const toDate = new Date(today);
-toDate.setDate(today.getDate() + 15);
+toDate.setDate(today.getDate() + 30);
 
 function RequestQuote() {
   const { user, changeMyAccountTab } = useUI()
@@ -35,9 +33,7 @@ function RequestQuote() {
     router.push(`/my-account/request-for-quote/rfq/${recordId}`);
   }
 
-  useEffect(() => {
-    changeMyAccountTab(translate('label.myAccount.myCompanyMenus.requestQuote'))
-  }, [])
+  useEffect(() => { changeMyAccountTab(translate('label.myAccount.myCompanyMenus.requestQuote')) }, [])
 
   useEffect(() => {
     if (isB2BUser(user)) {
@@ -47,15 +43,14 @@ function RequestQuote() {
         setIsLoading(false)
       }
       const data = {
-        "companyName": user?.companyName,
-        "companyId": user?.companyId,
-        "email": user?.email,
-        "fromDate": formatISODate(fromDate),
-        "toDate": formatISODate(toDate),
-        "currentPage": "1",
-        "pageSize": "40"
+        companyName: user?.companyName,
+        companyId: user?.companyId,
+        email: user?.email,
+        fromDate: formatISODate(fromDate),
+        toDate: formatISODate(toDate),
+        currentPage: 1,
+        pageSize: 40,
       }
-      //////API calling function , uncomment when API is ready
       fetchAllRFQ(data);
     } else {
       router.push('/')
@@ -70,50 +65,30 @@ function RequestQuote() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-lg font-semibold">{translate('label.myAccount.rfq.allRequestsForQuote')}</h2>
-          {/* <button className="bg-transoarent border text-sm text-black py-2 px-4 rounded border-gray-800">
-            {translate('label.myAccount.rfq.newQuote')}
-          </button> */}
         </div>
         <div className="my-4 flex justify-between">
-          {/* <button className="flex items-center text-black">
-            <FunnelIcon className="h-5 w-5 mr-1" />
-            {translate('label.myAccount.rfq.filter')}
-          </button> */}
           <p className="text-sm text-gray-600">{translate('label.myAccount.rfq.totalRequestForQuote', { count: rfqData.length })}</p>
-          {/* <div className="flex space-x-2">
-            <button>
-              <ArrowPathIcon className="h-5 w-5" />
-            </button>
-            <button>
-              <TrashIcon className="h-5 w-5" />
-            </button>
-          </div> */}
         </div>
         <div className="border overflow-hidden shadow-sm">
           <table className="min-w-full text-left">
             <thead>
               <tr className="bg-gray-100 text-xs text-gray-600">
-                {/* <th className="py-2 px-4">{translate('label.myAccount.rfq.rfqNumber')}</th> */}
                 <th className="py-2 px-4">{translate('label.myAccount.rfq.status')}</th>
                 <th className="py-2 px-4">{translate('label.myAccount.rfq.poNumber')}</th>
                 <th className="py-2 px-4">{translate('label.myAccount.rfq.createdAt')}</th>
-                {/* <th className="py-2 px-4">{translate('label.myAccount.rfq.owner')}</th> */}
                 <th className="py-2 px-4"></th>
               </tr>
             </thead>
             <tbody>
               {rfqData?.map?.((rfq: any) => (
                 <tr key={rfq.rfqNumber} className="text-xs border-b">
-                  {/* <td className="py-2 px-4">{rfq?.rfqNumber}</td> */}
                   <td className="py-2 px-4">{rfq?.status}</td>
                   <td className="py-2 px-4">{rfq?.poNumber}</td>
                   <td className="py-2 px-4">{rfq?.created}</td>
-                  {/* <td className="py-2 px-4">{rfq?.owner}</td> */}
                   <td className="py-2 px-4">
-                    <button className="flex items-center text-black">
-                      <EyeIcon className="h-5 w-5 mr-1" onClick={() => navigateToRFQ(rfq?.recordId)}/>
-                      {translate('label.myAccount.rfq.view')}
-                    </button>
+                      <button className="flex items-center text-black" onClick={() => navigateToRFQ(rfq?.recordId)}>
+                       <EyeIcon className="h-5 w-5 mr-1" /> {translate('label.myAccount.rfq.view')} 
+                      </button>
                   </td>
                 </tr>
               ))}

@@ -55,7 +55,7 @@ export const useSaveFormConfig = () => {
         required: false,
       },
       validUntil: {
-        label: translate('label.myAccount.rfq.validUntil'),
+        label: translate('label.myAccount.rfq.generalETAText'),
         type: 'date',
         required: true,
       },
