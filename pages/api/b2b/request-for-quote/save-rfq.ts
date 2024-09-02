@@ -1,6 +1,6 @@
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from '../../base/api-route-guard'
-import saveRFQ from '@framework/b2b/refer-for-quote/save-rfq'
+import saveRFQ from '@framework/b2b/request-for-quote/save-rfq'
 
 const saveRFQApiMiddleware = async (req: any, res: any) => {
     const { data }: any = req?.body

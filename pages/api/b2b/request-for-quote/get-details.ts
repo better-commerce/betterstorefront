@@ -1,6 +1,6 @@
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from '../../base/api-route-guard'
-import getDetails from '@framework/b2b/refer-for-quote/get-details'
+import getDetails from '@framework/b2b/request-for-quote/get-details'
 
 const getRFQDetailsApiMiddleware = async (req: any, res: any) => {
     const { rfqId }: any = req?.body
