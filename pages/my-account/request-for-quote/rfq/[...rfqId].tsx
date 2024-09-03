@@ -12,13 +12,13 @@ import RFQDetailsComponent from '@components/account/RequestForQuote/RFQDetailsC
 import { useTranslation } from '@commerce/utils/use-translation';
 
 interface RFQItem {
-  productId : string,
+  productId: string,
   stockCode: string,
-  productName : string,
-  qty : number,
-  price : number,
-  targetPrice : number
-} 
+  productName: string,
+  qty: number,
+  price: number,
+  targetPrice: number
+}
 
 interface RFQData {
   RFQNumber: string;
@@ -32,21 +32,21 @@ interface RFQData {
 }
 
 
-const RFQDetailsPage: any = ({}) => {
+const RFQDetailsPage: any = ({ }) => {
   const router = useRouter();
   const rfqId = router?.query?.rfqId?.[0];
   const translate = useTranslation();
   const { setAlert } = useUI();
   const [rfqData, setRfqData] = useState<RFQData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => { if (rfqId) { fetchRFQData(); } }, [rfqId]);
 
   const fetchRFQData = async () => {
 
     setIsLoading(true);
-    try { const response: any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId }); setRfqData(response?.data); } 
-    catch (err) { setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') }); } 
+    try { const response: any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId }); setRfqData(response?.data); }
+    catch (err) { setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') }); }
     finally { setIsLoading(false); }
   };
 

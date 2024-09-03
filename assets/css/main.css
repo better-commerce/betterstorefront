@@ -1031,6 +1031,14 @@ body {
   line-height: 1;
 }
 
+
+.label-blue {
+  background: rgba(0, 34, 255, 0.12);
+  border-radius: 2px;
+  color: #0077ff;
+  line-height: 1;
+}
+
 .label-Delivered {
   background: #00890e;
   border-radius: 2px;

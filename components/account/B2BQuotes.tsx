@@ -29,32 +29,41 @@ function B2BQuotes({ quotes }: any) {
               <div key={Idx} className={`flex flex-col px-6 py-4 border rounded-2xl gap-y-2 ${quote?.status == QuoteStatus.CONVERTED ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-slate-200'}`} >
                 <div className="flex justify-between gap-x-6">
                   <h2 className="font-semibold mob-font-14 sm:text-2xl font-Inter text-brand-blue">
-                    {quote?.quoteName} {`(${quote?.customQuoteNo})`}
+                    {quote?.quoteName != "" ? (
+                      <>
+                       {`${quote?.customQuoteNo} -`} {quote?.quoteName} 
+                      </>
+                    ) : (
+                      <>
+                        {`${quote?.customQuoteNo}`}
+                      </>
+                    )}
+
                   </h2>
                   <button className='px-6 py-1 font-semibold text-white rounded-full bg-sky-800 font-14 hover:bg-sky-600' onClick={() => showQuoteDetail(quote)}>{translate('common.label.viewText')}</button>
                 </div>
                 <div className='flex justify-normal'>
-                  <span className={`px-3 py-0.5 font-medium border rounded-full font-10 ${quote?.status == QuoteStatus.CONVERTED ? 'bg-emerald-200 border-emerald-300 text-emerald-900' : 'text-slate-600 bg-slate-200 border-slate-300'}`}>
+                  <span className={`px-4 py-2 text-sm font-semibold leading-none truncate rounded-full ${quote?.status == QuoteStatus.CONVERTED ? 'label-confirmed' : 'label-pending'}`}>
                     {quote?.status == QuoteStatus.ABANDONED ? 'Abandoned' : quote?.status == QuoteStatus.CANCELLED ? 'Cancelled' : quote?.status == QuoteStatus.CONVERTED ? 'Converted' : quote?.status == QuoteStatus.DRAFT ? 'Draft' : quote?.status == QuoteStatus.NOT_QUOTE ? 'Not Quote' : quote?.status == QuoteStatus.PAYMENT_LINK_SENT ? 'Payment Link Sent' : quote?.status == QuoteStatus.QUOTE_SENT ? 'Quote Sent' : ''}
                   </span>
                 </div>
                 {quote?.status != QuoteStatus.CONVERTED && quote?.status != QuoteStatus.PAYMENT_LINK_SENT &&
                   <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:flex-row gap-x-6">
-                    <span className="font-Inter font-light leading-4 mob-font-14 text-lg tracking-[2%]">
-                      {`Valid Until: ${new Date(quote?.validUntil).getUTCDate()}/${new Date(quote?.validUntil).getUTCMonth() + 1
+                    <span className="font-Inter font-light leading-4 mob-font-14 text-sm tracking-[2%]">
+                      <span className='font-semibold text-black'>Valid Until:</span> {`${new Date(quote?.validUntil).getUTCDate()}/${new Date(quote?.validUntil).getUTCMonth() + 1
                         }/${new Date(quote?.validUntil).getUTCFullYear()}`}
                     </span>
-                    <span className="font-Inter font-light leading-4 mob-font-14 text-lg tracking-[2%]">
-                      {`Validity Days: ${quote?.validDays} ${translate('label.product.productSidebar.daysText')}`}
+                    <span className="font-Inter font-light leading-4 mob-font-14 text-sm tracking-[2%]">
+                      <span className='font-semibold text-black'>Validity Days:</span> {`${quote?.validDays} ${translate('label.product.productSidebar.daysText')}`}
                     </span>
                   </div>
                 }
                 <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:flex-row gap-x-6">
                   <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                    {translate('label.companyUsers.usernameText')} {quote?.userName}
+                    <span className='font-semibold text-black'>{translate('label.companyUsers.usernameText')} </span> {quote?.userName}
                   </span>
                   <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                    {translate('label.companyUsers.emailText')}{quote?.email}
+                    <span className='font-semibold text-black'>{translate('label.companyUsers.emailText')}</span> {quote?.email}
                   </span>
                 </div>
               </div>

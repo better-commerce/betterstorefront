@@ -133,16 +133,16 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 pt-0 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-semibold mb-6">{translate('label.myAccount.rfq.requestForQuote')}</h1>
+    <div className="flex flex-col w-full">
+      <h1 className="mb-6 text-2xl font-semibold">{translate('label.myAccount.rfq.requestForQuote')}</h1>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2">
           {Object?.keys(formConfig?.fields).map((fieldKey) => {
             const field:any = formConfig.fields[fieldKey];
             if (field.type === 'select') {
               return (
                 <div key={fieldKey}>
-                  <label className="block text-sm font-medium mb-2">{field.label}</label>
+                  <label className="block mb-2 text-sm font-medium">{field.label}</label>
                   <select
                     name={fieldKey}
                     className="w-full p-2 border border-gray-300 rounded-md"
@@ -158,7 +158,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                     ))}
                   </select>
                   {formik?.errors[fieldKey] && formik?.touched[fieldKey] && (
-                    <div className="text-red-600 text-sm">{formik?.errors[fieldKey]}</div>
+                    <div className="text-sm text-red-600">{formik?.errors[fieldKey]}</div>
                   )}
                 </div>
               );
@@ -166,12 +166,12 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
             return (
               <div key={fieldKey} className={`${field?.type === 'textarea' ? "col-span-2" : ""}`}>
-                <label className="block text-sm font-medium mb-2">{field.label}</label>
+                <label className="block mb-2 text-sm font-medium">{field.label}</label>
                 {field.type === 'textarea' ? (
                   <textarea
                     name={fieldKey}
                     placeholder={field.placeholder}
-                    className="w-full p-2 border border-gray-300 rounded-md h-24"
+                    className="w-full h-24 p-2 border border-gray-300 rounded-md"
                     onChange={formik?.handleChange}
                     value={formik?.values[fieldKey]}
                     onBlur={formik?.handleBlur}
@@ -188,7 +188,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                   />
                 )}
                 {formik?.errors[fieldKey] && formik?.touched[fieldKey] && (
-                  <div className="text-red-600 text-sm">{formik?.errors[fieldKey]}</div>
+                  <div className="text-sm text-red-600">{formik?.errors[fieldKey]}</div>
                 )}
               </div>
             );
@@ -196,7 +196,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         </div>
 
         <div className="w-full">
-          <h2 className="text-xl font-semibold mb-4">{translate('label.myAccount.rfq.lineItems')}</h2>
+          <h2 className="mb-4 text-xl font-semibold">{translate('label.myAccount.rfq.lineItems')}</h2>
           <div className="grid grid-cols-1 gap-4 mb-6">
             {lines?.map((item: any, index: number) => (
               <div
@@ -204,48 +204,41 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 className="grid grid-cols-12 gap-2 p-2 border border-gray-300 rounded-md bg-gray-50"
               >
                 <div className="col-span-4">
-                  <a href="#" className="text-xs underline text-blue-600">{item?.stockCode} - {item?.productName}</a>
+                  <a href="#" className="text-xs text-blue-600 underline">{item?.stockCode} - {item?.productName}</a>
                 </div>
-                <div className="col-span-6 grid grid-cols-7 space-x-2">
-                  <p className="text-xs col-span-1">{translate('label.myAccount.rfq.quantity')}: {item?.qty}</p>
-                  <p className="text-xs col-span-3">{translate('label.myAccount.rfq.targetPrice')}: {item?.targetPrice}</p>
-                  <p className="text-xs col-span-3">{translate('label.myAccount.rfq.price')}: {item?.price}</p>
+                <div className="grid grid-cols-7 col-span-6 space-x-2">
+                  <p className="col-span-1 text-xs">{translate('label.myAccount.rfq.quantity')}: {item?.qty}</p>
+                  <p className="col-span-3 text-xs">{translate('label.myAccount.rfq.targetPrice')}: {item?.targetPrice}</p>
+                  <p className="col-span-3 text-xs">{translate('label.myAccount.rfq.price')}: {item?.price}</p>
                 </div>
-                <div className="col-span-2 grid grid-cols-2 space-x-4">
-                  <PencilIcon className="col-span-1 h-4 w-4 text-gray-600 cursor-pointer" onClick={() => openModal(item, 'edit')} />
-                  <TrashIcon className="col-span-1 h-4 w-4 text-red-600 cursor-pointer" onClick={() => openModal(item, 'delete')} />
+                <div className="grid grid-cols-2 col-span-2 space-x-4">
+                  <PencilIcon className="w-4 h-4 col-span-1 text-gray-600 cursor-pointer" onClick={() => openModal(item, 'edit')} />
+                  <TrashIcon className="w-4 h-4 col-span-1 text-red-600 cursor-pointer" onClick={() => openModal(item, 'delete')} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex space-x-4 mt-6">
-          <button
-            type="button"
-            className="px-4 py-2 bg-transparent border border-gray-600 text-gray-700 rounded-md"
-            onClick={() => router.back()}
-          >
+        <div className="flex justify-between mt-6 space-x-4">
+          <button type="button" className="px-4 py-2 text-gray-700 bg-transparent border border-gray-600 rounded-md" onClick={() => router.back()} >
             {translate('label.myAccount.rfq.backToList')}
           </button>
-          <button
-            type="submit"
-            className="px-4 py-2 btn btn-primary text-white rounded-md"
-          >
-            {translate('label.myAccount.rfq.save')}
+          <button type="submit" className="px-4 py-2 text-white rounded-md btn btn-primary" >
+            Submit Request
           </button>
         </div>
       </form>
       {(isModalOpen || isRemoveModalOpen) && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold mb-4 text-gray-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="w-full max-w-md p-6 mx-4 bg-white rounded-lg shadow-lg">
+            <h3 className="mb-4 text-lg font-semibold text-gray-800">
               {isModalOpen ? translate('label.myAccount.rfq.editTargetPrice') : translate('label.myAccount.rfq.removeProduct')}
             </h3>
             {isModalOpen ? (
               <>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2 text-gray-700">{translate('label.myAccount.rfq.newTargetPrice')}</label>
+                  <label className="block mb-2 text-sm font-medium text-gray-700">{translate('label.myAccount.rfq.newTargetPrice')}</label>
                   <input
                     type="text"
                     value={newTargetPrice}
@@ -253,24 +246,24 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                     className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                <div className="flex justify-end space-x-4 mt-6">
+                <div className="flex justify-end mt-6 space-x-4">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
                     onClick={handleSetSameAsPrice}
                   >
                     {translate('label.myAccount.rfq.setToListedPrice')}
                   </button>
                   <button
                     type="button"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     onClick={handleSaveTargetPrice}
                   >
                     {translate('label.myAccount.rfq.save')}
                   </button>
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    className="px-4 py-2 text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     onClick={closeModal}
                   >
                     {translate('label.myAccount.rfq.cancel')}
@@ -282,13 +275,13 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 <p className="mb-4 text-gray-600">{translate('label.myAccount.rfq.removeProductConfirmation')}</p>
                 <div className="flex justify-end space-x-4">
                   <div
-                    className="flex items-center justify-center  border border-gray-300 rounded-full shadow-sm btn"
+                    className="flex items-center justify-center border border-gray-300 rounded-full shadow-sm btn"
                     onClick={() => setIsRemoveModalOpen(false)} // Close the modal without removing
                   >
                     {translate('label.myAccount.rfq.cancel')}
                   </div>
                   <div
-                    className="flex items-center justify-center  border border-gray-300 rounded-full shadow-sm btn btn-primary"
+                    className="flex items-center justify-center border border-gray-300 rounded-full shadow-sm btn btn-primary"
                     onClick={() => {
                       if (selectedProduct) {
                         removeFromCart({ product: selectedProduct });

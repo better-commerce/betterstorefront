@@ -133,21 +133,21 @@ function MyInvoices({ deviceInfo }: any) {
         console.error(error)
       }
     }
-      fetchInvoice()
+    fetchInvoice()
   }, [user?.companyId])
 
   async function downloadOrderInvoice(order: any) {
     setOverlayLoaderState({ visible: true, message: 'Generating invoice...', })
     const res: any = await axios.post(NEXT_DOWNLOAD_INVOICE, {
-       orderId: order?.orderId,
+      orderId: order?.orderId,
     })
     if (res?.data) {
-       generatePDF(res?.data?.base64Pdf, order);
+      generatePDF(res?.data?.base64Pdf, order);
     } else {
       console.log('invoice Details not found')
     }
     hideOverlayLoaderState()
- }
+  }
 
   return (
     <div className={'orders bg-white dark:bg-transparent'}>
@@ -161,50 +161,49 @@ function MyInvoices({ deviceInfo }: any) {
               <thead>
                 <tr className="w-full text-xs bg-[#f1f5f7] leading-normal">
                   <td className="py-2 px-4 text-left text-xs !border">Invoice No</td>
-                  <td className="py-2 px-4 text-left text-xs">Invoice Date</td>
-                  <td className="py-2 px-4 text-left text-xs">Order No</td>
-                  <td className="py-2 px-4 text-left text-xs">Order Date</td>
-                  <td className="py-2 px-4 text-left text-xs">Invoice Amount</td>
-                  <td className="py-2 px-4 text-left text-xs">Paid Amount</td>
-                  <td className="py-2 px-4 text-left text-xs">Due Amount</td>
-                  <td className="py-2 px-4 text-left text-xs">Due Date</td>
-                  <td className="py-2 px-4 text-left text-xs">Status</td>
-                  <td className="py-2 px-4 text-left text-xs">Over Due</td>
+                  <td className="px-4 py-2 text-xs text-left">Invoice Date</td>
+                  <td className="px-4 py-2 text-xs text-left">Order No</td>
+                  <td className="px-4 py-2 text-xs text-left">Order Date</td>
+                  <td className="px-4 py-2 text-xs text-left">Invoice Amount</td>
+                  <td className="px-4 py-2 text-xs text-left">Paid Amount</td>
+                  <td className="px-4 py-2 text-xs text-left">Due Amount</td>
+                  <td className="px-4 py-2 text-xs text-left">Due Date</td>
+                  <td className="px-4 py-2 text-xs text-left">Status</td>
+                  <td className="px-4 py-2 text-xs text-left">Over Due</td>
                 </tr>
               </thead>
               <tbody>
                 {data?.result?.map((invoice: any, idx: any) => (
                   <tr key={invoice?.recordId}>
-                    <td className="py-2 px-4 text-left text-xs border-b text-blue">
-                      <div onClick={() => downloadOrderInvoice(invoice)} className=' flex gap-2 cursor-pointer'>
-                      <img className="h-3 w-3" src="/images/pdf.png" alt=""/>{invoice?.invoiceNo}
+                    <td className="px-4 py-2 text-xs text-left border-b text-blue">
+                      <div onClick={() => downloadOrderInvoice(invoice)} className='flex gap-2 cursor-pointer '>
+                        <img className="w-3 h-3" src="/images/pdf.png" alt="" />{invoice?.customNo}
                       </div>
                     </td>
-                    <td className="py-2 px-4 text-left text-xs border-b">
-                    {deliveryDateFormat(invoice?.invoiceDate)}
+                    <td className="px-4 py-2 text-xs text-left border-b">
+                      {deliveryDateFormat(invoice?.invoiceDate)}
                     </td>
-                    <td className="py-2 px-4 text-left text-xs border-b">{invoice?.orderNo}</td>
-                    <td className="py-2 px-4 text-left text-xs border-b">
-                    {deliveryDateFormat(invoice?.orderDate)}
+                    <td className="px-4 py-2 text-xs text-left border-b">{invoice?.orderNo}</td>
+                    <td className="px-4 py-2 text-xs text-left border-b">
+                      {deliveryDateFormat(invoice?.orderDate)}
                     </td>
 
-                    <td className="py-2 px-4 text-left text-xs border-b">
+                    <td className="px-4 py-2 text-xs text-left border-b">
                       {invoice?.grandTotal}
                     </td>
-                    <td className="py-2 px-4 text-left text-xs border-b">
+                    <td className="px-4 py-2 text-xs text-left border-b">
                       {invoice?.paidAmount}
                     </td>
-                    <td className="py-2 px-4 text-left text-xs border-b">
+                    <td className="px-4 py-2 text-xs text-left border-b">
                       {invoice?.dueAmount.toFixed(2)}{' '}
                     </td>
-                    <td className="py-2 px-4 text-left text-xs border-b">{deliveryDateFormat(invoice?.dueDate)}</td>
-                    <td className="py-2 px-4 text-left text-xs border-b">
+                    <td className="px-4 py-2 text-xs text-left border-b">{deliveryDateFormat(invoice?.dueDate)}</td>
+                    <td className="px-4 py-2 text-xs text-left border-b">
                       {invoice?.paymentStatus}
                     </td>
-                    <td className="py-2 px-4 text-left text-xs border-b">
-                    <span className={`p-1 px-4 rounded-md ${
-                        invoice?.isOverDue ? 'label-confirmed' : 'label-cancelled'
-                      }`}>{invoice?.isOverDue ? 'Yes' : 'No'}</span>
+                    <td className="px-4 py-2 text-xs text-left border-b">
+                      <span className={`p-1 px-4 rounded-md ${invoice?.isOverDue ? 'label-confirmed' : 'label-cancelled'
+                        }`}>{invoice?.isOverDue ? 'Yes' : 'No'}</span>
                     </td>
                   </tr>
                 ))}

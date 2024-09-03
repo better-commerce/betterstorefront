@@ -38,7 +38,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         props: 'returns',
         head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
         href: '/my-account/MyReturns',
-        displayOrder: 3
+        displayOrder: 6
       },
       {
         type: 'tab',
@@ -47,7 +47,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         props: 'wishlist',
         head: <HeartIcon className="text-gray-500 w-7 h-7" />,
         href: '/my-account/wishlist',
-        displayOrder: 7
+        displayOrder: 10
       },
       {
         type: 'tab',
@@ -70,19 +70,19 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
     ]
     if (isB2B) {
       let i = newConfig.length
-      if (referralProgramActive) {
-        if (!hasReferral) {
-          newConfig.push({
-            type: 'tab',
-            text: translate('label.myAccount.referAFriendText'),
-            mtext: translate('label.myAccount.referAFriendText'),
-            props: 'refer-a-friend',
-            head: <EllipsisHorizontalCircleIcon className="text-gray-500 w-7 h-7" />,
-            href: "/my-account/refer-a-friend",
-            displayOrder: 12
-          })
-        }
-      }
+      // if (referralProgramActive) {
+      //   if (!hasReferral) {
+      //     newConfig.push({
+      //       type: 'tab',
+      //       text: translate('label.myAccount.referAFriendText'),
+      //       mtext: translate('label.myAccount.referAFriendText'),
+      //       props: 'refer-a-friend',
+      //       head: <EllipsisHorizontalCircleIcon className="text-gray-500 w-7 h-7" />,
+      //       href: "/my-account/refer-a-friend",
+      //       displayOrder: 12
+      //     })
+      //   }
+      // }
       while (i--) {
         if (
           newConfig[i]?.props === 'address-book' ||
@@ -98,7 +98,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         props: 'data-pack',
         head: <ServerIcon className="text-gray-500 w-7 h-7" />,
         href: "/my-account/data-pack",
-        displayOrder: 6
+        displayOrder: 7
       })
     }
     if (!isB2B) {
@@ -127,7 +127,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'orders',
           head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/orders',
-          displayOrder: 1
+          displayOrder: 4
         },
         {
           type: 'tab',
@@ -136,7 +136,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'quotes',
           head: <ListBulletIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/quotes',
-          displayOrder: 2
+          displayOrder: 3
         },
         {
           type: 'tab',
@@ -145,7 +145,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'invoice',
           head: <QueueListIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/invoices',
-          displayOrder: 4
+          displayOrder: 5
         },
         {
           type: 'tab',
@@ -154,7 +154,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'shopping-list',
           head: <ShoppingBagIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/shopping-list',
-          displayOrder: 5
+          displayOrder: 1
         },
         {
           type: 'tab',
@@ -163,7 +163,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'request-for-quotes',
           head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/request-for-quote',
-          displayOrder: 5
+          displayOrder: 2
         },
         {
           type: 'tab',
@@ -172,7 +172,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           props: 'my-company',
           head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company',
-          displayOrder: 10
+          displayOrder: 8
         }
       )
     }
@@ -184,7 +184,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         props: 'my-store',
         head: <BuildingStorefrontIcon className="text-gray-500 w-7 h-7" />,
         href: '/my-store/recommendations',
-        displayOrder: 14,
+        displayOrder: 11,
         childMenu: [
           {
             type: 'tab',

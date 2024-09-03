@@ -4,11 +4,11 @@ import { useUI } from '@components/ui/context'
 import withAuth from '@components/utils/withAuth'
 import { isB2BUser } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import LayoutAccount from '@components/Layout/LayoutAccount'
 import { SaveRFQForm } from '@components/account/RequestForQuote/Form'
 import { useRouter } from 'next/router'
 import { NEXT_SAVE_RFQ } from '@components/utils/constants'
 import axios from 'axios'
+import LayoutAccountWithoutNav from '@components/Layout/LayoutAccountWithoutNav'
 
 function SaveRFQ() {
   const router = useRouter()
@@ -70,5 +70,5 @@ function SaveRFQ() {
   )
 }
 
-SaveRFQ.LayoutAccount = LayoutAccount
-export default withDataLayer(withAuth(SaveRFQ), PAGE_TYPES.RequestQuote, true, LayoutAccount)
+SaveRFQ.LayoutAccountWithoutNav = LayoutAccountWithoutNav
+export default withDataLayer(withAuth(SaveRFQ), PAGE_TYPES.RequestQuote, true, LayoutAccountWithoutNav)

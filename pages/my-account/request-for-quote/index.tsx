@@ -9,10 +9,11 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { NEXT_GET_ALL_RFQ } from '@components/utils/constants'
+import { DATE_FORMAT, NEXT_GET_ALL_RFQ } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
+import moment from 'moment'
 
-function formatISODate(date:any) { return date.toISOString(); }
+function formatISODate(date: any) { return date.toISOString(); }
 
 // Calculate default dates
 const today = new Date();
@@ -29,7 +30,7 @@ function RequestQuote() {
   const [rfqData, setRfqData] = useState<any>([]);
   const router = useRouter()
 
-  const navigateToRFQ = (recordId:any) => {
+  const navigateToRFQ = (recordId: any) => {
     router.push(`/my-account/request-for-quote/rfq/${recordId}`);
   }
 
@@ -58,44 +59,47 @@ function RequestQuote() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
-  if (isLoading) { return (<Spinner/>)}
+  if (isLoading) { return (<Spinner />) }
 
   return (
     rfqData?.length > 0 ? (
-      <div className="p-4">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-lg font-semibold">{translate('label.myAccount.rfq.allRequestsForQuote')}</h2>
+      <div>
+        <div className=''>
+          <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+            Request for Quote (RFQ)
+          </h1>
         </div>
-        <div className="my-4 flex justify-between">
-          <p className="text-sm text-gray-600">{translate('label.myAccount.rfq.totalRequestForQuote', { count: rfqData.length })}</p>
-        </div>
-        <div className="border overflow-hidden shadow-sm">
+        <div className="overflow-hidden border my-7 rounded-2xl border-slate-200">
           <table className="min-w-full text-left">
             <thead>
-              <tr className="bg-gray-100 text-xs text-gray-600">
-                <th className="py-2 px-4">{translate('label.myAccount.rfq.status')}</th>
-                <th className="py-2 px-4">{translate('label.myAccount.rfq.poNumber')}</th>
-                <th className="py-2 px-4">{translate('label.myAccount.rfq.createdAt')}</th>
-                <th className="py-2 px-4"></th>
+              <tr className="bg-slate-50">
+                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">RFQ No.</th>
+                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.poNumber')}</th>
+                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.createdAt')}</th>
+                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.status')}</th>
+                <th className="w-20 px-2 py-3 text-sm font-semibold text-left border border-slate-200"></th>
               </tr>
             </thead>
             <tbody>
               {rfqData?.map?.((rfq: any) => (
-                <tr key={rfq.rfqNumber} className="text-xs border-b">
-                  <td className="py-2 px-4">{rfq?.status}</td>
-                  <td className="py-2 px-4">{rfq?.poNumber}</td>
-                  <td className="py-2 px-4">{rfq?.created}</td>
-                  <td className="py-2 px-4">
-                      <button className="flex items-center text-black" onClick={() => navigateToRFQ(rfq?.recordId)}>
-                       <EyeIcon className="h-5 w-5 mr-1" /> {translate('label.myAccount.rfq.view')} 
-                      </button>
+                <tr key={rfq.rfqNumber} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
+                  <td className="p-2 text-sm font-medium text-left cursor-pointer text-sky-600" onClick={() => navigateToRFQ(rfq?.recordId)}>{rfq?.rfqNumber}</td>
+                  <td className="p-2 text-sm text-left">{rfq?.poNumber}</td>
+                  <td className="p-2 text-sm text-left">{moment(new Date(rfq?.created)).format(DATE_FORMAT)}</td>
+                  <td className="p-2 text-sm text-left">
+                    <span className={`px-2 py-1 text-[10px] font-semibold leading-none truncate rounded-full ${rfq?.status == "QuoteCreated" ? 'label-confirmed' : rfq?.status == "Submitted" ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>{rfq?.status}</span>
+                  </td>
+                  <td className="p-2 text-sm" align='right'>
+                    <button className="flex text-black" onClick={() => navigateToRFQ(rfq?.recordId)}>
+                      <EyeIcon className="hidden w-4 h-4 text-black group-hover:flex" />
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>) : <div className="text-center p-4">{translate('label.myAccount.rfq.noRequestForQuoteFound')}</div>)
+      </div>) : <div className="p-4 text-center">{translate('label.myAccount.rfq.noRequestForQuoteFound')}</div>)
 }
 
 RequestQuote.LayoutAccount = LayoutAccount

@@ -7,7 +7,7 @@ import Link from "next/link";
 // Other Imports
 import { useUI } from '@components/ui';
 import { Guid } from '@commerce/types';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { DocumentIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from '@commerce/utils/use-translation'
 import { TransferIcon, } from '@components/shared/icons';
 import TransferSm from '@components/shared/icons/TransferSm';
@@ -52,18 +52,22 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket, openTransferBasketM
               </div>
             </Link>
             {!basket?.isLocked && (
-              <div className='flex items-center justify-center flex-shrink-0 gap-4 capitalize text-neutral-500 dark:text-neutral-300 z-99'> 
-                <PencilSquareIcon className="w-5 h-5 text-sm font-semibold cursor-pointer text-sky-600 hover:text-sky-800" onClick={(ev: any) => {
+              <div className='flex items-center justify-center flex-shrink-0 gap-4 capitalize text-neutral-500 dark:text-neutral-300'>
+                <button className='opacity-40 hover:opacity-100' onClick={(ev: any) => {
                   ev.preventDefault()
                   ev.stopPropagation()
-
                   router.push(`/my-account/request-for-quote/${basket?.id}`)
-                }}/>        
-                <ArrowPathRoundedSquareIcon  className="w-5 h-5 text-sm font-semibold cursor-pointer text-sky-600 hover:text-sky-800" onClick={(ev: any) => {
+                }}>
+                  <img src='/images/quote-request.png' alt='Request For Quotes' title='Request For Quote' className='w-5 h-5' />
+                </button>
+
+                <button className='opacity-40 hover:opacity-100' title='Transfer Basket' onClick={(ev: any) => {
                   ev.preventDefault()
                   ev.stopPropagation()
                   openTransferBasketModal()
-                }}/>
+                }}>
+                  <TransferIcon className="w-5 h-5 text-sm font-semibold opacity-50 cursor-pointer text-sky-600 hover:text-sky-800" />
+                </button>
                 <TrashIcon className="w-4 h-4 text-gray-400 cursor-pointer stroke-2 hover:text-red-500" onClick={(ev: any) => {
                   ev.preventDefault()
                   ev.stopPropagation()
