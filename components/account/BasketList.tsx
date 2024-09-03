@@ -56,7 +56,6 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket, openTransferBasketM
                 <PencilSquareIcon className="w-5 h-5 text-sm font-semibold cursor-pointer text-sky-600 hover:text-sky-800" onClick={(ev: any) => {
                   ev.preventDefault()
                   ev.stopPropagation()
-
                   router.push(`/my-account/request-for-quote/${basket?.id}`)
                 }}/>        
                 <ArrowPathRoundedSquareIcon  className="w-5 h-5 text-sm font-semibold cursor-pointer text-sky-600 hover:text-sky-800" onClick={(ev: any) => {

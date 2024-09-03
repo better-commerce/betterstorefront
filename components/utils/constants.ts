@@ -510,6 +510,13 @@ export module PageActions {
     ADD_TO_CART = 1,
   }
 }
+
+export const RFQStatusStyles:any = {
+  Cancelled: 'text-red-600',
+  Recieved: 'text-gray-600',
+  QuoteCreated: 'text-emerald-600', 
+};
+
 export const ALERT_TIMER = 5000
 
 export const DATE_FORMAT = 'DD-MMM-yy'

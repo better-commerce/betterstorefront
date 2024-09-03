@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import { NEXT_GET_ALL_RFQ } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
+import { RFQStatusStyles } from '@components/utils/constants'
 
 function formatISODate(date:any) { return date.toISOString(); }
 
@@ -82,7 +83,7 @@ function RequestQuote() {
             <tbody>
               {rfqData?.map?.((rfq: any) => (
                 <tr key={rfq.rfqNumber} className="text-xs border-b">
-                  <td className="py-2 px-4">{rfq?.status}</td>
+                  <td className={`py-2 px-4 ${RFQStatusStyles[rfq?.status]}`}>{rfq?.status}</td>
                   <td className="py-2 px-4">{rfq?.poNumber}</td>
                   <td className="py-2 px-4">{rfq?.created}</td>
                   <td className="py-2 px-4">
