@@ -36,7 +36,7 @@ function B2BQuotes({ quotes }: any) {
                       </>
                     ) : (
                       <>
-                        {`${quote?.customQuoteNo}`}
+                        {`${quote?.customQuoteNo}`} {quote?.rfqNumber !="" && ` - ${quote?.rfqNumber}`}
                       </>
                     )}
 
