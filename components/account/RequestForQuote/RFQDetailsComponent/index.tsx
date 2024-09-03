@@ -9,6 +9,8 @@ import { AlertType } from "@framework/utils/enums";
 import { useUI } from "@components/ui";
 import moment from "moment";
 import { priceFormat } from "@framework/utils/parse-util";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 
 export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: any) {
@@ -43,40 +45,40 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
 
     return (
         <div>
+            <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+                <li className='flex items-center text-10-mob sm:text-sm'>
+                    <Link href="/my-account/request-for-quote" passHref>
+                        <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > Request For Quote </span>
+                    </Link>
+                </li>
+                <li className='flex items-center text-10-mob sm:text-sm'>
+                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                        <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                    </span>
+                </li>
+                <li className="flex items-center text-10-mob sm:text-sm" >
+                    <span className={`font-semibold hover:text-gray-900 capitalize dark:text-black`} >
+                        {rfqData?.rfqNumber}
+                    </span>
+                </li>
+            </ol>
+            <div className='mb-4'>
+                <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+                    {rfqData?.rfqNumber && "RFQ #" + rfqData?.rfqNumber}
+                </h1>
+            </div>
+            <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="w-full pb-2">
                 <div className="w-full">
                     <div className="flex justify-between">
-                        <div className="relative pl-9">
-                            <a
-                                href="#"
-                                className="absolute left-0 top-2/4 -translate-y-2/4 dark:text-gray-900"
-                                onClick={() => {
-                                    router.push('/my-account/request-for-quote');
-                                }}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
-                                    fill="currentColor"
-                                    className="bi bi-arrow-left"
-                                    viewBox="0 0 16 16"
-                                >
-                                    {' '}
-                                    <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-                                </svg>
-                            </a>
-                            {
-                                //let orderLabel.order=  Details";
-                            }
-
+                        <div className="relative">
                             <div className="w-full">
                                 <h5 className="font-bold text-18 text-secondary-full-opacity ">
-                                    RFQ Details
+                                    Company
                                 </h5>
 
                                 <p className="text-sm text-black-light dark:text-gray-900">
-                                    {rfqData?.rfqNumber && "#" + rfqData?.rfqNumber}
+                                    {rfqData?.companyName}
                                 </p>
 
                             </div>
@@ -111,11 +113,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                 <div className="flex justify-start w-full gap-1">
                     <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.email')}:</span>
                     <span className="text-sm font-normal text-black">{rfqData?.email}</span>
-                </div>
-                <div className="flex justify-start w-full gap-1">
-                    <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.company')}:</span>
-                    <span className="text-sm font-normal text-black">{rfqData?.companyName}</span>
-                </div>
+                </div>               
                 {rfqData?.notes &&
                     <div className="flex justify-start w-full gap-1">
                         <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.notes')}:</span>

@@ -9,10 +9,12 @@ import { useRouter } from 'next/router'
 import { NEXT_SAVE_RFQ } from '@components/utils/constants'
 import axios from 'axios'
 import LayoutAccountWithoutNav from '@components/Layout/LayoutAccountWithoutNav'
+import Link from 'next/link'
+import { ChevronRightIcon } from '@heroicons/react/24/solid'
 
 function SaveRFQ() {
   const router = useRouter()
-  const { user, changeMyAccountTab, cartItems, setAlert  } = useUI()
+  const { user, changeMyAccountTab, cartItems, setAlert } = useUI()
   const basketId = router?.query?.basketId?.[0]
   const translate = useTranslation()
 
@@ -20,20 +22,20 @@ function SaveRFQ() {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.requestQuote'))
   }, [])
 
-  const calculateValidDays = (validUntilDate :any) => {
-    const today:any = new Date();
-    const validUntil:any = new Date(validUntilDate);
-    const msPerDay = 24 * 60 * 60 * 1000; 
+  const calculateValidDays = (validUntilDate: any) => {
+    const today: any = new Date();
+    const validUntil: any = new Date(validUntilDate);
+    const msPerDay = 24 * 60 * 60 * 1000;
     return Math.ceil((validUntil - today) / msPerDay);
   };
-  
+
 
   // Function to convert date to ISO 8601 format
-  const formatToISO8601 = (dateStr:any) => new Date(dateStr).toISOString();
+  const formatToISO8601 = (dateStr: any) => new Date(dateStr).toISOString();
 
 
   const handleFormSubmit = async (data: any) => {
-    const { products, ...values} = data
+    const { products, ...values } = data
     const validUntilISO = formatToISO8601(values.validUntil);
     const validDays = calculateValidDays(values.validUntil);
 
@@ -45,28 +47,47 @@ function SaveRFQ() {
       validUntil: validUntilISO,
       status: "Submitted",
     };
-    const result = await axios.post(NEXT_SAVE_RFQ, {data : sanitizedData})
+    const result = await axios.post(NEXT_SAVE_RFQ, { data: sanitizedData })
     if (!result?.data) {
       setAlert({ type: 'error', msg: "Something went wrong" })
       return
     }
-    else{
+    else {
       setAlert({ type: 'success', msg: result?.data?.message })
       const rfqId = result?.data?.recordId
       router.push('/my-account/request-for-quote/rfq/' + rfqId)
     }
-    
+
   }
-  
+
   useEffect(() => {
     if (!isB2BUser(user)) {
       router.push('/')
-    } 
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <SaveRFQForm handleFormSubmit={handleFormSubmit} cartItems={cartItems} basketId={basketId} />
+    <div className='flex flex-col'>
+      <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+        <li className='flex items-center text-10-mob sm:text-sm'>
+          <Link href="/my-account/my-company/shopping-list" passHref>
+            <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > Shopping List </span>
+          </Link>
+        </li>
+        <li className='flex items-center text-10-mob sm:text-sm'>
+          <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+            <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+          </span>
+        </li>
+        <li className="flex items-center text-10-mob sm:text-sm" >
+          <span className={`font-semibold hover:text-gray-900 capitalize dark:text-black`} >
+            Request For Quote
+          </span>
+        </li>
+      </ol>
+      <SaveRFQForm handleFormSubmit={handleFormSubmit} cartItems={cartItems} basketId={basketId} />
+    </div>
   )
 }
 

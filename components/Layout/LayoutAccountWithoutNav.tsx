@@ -201,7 +201,7 @@ const LayoutAccountWithoutNav: FC<Props & IExtraProps> = ({ children, config, pa
             <MembershipBanner user={user} />
             <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-32">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-               <div className='pt-0 sm:col-span-12 sm:pt-8 z-1'>
+               <div className='pt-0 sm:col-span-12 sm:pt-2 z-1'>
                   {children}
                 </div>
               </div>

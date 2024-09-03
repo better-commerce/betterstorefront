@@ -156,54 +156,51 @@ function MyInvoices({ deviceInfo }: any) {
           Invoices
         </h1>
         {data?.result?.length > 0 ? (
-          <div className="mt-10 overflow-x-auto sm:overflow-x-hidden">
-            <table className="min-w-full bg-white border border-gray-200">
+          <div className="mt-8 overflow-hidden border rounded-2xl border-slate-200">
+            <table className="min-w-full text-left">
               <thead>
                 <tr className="w-full text-xs bg-[#f1f5f7] leading-normal">
-                  <td className="py-2 px-4 text-left text-xs !border">Invoice No</td>
-                  <td className="px-4 py-2 text-xs text-left">Invoice Date</td>
-                  <td className="px-4 py-2 text-xs text-left">Order No</td>
-                  <td className="px-4 py-2 text-xs text-left">Order Date</td>
-                  <td className="px-4 py-2 text-xs text-left">Invoice Amount</td>
-                  <td className="px-4 py-2 text-xs text-left">Paid Amount</td>
-                  <td className="px-4 py-2 text-xs text-left">Due Amount</td>
-                  <td className="px-4 py-2 text-xs text-left">Due Date</td>
-                  <td className="px-4 py-2 text-xs text-left">Status</td>
-                  <td className="px-4 py-2 text-xs text-left">Over Due</td>
+                  <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">Invoice No</th>
+                  <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">Invoice Date</th>
+                  <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">Order No</th>
+                  <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">Invoice Amount</th>
+                  <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">Paid Amount</th>
+                  <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.result?.map((invoice: any, idx: any) => (
-                  <tr key={invoice?.recordId}>
-                    <td className="px-4 py-2 text-xs text-left border-b text-blue">
-                      <div onClick={() => downloadOrderInvoice(invoice)} className='flex gap-2 cursor-pointer '>
-                        <img className="w-3 h-3" src="/images/pdf.png" alt="" />{invoice?.customNo}
+                  <tr key={invoice?.recordId} className="text-xs bg-white border-b shadow-none border-slate-200 hover:shadow hover:bg-gray-100">
+                    <td className="p-2 text-sm text-left">
+                      <div onClick={() => downloadOrderInvoice(invoice)} className='flex items-center gap-2 font-medium cursor-pointer text-sky-500 '>
+                        <img className="w-4 h-4" src="/images/pdf.png" alt="" />{invoice?.customNo}
                       </div>
                     </td>
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      {deliveryDateFormat(invoice?.invoiceDate)}
-                    </td>
-                    <td className="px-4 py-2 text-xs text-left border-b">{invoice?.orderNo}</td>
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      {deliveryDateFormat(invoice?.orderDate)}
-                    </td>
-
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      {invoice?.grandTotal}
-                    </td>
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      {invoice?.paidAmount}
-                    </td>
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      {invoice?.dueAmount.toFixed(2)}{' '}
-                    </td>
-                    <td className="px-4 py-2 text-xs text-left border-b">{deliveryDateFormat(invoice?.dueDate)}</td>
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      {invoice?.paymentStatus}
-                    </td>
-                    <td className="px-4 py-2 text-xs text-left border-b">
-                      <span className={`p-1 px-4 rounded-md ${invoice?.isOverDue ? 'label-confirmed' : 'label-cancelled'
-                        }`}>{invoice?.isOverDue ? 'Yes' : 'No'}</span>
+                    <td className="p-2 text-sm text-left"> {deliveryDateFormat(invoice?.invoiceDate)} </td>
+                    <td className="p-2 text-sm text-left">{invoice?.orderNo}</td>
+                    <td className="p-2 text-sm text-left"> {invoice?.currencySymbol}{invoice?.grandTotal} </td>
+                    <td className="p-2 text-sm text-left"> {invoice?.currencySymbol}{invoice?.paidAmount} </td>
+                    <td className="p-2 text-sm text-left">
+                      {invoice?.paymentStatus == 0 && <span className='px-3 py-1 text-xs rounded-full label-pending'>Pending</span>}
+                      {invoice?.paymentStatus == 1 && <span className='px-3 py-1 text-xs rounded-full label-confirmed'>Authorized</span>}
+                      {invoice?.paymentStatus == 2 && <span className='px-3 py-1 text-xs rounded-full label-confirmed'>Paid</span>}
+                      {invoice?.paymentStatus == 3 && <span className='px-3 py-1 text-xs rounded-full label-Cancelled'>Declined</span>}
+                      {invoice?.paymentStatus == 4 && <span className='px-3 py-1 text-xs rounded-full label-Cancelled'>Cancelled</span>}
+                      {invoice?.paymentStatus == 5 && <span className='px-3 py-1 text-xs rounded-full label-Cancelled'>Cancelled By PSP</span>}
+                      {invoice?.paymentStatus == 6 && <span className='px-3 py-1 text-xs rounded-full label-blue'>Refunded</span>}
+                      {invoice?.paymentStatus == 7 && <span className='px-3 py-1 text-xs rounded-full label-blue'>Charging</span>}
+                      {invoice?.paymentStatus == 8 && <span className='px-3 py-1 text-xs rounded-full label-Cancelled'>Voided</span>}
+                      {invoice?.paymentStatus == 9 && <span className='px-3 py-1 text-xs rounded-full label-confirmed'>Require Pre-Auth</span>}
+                      {invoice?.paymentStatus == 10 && <span className='px-3 py-1 text-xs rounded-full label-pending'>Problem InRefund</span>}
+                      {invoice?.paymentStatus == 11 && <span className='px-3 py-1 text-xs rounded-full label-pending'>Problem In Post-Auth</span>}
+                      {invoice?.paymentStatus == 12 && <span className='px-3 py-1 text-xs rounded-full label-pending'>Awaiting Post Auth Response</span>}
+                      {invoice?.paymentStatus == 13 && <span className='px-3 py-1 text-xs rounded-full label-Cancelled'>Request To Cancel Pre-Auth</span>}
+                      {invoice?.paymentStatus == 14 && <span className='px-3 py-1 text-xs rounded-full label-Cancelled'>Problem In Cancel Pre-Auth</span>}
+                      {invoice?.paymentStatus == 15 && <span className='px-3 py-1 text-xs rounded-full label-blue'>Po Received</span>}
+                      {invoice?.paymentStatus == 16 && <span className='px-3 py-1 text-xs rounded-full label-pending'>Duplicate Request</span>}
+                      {invoice?.paymentStatus == 17 && <span className='px-3 py-1 text-xs rounded-full label-confirmed'>Initiated</span>}
+                      {invoice?.paymentStatus == 18 && <span className='px-3 py-1 text-xs rounded-full label-blue'>Retry Refund</span>}
+                      {invoice?.paymentStatus == 19 && <span className='px-3 py-1 text-xs rounded-full label-confirmed'>Authorized By Webhook</span>}
                     </td>
                   </tr>
                 ))}

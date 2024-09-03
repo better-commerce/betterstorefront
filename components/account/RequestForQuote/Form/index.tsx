@@ -1,4 +1,4 @@
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useSaveFormValidationSchema } from "../SaveFormValidationSchema";
 import { useSaveFormConfig } from "../SaveFormConfig";
@@ -43,7 +43,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   useEffect(() => {
     fetchB2BUsers();
   }, []);
-  
+
 
   // Initialize Formik
   const formik: any = useFormik({
@@ -60,7 +60,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       validUntil: '',
       assignedTo: '',
     },
-    validationSchema ,
+    validationSchema,
     onSubmit: async () => { },
   });
 
@@ -133,12 +133,12 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   };
 
   return (
-    <div className="flex flex-col w-full">
-      <h1 className="mb-6 text-2xl font-semibold">{translate('label.myAccount.rfq.requestForQuote')}</h1>
+    <div className="flex flex-col w-full my-4">
+      <h1 className="mb-6 text-2xl font-semibold">Request For Quote</h1>
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2">
           {Object?.keys(formConfig?.fields).map((fieldKey) => {
-            const field:any = formConfig.fields[fieldKey];
+            const field: any = formConfig.fields[fieldKey];
             if (field.type === 'select') {
               return (
                 <div key={fieldKey}>
@@ -194,37 +194,34 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
             );
           })}
         </div>
-
-        <div className="w-full">
+        <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
+        <div className="w-full my-4">
           <h2 className="mb-4 text-xl font-semibold">{translate('label.myAccount.rfq.lineItems')}</h2>
-          <div className="grid grid-cols-1 gap-4 mb-6">
+          <div className="flex flex-col w-full p-4 border divide-y divide-gray-200 bg-slate-50 border-slate-200 rounded-2xl">
             {lines?.map((item: any, index: number) => (
-              <div
-                key={index}
-                className="grid grid-cols-12 gap-2 p-2 border border-gray-300 rounded-md bg-gray-50"
-              >
-                <div className="col-span-4">
-                  <a href="#" className="text-xs text-blue-600 underline">{item?.stockCode} - {item?.productName}</a>
-                </div>
-                <div className="grid grid-cols-7 col-span-6 space-x-2">
+              <div key={index} className="flex items-center justify-between gap-4" >
+                <span className="flex flex-col gap-2">
+                  <span className="text-sm font-semibold text-black">{item?.stockCode} - {item?.productName}</span>
                   <p className="col-span-1 text-xs">{translate('label.myAccount.rfq.quantity')}: {item?.qty}</p>
+                </span>
+                <div className="flex justify-start gap-4">
                   <p className="col-span-3 text-xs">{translate('label.myAccount.rfq.targetPrice')}: {item?.targetPrice}</p>
                   <p className="col-span-3 text-xs">{translate('label.myAccount.rfq.price')}: {item?.price}</p>
                 </div>
-                <div className="grid grid-cols-2 col-span-2 space-x-4">
-                  <PencilIcon className="w-4 h-4 col-span-1 text-gray-600 cursor-pointer" onClick={() => openModal(item, 'edit')} />
-                  <TrashIcon className="w-4 h-4 col-span-1 text-red-600 cursor-pointer" onClick={() => openModal(item, 'delete')} />
+                <div className="flex justify-end gap-3">
+                  <PencilSquareIcon className="w-4 h-4 col-span-1 text-gray-500 cursor-pointer hover:text-black" onClick={() => openModal(item, 'edit')} />
+                  <TrashIcon className="w-4 h-4 col-span-1 text-gray-400 cursor-pointer hover:text-red-500" onClick={() => openModal(item, 'delete')} />
                 </div>
               </div>
             ))}
           </div>
         </div>
-
-        <div className="flex justify-between mt-6 space-x-4">
-          <button type="button" className="px-4 py-2 text-gray-700 bg-transparent border border-gray-600 rounded-md" onClick={() => router.back()} >
+        <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
+        <div className="flex justify-between mt-4 space-x-4">
+          <button type="button" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => router.back()} >
             {translate('label.myAccount.rfq.backToList')}
           </button>
-          <button type="submit" className="px-4 py-2 text-white rounded-md btn btn-primary" >
+          <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" >
             Submit Request
           </button>
         </div>
