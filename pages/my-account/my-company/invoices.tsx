@@ -12,15 +12,17 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import B2BQuotes from '@components/account/B2BQuotes'
+import { generatePDF } from '@components/utils/order'
 import axios from 'axios'
-import { NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_GET_ORDERS } from '@components/utils/constants'
+import { NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_DOWNLOAD_INVOICE, NEXT_GET_INVOICE, NEXT_GET_ORDERS } from '@components/utils/constants'
 import B2BOrders from '@components/account/Orders/B2BOrders'
+import { deliveryDateFormat } from '@framework/utils/parse-util'
 
 function MyInvoices({ deviceInfo }: any) {
   const [isShow, setShow] = useState(true)
   const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
-  const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder } = useUI()
+  const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder, setAlert, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const router = useRouter()
   const [isAdmin, setIsAdmin] = useState(false)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
@@ -28,6 +30,8 @@ function MyInvoices({ deviceInfo }: any) {
   const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder)
+  const [data, setData] = useState<any>([])
+
   useEffect(() => {
     setIsShowDetailedOrder(displayDetailedOrder)
   }, [displayDetailedOrder])
@@ -112,17 +116,109 @@ function MyInvoices({ deviceInfo }: any) {
     fetchData()
   }, [b2bUsers])
 
+  // Fetch Invoice
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      if (!user?.companyId) return;
+      try {
+        const response: any = await axios.post(NEXT_GET_INVOICE, {
+          companyId: user?.companyId,
+          currentPage: 1,
+          pageSize: 1000,
+          fromDate: '',
+          toDate: '',
+        })
+        setData(response?.data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+      fetchInvoice()
+  }, [user?.companyId])
+
+  async function downloadOrderInvoice(order: any) {
+    setOverlayLoaderState({ visible: true, message: 'Generating invoice...', })
+    const res: any = await axios.post(NEXT_DOWNLOAD_INVOICE, {
+       orderId: order?.orderId,
+    })
+    if (res?.data) {
+       generatePDF(res?.data?.base64Pdf, order);
+    } else {
+      console.log('invoice Details not found')
+    }
+    hideOverlayLoaderState()
+ }
+
   return (
     <div className={'orders bg-white dark:bg-transparent'}>
-      <div className=''>
+      <div>
         <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
           Invoices
         </h1>
+        {data?.result?.length > 0 ? (
+          <div className="mt-10 overflow-x-auto sm:overflow-x-hidden">
+            <table className="min-w-full bg-white border border-gray-200">
+              <thead>
+                <tr className="w-full text-xs bg-[#f1f5f7] leading-normal">
+                  <td className="py-2 px-4 text-left text-xs !border">Invoice No</td>
+                  <td className="py-2 px-4 text-left text-xs">Invoice Date</td>
+                  <td className="py-2 px-4 text-left text-xs">Order No</td>
+                  <td className="py-2 px-4 text-left text-xs">Order Date</td>
+                  <td className="py-2 px-4 text-left text-xs">Invoice Amount</td>
+                  <td className="py-2 px-4 text-left text-xs">Paid Amount</td>
+                  <td className="py-2 px-4 text-left text-xs">Due Amount</td>
+                  <td className="py-2 px-4 text-left text-xs">Due Date</td>
+                  <td className="py-2 px-4 text-left text-xs">Status</td>
+                  <td className="py-2 px-4 text-left text-xs">Over Due</td>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.result?.map((invoice: any, idx: any) => (
+                  <tr key={invoice?.recordId}>
+                    <td className="py-2 px-4 text-left text-xs border-b text-blue">
+                      <div onClick={() => downloadOrderInvoice(invoice)} className=' flex gap-2 cursor-pointer'>
+                      <img className="h-3 w-3" src="/images/pdf.png" alt=""/>{invoice?.invoiceNo}
+                      </div>
+                    </td>
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                    {deliveryDateFormat(invoice?.invoiceDate)}
+                    </td>
+                    <td className="py-2 px-4 text-left text-xs border-b">{invoice?.orderNo}</td>
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                    {deliveryDateFormat(invoice?.orderDate)}
+                    </td>
+
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                      {invoice?.grandTotal}
+                    </td>
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                      {invoice?.paidAmount}
+                    </td>
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                      {invoice?.dueAmount.toFixed(2)}{' '}
+                    </td>
+                    <td className="py-2 px-4 text-left text-xs border-b">{deliveryDateFormat(invoice?.dueDate)}</td>
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                      {invoice?.paymentStatus}
+                    </td>
+                    <td className="py-2 px-4 text-left text-xs border-b">
+                    <span className={`p-1 px-4 rounded-md ${
+                        invoice?.isOverDue ? 'label-confirmed' : 'label-cancelled'
+                      }`}>{invoice?.isOverDue ? 'Yes' : 'No'}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div>
+            <h3>No Invoice Available</h3>
+          </div>
+        )}
       </div>
-      <div>
-        <h3>No Invoice Available</h3>
-      </div>
-    </div>)
+    </div>
+  )
 }
 
 MyInvoices.LayoutAccount = LayoutAccount

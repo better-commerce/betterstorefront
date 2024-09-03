@@ -4,7 +4,7 @@ import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
 import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
-import { ArrowPathRoundedSquareIcon, BookOpenIcon, ClipboardDocumentListIcon, HeartIcon, UserIcon } from '@heroicons/react/24/solid'
+import { ArrowPathRoundedSquareIcon, BookOpenIcon, ClipboardDocumentListIcon, HeartIcon, ListBulletIcon, QueueListIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
 
 function SideMenu({ deviceInfo, featureToggle }: any) {
@@ -125,7 +125,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           text: translate('label.myAccount.myCompanyMenus.order'),
           mtext: translate('label.myAccount.myCompanyMenus.order'),
           props: 'orders',
-          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/orders',
           displayOrder: 1
         },
@@ -134,7 +134,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           text: translate('label.myAccount.myCompanyMenus.quote'),
           mtext: translate('label.myAccount.myCompanyMenus.quote'),
           props: 'quotes',
-          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          head: <ListBulletIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/quotes',
           displayOrder: 2
         },
@@ -143,7 +143,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           text: translate('label.myAccount.myCompanyMenus.invoice'),
           mtext: translate('label.myAccount.myCompanyMenus.invoice'),
           props: 'invoice',
-          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          head: <QueueListIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/invoices',
           displayOrder: 4
         },
@@ -152,7 +152,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           text: translate('label.myAccount.myCompanyMenus.shoppingList'),
           mtext: translate('label.myAccount.myCompanyMenus.shoppingList'),
           props: 'shopping-list',
-          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          head: <ShoppingBagIcon className="text-gray-500 w-7 h-7" />,
           href: '/my-account/my-company/shopping-list',
           displayOrder: 5
         },
@@ -232,7 +232,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
       {isMobile ? (
         <>
           <hr className="mt-6 mb-2 border-slate-200 dark:border-slate-200"></hr>
-          <div className="flex w-full gap-0">
+          <div className="flex w-full gap-0 bg-white">
             {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
               <>
                 {item.text == myAccountActiveTab ? (
