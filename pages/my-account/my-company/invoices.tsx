@@ -14,9 +14,10 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import B2BQuotes from '@components/account/B2BQuotes'
 import { generatePDF } from '@components/utils/order'
 import axios from 'axios'
-import { NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_DOWNLOAD_INVOICE, NEXT_GET_INVOICE, NEXT_GET_ORDERS } from '@components/utils/constants'
+import { DATE_FORMAT, NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_DOWNLOAD_INVOICE, NEXT_GET_INVOICE, NEXT_GET_ORDERS } from '@components/utils/constants'
 import B2BOrders from '@components/account/Orders/B2BOrders'
 import { deliveryDateFormat } from '@framework/utils/parse-util'
+import moment from 'moment'
 
 function MyInvoices({ deviceInfo }: any) {
   const [isShow, setShow] = useState(true)
@@ -176,7 +177,7 @@ function MyInvoices({ deviceInfo }: any) {
                         <img className="w-4 h-4" src="/images/pdf.png" alt="" />{invoice?.customNo}
                       </div>
                     </td>
-                    <td className="p-2 text-sm text-left"> {deliveryDateFormat(invoice?.invoiceDate)} </td>
+                    <td className="p-2 text-sm text-left">{moment(new Date(invoice?.invoiceDate)).format(DATE_FORMAT)}</td>
                     <td className="p-2 text-sm text-left">{invoice?.orderNo}</td>
                     <td className="p-2 text-sm text-left"> {invoice?.currencySymbol}{invoice?.grandTotal} </td>
                     <td className="p-2 text-sm text-left"> {invoice?.currencySymbol}{invoice?.paidAmount} </td>

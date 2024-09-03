@@ -5,12 +5,13 @@ import {
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { NEXT_GET_RETURNS } from '@components/utils/constants'
+import { DATE_FORMAT, NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
 import { generateUri } from '@commerce/utils/uri-util'
+import moment from 'moment'
 
 export default function MyReturns() {
   const { user, basketId, setCartItems, openCart, cartItems } = useUI()
@@ -97,41 +98,39 @@ export default function MyReturns() {
                 <div className="px-4 py-2 border bg-gray-50 border-slate-300 sm:rounded-lg sm:py-2 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8">
                   <dl className="flex-auto space-y-4 text-sm text-gray-600 divide-y divide-gray-200 md:divide-y-0 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-6 lg:w-full lg:flex-none lg:gap-x-8">
                     <div className="flex justify-between md:block">
-                      <dt className="text-lg font-bold text-gray-900">
+                      <dt className="text-lg font-semibold text-gray-900">
                         {translate('label.returnReason.returnNumText')}
                       </dt>
                       <dd className="md:mt-1">{order.returnNo}</dd>
                     </div>
                     <div className="flex justify-between pt-4 md:block md:pt-0">
-                      <dt className="text-lg font-bold text-gray-900">
+                      <dt className="text-lg font-semibold text-gray-900">
                         {translate('label.common.datePlacedText')}
                       </dt>
                       <dd className="md:mt-1">
-                        <time dateTime={order.returnDate}>
-                          {new Date(order.returnDate).toDateString()}
-                        </time>
+                        {moment(new Date(order.returnDate)).format(DATE_FORMAT)}
                       </dd>
                     </div>
                     <div className="flex justify-between pt-4 font-medium text-gray-900 md:block md:pt-0">
                       {order?.lineItems?.map((product: any) => (
-                          <>
-                            <dt className="text-lg font-bold text-gray-900">
-                              {translate('label.orderDetails.refundAmtText')}
-                            </dt>
-                            <dd className="md:mt-1">
-                              {product?.price?.raw?.withTax > 0 ? (
-                                isIncludeVAT ? (
-                                  product?.price?.formatted?.withTax
-                                ) : (
-                                  product?.price?.formatted?.withoutTax
-                                )
-                                ) : (
-                                  <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
-                                    {translate('label.orderSummary.freeText')}
-                                  </span>
-                              )}
-                            </dd>
-                          </>
+                        <>
+                          <dt className="text-lg font-semibold text-gray-900">
+                            {translate('label.orderDetails.refundAmtText')}
+                          </dt>
+                          <dd className="md:mt-1">
+                            {product?.price?.raw?.withTax > 0 ? (
+                              isIncludeVAT ? (
+                                product?.price?.formatted?.withTax
+                              ) : (
+                                product?.price?.formatted?.withoutTax
+                              )
+                            ) : (
+                              <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                                {translate('label.orderSummary.freeText')}
+                              </span>
+                            )}
+                          </dd>
+                        </>
                       ))}
                     </div>
                   </dl>

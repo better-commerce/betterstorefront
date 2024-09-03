@@ -2,7 +2,8 @@ import Spinner from '@components/ui/Spinner'
 import React, { useState } from 'react'
 import QuoteDetail from './QuoteDetail'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { QuoteStatus } from '@components/utils/constants'
+import { DATE_FORMAT, QuoteStatus } from '@components/utils/constants'
+import moment from 'moment'
 
 function B2BQuotes({ quotes }: any) {
   const translate = useTranslation()
@@ -31,7 +32,7 @@ function B2BQuotes({ quotes }: any) {
                   <h2 className="font-semibold mob-font-14 sm:text-2xl font-Inter text-brand-blue">
                     {quote?.quoteName != "" ? (
                       <>
-                       {`${quote?.customQuoteNo} -`} {quote?.quoteName} 
+                        {`${quote?.customQuoteNo} -`} {quote?.quoteName}
                       </>
                     ) : (
                       <>
@@ -50,8 +51,7 @@ function B2BQuotes({ quotes }: any) {
                 {quote?.status != QuoteStatus.CONVERTED && quote?.status != QuoteStatus.PAYMENT_LINK_SENT &&
                   <div className="flex flex-col gap-y-2 sm:gap-y-0 sm:flex-row gap-x-6">
                     <span className="font-Inter font-light leading-4 mob-font-14 text-sm tracking-[2%]">
-                      <span className='font-semibold text-black'>Valid Until:</span> {`${new Date(quote?.validUntil).getUTCDate()}/${new Date(quote?.validUntil).getUTCMonth() + 1
-                        }/${new Date(quote?.validUntil).getUTCFullYear()}`}
+                      <span className='font-semibold text-black'>Valid Until:</span> {moment(new Date(quote?.validUntil)).format(DATE_FORMAT)}                      
                     </span>
                     <span className="font-Inter font-light leading-4 mob-font-14 text-sm tracking-[2%]">
                       <span className='font-semibold text-black'>Validity Days:</span> {`${quote?.validDays} ${translate('label.product.productSidebar.daysText')}`}
