@@ -142,7 +142,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
             if (field.type === 'select') {
               return (
                 <div key={fieldKey}>
-                  <label className="block text-sm font-medium mb-2">{field.label}</label>
+                  <label className="flex text-sm font-medium mb-2"> <p>{field.label}</p> {field?.required && <p className="text-red-600">*</p>} </label>
                   <select
                     name={fieldKey}
                     className="w-full p-2 border border-gray-300 rounded-md"
@@ -166,7 +166,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
             return (
               <div key={fieldKey} className={`${field?.type === 'textarea' ? "col-span-2" : ""}`}>
-                <label className="block text-sm font-medium mb-2">{field.label}</label>
+                <label className="flex text-sm font-medium mb-2"> <p>{field.label}</p> {field?.required && <p className="text-red-600">*</p>} </label>
                 {field.type === 'textarea' ? (
                   <textarea
                     name={fieldKey}
@@ -206,14 +206,14 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 <div className="col-span-4">
                   <a href="#" className="text-xs underline text-blue-600">{item?.stockCode} - {item?.productName}</a>
                 </div>
-                <div className="col-span-6 grid grid-cols-7 space-x-2">
-                  <p className="text-xs col-span-1">{translate('label.myAccount.rfq.quantity')}: {item?.qty}</p>
+                <div className="col-span-6 grid grid-cols-8 space-x-2">
+                  <p className="text-xs col-span-2">{translate('label.myAccount.rfq.quantity')}: {item?.qty}</p>
                   <p className="text-xs col-span-3">{translate('label.myAccount.rfq.targetPrice')}: {item?.targetPrice}</p>
                   <p className="text-xs col-span-3">{translate('label.myAccount.rfq.price')}: {item?.price}</p>
                 </div>
                 <div className="col-span-2 grid grid-cols-2 space-x-4">
-                  <PencilIcon className="col-span-1 h-4 w-4 text-gray-600 cursor-pointer" onClick={() => openModal(item, 'edit')} />
-                  <TrashIcon className="col-span-1 h-4 w-4 text-red-600 cursor-pointer" onClick={() => openModal(item, 'delete')} />
+                  <PencilIcon className="col-span-1 mx-auto h-4 w-4 text-gray-600 cursor-pointer" onClick={() => openModal(item, 'edit')} />
+                  <TrashIcon className="col-span-1 mx-auto h-4 w-4 text-red-600 cursor-pointer" onClick={() => openModal(item, 'delete')} />
                 </div>
               </div>
             ))}

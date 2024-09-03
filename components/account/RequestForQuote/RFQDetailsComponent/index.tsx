@@ -51,7 +51,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                 <p><strong>{translate('label.myAccount.rfq.name')}:</strong> {rfqData?.firstName} {rfqData?.lastName}</p>
                 <p><strong>{translate('label.myAccount.rfq.email')}:</strong> {rfqData?.email || translate('label.myAccount.rfq.notAvailable')}</p>
                 <p><strong>{translate('label.myAccount.rfq.company')}:</strong> {rfqData?.companyName}</p>
-                <p><strong>{translate('label.myAccount.rfq.notes')}:</strong> {rfqData?.notes}</p>
+                {rfqData?.notes && <p><strong>{translate('label.myAccount.rfq.notes')}:</strong> {rfqData?.notes}</p>}
             </div>
 
             <h2 className="text-xl font-semibold mb-2">{translate('label.myAccount.rfq.lineItems')}</h2>
