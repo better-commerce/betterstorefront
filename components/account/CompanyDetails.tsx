@@ -41,15 +41,15 @@ function CompanyDetails({ user }: any) {
         <div className='flex gap-10 mt-6 justify-normal'>
           <div className='flex flex-col gap-1'>
             <span className='text-sm font-semibold text-black'>Credit Limit:</span>
-            <span className='text-sm font-normal text-black'>{details?.creditLimit?.formatted?.withTax}</span>
+            <span className='text-sm font-normal text-white bg-[#323a46] p-2 rounded'>{details?.creditLimit?.formatted?.withTax}</span>
           </div>
           <div className='flex flex-col gap-1'>
             <span className='text-sm font-semibold text-black'>Credit Available:</span>
-            <span className='text-sm font-normal text-black'>{details?.creditAvailable?.formatted?.withTax}</span>
+            <span className='text-sm font-normal text-white bg-[#1abc9c] p-2 rounded'>{details?.creditAvailable?.formatted?.withTax}</span>
           </div>
           <div className='flex flex-col gap-1'>
             <span className='text-sm font-semibold text-black'>Used Credit:</span>
-            <span className='text-sm font-normal text-black'>{details?.usedCredit?.formatted?.withTax}</span>
+            <span className='text-sm font-normal text-white bg-[#6c757d] p-2 rounded'>{details?.usedCredit?.formatted?.withTax}</span>
           </div>
         </div>
       </div>
