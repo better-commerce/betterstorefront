@@ -17806,7 +17806,7 @@ body:has(.engage-announcement-bar){
 }
 
 .max-demo-list{
-  max-height: 35vh;
+  max-height: 30vh;
   overflow-y: auto;
 }
 .max-demo-list::-webkit-scrollbar {
