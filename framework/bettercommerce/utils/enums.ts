@@ -33,3 +33,9 @@ export enum CheckoutStep {
   DELIVERY_TYPE_SELECT = 'select-delivery-type',
   REVIEW = 'review',
 }
+
+export enum StatusStyles {
+  Cancelled = 'text-red-600',
+  Submitted = 'text-gray-600',
+  QuoteCreated = 'text-emerald-600',
+};
