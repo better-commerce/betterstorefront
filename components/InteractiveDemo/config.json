@@ -271,9 +271,9 @@
         },
         {
           "group": "B2B",
-          "urlCode": "account-credit-facility",
-          "name": "Account Credit Facility",
-          "url": "https://fashion.bettercommerce.tech/my-account/my-company?tab=company",
+          "urlCode": "address-management",
+          "name": "Address Management",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company?tab=addresses",
           "displayOrder": 46,
           "active": 1
         },
