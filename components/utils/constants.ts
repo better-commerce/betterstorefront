@@ -511,7 +511,7 @@ export module PageActions {
   }
 }
 
-export const StatusStyles:any = {
+export const RFQStatusStyles:any = {
   Cancelled: 'text-red-600',
   Recieved: 'text-gray-600',
   QuoteCreated: 'text-emerald-600', 
