@@ -142,7 +142,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
             if (field.type === 'select') {
               return (
                 <div key={fieldKey}>
-                  <label className="block mb-2 text-sm font-medium">{field.label}</label>
+                  <label className="block mb-2 text-sm font-medium">{field.label} {field?.required && <span className="text-red-600">*</span>}</label>
                   <select
                     name={fieldKey}
                     className="w-full p-2 border border-gray-300 rounded-md"
@@ -166,7 +166,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
             return (
               <div key={fieldKey} className={`${field?.type === 'textarea' ? "col-span-2" : ""}`}>
-                <label className="block mb-2 text-sm font-medium">{field.label}</label>
+                <label className="block mb-2 text-sm font-medium">{field.label} {field?.required && <span className="text-red-600">*</span>}</label>
                 {field.type === 'textarea' ? (
                   <textarea
                     name={fieldKey}

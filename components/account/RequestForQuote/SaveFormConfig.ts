@@ -34,7 +34,7 @@ export const useSaveFormConfig = () => {
         label: translate('label.myAccount.rfq.phoneNumber'),
         placeholder: translate('label.myAccount.rfq.phoneNumber'),
         type: 'tel',
-        required: false,
+        required: true,
       },
       companyName: {
         label: translate('label.myAccount.rfq.companyName'),
@@ -46,13 +46,13 @@ export const useSaveFormConfig = () => {
         label: translate('label.myAccount.rfq.role'),
         placeholder: translate('label.myAccount.rfq.role'),
         type: 'text',
-        required: false,
+        required: true,
       },
       poNumber: {
         label: translate('label.myAccount.rfq.poNumber'),
         placeholder: translate('label.myAccount.rfq.poNumber'),
         type: 'text',
-        required: false,
+        required: true,
       },
       validUntil: {
         label: translate('label.myAccount.rfq.generalETAText'),

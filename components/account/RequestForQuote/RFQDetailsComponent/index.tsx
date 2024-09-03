@@ -110,16 +110,18 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                 </div>
                 <div className="flex justify-start w-full gap-1">
                     <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.email')}:</span>
-                    <span className="text-sm font-normal text-black">{rfqData?.firstName} {rfqData?.email}</span>
+                    <span className="text-sm font-normal text-black">{rfqData?.email}</span>
                 </div>
                 <div className="flex justify-start w-full gap-1">
                     <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.company')}:</span>
-                    <span className="text-sm font-normal text-black">{rfqData?.firstName} {rfqData?.companyName}</span>
+                    <span className="text-sm font-normal text-black">{rfqData?.companyName}</span>
                 </div>
-                <div className="flex justify-start w-full gap-1">
-                    <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.notes')}:</span>
-                    <span className="text-sm font-normal text-black">{rfqData?.firstName} {rfqData?.notes}</span>
-                </div>
+                {rfqData?.notes &&
+                    <div className="flex justify-start w-full gap-1">
+                        <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.notes')}:</span>
+                        <span className="text-sm font-normal text-black">{rfqData?.notes}</span>
+                    </div>
+                }
             </div>
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="flex flex-col w-full my-4">
