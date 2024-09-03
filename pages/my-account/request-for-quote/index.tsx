@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import { NEXT_GET_ALL_RFQ } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
-import { StatusStyles } from '@framework/utils/enums';
+import { StatusStyles } from '@components/utils/constants'
 
 function formatISODate(date:any) { return date.toISOString(); }
 
@@ -23,7 +23,6 @@ fromDate.setDate(today.getDate() - 30);
 const toDate = new Date(today);
 toDate.setDate(today.getDate() + 30);
 
-type RFQStatus = keyof typeof StatusStyles;
 function RequestQuote() {
   const { user, changeMyAccountTab } = useUI()
   const [isLoading, setIsLoading] = useState(true)
@@ -84,7 +83,7 @@ function RequestQuote() {
             <tbody>
               {rfqData?.map?.((rfq: any) => (
                 <tr key={rfq.rfqNumber} className="text-xs border-b">
-                  <td className={`py-2 px-4 ${StatusStyles[rfq?.status as RFQStatus] || ''}`}>{rfq?.status}</td>
+                  <td className={`py-2 px-4 ${StatusStyles[rfq?.status]}`}>{rfq?.status}</td>
                   <td className="py-2 px-4">{rfq?.poNumber}</td>
                   <td className="py-2 px-4">{rfq?.created}</td>
                   <td className="py-2 px-4">
