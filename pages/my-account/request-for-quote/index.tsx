@@ -87,7 +87,7 @@ function RequestQuote() {
                   <td className="p-2 text-sm text-left">{rfq?.poNumber}</td>
                   <td className="p-2 text-sm text-left">{moment(new Date(rfq?.created)).format(DATE_FORMAT)}</td>
                   <td className="p-2 text-sm text-left">
-                    <span className={`px-2 py-1 text-[10px] font-semibold leading-none truncate rounded-full ${rfq?.status == "QuoteCreated" ? 'label-confirmed' : rfq?.status == "Submitted" ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>{rfq?.status}</span>
+                    <span className={`px-2 py-1 text-[10px] font-semibold leading-none truncate rounded-full ${rfq?.status == "QuoteCreated" ? 'label-confirmed' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>{rfq?.status}</span>
                   </td>
                   <td className="p-2 text-sm" align='right'>
                     <button className="flex text-black" onClick={() => navigateToRFQ(rfq?.recordId)}>

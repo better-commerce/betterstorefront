@@ -104,7 +104,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             <div className="flex flex-col w-full gap-2 my-4">
                 <div className="flex justify-between">
                     <h4 className="font-bold text-18 text-secondary-full-opacity ">Details</h4>
-                    <span className={`px-4 py-3 text-sm font-semibold leading-none truncate rounded-full ${rfqData?.status == "QuoteCreated" ? 'label-confirmed' : rfqData?.status == "Submitted" ? 'label-blue' : rfqData?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>{rfqData?.status}</span>
+                    <span className={`px-4 py-3 text-sm font-semibold leading-none truncate rounded-full ${rfqData?.status == "QuoteCreated" ? 'label-confirmed' : (rfqData?.status == "Submitted" || rfqData?.status == "Received") ? 'label-blue' : rfqData?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>{rfqData?.status}</span>
                 </div>
                 <div className="flex justify-start w-full gap-1">
                     <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.name')}:</span>

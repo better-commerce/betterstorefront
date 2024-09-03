@@ -45,7 +45,7 @@ function SaveRFQ() {
       UserId: user?.userId,
       validDays: validDays,
       validUntil: validUntilISO,
-      status: "Submitted",
+      status: "Received",
     };
     const result = await axios.post(NEXT_SAVE_RFQ, { data: sanitizedData })
     if (!result?.data) {
