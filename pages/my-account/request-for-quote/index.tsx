@@ -75,8 +75,8 @@ function RequestQuote() {
               <tr className="bg-slate-50">
                 <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">RFQ No.</th>
                 <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.poNumber')}</th>
-                <th className="px-2 py-3 text-sm font-semibold text-right border border-slate-200">{translate('label.myAccount.rfq.status')}</th>
-                <th className="px-2 py-3 text-sm font-semibold text-right border border-slate-200">{translate('label.myAccount.rfq.createdAt')}</th>
+                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.status')}</th>
+                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.createdAt')}</th>
                 <th className="w-20 px-2 py-3 text-sm font-semibold text-left border border-slate-200"></th>
               </tr>
             </thead>
@@ -85,13 +85,13 @@ function RequestQuote() {
                 <tr key={rfq.rfqNumber} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
                   <td className="px-2 py-3 text-sm font-medium text-left cursor-pointer text-sky-600" onClick={() => navigateToRFQ(rfq?.recordId)}>{rfq?.rfqNumber}</td>
                   <td className="px-2 py-3 text-sm text-left">{rfq?.poNumber}</td>
-                  <td className="px-2 py-3 text-sm text-right">
+                  <td className="px-2 py-3 text-sm text-left">
                     <span className={`px-2 py-1 text-[10px] font-semibold leading-none truncate rounded-full ${rfq?.status == "QuoteCreated" ? 'label-confirmed' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>
                       {rfq?.status == "QuoteCreated" ? 'Quote Created' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'Submitted' : rfq?.status == "Cancelled" ? 'Cancelled' : ''}
                     </span>
                   </td>
-                  <td className="px-2 py-3 text-sm text-right">{moment(new Date(rfq?.created)).format(DATE_FORMAT)}</td>
-                  <td className="px-2 py-3 text-sm" align='right'>
+                  <td className="px-2 py-3 text-sm text-left">{moment(new Date(rfq?.created)).format(DATE_FORMAT)}</td>
+                  <td className="px-2 py-3 text-sm" align='left'>
                     <button className="flex text-black" onClick={() => navigateToRFQ(rfq?.recordId)}>
                       <EyeIcon className="hidden w-4 h-4 text-black group-hover:flex" />
                     </button>
