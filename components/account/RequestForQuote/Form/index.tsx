@@ -199,16 +199,16 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
           <h2 className="mb-4 text-xl font-semibold">{translate('label.myAccount.rfq.lineItems')}</h2>
           <div className="flex flex-col w-full p-4 border divide-y divide-gray-200 bg-slate-50 border-slate-200 rounded-2xl">
             {lines?.map((item: any, index: number) => (
-              <div key={index} className="flex items-center justify-between gap-4" >
-                <span className="flex flex-col gap-2">
+              <div key={index} className="flex items-center justify-between gap-4 py-2" >
+                <span className="flex flex-col w-6/12 gap-2">
                   <span className="text-sm font-semibold text-black">{item?.stockCode} - {item?.productName}</span>
                   <p className="col-span-1 text-xs">{translate('label.myAccount.rfq.quantity')}: {item?.qty}</p>
                 </span>
-                <div className="flex justify-start gap-4">
-                  <p className="col-span-3 text-xs">{translate('label.myAccount.rfq.targetPrice')}: {item?.targetPrice}</p>
-                  <p className="col-span-3 text-xs">{translate('label.myAccount.rfq.price')}: {item?.price}</p>
+                <div className="flex justify-start w-4/12 gap-4">
+                  <p className="col-span-3 text-xs"><span className="font-semibold text-black">{translate('label.myAccount.rfq.targetPrice')}:</span> {item?.targetPrice}</p>
+                  <p className="col-span-3 text-xs"><span className="font-semibold text-black">{translate('label.myAccount.rfq.price')}:</span> {item?.price}</p>
                 </div>
-                <div className="flex justify-end gap-3">
+                <div className="flex justify-end w-2/12 gap-3">
                   <PencilSquareIcon className="w-4 h-4 col-span-1 text-gray-500 cursor-pointer hover:text-black" onClick={() => openModal(item, 'edit')} />
                   <TrashIcon className="w-4 h-4 col-span-1 text-gray-400 cursor-pointer hover:text-red-500" onClick={() => openModal(item, 'delete')} />
                 </div>
