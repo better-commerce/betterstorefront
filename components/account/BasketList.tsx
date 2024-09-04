@@ -53,12 +53,12 @@ const BasketList = ({ baskets, openMiniBasket, deleteBasket, openTransferBasketM
             </Link>
             {!basket?.isLocked && (
               <div className='flex items-center justify-center flex-shrink-0 gap-4 capitalize text-neutral-500 dark:text-neutral-300'>
-                <button className='opacity-40 hover:opacity-100' onClick={(ev: any) => {
+                <button className='px-2 py-1 text-xs text-black bg-white border border-gray-400 rounded-full hover:border-black hover:bg-black hover:text-white' onClick={(ev: any) => {
                   ev.preventDefault()
                   ev.stopPropagation()
                   router.push(`/my-account/request-for-quote/${basket?.id}`)
                 }}>
-                  <img src='/images/quote-request.png' alt='Request For Quotes' title='Request For Quote' className='w-5 h-5' />
+                  Create RFQ
                 </button>
 
                 <button className='opacity-40 hover:opacity-100' title='Transfer Basket' onClick={(ev: any) => {

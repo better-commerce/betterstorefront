@@ -32,14 +32,13 @@ function B2BQuotes({ quotes }: any) {
                   <h2 className="font-semibold mob-font-14 sm:text-2xl font-Inter text-brand-blue">
                     {quote?.quoteName != "" ? (
                       <>
-                        {`${quote?.customQuoteNo} -`} {quote?.quoteName}
+                        {quote?.quoteName !="" && `${quote?.quoteName} - `}{`${quote?.customQuoteNo}`} {quote?.rfqNumber !="" && <span className='text-sm'>({quote?.rfqNumber})</span>}
                       </>
                     ) : (
                       <>
-                        {`${quote?.customQuoteNo}`} {quote?.rfqNumber !="" && ` - ${quote?.rfqNumber}`}
+                        {quote?.quoteName !="" && `${quote?.quoteName} - `}{`${quote?.customQuoteNo}`} {quote?.rfqNumber !="" && <span className='text-sm'>({quote?.rfqNumber})</span>}
                       </>
                     )}
-
                   </h2>
                   <button className='px-6 py-1 font-semibold text-white rounded-full bg-sky-800 font-14 hover:bg-sky-600' onClick={() => showQuoteDetail(quote)}>{translate('common.label.viewText')}</button>
                 </div>
