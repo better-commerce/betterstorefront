@@ -89,34 +89,36 @@ export default function DataPack() {
 const DataPackDetailTable = ({ rows, onDownloadProductsCSV, onDownloadImagesCSV }: any) => {
   const translate = useTranslation()
   return (
-    <table className="min-w-full">
-      <thead className='bg-gray-100'>
-        <tr className='border border-gray-200 divide-x divide-gray-300'>
-          <th scope="col" className="py-3.5 p-4 border border-gray-300 pr-3 text-left text-sm font-semibold text-gray-900">{translate('common.label.nameText')}</th>
-          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{translate('common.label.generatedOnText')}</th>
-          <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">{translate('common.label.productsText')}</th>
-          <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">{translate('common.label.imagesText')}</th>
-        </tr>
-      </thead>
-      {(rows?.length > 0) &&
-        <tbody className="divide-y divide-gray-200">
-          {rows?.map((data: any) => (
-            <tr key={data?.dataPackId} className='border border-gray-200 divide-x divide-gray-300'>
-              <td className="py-4 pl-4 pr-3 text-base font-semibold text-gray-900 whitespace-nowrap">{data?.dataPackName}</td>
-              <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">{moment(new Date(data?.created)).format(DATE_TIME_FORMAT)}</td>
-              <td className="justify-end px-3 py-4 text-sm text-right text-gray-500 whitespace-nowrap">
-                {data?.productDataPackUrl && (
-                  <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadProductsCSV(data?.companyId, data?.id)} />
-                )}
-              </td>
-              <td className="justify-end px-3 py-4 text-sm text-right text-gray-500 whitespace-nowrap">
-                {data?.imageDataPackUrl && (
-                  <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadImagesCSV(data?.companyId, data?.id)} />
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>}
-    </table>
+    <div className="my-3 overflow-hidden border rounded-2xl border-slate-200">
+      <table className="min-w-full text-left">
+        <thead>
+          <tr className="bg-slate-50">
+            <th scope="col" className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('common.label.nameText')}</th>
+            <th scope="col" className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('common.label.generatedOnText')}</th>
+            <th scope="col" className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('common.label.productsText')}</th>
+            <th scope="col" className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('common.label.imagesText')}</th>
+          </tr>
+        </thead>
+        {(rows?.length > 0) &&
+          <tbody className="divide-y divide-gray-200">
+            {rows?.map((data: any) => (
+              <tr key={data?.dataPackId} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
+                <td className="p-2 text-sm text-left">{data?.dataPackName}</td>
+                <td className="p-2 text-sm text-left whitespace-nowrap">{moment(new Date(data?.created)).format(DATE_TIME_FORMAT)}</td>
+                <td className="p-2 text-sm text-left">
+                  {data?.productDataPackUrl && (
+                    <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadProductsCSV(data?.companyId, data?.id)} />
+                  )}
+                </td>
+                <td className="p-2 text-sm text-left">
+                  {data?.imageDataPackUrl && (
+                    <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadImagesCSV(data?.companyId, data?.id)} />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>}
+      </table>
+    </div>
   )
 }

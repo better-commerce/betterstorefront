@@ -113,18 +113,18 @@ export default function B2BBaskets() {
       },
       enabled: false
     },
-    {
-      id: 'listBasket',
-      href: '#',
-      title: translate('label.b2b.basket.listBasketsHeadingText'),
-      className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
-      head: null,
-      onClick: (ev: any) => {
-        ev.preventDefault()
-        ev.stopPropagation()
-      },
-      enabled: true
-    },
+    // {
+    //   id: 'listBasket',
+    //   href: '#',
+    //   title: translate('label.b2b.basket.listBasketsHeadingText'),
+    //   className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+    //   head: null,
+    //   onClick: (ev: any) => {
+    //     ev.preventDefault()
+    //     ev.stopPropagation()
+    //   },
+    //   enabled: true
+    // },
   ]
 
   const getBaskets = async (userId: string) => {
