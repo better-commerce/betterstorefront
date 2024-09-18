@@ -170,7 +170,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
         {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
-          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+          <div key={dataIdx} className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-30'>
               <div className='flex flex-col justify-center gap-6 text-center sm:gap-10'>
                 <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
@@ -203,7 +203,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <div className='container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1'>
             <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
               {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
-                <h4 className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
+                <h4 key={dataIdx} className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
               ))}
             </div>
           </div>
