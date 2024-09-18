@@ -61,7 +61,7 @@ function MyCompany({ deviceInfo }: any) {
       options.push(opt)
     })
     return options
-  }, [translate, user])
+  }, [user])
 
   const onSelectTab = (tab: any) => {
     router.replace({ query: { tab: tab?.value } }, undefined, { shallow: true })
@@ -155,9 +155,9 @@ function MyCompany({ deviceInfo }: any) {
   useEffect(() => {
     const { tab: selectedTab } = router.query
     if (selectedTab) {
-      if (selectedTab === CompanyTabs.COMPANYDETAIL) fetchB2BUsers()
+      // if (selectedTab === CompanyTabs.COMPANYDETAIL) fetchB2BUsers()
       if (selectedTab === CompanyTabs.USER) fetchB2BUsers()
-      if (selectedTab === CompanyTabs.ADDRESS) fetchB2BAddressBook()
+      // if (selectedTab === CompanyTabs.ADDRESS) fetchB2BAddressBook()
     } else {
       router.replace({ query: { tab: optionsConfig[0]?.value } }, undefined, { shallow: true })
     }
