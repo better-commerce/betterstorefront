@@ -1848,11 +1848,18 @@ p {
   filter: invert(1)  !important;
 }
 .icon-div-menu svg{
- color: white !important;
+ color: #000000 !important;
 }
 .icon-div-menu img:hover{
   filter: invert(0)  !important;
 }
 .LangDropdown span{
   color: #fff !important;
+}
+.header-dark{
+ color: #FFFFFF !important;
+}
+
+.group:hover img{
+  filter: invert(0)  !important;
 }
