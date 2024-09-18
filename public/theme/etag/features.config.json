@@ -2,10 +2,10 @@
   "features": {
     "enableLanguage": false,
     "enablePriceIncVatToggle": false,
-    "enableQuickOrderPad": false,
+    "enableQuickOrderPad": true,
     "enableCompare": true,
     "enableStoreLocator": false,
-    "enableCollectDeliveryOption": false,
+    "enableCollectDeliveryOption": true,
     "enableEngage":false,      
     "enableMyStoreFeature": false,
     "enableAddToBagPlp": false,
@@ -17,7 +17,7 @@
     "enableCategory": false,
     "enableDemoToggle": false,
     "enableLoqateSearch": false,
-    "enableAddressIOSearch":false
+    "enableAddressIOSearch":true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
