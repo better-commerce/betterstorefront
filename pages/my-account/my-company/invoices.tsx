@@ -21,7 +21,6 @@ import moment from 'moment'
 
 function MyInvoices({ deviceInfo }: any) {
   const [isShow, setShow] = useState(true)
-  const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder, setAlert, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const router = useRouter()
@@ -37,19 +36,12 @@ function MyInvoices({ deviceInfo }: any) {
     setIsShowDetailedOrder(displayDetailedOrder)
   }, [displayDetailedOrder])
   useEffect(() => {
-    fetchB2BUserQuotes()
     if (isGuestUser) {
       router.push('/')
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  const fetchB2BUserQuotes = async () => {
-    let { data: b2bQuotes } = await axios.post(NEXT_B2B_GET_QUOTES, {
-      userId: user?.userId,
-    })
-    setB2BQuotes(b2bQuotes)
-  }
   let loggedInEventData: any = {
     eventType: CustomerProfileViewed,
   }
