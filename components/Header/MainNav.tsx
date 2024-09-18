@@ -101,7 +101,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     const translate = useTranslation()
     return (
       <>
-        <div className={`top-0 td-header fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>
+        <div className={`top-0 td-header bg-header-clr fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>
           {!isMobile &&
             <div className="container justify-between hidden mx-auto sm:flex">
               <div className="promotion-banner mob-marquee"></div>
@@ -137,7 +137,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
             }
 
-            <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0">
+            <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
               {featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }

@@ -78,6 +78,60 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
       )}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
+          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-60'>
+              <div className='flex flex-col justify-center text-center'>
+                <h3 className='text-4xl font-semibold text-orange-500'>{data?.about_title}</h3>
+                <div className='pt-4 text-xl font-normal text-black sm:pt-6 cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
+              </div>
+              <div className='flex flex-col sm:p-10'>
+                <img alt={data?.about_title} src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+              </div>
+            </div>
+          </div>
+        ))}
+        {pageContents?.allcategories?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6'>
+              {pageContents?.allcategories?.map((data: any, dataIdx: number) => (
+                <div className='flex flex-col justify-center p-4 text-center rounded-lg shadow-md hover:bg-white hover:shadow-xl bg-slate-50' key={`data-${dataIdx}`}>
+                  <div className='h-60'>
+                    <img alt={data?.allcategories_name} src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-60 rounded-xl' />
+                  </div>
+                  <Link href={data?.allcategories_link} className='flex items-center justify-center w-full font-semibold text-orange-500 h-14 text-md'>{data?.allcategories_name}</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.brandheading?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1'>
+            <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
+              {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
+                <h4 className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.allbrands?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-6 sm:gap-6'>
+              {pageContents?.allbrands?.map((data: any, dataIdx: number) => (
+                <div className='flex flex-col justify-center p-4 text-center bg-white rounded-lg shadow-md hover:shadow-xl' key={`data-${dataIdx}`}>
+                  <div className='h-32'>
+                    <img alt={data?.allbrands_name} src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-32 rounded-xl' />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.promotionbanner != "" && CURRENT_THEME == 'etag' &&
+          <div className='flex flex-col pt-10 mt-0'>
+            <img alt="Banner" src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-full' />
+          </div>
+        }
         {pageContents?.shopbygender?.length > 0 &&
           <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
