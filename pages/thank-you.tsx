@@ -20,13 +20,13 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
 import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
-import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
 import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
+import { ContentSnippetInjector } from '@components/common/Content'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -398,9 +398,6 @@ export default function OrderConfirmation({ config }: any) {
     )
   }
 
-  const bodyStartScrCntrRef = React.createRef<any>()
-  const bodyEndScrCntrRef = React.createRef<any>()
-
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -421,7 +418,6 @@ export default function OrderConfirmation({ config }: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr-pc`} ></div>
       <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
@@ -809,13 +805,8 @@ export default function OrderConfirmation({ config }: any) {
         </Dialog>
       </Transition.Root>
 
-      <div
-        ref={bodyEndScrCntrRef}
-        className={`${ELEM_ATTR}body-end-script-cntr-pc`}
-      ></div>
-
       {(!isSnippetLoaded && snippets?.length > 0) && (
-        <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
+        <ContentSnippetInjector snippets={snippets} />
       )}
     </>
   )

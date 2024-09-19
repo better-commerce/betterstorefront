@@ -15,7 +15,7 @@ import uniqBy from 'lodash/uniqBy'
 import { SessionProvider } from 'next-auth/react'
 import os from 'os'
 
-import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
+import { resetSnippetElements, } from '@framework/content/use-content-snippet'
 import { IncomingMessage, ServerResponse } from 'http'
 import { Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, } from '@framework/utils/constants'
 import { DeviceType } from '@commerce/utils/use-device'
@@ -35,8 +35,6 @@ import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinute
 import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import Head from '@components/shared/Head/Head';
-import NonHeadContentSnippet from '@components/shared/Snippet/NonHeadContentSnippet';
-import { IScriptSnippet } from '@components/shared/Snippet/ScriptContentSnippet';
 import InitDeviceInfo from '@components/shared/InitDeviceInfo';
 import BrowserNavigation from '@components/shared/routing/BrowserNavigation';
 import ErrorBoundary from '@components/shared/error';
@@ -47,6 +45,7 @@ import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
 import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
 import { I18nProvider } from '@components/ui/i18nContext';
 import { i18nLocalization } from 'framework/utils/app-util';
+import { ContentSnippetInjector } from '@components/common/Content'
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const tagManagerArgs: any = {
@@ -91,9 +90,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [isAppLoading, setAppIsLoading] = useState(true)
-  const [language, setLanguage] = useState('')
-  const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
-  const [headJSSnippets, setHeadJSSnippets] = useState(new Array<any>())
   const [deviceInfo, setDeviceInfo] = useState<IDeviceInfo>({
     isMobile: undefined,
     isDesktop: undefined,
@@ -105,12 +101,12 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   const [campaignData, setCampaignData] = useState()
 
   const keywordsData = pageProps?.keywords || []
-  let snippets = [
+  const snippets = [
     ...(pageProps?.globalSnippets ?? []),
     ...(pageProps?.snippets ?? []),
     ...(pageProps?.data?.snippets ?? []),
   ]
-  snippets = uniqBy(snippets, 'name'); //Prevent duplicate data being passed on to snippets rendering engine.
+  //snippets = uniqBy(snippets, 'name'); //Prevent duplicate data being passed on to snippets rendering engine.
 
   const router = useRouter()
   const Layout = (Component as any).Layout || Noop
@@ -212,11 +208,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }, [])
 
   useEffect(() => {
-    setTopHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'TopHead' && x?.type === SnippetContentType.JAVASCRIPT))
-    setHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'Head' && x?.type === SnippetContentType.JAVASCRIPT))
-  }, [])
-
-  useEffect(() => {
     DataLayerInstance.setDataLayer()
     DataLayerInstance.setItemInDataLayer('server', pageProps?.serverHost || EmptyString)
     // If browser session is not yet started.
@@ -258,69 +249,12 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }, [router.asPath])
 
-  const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
-    let scripts = new Array<IScriptSnippet>()
-    if (typeof document !== undefined) {
-      let container = document.createElement('div')
-      container.insertAdjacentHTML('beforeend', snippet.content)
-      const arrNodes = container.querySelectorAll('*')
-      arrNodes.forEach((node: any, key: number) => {
-        if (node.innerHTML) {
-          scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node.innerHTML, })
-        } else if (node.src) {
-          scripts.push({ name: snippet.name, type: 'text/javascript', src: node.src, })
-        }
-      })
-    }
-    return scripts
-  }
-
-  const topHeadElements = (
-    topHeadJSSnippets?.map((snippet: ISnippet, index: number) => {
-      const scripts = getScriptSnippets(snippet)
-      return (
-        scripts.length > 0 &&
-        scripts?.map((script: IScriptSnippet, index: number) => (
-          <>
-            {script?.src && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
-            )}
-            {script?.innerHTML && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
-            )}
-          </>
-        ))
-      )
-    })
-  )
-
-  const headElements = (
-    headJSSnippets?.map((snippet: ISnippet, index: number) => {
-      const scripts = getScriptSnippets(snippet)
-      return (
-        scripts.length > 0 &&
-        scripts?.map((script: IScriptSnippet, index: number) => (
-          <>
-            {script?.src && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
-            )}
-            {script?.innerHTML && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
-            )}
-          </>
-        ))
-      )
-    })
-  )
   const seoInfo = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps : pageProps?.data?.product || undefined
   const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
-  const bodyStartScrCntrRef = React.createRef<any>()
-  const bodyEndScrCntrRef = React.createRef<any>()
   const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
-        {topHeadElements}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
@@ -345,15 +279,12 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
         <meta property="og:image" content={seoImage} />
-        {headElements}
       </NextHead>
 
       <Head {...appConfig}></Head>
+      {<ContentSnippetInjector snippets={snippets} />}
       <ManagedUIContext>
         <PasswordProtectedRoute config={appConfig}>
-          {(snippets?.length > 0) && (
-            <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
-          )}
           <CustomCacheBuster buildVersion={packageInfo?.version} />
           <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
           {
@@ -364,7 +295,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
           <I18nProvider value={i18n}>
             <ErrorBoundary>
               <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
-                <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
                 <OverlayLoader />
                 <CustomerReferral router={router} />
                 <SessionProvider session={pageProps?.session}>
@@ -378,7 +308,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
                     deviceInfo={deviceInfo}
                   />
                 </SessionProvider>
-                <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
               </Layout>
             </ErrorBoundary>
           </I18nProvider>
