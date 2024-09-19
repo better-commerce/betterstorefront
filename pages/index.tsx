@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
@@ -10,7 +10,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
+import { getCurrency, getCurrentCurrency, isB2BUser, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
@@ -26,6 +26,7 @@ import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 import { Hero } from '@components/ui'
+import { Guid } from '@commerce/types';
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -65,7 +66,7 @@ const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
-  const { user } = useUI()
+  const { user, isGuestUser } = useUI()
   const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -151,6 +152,16 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     };
   }, [sliderRef]);
   const cleanPath = removeQueryString(router.asPath)
+  const redirectHref = useMemo(() => {
+    if (!isGuestUser && user?.userId && user?.id !== Guid.empty && isB2BUser(user)) { // if loggedIn with B2b user 
+      return '/my-account/my-company/quotes';
+    } else if(!isGuestUser && user?.userId && user?.id !== Guid.empty){  // if loggedIn user
+      return 'tel:+442086915794';
+    } else {
+      return '/my-account/login';
+    }
+  }, [isGuestUser, user]);
+  
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -176,7 +187,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
                 <div className='text-2xl font-normal text-black cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
                 <div>
-                  <Link href="tel:+442086915794" className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Call for a Quote!</Link>
+                  <Link href={redirectHref} className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
                 </div>
               </div>
               <div className='flex flex-col sm:p-20'>
