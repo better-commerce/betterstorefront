@@ -11,13 +11,12 @@ import { v4 as uuid_v4 } from 'uuid'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { AppContext, AppInitialProps } from 'next/app'
-import uniqBy from 'lodash/uniqBy'
 import { SessionProvider } from 'next-auth/react'
 import os from 'os'
 
 import { resetSnippetElements, } from '@framework/content/use-content-snippet'
 import { IncomingMessage, ServerResponse } from 'http'
-import { Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, } from '@framework/utils/constants'
+import { Cookie, } from '@framework/utils/constants'
 import { DeviceType } from '@commerce/utils/use-device'
 
 import packageInfo from '../package.json'
@@ -32,7 +31,6 @@ import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
 import analytics from '@components/services/analytics/analytics'
 import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, setGeoDataCookie, } from '@components/utils/setSessionId'
-import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import Head from '@components/shared/Head/Head';
 import InitDeviceInfo from '@components/shared/InitDeviceInfo';
@@ -182,12 +180,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       TagManager.initialize(tagManagerArgs)
   }
 
-  const initializeGA4 = () => {
-    if (GA4_MEASUREMENT_ID) {
-      initGA4(GA4_MEASUREMENT_ID)
-    }
-  }
-
   useEffect(() => {
     setNavTree()
     initializeGTM()
@@ -200,10 +192,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale || EmptyString
       Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
       Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
-    }
-
-    if (!GA4_DISABLED) {
-      initializeGA4()
     }
   }, [])
 
