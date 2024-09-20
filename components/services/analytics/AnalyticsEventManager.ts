@@ -7,6 +7,9 @@ import { EmptyObject } from '@components/utils/constants';
 
 declare const window: any
 
+/**
+ * Manages the dispatching of analytics events to configured analytics providers
+ */
 class EventManager {
     /**
      * Holds the single instance of the class
