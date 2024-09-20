@@ -21,7 +21,6 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString, } from '@commerce/utils/uri-util'
 import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
@@ -46,6 +45,8 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -254,25 +255,9 @@ function CollectionPage(props: any) {
   useEffect(() => {
     if (productDataToPass?.results?.length > 0) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'view_item_list', {
-          ecommerce: {
-            items: productDataToPass?.results?.map(
-              (item: any, itemId: number) => ({
-                item_name: item?.name,
-                item_id: item?.sku,
-                price: item?.price?.raw?.withTax,
-                item_brand: item?.brand,
-                item_category1: item?.classification?.mainCategoryName,
-                item_category2: item?.classification?.category,
-                item_variant: item?.variantGroupCode,
-                item_list_name: props?.name,
-                item_list_id: props?.id,
-                index: itemId + 1,
-                item_var_id: item?.stockCode,
-              })
-            ),
-          },
-        })
+        debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+        analyticsEventDispatch(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false })
       }
     }
   }, [productDataToPass])

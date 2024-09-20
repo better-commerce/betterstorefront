@@ -22,7 +22,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         ? source?.product?.results?.map((item: any, itemId: number) => ({
                             item_id: item?.sku,
                             item_name: item?.name,
-                            Affliation: "FFX Website",
+                            Affliation: "Fashion Store",
                             Coupon: "",
                             discount: "",
                             index: itemId + 1,
@@ -34,7 +34,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                             quantity: 1,
                             item_is_bundle_item: source?.itemIsBundleItem,
                         }))
-                        : [],
+                        : new Array<any>(),
                 }),
             },
         },
@@ -58,7 +58,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         ? source?.cartItems?.lineItems?.map((item: any, itemId: number) => ({
                             item_id: item?.stockCode || item?.sku,
                             item_name: item?.name,
-                            Affliation: "FFX Website",
+                            Affliation: "Fashion Store",
                             Coupon: "",
                             discount: (source: any) => source?.cartItems?.discount?.raw?.withTax,
                             index: itemId,
@@ -98,7 +98,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         ? source?.cartItems?.lineItems?.map((item: any, itemId: number) => ({
                             item_id: item?.stockCode || item?.sku,
                             item_name: item?.name,
-                            Affliation: "FFX Website",
+                            Affliation: "Fashion Store",
                             Coupon: "",
                             discount: source?.cartItems?.discount?.raw?.withTax,
                             index: itemId,
@@ -133,7 +133,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         {
                             item_id: `${source?.stockCode}`,
                             item_name: `${source?.name}`,
-                            Affliation: "FFX Website",
+                            Affliation: "Fashion Store",
                             Coupon: "",
                             discount: "",
                             index: 0,
@@ -177,7 +177,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         {
                             item_id: source?.sku,
                             item_name: source?.name,
-                            Affliation: "FFX Website",
+                            Affliation: "Fashion Store",
                             Coupon: "",
                             discount: "",
                             index: 1,
@@ -298,7 +298,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                     items: {
                         item_id: source?.stockCode,
                         item_name: source?.name,
-                        Affliation: "FFX Website",
+                        Affliation: "Fashion Store",
                         Coupon: "",
                         discount: "",
                         index: 0,
@@ -431,7 +431,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         ? source?.cartItems?.lineItems?.map((item: any, itemId: number) => ({
                             item_id: item?.sku,
                             item_name: item?.name,
-                            Affliation: "FFX Website",
+                            Affliation: "Fashion Store",
                             Coupon: "",
                             discount: 'cartItems?.discount?.raw?.withTax',
                             index: itemId,
@@ -504,7 +504,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                             (item: any, itemId: number) => ({
                                 item_id: item?.stockCode,
                                 item_name: item?.name,
-                                Affliation: "FFX Website",
+                                Affliation: "Fashion Store",
                                 Coupon: "",
                                 discount: "",
                                 index: itemId,
