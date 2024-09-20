@@ -1,7 +1,6 @@
 export enum AnalyticsEventType {
     VIEW_PLP_ITEMS = 'view_item_list',
     VIEW_BASKET = 'view_cart',
-    BASKET = 'cart',
     ADD_TO_BASKET = 'add_to_cart',
     REMOVE_FROM_CART = 'remove_from_cart',
     SELECT_QUANTITY = 'select_quantity',
@@ -18,6 +17,7 @@ export enum AnalyticsEventType {
     SPECIFICATION_PRODUCT_DETAIL = 'specification_product_detail',
     BEGIN_CHECKOUT = 'begin_checkout',
     ADD_SHIPPING_INFO = 'add_shipping_info',
+    ADD_PAYMENT_INFO = 'add_payment_info',
     PURCHASE = 'purchase',
     HELP_ICON = 'help_icon',
     HAMBURGER_MENU = 'hamburger_menu',
@@ -38,6 +38,7 @@ export enum AnalyticsEventType {
     NOTIFY_CLICK = 'notify_click',
     REFERRER_BANNERS = 'referrer_banners',
     LOGO_CLICK = 'logo_click',
+    POLICY_POPUP = 'policy_popup',
 }
 
 export const AnalyticsType = {

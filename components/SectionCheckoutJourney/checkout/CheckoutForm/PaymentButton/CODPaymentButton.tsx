@@ -52,7 +52,7 @@ class CODPaymentButton extends BasePaymentButton {
       if (state) {
         dispatchState(state)
       }
-      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.COD)
+      super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.COD)
       this.setState({
         isPaymentInitiated: true,
       })

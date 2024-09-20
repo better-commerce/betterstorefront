@@ -8,8 +8,11 @@ import 'swiper/css/navigation'
 import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import Router from 'next/router'
 const PLPQuickView = dynamic(() => import('@components/Product/QuickView/PLPQuickView'))
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 
@@ -84,61 +87,18 @@ export default function RelatedProducts({
   // record analytics
   function viewProductDetail(product: any, pid: number) {
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'select_item', {
-        ecommerce: {
-          items: [
-            {
-              item_id: product?.sku,
-              item_name: product?.name,
-              price: product?.price?.raw?.withTax,
-              item_brand: product?.brand,
-              item_category: product?.classification?.mainCategoryName,
-              item_category2: product?.classification?.category,
-              item_variant: product?.variantGroupCode,
-              item_list_name: product?.classification?.category,
-              item_list_id: product?.classification?.categoryId,
-              index: pid + 1,
-            },
-          ],
-          color: product?.variantGroupCode,
-          position: pid + 1,
-          item_var_id: product?.stockCode,
-          current_page: currentPage,
-          section_title: 'Frequently Bought Together',
-        },
-      })
-      recordGA4Event(window, 'view_item', {
-        ecommerce: {
-          items: [
-            {
-              item_name: product?.name,
-              item_brand: product?.brand,
-              item_category: product?.classification?.mainCategoryName,
-              item_category2: product?.classification?.category,
-              item_variant: product?.variantGroupCode,
-              quantity: 1,
-              item_id: product?.sku,
-              item_var_id: product?.stockCode,
-              price: product?.price?.raw?.withTax,
-            },
-          ],
-          section_title: title,
-          value: product?.price?.raw?.withTax,
-        },
-      })
-      recordGA4Event(window, 'view_prod_details', {
-        category_selected: product?.name,
-        header: title,
-        current_page: 'Cart',
-      })
+      debugger
+      analyticsEventDispatch(AnalyticsEventType.PDP_VIEW_DETAILS, { ...product, position: pid + 1, currentPage, sectionTitle: 'Frequently Bought Together', })
+      let color = ''
+      if (product?.variantGroupCode) {
+        color = product?.variantGroupCode?.split('-')[1]
+      }
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      analyticsEventDispatch(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
+      analyticsEventDispatch(AnalyticsEventType.VIEW_PRODUCT_DETAILS, { ...product, header: title, currentPage: 'Cart', })
+
       if (checkout_refrence == true) {
-        recordGA4Event(window, 'referrer_banners', {
-          cross_sell_category_position: 'Checkout',
-          section_title: title,
-          product_name: product?.name,
-          product_clicked_position: pid + 1,
-          current_page: 'Cart',
-        })
+        analyticsEventDispatch(AnalyticsEventType.REFERRER_BANNERS, { ...product, categoryPosition: 'Checkout', header: title, position: pid + 1, currentPage: 'Cart', })
       }
     }
   }
@@ -146,28 +106,10 @@ export default function RelatedProducts({
   const onProductQuickView = (product: any, pid: any) => {
     setQuickViewProduct(product)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'popup_view', {
-        product_name: product?.name,
-        category: product?.classification?.mainCategoryName,
-        page: window.location.href,
-        position: pid + 1,
-        color: product?.variantGroupCode,
-        price: product?.price?.raw?.withTax,
-        current_page: 'Cart',
-      })
-      recordGA4Event(window, 'quick_view_click', {
-        ecommerce: {
-          items: {
-            product_name: product?.name,
-            position: pid + 1,
-            product_price: product?.price?.raw?.withTax,
-            color: product?.variantGroupCode,
-            category: product?.classification?.mainCategoryName,
-            current_page: 'Cart',
-            header: title,
-          },
-        },
-      })
+      debugger
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
+      analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage: 'Cart', header: title, })
     }
   }
 

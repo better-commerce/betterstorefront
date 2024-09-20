@@ -8,13 +8,14 @@ import Cookies from 'js-cookie'
 import DeliveryMessage from './DeliveryMessage'
 
 // Other Imports
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components/utils/constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductWarranty from './ProductWarranty'
 import ProductReturn from './ProductReturn'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 
@@ -52,20 +53,16 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     replaceInfo(grpData)
     setWarranty(true)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'policy_popup', {
-        current_page: 'PDP',
-        category: 'Warranty',
-      })
+      debugger
+      analyticsEventDispatch(AnalyticsEventType.LOGO_CLICK, { currentPage: 'PDP', category: 'Warranty', })
     }
   }
 
   const handleReturn = () => {
     setReturn(true)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'policy_popup', {
-        current_page: 'PDP',
-        category: 'Easy Returns & Exchange',
-      })
+      debugger
+      analyticsEventDispatch(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
     }
   }
   const shippingSettings = config?.configSettings?.find(

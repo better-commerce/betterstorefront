@@ -11,10 +11,11 @@ import { NEXT_GUEST_CHECKOUT, NEXT_UPDATE_DELIVERY_INFO } from '@components/util
 import axios from 'axios'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import CheckoutHeading from '@components/SectionCheckoutJourney/checkout/CheckoutHeading'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutRouter'))
 const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutForm'))
 
@@ -162,35 +163,8 @@ function Checkout({ cart, config, location }: any) {
 
   const recordShippingInfo = () => {
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'add_shipping_info', {
-        ecommerce: {
-          shipping_tier: cartItems?.shippingMethods[0]?.countryCode,
-          coupon: cartItems?.promotionsApplied?.length
-            ? cartItems?.promotionsApplied
-              ?.map((x: any) => x?.promoCode)
-              ?.join(',')
-            : '',
-          value: cartItems?.subTotal?.raw?.withTax,
-          item_var_id: cartItems?.id,
-          items: cartItems?.lineItems?.map((item: any) => ({
-            item_name: item?.name,
-            price: item?.price?.raw?.withTax,
-            quantity: item?.qty,
-            item_id: item?.id,
-            item_size: item?.variantProducts
-              ?.find((x: any) => x?.stockCode === item?.stockCode)
-              ?.variantAttributes?.find(
-                (x: any) => x?.fieldCode === 'clothing.size'
-              )?.fieldValue,
-            item_brand: item?.brand,
-            item_variant: item?.variantProducts
-              ?.find((x: any) => x?.stockCode === item?.stockCode)
-              ?.variantAttributes?.find(
-                (x: any) => x?.fieldCode === 'global.colour'
-              )?.fieldValue,
-          })),
-        },
-      })
+      debugger
+      analyticsEventDispatch(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems, })
     }
   }
 

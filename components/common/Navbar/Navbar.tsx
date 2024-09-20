@@ -10,7 +10,7 @@ import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui'
 import axios from 'axios'
-import { NEXT_SET_CONFIG, SocialMediaType } from '@components/utils/constants'
+import { EmptyString, NEXT_SET_CONFIG, SITE_ORIGIN_URL, SocialMediaType } from '@components/utils/constants'
 import Router from 'next/router'
 import Cookies from 'js-cookie'
 import {
@@ -29,7 +29,6 @@ import {
   removePrecedingSlash,
   vatIncluded,
 } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IExtraProps } from '../Layout/Layout'
 import ToggleSwitch from '../ToggleSwitch'
 import { getItem, setItem } from '@components/utils/localStorage'
@@ -44,6 +43,8 @@ import {
 } from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
@@ -208,12 +209,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'wishlist', {
-              ecommerce: {
-                header: 'Menu Bar',
-                current_page: currentPage,
-              },
-            })
+            debugger
+            analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }
@@ -234,25 +231,9 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   function viewCart(cartItems: any) {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'view_cart', {
-          ecommerce: {
-            items: cartItems?.lineItems?.map((items: any, itemId: number) => ({
-              item_name: items?.name,
-              item_id: items?.sku,
-              price: items?.price?.raw?.withTax,
-              item_brand: items?.brand,
-              item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
-              item_variant: items?.colorName,
-              item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
-              item_list_id: '',
-              index: itemId,
-              quantity: items?.qty,
-              item_var_id: items?.stockCode,
-            })),
-            device: deviceCheck,
-            current_page: currentPage,
-          },
-        })
+        debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+        analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, })
       }
     }
   }
@@ -260,17 +241,10 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerMenu = () => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'hamburger_menu', {
-          current_page: currentPage,
-          device: deviceCheck,
-        })
-        recordGA4Event(window, 'hamburger_icon_click', {
-          header: 'Menu',
-          sub_header: '',
-          sub_header2: '',
-          current_page: currentPage,
-          device: deviceCheck,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
       }
     }
   }
@@ -278,13 +252,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerMenuClick = (item: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'hamburger_menu_click', {
-          header: item,
-          sub_header: '',
-          sub_header2: '',
-          current_page: currentPage,
-          device: deviceCheck,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader: EmptyString, subHeader2: EmptyString, })
       }
     }
   }
@@ -292,13 +261,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerMenuClickLevel2 = (item: any, subHeader: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'hamburger_menu_click', {
-          header: item,
-          sub_header: subHeader,
-          sub_header2: '',
-          current_page: currentPage,
-          device: deviceCheck,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2: EmptyString, })
       }
     }
   }
@@ -306,13 +270,8 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerClickLevel3 = (item: any, subHeader: any, subHeader2: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'hamburger_menu_click', {
-          header: item,
-          sub_header: subHeader,
-          sub_header2: subHeader2,
-          current_page: currentPage,
-          device: deviceCheck,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2, })
       }
     }
   }

@@ -3,10 +3,11 @@ import Form from './AddressBookForm'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 export default function AddressItem({
   item,
   updateAddress,
@@ -46,10 +47,8 @@ export default function AddressItem({
     let currentPage = getCurrentPage()
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        recordGA4Event(window, 'address_changes', {
-          delivery_address_name: values?.address1,
-          current_page: currentPage,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })

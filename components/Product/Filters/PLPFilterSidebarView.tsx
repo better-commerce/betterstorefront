@@ -2,11 +2,12 @@ import { useEffect, Fragment, useState, FC } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import useWishlist from '@components/services/wishlist'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import useCart from '@components/services/cart'
 import PLPSort from './PLPSort'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 type PLPFilterSidebarProps = {
   handleSortBy: Function
@@ -59,11 +60,8 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar
     }
 
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'remove_item', {
-        product_name: product?.name,
-        availability: productAvailability,
-        product_id: product?.sku,
-      })
+      debugger
+      analyticsEventDispatch(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 
     if (accessToken) {

@@ -12,7 +12,8 @@ import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { recordGA4Event } from "@components/services/analytics/ga4";
+import { analyticsEventDispatch } from "@components/services/analytics/analyticsEventDispatch";
+import { AnalyticsEventType } from "@components/services/analytics";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -71,12 +72,8 @@ function handleWishlist() {
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'wishlist', {
-              ecommerce: {
-                header: 'Menu Bar',
-                current_page: currentPage,
-              },
-            })
+            debugger
+            analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }

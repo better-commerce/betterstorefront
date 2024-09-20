@@ -2,11 +2,14 @@ import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
 import { useState } from 'react'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import cartHandler from '@components/services/cart'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import Router from 'next/router'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
 
@@ -68,33 +71,16 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'popup_view', {
-          product_name: product?.name,
-          category: product?.classification?.mainCategoryName,
-          page: window.location.href,
-          position: pid + 1,
-          color: product?.variantGroupCode,
-          price: product?.price?.raw?.withTax,
-          current_page: currentPage,
-        })
+        debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+        analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, currentPage, })
       }
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'quick_view_click', {
-          ecommerce: {
-            items: {
-              product_name: product?.name,
-              position: pid + 1,
-              product_price: product?.price?.raw?.withTax,
-              color: product?.variantGroupCode,
-              category: product?.classification?.mainCategoryName,
-              current_page: currentPage,
-              header: 'You May Also Like',
-            },
-          },
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
       }
     }
   }

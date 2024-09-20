@@ -65,7 +65,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
     )
     if (orderResult?.success && orderResult?.result?.id) {
       //uiContext?.hideOverlayLoaderState();
-      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.CLEAR_PAY)
+      super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.CLEAR_PAY)
       this.setState({
         confirmed: true,
       })

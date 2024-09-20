@@ -17,7 +17,7 @@ import { removeItem } from '@components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { vatIncluded } from '@framework/utils/app-util'
+import { getOrderInfo, vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
 import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -27,6 +27,8 @@ import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderIt
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 import { ContentSnippetInjector } from '@components/common/Content'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export default function OrderConfirmation({ config }: any) {
   const [order, setOrderData] = useState<any>()
@@ -50,16 +52,7 @@ export default function OrderConfirmation({ config }: any) {
   const [referralLink, setReferralLink] = useState('')
   const [copied, setCopied] = useState(false)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
-  const {
-    setOrderId,
-    orderId,
-    user,
-    setGuestUser,
-    setIsGuestUser,
-    guestUser,
-    isGuestUser,
-    resetIsPaymentLink,
-  } = useUI()
+  const { setOrderId, orderId, user, cartItems, setGuestUser, setIsGuestUser, guestUser, isGuestUser, resetIsPaymentLink, } = useUI()
   const shareOptionsConfig = [
     {
       name: 'email',
@@ -270,11 +263,21 @@ export default function OrderConfirmation({ config }: any) {
   }
 
   useEffect(() => {
+    const orderInfo: any = getOrderInfo()
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
         id: orderId,
       })
+      const orderData: any = order?.data
       setOrderData(data.order)
+      
+      // PURCHASE EVENT
+      if (typeof window !== 'undefined') {
+        debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+        analyticsEventDispatch(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, cartItems, orderInfo, orderData, itemIsBundleItem: false })
+      }
+
       setTimeout(() => {
         setSnippets(data?.snippets || [])
       }, 100);

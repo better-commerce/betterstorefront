@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react'
 import { CURRENT_THEME } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import {  } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
 import Image from 'next/image'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const Logo = ({ className = '', ...props }) => {
   let currentPage = getCurrentPage()
@@ -10,9 +12,8 @@ const Logo = ({ className = '', ...props }) => {
   function logoClick() {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'logo_click', {
-          current_page: currentPage,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.LOGO_CLICK, { currentPage, })
       }
     }
   }

@@ -3,8 +3,9 @@ import { Fragment } from 'react'
 import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export default function Account({ config, title, deviceInfo }: any) {
   const translate = useTranslation()
@@ -21,11 +22,8 @@ export default function Account({ config, title, deviceInfo }: any) {
     let currentPage = getCurrentPage()
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'login_attempt', {
-          device: deviceCheck,
-          browser: 'Chrome',
-          current_page: currentPage,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.LOGIN_ATTEMPT, { browser: 'Chrome', currentPage, deviceCheck, })
       }
     }
   }

@@ -10,9 +10,8 @@ import { XMarkIcon, CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/Layout/Layout'
@@ -24,6 +23,8 @@ import RelatedProducts from '@components/Product/RelatedProducts'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import Engraving from '@components/Product/Engraving'
 import Router from 'next/router'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -391,15 +392,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           data.qty = 1
           if (currentPage) {
             if (typeof window !== 'undefined') {
-              recordGA4Event(window, 'select_quantity', {
-                category: product?.categoryItems?.length
-                  ? product?.categoryItems[0]?.categoryName
-                  : '',
-                final_quantity: data.qty,
-                current_page: currentPage,
-                number_of_plus_clicked: 1,
-                number_of_minus_clicked: 0,
-              })
+              debugger
+              analyticsEventDispatch(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
             }
           }
         } else {
@@ -415,24 +409,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       if (type === 'delete') {
         data.qty = 0
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'remove_from_cart', {
-            ecommerce: {
-              items: [
-                {
-                  item_name: product?.name,
-                  price: product?.price?.raw?.withTax,
-                  quantity: product?.qty,
-                  item_id: product?.sku,
-                  item_size: getLineItemSizeWithoutSlug(product),
-                  item_brand: product?.brand,
-                  item_variant: product?.colorName,
-                  item_var_id: product?.stockCode,
-                },
-              ],
-              loggedin: user?.userId && user?.userId !== Guid.empty,
-              current_page: 'Cart',
-            },
-          })
+          debugger
+          const extras = { originalLocation: SITE_ORIGIN_URL + window.location.href }
+          analyticsEventDispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
         }
         if (window?.ch_session) {
           window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
@@ -466,27 +445,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
 
   const beginCheckout = (cartItems: any) => {
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'begin_checkout', {
-        ecommerce: {
-          items: [
-            cartItems?.lineItems?.map((item: any, itemId: number) => ({
-              item_name: item?.name,
-              price: item?.price?.raw?.withTax,
-              quantity: item?.qty,
-              item_brand: item?.brand,
-              item_id: item?.sku,
-              item_size: getLineItemSizeWithoutSlug(item),
-              item_variant: item?.colorName,
-            })),
-          ],
-          current_page: 'Checkout',
-          loggedin_status: user?.userId && user?.userId !== Guid.empty,
-          paymode: '',
-          address: '',
-          value: cartItems?.grandTotal?.raw?.withTax,
-          item_var_id: cartItems?.lineItems[0]?.stockCode,
-        },
-      })
+      debugger
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      analyticsEventDispatch(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
     }
   }
 

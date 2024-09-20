@@ -30,7 +30,6 @@ import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-s
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import DeliveryInfo from './DeliveryInfo'
 import ProductSpecifications from '@components/Product/ProductDetails/specifications'
@@ -47,6 +46,9 @@ import Prices from '@components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@components/ReviewItem'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
+import Router from 'next/router'
 const Preview = dynamic(() => import('@components/Product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/Product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -290,53 +292,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         )
         setCartItems(item)
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'add_to_cart', {
-            ecommerce: {
-              items: [
-                {
-                  item_name: product?.name,
-                  item_brand: product?.brand,
-                  item_category2: product?.mappedCategories[1]?.categoryName,
-                  item_variant: product?.variantGroupCode,
-                  quantity: 1,
-                  item_id: product?.productCode,
-                  price: product?.price?.raw?.withTax,
-                  item_var_id: product?.stockCode,
-                  item_list_name: product?.mappedCategories[2]?.categoryName,
-                  index: 1,
-                },
-              ],
-              cart_quantity: 1,
-              total_value: product?.price?.raw?.withTax,
-              current_page: 'PDP',
-              section_title: 'Product Detail',
-            },
-          })
+          debugger
+          const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+
           if (currentPage) {
-            recordGA4Event(window, 'view_cart', {
-              ecommerce: {
-                items: cartItems?.lineItems?.map(
-                  (items: any, itemId: number) => ({
-                    item_name: items?.name,
-                    item_id: items?.sku,
-                    price: items?.price?.raw?.withTax,
-                    item_brand: items?.brand,
-                    item_category2: items?.categoryItems?.length
-                      ? items?.categoryItems[1]?.categoryName
-                      : '',
-                    item_variant: items?.colorName,
-                    item_list_name: items?.categoryItems?.length
-                      ? items?.categoryItems[0]?.categoryName
-                      : '',
-                    item_list_id: '',
-                    index: itemId,
-                    quantity: items?.qty,
-                    item_var_id: items?.stockCode,
-                  })
-                ),
-                current_page: currentPage,
-              },
-            })
+            debugger
+            const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+            analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
           }
         }
       },
@@ -403,49 +366,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             )
             setCartItems(item)
             if (typeof window !== 'undefined') {
-              recordGA4Event(window, 'add_to_cart', {
-                ecommerce: {
-                  items: [
-                    {
-                      item_name: product?.name,
-                      item_brand: product?.brand,
-                      item_category2: product?.mappedCategories[1]?.categoryName,
-                      item_variant: product?.variantGroupCode,
-                      quantity: 1,
-                      item_id: product?.productCode,
-                      price: product?.price?.raw?.withTax,
-                      item_var_id: product?.stockCode,
-                      item_list_name: product?.mappedCategories[2]?.categoryName,
-                      index: 1,
-                    },
-                  ],
-                  cart_quantity: 1,
-                  total_value: product?.price?.raw?.withTax,
-                  current_page: 'PDP',
-                  section_title: 'Product Detail',
-                },
-              })
+              debugger
+              const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+
               if (currentPage) {
-                recordGA4Event(window, 'view_cart', {
-                  ecommerce: {
-                    items: cartItems?.lineItems?.map(
-                      (items: any, itemId: number) => ({
-                        item_name: items?.name,
-                        item_id: items?.sku,
-                        price: items?.price?.raw?.withTax,
-                        item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
-                        item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
-                        item_list_id: '',
-                        index: itemId,
-                        quantity: items?.qty,
-                        item_var_id: items?.stockCode,
-                      })
-                    ),
-                    current_page: currentPage,
-                  },
-                })
+                debugger
+                const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+                analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
               }
             }
           },
@@ -559,43 +487,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
 
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'wishlist', {
-        ecommerce: {
-          header: product?.name,
-          current_page: 'PDP',
-        },
-      })
-
-      recordGA4Event(window, 'add_to_wishlist', {
-        ecommerce: {
-          items: [
-            {
-              item_name: product?.name,
-              item_brand: product?.brand,
-              item_category: product?.mappedCategories[0]?.categoryName,
-              item_category2: product?.mappedCategories[1]?.categoryName,
-              item_variant: product?.variantGroupCode,
-              quantity: 1,
-              item_id: product?.productCode,
-              price: product?.price?.raw?.withTax,
-            },
-          ],
-          item_var_id: product?.stockCode,
-          header: 'PDP',
-          current_page: 'PDP',
-          availability: productAvailability,
-        },
-      })
+      debugger
+      analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
+      analyticsEventDispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'wishlist', {
-          ecommerce: {
-            header: 'PDP',
-            current_page: currentPage,
-          },
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
       }
     }
 

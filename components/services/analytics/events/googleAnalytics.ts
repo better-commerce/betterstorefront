@@ -80,45 +80,6 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         },
 
         /**
-         * Event: Cart
-         */
-        [AnalyticsEventType.BASKET]: {
-            transformMap: {
-                originalLocation: (source: any) => `${source.originalLocation}`,
-                event: AnalyticsEventType.BASKET,
-                gtm: { uniqueEventId: GTMUniqueEventID.CART, start: new Date().getTime() },
-                crto: (source: any) => ({
-                    email: "",
-                    products: source?.cartItems?.lineItems?.length
-                        ? source?.cartItems?.lineItems?.map((item: any, itemId: number) => (item?.sku))
-                        : new Array<any>(),
-                }),
-                ecommerce: (source: any) => ({
-                    items: source?.cartItems?.lineItems?.length
-                        ? source?.cartItems?.lineItems?.map((item: any, itemId: number) => ({
-                            item_id: item?.stockCode || item?.sku,
-                            item_name: item?.name,
-                            Affliation: "Fashion Store",
-                            Coupon: "",
-                            discount: source?.cartItems?.discount?.raw?.withTax,
-                            index: itemId,
-                            item_list_id: item?.stockCode || item?.sku,
-                            item_list_name: source?.itemListName || (item?.categoryItems?.length ? item?.categoryItems[0]?.categoryName : ''),
-                            item_variant: item?.colorName,
-                            item_brand: item?.brand,
-                            //item_category2: item?.categoryItems?.length ? item?.categoryItems[1]?.categoryName : '', //
-                            quantity: item?.qty,
-                            item_var_id: item?.stockCode,
-                            item_is_bundle_item: (source: any) => source?.itemIsBundleItem,
-                            price: item?.price?.raw?.withTax,
-                            item_category: item?.categoryItems?.length ? item?.categoryItems[0]?.categoryName : '',
-                        }))
-                        : new Array<any>(),
-                })
-            }
-        },
-
-        /**
          * Event: Add to Cart
          */
         [AnalyticsEventType.ADD_TO_BASKET]: {
@@ -481,6 +442,52 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         },
 
         /**
+         * Event: Add Payment Info
+         */
+        [AnalyticsEventType.ADD_PAYMENT_INFO]: {
+            transformMap: {
+                event: AnalyticsEventType.ADD_PAYMENT_INFO,
+                gtm: { uniqueEventId: GTMUniqueEventID.ADD_PAYMENT_INFO, start: new Date().getTime(), },
+                crto: (source: any) => ({
+                    email: source?.user?.email,
+                    transactionId: source?.transactionId,
+                    products: source?.cartItems?.lineItems?.map((item: any, itemId: number) => ({
+                        id: item?.sku,
+                        price: item?.price?.raw?.withTax,
+                        quantity: item?.qty,
+                    })) || new Array<any>(),
+                }),
+                ecommerce: (source: any) => ({
+                    items: source?.cartItems?.lineItems?.map(
+                        (item: any, itemId: number) => ({
+                            item_id: item?.stockCode,
+                            item_name: item?.name,
+                            Affliation: "FFX Website",
+                            Coupon: "",
+                            discount: "",
+                            index: itemId,
+                            item_list_name: item?.categoryItems?.length
+                                ? item?.categoryItems[0]?.categoryName
+                                : item?.classification?.category,
+                            item_list_id: item?.categoryItems?.length
+                                ? item?.categoryItems[0]?.categoryId
+                                : item?.stockCode,
+                            item_variant: item?.variantGroupCode || item?.colorName,
+                            item_brand: item?.brand,
+                            quantity: item?.qty,
+                            item_is_bundle_item: false,
+                            price: item?.price?.raw?.withTax,
+                        })
+                    ),
+                    value: source?.cartItems?.grandTotal?.raw?.withTax,
+                    currency: source?.cartItems?.baseCurrency,
+                    payment_type: source?.paymentType.toUpperCase(),
+                }),
+
+            },
+        },
+
+        /**
          * Event: Purchase
          */
         [AnalyticsEventType.PURCHASE]: {
@@ -533,7 +540,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.HELP_ICON]: {
             transformMap: {
                 event: AnalyticsEventType.HELP_ICON,
-                helpmode: 'cancel/return/exchange/chat',
+                helpmode: 'helpMode',
                 device: 'deviceCheck',
             },
         },
@@ -727,6 +734,17 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
             transformMap: {
                 event: AnalyticsEventType.LOGO_CLICK,
                 current_page: 'currentPage',
+            },
+        },
+
+        /**
+         * Event: Policy Popup
+         */
+        [AnalyticsEventType.POLICY_POPUP]: {
+            transformMap: {
+                event: AnalyticsEventType.POLICY_POPUP,
+                current_page: 'currentPage',
+                category: 'category',
             },
         },
     }

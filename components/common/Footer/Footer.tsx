@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react'
 import { Logo } from '@components/ui'
 import { useRouter } from 'next/router'
 import { getCurrentPage } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import FooterMenu from '../Footer/FooterMenu'
 import SocialLinks from '../Footer/SocialLinks'
 import Newsletter from '../Footer/Newsletter'
@@ -10,6 +9,8 @@ import { IExtraProps } from '../Layout/Layout'
 import Script from 'next/script'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 interface Props {
   config: []
@@ -40,11 +41,8 @@ const Footer: FC<Props & IExtraProps> = ({
     let currentPage = getCurrentPage()
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'footer_query_click', {
-          device: deviceCheck,
-          page_clicked_on: currentPage,
-          click_detail: detail,
-        })
+        debugger
+        analyticsEventDispatch(AnalyticsEventType.FOOTER_QUERY_CLICK, { detail, currentPage, deviceCheck, })
       }
     }
   }

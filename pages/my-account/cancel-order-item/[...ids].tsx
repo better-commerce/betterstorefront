@@ -19,7 +19,6 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
@@ -31,6 +30,8 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 
 function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
@@ -105,11 +106,8 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         setAlert({ type: 'success', msg: translate('common.message.itemCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'cancel_confirm', {
-            transaction_id: toNumber(payment?.id?.toString()),
-            user_id: user?.userId,
-            device: deviceCheck,
-          })
+          debugger
+          analyticsEventDispatch(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
         }
       } catch (error) {
         setCancelLineItemLoading(false)
