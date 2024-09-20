@@ -37,7 +37,7 @@ import ProductSocialProof from './ProductSocialProof'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import TechnicalSpecifications from './TechnicalSpecification'
 import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
@@ -390,12 +390,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
           }
           if (window?.ch_session && memoizedDataForEngage) {
             window?.ch_add_to_cart_before(memoizedDataForEngage)
@@ -473,12 +473,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
               }
             }
           },
@@ -595,14 +595,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
-      analyticsEventDispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
       }
     }
 

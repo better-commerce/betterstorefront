@@ -27,7 +27,7 @@ import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { PRODUCTS } from "./Product/data";
 import { Guid } from '@commerce/types';
-import { analyticsEventDispatch } from "./services/analytics/analyticsEventDispatch";
+import AnalyticsEventManager from "./services/analytics/AnalyticsEventManager";
 import { AnalyticsEventType } from "./services/analytics";
 import Router from "next/router";
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
@@ -173,12 +173,12 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
+          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Quick View', itemIsBundleItem: false })
+            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Quick View', itemIsBundleItem: false })
           }
         }
       },
@@ -250,12 +250,12 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
+              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Quick View', itemIsBundleItem: false })
+                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Quick View', itemIsBundleItem: false })
               }
             }
           },
@@ -380,14 +380,14 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
 
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view ', })
-        analyticsEventDispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view ', })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
       }
 
       if (currentPage) {
         if (typeof window !== 'undefined') {
           debugger
-          analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
+          AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
         }
       }
 

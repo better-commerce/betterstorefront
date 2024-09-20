@@ -20,7 +20,7 @@ import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import wishlistHandler from '@components/services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
 import AttributesHandler from './AttributesHandler'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -127,12 +127,12 @@ export default function PLPQuickView({
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
+          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
+            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
           }
         }
       },
@@ -200,12 +200,12 @@ export default function PLPQuickView({
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              analyticsEventDispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
+              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, });
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
+                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
               }
             }
           },
@@ -244,14 +244,14 @@ export default function PLPQuickView({
 
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view', })
-      analyticsEventDispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
       }
     }
 

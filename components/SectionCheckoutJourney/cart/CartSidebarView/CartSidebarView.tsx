@@ -23,7 +23,7 @@ import RelatedProducts from '@components/Product/RelatedProducts'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import Engraving from '@components/Product/Engraving'
 import Router from 'next/router'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
@@ -393,7 +393,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           if (currentPage) {
             if (typeof window !== 'undefined') {
               debugger
-              analyticsEventDispatch(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
+              AnalyticsEventManager.dispatch(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
             }
           }
         } else {
@@ -411,7 +411,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + window.location.href }
-          analyticsEventDispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
+          AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
         }
         if (window?.ch_session) {
           window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
@@ -447,7 +447,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     if (typeof window !== 'undefined') {
       debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      analyticsEventDispatch(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
     }
   }
 

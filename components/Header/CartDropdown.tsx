@@ -16,7 +16,7 @@ import { AlertType } from '@framework/utils/enums';
 import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import TransferBasket from "@components/TransferBasket";
-import { analyticsEventDispatch } from "@components/services/analytics/analyticsEventDispatch";
+import AnalyticsEventManager from "@components/services/analytics/AnalyticsEventManager";
 import { AnalyticsEventType } from "@components/services/analytics";
 import Router from "next/router";
 
@@ -44,7 +44,7 @@ export default function CartDropdown() {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false })
       }
     }
   }

@@ -43,7 +43,7 @@ import {
 } from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
@@ -210,7 +210,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
         if (currentPage) {
           if (typeof window !== 'undefined') {
             debugger
-            analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
+            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }
@@ -233,7 +233,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        analyticsEventDispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, })
       }
     }
   }
@@ -242,9 +242,9 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
         debugger
-        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
       }
     }
   }
@@ -253,7 +253,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader: EmptyString, subHeader2: EmptyString, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader: EmptyString, subHeader2: EmptyString, })
       }
     }
   }
@@ -262,7 +262,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2: EmptyString, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2: EmptyString, })
       }
     }
   }
@@ -271,7 +271,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2, })
       }
     }
   }

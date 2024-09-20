@@ -14,7 +14,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import CheckoutHeading from '@components/SectionCheckoutJourney/checkout/CheckoutHeading'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutRouter'))
 const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutForm'))
@@ -164,7 +164,7 @@ function Checkout({ cart, config, location }: any) {
   const recordShippingInfo = () => {
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems, })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems, })
     }
   }
 

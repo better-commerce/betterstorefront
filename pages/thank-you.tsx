@@ -27,7 +27,7 @@ import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderIt
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 import { ContentSnippetInjector } from '@components/common/Content'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export default function OrderConfirmation({ config }: any) {
@@ -275,7 +275,7 @@ export default function OrderConfirmation({ config }: any) {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        analyticsEventDispatch(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, cartItems, orderInfo, orderData, itemIsBundleItem: false })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, cartItems, orderInfo, orderData, itemIsBundleItem: false })
       }
 
       setTimeout(() => {

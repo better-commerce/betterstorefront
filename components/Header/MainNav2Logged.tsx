@@ -12,7 +12,7 @@ import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
 import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { analyticsEventDispatch } from "@components/services/analytics/analyticsEventDispatch";
+import AnalyticsEventManager from "@components/services/analytics/AnalyticsEventManager";
 import { AnalyticsEventType } from "@components/services/analytics";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
@@ -73,7 +73,7 @@ function handleWishlist() {
         if (currentPage) {
           if (typeof window !== 'undefined') {
             debugger
-            analyticsEventDispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
+            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }

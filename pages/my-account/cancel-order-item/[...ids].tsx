@@ -30,7 +30,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 
@@ -107,7 +107,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
           debugger
-          analyticsEventDispatch(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
+          AnalyticsEventManager.dispatch(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
         }
       } catch (error) {
         setCancelLineItemLoading(false)

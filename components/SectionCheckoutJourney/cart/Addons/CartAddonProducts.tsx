@@ -6,7 +6,7 @@ import cartHandler from '@components/services/cart'
 import AddonCard from './AddonCard'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
 
@@ -70,14 +70,14 @@ export default function CartAddonProducts({ products, deviceInfo, maxBasketItems
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
       }
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
       }
     }
   }

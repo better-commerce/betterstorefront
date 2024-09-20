@@ -15,7 +15,7 @@ import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
 import { AlertType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 export function asyncHandler() {
   function getAddress() {
@@ -243,7 +243,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
     if (typeof window !== 'undefined') {
       if (currentPage) {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
       }
     }
 

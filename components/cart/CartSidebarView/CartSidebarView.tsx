@@ -25,7 +25,7 @@ import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyV
 import wishlistHandler from '@components/services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { ArrowRight } from '@components/icons'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 
@@ -391,7 +391,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           if (currentPage) {
             if (typeof window !== 'undefined') {
               debugger
-              analyticsEventDispatch(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
+              AnalyticsEventManager.dispatch(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
             }
           }
         } else {
@@ -409,7 +409,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          analyticsEventDispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...product, ...{ ...extras }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
+          AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...product, ...{ ...extras }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
 
           if(window?.ch_session){
             window.ch_remove_from_cart_before({ item_id : product?.sku || EmptyString})
@@ -446,7 +446,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     if (typeof window !== 'undefined') {
       debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      analyticsEventDispatch(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
     }
   }
 

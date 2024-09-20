@@ -6,7 +6,7 @@ import { IPLPFilterState, useUI } from '@components/ui/context'
 import useCart from '@components/services/cart'
 import PLPSort from './PLPSort'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 type PLPFilterSidebarProps = {
@@ -61,7 +61,7 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar
 
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 
     if (accessToken) {

@@ -6,7 +6,7 @@ import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 export default function AddressItem({
   item,
@@ -48,7 +48,7 @@ export default function AddressItem({
     if (typeof window !== 'undefined') {
       if (currentPage) {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })

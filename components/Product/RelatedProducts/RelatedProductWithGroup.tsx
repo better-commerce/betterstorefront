@@ -8,7 +8,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
@@ -73,14 +73,14 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, currentPage, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, currentPage, })
       }
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
       }
     }
   }

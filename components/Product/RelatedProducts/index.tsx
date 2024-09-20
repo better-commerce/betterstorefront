@@ -9,7 +9,7 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
@@ -88,17 +88,17 @@ export default function RelatedProducts({
   function viewProductDetail(product: any, pid: number) {
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.PDP_VIEW_DETAILS, { ...product, position: pid + 1, currentPage, sectionTitle: 'Frequently Bought Together', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_VIEW_DETAILS, { ...product, position: pid + 1, currentPage, sectionTitle: 'Frequently Bought Together', })
       let color = ''
       if (product?.variantGroupCode) {
         color = product?.variantGroupCode?.split('-')[1]
       }
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      analyticsEventDispatch(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
-      analyticsEventDispatch(AnalyticsEventType.VIEW_PRODUCT_DETAILS, { ...product, header: title, currentPage: 'Cart', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_PRODUCT_DETAILS, { ...product, header: title, currentPage: 'Cart', })
 
       if (checkout_refrence == true) {
-        analyticsEventDispatch(AnalyticsEventType.REFERRER_BANNERS, { ...product, categoryPosition: 'Checkout', header: title, position: pid + 1, currentPage: 'Cart', })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.REFERRER_BANNERS, { ...product, categoryPosition: 'Checkout', header: title, position: pid + 1, currentPage: 'Cart', })
       }
     }
   }
@@ -108,8 +108,8 @@ export default function RelatedProducts({
     if (typeof window !== 'undefined') {
       debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
-      analyticsEventDispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage: 'Cart', header: title, })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage: 'Cart', header: title, })
     }
   }
 

@@ -9,7 +9,7 @@ import { IExtraProps } from '../Layout/Layout'
 import Script from 'next/script'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 interface Props {
@@ -42,7 +42,7 @@ const Footer: FC<Props & IExtraProps> = ({
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.FOOTER_QUERY_CLICK, { detail, currentPage, deviceCheck, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.FOOTER_QUERY_CLICK, { detail, currentPage, deviceCheck, })
       }
     }
   }

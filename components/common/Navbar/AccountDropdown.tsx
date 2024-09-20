@@ -4,7 +4,7 @@ import { UserIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export default function Account({ config, title, deviceInfo }: any) {
@@ -23,7 +23,7 @@ export default function Account({ config, title, deviceInfo }: any) {
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.LOGIN_ATTEMPT, { browser: 'Chrome', currentPage, deviceCheck, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.LOGIN_ATTEMPT, { browser: 'Chrome', currentPage, deviceCheck, })
       }
     }
   }

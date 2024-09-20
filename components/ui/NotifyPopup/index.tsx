@@ -5,7 +5,7 @@ import axios from 'axios'
 import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'
 import { validate } from 'email-validator'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export default function NotifyUserPopup() {
@@ -41,8 +41,8 @@ export default function NotifyUserPopup() {
 
     if (typeof window !== "undefined") {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.NOTIFY_ME, { currentPage: "PDP", })
-      analyticsEventDispatch(AnalyticsEventType.NOTIFY_CLICK, { currentPage: "PDP", })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.NOTIFY_ME, { currentPage: "PDP", })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.NOTIFY_CLICK, { currentPage: "PDP", })
     }
   }
 

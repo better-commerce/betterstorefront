@@ -3,7 +3,7 @@ import { CURRENT_THEME } from '@components/utils/constants'
 import {  } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
 import Image from 'next/image'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 const Logo = ({ className = '', ...props }) => {
@@ -13,7 +13,7 @@ const Logo = ({ className = '', ...props }) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        analyticsEventDispatch(AnalyticsEventType.LOGO_CLICK, { currentPage, })
+        AnalyticsEventManager.dispatch(AnalyticsEventType.LOGO_CLICK, { currentPage, })
       }
     }
   }

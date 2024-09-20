@@ -32,7 +32,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function ReturnOrder({
@@ -135,7 +135,7 @@ function ReturnOrder({
         setItemReturnLoading(false)
         if (typeof window !== 'undefined') {
           debugger
-          analyticsEventDispatch(AnalyticsEventType.RETURN_CONFIRM, { transactionId: data?.orderId, user, deviceCheck, })
+          AnalyticsEventManager.dispatch(AnalyticsEventType.RETURN_CONFIRM, { transactionId: data?.orderId, user, deviceCheck, })
         }
         setTimeout(() => {
           Router.push('/my-account/orders')

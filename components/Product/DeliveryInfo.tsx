@@ -14,7 +14,7 @@ import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductWarranty from './ProductWarranty'
 import ProductReturn from './ProductReturn'
-import { analyticsEventDispatch } from '@components/services/analytics/analyticsEventDispatch'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
@@ -54,7 +54,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     setWarranty(true)
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.LOGO_CLICK, { currentPage: 'PDP', category: 'Warranty', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.LOGO_CLICK, { currentPage: 'PDP', category: 'Warranty', })
     }
   }
 
@@ -62,7 +62,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     setReturn(true)
     if (typeof window !== 'undefined') {
       debugger
-      analyticsEventDispatch(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
+      AnalyticsEventManager.dispatch(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
     }
   }
   const shippingSettings = config?.configSettings?.find(
