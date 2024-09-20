@@ -11,21 +11,3 @@ export enum GTMUniqueEventID {
   VIEW_CART = 44,
   PURCHASE = 45,
 }
-
-export const recordGA4Event = (
-  window: any,
-  eventName: string,
-  eventParams: any
-) => {
-  //GA4.event(eventName, eventParams);
-  if (!GA4_DISABLED && window && window?.dataLayer) {
-    try {
-      window?.dataLayer?.push({
-        event: eventName,
-        page: eventParams,
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-}
