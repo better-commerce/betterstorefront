@@ -74,7 +74,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                             item_category: item?.categoryItems?.length ? item?.categoryItems[0]?.categoryName : '',
                         }))
                         : new Array<any>(),
-                    current_page: 'currentPage',
+                    current_page: (source:any) => source.currentPage,
                 })
             },
         },
@@ -111,7 +111,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                 }),
                 currency: (source: any) => `${source?.price?.currencySymbol}`,
                 value: (source: any) => `${source?.cartItems?.grandTotal?.raw?.withTax}`,
-                add_to_cart_type: 'addToCartType',
+                add_to_cart_type: (source:any) => source?.addToCartType,
             },
         },
 
@@ -168,7 +168,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                     ? source?.categoryItems[0]?.categoryName
                     : EmptyString,
                 final_quantity: (source: any) => source?.qty,
-                current_page: 'currentPage',
+                current_page: (source:any) => source.currentPage,
                 number_of_plus_clicked: 1,
                 number_of_minus_clicked: 0,
             }
@@ -180,7 +180,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.SAVE_NEW_ADDRESS]: {
             transformMap: {
                 event: AnalyticsEventType.SAVE_NEW_ADDRESS,
-                current_page: 'currentPage',
+                current_page: (source:any) => source.currentPage,
             },
         },
 
@@ -191,8 +191,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
             transformMap: {
                 event: AnalyticsEventType.VIEW_WISHLIST,
                 ecommerce: {
-                    header: 'header',
-                    current_page: 'currentPage',
+                    header: (source:any) => source?.header,
+                    current_page: (source:any) => source.currentPage,
                 },
             },
         },
@@ -217,9 +217,9 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         },
                     ],
                     item_var_id: source?.stockCode,
-                    header: 'header',
-                    current_page: 'currentPage',
-                    availability: 'productAvailability',
+                    header: (source:any) => source?.header,
+                    current_page: (source:any) => source.currentPage,
+                    availability: (source:any) => source?.productAvailability,
                 }),
             }
         },
@@ -230,8 +230,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.REMOVE_FROM_WISHLIST]: {
             transformMap: {
                 event: AnalyticsEventType.VIEW_WISHLIST,
-                product_name: 'name',
-                availability: 'productAvailability',
+                product_name: (source:any) => source?.name,
+                availability: (source:any) => source?.productAvailability,
                 product_id: 'sku',
             },
         },
@@ -242,8 +242,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.ADDRESS_CHANGE]: {
             transformMap: {
                 event: AnalyticsEventType.ADDRESS_CHANGE,
-                delivery_address_name: 'deliveryAddressName',
-                current_page: 'currentPage',
+                delivery_address_name: (source:any) => source?.deliveryAddressName,
+                current_page: (source:any) => source.currentPage,
             },
         },
 
@@ -268,11 +268,11 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                         item_list_name: "",
                         item_category: source?.classification?.mainCategoryName,
                         item_category2: source?.classification?.category,
-                        item_variant: 'color',
+                        item_variant: (source:any) => source?.color,
                         quantity: 1,
                         item_var_id: source?.stockCode,
                         price: source?.price?.raw?.withTax,
-                        item_is_bundle_item: 'itemIsBundleItem',
+                        item_is_bundle_item: (source:any) => source?.itemIsBundleItem,
                     },
                 }),
             },
@@ -314,9 +314,9 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.VIEW_PRODUCT_DETAILS]: {
             transformMap: {
                 event: AnalyticsEventType.VIEW_PRODUCT_DETAILS,
-                category_selected: 'name',
-                header: 'header',
-                current_page: 'currentPage',
+                category_selected: (source:any) => source?.name,
+                header: (source:any) => source?.header,
+                current_page: (source:any) => source.currentPage,
             },
         },
 
@@ -326,13 +326,13 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.PDP_QUICK_VIEW]: {
             transformMap: {
                 event: AnalyticsEventType.PDP_QUICK_VIEW,
-                product_name: 'name',
-                category: 'classification?.mainCategoryName',
+                product_name: (source:any) => source?.name,
+                category: (source:any) => source?.classification?.mainCategoryName,
                 page: (source: any) => `${source.originalLocation}`,
-                position: 'position',
-                color: 'variantGroupCode',
-                price: 'price?.raw?.withTax',
-                current_page: 'currentPage',
+                position: (source:any) => source?.position,
+                color: (source:any) => source?.variantGroupCode,
+                price: (source:any) => source?.price?.raw?.withTax,
+                current_page: (source:any) => source.currentPage,
             },
         },
 
@@ -344,13 +344,13 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                 event: AnalyticsEventType.PDP_QUICK_VIEW_CLICK,
                 ecommerce: {
                     items: {
-                        product_name: 'name',
-                        position: 'position',
-                        product_price: 'price?.raw?.withTax',
-                        color: 'variantGroupCode',
-                        category: 'classification?.mainCategoryName',
-                        current_page: 'currentPage',
-                        header: 'header',
+                        product_name: (source:any) => source?.name,
+                        position: (source:any) => source?.position,
+                        product_price: (source:any) => source?.price?.raw?.withTax,
+                        color: (source:any) => source?.variantGroupCode,
+                        category: (source:any) => source?.classification?.mainCategoryName,
+                        current_page: (source:any) => source.currentPage,
+                        header: (source:any) => source?.header,
                     },
                 },
             },
@@ -363,8 +363,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
             transformMap: {
                 event: AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL,
                 category_selected: (source: any) => source?.mappedCategories?.length > 2 ? source?.mappedCategories?.[2]?.categoryName : EmptyString,
-                header: 'name',
-                current_page: 'currentPage',
+                header: (source:any) => source?.name,
+                current_page: (source:any) => source.currentPage,
             },
         },
 
@@ -394,19 +394,19 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                             item_name: item?.name,
                             Affliation: "Fashion Store",
                             Coupon: "",
-                            discount: 'cartItems?.discount?.raw?.withTax',
+                            discount: (source:any) => source?.cartItems?.discount?.raw?.withTax,
                             index: itemId,
                             item_list_id: item?.id || item?.sku,
                             item_list_name: 'Cart',
                             item_variant: item?.colorName,
                             item_brand: item?.brand,
                             quantity: item?.qty,
-                            item_is_bundle_item: 'itemIsBundleItem',
+                            item_is_bundle_item: (source:any) => source?.itemIsBundleItem,
                             price: item?.price?.raw?.withTax,
                             item_category: item?.categoryItems?.length ? item?.categoryItems[0]?.categoryName : EmptyString,
                         }))
                         : new Array<any>(),
-                    current_page: 'currentPage',
+                    current_page: (source:any) => source.currentPage,
                     loggedin_status: (source: any) => source?.user?.userId && source?.user?.userId !== Guid.empty,
                     value: 'cartItems?.grandTotal?.raw?.withTax',
                 }),
@@ -520,7 +520,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
                                 item_variant: item?.variantGroupCode || item?.colorName,
                                 item_brand: item?.brand,
                                 quantity: item?.qty,
-                                item_is_bundle_item: 'itemIsBundleItem',
+                                item_is_bundle_item: (source:any) => source?.itemIsBundleItem,
                                 price: item?.price?.raw?.withTax,
                             })
                         )
@@ -540,8 +540,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.HELP_ICON]: {
             transformMap: {
                 event: AnalyticsEventType.HELP_ICON,
-                helpmode: 'helpMode',
-                device: 'deviceCheck',
+                helpmode: (source:any) => source?.helpMode,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -551,8 +551,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.HAMBURGER_MENU]: {
             transformMap: {
                 event: AnalyticsEventType.HAMBURGER_MENU,
-                current_page: 'currentPage',
-                device: 'deviceCheck',
+                current_page: (source:any) => source.currentPage,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -563,10 +563,10 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
             transformMap: {
                 event: AnalyticsEventType.HAMBURGER_MENU_CLICK,
                 header: 'item',
-                sub_header: 'subHeader',
-                sub_header2: 'subHeader2',
-                current_page: 'currentPage',
-                device: 'deviceCheck',
+                sub_header: (source:any) => source?.subHeader,
+                sub_header2: (source:any) => source?.subHeader2,
+                current_page: (source:any) => source.currentPage,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -576,11 +576,11 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.HAMBURGER_ICON_CLICK]: {
             transformMap: {
                 event: AnalyticsEventType.HAMBURGER_ICON_CLICK,
-                header: 'header',
-                sub_header: 'subHeader',
-                sub_header2: 'subHeader2',
-                current_page: 'currentPage',
-                device: 'deviceCheck',
+                header: (source:any) => source?.header,
+                sub_header: (source:any) => source?.subHeader,
+                sub_header2: (source:any) => source?.subHeader2,
+                current_page: (source:any) => source?.currentPage,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -590,8 +590,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.HELP_SIDEBAR_MENU]: {
             transformMap: {
                 event: AnalyticsEventType.HELP_SIDEBAR_MENU,
-                helpmode: 'mode',
-                device: 'deviceCheck',
+                helpmode: (source:any) => source?.mode,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -602,7 +602,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
             transformMap: {
                 event: AnalyticsEventType.NEED_HELP_WITH_ORDER,
                 helpmode: 'Order',
-                device: 'deviceCheck',
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -640,9 +640,9 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.CANCEL_CONFIRM]: {
             transformMap: {
                 event: AnalyticsEventType.CANCEL_CONFIRM,
-                transaction_id: 'transactionId',
-                user_id: 'user?.userId',
-                device: 'deviceCheck',
+                transaction_id: (source:any) => source?.transactionId,
+                user_id: (source:any) => source?.user?.userId,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -652,9 +652,9 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.RETURN_CONFIRM]: {
             transformMap: {
                 event: AnalyticsEventType.RETURN_CONFIRM,
-                transaction_id: 'transactionId',
-                user_id: 'user?.userId',
-                device: 'deviceCheck',
+                transaction_id: (source:any) => source?.transactionId,
+                user_id: (source:any) => source?.user?.userId,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -664,8 +664,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.TRACK_PACKAGE]: {
             transformMap: {
                 event: AnalyticsEventType.TRACK_PACKAGE,
-                transaction_id: 'details?.payments?.id',
-                device: 'deviceCheck',
+                transaction_id: (source:any) => source?.details?.payments?.id,
+                device: (source:any) => source?.deviceCheck,
             },
         },
 
@@ -675,9 +675,9 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.FOOTER_QUERY_CLICK]: {
             transformMap: {
                 event: AnalyticsEventType.FOOTER_QUERY_CLICK,
-                device: 'deviceCheck',
-                page_clicked_on: 'currentPage',
-                click_detail: 'detail',
+                device: (source:any) => source?.deviceCheck,
+                page_clicked_on: (source:any) => source?.currentPage,
+                click_detail: (source:any) => source?.detail,
             },
         },
 
@@ -687,9 +687,9 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.LOGIN_ATTEMPT]: {
             transformMap: {
                 event: AnalyticsEventType.LOGIN_ATTEMPT,
-                device: 'deviceCheck',
-                browser: 'browser',
-                current_page: 'currentPage',
+                device: (source:any) => source?.deviceCheck,
+                browser: (source:any) => source?.browser,
+                current_page: (source:any) => source?.currentPage,
             },
         },
 
@@ -699,7 +699,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.NOTIFY_ME]: {
             transformMap: {
                 event: AnalyticsEventType.NOTIFY_ME,
-                current_page: 'currentPage',
+                current_page: (source:any) => source?.currentPage,
             },
         },
 
@@ -709,7 +709,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.NOTIFY_CLICK]: {
             transformMap: {
                 event: AnalyticsEventType.NOTIFY_CLICK,
-                current_page: 'currentPage',
+                current_page: (source:any) => source?.currentPage,
             },
         },
 
@@ -719,11 +719,11 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.REFERRER_BANNERS]: {
             transformMap: {
                 event: AnalyticsEventType.REFERRER_BANNERS,
-                cross_sell_category_position: 'categoryPosition',
-                section_title: 'title',
-                product_name: 'name',
-                product_clicked_position: 'position',
-                current_page: 'currentPage',
+                cross_sell_category_position: (source:any) => source?.categoryPosition,
+                section_title: (source:any) => source?.title,
+                product_name: (source:any) => source?.name,
+                product_clicked_position: (source:any) => source?.position,
+                current_page: (source:any) => source?.currentPage,
             },
         },
 
@@ -733,7 +733,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.LOGO_CLICK]: {
             transformMap: {
                 event: AnalyticsEventType.LOGO_CLICK,
-                current_page: 'currentPage',
+                current_page: (source:any) => source?.currentPage,
             },
         },
 
@@ -743,8 +743,8 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.POLICY_POPUP]: {
             transformMap: {
                 event: AnalyticsEventType.POLICY_POPUP,
-                current_page: 'currentPage',
-                category: 'category',
+                current_page: (source:any) => source?.currentPage,
+                category: (source:any) => source?.category,
             },
         },
     }

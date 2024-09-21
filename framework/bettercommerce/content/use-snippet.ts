@@ -21,7 +21,7 @@ const useSnippet = (snippets: Array<any>) => {
             const arrNodes = container.querySelectorAll('*')
             arrNodes.forEach((node: any, key: number) => {
                 if (node.innerHTML) {
-                    scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node.innerHTML, })
+                    scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node?.innerHTML?.replaceAll('\n', '')?.replaceAll('\r', ''), })
                 } else if (node.src) {
                     scripts.push({ name: snippet.name, type: 'text/javascript', src: node.src, })
                 }

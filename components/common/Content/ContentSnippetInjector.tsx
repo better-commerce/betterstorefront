@@ -1,5 +1,5 @@
 // Base Imports
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 
 // Package Imports
 import Head from "next/head"
@@ -10,9 +10,24 @@ import uniqBy from "lodash/uniqBy";
 import useSnippet, { ISnippetSet } from "@framework/content/use-snippet";
 
 const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: any) => {
+    const containerRef = React.createRef<any>()
     let { snippets } = props;
     snippets = uniqBy(snippets, 'name') // Prevent duplicate data being passed on to snippets rendering engine.
     const { topHeadSnippets, headSnippets, restSnippets, }: any = useSnippet(snippets)
+
+    
+    /**
+     * Injects snippets into container.
+     * @param snippets - Array of snippets to inject.
+     */
+    const injectSnippetsBody = useCallback((snippets: any, container: any) => {
+        snippets?.filter((x: any)=> x.innerHTML)?.forEach((snippet: any, index: number) => {
+            const script = document.createElement('script')
+            script.innerHTML = snippet?.innerHTML
+            script.async = true
+            container.appendChild(script)
+        })
+    }, [])
 
     const renderSnippetSet = useCallback((snippetSet: any, strategy?: 'afterInteractive' | 'lazyOnload' | 'beforeInteractive' | 'worker') => {
 
@@ -23,10 +38,6 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
                 ))}
                 {snippetSet?.scripts?.length > 0 && snippetSet?.scripts?.map((script: any, index: number) => (
                     <>
-                        {script?.innerHTML && (
-                            <Script id={`${script?.name}${index + 1}`} data-bc-name={`${script?.name}${index + 1}`} key={`${script?.name}${index}`} dangerouslySetInnerHTML={{ __html: script?.innerHTML }} />
-                        )}
-
                         {script?.src && (
                             <Script id={`${script?.name}${index + 1}`} data-bc-name={`${script?.name}${index + 1}`} key={`${script?.name}${index}`} type={script?.type} src={script?.src} strategy={strategy} />
                         )}
@@ -35,6 +46,18 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
             </>
         )
     }, [])
+
+    useEffect(() => {
+        injectSnippetsBody(topHeadSnippets?.scripts || [], document.head)
+    }, [topHeadSnippets])
+
+    useEffect(() => {
+        injectSnippetsBody(headSnippets?.scripts || [], document.head)
+    }, [headSnippets])
+
+    useEffect(() => {
+        injectSnippetsBody(restSnippets?.scripts || [], document.body)
+    }, [restSnippets])
 
     return (
         <>
