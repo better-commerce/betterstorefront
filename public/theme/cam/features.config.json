@@ -17,7 +17,8 @@
     "enableCategory": true,
     "enableDemoToggle": false,
     "enableLoqateSearch": false,
-    "enableAddressIOSearch":false
+    "enableAddressIOSearch":false,
+    "enableAnalytics": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

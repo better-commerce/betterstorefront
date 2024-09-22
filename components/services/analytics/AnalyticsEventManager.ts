@@ -3,7 +3,8 @@ import { allEnumKeys } from '@framework/utils/app-util';
 import { AnalyticsType } from '.';
 import { Analytics } from './events';
 import { mapObject } from '@framework/utils/translate-util';
-import { EmptyObject } from '@components/utils/constants';
+import { CURRENT_THEME, EmptyObject } from '@components/utils/constants';
+const featureToggle = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
 
@@ -56,31 +57,33 @@ class EventManager {
      * the transformMap in the event config
      */
     private dispatchEvent(providerKey: string, eventType: string, eventData: any) {
-        const providerConfig = Analytics.Events[providerKey];
-        if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
-            console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
-            return;
-        }
+        if (featureToggle?.features?.enableAnalytics) {
+            const providerConfig = Analytics.Events[providerKey];
+            if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
+                console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
+                return;
+            }
 
-        const eventConfig = providerConfig.events[eventType]
-        const translatedEventData = (eventData && eventConfig?.transformMap) ? mapObject(eventData, eventConfig?.transformMap) : EmptyObject
-        debugger
+            const eventConfig = providerConfig.events[eventType]
+            const translatedEventData = (eventData && eventConfig?.transformMap) ? mapObject(eventData, eventConfig?.transformMap) : EmptyObject
+            debugger
 
-        // Dispatch the event to the analytics platform (customize based on provider)
-        switch (providerKey) {
-            case AnalyticsType.GOOGLE_ANALYTICS:
+            // Dispatch the event to the analytics platform (customize based on provider)
+            switch (providerKey) {
+                case AnalyticsType.GOOGLE_ANALYTICS:
 
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    event: eventType,
-                    page: translatedEventData
-                })
-                break;
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        event: eventType,
+                        page: translatedEventData
+                    })
+                    break;
 
-            case AnalyticsType.GOOGLE_TAG:
+                case AnalyticsType.GOOGLE_TAG:
 
-                window.gtag('event', eventType, translatedEventData)
-                break;
+                    window.gtag('event', eventType, translatedEventData)
+                    break;
+            }
         }
     }
 }
