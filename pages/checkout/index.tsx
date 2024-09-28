@@ -612,7 +612,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       goToStep(CheckoutStep.DELIVERY)
     } else {
       // if billing address exists
-      if(basket?.billingAddress?.id){
+      if(basket?.billingAddress?.id && (address?.isBilling || address?.useSameForBilling)){
         if (!isLoggedIn) {
           setCompletedSteps((prev) => [
             ...new Set([...prev, CheckoutStep.ADDRESS]),
@@ -850,6 +850,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const editAddressFormProps = {
     ...newAddressFormProps,
     editAddressValues,
+    setEditAddressValues,
     onEditAddressToggleView,
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,

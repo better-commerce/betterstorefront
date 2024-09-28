@@ -20,6 +20,7 @@ const DEFAULT_COUNTRY = 'United Kingdom'
 
 const ShippingAddressForm: React.FC<any> = ({
   editAddressValues,
+  setEditAddressValues,
   onSubmit,
   searchAddressByPostcode,
   guestCheckoutFormik,
@@ -40,7 +41,14 @@ const ShippingAddressForm: React.FC<any> = ({
   const [searchedAddresses, setSearchedAddresses] = useState([])
   const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } = useUI()
   const [useSameForBilling, setUseSameForBilling] = useState(true)
+  const [hasSameBillingChanged, setHasSameBillingChanged] = useState(false)
   const [isGuestCheckoutSubmit, setIsGuestCheckoutSubmit] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      if (setEditAddressValues) setEditAddressValues(undefined)
+    }
+  }, [setEditAddressValues])
 
   const addressFinderFormik = useFormik({
     initialValues: {
@@ -152,11 +160,12 @@ const ShippingAddressForm: React.FC<any> = ({
   }, [currentStep, useSameForBilling, translate])
 
   const isSameAddress = useMemo(() => {
+    if (hasSameBillingChanged) return useSameForBilling
     if (basket?.shippingAddress && basket?.billingAddress) {
       return basket?.shippingAddress?.id === basket?.billingAddress?.id
     }
     return useSameForBilling
-  }, [basket, useSameForBilling])
+  }, [basket, useSameForBilling, hasSameBillingChanged])
 
   return (
     <>
@@ -449,6 +458,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   defaultChecked={isSameAddress}
                   onChange={(e) => {
                     setUseSameForBilling(e.target.checked)
+                    setHasSameBillingChanged(true)
                   }}
                 />
                 <label

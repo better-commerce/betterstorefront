@@ -57,12 +57,15 @@ const AddressBook: React.FC<AddressBookProps> = ({
     selectedShippingAddress?.id || 0
   )
   const [useSameForBilling, setUseSameForBilling] = useState<boolean>(true)
+  const [hasSameBillingChanged, setHasSameBillingChanged] = useState(false)
+
   const isSameAddress = useMemo(() => {
+    if (hasSameBillingChanged) return useSameForBilling
     if (basket?.shippingAddress && basket?.billingAddress) {
       return basket?.shippingAddress?.id === basket?.billingAddress?.id
     }
     return useSameForBilling
-  }, [basket, useSameForBilling])
+  }, [basket, useSameForBilling, hasSameBillingChanged])
   const [showBillingAddress, setShowBillingAddress] = useState<boolean>(!isSameAddress)
   const [mappedAddressList, setMappedAddressList] = useState<any>(addressList)
 
@@ -120,6 +123,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
       if (typeof address?.isBilling === 'boolean' && typeof address?.isDefaultBilling === 'boolean') {
         return address?.isBilling || address?.isDefaultBilling
       } else if (typeof address?.isDefaultBilling === 'boolean') {
+        if (address?.isDefaultBilling && address?.isDefaultDelivery) return !address?.isDefaultBilling
         return address?.isDefaultBilling
       }
       return address?.isBilling || false
@@ -316,6 +320,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                   defaultChecked={isSameAddress}
                   onChange={(e) => {
                     setUseSameForBilling(e.target.checked)
+                    setHasSameBillingChanged(true)
                     if (e.target.checked) {
                       onAddressSelect(
                         selectedShippingAddress,
