@@ -71,6 +71,12 @@ const AddressBook: React.FC<AddressBookProps> = ({
   const [mappedAddressList, setMappedAddressList] = useState<any>(addressList)
 
   useEffect(() => {
+    if (basket?.shippingAddress?.id && basket?.billingAddress?.id) {
+      setShowBillingAddress(basket?.shippingAddress?.id !== basket?.billingAddress?.id)
+    }
+  }, [basket?.shippingAddress, basket?.billingAddress])
+
+  useEffect(() => {
     setMappedAddressList(addressList)
   }, [addressList, isGuestUser])
 
@@ -287,7 +293,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 {
                   (!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && (
                     <div className="mt-4">
-                      <input id="useSameForBilling" type="checkbox" defaultChecked={isSameAddress} onChange={(e) => {
+                      <input id="useSameForBilling" type="checkbox" defaultChecked={isSameAddress} checked={isSameAddress} onChange={(e) => {
                           setUseSameForBilling(e.target.checked)
                           setHasSameBillingChanged(true)
                           if (e.target.checked) {
