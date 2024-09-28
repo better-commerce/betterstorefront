@@ -19,7 +19,10 @@ export enum SearchProvider {
 }
 
 export enum UserRoleType {
-  ADMIN = 1,
+  None = 0,
+  Admin = 1,
+  SalesUser = 2,
+  User = 3,
 }
 
 export enum CheckoutStep {

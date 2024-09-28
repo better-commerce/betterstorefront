@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { LoadingDots, useUI } from '@components/ui'
-import { isB2BUser } from '@framework/utils/app-util'
+import { displayCTAByUserRole, isB2BUser } from '@framework/utils/app-util'
 import { AlertType, CheckoutStep, UserRoleType } from '@framework/utils/enums'
 import BillingAddressForm from './BillingAddressForm'
 import { isMobile } from 'react-device-detect'
 import { DeliveryType, EmptyObject } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { Guid } from '@commerce/types'
 
 interface AddressBookProps {
   editAddressValues: any
@@ -139,7 +138,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">
                 {translate('label.addressBook.addressBookTitleText')}
               </h5>
-              {(!isGuestUser && user?.userId && user?.id != Guid.empty) && <button
+              {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && <button
                 className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
                 onClick={onAddNewAddress}
               >
@@ -197,23 +196,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               {address?.country && `${address?.country} `}
                             </span>
                           </div>
-                          {isB2BUserLoggedIn ? (
-                            <>
-                              {user?.companyUserRole === UserRoleType.ADMIN && (
-                                <div className="justify-end my-0 edit-btn">
-                                  <button
-                                    className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                    onClick={(e: any) => {
-                                      e.stopPropagation()
-                                      onEditAddressToggleView(address)
-                                    }}
-                                  >
-                                    {translate('common.label.editText')}
-                                  </button>
-                                </div>
-                              )}
-                            </>
-                          ) : (
+                          {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && (
                             <div className="justify-end my-0 edit-btn">
                               <button
                                 className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -276,23 +259,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {isB2BUserLoggedIn ? (
-                          <>
-                            {user?.companyUserRole === UserRoleType.ADMIN && (
-                              <div className="justify-end my-0 edit-btn">
-                                <button
-                                  className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                  onClick={(e: any) => {
-                                    e.stopPropagation()
-                                    onEditAddressToggleView(address)
-                                  }}
-                                >
-                                  {translate('common.label.editText')}
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        ) : (
+                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && (
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -398,23 +365,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {/* {isB2BUserLoggedIn ? (
-                          <>
-                            {user?.companyUserRole === UserRoleType.ADMIN && (
-                              <div className="justify-end my-0 edit-btn">
-                                <button
-                                  className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                  onClick={(e: any) => {
-                                    e.stopPropagation()
-                                    onEditAddressToggleView(address)
-                                  }}
-                                >
-                                  {translate('common.label.editText')}
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        ) : ( */}
+                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && (
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -426,7 +377,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               {translate('common.label.editText')}
                             </button>
                           </div>
-                        {/* )} */}
+                        )}
                       </div>
                     </div>
                   </div>

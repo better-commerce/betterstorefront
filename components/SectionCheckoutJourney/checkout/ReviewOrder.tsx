@@ -2,12 +2,13 @@
 import React from 'react'
 
 // Other Imports
-import { vatIncluded } from '@framework/utils/app-util'
+import { displayCTAByUserRole, vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import PaymentMethodSelection from './PaymentMethodSelection'
-import { CheckoutStep } from '@framework/utils/enums'
+import { CheckoutStep, UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { DeliveryType } from '@components/utils/constants'
+import { useUI } from '@components/ui'
 
 interface ShippingMethod {
   id: string
@@ -64,6 +65,8 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
   )
   const { shippingAddress, billingAddress } = basket || {}
   const selectedAddress = { shippingAddress, billingAddress }
+  const { user } = useUI()
+
   return (
     <>
       <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
@@ -76,7 +79,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
                 {deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) ? translate('label.addressBook.pickupAddressHeadingText') : translate('label.addressBook.shippingAddressHeadingText')}
               </h5>
-              {!deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
+              {displayCTAByUserRole(user, { roleId: UserRoleType.Admin }) && !deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
                 <button
                   className="justify-end font-semibold text-black font-12 hover:text-orange-600"
                   onClick={() =>
@@ -115,17 +118,19 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
                 {translate('label.addressBook.BillingAddressHeadingText')}
               </h5>
-              <button
-                className="justify-end font-semibold text-black font-12 hover:text-orange-600"
-                onClick={() =>
-                  onEditAddressToggleView(
-                    selectedAddress?.billingAddress,
-                    'billing-address'
-                  )
-                }
-              >
-                {translate('common.label.changeText')}
-              </button>
+              {displayCTAByUserRole(user, { roleId: UserRoleType.Admin }) && (
+                <button
+                  className="justify-end font-semibold text-black font-12 hover:text-orange-600"
+                  onClick={() =>
+                    onEditAddressToggleView(
+                      selectedAddress?.billingAddress,
+                      'billing-address'
+                    )
+                  }
+                >
+                  {translate('common.label.changeText')}
+                </button>
+              )}
             </div>
             {selectedAddress?.billingAddress ? (
               <div className="flex gap-1 font-normal text-black font-12 dark:text-black">
