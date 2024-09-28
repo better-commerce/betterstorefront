@@ -115,6 +115,17 @@ const AddressBook: React.FC<AddressBookProps> = ({
     return currentStep === CheckoutStep.ADDRESS && featureToggle?.features?.enableCollectDeliveryOption
   }, [currentStep, featureToggle])
 
+  const isBillingAddress = useMemo(() => {
+    return (address: any) => {
+      if (typeof address?.isBilling === 'boolean' && typeof address?.isDefaultBilling === 'boolean') {
+        return address?.isBilling || address?.isDefaultBilling
+      } else if (typeof address?.isDefaultBilling === 'boolean') {
+        return address?.isDefaultBilling
+      }
+      return address?.isBilling || false
+    }
+  }, [])
+
   return (
     <>
       {!shouldHideView ? (
@@ -140,7 +151,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
                 <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Shipping Address</h5>
                 {mappedAddressList
-                  ?.filter((x: any) => (x?.id > 0 && !x?.isBilling))
+                  ?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x)))
                   ?.map((address: any, addIdx: number) => (
                     <div
                       className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
@@ -218,7 +229,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
              ) : (
             <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
               {mappedAddressList
-                ?.filter((x: any) => x?.id > 0)
+                ?.filter((x: any) => x?.id > 0 && !isBillingAddress(x))
                 ?.map((address: any, addIdx: number) => (
                   <div
                     className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
@@ -336,16 +347,16 @@ const AddressBook: React.FC<AddressBookProps> = ({
               </div>
             )}
 
-            {(showBillingAddress && isGuestUser) && (<>
+            {(showBillingAddress /**&& isGuestUser */) && (<>
               <h5 className="mt-3 mb-4 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Billing Address</h5>
               {mappedAddressList
-                ?.filter((x: any) => (x?.id > 0 && x?.isBilling))
+                ?.filter((x: any) => (x?.id > 0 && isBillingAddress(x)))
                 ?.map((address: any, addIdx: number) => (
                   <div
                     className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
-                      address?.isBilling ? 'bg-gray-200' : ''
+                      isBillingAddress(address) ? 'bg-gray-200' : ''
                     } ${
-                      address?.isBilling
+                      isBillingAddress(address)
                         ? 'bg-gray-200'
                         : 'bg-transparent'
                     }`}
@@ -380,7 +391,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {isB2BUserLoggedIn ? (
+                        {/* {isB2BUserLoggedIn ? (
                           <>
                             {user?.companyUserRole === UserRoleType.ADMIN && (
                               <div className="justify-end my-0 edit-btn">
@@ -396,7 +407,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               </div>
                             )}
                           </>
-                        ) : (
+                        ) : ( */}
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -408,7 +419,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               {translate('common.label.editText')}
                             </button>
                           </div>
-                        )}
+                        {/* )} */}
                       </div>
                     </div>
                   </div>
