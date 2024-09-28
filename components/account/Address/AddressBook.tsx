@@ -15,7 +15,6 @@ import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import { Guid } from '@commerce/types'
 import { AlertType } from '@framework/utils/enums'
-import { DEFAULT_COUNTRY } from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { useTranslation } from '@commerce/utils/use-translation'
 export function asyncHandler() {
   function getAddress() {
@@ -328,7 +327,7 @@ export default function AddressBook({ deviceInfo }: any) {
     const newValues = {
       ...values,
       userId: user?.userId,
-      country: data?.country?.split('&')?.[1] || data?.country || DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1] || data?.country,
       countryCode: data?.country?.includes('&') ? data.country.split('&')[0] : data?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY
     }
     if (data?.id == 0) {

@@ -2,13 +2,13 @@ import React, { useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { ALERT_TIMER } from '@components/utils/constants'
+import { ALERT_TIMER, SessionIdCookieKey } from '@components/utils/constants'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
 import { DeviceType } from '@commerce/utils/use-device'
-import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
+import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import { processCartData, resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
@@ -899,11 +899,14 @@ export const UIProvider: React.FC<any> = (props) => {
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
         dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
+        Cookies.remove(Cookie.Key.USER_TOKEN)
+        Cookies.remove(SessionIdCookieKey)
         Cookies.remove(Cookie.Key.COMPANY_ID)
         const basketIdRef = uuid()
         Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
           expires: getExpiry(getMinutesInDays(365)),
         })
+        setSessionIdCookie()
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
         dispatch({ type: 'REMOVE_USER', payload: {} })
         removeItem('isPaymentLink')

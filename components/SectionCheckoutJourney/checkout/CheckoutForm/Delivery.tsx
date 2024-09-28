@@ -13,7 +13,6 @@ import axios from 'axios'
 import CncList from './CncList'
 import { vatIncluded } from '@framework/utils/app-util'
 import SplitDelivery from '../SplitDelivery'
-import { DEFAULT_COUNTRY } from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 
@@ -138,7 +137,7 @@ export default function Delivery({
       if (defaultSelectedCountry) setSelectedCountry(defaultSelectedCountry)
       else{
         const defaultCountry = appConfig?.defaultCountry ||
-        appConfig?.shippingCountries[0] || { name:DEFAULT_COUNTRY, twoLetterIsoCode: BETTERCOMMERCE_DEFAULT_COUNTRY, }
+        appConfig?.shippingCountries?.[0]
       }
     }
     if (Object.keys(appConfig)?.length) getDefaultCountry()

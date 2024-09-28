@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { LoadingDots, useUI } from '@components/ui'
-import { isB2BUser } from '@framework/utils/app-util'
+import { displayCTAByUserRole, isB2BUser } from '@framework/utils/app-util'
 import { AlertType, CheckoutStep, UserRoleType } from '@framework/utils/enums'
 import BillingAddressForm from './BillingAddressForm'
 import { isMobile } from 'react-device-detect'
 import { DeliveryType, EmptyObject } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { Guid } from '@commerce/types'
 
 interface AddressBookProps {
   editAddressValues: any
@@ -27,6 +26,7 @@ interface AddressBookProps {
   featureToggle?: any
   deliveryMethods?: any
   currentStep?: any
+  appConfig?: any
 }
 
 const AddressBook: React.FC<AddressBookProps> = ({
@@ -46,6 +46,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
   featureToggle,
   onContinueToSelectDeliveryType,
   currentStep,
+  appConfig,
 }) => {
   const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
@@ -57,14 +58,23 @@ const AddressBook: React.FC<AddressBookProps> = ({
     selectedShippingAddress?.id || 0
   )
   const [useSameForBilling, setUseSameForBilling] = useState<boolean>(true)
+  const [hasSameBillingChanged, setHasSameBillingChanged] = useState(false)
+
   const isSameAddress = useMemo(() => {
+    if (hasSameBillingChanged) return useSameForBilling
     if (basket?.shippingAddress && basket?.billingAddress) {
       return basket?.shippingAddress?.id === basket?.billingAddress?.id
     }
     return useSameForBilling
-  }, [basket, useSameForBilling])
+  }, [basket, useSameForBilling, hasSameBillingChanged])
   const [showBillingAddress, setShowBillingAddress] = useState<boolean>(!isSameAddress)
   const [mappedAddressList, setMappedAddressList] = useState<any>(addressList)
+
+  useEffect(() => {
+    if (basket?.shippingAddress?.id && basket?.billingAddress?.id) {
+      setShowBillingAddress(basket?.shippingAddress?.id !== basket?.billingAddress?.id)
+    }
+  }, [basket?.shippingAddress, basket?.billingAddress])
 
   useEffect(() => {
     setMappedAddressList(addressList)
@@ -115,6 +125,18 @@ const AddressBook: React.FC<AddressBookProps> = ({
     return currentStep === CheckoutStep.ADDRESS && featureToggle?.features?.enableCollectDeliveryOption
   }, [currentStep, featureToggle])
 
+  const isBillingAddress = useMemo(() => {
+    return (address: any) => {
+      if (typeof address?.isBilling === 'boolean' && typeof address?.isDefaultBilling === 'boolean') {
+        return address?.isBilling || address?.isDefaultBilling
+      } else if (typeof address?.isDefaultBilling === 'boolean') {
+        if (address?.isDefaultBilling && address?.isDefaultDelivery) return !address?.isDefaultBilling
+        return address?.isDefaultBilling
+      }
+      return address?.isBilling || false
+    }
+  }, [])
+
   return (
     <>
       {!shouldHideView ? (
@@ -124,7 +146,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">
                 {translate('label.addressBook.addressBookTitleText')}
               </h5>
-              {(!isGuestUser && user?.userId && user?.id != Guid.empty) && <button
+              {((!isGuestUser) && (displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }))) && <button
                 className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
                 onClick={onAddNewAddress}
               >
@@ -139,8 +161,9 @@ const AddressBook: React.FC<AddressBookProps> = ({
             {isGuestUser ? (
               <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
                 <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Shipping Address</h5>
-                {mappedAddressList
-                  ?.filter((x: any) => (x?.id > 0 && !x?.isBilling))
+                {(mappedAddressList?.length === 1 
+                  ? mappedAddressList?.filter((x: any) => (x?.id > 0))
+                  : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
                   ?.map((address: any, addIdx: number) => (
                     <div
                       className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
@@ -181,23 +204,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               {address?.country && `${address?.country} `}
                             </span>
                           </div>
-                          {isB2BUserLoggedIn ? (
-                            <>
-                              {user?.companyUserRole === UserRoleType.ADMIN && (
-                                <div className="justify-end my-0 edit-btn">
-                                  <button
-                                    className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                    onClick={(e: any) => {
-                                      e.stopPropagation()
-                                      onEditAddressToggleView(address)
-                                    }}
-                                  >
-                                    {translate('common.label.editText')}
-                                  </button>
-                                </div>
-                              )}
-                            </>
-                          ) : (
+                          {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
                             <div className="justify-end my-0 edit-btn">
                               <button
                                 className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -217,8 +224,9 @@ const AddressBook: React.FC<AddressBookProps> = ({
                </div>
              ) : (
             <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
-              {mappedAddressList
-                ?.filter((x: any) => x?.id > 0)
+            {(mappedAddressList?.length === 1
+              ? mappedAddressList?.filter((x: any) => (x?.id > 0))
+              : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
                 ?.map((address: any, addIdx: number) => (
                   <div
                     className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
@@ -259,23 +267,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {isB2BUserLoggedIn ? (
-                          <>
-                            {user?.companyUserRole === UserRoleType.ADMIN && (
-                              <div className="justify-end my-0 edit-btn">
-                                <button
-                                  className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                  onClick={(e: any) => {
-                                    e.stopPropagation()
-                                    onEditAddressToggleView(address)
-                                  }}
-                                >
-                                  {translate('common.label.editText')}
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        ) : (
+                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -296,56 +288,57 @@ const AddressBook: React.FC<AddressBookProps> = ({
             )}
 
             {isDeliverTypeSelected && !noAddressesFound && (
-              <div className="mt-4">
-                <input
-                  id="useSameForBilling"
-                  type="checkbox"
-                  defaultChecked={isSameAddress}
-                  onChange={(e) => {
-                    setUseSameForBilling(e.target.checked)
-                    if (e.target.checked) {
-                      onAddressSelect(
-                        selectedShippingAddress,
-                        selectedShippingAddress
-                      )
-                      setShowBillingAddress(!e.target.checked)
-                    } else {
-                      onAddressSelect(selectedShippingAddress, undefined)
-                    }
-                  }}
-                />
-                <label
-                  htmlFor="useSameForBilling"
-                  className="pl-1 font-semibold text-black font-14"
-                >
-                  {translate('label.checkout.useSameAddressForBillingText')}
-                </label>
-              </div>
+
+              <>
+                {
+                  (!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && (
+                    <div className="mt-4">
+                      <input id="useSameForBilling" type="checkbox" defaultChecked={isSameAddress} checked={isSameAddress} onChange={(e) => {
+                          setUseSameForBilling(e.target.checked)
+                          setHasSameBillingChanged(true)
+                          if (e.target.checked) {
+                            onAddressSelect( selectedShippingAddress, selectedShippingAddress )
+                            setShowBillingAddress(!e.target.checked)
+                          } else {
+                            onAddressSelect(selectedShippingAddress, undefined)
+                          }
+                        }}
+                      />
+                      <label htmlFor="useSameForBilling" className="pl-1 font-semibold text-black font-14">
+                        {translate('label.checkout.useSameAddressForBillingText')}
+                      </label>
+                    </div>
+                  )
+                }
+
+                {
+                  (isB2BUser(user) && user?.companyUserRole !== UserRoleType.ADMIN) && (
+                    <div className="mt-4">
+                      <input id="useSameForBillingDisabled" type="checkbox" defaultChecked={true} checked={true} disabled={true} />
+                      <label htmlFor="useSameForBilling" className="pl-1 font-semibold text-black font-14">
+                        {translate('label.checkout.useSameAddressForBillingText')}
+                      </label>
+                    </div>
+                  )
+                }
+              </>
             )}
             {isDeliverTypeSelected && !useSameForBilling && (
               <div className="mt-4 border-t border-gray-300">
-                <BillingAddressForm
-                  editAddressValues={editAddressValues}
-                  shippingCountries={shippingCountries}
-                  billingCountries={billingCountries}
-                  searchAddressByPostcode={searchAddressByPostcode}
-                  onSubmit={onSubmit}
-                  useSameForBilling={useSameForBilling}
-                  shouldDisplayEmail={false}
-                />
+                <BillingAddressForm editAddressValues={editAddressValues} shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={useSameForBilling} shouldDisplayEmail={false} appConfig={appConfig} />
               </div>
             )}
 
-            {(showBillingAddress && isGuestUser) && (<>
+            {(showBillingAddress /**&& isGuestUser */) && (<>
               <h5 className="mt-3 mb-4 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Billing Address</h5>
               {mappedAddressList
-                ?.filter((x: any) => (x?.id > 0 && x?.isBilling))
+                ?.filter((x: any) => (x?.id > 0 && isBillingAddress(x)))
                 ?.map((address: any, addIdx: number) => (
                   <div
                     className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
-                      address?.isBilling ? 'bg-gray-200' : ''
+                      isBillingAddress(address) ? 'bg-gray-200' : ''
                     } ${
-                      address?.isBilling
+                      isBillingAddress(address)
                         ? 'bg-gray-200'
                         : 'bg-transparent'
                     }`}
@@ -380,23 +373,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {isB2BUserLoggedIn ? (
-                          <>
-                            {user?.companyUserRole === UserRoleType.ADMIN && (
-                              <div className="justify-end my-0 edit-btn">
-                                <button
-                                  className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                  onClick={(e: any) => {
-                                    e.stopPropagation()
-                                    onEditAddressToggleView(address)
-                                  }}
-                                >
-                                  {translate('common.label.editText')}
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        ) : (
+                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
