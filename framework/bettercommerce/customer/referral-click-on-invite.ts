@@ -2,10 +2,6 @@ import { EmptyObject, REFERRAL_REFEREE_ENDPOINT } from "@components/utils/consta
 import fetcher from "@framework/fetcher";
 import { logError } from "@framework/utils/app-util";
 
-interface props{
-    referralId?:string,
-}
-
 export default function useReferralClickOnInvite(){
     return async function handler(referralId?:any, cookies = EmptyObject){
         const url = REFERRAL_REFEREE_ENDPOINT + `/${referralId}/capture-clicks`
