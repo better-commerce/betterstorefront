@@ -5,7 +5,7 @@ import apiRouteGuard from '../base/api-route-guard'
 const getUserQuotesApiMiddleware = async (req: any, res: any) => {
   const { userId }: any = req?.body
   try {
-    const response = await useB2BUserQuotes()(userId)
+    const response = await useB2BUserQuotes()(userId, req?.cookies)
 
     res.status(200).json(response?.result)
   } catch (error) {
