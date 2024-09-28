@@ -280,44 +280,44 @@ const AddressBook: React.FC<AddressBookProps> = ({
             )}
 
             {isDeliverTypeSelected && !noAddressesFound && (
-              <div className="mt-4">
-                <input
-                  id="useSameForBilling"
-                  type="checkbox"
-                  defaultChecked={isSameAddress}
-                  onChange={(e) => {
-                    setUseSameForBilling(e.target.checked)
-                    setHasSameBillingChanged(true)
-                    if (e.target.checked) {
-                      onAddressSelect(
-                        selectedShippingAddress,
-                        selectedShippingAddress
-                      )
-                      setShowBillingAddress(!e.target.checked)
-                    } else {
-                      onAddressSelect(selectedShippingAddress, undefined)
-                    }
-                  }}
-                />
-                <label
-                  htmlFor="useSameForBilling"
-                  className="pl-1 font-semibold text-black font-14"
-                >
-                  {translate('label.checkout.useSameAddressForBillingText')}
-                </label>
-              </div>
+
+              <>
+                {
+                  (!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && (
+                    <div className="mt-4">
+                      <input id="useSameForBilling" type="checkbox" defaultChecked={isSameAddress} onChange={(e) => {
+                          setUseSameForBilling(e.target.checked)
+                          setHasSameBillingChanged(true)
+                          if (e.target.checked) {
+                            onAddressSelect( selectedShippingAddress, selectedShippingAddress )
+                            setShowBillingAddress(!e.target.checked)
+                          } else {
+                            onAddressSelect(selectedShippingAddress, undefined)
+                          }
+                        }}
+                      />
+                      <label htmlFor="useSameForBilling" className="pl-1 font-semibold text-black font-14">
+                        {translate('label.checkout.useSameAddressForBillingText')}
+                      </label>
+                    </div>
+                  )
+                }
+
+                {
+                  (isB2BUser(user) && user?.companyUserRole !== UserRoleType.ADMIN) && (
+                    <div className="mt-4">
+                      <input id="useSameForBillingDisabled" type="checkbox" defaultChecked={true} checked={true} disabled={true} />
+                      <label htmlFor="useSameForBilling" className="pl-1 font-semibold text-black font-14">
+                        {translate('label.checkout.useSameAddressForBillingText')}
+                      </label>
+                    </div>
+                  )
+                }
+              </>
             )}
             {isDeliverTypeSelected && !useSameForBilling && (
               <div className="mt-4 border-t border-gray-300">
-                <BillingAddressForm
-                  editAddressValues={editAddressValues}
-                  shippingCountries={shippingCountries}
-                  billingCountries={billingCountries}
-                  searchAddressByPostcode={searchAddressByPostcode}
-                  onSubmit={onSubmit}
-                  useSameForBilling={useSameForBilling}
-                  shouldDisplayEmail={false}
-                />
+                <BillingAddressForm editAddressValues={editAddressValues} shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={useSameForBilling} shouldDisplayEmail={false} />
               </div>
             )}
 
