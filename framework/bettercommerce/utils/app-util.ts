@@ -657,16 +657,17 @@ export const displayCTAByUserRole = (user: any, { roleId, isGuestUser }: { isGue
     return false
   }
   
-  /**
-   * Check for non-company user which includes logged-in and guest user
-   */
-  // display CTA to all non-company users
-  if (typeof isGuestUser === 'undefined') return true
-  
-  // display CTA to all logged-in users
-  if (isGuestUser === false && user?.userId && user?.id !== Guid.empty) return true
-  
-  return false 
+  // /**
+  //  * Check for non-company user which includes logged-in and guest user
+  //  */
+  // // display CTA to all non-company users
+  // if (typeof isGuestUser === 'undefined') return true
+  // 
+  // // display CTA to all logged-in users
+  // if (isGuestUser === false && user?.userId && user?.id !== Guid.empty) return true
+  // 
+  // return false 
+  return true
 }
 
 export const isIncludeVATInPriceDisplay = (

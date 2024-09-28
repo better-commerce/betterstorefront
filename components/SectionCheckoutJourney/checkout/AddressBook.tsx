@@ -138,7 +138,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">
                 {translate('label.addressBook.addressBookTitleText')}
               </h5>
-              {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && <button
+              {((!isGuestUser) && (displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }))) && <button
                 className="py-2 text-xs font-semibold text-black underline sm:text-sm dark:text-black hover:text-orange-600"
                 onClick={onAddNewAddress}
               >
@@ -196,7 +196,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               {address?.country && `${address?.country} `}
                             </span>
                           </div>
-                          {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && (
+                          {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
                             <div className="justify-end my-0 edit-btn">
                               <button
                                 className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -259,7 +259,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && (
+                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
@@ -365,7 +365,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             {address?.country && `${address?.country} `}
                           </span>
                         </div>
-                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.Admin }) && (
+                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
                           <div className="justify-end my-0 edit-btn">
                             <button
                               className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"

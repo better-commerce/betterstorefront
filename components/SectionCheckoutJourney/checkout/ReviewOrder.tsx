@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Other Imports
-import { displayCTAByUserRole, vatIncluded } from '@framework/utils/app-util'
+import { displayCTAByUserRole, isB2BUser, vatIncluded } from '@framework/utils/app-util'
 import { eddDateFormat } from '@framework/utils/parse-util'
 import PaymentMethodSelection from './PaymentMethodSelection'
 import { CheckoutStep, UserRoleType } from '@framework/utils/enums'
@@ -79,7 +79,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
                 {deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) ? translate('label.addressBook.pickupAddressHeadingText') : translate('label.addressBook.shippingAddressHeadingText')}
               </h5>
-              {displayCTAByUserRole(user, { roleId: UserRoleType.Admin }) && !deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
+              {(!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && !deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
                 <button
                   className="justify-end font-semibold text-black font-12 hover:text-orange-600"
                   onClick={() =>
@@ -118,7 +118,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">
                 {translate('label.addressBook.BillingAddressHeadingText')}
               </h5>
-              {displayCTAByUserRole(user, { roleId: UserRoleType.Admin }) && (
+              {(!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && (
                 <button
                   className="justify-end font-semibold text-black font-12 hover:text-orange-600"
                   onClick={() =>
