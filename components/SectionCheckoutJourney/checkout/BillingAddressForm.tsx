@@ -25,7 +25,8 @@ const BillingAddressForm: React.FC<any> = ({
   guestCheckoutFormik,
   onGuestCheckout,
   currentStep,
-  featureToggle
+  featureToggle,
+  appConfig
 }) => {
   const translate = useTranslation()
   const BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA = billingAddressWithPhoneCheckout2Schema();
@@ -50,6 +51,16 @@ const BillingAddressForm: React.FC<any> = ({
     },
   })
 
+  const getDefaultCountry = useMemo(() => {
+    const regionalSettingsConfigKeys = appConfig?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
+    if (regionalSettingsConfigKeys?.length) {
+      const defaultCountry = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultCountry")?.value || EmptyString
+      return appConfig?.shippingCountries?.find(
+        (item: any) => item?.twoLetterIsoCode === defaultCountry
+      )?.name  || EmptyString
+    }
+  }, [appConfig])
+
   const formik: any = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -67,7 +78,7 @@ const BillingAddressForm: React.FC<any> = ({
       address3: editAddressValues?.address3 || EmptyString,
       city: editAddressValues?.city || EmptyString,
       state: editAddressValues?.state || EmptyString,
-      country: editAddressValues?.country || DEFAULT_COUNTRY,
+      country: editAddressValues?.country || getDefaultCountry || DEFAULT_COUNTRY,
     },
     validationSchema: BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA,
     onSubmit: (values, { setSubmitting }) => {
@@ -78,7 +89,7 @@ const BillingAddressForm: React.FC<any> = ({
         (o: any) => o.name === payload.country
       )?.twoLetterIsoCode
       onSubmit(
-        { ...payload, isBilling: true },
+        { ...payload, isBilling: true, isDefaultBilling: true },
         true,
         () => {
           setSubmitting(false)

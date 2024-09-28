@@ -589,9 +589,15 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           await updateCheckoutAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, }, true)
           setSelectedAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, })
         } else {
-          await updateCheckoutAddress({ shippingAddress: newAddressData, }, true)
+          // if billing addressId is different
+          if(basket?.billingAddress?.id !== basket?.shippingAddress?.id){
+            await updateCheckoutAddress({ shippingAddress: newAddressData, billingAddress: basket?.billingAddress }, true)
+            setSelectedAddress({ billingAddress: basket?.billingAddress, shippingAddress: newAddressData, })
+          } else {
+            await updateCheckoutAddress({ shippingAddress: newAddressData, }, true)
 
-          setSelectedAddress({ billingAddress: undefined, shippingAddress: newAddressData, })
+            setSelectedAddress({ billingAddress: undefined, shippingAddress: newAddressData, })
+          }
         }
       }
     }
@@ -605,7 +611,17 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       }
       goToStep(CheckoutStep.DELIVERY)
     } else {
-      goToStep(CheckoutStep.BILLING_ADDRESS)
+      // if billing address exists
+      if(basket?.billingAddress?.id){
+        if (!isLoggedIn) {
+          setCompletedSteps((prev) => [
+            ...new Set([...prev, CheckoutStep.ADDRESS]),
+          ])
+        }
+        goToStep(CheckoutStep.DELIVERY)
+      } else {
+        goToStep(CheckoutStep.BILLING_ADDRESS)
+      }
     }
   }
 
@@ -617,7 +633,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const { isBilling, ...addressData } = newAddress
       if (size(addressData) > 0) {
         if (isBilling) {
-          prevAddrList[1] = addressData
+          prevAddrList[1] = {...addressData, isBilling:true }
         } else {
           prevAddrList[0] = addressData
         }
