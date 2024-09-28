@@ -899,6 +899,7 @@ export const UIProvider: React.FC<any> = (props) => {
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
         dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
+        Cookies.remove(Cookie.Key.USER_TOKEN)
         Cookies.remove(Cookie.Key.COMPANY_ID)
         const basketIdRef = uuid()
         Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
