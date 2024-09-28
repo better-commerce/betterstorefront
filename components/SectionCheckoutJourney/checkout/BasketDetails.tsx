@@ -104,7 +104,9 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
         const membership = membershipBenefitsResult?.result
         setMembership(membership)}
     }
-    fetchMembership()
+    if (featureToggle?.features?.enableMembership) {
+      fetchMembership()
+    }
   },[basket,basket?.id,basket?.lineItems])
 
   useEffect(() => {
