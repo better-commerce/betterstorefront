@@ -145,11 +145,20 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                           {method?.id === basket?.shippingMethodId ? basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)?.displayName : method?.displayName}{' '}
                         </h4>
                         <div dangerouslySetInnerHTML={{ __html: method?.description, }} className="my-0 font-12 dark:text-black delivery-method-desc" />
-                        {basket?.estimatedDeliveryDate && (
+                        {(basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate !== "0001-01-01T00:00:00") && (
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
                             <span className="font-bold">
                               {isDeliverTypeSelected(method) ? eddDateFormat(basket?.estimatedDeliveryDate) : eddDateFormat(method?.expectedDeliveryDate)}{' '}
+                            </span>
+                          </span>
+                        )}
+
+                        {(!basket?.estimatedDeliveryDate || (basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate === "0001-01-01T00:00:00")) && (
+                          <span className="block text-xs font-normal text-wrap-p">
+                            {translate('common.label.expectedDeliveryDateText')}:{' '}
+                            <span className="font-bold">
+                              {eddDateFormat(method?.expectedDeliveryDate)}{' '}
                             </span>
                           </span>
                         )}

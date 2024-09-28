@@ -452,7 +452,7 @@ export default function CheckoutForm({
   const paymentData = async () => {
     const response = await axios.post(NEXT_PAYMENT_METHODS, {
       currencyCode: cartItems.baseCurrency,
-      countryCode: state.deliveryMethod.twoLetterIsoCode || 'GB',
+      countryCode: state.deliveryMethod.twoLetterIsoCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
       basketId: basketId,
     })
     return response
