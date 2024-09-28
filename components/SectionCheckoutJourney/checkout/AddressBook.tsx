@@ -150,8 +150,9 @@ const AddressBook: React.FC<AddressBookProps> = ({
             {isGuestUser ? (
               <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
                 <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Shipping Address</h5>
-                {mappedAddressList
-                  ?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x)))
+                {(mappedAddressList?.length === 1 
+                  ? mappedAddressList?.filter((x: any) => (x?.id > 0))
+                  : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
                   ?.map((address: any, addIdx: number) => (
                     <div
                       className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
@@ -228,8 +229,9 @@ const AddressBook: React.FC<AddressBookProps> = ({
                </div>
              ) : (
             <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
-              {mappedAddressList
-                ?.filter((x: any) => x?.id > 0 && !isBillingAddress(x))
+            {(mappedAddressList?.length === 1
+              ? mappedAddressList?.filter((x: any) => (x?.id > 0))
+              : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
                 ?.map((address: any, addIdx: number) => (
                   <div
                     className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${

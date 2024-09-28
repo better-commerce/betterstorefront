@@ -627,6 +627,15 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
   const updateAddressList = (newAddress: any) => {
     setAddressList((prevAddrList: any) => {
+      let shippingAddress = prevAddrList?.find((o: any) => o?.id !== newAddress?.id)
+      if (shippingAddress) {
+        shippingAddress = {
+          ...shippingAddress,
+          isBilling: false,
+          isDefaultBilling: false,
+        }
+        prevAddrList[0] = shippingAddress
+      }
       if (!prevAddrList || prevAddrList?.length < 1) {
         prevAddrList = new Array(2).fill(undefined)
       }
