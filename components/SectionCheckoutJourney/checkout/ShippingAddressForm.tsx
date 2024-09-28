@@ -30,7 +30,9 @@ const ShippingAddressForm: React.FC<any> = ({
   deliveryTypeMethod,
   billingCountries,
   currentStep,
-  featureToggle
+  featureToggle,
+  appConfig,
+  basket,
 }) => {
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
@@ -84,7 +86,7 @@ const ShippingAddressForm: React.FC<any> = ({
       )?.twoLetterIsoCode
       const isNewAddress = !Boolean(editAddressValues)
       onSubmit(
-        { ...payload, useSameForBilling },
+        { ...payload, useSameForBilling : isSameAddress, isDefaultDelivery: true, isDefaultBilling: isSameAddress },
         isNewAddress,
         () => {
           setSubmitting(false)
@@ -148,6 +150,13 @@ const ShippingAddressForm: React.FC<any> = ({
     }
     return translate('label.checkout.saveAndContinueToDeliveryText')
   }, [currentStep, useSameForBilling, translate])
+
+  const isSameAddress = useMemo(() => {
+    if (basket?.shippingAddress && basket?.billingAddress) {
+      return basket?.shippingAddress?.id === basket?.billingAddress?.id
+    }
+    return useSameForBilling
+  }, [basket, useSameForBilling])
 
   return (
     <>
@@ -437,7 +446,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   id="useSameForBilling"
                   name="useSameForBilling"
                   type="checkbox"
-                  checked={useSameForBilling}
+                  defaultChecked={isSameAddress}
                   onChange={(e) => {
                     setUseSameForBilling(e.target.checked)
                   }}
@@ -482,6 +491,7 @@ const ShippingAddressForm: React.FC<any> = ({
             onSubmit={onSubmit}
             useSameForBilling={useSameForBilling}
             shouldDisplayEmail={false}
+            appConfig={appConfig}
           />
         </div>
       )}

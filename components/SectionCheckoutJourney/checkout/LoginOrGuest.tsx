@@ -21,6 +21,7 @@ const LoginOrGuest: React.FC<any> = ({
   setDeliveryTypeMethod,
   featureToggle,
   deliveryMethods,
+  appConfig,
 }) => {
   const GUEST_LOGIN_CHECKOUT2_SCHEMA = guestLoginCheckout2Schema();
   const translate = useTranslation()
@@ -109,6 +110,7 @@ const LoginOrGuest: React.FC<any> = ({
           onSubmit={onSubmit}
           useSameForBilling={false}
           shouldDisplayEmail={false}
+          appConfig={appConfig}
         />
       )
     } else {
