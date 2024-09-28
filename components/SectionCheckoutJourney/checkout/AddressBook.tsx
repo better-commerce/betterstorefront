@@ -26,6 +26,7 @@ interface AddressBookProps {
   featureToggle?: any
   deliveryMethods?: any
   currentStep?: any
+  appConfig?: any
 }
 
 const AddressBook: React.FC<AddressBookProps> = ({
@@ -45,6 +46,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
   featureToggle,
   onContinueToSelectDeliveryType,
   currentStep,
+  appConfig,
 }) => {
   const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
@@ -317,7 +319,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
             )}
             {isDeliverTypeSelected && !useSameForBilling && (
               <div className="mt-4 border-t border-gray-300">
-                <BillingAddressForm editAddressValues={editAddressValues} shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={useSameForBilling} shouldDisplayEmail={false} />
+                <BillingAddressForm editAddressValues={editAddressValues} shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={useSameForBilling} shouldDisplayEmail={false} appConfig={appConfig} />
               </div>
             )}
 

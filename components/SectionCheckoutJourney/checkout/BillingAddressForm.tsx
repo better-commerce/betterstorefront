@@ -11,8 +11,6 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { CheckoutStep } from '@framework/utils/enums'
 import { retrieveAddress } from '@framework/utils/app-util'
 
-export const DEFAULT_COUNTRY = 'United Kingdom'
-
 const BillingAddressForm: React.FC<any> = ({
   editAddressValues,
   onSubmit,
@@ -55,7 +53,7 @@ const BillingAddressForm: React.FC<any> = ({
     const regionalSettingsConfigKeys = appConfig?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
     if (regionalSettingsConfigKeys?.length) {
       const defaultCountry = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultCountry")?.value || EmptyString
-      return appConfig?.shippingCountries?.find(
+      return appConfig?.billingCountries?.find(
         (item: any) => item?.twoLetterIsoCode === defaultCountry
       )?.name  || EmptyString
     }
@@ -78,7 +76,7 @@ const BillingAddressForm: React.FC<any> = ({
       address3: editAddressValues?.address3 || EmptyString,
       city: editAddressValues?.city || EmptyString,
       state: editAddressValues?.state || EmptyString,
-      country: editAddressValues?.country || getDefaultCountry || DEFAULT_COUNTRY,
+      country: editAddressValues?.country || getDefaultCountry,
     },
     validationSchema: BILLING_ADDRESS_WITH_PHONE_CHECKOUT2_SCHEMA,
     onSubmit: (values, { setSubmitting }) => {

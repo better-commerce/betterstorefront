@@ -16,8 +16,6 @@ import BillingAddressForm from './BillingAddressForm'
 import { CheckoutStep } from '@framework/utils/enums'
 import { retrieveAddress } from '@framework/utils/app-util'
 
-const DEFAULT_COUNTRY = 'United Kingdom'
-
 const ShippingAddressForm: React.FC<any> = ({
   editAddressValues,
   setEditAddressValues,
@@ -66,6 +64,16 @@ const ShippingAddressForm: React.FC<any> = ({
     },
   })
 
+  const getDefaultCountry = useMemo(() => {
+    const regionalSettingsConfigKeys = appConfig?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
+    if (regionalSettingsConfigKeys?.length) {
+      const defaultCountry = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultCountry")?.value || EmptyString
+      return appConfig?.shippingCountries?.find(
+        (item: any) => item?.twoLetterIsoCode === defaultCountry
+      )?.name  || EmptyString
+    }
+  }, [appConfig])
+
   const formik: any = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -83,7 +91,7 @@ const ShippingAddressForm: React.FC<any> = ({
       address3: editAddressValues?.address3 || EmptyString,
       city: editAddressValues?.city || EmptyString,
       state: editAddressValues?.state || EmptyString,
-      country: editAddressValues?.country || DEFAULT_COUNTRY,
+      country: editAddressValues?.country || getDefaultCountry,
     },
     validationSchema: CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA,
     onSubmit: (values, { setSubmitting }) => {
