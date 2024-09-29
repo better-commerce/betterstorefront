@@ -183,15 +183,13 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   }
 
   const asyncBasket = async () => {
-    setOverlayLoaderState({
-      visible: true,
-      message: 'Please wait...',
-      backdropInvisible: true,
-    })
+    setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
     if (!isGuestUser) {
       const addressList = await fetchAddress()
       const basketRes: any = await getBasket(basketId)
-      await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
+      if (featureToggle?.features?.enableCollectDeliveryOption) {
+        await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
+      }
       if (!featureToggle?.features?.enableCollectDeliveryOption) {
         await checkIfDefaultShippingAndBilling(addressList, basketRes)
       } else {
@@ -205,13 +203,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   }
 
   const asyncGuestBasket = async () => {
-    setOverlayLoaderState({
-      visible: true,
-      message: 'Please wait...',
-      backdropInvisible: true,
-    })
+    setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
     const basketRes: any = await getBasket(basketId)
-    await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
+    if (featureToggle?.features?.enableCollectDeliveryOption) {
+      await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
+    }
     if (basketRes?.shippingAddress?.id !== basketRes?.billingAddress?.id) {
       updateAddressList({ ...basketRes?.shippingAddress, isBilling: false })
       updateAddressList({ ...basketRes?.billingAddress, isBilling: true })
@@ -797,6 +793,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
     onLoginSuccess: handleLoginSuccess,
     onGuestCheckout: handleGuestCheckout,
+    appConfig: appConfigData,
   }
 
   const onContinueToSelectDeliveryType = () => {
@@ -829,6 +826,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
     deliveryMethods,
     currentStep,
+    appConfig: appConfigData,
   }
 
 
@@ -845,6 +843,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
     deliveryMethods,
     basket,
+    appConfig: appConfigData,
   }
 
   const editAddressFormProps = {
@@ -855,6 +854,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,
     featureToggle,
+    appConfig: appConfigData,
   }
 
   const deliveryTypeSelectionProps = {
@@ -869,6 +869,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     deliveryMethods,
     user,
     currentStep,
+    appConfig: appConfigData,
   }
 
   const deliveryMethodSelectionProps = {
@@ -957,6 +958,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         } else {
           setDeliveryTypeMethod(output[0])
         }
+      } else {
+        return setAlert({ type: AlertType.ERROR, msg: translate('common.message.invalidPostCodeMsg') })
       }
     } catch (error) {
       logError(error)
