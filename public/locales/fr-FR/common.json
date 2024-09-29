@@ -1253,6 +1253,7 @@
       "authenticationFailedText": "Échec de l'authentification par e-mail",
       "requiredTextMsg": "Requis",
       "invalidAccountMsg": "Aucun compte n'a été trouvé avec cet e-mail / mot de passe",
+      "invalidPostCodeMsg": "Veuillez nous appeler directement si vous avez un besoin urgent de livraison dans cette zone",
       "alreadyLoggedInMsg": "Vous êtes déjà connecté",
       "registerSuccessMsg": "Inscription réussie",
       "loginSuccessMsg": "Connecté avec succès",

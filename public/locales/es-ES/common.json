@@ -1254,6 +1254,7 @@
       "authenticationFailedText": "Falló la autenticación por correo electrónico",
       "requiredTextMsg": "Requerido",
       "invalidAccountMsg": "No se ha encontrado ninguna cuenta con este correo electrónico/contraseña",
+      "invalidPostCodeMsg": "Por favor, llámenos directamente si necesita una entrega urgente en esta área",
       "alreadyLoggedInMsg": "Ya has iniciado sesión",
       "registerSuccessMsg": "Registro exitoso",
       "loginSuccessMsg": "Inicio de sesión exitoso",

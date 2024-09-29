@@ -12,9 +12,10 @@ interface DeliveryTypeSelectionProps {
   readonly featureToggle?: any
   setDeliveryTypeMethod: any
   deliveryMethods: any
+  appConfig?: any
 }
 
-const DeliveryTypeSelection = ({ deliveryTypeMethod, setDeliveryTypeMethod, deliveryMethods = [] }: DeliveryTypeSelectionProps) => {
+const DeliveryTypeSelection = ({ deliveryTypeMethod, setDeliveryTypeMethod, deliveryMethods = [], appConfig, }: DeliveryTypeSelectionProps) => {
   const translate = useTranslation()
 
   return (

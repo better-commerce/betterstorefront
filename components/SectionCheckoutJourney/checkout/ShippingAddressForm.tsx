@@ -68,9 +68,7 @@ const ShippingAddressForm: React.FC<any> = ({
     const regionalSettingsConfigKeys = appConfig?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
     if (regionalSettingsConfigKeys?.length) {
       const defaultCountry = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultCountry")?.value || EmptyString
-      return appConfig?.shippingCountries?.find(
-        (item: any) => item?.twoLetterIsoCode === defaultCountry
-      )?.name  || EmptyString
+      return appConfig?.shippingCountries?.find((item: any) => item?.twoLetterIsoCode === defaultCountry)?.name || EmptyString
     }
   }, [appConfig])
 

@@ -96,6 +96,7 @@ const LoginOrGuest: React.FC<any> = ({
           featureToggle={featureToggle}
           deliveryMethods={deliveryMethods}
           billingCountries={billingCountries}
+          appConfig={appConfig}
         />
       )
     } else if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
@@ -268,6 +269,7 @@ const LoginOrGuest: React.FC<any> = ({
               featureToggle={featureToggle}
               deliveryMethods={deliveryMethods}
               billingCountries={billingCountries}
+              appConfig={appConfig}
             />
           )}
         </>
