@@ -343,24 +343,14 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 ?.filter((x: any) => (x?.id > 0 && isBillingAddress(x)))
                 ?.map((address: any, addIdx: number) => (
                   <div
-                    className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
-                      isBillingAddress(address) ? 'bg-gray-200' : ''
-                    } ${
-                      isBillingAddress(address)
-                        ? 'bg-gray-200'
-                        : 'bg-transparent'
-                    }`}
+                    className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${ isBillingAddress(address) ? 'bg-gray-200' : '' } ${ isBillingAddress(address) ? 'bg-gray-200' : 'bg-transparent' }`}
                     key={addIdx}
                     // onClick={() => handleAddressSelection(address?.id)}
                   >
                     <div className="flex w-full">
                       <div className="check-panel">
                         <span
-                          className={`rounded-check rounded-full check-address ${
-                            address?.isBilling
-                              ? 'bg-black border border-black'
-                              : 'bg-white border border-gray-600'
-                          }`}
+                          className={`rounded-check rounded-full check-address ${ (address?.isBilling || isBillingAddress(address)) ? 'bg-black border border-black' : 'bg-white border border-gray-600' }`}
                         ></span>
                       </div>
                       <div className="flex justify-between w-full gap-2 info-panel">
