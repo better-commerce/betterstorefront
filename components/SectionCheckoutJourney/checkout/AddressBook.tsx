@@ -50,16 +50,13 @@ const AddressBook: React.FC<AddressBookProps> = ({
 }) => {
   const translate = useTranslation()
   const { user, setAlert, isGuestUser } = useUI()
-  const {
-    shippingAddress: selectedShippingAddress,
-    billingAddress: selectedBillingAddress,
-  } = selectedAddress || basket || EmptyObject
-  const [selectedAddressId, setSelectedAddressId] = useState<string>(
-    selectedShippingAddress?.id || 0
-  )
+  const { shippingAddress: selectedShippingAddress, billingAddress: selectedBillingAddress, } = selectedAddress || basket || EmptyObject
+  const [selectedAddressId, setSelectedAddressId] = useState<string>(selectedShippingAddress?.id || 0)
   const [useSameForBilling, setUseSameForBilling] = useState<boolean>(true)
   const [hasSameBillingChanged, setHasSameBillingChanged] = useState(false)
-
+  const isDeliverMethodSelected = useMemo(() => deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY), [deliveryTypeMethod])
+  const isCNCMethodSelected = useMemo(() => deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT), [deliveryTypeMethod])
+  
   const isSameAddress = useMemo(() => {
     if (hasSameBillingChanged) return useSameForBilling
     if (basket?.shippingAddress && basket?.billingAddress) {
@@ -77,8 +74,13 @@ const AddressBook: React.FC<AddressBookProps> = ({
   }, [basket?.shippingAddress, basket?.billingAddress])
 
   useEffect(() => {
+    setShowBillingAddress(!isSameAddress)
+  }, [isSameAddress])
+
+  useEffect(() => {
     setMappedAddressList(addressList)
   }, [addressList, isGuestUser])
+
 
   const handleAddressSelection = (addressId: string) => {
     setSelectedAddressId(addressId)
@@ -103,13 +105,12 @@ const AddressBook: React.FC<AddressBookProps> = ({
   },[])
 
   const handleContinue = () => {
-    if (selectedShippingAddress && selectedBillingAddress) {
+    if (isDeliverMethodSelected && selectedShippingAddress && selectedBillingAddress) {
+      onContinue()
+    } else if (isCNCMethodSelected && selectedBillingAddress) {
       onContinue()
     } else {
-      setAlert({
-        type: AlertType.ERROR,
-        msg: translate('common.message.chooseShippingBillingAddressMsg'),
-      })
+      setAlert({ type: AlertType.ERROR, msg: translate('common.message.chooseShippingBillingAddressMsg'), })
     }
   }
 
@@ -158,133 +159,138 @@ const AddressBook: React.FC<AddressBookProps> = ({
                 {translate('label.checkout.noAddressFoundText')}
               </p>
             )}
-            {isGuestUser ? (
-              <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
-                <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Shipping Address</h5>
-                {(mappedAddressList?.length === 1 
+
+            {isDeliverMethodSelected && (
+              <>
+                {isGuestUser ? (
+                  <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
+                    <h5 className="mt-2 mb-2 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Shipping Address</h5>
+                    {(mappedAddressList?.length === 1 
+                      ? mappedAddressList?.filter((x: any) => (x?.id > 0))
+                      : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
+                      ?.map((address: any, addIdx: number) => (
+                        <div
+                          className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
+                            address?.isDefault ? 'bg-gray-200' : ''
+                          } ${
+                            address?.id === selectedAddressId
+                              ? 'bg-gray-200'
+                              : 'bg-transparent'
+                          }`}
+                          key={addIdx}
+                          onClick={() => handleAddressSelection(address?.id)}
+                        >
+                          <div className="flex w-full">
+                            <div className="check-panel">
+                              <span
+                                className={`rounded-check rounded-full check-address ${
+                                  address?.id === selectedAddressId
+                                    ? 'bg-black border border-black'
+                                    : 'bg-white border border-gray-600'
+                                }`}
+                              ></span>
+                            </div>
+                            <div className="flex justify-between w-full gap-2 info-panel">
+                              <div className="flex flex-col text-xs sm:text-sm dark:text-black">
+                                <span className="block font-medium">
+                                  {address?.companyName &&
+                                    `${address?.companyName}, `}
+                                  {address?.firstName && `${address?.firstName} `}
+                                  {address?.lastName && `${address?.lastName}, `}
+                                  {address?.address1 && `${address?.address1}, `}
+                                  {address?.address2 && `${address?.address2}, `}
+                                  {address?.address3 && `${address?.address3}, `}
+                                </span>
+                                <span className="block font-12 dark:text-black">
+                                  {address?.city && `${address?.city}, `}
+                                  {address?.state && `${address?.state}, `}
+                                  {address?.postCode && `${address?.postCode}, `}
+                                  {address?.country && `${address?.country} `}
+                                </span>
+                              </div>
+                              {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
+                                <div className="justify-end my-0 edit-btn">
+                                  <button
+                                    className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
+                                    onClick={(e: any) => {
+                                      e.stopPropagation()
+                                      onEditAddressToggleView(address)
+                                    }}
+                                  >
+                                    {translate('common.label.editText')}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
+                {(mappedAddressList?.length === 1
                   ? mappedAddressList?.filter((x: any) => (x?.id > 0))
                   : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
-                  ?.map((address: any, addIdx: number) => (
-                    <div
-                      className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
-                        address?.isDefault ? 'bg-gray-200' : ''
-                      } ${
-                        address?.id === selectedAddressId
-                          ? 'bg-gray-200'
-                          : 'bg-transparent'
-                      }`}
-                      key={addIdx}
-                      onClick={() => handleAddressSelection(address?.id)}
-                    >
-                      <div className="flex w-full">
-                        <div className="check-panel">
-                          <span
-                            className={`rounded-check rounded-full check-address ${
-                              address?.id === selectedAddressId
-                                ? 'bg-black border border-black'
-                                : 'bg-white border border-gray-600'
-                            }`}
-                          ></span>
-                        </div>
-                        <div className="flex justify-between w-full gap-2 info-panel">
-                          <div className="flex flex-col text-xs sm:text-sm dark:text-black">
-                            <span className="block font-medium">
-                              {address?.companyName &&
-                                `${address?.companyName}, `}
-                              {address?.firstName && `${address?.firstName} `}
-                              {address?.lastName && `${address?.lastName}, `}
-                              {address?.address1 && `${address?.address1}, `}
-                              {address?.address2 && `${address?.address2}, `}
-                              {address?.address3 && `${address?.address3}, `}
-                            </span>
-                            <span className="block font-12 dark:text-black">
-                              {address?.city && `${address?.city}, `}
-                              {address?.state && `${address?.state}, `}
-                              {address?.postCode && `${address?.postCode}, `}
-                              {address?.country && `${address?.country} `}
-                            </span>
+                    ?.map((address: any, addIdx: number) => (
+                      <div
+                        className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
+                          address?.isDefault ? 'bg-gray-200' : ''
+                        } ${
+                          address?.id === selectedAddressId
+                            ? 'bg-gray-200'
+                            : 'bg-transparent'
+                        }`}
+                        key={addIdx}
+                        onClick={() => handleAddressSelection(address?.id)}
+                      >
+                        <div className="flex w-full">
+                          <div className="check-panel">
+                            <span
+                              className={`rounded-check rounded-full check-address ${
+                                address?.id === selectedAddressId
+                                  ? 'bg-black border border-black'
+                                  : 'bg-white border border-gray-600'
+                              }`}
+                            ></span>
                           </div>
-                          {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
-                            <div className="justify-end my-0 edit-btn">
-                              <button
-                                className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                                onClick={(e: any) => {
-                                  e.stopPropagation()
-                                  onEditAddressToggleView(address)
-                                }}
-                              >
-                                {translate('common.label.editText')}
-                              </button>
+                          <div className="flex justify-between w-full gap-2 info-panel">
+                            <div className="flex flex-col text-xs sm:text-sm dark:text-black">
+                              <span className="block font-medium">
+                                {address?.companyName &&
+                                  `${address?.companyName}, `}
+                                {address?.firstName && `${address?.firstName} `}
+                                {address?.lastName && `${address?.lastName}, `}
+                                {address?.address1 && `${address?.address1}, `}
+                                {address?.address2 && `${address?.address2}, `}
+                                {address?.address3 && `${address?.address3}, `}
+                              </span>
+                              <span className="block font-12 dark:text-black">
+                                {address?.city && `${address?.city}, `}
+                                {address?.state && `${address?.state}, `}
+                                {address?.postCode && `${address?.postCode}, `}
+                                {address?.country && `${address?.country} `}
+                              </span>
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-               </div>
-             ) : (
-            <div className={`grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-2 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2 ${ isMobile ? '' : 'max-panel' }`} >
-            {(mappedAddressList?.length === 1
-              ? mappedAddressList?.filter((x: any) => (x?.id > 0))
-              : mappedAddressList?.filter((x: any) => (x?.id > 0 && !isBillingAddress(x))))
-                ?.map((address: any, addIdx: number) => (
-                  <div
-                    className={`flex gap-1 sm:p-3 p-2 justify-between cursor-pointer rounded-md items-center ${
-                      address?.isDefault ? 'bg-gray-200' : ''
-                    } ${
-                      address?.id === selectedAddressId
-                        ? 'bg-gray-200'
-                        : 'bg-transparent'
-                    }`}
-                    key={addIdx}
-                    onClick={() => handleAddressSelection(address?.id)}
-                  >
-                    <div className="flex w-full">
-                      <div className="check-panel">
-                        <span
-                          className={`rounded-check rounded-full check-address ${
-                            address?.id === selectedAddressId
-                              ? 'bg-black border border-black'
-                              : 'bg-white border border-gray-600'
-                          }`}
-                        ></span>
-                      </div>
-                      <div className="flex justify-between w-full gap-2 info-panel">
-                        <div className="flex flex-col text-xs sm:text-sm dark:text-black">
-                          <span className="block font-medium">
-                            {address?.companyName &&
-                              `${address?.companyName}, `}
-                            {address?.firstName && `${address?.firstName} `}
-                            {address?.lastName && `${address?.lastName}, `}
-                            {address?.address1 && `${address?.address1}, `}
-                            {address?.address2 && `${address?.address2}, `}
-                            {address?.address3 && `${address?.address3}, `}
-                          </span>
-                          <span className="block font-12 dark:text-black">
-                            {address?.city && `${address?.city}, `}
-                            {address?.state && `${address?.state}, `}
-                            {address?.postCode && `${address?.postCode}, `}
-                            {address?.country && `${address?.country} `}
-                          </span>
-                        </div>
-                        {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
-                          <div className="justify-end my-0 edit-btn">
-                            <button
-                              className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
-                              onClick={(e: any) => {
-                                e.stopPropagation()
-                                onEditAddressToggleView(address)
-                              }}
-                            >
-                              {translate('common.label.editText')}
-                            </button>
+                            {displayCTAByUserRole(user, { isGuestUser, roleId: UserRoleType.ADMIN }) && (
+                              <div className="justify-end my-0 edit-btn">
+                                <button
+                                  className="text-xs font-medium text-black sm:text-sm dark:text-black hover:text-orange-600"
+                                  onClick={(e: any) => {
+                                    e.stopPropagation()
+                                    onEditAddressToggleView(address)
+                                  }}
+                                >
+                                  {translate('common.label.editText')}
+                                </button>
+                              </div>
+                            )}
                           </div>
-                        )}
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             )}
 
             {isDeliverTypeSelected && !noAddressesFound && (
@@ -329,7 +335,9 @@ const AddressBook: React.FC<AddressBookProps> = ({
               </div>
             )}
 
-            {(showBillingAddress /**&& isGuestUser */) && (<>
+            {/*showBillingAddress: {showBillingAddress.toString()}
+            useSameForBilling: {useSameForBilling.toString()}*/}
+            {((showBillingAddress && useSameForBilling) || (isCNCMethodSelected && useSameForBilling && mappedAddressList?.length > 0) /**&& isGuestUser */) && (<>
               <h5 className="mt-3 mb-4 font-normal text-gray-400 sm:font-medium sm:text-black font-14 mob-font-12 dark:text-black">Billing Address</h5>
               {mappedAddressList
                 ?.filter((x: any) => (x?.id > 0 && isBillingAddress(x)))

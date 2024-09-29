@@ -17,7 +17,7 @@ const withAddressSelection = (Component: any) => (props: any) => {
       if (deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY)) {
         return <ShippingAddressForm shippingCountries={shippingCountries} onSubmit={onSubmit} searchAddressByPostcode={searchAddressByPostcode} deliveryType={deliveryTypeMethod?.type} isGuest={true} basket={basket} deliveryTypeMethod={deliveryTypeMethod} setDeliveryTypeMethod={setDeliveryTypeMethod} featureToggle={featureToggle} deliveryMethods={deliveryMethods} billingCountries={billingCountries} currentStep={currentStep} appConfig={appConfig} />
       } else if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
-        return <BillingAddressForm shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={false} shouldDisplayEmail={false} currentStep={currentStep} />
+        return <BillingAddressForm shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={false} shouldDisplayEmail={false} currentStep={currentStep} appConfig={appConfig} />
       } else {
         return <></>
       }
