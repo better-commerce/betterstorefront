@@ -187,9 +187,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     if (!isGuestUser) {
       const addressList = await fetchAddress()
       const basketRes: any = await getBasket(basketId)
-      if (featureToggle?.features?.enableCollectDeliveryOption) {
-        await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
-      }
+      await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
       if (!featureToggle?.features?.enableCollectDeliveryOption) {
         await checkIfDefaultShippingAndBilling(addressList, basketRes)
       } else {
@@ -205,9 +203,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const asyncGuestBasket = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
     const basketRes: any = await getBasket(basketId)
-    if (featureToggle?.features?.enableCollectDeliveryOption) {
-      await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
-    }
+    await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
     if (basketRes?.shippingAddress?.id !== basketRes?.billingAddress?.id) {
       updateAddressList({ ...basketRes?.shippingAddress, isBilling: false })
       updateAddressList({ ...basketRes?.billingAddress, isBilling: true })
