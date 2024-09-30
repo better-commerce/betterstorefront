@@ -8,6 +8,7 @@ import uniqBy from "lodash/uniqBy";
 
 // Other Imports
 import useSnippet, { ISnippetSet } from "@framework/content/use-snippet";
+import { ELEM_ATTR, HEAD_ELEM_SELECTORS, removeInjections } from "@framework/content/use-content-snippet";
 
 const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: any) => {
     const containerRef = React.createRef<any>()
@@ -20,11 +21,14 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
      * Injects snippets into container.
      * @param snippets - Array of snippets to inject.
      */
-    const injectSnippetsBody = useCallback((snippets: any, container: any) => {
+    const injectSnippetsBody = useCallback((snippets: any, container: any, snippetAttrName?: string) => {
         snippets?.filter((x: any)=> x.innerHTML)?.forEach((snippet: any, index: number) => {
             const script = document.createElement('script')
             script.innerHTML = snippet?.innerHTML
             script.async = true
+            if (snippetAttrName) {
+                script.setAttribute(snippetAttrName, snippet?.name)
+            }
             container.appendChild(script)
         })
     }, [])
@@ -38,6 +42,10 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
                 ))}
                 {snippetSet?.scripts?.length > 0 && snippetSet?.scripts?.map((script: any, index: number) => (
                     <>
+                        {/*{script?.innerHTML && (
+                            <script dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
+                        )}*/}
+
                         {script?.src && (
                             <Script id={`${script?.name}${index + 1}`} data-bc-name={`${script?.name}${index + 1}`} key={`${script?.name}${index}`} type={script?.type} src={script?.src} strategy={strategy} />
                         )}
@@ -48,11 +56,13 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
     }, [])
 
     useEffect(() => {
-        injectSnippetsBody(topHeadSnippets?.scripts || [], document.head)
+        removeInjections([`${ELEM_ATTR}${HEAD_ELEM_SELECTORS[0]}`], document.head)
+        injectSnippetsBody(topHeadSnippets?.scripts || [], document.head, `${ELEM_ATTR}${HEAD_ELEM_SELECTORS[0]}`)
     }, [topHeadSnippets])
 
     useEffect(() => {
-        injectSnippetsBody(headSnippets?.scripts || [], document.head)
+        removeInjections([`${ELEM_ATTR}${HEAD_ELEM_SELECTORS[1]}`], document.head)
+        injectSnippetsBody(headSnippets?.scripts || [], document.head, `${ELEM_ATTR}${HEAD_ELEM_SELECTORS[1]}`)
     }, [headSnippets])
 
     useEffect(() => {

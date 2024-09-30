@@ -63,6 +63,8 @@ import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
 import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
+import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export enum BasketStage {
   CREATED = 0,
@@ -789,6 +791,10 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onAddressSelect,
     onSubmit: handleAddressSubmit,
     onAddNewAddress: () => {
+      if (typeof window !== 'undefined') {
+        debugger
+        AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems: basket, })
+      }
       setPrevStep(router.query?.step)
       setEditAddressValues(undefined)
       goToStep(CheckoutStep.NEW_ADDRESS)

@@ -170,6 +170,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         productCode: response?.data?.product?.productCode,
       })
     }
+    debugger
+    const product: any = response?.data?.product
+    let color = ''
+    if (product?.variantGroupCode) {
+      color = product?.variantGroupCode?.split('-')[1]
+    }
+    const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+    AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
     if (response?.data?.product) {
       eventDispatcher(ProductViewed, {
         entity: JSON.stringify({

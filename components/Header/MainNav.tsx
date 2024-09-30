@@ -154,7 +154,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                   </button>
                 </div>
               }
-              <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
+              <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
               <CartDropdown />
               {featureToggle?.features?.enableMembership &&
                 <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">

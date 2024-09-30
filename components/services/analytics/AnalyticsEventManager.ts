@@ -4,7 +4,7 @@ import { AnalyticsType } from '.';
 import { Analytics } from './events';
 import { mapObject } from '@framework/utils/translate-util';
 import { CURRENT_THEME, EmptyObject } from '@components/utils/constants';
-const featureToggle = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`);
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
 

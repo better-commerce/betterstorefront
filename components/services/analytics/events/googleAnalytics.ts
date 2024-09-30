@@ -190,10 +190,10 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.VIEW_WISHLIST]: {
             transformMap: {
                 event: AnalyticsEventType.VIEW_WISHLIST,
-                ecommerce: {
-                    header: (source: any) => source?.header,
-                    current_page: (source: any) => source?.currentPage,
-                },
+                ecommerce: (source: any) => ({
+                    header: source?.header,
+                    current_page: source?.currentPage,
+                }),
             },
         },
 
@@ -229,10 +229,10 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.REMOVE_FROM_WISHLIST]: {
             transformMap: {
-                event: AnalyticsEventType.VIEW_WISHLIST,
+                event: AnalyticsEventType.REMOVE_FROM_WISHLIST,
                 product_name: (source: any) => source?.name,
                 availability: (source: any) => source?.productAvailability,
-                product_id: 'sku',
+                product_id: (source: any) => source?.sku,
             },
         },
 
@@ -342,17 +342,17 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.PDP_QUICK_VIEW_CLICK]: {
             transformMap: {
                 event: AnalyticsEventType.PDP_QUICK_VIEW_CLICK,
-                ecommerce: {
+                ecommerce: (source: any) => ({
                     items: {
-                        product_name: (source: any) => source?.name,
-                        position: (source: any) => source?.position,
-                        product_price: (source: any) => source?.price?.raw?.withTax,
-                        color: (source: any) => source?.variantGroupCode,
-                        category: (source: any) => source?.classification?.mainCategoryName,
-                        current_page: (source: any) => source?.currentPage,
-                        header: (source: any) => source?.header,
+                        product_name: source?.name,
+                        position: source?.position,
+                        product_price: source?.price?.raw?.withTax,
+                        color: source?.variantGroupCode,
+                        category: source?.classification?.mainCategoryName,
+                        current_page: source?.currentPage,
+                        header: source?.header,
                     },
-                },
+                }),
             },
         },
 

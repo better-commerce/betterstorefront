@@ -410,7 +410,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         data.qty = 0
         if (typeof window !== 'undefined') {
           debugger
-          const extras = { originalLocation: SITE_ORIGIN_URL + window.location.href }
+          const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
           AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
         }
         if (window?.ch_session) {
