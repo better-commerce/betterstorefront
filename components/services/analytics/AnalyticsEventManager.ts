@@ -57,6 +57,7 @@ class EventManager {
      * the transformMap in the event config
      */
     private dispatchEvent(providerKey: string, eventType: string, eventData: any) {
+
         if (featureToggle?.features?.enableAnalytics) {
             const providerConfig = Analytics.Events[providerKey];
             if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
@@ -64,7 +65,8 @@ class EventManager {
                 return;
             }
 
-            const eventConfig = providerConfig.events[eventType]
+            const eventTypeName = providerConfig?.eventTypes[eventType]
+            const eventConfig = providerConfig?.events[eventType]
             const translatedEventData = (eventData && eventConfig?.transformMap) ? mapObject(eventData, eventConfig?.transformMap) : EmptyObject
             debugger
 
@@ -74,7 +76,7 @@ class EventManager {
 
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({
-                        event: eventType,
+                        event: eventTypeName,
                         page: translatedEventData
                     })
                     break;
@@ -82,6 +84,17 @@ class EventManager {
                 case AnalyticsType.GOOGLE_TAG:
 
                     window.gtag('event', eventType, translatedEventData)
+                    break;
+
+                case AnalyticsType.OMNILYTICS:
+
+                    const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
+                    if (dataLayer) {
+                        let event = new CustomEvent(eventType, {
+                            detail: { action: eventType, payload: translatedEventData },
+                        })
+                        window.dispatchEvent(event)
+                    }
                     break;
             }
         }

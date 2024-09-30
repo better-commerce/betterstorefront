@@ -29,7 +29,12 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
             if (snippetAttrName) {
                 script.setAttribute(snippetAttrName, snippet?.name)
             }
-            container.appendChild(script)
+
+            if (container && container?.appendChild && script)
+			    try {
+					container.appendChild(script)
+				} catch(error: any) {
+				}
         })
     }, [])
 

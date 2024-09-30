@@ -6,6 +6,52 @@ import { getOrderId } from "@framework/utils/app-util";
 
 export const GOOGLE_ANALYTICS_EVENTS: any = {
 
+    /**
+     * All events supported for Google Analytics tracking
+     */
+    eventTypes: {
+        [AnalyticsEventType.VIEW_PLP_ITEMS]: 'view_item_list',
+        [AnalyticsEventType.VIEW_BASKET]: 'view_cart',
+        [AnalyticsEventType.ADD_TO_BASKET]: 'add_to_cart',
+        [AnalyticsEventType.REMOVE_FROM_CART]: 'remove_from_cart',
+        [AnalyticsEventType.SELECT_QUANTITY]: 'select_quantity',
+        [AnalyticsEventType.SAVE_NEW_ADDRESS]: 'save_new_address',
+        [AnalyticsEventType.VIEW_WISHLIST]: 'wishlist',
+        [AnalyticsEventType.ADD_TO_WISHLIST]: 'add_to_wishlist',
+        [AnalyticsEventType.REMOVE_FROM_WISHLIST]: 'remove_item',
+        [AnalyticsEventType.ADDRESS_CHANGE]: 'address_changes',
+        [AnalyticsEventType.PDP_VIEW]: 'view_item',
+        [AnalyticsEventType.PDP_VIEW_DETAILS]: 'select_item',
+        [AnalyticsEventType.PDP_QUICK_VIEW]: 'popup_view',
+        [AnalyticsEventType.PDP_QUICK_VIEW_CLICK]: 'quick_view_click',
+        [AnalyticsEventType.VIEW_PRODUCT_DETAILS]: 'view_prod_details',
+        [AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL]: 'specification_product_detail',
+        [AnalyticsEventType.BEGIN_CHECKOUT]: 'begin_checkout',
+        [AnalyticsEventType.ADD_SHIPPING_INFO]: 'add_shipping_info',
+        [AnalyticsEventType.ADD_PAYMENT_INFO]: 'add_payment_info',
+        [AnalyticsEventType.PURCHASE]: 'purchase',
+        [AnalyticsEventType.HELP_ICON]: 'help_icon',
+        [AnalyticsEventType.HAMBURGER_MENU]: 'hamburger_menu',
+        [AnalyticsEventType.HAMBURGER_MENU_CLICK]: 'hamburger_menu_click',
+        [AnalyticsEventType.HAMBURGER_ICON_CLICK]: 'hamburger_icon_click',
+        [AnalyticsEventType.HELP_SIDEBAR_MENU]: 'help_sidebar_menu',
+        [AnalyticsEventType.NEED_HELP_WITH_ORDER]: 'need_help_with_your_order',
+        [AnalyticsEventType.PROCEED_TO_CANCEL_ITEM]: 'proceed_to_cancel_item',
+        [AnalyticsEventType.PROCEED_TO_CANCEL_ORDER]: 'proceed_to_cancel_order',
+        [AnalyticsEventType.PROCEED_TO_RETURN]: 'proceed_to_return',
+        [AnalyticsEventType.PROCEED_TO_EXCHANGE]: 'proceed_to_exchange',
+        [AnalyticsEventType.CANCEL_CONFIRM]: 'cancel_confirm',
+        [AnalyticsEventType.RETURN_CONFIRM]: 'return_confirm',
+        [AnalyticsEventType.TRACK_PACKAGE]: 'track_package',
+        [AnalyticsEventType.FOOTER_QUERY_CLICK]: 'footer_query_click',
+        [AnalyticsEventType.LOGIN_ATTEMPT]: 'login_attempt',
+        [AnalyticsEventType.NOTIFY_ME]: 'notify_me',
+        [AnalyticsEventType.NOTIFY_CLICK]: 'notify_click',
+        [AnalyticsEventType.REFERRER_BANNERS]: 'referrer_banners',
+        [AnalyticsEventType.LOGO_CLICK]: 'logo_click',
+        [AnalyticsEventType.POLICY_POPUP]: 'policy_popup',
+    },
+
     // Event mappings for GoogleAnalytics
     events: {
 
