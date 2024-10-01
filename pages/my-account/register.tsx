@@ -11,7 +11,6 @@ import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
 import cartHandler from '@components/services/cart'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
@@ -23,6 +22,7 @@ import SocialSignInLinks from '@components/shared/Login/SocialSignInLinks'
 import { AlertType } from '@framework/utils/enums'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
@@ -92,6 +92,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
 
 function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   let b2bSettings = []
+  const { recordAnalytics } = useAnalytics()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const [hasPassedEmailValidation, setHasPassedEmailValidation] = useState(false)
   const [userEmail, setUserEmail] = useState('')
@@ -100,19 +101,18 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const { associateCart } = cartHandler()
-  const { CustomerCreated, PageViewed } = EVENTS_MAP.EVENT_TYPES
-const router = useRouter()
-  if (config?.configSettings?.length) {
-    b2bSettings =
-      config?.configSettings?.find((x: any) =>
-        matchStrings(x?.configType, 'B2BSettings', true)
-      )?.configKeys || []
+  const router = useRouter()
+    if (config?.configSettings?.length) {
+      b2bSettings =
+        config?.configSettings?.find((x: any) =>
+          matchStrings(x?.configType, 'B2BSettings', true)
+        )?.configKeys || []
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entityName: PAGE_TYPES.Register,
     entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+    eventType: AnalyticsEventType.PAGE_VIEWED,
   })
 
   useEffect(() => {
@@ -231,13 +231,13 @@ const router = useRouter()
     // If registration is SUCCESS
     if (userCreated) {
       deleteUser({ isSilentLogout: true })
-      eventDispatcher(CustomerCreated, {
+      recordAnalytics(AnalyticsEventType.CUSTOMER_CREATED, {
         entity: JSON.stringify({
           id: recordId,
           name: values.firstName + values.lastName,
           email: values.email,
         }),
-        eventType: CustomerCreated,
+        eventType: AnalyticsEventType.CUSTOMER_CREATED,
       })
       setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.registerSuccessMsg')})
       Router.push('/my-account/login')

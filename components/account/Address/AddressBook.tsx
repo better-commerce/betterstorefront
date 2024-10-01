@@ -16,8 +16,9 @@ import { Guid } from '@commerce/types'
 import { AlertType } from '@framework/utils/enums'
 import { DEFAULT_COUNTRY } from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -54,6 +55,7 @@ export function asyncHandler() {
 }
 
 export default function AddressBook({ deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [data, setData] = useState([])
   const translate = useTranslation();
   const [isNewFormMode, setNewFormMode] = useState(false)
@@ -244,7 +246,7 @@ export default function AddressBook({ deviceInfo }: any) {
     if (typeof window !== 'undefined') {
       if (currentPage) {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
+        recordAnalytics(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
       }
     }
 

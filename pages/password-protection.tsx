@@ -19,10 +19,12 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 declare const window: any
 
 function PasswordProtectionPage({ config }: any) {
+  const { recordAnalytics } = useAnalytics()
   let configSettings: any
   if (config) {
     configSettings = config?.configSettings
@@ -135,10 +137,10 @@ function PasswordProtectionPage({ config }: any) {
     })
   }, [configSettings])
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PasswordProtection, {
+  recordAnalytics(AnalyticsEventType.PASSWORD_PROTECTION, {
     entityName: PAGE_TYPES.PasswordProtection,
     entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PasswordProtection,
+    eventType: AnalyticsEventType.PASSWORD_PROTECTION,
   })
 
   useEffect(() => {

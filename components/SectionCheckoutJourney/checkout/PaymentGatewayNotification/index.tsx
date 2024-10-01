@@ -5,9 +5,6 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 
-// Component Imports
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-
 // Other Imports
 import cartHandler from '@components/services/cart'
 import { getOrderId, getOrderInfo, getRedirectionLocale } from '@framework/utils/app-util'
@@ -19,10 +16,13 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { EmptyString } from '@components/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 
 const PaymentGatewayNotification = (props: IGatewayPageProps) => {
+  const { recordAnalytics } = useAnalytics()
   const orderInfo = getOrderInfo()
   const { associateCart } = cartHandler()
   const { gateway, params, isCancelled, isCOD = false, config } = props
@@ -37,7 +37,6 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
   } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
   const { Order } = EVENTS_MAP.ENTITY_TYPES
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
 
   /**
    * Update order status.
@@ -83,7 +82,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       paymentResponseResult === PaymentStatus.AUTHORIZED
     ) {
       const { orderNo, grandTotal } = orderInfo?.orderResponse
-      eventDispatcher(CheckoutConfirmation, {
+      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, {
         basketItemCount: cartItems?.lineItems?.length,
         basketTotal: grandTotal?.raw?.withTax,
         shippingCost: cartItems?.shippingCharge?.raw?.withTax,
@@ -139,7 +138,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
         entityId: orderInfo?.orderResponse?.id,
         entityName: orderNo,
         entityType: Order,
-        eventType: CheckoutConfirmation,
+        eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
       })
 
       Cookies.remove(Cookie.Key.SESSION_ID)

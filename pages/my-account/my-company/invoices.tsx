@@ -18,8 +18,10 @@ import { DATE_FORMAT, NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_DOWNLOAD_INV
 import B2BOrders from '@components/account/Orders/B2BOrders'
 import { deliveryDateFormat } from '@framework/utils/parse-util'
 import moment from 'moment'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyInvoices({ deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder, setAlert, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
@@ -27,7 +29,6 @@ function MyInvoices({ deviceInfo }: any) {
   const [isAdmin, setIsAdmin] = useState(false)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder)
   const [data, setData] = useState<any>([])
@@ -43,7 +44,7 @@ function MyInvoices({ deviceInfo }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
+    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
   }
   const userAdminCheck = (b2bUsers: any) => {
     let isAdmin =
@@ -82,7 +83,7 @@ function MyInvoices({ deviceInfo }: any) {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.invoice'))
   }, [])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

@@ -9,7 +9,6 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon, CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
@@ -23,15 +22,15 @@ import RelatedProducts from '@components/Product/RelatedProducts'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import Engraving from '@components/Product/Engraving'
 import Router from 'next/router'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
+  const { recordAnalytics } = useAnalytics()
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
-  const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
   const { Basket } = EVENTS_MAP.ENTITY_TYPES
   const [totalDiscount, setTotalDiscount] = useState(0)
   const [lastCartItemProductId, setLastCartItemProductId] = useState('')
@@ -216,7 +215,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     //   setCartItems(items)
     // }
 
-    eventDispatcher(BasketViewed, {
+    recordAnalytics(AnalyticsEventType.VIEW_BASKET, {
       entity: JSON.stringify({
         id: basketId,
         grandTotal: cartItems.grandTotal?.raw.withTax,
@@ -229,7 +228,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       }),
       entityName: 'Cart',
       entityType: Basket,
-      eventType: BasketViewed,
+      eventType: AnalyticsEventType.VIEW_BASKET,
       promoCodes: cartItems.promotionsApplied,
     })
     // handleCartitems()
@@ -393,7 +392,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           if (currentPage) {
             if (typeof window !== 'undefined') {
               debugger
-              AnalyticsEventManager.dispatch(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
+              recordAnalytics(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
             }
           }
         } else {
@@ -411,7 +410,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
+          recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
         }
         if (window?.ch_session) {
           window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
@@ -447,7 +446,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     if (typeof window !== 'undefined') {
       debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      AnalyticsEventManager.dispatch(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
+      recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
     }
   }
 

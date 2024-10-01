@@ -14,7 +14,6 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import CheckoutHeading from '@components/SectionCheckoutJourney/checkout/CheckoutHeading'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 const CheckoutRouter = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutRouter'))
 const CheckoutForm = dynamic(() => import('@components/SectionCheckoutJourney/checkout/CheckoutForm'))
@@ -25,6 +24,7 @@ export interface actionInterface {
 }
 
 function Checkout({ cart, config, location }: any) {
+  const { recordAnalytics } = useAnalytics()
   const {
     user,
     basketId,
@@ -140,11 +140,9 @@ function Checkout({ cart, config, location }: any) {
     }
   }
 
-  const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
-
   const { Basket } = EVENTS_MAP.ENTITY_TYPES
 
-  useAnalytics(CheckoutStarted, {
+  recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, {
     entity: JSON.stringify({
       grandTotal: cart.grandTotal.raw,
       id: cart.id,
@@ -158,13 +156,13 @@ function Checkout({ cart, config, location }: any) {
     entityId: cart.id,
     entityName: PAGE_TYPE,
     entityType: Basket,
-    eventType: CheckoutStarted,
+    eventType: AnalyticsEventType.BEGIN_CHECKOUT,
   })
 
   const recordShippingInfo = () => {
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems, })
+      recordAnalytics(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems, })
     }
   }
 

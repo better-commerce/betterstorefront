@@ -38,8 +38,10 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
+  const { recordAnalytics } = useAnalytics()
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
@@ -271,7 +273,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.BasketViewed, {
+  recordAnalytics(AnalyticsEventType.VIEW_BASKET, {
     entity: JSON.stringify({
       id: basketId,
       grandTotal: cartItems?.grandTotal?.raw.withTax,
@@ -284,7 +286,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     }),
     entityName: PAGE_TYPES.Cart,
     entityType: EVENTS_MAP.ENTITY_TYPES.Basket,
-    eventType: EVENTS_MAP.EVENT_TYPES.BasketViewed,
+    eventType: AnalyticsEventType.VIEW_BASKET,
     promoCodes: cartItems.promotionsApplied,
   })
 

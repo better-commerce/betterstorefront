@@ -16,8 +16,6 @@ import { getOrderId, getOrderInfo, parsePaymentMethods } from '@framework/utils/
 import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export interface IPaymentButtonProps {
@@ -33,6 +31,7 @@ export interface IPaymentButtonProps {
   readonly contactDetails?: any
   onScrollToSection?: any
   translate?: any
+  recordAnalytics?: any
 }
 
 export interface IApplePaymentProps {
@@ -168,7 +167,7 @@ export default abstract class BasePaymentButton
     const orderInfo = getOrderInfo()
     const transactionId = getOrderId(orderInfo?.order)
     debugger
-    AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_PAYMENT_INFO, { user, cartItems, transactionId, paymentType, })
+    this.props?.recordAnalytics(AnalyticsEventType.ADD_PAYMENT_INFO, { user, cartItems, transactionId, paymentType, })
   }
 
   /**

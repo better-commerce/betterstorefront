@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
-import eventDispatcher from './eventDispatcher'
-import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import { useCallback, useEffect } from 'react'
+import { CURRENT_THEME } from '@components/utils/constants'
+import AnalyticsEventManager from './AnalyticsEventManager'
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 declare global {
   interface Window {
@@ -19,16 +20,40 @@ declare global {
   }
 }
 
-export default function useAnalytics(event: string, data: any) {
-  if (OMNILYTICS_DISABLED) return
-  
-  // const windowClone: any = typeof window !== 'undefined' ? window : {}
-  const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
+/**
+ * useAnalytics hook
+ *
+ * If analytics is enabled, it provides a function to record analytics events.
+ *
+ * @returns {Object} an object with a single function, recordAnalytics
+ * @property {function(string, Object): void} recordAnalytics - a function to record analytics events
+ */
+export default function useAnalytics() {
+  const dataLayer = typeof window !== 'undefined'
 
-  useEffect(() => {
-    //console.count(`inside use effect ${dataLayer}`)
-    if (dataLayer) eventDispatcher(event, data)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  /**
+   * Returns a function to record analytics events
+   * @returns {function(string, Object): void} recordAnalytics function
+   */
+  const recordAnalytics = useCallback((event: string, data: any): void => {
+    if (!featureToggle?.features?.enableAnalytics) return
+    
+    if (dataLayer) {
+      AnalyticsEventManager.dispatch(event, data)
+    }
   }, [dataLayer])
+
+  return { recordAnalytics }
+
+  // if (!featureToggle?.features?.enableOmnilytics) return
+  
+  // // const windowClone: any = typeof window !== 'undefined' ? window : {}
+  // const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
+
+  // useEffect(() => {
+  //   //console.count(`inside use effect ${dataLayer}`)
+  //   if (dataLayer) eventDispatcher(event, data)
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dataLayer])
 }

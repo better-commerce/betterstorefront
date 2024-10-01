@@ -27,6 +27,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import StoreLocatorScript from '@components/StoreLocator/Script'
 import { LoadingDots } from '@components/ui'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const DEBOUNCE_TIMER = 300
 
@@ -45,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 }
 
 function StoreLocatorPage({ deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -65,10 +67,10 @@ function StoreLocatorPage({ deviceInfo }: any) {
   const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false)
   const { isMobile } = deviceInfo
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entityName: PAGE_TYPES.StoreLocator,
     entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+    eventType: AnalyticsEventType.PAGE_VIEWED,
   })
 
   useEffect(() => {

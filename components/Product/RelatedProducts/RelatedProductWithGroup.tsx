@@ -8,12 +8,13 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
 
 export default function RelatedProductWithGroup({ products, productPerColumn, deviceInfo, maxBasketItemsCount, defaultDisplayMembership, featureToggle }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
   let currentPage = getCurrentPage()
@@ -73,14 +74,14 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, currentPage, })
+        recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, currentPage, })
       }
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
+        recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
       }
     }
   }

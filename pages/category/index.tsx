@@ -18,8 +18,10 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function CategoryPage(props: any) {
+  const { recordAnalytics } = useAnalytics()
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -27,10 +29,10 @@ function CategoryPage(props: any) {
   const router = useRouter()
   const translate = useTranslation()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
+  recordAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
     entityName: PAGE_TYPE,
     entityType: EVENTS_MAP.ENTITY_TYPES.Category,
-    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
+    eventType: AnalyticsEventType.CATEGORY_VIEWED,
   })
 
   return (

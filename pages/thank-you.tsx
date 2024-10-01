@@ -27,10 +27,11 @@ import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderIt
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 import { ContentSnippetInjector } from '@components/common/Content'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function OrderConfirmation({ config }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [order, setOrderData] = useState<any>()
   const [isSnippetLoaded, setIsSnippetLoaded] = useState(false)
   const [snippets, setSnippets] = useState(new Array<any>())
@@ -275,7 +276,7 @@ export default function OrderConfirmation({ config }: any) {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, cartItems, orderInfo, orderData, itemIsBundleItem: false })
+        recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, cartItems, orderInfo, orderData, itemIsBundleItem: false })
       }
 
       setTimeout(() => {

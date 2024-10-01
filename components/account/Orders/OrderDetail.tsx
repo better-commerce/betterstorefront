@@ -23,10 +23,11 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { PaymentStatus } from '@components/utils/payment-constants'
 import { DATE_FORMAT, EmptyObject, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [isHelpOpen, setIsHelpOpen] = useState(false)
@@ -101,14 +102,14 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
     setIsHelpStatus(item)
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.HELP_ICON, { helpMode: 'cancel/return/exchange/chat', deviceCheck })
+      recordAnalytics(AnalyticsEventType.HELP_ICON, { helpMode: 'cancel/return/exchange/chat', deviceCheck })
     }
   }
 
   const chooseHelpMode = (mode: any) => {
     if (typeof window !== 'undefined')
       debugger
-    AnalyticsEventManager.dispatch(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
+    recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
   }
 
   const closeHelpModal = () => {
@@ -123,7 +124,7 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
     setIsHelpOrderOpen(true)
     if (typeof window !== 'undefined')
       debugger
-    AnalyticsEventManager.dispatch(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
+    recordAnalytics(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
   }
 
   const closeOrderHelpModal = () => {
@@ -136,33 +137,33 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
     )
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PROCEED_TO_CANCEL_ITEM, EmptyObject)
-      AnalyticsEventManager.dispatch(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ITEM, EmptyObject)
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   const onCancelOrder = async (mode: any) => {
     Router.push(`/my-account/cancel-order/${data?.orderId}`)
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PROCEED_TO_CANCEL_ORDER, EmptyObject)
-      AnalyticsEventManager.dispatch(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ORDER, EmptyObject)
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   const onReturnItem = async (mode: any) => {
     Router.push(`/my-account/return-order/${data?.orderId}/${data?.itemId}`)
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PROCEED_TO_RETURN, EmptyObject)
-      AnalyticsEventManager.dispatch(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_RETURN, EmptyObject)
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   const onExchangeItem = async (mode: any) => {
     Router.push(`/my-account/exchange-order/${data?.orderId}/${data?.itemId}`)
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
-      AnalyticsEventManager.dispatch(AnalyticsEventType.TRACK_PACKAGE, { details, deviceCheck, })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
+      recordAnalytics(AnalyticsEventType.TRACK_PACKAGE, { details, deviceCheck, })
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   useEffect(() => {
@@ -175,7 +176,7 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
   const trackPackage = (details: any) => {
     if (typeof window !== 'undefined')
       debugger
-    AnalyticsEventManager.dispatch(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
   }
   const isIncludeVAT = vatIncluded()
   const subTotalAmount = isIncludeVAT

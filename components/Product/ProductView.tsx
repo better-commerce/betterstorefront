@@ -12,7 +12,6 @@ import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
 import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG } from '@components/utils/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
@@ -37,9 +36,9 @@ import ProductSocialProof from './ProductSocialProof'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import TechnicalSpecifications from './TechnicalSpecification'
 import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
@@ -70,6 +69,7 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership,  selectedFilters = [] }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
@@ -126,7 +126,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setAttributeNames(mappedAttribsArrStr)
   }, [allProductsByCategory])
 
-  const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
     if (colour) {
       setVariantInfo((v: any) => ({
@@ -177,9 +176,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       color = product?.variantGroupCode?.split('-')[1]
     }
     const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-    AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
+    recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
     if (response?.data?.product) {
-      eventDispatcher(ProductViewed, {
+      recordAnalytics(AnalyticsEventType.PDP_VIEW, {
         entity: JSON.stringify({
           id: response?.data?.product?.recordId,
           sku: response?.data?.product?.sku,
@@ -190,7 +189,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         entityId: response?.data?.product?.recordId,
         entityName: response?.data?.product?.name,
         entityType: Product,
-        eventType: ProductViewed,
+        eventType: AnalyticsEventType.PDP_VIEW,
         omniImg: response?.data?.product?.image,
       })
       setUpdatedProduct(response.data.product)
@@ -398,12 +397,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
           }
           if (window?.ch_session && memoizedDataForEngage) {
             window?.ch_add_to_cart_before(memoizedDataForEngage)
@@ -481,12 +480,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
               }
             }
           },
@@ -603,14 +602,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
+      recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
+      recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
+        recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
       }
     }
 

@@ -30,6 +30,7 @@ import { Guid } from '@commerce/types'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { useTranslation } from '@commerce/utils/use-translation'
 import SaveB2BQuote from './SaveB2BQuote'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 interface PaymentMethodSelectionProps {
   readonly basket: any
@@ -55,6 +56,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     hideOverlayLoaderState,
     generateBasketId,
   }) => {
+    const { recordAnalytics } = useAnalytics()
     const translate = useTranslation()
     const { shippingAddress, billingAddress }: any = basket || EmptyObject
     const selectedAddress = { shippingAddress, billingAddress }
@@ -437,6 +439,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                       contactDetails={contactDetails}
                       isApplePayScriptLoaded={isApplePayScriptLoaded}
                       onScrollToSection={() => { }}
+                      recordAnalytics={recordAnalytics}
                     />
                     {(state?.isPaymentWidgetActive ||
                       !!state?.isPaymentIntent) && (

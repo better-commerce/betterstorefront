@@ -4,13 +4,14 @@ import { useRef, useState } from 'react'
 import { getCurrentPage } from '@framework/utils/app-util'
 import cartHandler from '@components/services/cart'
 import AddonCard from './AddonCard'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
 
 export default function CartAddonProducts({ products, deviceInfo, maxBasketItemsCount }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [isQuickview, setQuickview] = useState(undefined)
   const [isQuickviewOpen, setQuickviewOpen] = useState(false)
   let currentPage = getCurrentPage()
@@ -70,14 +71,14 @@ export default function CartAddonProducts({ products, deviceInfo, maxBasketItems
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
+        recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
       }
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
+        recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
       }
     }
   }

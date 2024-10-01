@@ -21,9 +21,9 @@ import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ButtonNotifyMe from './ButtonNotifyMe'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -68,6 +68,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 export default function SearchQuickView({ isQuickview, setQuickview, productData, isQuickviewOpen, setQuickviewOpen, maxBasketItemsCount }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, setAlert } = useUI()
   const isIncludeVAT = vatIncluded()
@@ -156,12 +157,12 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, });
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, });
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false })
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false })
           }
         }
       },
@@ -226,12 +227,12 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, });
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, });
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false })
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false })
               }
             }
           },
@@ -264,14 +265,14 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
 
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view ', })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
+      recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view ', })
+      recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
+        recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
       }
     }
 

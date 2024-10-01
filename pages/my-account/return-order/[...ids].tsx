@@ -32,7 +32,6 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function ReturnOrder({
@@ -40,6 +39,7 @@ function ReturnOrder({
   itemId = Guid.empty,
   deviceInfo,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const { setAlert, user } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [orderDetails, setOrderDetails] = useState<any>()
@@ -135,7 +135,7 @@ function ReturnOrder({
         setItemReturnLoading(false)
         if (typeof window !== 'undefined') {
           debugger
-          AnalyticsEventManager.dispatch(AnalyticsEventType.RETURN_CONFIRM, { transactionId: data?.orderId, user, deviceCheck, })
+          recordAnalytics(AnalyticsEventType.RETURN_CONFIRM, { transactionId: data?.orderId, user, deviceCheck, })
         }
         setTimeout(() => {
           Router.push('/my-account/orders')
@@ -150,10 +150,10 @@ function ReturnOrder({
     setShowReturnReasons(!showReturnReasons)
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+  recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
     entityName: PAGE_TYPES.OrderReturn,
     entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+    eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
   })
 
   useEffect(() => {

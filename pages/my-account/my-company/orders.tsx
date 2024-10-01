@@ -15,8 +15,10 @@ import B2BQuotes from '@components/account/B2BQuotes'
 import axios from 'axios'
 import { NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_GET_ORDERS } from '@components/utils/constants'
 import B2BOrders from '@components/account/Orders/B2BOrders'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyOrders({ deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder } = useUI()
@@ -24,7 +26,6 @@ function MyOrders({ deviceInfo }: any) {
   const [isAdmin, setIsAdmin] = useState(false)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder)
   useEffect(() => {
@@ -38,7 +39,7 @@ function MyOrders({ deviceInfo }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
+    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
   }
   const userAdminCheck = (b2bUsers: any) => {
     let isAdmin =
@@ -77,7 +78,7 @@ function MyOrders({ deviceInfo }: any) {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.order'))
   }, [])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

@@ -1,7 +1,6 @@
 "use client";
 import cn from 'classnames'
 import React, { FC, useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
@@ -20,8 +19,8 @@ import { isMobile } from 'react-device-detect';
 import { Guid } from '@commerce/types';
 import { AlertType } from '@framework/utils/enums';
 import Router from 'next/router';
-import AnalyticsEventManager from './services/analytics/AnalyticsEventManager';
 import { AnalyticsEventType } from './services/analytics';
+import useAnalytics from './services/analytics/useAnalytics';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -41,6 +40,7 @@ export interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
+  const { recordAnalytics } = useAnalytics()
   const { deleteWishlistItem, isInWishList: isInWishlistItem, addToWishlist: addToWishlistItem } = wishlistHandler()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -53,8 +53,8 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const handleQuickViewData = (data: any) => {
     debugger
     const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-    AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: 0/*pid + 1,*/, currentPage: 'PLP', header: '', })
-    AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...data, ...{ ...extras }, position: 0/*pid + 1,*/ })
+    recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: 0/*pid + 1,*/, currentPage: 'PLP', header: '', })
+    recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...data, ...{ ...extras }, position: 0/*pid + 1,*/ })
     setShowModalQuickView(true);
     setQuickViewData(data)
   }

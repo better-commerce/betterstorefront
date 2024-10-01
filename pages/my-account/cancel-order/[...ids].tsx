@@ -30,9 +30,11 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 
 function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
@@ -101,10 +103,10 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+  recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
     entityName: PAGE_TYPES.OrderCancel,
     entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+    eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
   })
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import { getPagePropType, PagePropType } from "@framework/page-props";
 const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics';
 import { EVENTS_MAP } from '@components/services/analytics/constants';
+import { AnalyticsEventType } from "@components/services/analytics";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
@@ -28,6 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 }
 
 function Recommendations({  campaignData, featureToggle }: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const translate = useTranslation()
   const { user, isGuestUser,changeMyAccountTab } = useUI()
@@ -45,10 +47,10 @@ function Recommendations({  campaignData, featureToggle }: any) {
     return titleMap[path] || '';
   };
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entityName: PAGE_TYPES.MyStoreRecommends,
     entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
+    eventType: AnalyticsEventType.PAGE_VIEWED,
   })
 
   useEffect(()=>{

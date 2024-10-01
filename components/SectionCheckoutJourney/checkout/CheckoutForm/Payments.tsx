@@ -8,6 +8,7 @@ import PaymentButton from './PaymentButton'
 // Other Imports
 import { IDispatchState } from './PaymentButton/BasePaymentButton'
 import { useTranslation } from '@commerce/utils/use-translation'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 interface IPaymentMethodsProps {
   readonly paymentData: Function
@@ -22,6 +23,7 @@ export default function PaymentMethods({
   uiContext,
   dispatchState,
 }: IPaymentMethodsProps & IDispatchState) {
+  const { recordAnalytics } = useAnalytics()
   const [methods, setPaymentMethods] = useState([])
   const [activePaymentMethod, setActivePaymentMethod] = useState<any>({
     id: null,
@@ -72,7 +74,7 @@ export default function PaymentMethods({
       {activePaymentMethod.id &&
         selectedPaymentMethod?.id !== activePaymentMethod.id ? (
         <div className="flex justify-start w-full py-5">
-          <PaymentButton btnTitle={translate('common.label.confirmText')} paymentMethod={activePaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatchState} />
+          <PaymentButton btnTitle={translate('common.label.confirmText')} paymentMethod={activePaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatchState} recordAnalytics={recordAnalytics} />
         </div>
       ) : null}
     </ul>

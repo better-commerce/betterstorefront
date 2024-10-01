@@ -30,11 +30,11 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 
 function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
@@ -107,7 +107,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
           debugger
-          AnalyticsEventManager.dispatch(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
+          recordAnalytics(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
         }
       } catch (error) {
         setCancelLineItemLoading(false)
@@ -116,10 +116,10 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
+  recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
     entityName: PAGE_TYPES.OrderCancel,
     entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
+    eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
   })
 
   useEffect(() => {

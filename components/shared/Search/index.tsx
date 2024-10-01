@@ -5,7 +5,6 @@ import Link from 'next/link'
 import axios from 'axios'
 import { SEARCH_PROVIDER, NEXT_SEARCH_PRODUCTS, } from '@components/utils/constants'
 import rangeMap from '@lib/range-map'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -17,15 +16,17 @@ import { pushSearchToNavigationStack } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function Search(props: any) {
+  const { recordAnalytics } = useAnalytics()
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, searchDefaultSortBy } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [path, setCurrentPath] = useState(Router.asPath)
-  const SearchEvent = EVENTS_MAP.EVENT_TYPES.Search
   const translate = useTranslation()
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
 
@@ -39,7 +40,7 @@ export default function Search(props: any) {
         })
         setProducts(response?.data?.results)
         setIsLoading(false)
-        eventDispatcher(SearchEvent, {
+        recordAnalytics(AnalyticsEventType.SEARCH, {
           entity: JSON.stringify({
             FreeText: inputValue,
             ResultCount: response?.data?.results?.length || 0,
@@ -47,7 +48,7 @@ export default function Search(props: any) {
           entityId: inputValue,
           entityName: inputValue,
           entityType: SearchEntity,
-          eventType: SearchEvent,
+          eventType: AnalyticsEventType.SEARCH,
         })
       } catch (error) {
         console.log(error)

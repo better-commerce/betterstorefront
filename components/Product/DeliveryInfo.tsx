@@ -14,12 +14,13 @@ import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductWarranty from './ProductWarranty'
 import ProductReturn from './ProductReturn'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 
 export default function DeliveryInfo({ product, grpData, config }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const [isWarranty, setWarranty] = useState(false)
   const [isReturn, setReturn] = useState(false)
@@ -54,7 +55,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     setWarranty(true)
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.LOGO_CLICK, { currentPage: 'PDP', category: 'Warranty', })
+      recordAnalytics(AnalyticsEventType.LOGO_CLICK, { currentPage: 'PDP', category: 'Warranty', })
     }
   }
 
@@ -62,7 +63,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     setReturn(true)
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
+      recordAnalytics(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
     }
   }
   const shippingSettings = config?.configSettings?.find(

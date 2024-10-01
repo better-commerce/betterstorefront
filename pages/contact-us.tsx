@@ -36,6 +36,7 @@ import Link from 'next/link'
 import ContactForm from '@components/contact/ContactForm'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -69,8 +70,8 @@ function Contact({
   deviceInfo,
   data,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
@@ -99,7 +100,7 @@ function Contact({
     }
   }, [currencyCode, isMobile])
 
-  useAnalytics(PageViewed, {
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entity: JSON.stringify({
       id: '',
       name: pageContents?.metatitle,

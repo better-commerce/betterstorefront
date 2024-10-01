@@ -20,9 +20,9 @@ import { cartItemsValidateAddToCart, getCurrentPage, vatIncluded } from '@framew
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import wishlistHandler from '@components/services/wishlist'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -53,6 +53,7 @@ export default function PLPQuickView({
   setQuickviewOpen,
   maxBasketItemsCount,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const {isInWishList , deleteWishlistItem } = wishlistHandler()
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setCartItems, user, removeFromWishlist, setAlert ,isGuestUser, openLoginSideBar} = useUI()
@@ -127,12 +128,12 @@ export default function PLPQuickView({
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, })
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, })
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
           }
         }
       },
@@ -200,12 +201,12 @@ export default function PLPQuickView({
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, })
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, })
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'PLP - Quick View', itemIsBundleItem: false })
               }
             }
           },
@@ -244,14 +245,14 @@ export default function PLPQuickView({
 
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view', })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
+      recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view', })
+      recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
+        recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
       }
     }
 

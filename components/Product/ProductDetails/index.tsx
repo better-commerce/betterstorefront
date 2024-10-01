@@ -1,8 +1,8 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -33,6 +33,7 @@ const Attributes = ({ attributes = [] }: any) => {
 }
 
 export default function ProductDetails({ product, description }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const detailsConfig = [
     // {
@@ -86,7 +87,7 @@ export default function ProductDetails({ product, description }: any) {
   function openSpecification() {
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL, { ...product, currentPage: window.location.href, })
+      recordAnalytics(AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL, { ...product, currentPage: window.location.href, })
     }
   }
 

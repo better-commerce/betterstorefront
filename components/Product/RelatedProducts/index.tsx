@@ -9,10 +9,10 @@ import cartHandler from '@components/services/cart'
 import { useUI } from '@components/ui/context'
 import { getCurrentPage, removePrecedingSlash } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const PLPQuickView = dynamic(() => import('@components/Product/QuickView/PLPQuickView'))
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 
@@ -37,6 +37,7 @@ export default function RelatedProducts({
   featureToggle,
   defaultDisplayMembership
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { basketId, setCartItems, user } = useUI()
   const [quickViewProduct, setQuickViewProduct] = useState<any>(undefined)
@@ -88,17 +89,17 @@ export default function RelatedProducts({
   function viewProductDetail(product: any, pid: number) {
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_VIEW_DETAILS, { ...product, position: pid + 1, currentPage, sectionTitle: 'Frequently Bought Together', })
+      recordAnalytics(AnalyticsEventType.PDP_VIEW_DETAILS, { ...product, position: pid + 1, currentPage, sectionTitle: 'Frequently Bought Together', })
       let color = ''
       if (product?.variantGroupCode) {
         color = product?.variantGroupCode?.split('-')[1]
       }
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_PRODUCT_DETAILS, { ...product, header: title, currentPage: 'Cart', })
+      recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
+      recordAnalytics(AnalyticsEventType.VIEW_PRODUCT_DETAILS, { ...product, header: title, currentPage: 'Cart', })
 
       if (checkout_refrence == true) {
-        AnalyticsEventManager.dispatch(AnalyticsEventType.REFERRER_BANNERS, { ...product, categoryPosition: 'Checkout', header: title, position: pid + 1, currentPage: 'Cart', })
+        recordAnalytics(AnalyticsEventType.REFERRER_BANNERS, { ...product, categoryPosition: 'Checkout', header: title, position: pid + 1, currentPage: 'Cart', })
       }
     }
   }
@@ -108,8 +109,8 @@ export default function RelatedProducts({
     if (typeof window !== 'undefined') {
       debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage: 'Cart', header: title, })
+      recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
+      recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage: 'Cart', header: title, })
     }
   }
 

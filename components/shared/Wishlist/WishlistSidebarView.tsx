@@ -13,10 +13,11 @@ import {
 import { generateUri } from '@commerce/utils/uri-util'
 import { vatIncluded } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
+  const { recordAnalytics } = useAnalytics()
   const {
     displaySidebar,
     closeSidebar,
@@ -78,7 +79,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
 
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
+      recordAnalytics(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 
     if (objUser) {

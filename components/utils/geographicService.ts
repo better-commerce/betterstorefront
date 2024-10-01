@@ -3,7 +3,7 @@ import { EmptyString, OMNILYTICS_IP_INFO } from '@components/utils/constants'
 
 export default async function geoData(ipAddress = EmptyString) {
   try {
-    const { data }: any = await axios.get(OMNILYTICS_IP_INFO, {
+    const { data }: any = await axios.get(process.env.NEXT_PUBLIC_GEO_ENDPOINT!, {
       params: {
         ipAddress,
       },

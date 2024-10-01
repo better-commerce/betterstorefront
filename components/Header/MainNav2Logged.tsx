@@ -9,11 +9,10 @@ import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
-import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import AnalyticsEventManager from "@components/services/analytics/AnalyticsEventManager";
 import { AnalyticsEventType } from "@components/services/analytics";
+import useAnalytics from "@components/services/analytics/useAnalytics";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -33,6 +32,7 @@ interface Props {
 }
 
 const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
+  const { recordAnalytics } = useAnalytics()
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems, openLoginSideBar } = useUI()
@@ -73,7 +73,7 @@ function handleWishlist() {
         if (currentPage) {
           if (typeof window !== 'undefined') {
             debugger
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
+            recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }

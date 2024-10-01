@@ -46,6 +46,7 @@ import FeaturedBrand from '@components/category/FeaturedBrand'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 import Loader from '@components/Loader'
 import { removeQueryString } from '@commerce/utils/uri-util'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -291,6 +292,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
+  const { recordAnalytics } = useAnalytics()
   const { isMobile } = deviceInfo
   const router = useRouter()
   const qsFilters = router.asPath
@@ -385,7 +387,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     dispatch({ type: PAGE, payload: 1 })
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
+  recordAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
     entity: JSON.stringify({
       id: category?.id,
       name: category?.name || EmptyString,
@@ -393,7 +395,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     entityId: category?.id || EmptyGuid,
     entityName: PAGE_TYPE,
     entityType: EVENTS_MAP.ENTITY_TYPES.Category,
-    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
+    eventType: AnalyticsEventType.CATEGORY_VIEWED,
   })
 
   useEffect(() => {

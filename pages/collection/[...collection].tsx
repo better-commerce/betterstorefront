@@ -45,7 +45,6 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 declare const window: any
@@ -107,6 +106,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CollectionPage(props: any) {
+  const { recordAnalytics } = useAnalytics()
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
@@ -134,7 +134,7 @@ function CollectionPage(props: any) {
   })
   const { isCompared } = useUI()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
+  recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
     entity: JSON.stringify({
       id: props?.id || EmptyGuid,
       name: props?.name || EmptyString,
@@ -142,7 +142,7 @@ function CollectionPage(props: any) {
     entityId: props?.id || EmptyGuid,
     entityName: props?.name || EmptyString,
     entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
-    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
+    eventType: AnalyticsEventType.VIEW_PLP_ITEMS,
   })
 
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
@@ -257,7 +257,7 @@ function CollectionPage(props: any) {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false })
+        recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false })
       }
     }
   }, [productDataToPass])

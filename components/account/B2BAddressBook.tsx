@@ -15,8 +15,9 @@ import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
 import { AlertType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -53,6 +54,7 @@ export function asyncHandler() {
 }
 
 export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
@@ -243,7 +245,7 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
     if (typeof window !== 'undefined') {
       if (currentPage) {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
+        recordAnalytics(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
       }
     }
 

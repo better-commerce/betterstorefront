@@ -17,14 +17,15 @@ import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import BasketList from "./BasketList";
 import TransferBasket from "@components/TransferBasket";
-import AnalyticsEventManager from "@components/services/analytics/AnalyticsEventManager";
 import { AnalyticsEventType } from "@components/services/analytics";
 import Router from "next/router";
+import useAnalytics from "@components/services/analytics/useAnalytics";
 
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function B2BBaskets() {
+  const { recordAnalytics } = useAnalytics()
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
@@ -43,7 +44,7 @@ export default function B2BBaskets() {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false })
+        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false })
       }
     }
   }

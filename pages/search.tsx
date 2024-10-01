@@ -27,6 +27,7 @@ const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
+import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -76,6 +77,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
@@ -139,8 +141,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     }
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
-
-  const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     if (
@@ -215,7 +215,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     (filter: any) => filter.name === 'Category'
   )
 
-  useAnalytics(FacetSearch, {
+  recordAnalytics(AnalyticsEventType.FACET_SEARCH, {
     entity: JSON.stringify({
       FreeText: '',
       Page: state.currentPage,

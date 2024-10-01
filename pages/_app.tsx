@@ -23,7 +23,6 @@ import packageInfo from '../package.json'
 import { decrypt, } from '@framework/utils/cipher'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
-import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
 import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN, NEXT_GET_NAVIGATION } from '@components/utils/constants'
@@ -205,7 +204,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     } else {
       setAppIsLoading(false)
     }
-    if (!OMNILYTICS_DISABLED) {
+    if (featureToggle?.features?.enableOmnilytics) {
       setGeoData()
     }
     let analyticsCb = analytics()
@@ -232,7 +231,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
-    if (!OMNILYTICS_DISABLED) {
+    if (featureToggle?.features?.enableOmnilytics) {
       fetchEngageCampaigns()
     }
   }, [router.asPath])

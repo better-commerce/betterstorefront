@@ -28,10 +28,11 @@ import Cookies from 'js-cookie'
 import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData, config, location, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const isBrowser = typeof window !== 'undefined'
   const INITIAL_STATE = {
@@ -268,7 +269,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
         if (currentPage) {
           if (typeof window !== 'undefined') {
             debugger
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quote Detail', currentPage, })
+            recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quote Detail', currentPage, })
           }
         }
       }

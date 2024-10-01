@@ -59,12 +59,11 @@ import { Cookie } from '@framework/utils/constants'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
 import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export enum BasketStage {
   CREATED = 0,
@@ -78,6 +77,7 @@ export enum BasketStage {
 
 
 const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const uiContext: any = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
@@ -793,7 +793,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onAddNewAddress: () => {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems: basket, })
+        recordAnalytics(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems: basket, })
       }
       setPrevStep(router.query?.step)
       setEditAddressValues(undefined)
@@ -970,10 +970,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         router.push('/cart')
       } else {
         if (!isCheckoutStarted) {
-          const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
           const { Basket } = EVENTS_MAP.ENTITY_TYPES
           setCheckoutStarted(true)
-          eventDispatcher(CheckoutStarted, {
+          recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, {
             entity: JSON.stringify({
               id: basket?.id,
               basketId,
@@ -1015,7 +1014,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
             entityId: basket?.id,
             entityName: PAGE_TYPE,
             entityType: Basket,
-            eventType: CheckoutStarted,
+            eventType: AnalyticsEventType.BEGIN_CHECKOUT,
           })
         }
       }

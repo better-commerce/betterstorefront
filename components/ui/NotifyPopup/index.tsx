@@ -5,10 +5,11 @@ import axios from 'axios'
 import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'
 import { validate } from 'email-validator'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function NotifyUserPopup() {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [email, setEmailAddress] = useState('')
   const [isPostedMessage, setIsPosted] = useState('')
@@ -41,8 +42,8 @@ export default function NotifyUserPopup() {
 
     if (typeof window !== "undefined") {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.NOTIFY_ME, { currentPage: "PDP", })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.NOTIFY_CLICK, { currentPage: "PDP", })
+      recordAnalytics(AnalyticsEventType.NOTIFY_ME, { currentPage: "PDP", })
+      recordAnalytics(AnalyticsEventType.NOTIFY_CLICK, { currentPage: "PDP", })
     }
   }
 

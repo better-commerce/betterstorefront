@@ -18,17 +18,19 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function CollectionList(props: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter();
   const translate = useTranslation()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
+  recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
     entity: JSON.stringify({ id: props?.id || EmptyGuid, name: props?.name || EmptyString, }),
     entityId: props?.id || EmptyGuid,
     entityName: props?.name || EmptyString,
     entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
-    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
+    eventType: AnalyticsEventType.VIEW_PLP_ITEMS,
   })
 
   return (

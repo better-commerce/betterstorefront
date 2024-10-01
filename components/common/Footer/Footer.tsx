@@ -9,8 +9,8 @@ import { IExtraProps } from '../Layout/Layout'
 import Script from 'next/script'
 import { SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 interface Props {
   config: []
@@ -20,6 +20,7 @@ const Footer: FC<Props & IExtraProps> = ({
   config,
   deviceInfo,
 }) => {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const [hasConfig, setHasConfig] = useState(false)
@@ -42,7 +43,7 @@ const Footer: FC<Props & IExtraProps> = ({
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.FOOTER_QUERY_CLICK, { detail, currentPage, deviceCheck, })
+        recordAnalytics(AnalyticsEventType.FOOTER_QUERY_CLICK, { detail, currentPage, deviceCheck, })
       }
     }
   }

@@ -10,21 +10,21 @@ import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET , NEXT_TRANSFER_BASKET, SITE_ORIGIN_URL } from "@components/utils/constants";
 import axios from "axios";
-import { matchStrings } from "@framework/utils/parse-util";
 import { Guid } from "@commerce/types";
 import { AlertType } from '@framework/utils/enums';
 import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import TransferBasket from "@components/TransferBasket";
-import AnalyticsEventManager from "@components/services/analytics/AnalyticsEventManager";
 import { AnalyticsEventType } from "@components/services/analytics";
 import Router from "next/router";
+import useAnalytics from "@components/services/analytics/useAnalytics";
 
 const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function CartDropdown() {
+  const { recordAnalytics } = useAnalytics()
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
@@ -44,7 +44,7 @@ export default function CartDropdown() {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false })
+        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false })
       }
     }
   }

@@ -1,11 +1,12 @@
 import { useReducer, useEffect } from 'react'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { PaymentStatus } from '@components/utils/payment-constants'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 /* ---------------- HOW TO ADD A NEW PAYMENT METHOD
 
@@ -28,6 +29,7 @@ export default function PaymentWidget({
   paymentMethod,
   checkoutCallback,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const orderInfo = getOrderInfo()
   const initialState = {
     triggerStripe: false,
@@ -56,7 +58,6 @@ export default function PaymentWidget({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod])
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   const CODHandler = async (paymentResponseRequest: any) => {
@@ -86,7 +87,7 @@ export default function PaymentWidget({
         taxPercent,
         orderDate,
       } = res.result
-      eventDispatcher(CheckoutConfirmation, {
+      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, {
         basketItemCount: items.length,
         basketTotal: grandTotal?.raw?.withTax,
         shippingCost: shippingCharge?.raw?.withTax,
@@ -142,7 +143,7 @@ export default function PaymentWidget({
         entityId: orderModelResponse.id,
         entityName: orderNo,
         entityType: Order,
-        eventType: CheckoutConfirmation,
+        eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
       })
       dispatch({ type: 'TRIGGER_COD', payload: false })
       checkoutCallback(orderModelResponse.id)

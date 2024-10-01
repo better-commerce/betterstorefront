@@ -21,7 +21,6 @@ import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import cartHandler from '@components/services/cart'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, SITE_ORIGIN_URL } from '@components/utils/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 // Other Imports
@@ -46,9 +45,9 @@ import Prices from '@components/Prices'
 import Link from 'next/link'
 import ReviewItem from '@components/ReviewItem'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const Preview = dynamic(() => import('@components/Product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/Product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -75,6 +74,7 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, featureToggle, defaultDisplayMembership, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { isMobile } = deviceInfo
   const { sizes, variants, status, allOfSizes } = PRODUCTS[0];
@@ -124,7 +124,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setAttributeNames(mappedAttribsArrStr)
   }, [allProductsByCategory])
 
-  const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
     if (colour) {
       setVariantInfo((v: any) => ({
@@ -162,7 +161,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       )
     }
     if (response?.data?.product) {
-      eventDispatcher(ProductViewed, {
+      recordAnalytics(AnalyticsEventType.PDP_VIEW, {
         entity: JSON.stringify({
           id: response?.data?.product?.recordId,
           sku: response?.data?.product?.sku,
@@ -173,7 +172,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         entityId: response?.data?.product?.recordId,
         entityName: response?.data?.product?.name,
         entityType: Product,
-        eventType: ProductViewed,
+        eventType: AnalyticsEventType.PDP_VIEW,
         omniImg: response?.data?.product?.image,
       })
       setUpdatedProduct(response.data.product)
@@ -294,12 +293,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
           }
         }
       },
@@ -368,12 +367,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
               }
             }
           },
@@ -488,14 +487,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
-      AnalyticsEventManager.dispatch(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
+      recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
+      recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
+        recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
       }
     }
 

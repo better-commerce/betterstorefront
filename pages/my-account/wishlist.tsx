@@ -11,10 +11,11 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
   const { user, isGuestUser, changeMyAccountTab } = useUI()
@@ -28,7 +29,7 @@ function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any
   }, [])
 
   let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
+    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
   }
 
   if (user && user.userId) {
@@ -52,7 +53,7 @@ function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any
     changeMyAccountTab(translate('label.wishlist.wishlistText'))
   },[])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
     <>

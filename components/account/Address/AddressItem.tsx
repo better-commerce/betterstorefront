@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import Form from './AddressBookForm'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+
 export default function AddressItem({
   item,
   updateAddress,
@@ -17,6 +16,7 @@ export default function AddressItem({
   deleteAddress,
   onEditAddress = (id: number) => { },
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [isEditMode, setEditMode] = useState(false)
   const {
@@ -40,7 +40,6 @@ export default function AddressItem({
     label,
   } = item
 
-  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
   let [isOpen, setIsOpen] = useState(false)
 
   const handleAddressSubmit = async (values: any) => {
@@ -48,7 +47,7 @@ export default function AddressItem({
     if (typeof window !== 'undefined') {
       if (currentPage) {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
+        recordAnalytics(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })
@@ -56,7 +55,7 @@ export default function AddressItem({
         () =>
           successCallback() &&
           isEditMode &&
-          eventDispatcher(CustomerUpdated, {
+          recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, {
             entity: JSON.stringify({
               id: user.userId,
               name: user.username,
@@ -67,7 +66,7 @@ export default function AddressItem({
             }),
             entityId: user.userId,
             entityName: user.firstName + user.lastName,
-            eventType: CustomerUpdated,
+            eventType: AnalyticsEventType.CUSTOMER_UPDATED,
           })
       )
       .catch(() => errCallback())
@@ -78,7 +77,7 @@ export default function AddressItem({
       .then(
         () =>
           successCallback() &&
-          eventDispatcher(CustomerUpdated, {
+          recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, {
             entity: JSON.stringify({
               id: user.userId,
               name: user.username,
@@ -89,7 +88,7 @@ export default function AddressItem({
             }),
             entityId: user.userId,
             entityName: user.firstName + user.lastName,
-            eventType: CustomerUpdated,
+            eventType: AnalyticsEventType.CUSTOMER_UPDATED,
           })
       )
       .catch(() => errCallback)

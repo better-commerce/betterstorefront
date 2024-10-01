@@ -1,7 +1,7 @@
 import { CURRENT_THEME } from '@components/utils/constants'
-import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
 import Script from 'next/script'
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 export default class MyDocument extends NextDocument {
   static async getInitialProps(ctx: any) {
@@ -23,7 +23,7 @@ export default class MyDocument extends NextDocument {
         <body className={`custom_class promo-banner-inactive`}>
           <Main />
           <NextScript />
-          {OMNILYTICS_DISABLED ? null :
+          {!featureToggle?.features?.enableOmnilytics ? null :
             <Script src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js" strategy="beforeInteractive" />
           }
         </body>

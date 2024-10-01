@@ -13,6 +13,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 
 export async function getStaticProps({
@@ -39,15 +40,16 @@ export async function getStaticProps({
 }
 
 function Wishlist() {
+  const { recordAnalytics } = useAnalytics()
   const { data: customer } = useCustomer()
   // @ts-ignore  - Fix this types
   const { data, isLoading, isEmpty } = useWishlist({ includeProducts: true })
   const translate = useTranslation()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.Wishlist, {
+  recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, {
     entityName: PAGE_TYPES.Wishlist,
     entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.Wishlist,
+    eventType: AnalyticsEventType.VIEW_WISHLIST,
   })
 
   return (

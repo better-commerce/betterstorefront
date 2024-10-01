@@ -9,11 +9,11 @@ import {
   NEXT_GET_CART_COUNT,
 } from '@components/utils/constants'
 import axios from 'axios'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
 import { logError } from '@framework/utils/app-util'
+import { AnalyticsEventType } from './analytics'
+import useAnalytics from './analytics/useAnalytics'
 
 interface CartItem {
   basketId?: string
@@ -35,10 +35,8 @@ interface GetCart {
   basketId?: string
 }
 
-const { BasketItemAdded, BasketItemRemoved, BasketViewed } =
-  EVENTS_MAP.EVENT_TYPES
-
 export default function cartHandler() {
+  const { recordAnalytics } = useAnalytics()
   return {
     addToCart: async (
       {
@@ -139,16 +137,16 @@ export default function cartHandler() {
         basketTotal: response?.data?.grandTotal?.raw?.withTax,
         entityId: data?.product?.recordId,
         entityType: 'product',
-        eventType: BasketItemAdded,
+        eventType: AnalyticsEventType.ADD_TO_BASKET,
         entityName: data?.product?.name,
       }
 
       if (qty && qty > 0) {
-        eventDispatcher(BasketItemAdded, eventData)
+        recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, eventData)
       } else
-        eventDispatcher(BasketItemRemoved, {
+        recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, {
           ...eventData,
-          eventType: BasketItemRemoved,
+          eventType: AnalyticsEventType.REMOVE_FROM_CART,
         })
 
       return response.data
@@ -198,11 +196,11 @@ export default function cartHandler() {
         basketTotal: response?.data?.grandTotal?.raw?.withTax,
         entityId: null,
         entityType: 'product',
-        eventType: BasketItemAdded,
+        eventType: AnalyticsEventType.ADD_TO_BASKET,
         entityName: null,
       }
 
-      eventDispatcher(BasketItemAdded, eventData)
+      recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, eventData)
       return response.data
     },
     getCartItemsCount: async ({ basketId }: GetCart) => {

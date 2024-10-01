@@ -15,6 +15,7 @@ import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util
 import { useTranslation } from '@commerce/utils/use-translation'
 import LoginOTPComp from '@components/account/login-otp'
 import SocialSignInLinks from './SocialSignInLinks'
+import { AnalyticsEventType } from '@components/services/analytics'
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -23,6 +24,7 @@ interface LoginProps {
 }
 
 export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], closeSideBar = () => {} }: LoginProps) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -40,7 +42,6 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const otpEnabled = OTP_LOGIN_ENABLED
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
 
@@ -49,9 +50,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
     const url = new URL(document.URL)
     redirectUrl = `${url?.origin}${url?.pathname}${url?.search}`
   }
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { eventType: AnalyticsEventType.PAGE_VIEWED, })
 
   const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {

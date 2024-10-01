@@ -9,14 +9,15 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { useEffect } from 'react'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
+  const { recordAnalytics } = useAnalytics()
   const { user , changeMyAccountTab } = useUI()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
   let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
+    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
   }
 
   useEffect(()=>{
@@ -39,7 +40,7 @@ function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
       entityType: Customer,
     }
   }
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
   return ( 
   <>
     <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.membership.myMembershipText')}</h2>

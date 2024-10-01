@@ -6,8 +6,8 @@ import { IPLPFilterState, useUI } from '@components/ui/context'
 import useCart from '@components/services/cart'
 import PLPSort from './PLPSort'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 type PLPFilterSidebarProps = {
   handleSortBy: Function
@@ -17,6 +17,7 @@ type PLPFilterSidebarProps = {
 }
 
 const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar, handleTogglePLPSidebar, plpFilterState }) => {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { closeSidebar, setWishlist, user, wishlistItems, basketId, setCartItems, removeFromWishlist } = useUI()
   const { getWishlist, deleteWishlistItem } = useWishlist()
@@ -61,7 +62,7 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar
 
     if (typeof window !== 'undefined') {
       debugger
-      AnalyticsEventManager.dispatch(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
+      recordAnalytics(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 
     if (accessToken) {

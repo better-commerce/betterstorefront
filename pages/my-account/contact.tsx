@@ -11,11 +11,12 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 function ContactPage() {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { changeMyAccountTab } = useUI()
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, isGuestUser } = useUI()
 
@@ -27,7 +28,7 @@ function ContactPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
+    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
   }
 
   if (user && user.userId) {
@@ -50,7 +51,7 @@ function ContactPage() {
   useEffect(()=>{
     changeMyAccountTab(translate('label.contactPreferences.contactPreferencesText'))
   },[])
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
       <>

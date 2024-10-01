@@ -43,8 +43,8 @@ import {
 } from '@components/config/config-helper'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
-import AnalyticsEventManager from '@components/services/analytics/AnalyticsEventManager'
 import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
@@ -75,6 +75,7 @@ interface Props {
 
 
 const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [] }) => {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
@@ -210,7 +211,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
         if (currentPage) {
           if (typeof window !== 'undefined') {
             debugger
-            AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
+            recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }
@@ -233,7 +234,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        AnalyticsEventManager.dispatch(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, })
+        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, })
       }
     }
   }
@@ -242,9 +243,9 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
+        recordAnalytics(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
+        recordAnalytics(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
       }
     }
   }
@@ -253,7 +254,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader: EmptyString, subHeader2: EmptyString, })
+        recordAnalytics(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader: EmptyString, subHeader2: EmptyString, })
       }
     }
   }
@@ -262,7 +263,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2: EmptyString, })
+        recordAnalytics(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2: EmptyString, })
       }
     }
   }
@@ -271,7 +272,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
     if (currentPage) {
       if (typeof window !== 'undefined') {
         debugger
-        AnalyticsEventManager.dispatch(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2, })
+        recordAnalytics(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2, })
       }
     }
   }

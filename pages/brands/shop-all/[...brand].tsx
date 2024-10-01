@@ -36,6 +36,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { removeQueryString } from '@commerce/utils/uri-util'
 import { Cookie } from '@framework/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -86,13 +87,13 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const adaptedQuery = { ...query }
-  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const sliderRef = useRef(null);
   const sliderRefNew = useRef(null);
   const [isShow, setIsShow] = useState(false);
@@ -122,12 +123,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  useAnalytics(BrandViewed, {
-    entity: JSON.stringify({
-      id: brandDetails?.id,
-      name: brandDetails?.name || '',
-      manufName: brandDetails?.manufacturerName,
-    }),
+  recordAnalytics(AnalyticsEventType.BRAND_VIEWED, {
+    entity: JSON.stringify({ id: brandDetails?.id, name: brandDetails?.name || '', manufName: brandDetails?.manufacturerName, }),
     entityName: PAGE_TYPE,
     pageTitle: brandDetails?.manufacturerName,
     entityType: 'Brand',

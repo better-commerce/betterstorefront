@@ -28,6 +28,7 @@ import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -60,8 +61,8 @@ function Cookie({
   hostName,
   deviceInfo,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
@@ -90,7 +91,7 @@ function Cookie({
     }
   }, [currencyCode, isMobile])
 
-  useAnalytics(PageViewed, {
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entity: JSON.stringify({
       id: '',
       name: pageContents?.metatitle,
