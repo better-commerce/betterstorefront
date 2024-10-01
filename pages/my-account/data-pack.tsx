@@ -13,7 +13,6 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import DataPack from '@components/account/DataPack'
 import { AnalyticsEventType } from '@components/services/analytics'
 function DataPackPage() {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { changeMyAccountTab } = useUI()
   const translate = useTranslation()
@@ -51,7 +50,7 @@ function DataPackPage() {
   useEffect(()=>{
     changeMyAccountTab(translate('label.myAccount.dataPackText'))
   },[])
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
       <>

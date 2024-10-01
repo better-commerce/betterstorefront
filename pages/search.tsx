@@ -77,7 +77,6 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
@@ -215,7 +214,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     (filter: any) => filter.name === 'Category'
   )
 
-  recordAnalytics(AnalyticsEventType.FACET_SEARCH, {
+  useAnalytics(AnalyticsEventType.FACET_SEARCH, {
     entity: JSON.stringify({
       FreeText: '',
       Page: state.currentPage,

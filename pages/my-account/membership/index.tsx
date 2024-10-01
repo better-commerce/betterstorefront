@@ -12,7 +12,6 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
-  const { recordAnalytics } = useAnalytics()
   const { user , changeMyAccountTab } = useUI()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
@@ -40,7 +39,7 @@ function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
       entityType: Customer,
     }
   }
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
   return ( 
   <>
     <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.membership.myMembershipText')}</h2>

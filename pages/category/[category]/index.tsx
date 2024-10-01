@@ -292,7 +292,6 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
-  const { recordAnalytics } = useAnalytics()
   const { isMobile } = deviceInfo
   const router = useRouter()
   const qsFilters = router.asPath
@@ -387,7 +386,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     dispatch({ type: PAGE, payload: 1 })
   }
 
-  recordAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
     entity: JSON.stringify({
       id: category?.id,
       name: category?.name || EmptyString,

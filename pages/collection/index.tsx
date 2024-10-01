@@ -21,11 +21,10 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function CollectionList(props: any) {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter();
   const translate = useTranslation()
 
-  recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
+  useAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
     entity: JSON.stringify({ id: props?.id || EmptyGuid, name: props?.name || EmptyString, }),
     entityId: props?.id || EmptyGuid,
     entityName: props?.name || EmptyString,

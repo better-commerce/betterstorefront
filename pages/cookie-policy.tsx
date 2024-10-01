@@ -61,7 +61,6 @@ function Cookie({
   hostName,
   deviceInfo,
 }: any) {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -91,7 +90,7 @@ function Cookie({
     }
   }, [currencyCode, isMobile])
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entity: JSON.stringify({
       id: '',
       name: pageContents?.metatitle,

@@ -18,7 +18,6 @@ import B2BOrders from '@components/account/Orders/B2BOrders'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyOrders({ deviceInfo }: any) {
-  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder } = useUI()
@@ -78,7 +77,7 @@ function MyOrders({ deviceInfo }: any) {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.order'))
   }, [])
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

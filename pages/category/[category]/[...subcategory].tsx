@@ -277,7 +277,6 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CategoryPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
-  const { recordAnalytics } = useAnalytics()
   const { isMobile } = deviceInfo
   const router = useRouter()
   const qsFilters = router.asPath
@@ -359,7 +358,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
-  recordAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
     entity: JSON.stringify({
       id: category?.id,
       name: category?.name || EmptyString,

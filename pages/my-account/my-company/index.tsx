@@ -38,10 +38,8 @@ import CompanyDetails from '@components/account/CompanyDetails'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyCompany({ deviceInfo }: any) {
-  const { recordAnalytics } = useAnalytics()
   const { user, changeMyAccountTab, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
   const router = useRouter()
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
@@ -188,7 +186,7 @@ function MyCompany({ deviceInfo }: any) {
   const handleClick = () => {
     setActive(!active)
   }
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const [isShowDetailedOrder, setIsShowDetailedOrder] =
     useState(displayDetailedOrder)

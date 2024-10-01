@@ -66,7 +66,6 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 const PAGE_TYPE = PAGE_TYPES.Home
 
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { user, isGuestUser } = useUI()
   const { isMobile } = deviceInfo
@@ -107,7 +106,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [])
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPES.Home, })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPES.Home, })
 
   if (!pageContents) {
     return (

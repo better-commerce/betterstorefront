@@ -109,7 +109,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
         )?.configKeys || []
   }
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entityName: PAGE_TYPES.Register,
     entityType: EVENTS_MAP.ENTITY_TYPES.Page,
     eventType: AnalyticsEventType.PAGE_VIEWED,

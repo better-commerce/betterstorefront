@@ -14,7 +14,6 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any) {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
@@ -53,7 +52,7 @@ function MyAccount({ deviceInfo, featureToggle, defaultDisplayMembership, }: any
     changeMyAccountTab(translate('label.wishlist.wishlistText'))
   },[])
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
     <>

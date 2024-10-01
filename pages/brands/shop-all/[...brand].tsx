@@ -123,7 +123,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  recordAnalytics(AnalyticsEventType.BRAND_VIEWED, {
+  useAnalytics(AnalyticsEventType.BRAND_VIEWED, {
     entity: JSON.stringify({ id: brandDetails?.id, name: brandDetails?.name || '', manufName: brandDetails?.manufacturerName, }),
     entityName: PAGE_TYPE,
     pageTitle: brandDetails?.manufacturerName,

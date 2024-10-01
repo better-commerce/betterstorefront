@@ -70,7 +70,6 @@ function Contact({
   deviceInfo,
   data,
 }: any) {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
@@ -100,7 +99,7 @@ function Contact({
     }
   }, [currencyCode, isMobile])
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, {
     entity: JSON.stringify({
       id: '',
       name: pageContents?.metatitle,

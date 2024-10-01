@@ -13,7 +13,6 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 function ContactPage() {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { changeMyAccountTab } = useUI()
   const translate = useTranslation()
@@ -51,7 +50,7 @@ function ContactPage() {
   useEffect(()=>{
     changeMyAccountTab(translate('label.contactPreferences.contactPreferencesText'))
   },[])
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
       <>

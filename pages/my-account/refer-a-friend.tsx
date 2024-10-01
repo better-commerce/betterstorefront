@@ -150,7 +150,7 @@ function ReferralPage() {
   const handleClick = () => {
     setActive(!active)
   }
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
     <>

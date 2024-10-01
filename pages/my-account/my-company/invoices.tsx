@@ -21,7 +21,6 @@ import moment from 'moment'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyInvoices({ deviceInfo }: any) {
-  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder, setAlert, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
@@ -83,7 +82,7 @@ function MyInvoices({ deviceInfo }: any) {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.invoice'))
   }, [])
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

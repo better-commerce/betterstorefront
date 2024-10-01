@@ -134,7 +134,7 @@ function CollectionPage(props: any) {
   })
   const { isCompared } = useUI()
 
-  recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
+  useAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
     entity: JSON.stringify({
       id: props?.id || EmptyGuid,
       name: props?.name || EmptyString,

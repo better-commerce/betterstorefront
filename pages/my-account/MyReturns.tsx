@@ -12,8 +12,8 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
+
 function MyAccount() {
-  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, isGuestUser, changeMyAccountTab } = useUI()
@@ -47,10 +47,10 @@ function MyAccount() {
     }
   }
 
-useEffect(()=>{
-  changeMyAccountTab(translate('label.myAccount.myReturnsText'))
-},[])
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useEffect(()=>{
+    changeMyAccountTab(translate('label.myAccount.myReturnsText'))
+  },[])
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
     <>

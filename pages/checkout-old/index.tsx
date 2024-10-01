@@ -142,7 +142,7 @@ function Checkout({ cart, config, location }: any) {
 
   const { Basket } = EVENTS_MAP.ENTITY_TYPES
 
-  recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, {
+  useAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, {
     entity: JSON.stringify({
       grandTotal: cart.grandTotal.raw,
       id: cart.id,

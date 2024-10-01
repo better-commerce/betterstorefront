@@ -14,7 +14,6 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyAccount() {
-  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
@@ -53,7 +52,7 @@ function MyAccount() {
     changeMyAccountTab(translate('label.myAccount.myDetailsHeadingText'))
   },[])
   
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

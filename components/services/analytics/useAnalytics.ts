@@ -28,7 +28,7 @@ declare global {
  * @returns {Object} an object with a single function, recordAnalytics
  * @property {function(string, Object): void} recordAnalytics - a function to record analytics events
  */
-export default function useAnalytics() {
+export default function useAnalytics(event?: string, data?: any) {
   const dataLayer = typeof window !== 'undefined'
 
   /**
@@ -37,16 +37,23 @@ export default function useAnalytics() {
    */
   const recordAnalytics = useCallback((event: string, data: any): void => {
     if (!featureToggle?.features?.enableAnalytics) return
-    
+
     if (dataLayer) {
       AnalyticsEventManager.dispatch(event, data)
+    }
+  }, [dataLayer])
+
+  useEffect(() => {
+    //console.count(`inside use effect ${dataLayer}`)
+    if (dataLayer && event && data) {
+      recordAnalytics(event!, data)
     }
   }, [dataLayer])
 
   return { recordAnalytics }
 
   // if (!featureToggle?.features?.enableOmnilytics) return
-  
+
   // // const windowClone: any = typeof window !== 'undefined' ? window : {}
   // const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
 

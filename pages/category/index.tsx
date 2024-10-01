@@ -21,7 +21,6 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function CategoryPage(props: any) {
-  const { recordAnalytics } = useAnalytics()
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -29,7 +28,7 @@ function CategoryPage(props: any) {
   const router = useRouter()
   const translate = useTranslation()
 
-  recordAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
     entityName: PAGE_TYPE,
     entityType: EVENTS_MAP.ENTITY_TYPES.Category,
     eventType: AnalyticsEventType.CATEGORY_VIEWED,

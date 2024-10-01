@@ -20,7 +20,6 @@ import B2BBaskets from '@components/account/B2BBasket'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function ShoppingList({ deviceInfo }: any) {
-  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder } = useUI()
@@ -80,7 +79,7 @@ function ShoppingList({ deviceInfo }: any) {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.shoppingList'))
   }, [])
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

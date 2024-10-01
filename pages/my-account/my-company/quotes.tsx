@@ -17,7 +17,6 @@ import { NEXT_B2B_GET_QUOTES } from '@components/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyQuotes() {
-  const { recordAnalytics } = useAnalytics()
   const [isShow, setShow] = useState(true)
   const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab } = useUI()
@@ -63,7 +62,7 @@ function MyQuotes() {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.quote'))
   }, [])
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

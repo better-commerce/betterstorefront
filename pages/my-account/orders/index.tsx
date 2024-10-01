@@ -18,7 +18,6 @@ import { AnalyticsEventType } from '@components/services/analytics'
 const PAGE_SIZE = 10
 
 function MyOrdersPage({ deviceInfo }: any) {
-  const { recordAnalytics } = useAnalytics()
   const { user, isGuestUser, displayDetailedOrder, changeMyAccountTab } = useUI()
   const router = useRouter()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
@@ -132,7 +131,7 @@ function MyOrdersPage({ deviceInfo }: any) {
     }
   }
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const [isShowDetailedOrder, setIsShowDetailedOrder] =
     useState(displayDetailedOrder)

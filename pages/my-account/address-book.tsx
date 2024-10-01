@@ -14,7 +14,6 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 function AddressBookPage() {
-  const { recordAnalytics } = useAnalytics()
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
   const translate = useTranslation()
@@ -52,7 +51,7 @@ function AddressBookPage() {
     changeMyAccountTab(translate('label.myAccount.mySavedAddressText'))
   },[])
 
-  recordAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
     <>
