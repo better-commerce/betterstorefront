@@ -194,5 +194,24 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
             },
         },
+
+        /**
+         * Event: Customer Updated
+         */
+        [AnalyticsEventType.CUSTOMER_UPDATED]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    id: source?.userId,
+                    name: source?.username,
+                    dateOfBirth: source?.yearOfBirth,
+                    gender: source?.gender,
+                    email: source?.email,
+                    postCode: source?.postCode,
+                })),
+                entityId: (source: any) => source?.userId,
+                entityName: (source: any) => source?.firstName + source?.lastName,
+                eventType: AnalyticsEventType.CUSTOMER_UPDATED,
+            },
+        },
     },
 }

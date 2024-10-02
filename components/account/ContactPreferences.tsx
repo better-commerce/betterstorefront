@@ -119,19 +119,7 @@ export default function ContactPreferences({hideSubmitBtn = false, customSubmit 
   const handleDataSubmit = async () => {
     if(data?.notifyByEmail != user?.notifyByEmail || data?.notifyByPost != user?.notifyByPost || data?.notifyBySMS != user?.notifyBySMS){
       await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
-      recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, {
-        entity: JSON.stringify({
-          id: user.userId,
-          name: user.username,
-          dateOfBirth: user.yearOfBirth,
-          gender: user.gender,
-          email: user.email,
-          postCode: user.postCode,
-        }),
-        entityId: user.userId,
-        entityName: user.firstName + user.lastName,
-        eventType: AnalyticsEventType.CUSTOMER_UPDATED,
-      })
+      recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
       if(hideSubmitBtn) setCustomSubmit(false)
     }
   }

@@ -55,19 +55,7 @@ export default function MyDetails() {
 
   const handleDataSubmit = async (values: any) => {
     await handleSubmit(values, user, setUser, setTitle)
-    recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, {
-      entity: JSON.stringify({
-        id: user.userId,
-        name: user.username,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        email: user.email,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      eventType: AnalyticsEventType.CUSTOMER_UPDATED,
-    })
+    recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
     setSubmitContactPreferences(true)
   }
 
