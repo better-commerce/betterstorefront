@@ -268,5 +268,13 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: 'Search',
             },
         },
+
+        [AnalyticsEventType.PASSWORD_PROTECTION]: {
+            transformMap: {
+                entityName: (source: any) => source?.entityName,
+                entityType: 'Page',
+                eventType: 'PasswordProtection',
+            },
+        },
     },
 }
