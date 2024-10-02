@@ -160,5 +160,19 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
             }
         },
+
+        /**
+         * Event: Customer Created
+         */
+        [AnalyticsEventType.CUSTOMER_CREATED]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    id: source?.details?.recordId,
+                    name: source?.details?.firstName + source?.details?.lastName,
+                    email: source?.details?.email,
+                })),
+                eventType: AnalyticsEventType.CUSTOMER_CREATED,
+            },
+        },
     },
 }

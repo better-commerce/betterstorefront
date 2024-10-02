@@ -231,14 +231,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
     // If registration is SUCCESS
     if (userCreated) {
       deleteUser({ isSilentLogout: true })
-      recordAnalytics(AnalyticsEventType.CUSTOMER_CREATED, {
-        entity: JSON.stringify({
-          id: recordId,
-          name: values.firstName + values.lastName,
-          email: values.email,
-        }),
-        eventType: AnalyticsEventType.CUSTOMER_CREATED,
-      })
+      recordAnalytics(AnalyticsEventType.CUSTOMER_CREATED, { details: { ...values, recordId, }, })
       setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.registerSuccessMsg')})
       Router.push('/my-account/login')
       // await handleBasketAssociation(recordId)
