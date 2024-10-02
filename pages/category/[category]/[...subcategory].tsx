@@ -358,16 +358,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
-  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
-    entity: JSON.stringify({
-      id: category?.id,
-      name: category?.name || EmptyString,
-    }),
-    entityId: category?.id || EmptyGuid,
-    entityName: PAGE_TYPE,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
-    eventType: AnalyticsEventType.CATEGORY_VIEWED,
-  })
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, { category, entityName: PAGE_TYPE, entityType: EVENTS_MAP.ENTITY_TYPES.Category, })
 
   useEffect(() => {
     // for Engage

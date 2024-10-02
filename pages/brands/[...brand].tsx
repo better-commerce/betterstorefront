@@ -140,13 +140,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  useAnalytics(AnalyticsEventType.BRAND_VIEWED, {
-    entity: JSON.stringify({ id: brandDetails?.id, name: brandDetails?.name || '', manufName: brandDetails?.manufacturerName, }),
-    entityName: PAGE_TYPE,
-    pageTitle: brandDetails?.manufacturerName,
-    entityType: 'Brand',
-    eventType: 'BrandViewed',
-  })
+  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE,})
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))

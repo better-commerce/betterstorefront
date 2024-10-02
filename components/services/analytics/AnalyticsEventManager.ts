@@ -88,12 +88,14 @@ class EventManager {
 
                 case AnalyticsType.OMNILYTICS:
 
-                    const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
-                    if (dataLayer) {
-                        let event = new CustomEvent(eventType, {
-                            detail: { action: eventType, payload: translatedEventData },
-                        })
-                        window.dispatchEvent(event)
+                    if (featureToggle?.features?.enableOmnilytics) {
+                        const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
+                        if (dataLayer) {
+                            let event = new CustomEvent(eventType, {
+                                detail: { action: eventType, payload: translatedEventData },
+                            })
+                            window.dispatchEvent(event)
+                        }
                     }
                     break;
             }

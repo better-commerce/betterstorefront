@@ -68,8 +68,7 @@ function BrandsPage({ brands }: any) {
     setNormalizedBrands(filteredData)
   }
 
-  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { eventType: AnalyticsEventType.BRAND_VIEWED, pageTitle: 'Brands', })
-  useEffect(() => { }, [])
+  useAnalytics(AnalyticsEventType.SHOP_ALL_BRAND_VIEWED, { })
 
   function handleScrollView(letter: any) {
     letter?.preventDefault()

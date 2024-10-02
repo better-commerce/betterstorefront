@@ -44,6 +44,7 @@ export enum AnalyticsEventType {
     //Basket_Item_Removed: 'BasketItemRemoved',
     //Basket_Viewed: 'BasketViewed',
     BRAND_VIEWED = 'BrandViewed',
+    SHOP_ALL_BRAND_VIEWED = 'BrandViewed',
     CATEGORY_VIEWED = 'CategoryViewed',
     CHECKOUT_CONFIRMATION = 'CheckoutConfirmation',
     //Checkout_Started: 'CheckoutStarted',

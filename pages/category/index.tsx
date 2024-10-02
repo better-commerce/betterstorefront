@@ -28,11 +28,7 @@ function CategoryPage(props: any) {
   const router = useRouter()
   const translate = useTranslation()
 
-  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
-    entityName: PAGE_TYPE,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
-    eventType: AnalyticsEventType.CATEGORY_VIEWED,
-  })
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, { category: null, entityName: PAGE_TYPE, entityType: EVENTS_MAP.ENTITY_TYPES.Category, })
 
   return (
     <>
