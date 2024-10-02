@@ -98,5 +98,67 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: AnalyticsEventType.CATEGORY_VIEWED,
             },
         },
-    }
+
+        /**
+         * Event: Checkout Confirmation
+         */
+        [AnalyticsEventType.CHECKOUT_CONFIRMATION]: {
+            transformMap: {
+                basketItemCount: (source: any) => source?.cartItems?.lineItems?.length,
+                basketTotal: (source: any) => source?.orderInfo?.orderResponse?.grandTotal?.raw?.withTax,
+                shippingCost: (source: any) => source?.cartItems?.shippingCharge?.raw?.withTax,
+                promoCodes: (source: any) => source?.cartItems?.promotionsApplied,
+                basketItems: (source: any) => (JSON.stringify(
+                    source?.cartItems?.lineItems?.length ? source?.cartItems?.lineItems?.map((i: any) => {
+                        return {
+                            categories: i?.categoryItems,
+                            discountAmt: i?.discount?.raw?.withTax,
+                            id: i?.id,
+                            img: i?.image,
+                            isSubscription: i?.isSubscription,
+                            itemType: i?.itemType,
+                            manufacturer: i?.manufacturer || EmptyString,
+                            name: i?.name,
+                            price: i?.price?.raw?.withTax,
+                            productId: i?.productId,
+                            qty: i?.qty,
+                            rootManufacturer: i?.rootManufacturer || EmptyString,
+                            stockCode: i?.stockCode,
+                            subManufacturer: i?.subManufacturer,
+                            tax: i?.totalPrice?.raw?.withTax,
+                        }
+                    }) : new Array<any>()
+                )),
+                entity: (source: any) => (JSON.stringify({
+                    basketId: source?.basketId,
+                    billingAddress: source?.orderInfo?.orderResponse?.billingAddress,
+                    customerId: source?.orderInfo?.orderResponse?.customerId,
+                    discount: source?.orderInfo?.orderResponse?.discount?.raw?.withTax,
+                    grandTotal: source?.orderInfo?.orderResponse?.grandTotal?.raw?.withTax,
+                    id: source?.orderInfo?.orderResponse?.id,
+                    lineitems: source?.orderInfo?.orderResponse?.items || source?.cartItems?.lineItems,
+                    orderNo: source?.orderInfo?.orderResponse?.orderNo,
+                    paidAmount: source?.orderInfo?.orderResponse?.paidAmount?.raw?.withTax || source?.orderInfo?.orderResponse?.grandTotal?.raw?.withTax,
+                    payments: source?.orderInfo?.orderResponse?.payments?.map((i: any) => ({
+                        methodName: i.paymentMethod,
+                        paymentGateway: i.paymentGateway,
+                        amount: i.paidAmount,
+                    })),
+                    promoCode: source?.orderInfo?.orderResponse?.promotionsApplied,
+                    shipCharge: source?.orderInfo?.orderResponse?.shippingCharge?.raw?.withTax || source?.cartItems?.shippingCharge?.raw?.withTax,
+                    shippingAddress: source?.orderInfo?.orderResponse?.shippingAddress,
+                    shippingMethod: source?.orderInfo?.orderResponse?.shipping,
+                    status: source?.orderInfo?.orderResponse?.orderStatus,
+                    subTotal: source?.orderInfo?.orderResponse?.subTotal?.raw?.withTax,
+                    tax: source?.orderInfo?.orderResponse?.grandTotal?.raw?.withTax,
+                    taxPercent: source?.orderInfo?.orderResponse?.taxPercent,
+                    timestamp: source?.orderInfo?.orderResponse?.orderDate,
+                })),
+                entityId: (source: any) => source?.orderInfo?.orderResponse?.id,
+                entityName: (source: any) => source?.orderInfo?.orderResponse?.orderNo,
+                entityType: (source: any) => source?.entityType,
+                eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
+            }
+        },
+    },
 }

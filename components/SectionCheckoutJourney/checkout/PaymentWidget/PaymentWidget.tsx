@@ -67,84 +67,9 @@ export default function PaymentWidget({
     )
     if (res === PaymentStatus.AUTHORIZED) {
       // TODO: Get order details
-      const {
-        basketId,
-        customerId,
-        billingAddress,
-        discount,
-        grandTotal,
-        id,
-        items,
-        orderNo,
-        paidAmount,
-        payments,
-        promotionsApplied,
-        shippingCharge,
-        shippingAddress,
-        shipping,
-        orderStatus,
-        subTotal,
-        taxPercent,
-        orderDate,
-      } = res.result
-      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, {
-        basketItemCount: items.length,
-        basketTotal: grandTotal?.raw?.withTax,
-        shippingCost: shippingCharge?.raw?.withTax,
-        promoCodes: promotionsApplied,
-        basketItems: JSON.stringify(
-          items.map((i: any) => {
-            return {
-              categories: i.categoryItems,
-              discountAmt: i.discountAmt?.raw?.withTax,
-              id: i.id,
-              img: i.image,
-              isSubscription: i.isSubscription,
-              itemType: i.itemType,
-              manufacturer: i.manufacturer,
-              name: i.name,
-              price: i.price?.raw?.withTax,
-              productId: i.productId,
-              qty: i.qty,
-              rootManufacturer: i.rootManufacturer || '',
-              stockCode: i.stockCode,
-              subManufacturer: i.subManufacturer,
-              tax: i.totalPrice?.raw?.withTax,
-            }
-          })
-        ),
-        entity: JSON.stringify({
-          basketId: basketId,
-          billingAddress: billingAddress,
-          customerId: customerId,
-          discount: discount?.raw?.withTax,
-          grandTotal: grandTotal?.raw?.withTax,
-          id: id,
-          lineitems: items,
-          orderNo: orderNo,
-          paidAmount: paidAmount?.raw?.withTax,
-          payments: payments.map((i: any) => {
-            return {
-              methodName: i.paymentMethod,
-              paymentGateway: i.paymentGateway,
-              amount: i.paidAmount,
-            }
-          }),
-          promoCode: promotionsApplied,
-          shipCharge: shippingCharge?.raw?.withTax,
-          shippingAddress: shippingAddress,
-          shippingMethod: shipping,
-          status: orderStatus,
-          subTotal: subTotal?.raw?.withTax,
-          tax: grandTotal?.raw?.withTax,
-          taxPercent: taxPercent,
-          timestamp: orderDate,
-        }),
-        entityId: orderModelResponse.id,
-        entityName: orderNo,
-        entityType: Order,
-        eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
-      })
+      const { basketId, customerId, billingAddress, discount, grandTotal, id, items, orderNo, paidAmount, payments, promotionsApplied, shippingCharge, shippingAddress, shipping, orderStatus, subTotal, taxPercent, orderDate, } = res.result
+      const orderInfo = { orderResponse: { id, orderNo, customerId, discount, paidAmount, grandTotal, shipping, shippingAddress, billingAddress, promotionsApplied, payments, orderStatus, subTotal, taxPercent, orderDate, } }
+      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, { basketId, cartItems: { lineItems: items, shippingCharge, }, orderInfo, entityType: Order, })
       dispatch({ type: 'TRIGGER_COD', payload: false })
       checkoutCallback(orderModelResponse.id)
     }

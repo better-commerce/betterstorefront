@@ -81,65 +81,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       paymentResponseResult === PaymentStatus.PAID ||
       paymentResponseResult === PaymentStatus.AUTHORIZED
     ) {
-      const { orderNo, grandTotal } = orderInfo?.orderResponse
-      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, {
-        basketItemCount: cartItems?.lineItems?.length,
-        basketTotal: grandTotal?.raw?.withTax,
-        shippingCost: cartItems?.shippingCharge?.raw?.withTax,
-        promoCodes: cartItems?.promotionsApplied,
-        basketItems: JSON.stringify(
-          cartItems?.lineItems?.map((i: any) => {
-            return {
-              categories: i?.categoryItems,
-              discountAmt: i?.discount?.raw?.withTax,
-              id: i?.id,
-              img: i?.image,
-              isSubscription: i?.isSubscription,
-              itemType: i?.itemType,
-              manufacturer: i?.manufacturer || '',
-              name: i?.name,
-              price: i?.price?.raw?.withTax,
-              productId: i?.productId,
-              qty: i?.qty,
-              rootManufacturer: i?.rootManufacturer || '',
-              stockCode: i?.stockCode,
-              subManufacturer: i?.subManufacturer,
-              tax: i?.totalPrice?.raw?.withTax,
-            }
-          })
-        ),
-        entity: JSON.stringify({
-          basketId: basketId,
-          billingAddress: orderInfo?.orderResponse?.billingAddress,
-          customerId: orderInfo?.orderResponse?.customerId,
-          discount: orderInfo?.orderResponse?.discount?.raw?.withTax,
-          grandTotal: grandTotal?.raw?.withTax,
-          id: orderInfo?.orderResponse?.id,
-          lineitems: orderInfo?.orderResponse?.items,
-          orderNo: orderNo,
-          paidAmount: grandTotal?.raw?.withTax,
-          payments: orderInfo?.orderResponse?.payments?.map((i: any) => {
-            return {
-              methodName: i.paymentMethod,
-              paymentGateway: i.paymentGateway,
-              amount: i.paidAmount,
-            }
-          }),
-          promoCode: orderInfo?.orderResponse?.promotionsApplied,
-          shipCharge: orderInfo?.orderResponse?.shippingCharge?.raw?.withTax,
-          shippingAddress: orderInfo?.orderResponse?.shippingAddress,
-          shippingMethod: orderInfo?.orderResponse?.shipping,
-          status: orderInfo?.orderResponse?.orderStatus,
-          subTotal: orderInfo?.orderResponse?.subTotal?.raw?.withTax,
-          tax: grandTotal?.raw?.withTax,
-          taxPercent: orderInfo?.orderResponse?.taxPercent,
-          timestamp: orderInfo?.orderResponse?.orderDate,
-        }),
-        entityId: orderInfo?.orderResponse?.id,
-        entityName: orderNo,
-        entityType: Order,
-        eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
-      })
+      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, { basketId, cartItems, orderInfo, entityType: Order, })
 
       Cookies.remove(Cookie.Key.SESSION_ID)
       setSessionIdCookie()
