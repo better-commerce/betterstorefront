@@ -13,7 +13,6 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export async function getStaticProps({
@@ -38,11 +37,7 @@ function InternalServerError({ deviceInfo }: any) {
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.InternalError,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.InternalError, })
 
   let absPath = ''
   if (typeof window !== 'undefined') {

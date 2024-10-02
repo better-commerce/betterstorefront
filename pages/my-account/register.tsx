@@ -11,7 +11,6 @@ import { useState, useEffect } from 'react'
 import Button from '@components/ui/IndigoButton'
 import { validate } from 'email-validator'
 import cartHandler from '@components/services/cart'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { matchStrings, stringToBoolean } from '@framework/utils/parse-util'
 import { GetServerSideProps } from 'next'
@@ -109,11 +108,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
         )?.configKeys || []
   }
 
-  useAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.Register,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-  })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Register, })
 
   useEffect(() => {
     setError('')

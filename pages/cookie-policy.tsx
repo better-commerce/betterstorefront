@@ -11,7 +11,6 @@ import {
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import {
   COOKIES_PAGE_DEFAULT_SLUG,
@@ -90,23 +89,7 @@ function Cookie({
     }
   }, [currencyCode, isMobile])
 
-  useAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entity: JSON.stringify({
-      id: '',
-      name: pageContents?.metatitle,
-      metaTitle: pageContents?.metaTitle,
-      MetaKeywords: pageContents?.metaKeywords,
-      MetaDescription: pageContents?.metaDescription,
-      Slug: pageContents?.slug,
-      Title: pageContents?.metatitle,
-      ViewType: 'Page View',
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: pageContents?.metaTitle,
-    entityType: 'Page',
-    entityId: '',
-    eventType: 'PageViewed',
-  })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPE, })
 
   if (!pageContents) {
     return (

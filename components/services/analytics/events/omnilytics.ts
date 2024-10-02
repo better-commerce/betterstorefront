@@ -38,18 +38,18 @@ export const OMNILYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.PAGE_VIEWED]: {
             transformMap: {
-                entity: (source: any) => (JSON.stringify({
+                entity: (source: any) => ((source?.metatitle || source?.metaTitle) ? (JSON.stringify({
                     id: '',
-                    name: source?.metatitle,
-                    metaTitle: source?.metaTitle,
+                    name: source?.metatitle || source?.metaTitle,
+                    metaTitle: source?.metatitle || source?.metaTitle,
                     MetaKeywords: source?.metaKeywords,
                     MetaDescription: source?.metaDescription,
                     Slug: source?.slug,
-                    Title: source?.metatitle,
+                    Title: source?.metatitle || source?.metaTitle,
                     ViewType: 'Page View',
-                })),
-                entityName: (source: any) => source?.entityName,
-                pageTitle: (source: any) => source?.metaTitle,
+                })) : EmptyString),
+                entityName: (source: any) => source?.entityName || EmptyString,
+                pageTitle: (source: any) => source?.metaTitle || EmptyString,
                 entityType: 'Page',
                 entityId: '',
                 eventType: 'PageViewed',
@@ -95,7 +95,7 @@ export const OMNILYTICS_EVENTS: any = {
                 entityId: (source: any) => source?.category ? (source?.category?.id || EmptyGuid) : EmptyString,
                 entityName: (source: any) => source?.entityName,
                 entityType: (source: any) => source?.entityType,
-                eventType: AnalyticsEventType.CATEGORY_VIEWED,
+                eventType: 'CategoryViewed',
             },
         },
 
@@ -157,7 +157,7 @@ export const OMNILYTICS_EVENTS: any = {
                 entityId: (source: any) => source?.orderInfo?.orderResponse?.id,
                 entityName: (source: any) => source?.orderInfo?.orderResponse?.orderNo,
                 entityType: (source: any) => source?.entityType,
-                eventType: AnalyticsEventType.CHECKOUT_CONFIRMATION,
+                eventType: 'CheckoutConfirmation',
             }
         },
 
@@ -171,7 +171,7 @@ export const OMNILYTICS_EVENTS: any = {
                     name: source?.details?.firstName + source?.details?.lastName,
                     email: source?.details?.email,
                 })),
-                eventType: AnalyticsEventType.CUSTOMER_CREATED,
+                eventType: 'CustomerCreated',
             },
         },
 
@@ -191,7 +191,7 @@ export const OMNILYTICS_EVENTS: any = {
                 entityId: (source: any) => source?.userId,
                 entityName: (source: any) => source?.firstName + source?.lastName,
                 entityType: (source: any) => source?.entityType,
-                eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
+                eventType: 'CustomerProfileViewed',
             },
         },
 
@@ -210,10 +210,13 @@ export const OMNILYTICS_EVENTS: any = {
                 })),
                 entityId: (source: any) => source?.userId,
                 entityName: (source: any) => source?.firstName + source?.lastName,
-                eventType: AnalyticsEventType.CUSTOMER_UPDATED,
+                eventType: 'CustomerUpdated',
             },
         },
 
+        /**
+         * Event: Facet Search
+         */
         [AnalyticsEventType.FACET_SEARCH]: {
             transformMap: {
                 entity: (source: any) => (JSON.stringify({
@@ -236,5 +239,13 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: 'Search',
             },
         },
+
+        /**
+         * Event: Faq Viewed
+         */
+        [AnalyticsEventType.FAQ_VIEWED]: {
+            transformMap: {
+            },
+        }
     },
 }

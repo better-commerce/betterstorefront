@@ -14,7 +14,6 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
@@ -41,11 +40,7 @@ function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, def
     setProducts(response?.data?.products)
   }
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.Lookbook,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Lookbook, })
 
   useEffect(() => {
     if (slug) loadProducts()

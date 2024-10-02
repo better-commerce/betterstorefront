@@ -5,7 +5,6 @@ import type { GetStaticPropsContext } from 'next'
 import getLookbooks from '@framework/api/content/lookbook'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
@@ -25,12 +24,7 @@ function LookbookPage({ data }: any) {
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.LookbookList,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-    omniImg: (data?.length) ? data[0]?.image : IMG_PLACEHOLDER,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.LookbookList, omniImg: (data?.length) ? data[0]?.image : IMG_PLACEHOLDER, })
 
   const css = { maxWidth: '100%', height: 'auto' }
   return (

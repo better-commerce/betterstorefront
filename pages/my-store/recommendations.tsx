@@ -11,9 +11,7 @@ import { IPagePropsProvider } from "@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from "@framework/page-props";
 
 
-const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics';
-import { EVENTS_MAP } from '@components/services/analytics/constants';
 import { AnalyticsEventType } from "@components/services/analytics";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -47,11 +45,7 @@ function Recommendations({  campaignData, featureToggle }: any) {
     return titleMap[path] || '';
   };
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.MyStoreRecommends,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.MyStoreRecommends, })
 
   useEffect(()=>{
     changeMyAccountTab(translate('label.wishlist.myStore'))

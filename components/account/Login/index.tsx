@@ -8,13 +8,14 @@ import { useUI } from '@components/ui/context'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import LoginOtp from '@components/account/login-otp'
 import SocialSignInLinks from '@components/account/SocialSignInLinks'
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { PAGE_TYPES } from '@components/withDataLayer'
+
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -36,7 +37,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
     const url = new URL(document.URL)
     redirectUrl = `${url?.origin}${url?.pathname}${url?.search}`
   }
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { eventType: AnalyticsEventType.PAGE_VIEWED, })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Login, })
 
   const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {

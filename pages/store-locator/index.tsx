@@ -22,9 +22,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 
-const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import StoreLocatorScript from '@components/StoreLocator/Script'
 import { LoadingDots } from '@components/ui'
 import { AnalyticsEventType } from '@components/services/analytics'
@@ -67,11 +65,7 @@ function StoreLocatorPage({ deviceInfo }: any) {
   const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false)
   const { isMobile } = deviceInfo
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.StoreLocator,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.StoreLocator, })
 
   useEffect(() => {
     getAllStores()

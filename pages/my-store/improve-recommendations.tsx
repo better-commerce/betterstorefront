@@ -6,14 +6,11 @@ import LayoutAccount from "@components/Layout/LayoutAccount";
 import { useEffect, useState } from "react";
 import { useUI } from "@components/ui";
 import { useTranslation } from "@commerce/utils/use-translation";
-import Link from "next/link";
 import EngageRecommendationCard from "@components/SectionEngagePanels/EngageRecommendationCard";
 import { IPagePropsProvider } from "@framework/contracts/page-props/IPagePropsProvider";
 import { getPagePropType, PagePropType } from "@framework/page-props";
 
-const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics';
-import { EVENTS_MAP } from '@components/services/analytics/constants';
 import { AnalyticsEventType } from "@components/services/analytics";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -47,11 +44,7 @@ function ImproveRecommendations({ campaignData, featureToggle }: any) {
     return titleMap[path] || '';
   };
 
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, {
-    entityName: PAGE_TYPES.MyStoreImproveRecommends,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: AnalyticsEventType.PAGE_VIEWED,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.MyStoreImproveRecommends, })
 
   useEffect(()=>{
     changeMyAccountTab(translate('label.wishlist.myStore'))

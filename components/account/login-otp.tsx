@@ -10,10 +10,10 @@ import {
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import LoginOTPForm from '@components/customer/login-otp-form'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { PAGE_TYPES } from '@components/withDataLayer'
 
 function LoginOTPComp() {
   const { recordAnalytics } = useAnalytics()
@@ -34,7 +34,7 @@ function LoginOTPComp() {
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const otpEnabled = OTP_LOGIN_ENABLED
-  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { eventType: AnalyticsEventType.PAGE_VIEWED, })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Login, })
 
   if (!isGuestUser && user.userId) {
     Router.push('/')
