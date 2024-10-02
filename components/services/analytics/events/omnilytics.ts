@@ -253,7 +253,20 @@ export const OMNILYTICS_EVENTS: any = {
                 entityName: (source: any) => source?.entityName,
                 entityType: (source: any) => source?.entityType,
                 eventType: 'OrderPageViewed',
-              },
+            },
+        },
+
+        [AnalyticsEventType.SEARCH]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    FreeText: source?.inputValue,
+                    ResultCount: source?.products?.length || 0,
+                })),
+                entityId: (source: any) => source?.inputValue,
+                entityName: (source: any) => source?.inputValue,
+                entityType: (source: any) => source?.entityType,
+                eventType: 'Search',
+            },
         },
     },
 }

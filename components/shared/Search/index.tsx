@@ -40,16 +40,7 @@ export default function Search(props: any) {
         })
         setProducts(response?.data?.results)
         setIsLoading(false)
-        recordAnalytics(AnalyticsEventType.SEARCH, {
-          entity: JSON.stringify({
-            FreeText: inputValue,
-            ResultCount: response?.data?.results?.length || 0,
-          }),
-          entityId: inputValue,
-          entityName: inputValue,
-          entityType: SearchEntity,
-          eventType: AnalyticsEventType.SEARCH,
-        })
+        recordAnalytics(AnalyticsEventType.SEARCH, { inputValue, products: response?.data?.products, entityType: SearchEntity, })
       } catch (error) {
         console.log(error)
         setIsLoading(false)
