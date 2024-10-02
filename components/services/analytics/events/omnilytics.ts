@@ -246,6 +246,14 @@ export const OMNILYTICS_EVENTS: any = {
         [AnalyticsEventType.FAQ_VIEWED]: {
             transformMap: {
             },
-        }
+        },
+
+        [AnalyticsEventType.ORDER_PAGE_VIEWED]: {
+            transformMap: {
+                entityName: (source: any) => source?.entityName,
+                entityType: (source: any) => source?.entityType,
+                eventType: 'OrderPageViewed',
+              },
+        },
     },
 }

@@ -34,7 +34,6 @@ import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 
 function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
-  const { recordAnalytics } = useAnalytics()
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
@@ -103,11 +102,7 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
     }
   }
 
-  recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
-    entityName: PAGE_TYPES.OrderCancel,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
-  })
+  useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderCancel, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
   useEffect(() => {
     const handleAsync = async () => {

@@ -78,11 +78,7 @@ function OrderDetail({ deviceInfo }: any) {
         }
     }
 
-    recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
-        entityName: PAGE_TYPES.OrderDetail,
-        entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-        eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
-    })
+    useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderDetail, entityType: EVENTS_MAP.ENTITY_TYPES.Page, })
 
     useEffect(() => {
         const orderId = router.query?.orderId[0]

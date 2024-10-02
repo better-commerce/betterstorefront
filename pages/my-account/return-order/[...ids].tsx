@@ -150,11 +150,7 @@ function ReturnOrder({
     setShowReturnReasons(!showReturnReasons)
   }
 
-  recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
-    entityName: PAGE_TYPES.OrderReturn,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
-  })
+  useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderReturn, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
   useEffect(() => {
     const handleAsync = async () => {

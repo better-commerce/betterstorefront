@@ -1,8 +1,8 @@
 // Base Imports
 import { useEffect, useState } from 'react'
+
 // Package Imports
 import axios from 'axios'
-import Image from 'next/image'
 import { toNumber } from 'lodash'
 import Link from 'next/link'
 import Router from 'next/router'
@@ -116,11 +116,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
     }
   }
 
-  recordAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, {
-    entityName: PAGE_TYPES.OrderCancel,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: AnalyticsEventType.ORDER_PAGE_VIEWED,
-  })
+  useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderCancel, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
   useEffect(() => {
     const handleAsync = async () => {
