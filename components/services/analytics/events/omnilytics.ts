@@ -213,5 +213,28 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: AnalyticsEventType.CUSTOMER_UPDATED,
             },
         },
+
+        [AnalyticsEventType.FACET_SEARCH]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    FreeText: '',
+                    Page: source?.currentPage,
+                    SortBy: source?.sortBy,
+                    SortOrder: source?.sortOrder,
+                    Brand: source?.brand,
+                    Category: source?.category,
+                    Gender: source?.gender,
+                    CurrentPage: source?.currentPage,
+                    PageSize: 20,
+                    Filters: source?.filters,
+                    AllowFacet: true,
+                    ResultCount: source?.products?.total,
+                })),
+                entityName: (source: any) => source?.entityName,
+                pageTitle: 'Catalog',
+                entityType: 'Page',
+                eventType: 'Search',
+            },
+        },
     },
 }

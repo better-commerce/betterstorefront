@@ -214,26 +214,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     (filter: any) => filter.name === 'Category'
   )
 
-  useAnalytics(AnalyticsEventType.FACET_SEARCH, {
-    entity: JSON.stringify({
-      FreeText: '',
-      Page: state.currentPage,
-      SortBy: state.sortBy,
-      SortOrder: state.sortOrder,
-      Brand: BrandFilter ? BrandFilter.value : null,
-      Category: CategoryFilter ? CategoryFilter.value : null,
-      Gender: user.gender,
-      CurrentPage: state.currentPage,
-      PageSize: 20,
-      Filters: state.filters,
-      AllowFacet: true,
-      ResultCount: data.products.total,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: 'Catalog',
-    entityType: 'Page',
-    eventType: 'Search',
-  })
+  useAnalytics(AnalyticsEventType.FACET_SEARCH, { ...state, ...user, products: data?.products, brand: BrandFilter ? BrandFilter.value : null, category: CategoryFilter ? CategoryFilter.value : null, entityName: PAGE_TYPE, })
 
   const handleInfiniteScroll = () => {
     if (
