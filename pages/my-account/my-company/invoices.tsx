@@ -42,20 +42,14 @@ function MyInvoices({ deviceInfo }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  let loggedInEventData: any = {
-    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer, }
   const userAdminCheck = (b2bUsers: any) => {
-    let isAdmin =
-      b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole ===
-      'Admin'
+    let isAdmin = b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole === 'Admin'
     setIsAdmin(isAdmin)
   }
 
   const fetchB2BUsers = async () => {
-    let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, {
-      companyId: user?.companyId,
-    })
+    let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, { companyId: user?.companyId, })
     if (b2bUsers?.length) {
       setB2BUsers(b2bUsers)
       userAdminCheck(b2bUsers)
@@ -63,20 +57,7 @@ function MyInvoices({ deviceInfo }: any) {
     return b2bUsers
   }
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.invoice'))

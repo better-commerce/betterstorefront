@@ -15,29 +15,14 @@ function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
   const { user , changeMyAccountTab } = useUI()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
-  let loggedInEventData: any = {
-    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer,}
 
   useEffect(()=>{
     changeMyAccountTab(translate('label.membership.myMembershipText'))
   },[])
   
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
   return ( 

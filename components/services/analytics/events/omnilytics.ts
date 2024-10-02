@@ -174,5 +174,25 @@ export const OMNILYTICS_EVENTS: any = {
                 eventType: AnalyticsEventType.CUSTOMER_CREATED,
             },
         },
+
+        /**
+         * Event: Customer Profile Viewed
+         */
+        [AnalyticsEventType.CUSTOMER_PROFILE_VIEWED]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    email: source?.email,
+                    dateOfBirth: source?.yearOfBirth,
+                    gender: source?.gender,
+                    id: source?.userId,
+                    name: source?.firstName + source?.lastName,
+                    postCode: source?.postCode,
+                })),
+                entityId: (source: any) => source?.userId,
+                entityName: (source: any) => source?.firstName + source?.lastName,
+                entityType: (source: any) => source?.entityType,
+                eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
+            },
+        },
     },
 }

@@ -37,13 +37,9 @@ function MyOrders({ deviceInfo }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  let loggedInEventData: any = {
-    eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, }
   const userAdminCheck = (b2bUsers: any) => {
-    let isAdmin =
-      b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole ===
-      'Admin'
+    let isAdmin = b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole === 'Admin'
     setIsAdmin(isAdmin)
   }
 
@@ -58,20 +54,7 @@ function MyOrders({ deviceInfo }: any) {
     return b2bUsers
   }
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.order'))
