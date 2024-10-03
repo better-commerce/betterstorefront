@@ -45,6 +45,7 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 let connector: any
 if (process.env.ELASTIC_ENGINE_NAME) {
   const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig()
@@ -234,7 +235,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, })
+        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
       }
     }
   }

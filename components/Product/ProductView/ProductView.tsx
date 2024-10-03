@@ -161,20 +161,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       )
     }
     if (response?.data?.product) {
-      recordAnalytics(AnalyticsEventType.PDP_VIEW, {
-        entity: JSON.stringify({
-          id: response?.data?.product?.recordId,
-          sku: response?.data?.product?.sku,
-          name: response?.data?.product?.name,
-          stockCode: response?.data?.product?.stockCode,
-          img: response?.data?.product?.image,
-        }),
-        entityId: response?.data?.product?.recordId,
-        entityName: response?.data?.product?.name,
-        entityType: Product,
-        eventType: AnalyticsEventType.PDP_VIEW,
-        omniImg: response?.data?.product?.image,
-      })
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...extras, ...response?.data?.product, entityType: Product, itemIsBundleItem: false, })
       setUpdatedProduct(response.data.product)
       setSelectedAttrData({
         productId: response?.data?.product?.recordId,
@@ -293,12 +281,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
           }
         }
       },
@@ -367,12 +355,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false })
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false })
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
               }
             }
           },

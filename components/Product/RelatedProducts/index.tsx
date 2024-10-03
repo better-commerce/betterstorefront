@@ -13,6 +13,7 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { PAGE_TYPES } from '@components/withDataLayer'
 const PLPQuickView = dynamic(() => import('@components/Product/QuickView/PLPQuickView'))
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 
@@ -95,7 +96,7 @@ export default function RelatedProducts({
         color = product?.variantGroupCode?.split('-')[1]
       }
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, })
+      recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, entityType: PAGE_TYPES.Product, })
       recordAnalytics(AnalyticsEventType.VIEW_PRODUCT_DETAILS, { ...product, header: title, currentPage: 'Cart', })
 
       if (checkout_refrence == true) {

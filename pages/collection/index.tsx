@@ -24,13 +24,8 @@ function CollectionList(props: any) {
   const router = useRouter();
   const translate = useTranslation()
 
-  useAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
-    entity: JSON.stringify({ id: props?.id || EmptyGuid, name: props?.name || EmptyString, }),
-    entityId: props?.id || EmptyGuid,
-    entityName: props?.name || EmptyString,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
-    eventType: AnalyticsEventType.VIEW_PLP_ITEMS,
-  })
+  const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+  useAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: null, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Collection, })
 
   return (
     <>

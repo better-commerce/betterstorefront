@@ -24,6 +24,7 @@ import ButtonNotifyMe from './ButtonNotifyMe'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -157,12 +158,12 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, });
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Search, });
 
           if (currentPage) {
             debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false })
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Search, })
           }
         }
       },
@@ -227,12 +228,12 @@ export default function SearchQuickView({ isQuickview, setQuickview, productData
             if (typeof window !== 'undefined') {
               debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, });
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Search, });
 
               if (currentPage) {
                 debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false })
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Search - Quick View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Search, })
               }
             }
           },

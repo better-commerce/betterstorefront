@@ -27,6 +27,7 @@ import { ArrowRight } from '@components/icons'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { PAGE_TYPES } from '@components/withDataLayer'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -214,26 +215,12 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     //   setCartItems(items)
     // }
 
-    recordAnalytics(AnalyticsEventType.VIEW_BASKET, {
-      entity: JSON.stringify({
-        id: basketId,
-        grandTotal: cartItems.grandTotal?.raw.withTax,
-        lineItems: cartItems.lineItems,
-        promoCode: cartItems.promotionsApplied,
-        shipCharge: cartItems.shippingCharge?.raw?.withTax,
-        shipTax: cartItems.shippingCharge?.raw?.tax,
-        taxPercent: cartItems.taxPercent,
-        tax: cartItems.grandTotal?.raw?.tax,
-      }),
-      entityName: 'Cart',
-      entityType: Basket,
-      eventType: AnalyticsEventType.VIEW_BASKET,
-      promoCodes: cartItems.promotionsApplied,
-    })
+    const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+    recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...extras, cartItems, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: 'Basket', })
+
     // handleCartitems()
     handleCartItemsLoadAsync()
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -408,7 +395,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         if (typeof window !== 'undefined') {
           debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-          recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...product, ...{ ...extras }, cartItems, itemListName: 'Cart', itemIsBundleItem: false })
+          recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...product, ...{ ...extras }, cartItems, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
 
           if(window?.ch_session){
             window.ch_remove_from_cart_before({ item_id : product?.sku || EmptyString})
@@ -445,7 +432,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     if (typeof window !== 'undefined') {
       debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-      recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, currentPage: "Checkout", itemIsBundleItem: false })
+      recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, entityName: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: "Checkout", itemIsBundleItem: false, })
     }
   }
 

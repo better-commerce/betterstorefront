@@ -110,44 +110,16 @@ export default function cartHandler() {
       if (userId && !isAssociated) {
         await cartHandler().associateCart(userId, basketId)
       }
-      const eventData = {
-        entity: JSON.stringify({
-          basketId,
-          id: productId,
-          name: data?.product?.name,
-          price: data?.product?.price?.raw?.withTax,
-          quantity: qty,
-          stockCode: data?.product?.stockCode,
-        }),
-        basketItems: JSON.stringify(
-          response?.data?.lineItems?.map((obj: any) => {
-            return {
-              basketId,
-              id: obj?.id,
-              img: obj?.image,
-              name: obj?.name,
-              price: obj?.price?.raw?.withTax,
-              qty: obj?.qty,
-              stockCode: obj?.stockCode,
-              tax: obj?.price?.raw?.tax,
-            }
-          })
-        ),
-        basketItemCount: response?.data?.lineItems?.length || 0,
-        basketTotal: response?.data?.grandTotal?.raw?.withTax,
-        entityId: data?.product?.recordId,
-        entityType: 'product',
-        eventType: AnalyticsEventType.ADD_TO_BASKET,
-        entityName: data?.product?.name,
-      }
 
+      // ---------------------------------------------------------------
+      // Omnilytics Event is already integrated with Analytics Injector.
+      /*const eventData = { ...data?.product, entityType: 'product', cartItems: response?.data, }
       if (qty && qty > 0) {
-        recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, eventData)
-      } else
-        recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, {
-          ...eventData,
-          eventType: AnalyticsEventType.REMOVE_FROM_CART,
-        })
+        recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...eventData })
+      } else {
+        recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...eventData, })
+      }*/
+     // ----------------------------------------------------------------
 
       return response.data
     },
@@ -169,7 +141,10 @@ export default function cartHandler() {
       if (userId && !isAssociated) {
         await cartHandler().associateCart(userId, basketId)
       }
-      const eventData = {
+
+      // ---------------------------------------------------------------
+      // Omnilytics Event is already integrated with Analytics Injector.
+      /*const eventData = {
         entity: JSON.stringify({
           basketId,
           //id: productId,
@@ -200,7 +175,9 @@ export default function cartHandler() {
         entityName: null,
       }
 
-      recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, eventData)
+      recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, eventData)*/
+      // ---------------------------------------------------------------
+      
       return response.data
     },
     getCartItemsCount: async ({ basketId }: GetCart) => {

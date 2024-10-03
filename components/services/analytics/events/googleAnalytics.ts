@@ -61,7 +61,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.VIEW_PLP_ITEMS]: {
             transformMap: {
                 originalLocation: (source: any) => `${source?.originalLocation}`,
-                event: AnalyticsEventType.VIEW_PLP_ITEMS,
+                event: 'view_item_list',
                 gtm: { uniqueEventId: GTMUniqueEventID.VIEW_ITEM_LIST, start: new Date().getTime() },
                 ecommerce: (source: any) => ({
                     items: source?.product?.results?.length
@@ -91,7 +91,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.VIEW_BASKET]: {
             transformMap: {
                 originalLocation: (source: any) => `${source?.originalLocation}`,
-                event: AnalyticsEventType.VIEW_BASKET,
+                event: 'view_cart',
                 gtm: { uniqueEventId: GTMUniqueEventID.VIEW_CART, start: new Date().getTime() },
                 crto: (source: any) => ({
                     email: "",
@@ -131,7 +131,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.ADD_TO_BASKET]: {
             transformMap: {
                 originalLocation: (source: any) => `${source?.originalLocation}`,
-                event: AnalyticsEventType.ADD_TO_BASKET,
+                event: 'add_to_cart',
                 gtm: { uniqueEventId: GTMUniqueEventID.ADD_TO_CART, start: new Date().getTime() },
                 ecommerce: (source: any) => ({
                     currency: `${source?.price?.currencySymbol}`,
@@ -167,7 +167,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.REMOVE_FROM_CART]: {
             transformMap: {
                 originalLocation: (source: any) => `${source?.originalLocation}`,
-                event: AnalyticsEventType.REMOVE_FROM_CART,
+                event: 'remove_from_cart',
                 gtm: { uniqueEventId: GTMUniqueEventID.REMOVE_FROM_CART, start: new Date().getTime() },
                 crto: (source: any) => ({
                     email: "",
@@ -209,7 +209,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.SELECT_QUANTITY]: {
             transformMap: {
-                event: AnalyticsEventType.SELECT_QUANTITY,
+                event: 'select_quantity',
                 category: (source: any) => source?.categoryItems?.length
                     ? source?.categoryItems[0]?.categoryName
                     : EmptyString,
@@ -225,7 +225,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.SAVE_NEW_ADDRESS]: {
             transformMap: {
-                event: AnalyticsEventType.SAVE_NEW_ADDRESS,
+                event: 'save_new_address',
                 current_page: (source: any) => source.currentPage,
             },
         },
@@ -235,7 +235,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.VIEW_WISHLIST]: {
             transformMap: {
-                event: AnalyticsEventType.VIEW_WISHLIST,
+                event: 'wishlist',
                 ecommerce: (source: any) => ({
                     header: source?.header,
                     current_page: source?.currentPage,
@@ -248,7 +248,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.ADD_TO_WISHLIST]: {
             transformMap: {
-                event: AnalyticsEventType.ADD_TO_WISHLIST,
+                event: 'add_to_wishlist',
                 ecommerce: (source: any) => ({
                     items: [
                         {
@@ -275,7 +275,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.REMOVE_FROM_WISHLIST]: {
             transformMap: {
-                event: AnalyticsEventType.REMOVE_FROM_WISHLIST,
+                event: 'remove_item',
                 product_name: (source: any) => source?.name,
                 availability: (source: any) => source?.productAvailability,
                 product_id: (source: any) => source?.sku,
@@ -287,7 +287,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.ADDRESS_CHANGE]: {
             transformMap: {
-                event: AnalyticsEventType.ADDRESS_CHANGE,
+                event: 'address_changes',
                 delivery_address_name: (source: any) => source?.deliveryAddressName,
                 current_page: (source: any) => source?.currentPage,
             },
@@ -298,7 +298,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.PDP_VIEW]: {
             transformMap: {
-                event: AnalyticsEventType.PDP_VIEW,
+                event: 'view_item',
                 originalLocation: (source: any) => `${source?.originalLocation}`,
                 gtm: { uniqueEventId: GTMUniqueEventID.VIEW_ITEM, start: new Date().getTime() },
                 ecommerce: (source: any) => ({
@@ -329,7 +329,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.PDP_VIEW_DETAILS]: {
             transformMap: {
-                event: AnalyticsEventType.PDP_VIEW_DETAILS,
+                event: 'select_item',
                 ecommerce: (source: any) => ({
                     items: [
                         {
@@ -359,7 +359,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.VIEW_PRODUCT_DETAILS]: {
             transformMap: {
-                event: AnalyticsEventType.VIEW_PRODUCT_DETAILS,
+                event: 'view_prod_details',
                 category_selected: (source: any) => source?.name,
                 header: (source: any) => source?.header,
                 current_page: (source: any) => source?.currentPage,
@@ -371,7 +371,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.PDP_QUICK_VIEW]: {
             transformMap: {
-                event: AnalyticsEventType.PDP_QUICK_VIEW,
+                event: 'popup_view',
                 product_name: (source: any) => source?.name,
                 category: (source: any) => source?.classification?.mainCategoryName,
                 page: (source: any) => `${source.originalLocation}`,
@@ -387,7 +387,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.PDP_QUICK_VIEW_CLICK]: {
             transformMap: {
-                event: AnalyticsEventType.PDP_QUICK_VIEW_CLICK,
+                event: 'quick_view_click',
                 ecommerce: (source: any) => ({
                     items: {
                         product_name: source?.name,
@@ -407,7 +407,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL]: {
             transformMap: {
-                event: AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL,
+                event: 'specification_product_detail',
                 category_selected: (source: any) => source?.mappedCategories?.length > 2 ? source?.mappedCategories?.[2]?.categoryName : EmptyString,
                 header: (source: any) => source?.name,
                 current_page: (source: any) => source?.currentPage,
@@ -420,7 +420,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.BEGIN_CHECKOUT]: {
             transformMap: {
                 originalLocation: (source: any) => `${source?.originalLocation}`,
-                event: AnalyticsEventType.BEGIN_CHECKOUT,
+                event: 'begin_checkout',
                 gtm: { uniqueEventId: GTMUniqueEventID.BEGIN_CHECKOUT, start: new Date().getTime() },
                 crto: (source: any) => ({
                     email: "",
@@ -464,7 +464,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.ADD_SHIPPING_INFO]: {
             transformMap: {
-                event: AnalyticsEventType.ADD_SHIPPING_INFO,
+                event: 'add_shipping_info',
                 ecommerce: (source: any) => ({
                     shipping_tier: source?.cartItems?.shippingMethods?.length ? source?.cartItems?.shippingMethods[0]?.countryCode : EmptyString,
                     coupon: source?.cartItems?.promotionsApplied?.length
@@ -492,7 +492,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.ADD_PAYMENT_INFO]: {
             transformMap: {
-                event: AnalyticsEventType.ADD_PAYMENT_INFO,
+                event: 'add_payment_info',
                 gtm: { uniqueEventId: GTMUniqueEventID.ADD_PAYMENT_INFO, start: new Date().getTime(), },
                 crto: (source: any) => ({
                     email: source?.user?.email,
@@ -539,7 +539,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.PURCHASE]: {
             transformMap: {
                 originalLocation: (source: any) => `${source?.originalLocation}`,
-                event: AnalyticsEventType.PURCHASE,
+                event: 'purchase',
                 gtm: { uniqueEventId: GTMUniqueEventID.PURCHASE, start: new Date().getTime() },
                 crto: (source: any) => ({
                     email: source?.user?.email,
@@ -585,7 +585,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.HELP_ICON]: {
             transformMap: {
-                event: AnalyticsEventType.HELP_ICON,
+                event: 'help_icon',
                 helpmode: (source: any) => source?.helpMode,
                 device: (source: any) => source?.deviceCheck,
             },
@@ -596,7 +596,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.HAMBURGER_MENU]: {
             transformMap: {
-                event: AnalyticsEventType.HAMBURGER_MENU,
+                event: 'hamburger_menu',
                 current_page: (source: any) => source?.currentPage,
                 device: (source: any) => source?.deviceCheck,
             },
@@ -607,7 +607,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.HAMBURGER_MENU_CLICK]: {
             transformMap: {
-                event: AnalyticsEventType.HAMBURGER_MENU_CLICK,
+                event: 'hamburger_menu_click',
                 header: 'item',
                 sub_header: (source: any) => source?.subHeader,
                 sub_header2: (source: any) => source?.subHeader2,
@@ -621,7 +621,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.HAMBURGER_ICON_CLICK]: {
             transformMap: {
-                event: AnalyticsEventType.HAMBURGER_ICON_CLICK,
+                event: 'hamburger_icon_click',
                 header: (source: any) => source?.header,
                 sub_header: (source: any) => source?.subHeader,
                 sub_header2: (source: any) => source?.subHeader2,
@@ -635,7 +635,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.HELP_SIDEBAR_MENU]: {
             transformMap: {
-                event: AnalyticsEventType.HELP_SIDEBAR_MENU,
+                event: 'help_sidebar_menu',
                 helpmode: (source: any) => source?.mode,
                 device: (source: any) => source?.deviceCheck,
             },
@@ -646,7 +646,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.NEED_HELP_WITH_ORDER]: {
             transformMap: {
-                event: AnalyticsEventType.NEED_HELP_WITH_ORDER,
+                event: 'need_help_with_your_order',
                 helpmode: 'Order',
                 device: (source: any) => source?.deviceCheck,
             },
@@ -656,28 +656,36 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          * Event: Proceed to cancel item
          */
         [AnalyticsEventType.PROCEED_TO_CANCEL_ITEM]: {
-            transformMap: EmptyObject,
+            transformMap: {
+                event: 'proceed_to_cancel_item',
+            },
         },
 
         /**
          * Event: Proceed to cancel order
          */
         [AnalyticsEventType.PROCEED_TO_CANCEL_ORDER]: {
-            transformMap: EmptyObject,
+            transformMap: {
+                event: 'proceed_to_cancel_order',
+            },
         },
 
         /**
          * Event: Proceed to return
          */
         [AnalyticsEventType.PROCEED_TO_RETURN]: {
-            transformMap: EmptyObject,
+            transformMap: {
+                event: 'proceed_to_return',
+            },
         },
 
         /**
          * Event: Proceed to exchange
          */
         [AnalyticsEventType.PROCEED_TO_EXCHANGE]: {
-            transformMap: EmptyObject,
+            transformMap: {
+                event: 'proceed_to_exchange',
+            },
         },
 
         /**
@@ -685,7 +693,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.CANCEL_CONFIRM]: {
             transformMap: {
-                event: AnalyticsEventType.CANCEL_CONFIRM,
+                event: 'cancel_confirm',
                 transaction_id: (source: any) => source?.transactionId,
                 user_id: (source: any) => source?.user?.userId,
                 device: (source: any) => source?.deviceCheck,
@@ -697,7 +705,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.RETURN_CONFIRM]: {
             transformMap: {
-                event: AnalyticsEventType.RETURN_CONFIRM,
+                event: 'return_confirm',
                 transaction_id: (source: any) => source?.transactionId,
                 user_id: (source: any) => source?.user?.userId,
                 device: (source: any) => source?.deviceCheck,
@@ -709,7 +717,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.TRACK_PACKAGE]: {
             transformMap: {
-                event: AnalyticsEventType.TRACK_PACKAGE,
+                event: 'track_package',
                 transaction_id: (source: any) => source?.details?.payments?.id,
                 device: (source: any) => source?.deviceCheck,
             },
@@ -720,7 +728,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.FOOTER_QUERY_CLICK]: {
             transformMap: {
-                event: AnalyticsEventType.FOOTER_QUERY_CLICK,
+                event: 'footer_query_click',
                 device: (source: any) => source?.deviceCheck,
                 page_clicked_on: (source: any) => source?.currentPage,
                 click_detail: (source: any) => source?.detail,
@@ -732,7 +740,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.LOGIN_ATTEMPT]: {
             transformMap: {
-                event: AnalyticsEventType.LOGIN_ATTEMPT,
+                event: 'login_attempt',
                 device: (source: any) => source?.deviceCheck,
                 browser: (source: any) => source?.browser,
                 current_page: (source: any) => source?.currentPage,
@@ -744,7 +752,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.NOTIFY_ME]: {
             transformMap: {
-                event: AnalyticsEventType.NOTIFY_ME,
+                event: 'notify_me',
                 current_page: (source: any) => source?.currentPage,
             },
         },
@@ -754,7 +762,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.NOTIFY_CLICK]: {
             transformMap: {
-                event: AnalyticsEventType.NOTIFY_CLICK,
+                event: 'notify_click',
                 current_page: (source: any) => source?.currentPage,
             },
         },
@@ -764,7 +772,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.REFERRER_BANNERS]: {
             transformMap: {
-                event: AnalyticsEventType.REFERRER_BANNERS,
+                event: 'referrer_banners',
                 cross_sell_category_position: (source: any) => source?.categoryPosition,
                 section_title: (source: any) => source?.title,
                 product_name: (source: any) => source?.name,
@@ -778,7 +786,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.LOGO_CLICK]: {
             transformMap: {
-                event: AnalyticsEventType.LOGO_CLICK,
+                event: 'logo_click',
                 current_page: (source: any) => source?.currentPage,
             },
         },
@@ -788,7 +796,7 @@ export const GOOGLE_ANALYTICS_EVENTS: any = {
          */
         [AnalyticsEventType.POLICY_POPUP]: {
             transformMap: {
-                event: AnalyticsEventType.POLICY_POPUP,
+                event: 'policy_popup',
                 current_page: (source: any) => source?.currentPage,
                 category: (source: any) => source?.category,
             },

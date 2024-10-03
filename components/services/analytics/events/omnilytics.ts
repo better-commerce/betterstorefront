@@ -7,15 +7,15 @@ export const OMNILYTICS_EVENTS: any = {
      * All events supported for Omnilytics tracking
      */
     eventTypes: {
-        [AnalyticsEventType.ADD_TO_BASKET]: 'BasketItemAdded', //
-        [AnalyticsEventType.REMOVE_FROM_CART]: 'BasketItemRemoved', //
+        [AnalyticsEventType.ADD_TO_BASKET]: 'BasketItemAdded',
+        [AnalyticsEventType.REMOVE_FROM_CART]: 'BasketItemRemoved',
         [AnalyticsEventType.VIEW_BASKET]: 'BasketViewed', //
         [AnalyticsEventType.BRAND_VIEWED]: 'BrandViewed',
         [AnalyticsEventType.CATEGORY_VIEWED]: 'CategoryViewed',
         [AnalyticsEventType.CHECKOUT_CONFIRMATION]: 'CheckoutConfirmation',
         [AnalyticsEventType.BEGIN_CHECKOUT]: 'CheckoutStarted', //
         [AnalyticsEventType.CMS_PAGE_VIEWED]: 'CmsPageViewed',
-        [AnalyticsEventType.VIEW_PLP_ITEMS]: 'CollectionViewed', //
+        [AnalyticsEventType.VIEW_PLP_ITEMS]: 'CollectionViewed',
         [AnalyticsEventType.CUSTOMER_CREATED]: 'CustomerCreated',
         [AnalyticsEventType.CUSTOMER_PROFILE_VIEWED]: 'CustomerProfileViewed',
         [AnalyticsEventType.CUSTOMER_UPDATED]: 'CustomerUpdated',
@@ -24,7 +24,7 @@ export const OMNILYTICS_EVENTS: any = {
         [AnalyticsEventType.FREE_TEXT]: 'FreeText',
         [AnalyticsEventType.PAGE_VIEWED]: 'PageViewed',
         [AnalyticsEventType.ORDER_PAGE_VIEWED]: 'OrderPageViewed',
-        [AnalyticsEventType.PDP_VIEW]: 'ProductViewed', //
+        [AnalyticsEventType.PDP_VIEW]: 'ProductViewed',
         [AnalyticsEventType.SEARCH]: 'Search',
         [AnalyticsEventType.PASSWORD_PROTECTION]: 'PasswordProtection',
         [AnalyticsEventType.VIEW_WISHLIST]: 'Wishlist', //
@@ -248,6 +248,9 @@ export const OMNILYTICS_EVENTS: any = {
             },
         },
 
+        /**
+         * Event: Order Page Viewed
+         */
         [AnalyticsEventType.ORDER_PAGE_VIEWED]: {
             transformMap: {
                 entityName: (source: any) => source?.entityName,
@@ -256,6 +259,9 @@ export const OMNILYTICS_EVENTS: any = {
             },
         },
 
+        /**
+         * Event: Search
+         */
         [AnalyticsEventType.SEARCH]: {
             transformMap: {
                 entity: (source: any) => (JSON.stringify({
@@ -269,11 +275,191 @@ export const OMNILYTICS_EVENTS: any = {
             },
         },
 
+        /**
+         * Event: Password Protection
+         */
         [AnalyticsEventType.PASSWORD_PROTECTION]: {
             transformMap: {
                 entityName: (source: any) => source?.entityName,
                 entityType: 'Page',
                 eventType: 'PasswordProtection',
+            },
+        },
+
+        /**
+         * Event: View Basket
+         */
+        [AnalyticsEventType.VIEW_BASKET]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    id: source?.cartItems?.id,
+                    grandTotal: source?.cartItems?.grandTotal?.raw.withTax,
+                    lineItems: source?.cartItems?.lineItems,
+                    promoCode: source?.cartItems?.promotionsApplied,
+                    shipCharge: source?.cartItems?.shippingCharge?.raw?.withTax,
+                    shipTax: source?.cartItems?.shippingCharge?.raw?.tax,
+                    taxPercent: source?.cartItems?.taxPercent,
+                    tax: source?.cartItems?.grandTotal?.raw?.tax,
+                })),
+                entityName: 'Cart',
+                entityType: (source: any) => source?.entityType,
+                eventType: 'BasketViewed',
+                promoCodes: (source: any) => source?.cartItems?.promotionsApplied,
+            },
+        },
+
+        /**
+         * Event: Product Viewed
+         */
+        [AnalyticsEventType.PDP_VIEW]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    id: source?.recordId,
+                    sku: source?.sku,
+                    name: source?.name,
+                    stockCode: source?.stockCode,
+                    img: source?.image,
+                })),
+                entityId: (source: any) => source?.recordId,
+                entityName: (source: any) => source?.name,
+                entityType: (source: any) => source?.entityType,
+                eventType: 'ProductViewed',
+                omniImg: (source: any) => source?.image,
+            },
+        },
+
+        /**
+         * Event: Add To Basket
+         */
+        [AnalyticsEventType.ADD_TO_BASKET]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    basketId: source?.cartItems?.id,
+                    id: source?.productId || source?.recordId,
+                    name: source?.name,
+                    price: source?.price?.raw?.withTax,
+                    quantity: 1,
+                    stockCode: source?.stockCode,
+                })),
+                basketItems: (source: any) => (source?.cartItems?.lineItems?.length ? JSON.stringify(
+                    source?.cartItems?.lineItems?.map((obj: any) => {
+                        return {
+                            basketId: source?.cartItems?.id,
+                            id: obj?.id,
+                            img: obj?.image,
+                            name: obj?.name,
+                            price: obj?.price?.raw?.withTax,
+                            qty: obj?.qty,
+                            stockCode: obj?.stockCode,
+                            tax: obj?.price?.raw?.tax,
+                        }
+                    })
+                ) : JSON.stringify(new Array<any>())),
+                basketItemCount: (source: any) => source?.cartItems?.lineItems?.length || 0,
+                basketTotal: (source: any) => source?.cartItems?.grandTotal?.raw?.withTax,
+                entityId: (source: any) => source?.recordId,
+                entityType: 'product',
+                eventType: 'BasketItemAdded',
+                entityName: (source: any) => source?.name,
+            },
+        },
+
+        [AnalyticsEventType.REMOVE_FROM_CART]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    basketId: source?.cartItems?.id,
+                    id: source?.productId || source?.recordId,
+                    name: source?.name,
+                    price: source?.price?.raw?.withTax,
+                    quantity: 1,
+                    stockCode: source?.stockCode,
+                })),
+                basketItems: (source: any) => (source?.cartItems?.lineItems?.length ? JSON.stringify(
+                    source?.cartItems?.lineItems?.map((obj: any) => {
+                        return {
+                            basketId: source?.cartItems?.id,
+                            id: obj?.id,
+                            img: obj?.image,
+                            name: obj?.name,
+                            price: obj?.price?.raw?.withTax,
+                            qty: obj?.qty,
+                            stockCode: obj?.stockCode,
+                            tax: obj?.price?.raw?.tax,
+                        }
+                    })
+                ) : JSON.stringify(new Array<any>())),
+                basketItemCount: (source: any) => source?.cartItems?.lineItems?.length || 0,
+                basketTotal: (source: any) => source?.cartItems?.grandTotal?.raw?.withTax,
+                entityId: (source: any) => source?.recordId,
+                entityType: (source: any) => source?.entityType,
+                eventType: 'BasketItemRemoved',
+                entityName: (source: any) => source?.name,
+            },
+        },
+
+        /**
+         * Event: Begin Checkout
+         */
+        [AnalyticsEventType.BEGIN_CHECKOUT]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    id: source?.cartItems?.id,
+                    basketId: source?.cartItems?.id,
+                    customerId: source?.cartItems?.userId,
+                    grandTotal: source?.cartItems?.grandTotal?.raw?.withTax,
+                    tax: source?.cartItems?.grandTotal?.raw?.tax,
+                    taxPercent: source?.cartItems?.taxPercent,
+                    shipCharge: source?.cartItems?.shippingCharge?.raw?.withoutTax,
+                    shipTax: source?.cartItems?.shippingCharge?.raw?.tax,
+                    subTotal: source?.cartItems?.subTotal?.raw?.withoutTax,
+                    discount: source?.cartItems?.discount?.raw?.withoutTax,
+                    lineitems: source?.cartItems?.lineItems?.map((lineitem: any) => ({
+                        id: lineitem?.id,
+                        manufacturer: lineitem?.manufacturer,
+                        subManufacturer: lineitem?.subManufacturer,
+                        productId: lineitem?.productId,
+                        stockCode: lineitem?.stockCode,
+                        name: lineitem?.name,
+                        discountAmt: lineitem?.discountAmt?.raw?.withoutTax || lineitem?.discount?.raw?.withoutTax || 0,
+                        isSubscription: lineitem?.isSubscription,
+                        itemType: lineitem?.itemType,
+                        qty: lineitem?.qty,
+                        price: lineitem?.price?.raw?.withoutTax,
+                        tax: lineitem?.price?.raw?.tax,
+                        categories: lineitem?.categoryItems?.map((category: any) => ({
+                            categoryId: category?.categoryId,
+                            categoryName: category?.categoryName,
+                            parentCategoryName: category?.parentCategoryName,
+                        })),
+                        img: lineitem?.img || lineitem?.image,
+                        rootManufacturer: lineitem?.categoryItems?.find((category: any) => !category?.parentCategoryName)?.categoryName,
+                    })) || new Array<any>(),
+                    promoCode: source?.cartItems?.promotionsApplied || new Array<any>(),
+                    paidAmount: source?.cartItems?.grandTotal?.raw?.withTax,
+                    shippingAddress: source?.cartItems?.shippingAddress,
+                    billingAddress: source?.cartItems?.billingAddress,
+                })),
+                promoCodes: (source: any) => JSON.stringify(source?.cartItems?.promotionsApplied),
+                entityId: (source: any) => source?.cartItems?.id,
+                entityName: (source: any) => source?.entityName,
+                entityType: 'Basket',
+                eventType: 'CheckoutStarted',
+            },
+        },
+
+        /**
+         * Event: View PLP Items
+         */
+        [AnalyticsEventType.VIEW_PLP_ITEMS]: {
+            transformMap: {
+                entity: (source: any) => (JSON.stringify({
+                    id: source?.plpDetails?.id || EmptyGuid,
+                    name: source?.plpDetails?.name || EmptyString,
+                })),
+                entityId: (source: any) => source?.plpDetails?.id || EmptyGuid,
+                entityName: (source: any) => source?.plpDetails?.name || EmptyString,
+                entityType: (source: any) => source?.entityType,
+                eventType: 'CollectionViewed',
             },
         },
     },

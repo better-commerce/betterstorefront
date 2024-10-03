@@ -133,18 +133,6 @@ function CollectionPage(props: any) {
     loading: false,
   })
   const { isCompared } = useUI()
-
-  useAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, {
-    entity: JSON.stringify({
-      id: props?.id || EmptyGuid,
-      name: props?.name || EmptyString,
-    }),
-    entityId: props?.id || EmptyGuid,
-    entityName: props?.name || EmptyString,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
-    eventType: AnalyticsEventType.VIEW_PLP_ITEMS,
-  })
-
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
   const initialState = {
@@ -257,7 +245,7 @@ function CollectionPage(props: any) {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false })
+        recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Collection, })
       }
     }
   }, [productDataToPass])
