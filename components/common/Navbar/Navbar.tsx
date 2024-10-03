@@ -233,7 +233,6 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   function viewCart(cartItems: any) {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
         recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
       }
@@ -443,7 +442,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
             </div>
 
             <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-16">
-              <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { viewCart(cartItems); openCart() }} >
+              <button className="relative grid flex-col items-center justify-center grid-cols-1 mx-auto text-center group icon-grp align-center" onClick={() => { openCart() }} >
                 <ShoppingCartIcon className="flex-shrink-0 block w-6 h-6 mx-auto text-black group-hover:text-gray-500" aria-hidden="true" aria-label="Add to cart" />
                 <span className="hidden text-sm font-normal text-black sm:block text-header-clr text-icon-display ">
                 {translate('label.navBar.cartText')} </span>

@@ -217,7 +217,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     // }
 
     const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-    recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...extras, cartItems, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: 'Cart',  })
+    recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...extras, cartItems, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: 'Cart', itemIsBundleItem: false,  })
     // handleCartitems()
     handleCartItemsLoadAsync()
 

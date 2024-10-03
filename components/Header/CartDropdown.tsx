@@ -43,7 +43,6 @@ export default function CartDropdown() {
   const viewCart = (cartItems: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
         recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
       }
@@ -51,7 +50,7 @@ export default function CartDropdown() {
   }
 
   const openMiniBasket = (basket: any) => {
-    viewCart(basket);
+    //viewCart(basket);
     openCart();
   }
 
