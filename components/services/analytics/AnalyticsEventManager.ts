@@ -4,6 +4,7 @@ import { AnalyticsType } from '.';
 import { Analytics } from './events';
 import { mapObject } from '@framework/utils/translate-util';
 import { CURRENT_THEME, EmptyObject } from '@components/utils/constants';
+import { eventDispatcher } from './eventDispatcher';
 const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
@@ -69,7 +70,6 @@ class EventManager {
             const eventTypeName = providerConfig?.eventTypes[eventType]
             const eventConfig = providerConfig?.events[eventType]
             const translatedEventData = mapObject(eventData, eventConfig?.transformMap || EmptyObject)
-            debugger
 
             // Dispatch the event to the analytics platform (customize based on provider)
             switch (providerKey) {
@@ -90,12 +90,10 @@ class EventManager {
                 case AnalyticsType.OMNILYTICS:
 
                     if (featureToggle?.features?.enableOmnilytics) {
+                        debugger
                         const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
                         if (dataLayer) {
-                            let event = new CustomEvent(eventType, {
-                                detail: { action: eventType, payload: translatedEventData },
-                            })
-                            window.dispatchEvent(event)
+                            eventDispatcher(eventTypeName, translatedEventData)
                         }
                     }
                     break;

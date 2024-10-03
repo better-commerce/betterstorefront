@@ -10,6 +10,7 @@ export const OMNILYTICS_EVENTS: any = {
         [AnalyticsEventType.ADD_TO_BASKET]: 'BasketItemAdded',
         [AnalyticsEventType.REMOVE_FROM_CART]: 'BasketItemRemoved',
         [AnalyticsEventType.VIEW_BASKET]: 'BasketViewed', //
+        [AnalyticsEventType.ALL_BRANDS_VIEWED]: 'AllBrandsViewed',
         [AnalyticsEventType.BRAND_VIEWED]: 'BrandViewed',
         [AnalyticsEventType.CATEGORY_VIEWED]: 'CategoryViewed',
         [AnalyticsEventType.CHECKOUT_CONFIRMATION]: 'CheckoutConfirmation',
@@ -76,9 +77,9 @@ export const OMNILYTICS_EVENTS: any = {
         /**
          * Event: Shop All Brand Viewed
          */
-        [AnalyticsEventType.SHOP_ALL_BRAND_VIEWED]: {
+        [AnalyticsEventType.ALL_BRANDS_VIEWED]: {
             transformMap: {
-                eventType: AnalyticsEventType.BRAND_VIEWED,
+                eventType: 'BrandViewed',
                 pageTitle: 'Brands',
             }
         },

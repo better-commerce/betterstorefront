@@ -12,8 +12,6 @@ import axios from 'axios'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
 import { logError } from '@framework/utils/app-util'
-import { AnalyticsEventType } from './analytics'
-import useAnalytics from './analytics/useAnalytics'
 
 interface CartItem {
   basketId?: string
@@ -36,7 +34,6 @@ interface GetCart {
 }
 
 export default function cartHandler() {
-  const { recordAnalytics } = useAnalytics()
   return {
     addToCart: async (
       {

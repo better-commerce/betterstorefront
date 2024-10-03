@@ -28,7 +28,7 @@ import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
 import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN, NEXT_GET_NAVIGATION } from '@components/utils/constants'
 import DataLayerInstance from '@components/utils/dataLayer'
 import geoData from '@components/utils/geographicService'
-import analytics from '@components/services/analytics/analytics'
+import analytics from '@components/services/analytics/omnilytics'
 import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, setGeoDataCookie, } from '@components/utils/setSessionId'
 import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import Head from '@components/shared/Head/Head';

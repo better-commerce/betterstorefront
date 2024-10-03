@@ -34,8 +34,8 @@ const publisher = async (data: any, event: string) => {
       window.location.search.replace(
         new RegExp(
           '^(?:.*[&\\?]' +
-            encodeURIComponent(n).replace(/[\.\+\*]/g, '\\$&') +
-            '(?:\\=([^&]*))?)?.*$',
+          encodeURIComponent(n).replace(/[\.\+\*]/g, '\\$&') +
+          '(?:\\=([^&]*))?)?.*$',
           'i'
         ),
         '$1'
@@ -226,78 +226,79 @@ export default function AnalyticsService() {
     const payload = event.detail.payload
     console.log(action, payload)
     switch (action) {
-      case AnalyticsEventType.ADD_TO_BASKET:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.ADD_TO_BASKET]:
         addToCart(payload)
         break
-      case AnalyticsEventType.REMOVE_FROM_CART:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.REMOVE_FROM_CART]:
         removedFromCart(payload)
         break
 
-      case AnalyticsEventType.VIEW_BASKET:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.VIEW_BASKET]:
         basketViewed(payload)
         break
 
-      case AnalyticsEventType.BRAND_VIEWED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.ALL_BRANDS_VIEWED]:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.BRAND_VIEWED]:
         brandViewed(payload)
         break
 
-      case AnalyticsEventType.CATEGORY_VIEWED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CATEGORY_VIEWED]:
         categoryViewed(payload)
         break
 
-      case AnalyticsEventType.CHECKOUT_CONFIRMATION:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CHECKOUT_CONFIRMATION]:
         checkoutConfirmation(payload)
         break
 
-      case AnalyticsEventType.BEGIN_CHECKOUT:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.BEGIN_CHECKOUT]:
         checkoutStarted(payload)
         break
 
-      case AnalyticsEventType.CMS_PAGE_VIEWED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CMS_PAGE_VIEWED]:
         cmsPageViewed(payload)
         break
 
-      case AnalyticsEventType.VIEW_PLP_ITEMS:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.VIEW_PLP_ITEMS]:
         collectionViewed(payload)
         break
 
-      case AnalyticsEventType.CUSTOMER_CREATED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CUSTOMER_CREATED]:
         customerCreated(payload)
         break
 
-      case AnalyticsEventType.CUSTOMER_PROFILE_VIEWED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CUSTOMER_PROFILE_VIEWED]:
         customerProfileViewed(payload)
         break
 
-      case AnalyticsEventType.CUSTOMER_UPDATED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CUSTOMER_UPDATED]:
         customerUpdated(payload)
         break
 
-      case AnalyticsEventType.FACET_SEARCH:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.FACET_SEARCH]:
         facetSearch(payload)
         break
 
-      case AnalyticsEventType.FAQ_VIEWED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.FAQ_VIEWED]:
         faqViewed(payload)
         break
 
-      case AnalyticsEventType.FREE_TEXT:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.FREE_TEXT]:
         freeText(payload)
         break
 
-      case AnalyticsEventType.PAGE_VIEWED:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PAGE_VIEWED]:
         pageViewed(payload)
         break
 
-      case AnalyticsEventType.PDP_VIEW:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PDP_VIEW]:
         productViewed(payload)
         break
-      
-      case AnalyticsEventType.PASSWORD_PROTECTION:
+
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PASSWORD_PROTECTION]:
         passwordProtection(payload)
         break
 
-      case AnalyticsEventType.SEARCH:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.SEARCH]:
         search(payload)
         break
 

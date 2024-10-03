@@ -68,7 +68,7 @@ function BrandsPage({ brands }: any) {
     setNormalizedBrands(filteredData)
   }
 
-  useAnalytics(AnalyticsEventType.SHOP_ALL_BRAND_VIEWED, { })
+  useAnalytics(AnalyticsEventType.ALL_BRANDS_VIEWED, { })
 
   function handleScrollView(letter: any) {
     letter?.preventDefault()
