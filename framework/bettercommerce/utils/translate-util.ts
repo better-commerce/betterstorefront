@@ -83,7 +83,7 @@ import { EmptyObject } from "@components/utils/constants";
  * 
  */
 export const mapObject = (source: any, mapping: any) => {
-  const target: any = EmptyObject
+  const target: any = {}
 
   for (const key in mapping) {
 

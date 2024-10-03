@@ -7,6 +7,7 @@ import { CURRENT_THEME, EmptyObject } from '@components/utils/constants';
 const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
+const ALL_EVENTS: any = Analytics.Events
 
 /**
  * Manages the dispatching of analytics events to configured analytics providers
@@ -59,15 +60,15 @@ class EventManager {
     private dispatchEvent(providerKey: string, eventType: string, eventData: any) {
 
         if (featureToggle?.features?.enableAnalytics) {
-            const providerConfig = Analytics.Events[providerKey];
+            const providerConfig = ALL_EVENTS[providerKey];
             if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
-                console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
-                return;
+                //console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
+                return
             }
 
             const eventTypeName = providerConfig?.eventTypes[eventType]
             const eventConfig = providerConfig?.events[eventType]
-            const translatedEventData = (eventData && eventConfig?.transformMap) ? mapObject(eventData, eventConfig?.transformMap) : EmptyObject
+            const translatedEventData = mapObject(eventData, eventConfig?.transformMap || EmptyObject)
             debugger
 
             // Dispatch the event to the analytics platform (customize based on provider)
