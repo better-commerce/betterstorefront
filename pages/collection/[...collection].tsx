@@ -243,7 +243,7 @@ function CollectionPage(props: any) {
   useEffect(() => {
     if (productDataToPass?.results?.length > 0) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
         recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Collection, })
       }

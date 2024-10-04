@@ -150,12 +150,12 @@ export default function ProductQuickView({
         )
         setCartItems(item)
         if (typeof window !== 'undefined') {
-          debugger
+          //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, });
 
           if (currentPage) {
-            debugger
+            //debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
             recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Quick View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
           }
@@ -232,12 +232,12 @@ export default function ProductQuickView({
             )
             setCartItems(item)
             if (typeof window !== 'undefined') {
-              debugger
+              //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, });
 
               if (currentPage) {
-                debugger
+                //debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
                 recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Quick View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
               }
@@ -271,14 +271,14 @@ export default function ProductQuickView({
     }
 
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PLP', currentPage: 'Quick view ', })
       recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'Quick View', currentPage: 'Quick View', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quick View', currentPage, })
       }
     }

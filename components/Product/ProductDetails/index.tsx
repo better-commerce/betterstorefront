@@ -86,7 +86,7 @@ export default function ProductDetails({ product, description }: any) {
 
   function openSpecification() {
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL, { ...product, currentPage: window.location.href, })
     }
   }

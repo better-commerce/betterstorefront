@@ -245,7 +245,7 @@ export default function AddressBook({ deviceInfo }: any) {
 
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
       }
     }

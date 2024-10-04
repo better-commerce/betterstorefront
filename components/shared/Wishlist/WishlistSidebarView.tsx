@@ -78,7 +78,7 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     }
 
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 

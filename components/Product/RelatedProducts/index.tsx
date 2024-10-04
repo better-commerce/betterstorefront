@@ -89,7 +89,7 @@ export default function RelatedProducts({
   // record analytics
   function viewProductDetail(product: any, pid: number) {
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.PDP_VIEW_DETAILS, { ...product, position: pid + 1, currentPage, sectionTitle: 'Frequently Bought Together', })
       let color = ''
       if (product?.variantGroupCode) {
@@ -108,7 +108,7 @@ export default function RelatedProducts({
   const onProductQuickView = (product: any, pid: any) => {
     setQuickViewProduct(product)
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
       recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, })
       recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage: 'Cart', header: title, })

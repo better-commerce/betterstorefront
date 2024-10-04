@@ -134,7 +134,7 @@ function ReturnOrder({
         setAlert({ type: 'success', msg: Messages.Messages['RETURN_SUCCESS'] })
         setItemReturnLoading(false)
         if (typeof window !== 'undefined') {
-          debugger
+          //debugger
           recordAnalytics(AnalyticsEventType.RETURN_CONFIRM, { transactionId: data?.orderId, user, deviceCheck, })
         }
         setTimeout(() => {

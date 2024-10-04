@@ -54,7 +54,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     replaceInfo(grpData)
     setWarranty(true)
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Warranty', })
     }
   }
@@ -62,7 +62,7 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
   const handleReturn = () => {
     setReturn(true)
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
     }
   }

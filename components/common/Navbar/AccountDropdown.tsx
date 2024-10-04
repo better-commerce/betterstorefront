@@ -23,7 +23,7 @@ export default function Account({ config, title, deviceInfo }: any) {
     let currentPage = getCurrentPage()
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.LOGIN_ATTEMPT, { browser: 'Chrome', currentPage, deviceCheck, })
       }
     }

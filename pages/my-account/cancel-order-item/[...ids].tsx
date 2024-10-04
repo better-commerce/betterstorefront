@@ -106,7 +106,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         setAlert({ type: 'success', msg: translate('common.message.itemCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
-          debugger
+          //debugger
           recordAnalytics(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
         }
       } catch (error) {

@@ -12,7 +12,7 @@ const Logo = ({ className = '', ...props }) => {
   function logoClick() {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.LOGO_CLICK, { currentPage, })
       }
     }

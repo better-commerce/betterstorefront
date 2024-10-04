@@ -268,7 +268,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quote Detail', currentPage, })
           }
         }

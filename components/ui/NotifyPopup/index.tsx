@@ -41,7 +41,7 @@ export default function NotifyUserPopup() {
     if (email && isValidEmail) postEmail()
 
     if (typeof window !== "undefined") {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.NOTIFY_ME, { currentPage: "PDP", })
       recordAnalytics(AnalyticsEventType.NOTIFY_CLICK, { currentPage: "PDP", })
     }

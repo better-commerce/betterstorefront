@@ -46,7 +46,7 @@ export default function AddressItem({
     let currentPage = getCurrentPage()
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
       }
     }

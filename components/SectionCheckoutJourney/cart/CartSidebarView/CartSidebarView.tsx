@@ -376,7 +376,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           data.qty = 1
           if (currentPage) {
             if (typeof window !== 'undefined') {
-              debugger
+              //debugger
               recordAnalytics(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
             }
           }
@@ -393,7 +393,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       if (type === 'delete') {
         data.qty = 0
         if (typeof window !== 'undefined') {
-          debugger
+          //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
           recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ... product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket })
         }
@@ -429,7 +429,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
 
   const beginCheckout = (cartItems: any) => {
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
       recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, entityName: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: "Checkout", itemIsBundleItem: false, })
     }

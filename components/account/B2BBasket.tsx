@@ -43,7 +43,7 @@ export default function B2BBaskets() {
   const viewCart = (cartItems: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
         recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
       }

@@ -72,7 +72,7 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
         recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...product, ...{ ...extras }, position: pid + 1, currentPage, })
       }
@@ -80,7 +80,7 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: pid + 1, currentPage, header: 'Related Products', })
       }
     }

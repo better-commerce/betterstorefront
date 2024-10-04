@@ -166,7 +166,7 @@ export default abstract class BasePaymentButton
     const { user, cartItems } = uiContext
     const orderInfo = getOrderInfo()
     const transactionId = getOrderId(orderInfo?.order)
-    debugger
+    //debugger
     this.props?.recordAnalytics(AnalyticsEventType.ADD_PAYMENT_INFO, { user, cartItems, transactionId, paymentType, })
   }
 

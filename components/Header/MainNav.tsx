@@ -75,7 +75,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }

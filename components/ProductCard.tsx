@@ -51,7 +51,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const translate = useTranslation()
   const [quantity, setQuantity] = useState(1)
   const handleQuickViewData = (data: any) => {
-    debugger
+    //debugger
     const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
     recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: 0/*pid + 1,*/, currentPage: 'PLP', header: '', })
     recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...data, ...{ ...extras }, position: 0/*pid + 1,*/ })

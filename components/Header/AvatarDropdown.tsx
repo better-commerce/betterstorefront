@@ -80,7 +80,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
         let currentPage = getCurrentPage()
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.LOGIN_ATTEMPT, { browser: getBrowserName(), currentPage, deviceCheck: isDesktop? 'Desktop': 'Mobile', })
           }
         }

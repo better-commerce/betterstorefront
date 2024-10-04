@@ -211,7 +211,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
@@ -242,9 +242,9 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerMenu = () => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
       }
     }
@@ -253,7 +253,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerMenuClick = (item: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader: EmptyString, subHeader2: EmptyString, })
       }
     }
@@ -262,7 +262,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerMenuClickLevel2 = (item: any, subHeader: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2: EmptyString, })
       }
     }
@@ -271,7 +271,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
   const hamburgerClickLevel3 = (item: any, subHeader: any, subHeader2: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.HAMBURGER_MENU_CLICK, { item, currentPage, deviceCheck, subHeader, subHeader2, })
       }
     }

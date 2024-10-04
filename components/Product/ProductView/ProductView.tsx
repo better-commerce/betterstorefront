@@ -279,12 +279,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         )
         setCartItems(item)
         if (typeof window !== 'undefined') {
-          debugger
+          //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
           if (currentPage) {
-            debugger
+            //debugger
             const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
             recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
           }
@@ -353,12 +353,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             )
             setCartItems(item)
             if (typeof window !== 'undefined') {
-              debugger
+              //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
               if (currentPage) {
-                debugger
+                //debugger
                 const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
                 recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
               }
@@ -474,14 +474,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
 
     if (typeof window !== 'undefined') {
-      debugger
+      //debugger
       recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
       recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
       }
     }

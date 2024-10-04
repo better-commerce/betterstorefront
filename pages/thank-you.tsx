@@ -275,7 +275,7 @@ export default function OrderConfirmation({ config }: any) {
       
       // PURCHASE EVENT
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
         recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: cartItems?.id, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
       }

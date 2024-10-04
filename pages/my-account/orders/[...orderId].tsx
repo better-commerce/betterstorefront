@@ -149,14 +149,14 @@ function OrderDetail({ deviceInfo }: any) {
         setIsHelpOpen(true)
         setIsHelpStatus(item)
         if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.HELP_ICON, { helpMode: 'cancel/return/exchange/chat', deviceCheck })
         }
     }
 
     const chooseHelpMode = (mode: any) => {
         if (typeof window !== 'undefined')
-            debugger
+            //debugger
         recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
 
@@ -171,7 +171,7 @@ function OrderDetail({ deviceInfo }: any) {
         })
         setIsHelpOrderOpen(true)
         if (typeof window !== 'undefined')
-            debugger
+            //debugger
         recordAnalytics(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
     }
 
@@ -182,7 +182,7 @@ function OrderDetail({ deviceInfo }: any) {
     const onCancelItem = async (mode: any) => {
         router.push(`/my-account/cancel-order-item/${data?.orderId}/${data?.itemId}`)
         if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ITEM, EmptyObject)
             recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
@@ -190,7 +190,7 @@ function OrderDetail({ deviceInfo }: any) {
     const onCancelOrder = async (mode: any) => {
         router.push(`/my-account/cancel-order/${data?.orderId}`)
         if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ORDER, EmptyObject)
             recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
@@ -198,7 +198,7 @@ function OrderDetail({ deviceInfo }: any) {
     const onReturnItem = async (mode: any) => {
         router.push(`/my-account/return-order/${data?.orderId}/${data?.itemId}`)
         if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.PROCEED_TO_RETURN, EmptyObject)
             recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
@@ -206,7 +206,7 @@ function OrderDetail({ deviceInfo }: any) {
     const onExchangeItem = async (mode: any) => {
         router.push(`/my-account/exchange-order/${data?.orderId}/${data?.itemId}`)
         if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
             recordAnalytics(AnalyticsEventType.TRACK_PACKAGE, { details: orderData, deviceCheck, })
             recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
@@ -221,7 +221,7 @@ function OrderDetail({ deviceInfo }: any) {
     // console.log('ENTIRE_ORDER_', orderData)
     const trackPackage = (orderData: any) => {
         if (typeof window !== 'undefined') {
-            debugger
+            //debugger
             recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
         }
     }

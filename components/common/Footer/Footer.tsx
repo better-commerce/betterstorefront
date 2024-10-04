@@ -42,7 +42,7 @@ const Footer: FC<Props & IExtraProps> = ({
     let currentPage = getCurrentPage()
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.FOOTER_QUERY_CLICK, { detail, currentPage, deviceCheck, })
       }
     }

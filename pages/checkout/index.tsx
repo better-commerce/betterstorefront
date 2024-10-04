@@ -793,7 +793,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onSubmit: handleAddressSubmit,
     onAddNewAddress: () => {
       if (typeof window !== 'undefined') {
-        debugger
+        //debugger
         recordAnalytics(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems: basket, })
       }
       setPrevStep(router.query?.step)
