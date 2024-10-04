@@ -11,7 +11,7 @@ import useSnippet, { ISnippetSet } from "@framework/content/use-snippet";
 import { ELEM_ATTR, HEAD_ELEM_SELECTORS, removeInjections } from "@framework/content/use-content-snippet";
 
 const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: any) => {
-    const containerRef = React.createRef<any>()
+    //const containerRef = React.createRef<any>()
     let { snippets } = props;
     snippets = uniqBy(snippets, 'name') // Prevent duplicate data being passed on to snippets rendering engine.
     const { topHeadSnippets, headSnippets, restSnippets, }: any = useSnippet(snippets)
@@ -28,6 +28,13 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
             script.async = true
             if (snippetAttrName) {
                 script.setAttribute(snippetAttrName, snippet?.name)
+            }
+            script.setAttribute("data-bc-name", snippet?.name)
+
+            // Prevent duplicate injections
+            const findElem: any = container?.querySelector(`[data-bc-name="${snippet?.name}"]`)
+            if (findElem) {
+                return
             }
 
             if (container && container?.appendChild && script)

@@ -23,8 +23,10 @@ export default class MyDocument extends NextDocument {
         <body className={`custom_class promo-banner-inactive`}>
           <Main />
           <NextScript />
+
+          {/* Fallback for injecting Omnilytics Script */}
           {!featureToggle?.features?.enableOmnilytics ? null :
-            <Script src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js" strategy="beforeInteractive" />
+            <Script data-bc-name="Omnilytics Script1" src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js" strategy="beforeInteractive" />
           }
         </body>
       </Html>
