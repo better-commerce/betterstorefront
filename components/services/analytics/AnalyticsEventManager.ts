@@ -60,7 +60,7 @@ class EventManager {
      */
     private dispatchEvent(providerKey: string, eventType: string, eventData: any) {
 
-        if (featureToggle?.features?.enableAnalytics) {
+        if (featureToggle?.features?.enableGoogleAnalytics || featureToggle?.features?.enableOmnilytics) {
             const providerConfig = ALL_EVENTS[providerKey];
             if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
                 //console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
@@ -75,16 +75,20 @@ class EventManager {
             switch (providerKey) {
                 case AnalyticsType.GOOGLE_ANALYTICS:
 
-                    window.dataLayer = window.dataLayer || [];
-                    window.dataLayer.push({
-                        event: eventTypeName,
-                        page: translatedEventData
-                    })
+                    if (featureToggle?.features?.enableGoogleAnalytics) {
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            event: eventTypeName,
+                            page: translatedEventData
+                        })
+                    }
                     break;
 
                 case AnalyticsType.GOOGLE_TAG:
 
-                    window.gtag('event', eventType, translatedEventData)
+                    if (featureToggle?.features?.enableGoogleAnalytics) {
+                        window.gtag('event', eventType, translatedEventData)
+                    }
                     break;
 
                 case AnalyticsType.OMNILYTICS:

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { CURRENT_THEME } from '@components/utils/constants'
 import AnalyticsEventManager from './AnalyticsEventManager'
-const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
+//const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 declare global {
   interface Window {
@@ -36,7 +36,7 @@ export default function useAnalytics(event?: string, data?: any) {
    * @returns {function(string, Object): void} recordAnalytics function
    */
   const recordAnalytics = useCallback((event: string, data: any): void => {
-    if (!featureToggle?.features?.enableAnalytics) return
+    //if (!featureToggle?.features?.enableAnalytics) return
 
     if (dataLayer) {
       AnalyticsEventManager.dispatch(event, data)

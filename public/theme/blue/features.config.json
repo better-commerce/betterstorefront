@@ -18,7 +18,7 @@
     "enableDemoToggle": false,
     "enableLoqateSearch": true,
     "enableAddressIOSearch":false,
-    "enableAnalytics": false,
+    "enableGoogleAnalytics": false,
     "enableOmnilytics": true
   },
   "social":[
