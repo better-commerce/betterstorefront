@@ -788,8 +788,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setItem('cartItems', newCartData)
 
       if (newCartData?.lineItems?.length == 0) {
-        let generatedBasketId = basketId()
-        resetBasket(setBasketId, generatedBasketId)
+        resetBasket(setBasketId, basketId)
         /*const user = {
           ...state?.user,
           ...{

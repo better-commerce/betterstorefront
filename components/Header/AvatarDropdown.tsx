@@ -15,8 +15,13 @@ import { useTranslation } from "@commerce/utils/use-translation";
 import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import DataLayerInstance from '@components/utils/dataLayer';
 import { AlertType } from "@framework/utils/enums";
+import { AnalyticsEventType } from "@components/services/analytics";
+import { getBrowserName } from "@framework/utils/ui-util";
+import useAnalytics from "@components/services/analytics/useAnalytics";
 
-export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any) {
+export default function AvatarDropdown({ pluginConfig = [], featureToggle, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
+  const { isDesktop } = deviceInfo
   const translate = useTranslation()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
@@ -71,6 +76,15 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
         </svg>
       ),
       tail: null,
+      onClick: async () => {
+        let currentPage = getCurrentPage()
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            //debugger
+            recordAnalytics(AnalyticsEventType.LOGIN_ATTEMPT, { browser: getBrowserName(), currentPage, deviceCheck: isDesktop? 'Desktop': 'Mobile', })
+          }
+        }
+      },
       isEnable: true
     },
     {

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
-import Link from 'next/link'
 
 import Form from '@components/customer'
 import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, OTP_LOGIN_ENABLED } from '@components/utils/constants'
@@ -9,12 +8,14 @@ import { useUI } from '@components/ui/context'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 import { getEnabledSocialLogins, saveUserToken } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LoginOTPComp from '@components/account/login-otp'
 import SocialSignInLinks from './SocialSignInLinks'
+import { AnalyticsEventType } from '@components/services/analytics'
+import { PAGE_TYPES } from '@components/withDataLayer'
+
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
   redirectToOriginUrl?: boolean;
@@ -23,6 +24,7 @@ interface LoginProps {
 }
 
 export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], closeSideBar = () => {} }: LoginProps) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const [noAccount, setNoAccount] = useState(false)
   const {
@@ -40,7 +42,6 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
   } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const otpEnabled = OTP_LOGIN_ENABLED
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
 
@@ -49,9 +50,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
     const url = new URL(document.URL)
     redirectUrl = `${url?.origin}${url?.pathname}${url?.search}`
   }
-  useAnalytics(PageViewed, {
-    eventType: PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Login, })
 
   const handleUserLogin = (values: any, cb?: any) => {
     const asyncLoginUser = async () => {

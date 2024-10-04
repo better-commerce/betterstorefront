@@ -9,10 +9,10 @@ import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
-import { CURRENT_THEME } from "@components/utils/constants";
 import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
-import { recordGA4Event } from "@components/services/analytics/ga4";
 import { useRouter } from "next/router";
+import { AnalyticsEventType } from "@components/services/analytics";
+import useAnalytics from "@components/services/analytics/useAnalytics";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -32,6 +32,7 @@ interface Props {
 }
 
 const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
+  const { recordAnalytics } = useAnalytics()
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const searchSetting = configSettings?.find((x: any) => matchStrings(x?.configType, 'SearchSettings', true))?.configKeys || []
@@ -74,12 +75,8 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'wishlist', {
-              ecommerce: {
-                header: 'Menu Bar',
-                current_page: currentPage,
-              },
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Menu Bar', currentPage, })
           }
         }
       }
@@ -157,7 +154,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                   </button>
                 </div>
               }
-              <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} />
+              <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
               <CartDropdown />
               {featureToggle?.features?.enableMembership &&
                 <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">

@@ -41,6 +41,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import Loader from '@components/Loader'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const PAGE_TYPE = PAGE_TYPES.SubCategoryList
 declare const window: any
@@ -357,16 +358,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CategoryViewed, {
-    entity: JSON.stringify({
-      id: category?.id,
-      name: category?.name || EmptyString,
-    }),
-    entityId: category?.id || EmptyGuid,
-    entityName: PAGE_TYPE,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
-    eventType: EVENTS_MAP.EVENT_TYPES.CategoryViewed,
-  })
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, { category, entityName: PAGE_TYPE, entityType: EVENTS_MAP.ENTITY_TYPES.Category, })
 
   useEffect(() => {
     // for Engage

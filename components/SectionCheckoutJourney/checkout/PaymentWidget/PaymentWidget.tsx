@@ -1,11 +1,14 @@
 import { useReducer, useEffect } from 'react'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { PaymentStatus } from '@components/utils/payment-constants'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import Router from 'next/router'
 
 /* ---------------- HOW TO ADD A NEW PAYMENT METHOD
 
@@ -28,6 +31,7 @@ export default function PaymentWidget({
   paymentMethod,
   checkoutCallback,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const orderInfo = getOrderInfo()
   const initialState = {
     triggerStripe: false,
@@ -56,7 +60,6 @@ export default function PaymentWidget({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod])
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
   const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   const CODHandler = async (paymentResponseRequest: any) => {
@@ -66,84 +69,10 @@ export default function PaymentWidget({
     )
     if (res === PaymentStatus.AUTHORIZED) {
       // TODO: Get order details
-      const {
-        basketId,
-        customerId,
-        billingAddress,
-        discount,
-        grandTotal,
-        id,
-        items,
-        orderNo,
-        paidAmount,
-        payments,
-        promotionsApplied,
-        shippingCharge,
-        shippingAddress,
-        shipping,
-        orderStatus,
-        subTotal,
-        taxPercent,
-        orderDate,
-      } = res.result
-      eventDispatcher(CheckoutConfirmation, {
-        basketItemCount: items.length,
-        basketTotal: grandTotal?.raw?.withTax,
-        shippingCost: shippingCharge?.raw?.withTax,
-        promoCodes: promotionsApplied,
-        basketItems: JSON.stringify(
-          items.map((i: any) => {
-            return {
-              categories: i.categoryItems,
-              discountAmt: i.discountAmt?.raw?.withTax,
-              id: i.id,
-              img: i.image,
-              isSubscription: i.isSubscription,
-              itemType: i.itemType,
-              manufacturer: i.manufacturer,
-              name: i.name,
-              price: i.price?.raw?.withTax,
-              productId: i.productId,
-              qty: i.qty,
-              rootManufacturer: i.rootManufacturer || '',
-              stockCode: i.stockCode,
-              subManufacturer: i.subManufacturer,
-              tax: i.totalPrice?.raw?.withTax,
-            }
-          })
-        ),
-        entity: JSON.stringify({
-          basketId: basketId,
-          billingAddress: billingAddress,
-          customerId: customerId,
-          discount: discount?.raw?.withTax,
-          grandTotal: grandTotal?.raw?.withTax,
-          id: id,
-          lineitems: items,
-          orderNo: orderNo,
-          paidAmount: paidAmount?.raw?.withTax,
-          payments: payments.map((i: any) => {
-            return {
-              methodName: i.paymentMethod,
-              paymentGateway: i.paymentGateway,
-              amount: i.paidAmount,
-            }
-          }),
-          promoCode: promotionsApplied,
-          shipCharge: shippingCharge?.raw?.withTax,
-          shippingAddress: shippingAddress,
-          shippingMethod: shipping,
-          status: orderStatus,
-          subTotal: subTotal?.raw?.withTax,
-          tax: grandTotal?.raw?.withTax,
-          taxPercent: taxPercent,
-          timestamp: orderDate,
-        }),
-        entityId: orderModelResponse.id,
-        entityName: orderNo,
-        entityType: Order,
-        eventType: CheckoutConfirmation,
-      })
+      const { basketId, customerId, billingAddress, discount, grandTotal, id, items, orderNo, paidAmount, payments, promotionsApplied, shippingCharge, shippingAddress, shipping, orderStatus, subTotal, taxPercent, orderDate, } = res.result
+      const orderInfo = { orderResponse: { id, orderNo, customerId, discount, paidAmount, grandTotal, shipping, shippingAddress, billingAddress, promotionsApplied, payments, orderStatus, subTotal, taxPercent, orderDate, } }
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, basketId, cartItems: { lineItems: items, shippingCharge, }, orderInfo, entityType: Order, })
       dispatch({ type: 'TRIGGER_COD', payload: false })
       checkoutCallback(orderModelResponse.id)
     }

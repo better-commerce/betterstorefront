@@ -1,7 +1,8 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const colorRegex = /^#(?:[0-9a-f]{3}){1,2}$/i
 
@@ -32,6 +33,7 @@ const Attributes = ({ attributes = [] }: any) => {
 }
 
 export default function ProductDetails({ product, description }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const detailsConfig = [
     // {
@@ -84,11 +86,8 @@ export default function ProductDetails({ product, description }: any) {
 
   function openSpecification() {
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'specification_product_detail', {
-        category_selected: product?.mappedCategories[2]?.categoryName,
-        header: product?.name,
-        current_page: window.location.href,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.SPECIFICATION_PRODUCT_DETAIL, { ...product, currentPage: window.location.href, })
     }
   }
 

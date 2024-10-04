@@ -4,10 +4,12 @@ import { useUI } from '@components/ui/context'
 import axios from 'axios'
 import { NEXT_API_NOTIFY_ME_ENDPOINT } from '@components/utils/constants'
 import { validate } from 'email-validator'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function NotifyUserPopup() {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [email, setEmailAddress] = useState('')
   const [isPostedMessage, setIsPosted] = useState('')
@@ -39,16 +41,9 @@ export default function NotifyUserPopup() {
     if (email && isValidEmail) postEmail()
 
     if (typeof window !== "undefined") {
-      recordGA4Event(window, 'notify_me', {
-        current_page: "PDP"
-      });
-      recordGA4Event(window, 'notify_click', {
-        current_page: "PDP"
-      });
-
-      recordGA4Event(window, 'notify_click', {
-        current_page: "PDP"
-      });
+      //debugger
+      recordAnalytics(AnalyticsEventType.NOTIFY_ME, { currentPage: "PDP", })
+      recordAnalytics(AnalyticsEventType.NOTIFY_CLICK, { currentPage: "PDP", })
     }
   }
 

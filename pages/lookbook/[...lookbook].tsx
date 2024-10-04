@@ -14,7 +14,6 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
@@ -27,8 +26,10 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Guid } from '@commerce/types'
 import { stringToNumber } from '@framework/utils/parse-util'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const { basketId, openCart, setCartItems, isCompared } = useUI()
@@ -39,11 +40,7 @@ function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, def
     setProducts(response?.data?.products)
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
-    entityName: PAGE_TYPES.Lookbook,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Lookbook, })
 
   useEffect(() => {
     if (slug) loadProducts()

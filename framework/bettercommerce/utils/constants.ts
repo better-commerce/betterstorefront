@@ -44,7 +44,6 @@ export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
 export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 // google analytics
 export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED)
-export const GA4_MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID
 
 export const ERROR_LOG_ENABLED = stringToBoolean(process.env.ERROR_LOG_ENABLED)
 export const ERROR_LOG_OUTPUT_DIR = process.env.ERROR_LOG_OUTPUT_DIR
@@ -54,9 +53,6 @@ export const HTTP_MESSAGES = {
   INVALID_USER_ID: 'User ID was not provided',
 }
 export const PRODUCT_IMAGE_CDN_URL = process.env.PRODUCT_IMAGE_CDN_URL
-export const OMNILYTICS_DISABLED = stringToBoolean(
-  process.env.OMNILYTICS_DISABLED
-)
 export const STATIC_CATEGORIES_PATH_ENABLED = stringToBoolean(
   process.env.STATIC_CATEGORIES_PATH_ENABLED
 )

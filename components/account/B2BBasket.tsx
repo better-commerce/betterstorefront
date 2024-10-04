@@ -6,10 +6,9 @@ import React, { useMemo, Fragment, useState, useEffect } from "react";
 import Link from "next/link";
 import useCart from '@components/services/cart'
 import { getCurrentPage, isB2BUser } from "@framework/utils/app-util";
-import { recordGA4Event } from "@components/services/analytics/ga4";
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_TRANSFER_BASKET } from "@components/utils/constants";
+import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_TRANSFER_BASKET, SITE_ORIGIN_URL } from "@components/utils/constants";
 import axios from "axios";
 import { matchStrings } from "@framework/utils/parse-util";
 import { Guid } from "@commerce/types";
@@ -18,11 +17,16 @@ import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import BasketList from "./BasketList";
 import TransferBasket from "@components/TransferBasket";
+import { AnalyticsEventType } from "@components/services/analytics";
+import Router from "next/router";
+import useAnalytics from "@components/services/analytics/useAnalytics";
+import { EVENTS_MAP } from "@components/services/analytics/constants";
 
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function B2BBaskets() {
+  const { recordAnalytics } = useAnalytics()
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
@@ -39,24 +43,9 @@ export default function B2BBaskets() {
   const viewCart = (cartItems: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'view_cart', {
-          ecommerce: {
-            items: cartItems?.lineItems?.map((items: any, itemId: number) => ({
-              item_name: items?.name,
-              item_id: items?.sku,
-              price: items?.price?.raw?.withTax,
-              item_brand: items?.brand,
-              item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
-              item_variant: items?.colorName,
-              item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
-              item_list_id: '',
-              index: itemId,
-              quantity: items?.qty,
-              item_var_id: items?.stockCode,
-            })),
-            current_page: currentPage,
-          },
-        })
+        //debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
       }
     }
   }

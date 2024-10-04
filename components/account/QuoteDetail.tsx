@@ -3,7 +3,6 @@ import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { uniq } from 'lodash'
@@ -29,8 +28,11 @@ import Cookies from 'js-cookie'
 import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData, config, location, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const isBrowser = typeof window !== 'undefined'
   const INITIAL_STATE = {
@@ -266,12 +268,8 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'wishlist', {
-              ecommerce: {
-                header: 'Menu Bar',
-                current_page: currentPage,
-              },
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quote Detail', currentPage, })
           }
         }
       }

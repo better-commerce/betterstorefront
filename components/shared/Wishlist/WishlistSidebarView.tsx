@@ -11,11 +11,13 @@ import {
   IMG_PLACEHOLDER,
 } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { vatIncluded } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
+  const { recordAnalytics } = useAnalytics()
   const {
     displaySidebar,
     closeSidebar,
@@ -76,11 +78,8 @@ const WishlistSidebar: FC<React.PropsWithChildren<unknown>> = () => {
     }
 
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'remove_item', {
-        product_name: product?.name,
-        availability: productAvailability,
-        product_id: product?.sku,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 
     if (objUser) {

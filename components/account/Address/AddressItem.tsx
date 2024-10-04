@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import Form from './AddressBookForm'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui'
 
 export default function AddressItem({
@@ -18,22 +17,20 @@ export default function AddressItem({
   deleteAddress,
   onEditAddress = (id: number) => { },
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [isEditMode, setEditMode] = useState(false)
   const { user: storeFrontUser } = useUI()
   const { title, firstName, lastName, address1, address2, address3, city, state, postCode, country, phoneNo, isDefault, isDefaultBilling, isDefaultDelivery, isDefaultSubscription, countryCode, user, label, } = item
 
-  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
   let [isOpen, setIsOpen] = useState(false)
 
   const handleAddressSubmit = async (values: any) => {
     let currentPage = getCurrentPage()
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        recordGA4Event(window, 'address_changes', {
-          delivery_address_name: values?.address1,
-          current_page: currentPage,
-        })
+        //debugger
+        recordAnalytics(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })
@@ -41,19 +38,7 @@ export default function AddressItem({
         () =>
           successCallback() &&
           isEditMode &&
-          eventDispatcher(CustomerUpdated, {
-            entity: JSON.stringify({
-              id: user.userId,
-              name: user.username,
-              dateOfBirth: user.yearOfBirth,
-              gender: user.gender,
-              email: user.email,
-              postCode: user.postCode,
-            }),
-            entityId: user.userId,
-            entityName: user.firstName + user.lastName,
-            eventType: CustomerUpdated,
-          })
+          recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
       )
       .catch(() => errCallback())
   }
@@ -63,19 +48,7 @@ export default function AddressItem({
       .then(
         () =>
           successCallback() &&
-          eventDispatcher(CustomerUpdated, {
-            entity: JSON.stringify({
-              id: user.userId,
-              name: user.username,
-              dateOfBirth: user.yearOfBirth,
-              gender: user.gender,
-              email: user.email,
-              postCode: user.postCode,
-            }),
-            entityId: user.userId,
-            entityName: user.firstName + user.lastName,
-            eventType: CustomerUpdated,
-          })
+          recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
       )
       .catch(() => errCallback)
     deleteCloseModal()

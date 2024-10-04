@@ -20,6 +20,7 @@ import { Disclosure } from '@headlessui/react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Spinner from '@components/ui/Spinner'
 import {
+    EmptyObject,
     NEXT_BULK_ADD_TO_CART,
   } from '@components/utils/constants'
 
@@ -28,7 +29,6 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { PaymentStatus } from '@components/utils/payment-constants'
 import { DATE_FORMAT, NEXT_GET_ORDER, NEXT_GET_ORDER_DETAILS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useUI } from '@components/ui'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { isB2BUser, notFoundRedirect, vatIncluded } from '@framework/utils/app-util'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import withAuth from '@components/utils/withAuth'
@@ -39,8 +39,10 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function OrderDetail({ deviceInfo }: any) {
+    const { recordAnalytics } = useAnalytics()
     const router: any = useRouter();
     const { user, setCartItems, openCart, basketId } = useUI();
     const translate = useTranslation();
@@ -76,11 +78,7 @@ function OrderDetail({ deviceInfo }: any) {
         }
     }
 
-    useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
-        entityName: PAGE_TYPES.OrderDetail,
-        entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-        eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
-    })
+    useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderDetail, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
     useEffect(() => {
         const orderId = router.query?.orderId[0]
@@ -151,19 +149,15 @@ function OrderDetail({ deviceInfo }: any) {
         setIsHelpOpen(true)
         setIsHelpStatus(item)
         if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'help_icon', {
-                helpmode: 'cancel/return/exchange/chat',
-                device: deviceCheck,
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.HELP_ICON, { helpMode: 'cancel/return/exchange/chat', deviceCheck })
         }
     }
 
     const chooseHelpMode = (mode: any) => {
         if (typeof window !== 'undefined')
-            recordGA4Event(window, 'help_sidebar_menu', {
-                helpmode: mode,
-                device: deviceCheck,
-            })
+            //debugger
+        recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
 
     const closeHelpModal = () => {
@@ -177,10 +171,8 @@ function OrderDetail({ deviceInfo }: any) {
         })
         setIsHelpOrderOpen(true)
         if (typeof window !== 'undefined')
-            recordGA4Event(window, 'need_help_with_your_order', {
-                helpmode: 'Order',
-                device: deviceCheck,
-            })
+            //debugger
+        recordAnalytics(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
     }
 
     const closeOrderHelpModal = () => {
@@ -190,45 +182,34 @@ function OrderDetail({ deviceInfo }: any) {
     const onCancelItem = async (mode: any) => {
         router.push(`/my-account/cancel-order-item/${data?.orderId}/${data?.itemId}`)
         if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'proceed_to_cancel_item', {})
-            recordGA4Event(window, 'help_sidebar_menu', {
-                helpmode: mode,
-                device: deviceCheck,
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ITEM, EmptyObject)
+            recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
     }
     const onCancelOrder = async (mode: any) => {
         router.push(`/my-account/cancel-order/${data?.orderId}`)
         if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'proceed_to_cancel_order', {})
-            recordGA4Event(window, 'help_sidebar_menu', {
-                helpmode: mode,
-                device: deviceCheck,
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ORDER, EmptyObject)
+            recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
     }
     const onReturnItem = async (mode: any) => {
         router.push(`/my-account/return-order/${data?.orderId}/${data?.itemId}`)
         if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'proceed_to_return', {})
-            recordGA4Event(window, 'help_sidebar_menu', {
-                helpmode: mode,
-                device: deviceCheck,
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.PROCEED_TO_RETURN, EmptyObject)
+            recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
     }
     const onExchangeItem = async (mode: any) => {
         router.push(`/my-account/exchange-order/${data?.orderId}/${data?.itemId}`)
         if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'proceed_to_exchange', {})
-            recordGA4Event(window, 'track_package', {
-                transaction_id: orderData?.payments?.id,
-                device: deviceCheck,
-            })
-            recordGA4Event(window, 'help_sidebar_menu', {
-                helpmode: mode,
-                device: deviceCheck,
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
+            recordAnalytics(AnalyticsEventType.TRACK_PACKAGE, { details: orderData, deviceCheck, })
+            recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
         }
     }
     useEffect(() => {
@@ -239,8 +220,10 @@ function OrderDetail({ deviceInfo }: any) {
     // console.log('ENTIRE_ORDER_LOG_SORTED', orderData?.orderLog.sort((a:any,b:any) => new Date(a?.created) - new Date(b?.created)))
     // console.log('ENTIRE_ORDER_', orderData)
     const trackPackage = (orderData: any) => {
-        if (typeof window !== 'undefined')
-            recordGA4Event(window, 'proceed_to_exchange', {})
+        if (typeof window !== 'undefined') {
+            //debugger
+            recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
+        }
     }
     const isIncludeVAT = vatIncluded()
     const subTotalAmount = isIncludeVAT

@@ -57,7 +57,7 @@ class PayPalPaymentButton extends BasePaymentButton {
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
-      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.PAYPAL)
+      super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.PAYPAL)
       this.setState({
         confirmed: true,
       })

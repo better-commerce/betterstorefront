@@ -5,9 +5,8 @@ import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
-import { CURRENT_THEME, EmptyGuid, EmptyObject, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, isB2BUser, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
@@ -27,6 +26,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 import { Hero } from '@components/ui'
 import { Guid } from '@commerce/types';
+import { AnalyticsEventType } from '@components/services/analytics'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -67,7 +67,6 @@ const PAGE_TYPE = PAGE_TYPES.Home
 function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const { user, isGuestUser } = useUI()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
@@ -106,23 +105,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [])
 
-  useAnalytics(PageViewed, {
-    entity: JSON.stringify({
-      id: '',
-      name: pageContents?.metatitle,
-      metaTitle: pageContents?.metaTitle,
-      MetaKeywords: pageContents?.metaKeywords,
-      MetaDescription: pageContents?.metaDescription,
-      Slug: pageContents?.slug,
-      Title: pageContents?.metatitle,
-      ViewType: 'Page View',
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: pageContents?.metaTitle,
-    entityType: 'Page',
-    entityId: '',
-    eventType: 'PageViewed',
-  })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPES.Home, })
 
   if (!pageContents) {
     return (

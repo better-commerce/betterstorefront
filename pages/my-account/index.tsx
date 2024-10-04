@@ -11,13 +11,13 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyAccount() {
   const [isShow, setShow] = useState(true)
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
 
   useEffect(() => {
@@ -28,31 +28,16 @@ function MyAccount() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer,}
 
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(()=>{
     changeMyAccountTab(translate('label.myAccount.myDetailsHeadingText'))
   },[])
   
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

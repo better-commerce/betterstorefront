@@ -9,37 +9,22 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { useEffect } from 'react'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function Membership({ allMembershipPlans, defaultDisplayMembership  }: any) {
   const { user , changeMyAccountTab } = useUI()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer,}
 
   useEffect(()=>{
     changeMyAccountTab(translate('label.membership.myMembershipText'))
   },[])
   
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
   return ( 
   <>
     <h2 className='text-2xl font-semibold sm:text-3xl'>{translate('label.membership.myMembershipText')}</h2>

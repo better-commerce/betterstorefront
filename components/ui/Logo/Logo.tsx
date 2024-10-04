@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react'
 import { CURRENT_THEME } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import {  } from '@components/services/analytics/ga4'
 import { getCurrentPage } from '@framework/utils/app-util'
-import Image from 'next/image'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const Logo = ({ className = '', ...props }) => {
+  const { recordAnalytics } = useAnalytics()
   let currentPage = getCurrentPage()
 
   function logoClick() {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'logo_click', {
-          current_page: currentPage,
-        })
+        //debugger
+        recordAnalytics(AnalyticsEventType.LOGO_CLICK, { currentPage, })
       }
     }
   }

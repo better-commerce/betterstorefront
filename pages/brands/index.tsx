@@ -17,6 +17,7 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -43,6 +44,7 @@ const dataNormalize = (data: any = []) => {
 }
 
 function BrandsPage({ brands }: any) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const data = dataNormalize(brands.results)
   const translate = useTranslation()
@@ -65,13 +67,8 @@ function BrandsPage({ brands }: any) {
 
     setNormalizedBrands(filteredData)
   }
-  const { BrandViewed } = EVENTS_MAP.EVENT_TYPES
 
-  useAnalytics(BrandViewed, {
-    eventType: BrandViewed,
-    pageTitle: 'Brands',
-  })
-  useEffect(() => { }, [])
+  useAnalytics(AnalyticsEventType.ALL_BRANDS_VIEWED, { })
 
   function handleScrollView(letter: any) {
     letter?.preventDefault()

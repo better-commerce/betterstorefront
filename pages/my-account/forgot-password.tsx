@@ -14,9 +14,10 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function ForgotPasswordPage() {
+  const { recordAnalytics } = useAnalytics()
   const { setAlert } = useUI()
   const translate = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
@@ -39,11 +40,7 @@ function ForgotPasswordPage() {
     return emailRegex.test(email)
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
-    entityName: PAGE_TYPES.ForgotPassword,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.ForgotPassword, })
 
   useEffect(() => {
     if (

@@ -9,8 +9,6 @@ import {
   NEXT_GET_CART_COUNT,
 } from '@components/utils/constants'
 import axios from 'axios'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
 import { logError } from '@framework/utils/app-util'
@@ -34,9 +32,6 @@ interface CartItem {
 interface GetCart {
   basketId?: string
 }
-
-const { BasketItemAdded, BasketItemRemoved, BasketViewed } =
-  EVENTS_MAP.EVENT_TYPES
 
 export default function cartHandler() {
   return {
@@ -112,44 +107,16 @@ export default function cartHandler() {
       if (userId && !isAssociated) {
         await cartHandler().associateCart(userId, basketId)
       }
-      const eventData = {
-        entity: JSON.stringify({
-          basketId,
-          id: productId,
-          name: data?.product?.name,
-          price: data?.product?.price?.raw?.withTax,
-          quantity: qty,
-          stockCode: data?.product?.stockCode,
-        }),
-        basketItems: JSON.stringify(
-          response?.data?.lineItems?.map((obj: any) => {
-            return {
-              basketId,
-              id: obj?.id,
-              img: obj?.image,
-              name: obj?.name,
-              price: obj?.price?.raw?.withTax,
-              qty: obj?.qty,
-              stockCode: obj?.stockCode,
-              tax: obj?.price?.raw?.tax,
-            }
-          })
-        ),
-        basketItemCount: response?.data?.lineItems?.length || 0,
-        basketTotal: response?.data?.grandTotal?.raw?.withTax,
-        entityId: data?.product?.recordId,
-        entityType: 'product',
-        eventType: BasketItemAdded,
-        entityName: data?.product?.name,
-      }
 
+      // ---------------------------------------------------------------
+      // Omnilytics Event is already integrated with Analytics Injector.
+      /*const eventData = { ...data?.product, entityType: 'product', cartItems: response?.data, }
       if (qty && qty > 0) {
-        eventDispatcher(BasketItemAdded, eventData)
-      } else
-        eventDispatcher(BasketItemRemoved, {
-          ...eventData,
-          eventType: BasketItemRemoved,
-        })
+        recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...eventData })
+      } else {
+        recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...eventData, })
+      }*/
+     // ----------------------------------------------------------------
 
       return response.data
     },
@@ -171,7 +138,10 @@ export default function cartHandler() {
       if (userId && !isAssociated) {
         await cartHandler().associateCart(userId, basketId)
       }
-      const eventData = {
+
+      // ---------------------------------------------------------------
+      // Omnilytics Event is already integrated with Analytics Injector.
+      /*const eventData = {
         entity: JSON.stringify({
           basketId,
           //id: productId,
@@ -198,11 +168,13 @@ export default function cartHandler() {
         basketTotal: response?.data?.grandTotal?.raw?.withTax,
         entityId: null,
         entityType: 'product',
-        eventType: BasketItemAdded,
+        eventType: AnalyticsEventType.ADD_TO_BASKET,
         entityName: null,
       }
 
-      eventDispatcher(BasketItemAdded, eventData)
+      recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, eventData)*/
+      // ---------------------------------------------------------------
+      
       return response.data
     },
     getCartItemsCount: async ({ basketId }: GetCart) => {

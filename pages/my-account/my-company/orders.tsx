@@ -15,6 +15,7 @@ import B2BQuotes from '@components/account/B2BQuotes'
 import axios from 'axios'
 import { NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_GET_ORDERS } from '@components/utils/constants'
 import B2BOrders from '@components/account/Orders/B2BOrders'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyOrders({ deviceInfo }: any) {
   const [isShow, setShow] = useState(true)
@@ -24,7 +25,6 @@ function MyOrders({ deviceInfo }: any) {
   const [isAdmin, setIsAdmin] = useState(false)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder)
   useEffect(() => {
@@ -37,13 +37,9 @@ function MyOrders({ deviceInfo }: any) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, }
   const userAdminCheck = (b2bUsers: any) => {
-    let isAdmin =
-      b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole ===
-      'Admin'
+    let isAdmin = b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole === 'Admin'
     setIsAdmin(isAdmin)
   }
 
@@ -58,26 +54,13 @@ function MyOrders({ deviceInfo }: any) {
     return b2bUsers
   }
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.order'))
   }, [])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)

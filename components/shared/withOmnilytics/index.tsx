@@ -1,8 +1,10 @@
-import { OMNILYTICS_DISABLED } from '@components/utils/constants'
+import { CURRENT_THEME } from "@components/utils/constants"
+
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 const withOmnilytics = (Component: any) => {
   return (props: any) => {
-    if (OMNILYTICS_DISABLED) {
+    if (!featureToggle?.features?.enableOmnilytics) {
       return null
     }
     return <Component {...props} />

@@ -60,7 +60,7 @@ class StripePaymentButton extends BasePaymentButton {
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
-      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.STRIPE)
+      super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.STRIPE)
       const {
         id: orderId,
         orderNo,

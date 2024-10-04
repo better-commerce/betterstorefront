@@ -14,12 +14,12 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 const PAGE_SIZE = 10
 
 function MyOrdersPage({ deviceInfo }: any) {
   const { user, isGuestUser, displayDetailedOrder, changeMyAccountTab } = useUI()
   const router = useRouter()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
   const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
@@ -110,28 +110,12 @@ function MyOrdersPage({ deviceInfo }: any) {
     setPageNumber(pageNumber + 1)
   }
 
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer, }
 
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
-
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const [isShowDetailedOrder, setIsShowDetailedOrder] =
     useState(displayDetailedOrder)

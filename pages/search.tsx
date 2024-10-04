@@ -27,6 +27,7 @@ const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
+import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -140,8 +141,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
-  const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
-
   useEffect(() => {
     if (
       router.query.freeText !== undefined &&
@@ -215,26 +214,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     (filter: any) => filter.name === 'Category'
   )
 
-  useAnalytics(FacetSearch, {
-    entity: JSON.stringify({
-      FreeText: '',
-      Page: state.currentPage,
-      SortBy: state.sortBy,
-      SortOrder: state.sortOrder,
-      Brand: BrandFilter ? BrandFilter.value : null,
-      Category: CategoryFilter ? CategoryFilter.value : null,
-      Gender: user.gender,
-      CurrentPage: state.currentPage,
-      PageSize: 20,
-      Filters: state.filters,
-      AllowFacet: true,
-      ResultCount: data.products.total,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: 'Catalog',
-    entityType: 'Page',
-    eventType: 'Search',
-  })
+  useAnalytics(AnalyticsEventType.FACET_SEARCH, { ...state, ...user, products: data?.products, brand: BrandFilter ? BrandFilter.value : null, category: CategoryFilter ? CategoryFilter.value : null, entityName: PAGE_TYPE, })
 
   const handleInfiniteScroll = () => {
     if (

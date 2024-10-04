@@ -7,7 +7,7 @@ import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import cookie from 'cookie'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import MembershipOfferCard from '@components/membership/MembershipOfferCard'
 import OptMembershipModal from '@components/membership/OptMembershipModal'
 
@@ -23,7 +23,7 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { vatIncluded, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
 import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
@@ -38,6 +38,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -271,22 +272,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.BasketViewed, {
-    entity: JSON.stringify({
-      id: basketId,
-      grandTotal: cartItems?.grandTotal?.raw.withTax,
-      lineItems: cartItems?.lineItems,
-      promoCode: cartItems?.promotionsApplied,
-      shipCharge: cartItems?.shippingCharge?.raw?.withTax,
-      shipTax: cartItems?.shippingCharge?.raw?.tax,
-      taxPercent: cartItems?.taxPercent,
-      tax: cartItems?.grandTotal?.raw?.tax,
-    }),
-    entityName: PAGE_TYPES.Cart,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Basket,
-    eventType: EVENTS_MAP.EVENT_TYPES.BasketViewed,
-    promoCodes: cartItems.promotionsApplied,
-  })
+  let currentPage = getCurrentPage()
+  const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+  useAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
 
   useEffect(() => {
     let splitProducts = groupItemsByDeliveryDate(cartItems?.lineItems)

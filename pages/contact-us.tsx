@@ -10,7 +10,6 @@ import {
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import {
   CONTACT_PAGE_DEFAULT_SLUG,
@@ -24,18 +23,12 @@ import {
   setCurrentCurrency,
 } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
-import {
-  containsArrayData,
-  getDataByUID,
-  parseDataValue,
-  setData,
-} from '@framework/utils/redis-util'
-import { Redis } from '@framework/utils/redis-constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import ContactForm from '@components/contact/ContactForm'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -70,7 +63,6 @@ function Contact({
   data,
 }: any) {
   const router = useRouter()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
@@ -99,23 +91,7 @@ function Contact({
     }
   }, [currencyCode, isMobile])
 
-  useAnalytics(PageViewed, {
-    entity: JSON.stringify({
-      id: '',
-      name: pageContents?.metatitle,
-      metaTitle: pageContents?.metaTitle,
-      MetaKeywords: pageContents?.metaKeywords,
-      MetaDescription: pageContents?.metaDescription,
-      Slug: pageContents?.slug,
-      Title: pageContents?.metatitle,
-      ViewType: 'Page View',
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: pageContents?.metaTitle,
-    entityType: 'Page',
-    entityId: '',
-    eventType: 'PageViewed',
-  })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPE, })
 
   if (!pageContents) {
     return (

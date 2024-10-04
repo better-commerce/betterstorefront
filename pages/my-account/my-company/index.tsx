@@ -35,13 +35,12 @@ import { matchStrings } from '@framework/utils/parse-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import CompanyDetails from '@components/account/CompanyDetails'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyCompany({ deviceInfo }: any) {
   const { user, changeMyAccountTab, isGuestUser, displayDetailedOrder, referralProgramActive } = useUI()
   const router = useRouter()
-  const { isMobile, isIPadorTablet, isOnlyMobile } = deviceInfo
   const [isShow, setShow] = useState(true)
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
@@ -163,31 +162,16 @@ function MyCompany({ deviceInfo }: any) {
     }
   }, [router.query, optionsConfig])
 
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer, }
 
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
 
   const handleClick = () => {
     setActive(!active)
   }
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const [isShowDetailedOrder, setIsShowDetailedOrder] =
     useState(displayDetailedOrder)

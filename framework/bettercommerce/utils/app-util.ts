@@ -108,12 +108,13 @@ export const sanitizeBase64 = (base64: string) => {
   return EmptyString
 }
 
-export const resetBasket = async (setBasketId: any, basketId: any) => {
+export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
   Cookies.remove(Cookie.Key.SESSION_ID)
   setSessionIdCookie()
   Cookies.remove(Cookie.Key.BASKET_ID)
+  const generatedBasketId = generateBasketId()
   if (setBasketId) {
-    setBasketId(basketId)
+    setBasketId(generatedBasketId)
   }
 }
 
@@ -972,4 +973,20 @@ export const getRedirectionLocale = (defaultCulture: string): string => {
     }
   }
   return EmptyString
+}
+
+/**
+ * Returns an array of all keys in an enumeration.
+ * @param enumeration The enumeration to retrieve keys from.
+ * @returns An array of all keys in the enumeration.
+ */
+export const allEnumKeys = <T>(enumeration: T): Array<any> => {
+  return (Object.keys(enumeration!) as Array<keyof T>)
+      .filter(key => isNaN(Number(key)))
+      .filter(key => typeof enumeration[key] === "number" || typeof enumeration[key] === "string")
+      .map(key => enumeration[key])
+  /*.map(key => ({
+      id: enumeration[key],
+      description: String(key).replace(separatorRegex, ' '),
+  }))*/
 }

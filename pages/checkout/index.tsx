@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Cookies from 'js-cookie'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
 import ShippingAddressForm from '@components/SectionCheckoutJourney/checkout/ShippingAddressForm'
 import BillingAddressForm from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
@@ -32,6 +32,7 @@ import {
   NEXT_UPDATE_CHECKOUT2_ADDRESS,
   NEXT_UPDATE_DELIVERY_INFO,
   NEXT_UPDATE_SHIPPING,
+  SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
 import axios from 'axios'
@@ -59,10 +60,11 @@ import { Cookie } from '@framework/utils/constants'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
 import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export enum BasketStage {
   CREATED = 0,
@@ -76,6 +78,7 @@ export enum BasketStage {
 
 
 const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const uiContext: any = useUI()
   const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
@@ -807,6 +810,10 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     onAddressSelect,
     onSubmit: handleAddressSubmit,
     onAddNewAddress: () => {
+      if (typeof window !== 'undefined') {
+        //debugger
+        recordAnalytics(AnalyticsEventType.ADD_SHIPPING_INFO, { cartItems: basket, })
+      }
       setPrevStep(router.query?.step)
       setEditAddressValues(undefined)
       goToStep(CheckoutStep.NEW_ADDRESS)
@@ -989,53 +996,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         router.push('/cart')
       } else {
         if (!isCheckoutStarted) {
-          const { CheckoutStarted } = EVENTS_MAP.EVENT_TYPES
-          const { Basket } = EVENTS_MAP.ENTITY_TYPES
           setCheckoutStarted(true)
-          eventDispatcher(CheckoutStarted, {
-            entity: JSON.stringify({
-              id: basket?.id,
-              basketId,
-              customerId: basket?.userId,
-              grandTotal: basket?.grandTotal?.raw?.withTax,
-              tax: basket?.grandTotal?.raw?.tax,
-              taxPercent: basket?.taxPercent,
-              shipCharge: basket?.shippingCharge?.raw?.withoutTax,
-              shipTax: basket?.shippingCharge?.raw?.tax,
-              subTotal: basket?.subTotal?.raw?.withoutTax,
-              discount: basket?.discount?.raw?.withoutTax,
-              lineitems: basket?.lineItems?.map((lineitem: any) => ({
-                id: lineitem?.id,
-                manufacturer: lineitem?.manufacturer,
-                subManufacturer: lineitem?.subManufacturer,
-                productId: lineitem?.productId,
-                stockCode: lineitem?.stockCode,
-                name: lineitem?.name,
-                discountAmt: lineitem?.discountAmt?.raw?.withoutTax || lineitem?.discount?.raw?.withoutTax || 0,
-                isSubscription: lineitem?.isSubscription,
-                itemType: lineitem?.itemType,
-                qty: lineitem?.qty,
-                price: lineitem?.price?.raw?.withoutTax,
-                tax: lineitem?.price?.raw?.tax,
-                categories: lineitem?.categoryItems?.map((category: any) => ({
-                  categoryId: category?.categoryId,
-                  categoryName: category?.categoryName,
-                  parentCategoryName: category?.parentCategoryName,
-                })),
-                img: lineitem?.img || lineitem?.image,
-                rootManufacturer: lineitem?.categoryItems?.find((category: any) => !category?.parentCategoryName)?.categoryName,
-              })) || new Array(),
-              promoCode: basket?.promotionsApplied || new Array(),
-              paidAmount: basket?.grandTotal?.raw?.withTax,
-              shippingAddress: basket?.shippingAddress,
-              billingAddress: basket?.billingAddress,
-            }),
-            promoCodes: JSON.stringify(basket?.promotionsApplied),
-            entityId: basket?.id,
-            entityName: PAGE_TYPE,
-            entityType: Basket,
-            eventType: CheckoutStarted,
-          })
+          const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems: basket, entityName: PAGE_TYPE, currentPage: "Checkout", itemIsBundleItem: false, })
         }
       }
     }

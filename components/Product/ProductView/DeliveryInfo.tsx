@@ -10,15 +10,17 @@ import ProductWarranty from '@components/Product/ProductSidebar/ProductWarranty'
 import ProductReturn from '@components/Product/ProductSidebar/ProductReturn'
 
 // Other Imports
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString } from '@components/utils/constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export const DELIVERY_FORM_ID = 'deliveryInfoForm'
 
 export default function DeliveryInfo({ product, grpData, config }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const [isWarranty, setWarranty] = useState(false)
   const [isReturn, setReturn] = useState(false)
@@ -52,20 +54,16 @@ export default function DeliveryInfo({ product, grpData, config }: any) {
     replaceInfo(grpData)
     setWarranty(true)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'policy_popup', {
-        current_page: 'PDP',
-        category: 'Warranty',
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Warranty', })
     }
   }
 
   const handleReturn = () => {
     setReturn(true)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'policy_popup', {
-        current_page: 'PDP',
-        category: 'Easy Returns & Exchange',
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.POLICY_POPUP, { currentPage: 'PDP', category: 'Easy Returns & Exchange', })
     }
   }
   const shippingSettings = config?.configSettings?.find(

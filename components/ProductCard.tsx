@@ -1,14 +1,13 @@
 "use client";
 import cn from 'classnames'
 import React, { FC, useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST } from "@components/utils/constants";
+import { NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST, SITE_ORIGIN_URL } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
@@ -19,6 +18,9 @@ import uniqBy from 'lodash/uniqBy';
 import { isMobile } from 'react-device-detect';
 import { Guid } from '@commerce/types';
 import { AlertType } from '@framework/utils/enums';
+import Router from 'next/router';
+import { AnalyticsEventType } from './services/analytics';
+import useAnalytics from './services/analytics/useAnalytics';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -38,6 +40,7 @@ export interface ProductCardProps {
 }
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
+  const { recordAnalytics } = useAnalytics()
   const { deleteWishlistItem, isInWishList: isInWishlistItem, addToWishlist: addToWishlistItem } = wishlistHandler()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
   const [quickViewData, setQuickViewData] = useState(null)
@@ -48,6 +51,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const translate = useTranslation()
   const [quantity, setQuantity] = useState(1)
   const handleQuickViewData = (data: any) => {
+    //debugger
+    const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+    recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW_CLICK, { ...product, position: 0/*pid + 1,*/, currentPage: 'PLP', header: '', })
+    recordAnalytics(AnalyticsEventType.PDP_QUICK_VIEW, { ...data, ...{ ...extras }, position: 0/*pid + 1,*/ })
     setShowModalQuickView(true);
     setQuickViewData(data)
   }

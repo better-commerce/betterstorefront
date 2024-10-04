@@ -83,7 +83,7 @@ export const matchStrings = (
   return false
 }
 
-export const tryParseJson = (json: any) => {
+export const tryParseJson = (json: any): any => {
   if (json) {
     let parsed = {}
     try {

@@ -6,13 +6,9 @@ import Link from 'next/link'
 import { XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import rangeMap from '@lib/range-map'
 import { useRouter } from 'next/router'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { useUI } from '@components/ui/context'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-//import ElasticSearchBar from './ElasticSearchBar'
-import ElasticSearch from './elastic/ElasticSearch'
 import ElasticSearchResult from './elastic/ElasticSearchResult'
 import { matchStrings } from '@framework/utils/parse-util'
 import { SearchProvider } from '@framework/utils/enums'
@@ -21,15 +17,17 @@ import { pushSearchToNavigationStack } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function Search(props: any) {
+  const { recordAnalytics } = useAnalytics()
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [path, setCurrentPath] = useState(Router.asPath)
-  const SearchEvent = EVENTS_MAP.EVENT_TYPES.Search
   const translate = useTranslation()
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
 
@@ -42,16 +40,7 @@ export default function Search(props: any) {
         })
         setProducts(response?.data?.products)
         setIsLoading(false)
-        eventDispatcher(SearchEvent, {
-          entity: JSON.stringify({
-            FreeText: inputValue,
-            ResultCount: response?.data?.products?.length || 0,
-          }),
-          entityId: inputValue,
-          entityName: inputValue,
-          entityType: SearchEntity,
-          eventType: SearchEvent,
-        })
+        recordAnalytics(AnalyticsEventType.SEARCH, { inputValue, products: response?.data?.products, entityType: SearchEntity, })
       } catch (error) {
         console.log(error)
         setIsLoading(false)

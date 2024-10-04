@@ -16,7 +16,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
@@ -31,6 +31,7 @@ export async function getServerSideProps(context: any) {
 }
 
 function ResetPasswordPage() {
+  const { recordAnalytics } = useAnalytics()
   const [isLoading, setIsLoading] = useState(true)
   const [token, setToken] = useState(null)
   const translate = useTranslation()
@@ -94,11 +95,7 @@ function ResetPasswordPage() {
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
-    entityName: PAGE_TYPES.ResetPassword,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.ResetPassword, })
 
   useEffect(() => {
     if (router?.query?.token) {

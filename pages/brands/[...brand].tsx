@@ -45,6 +45,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import Loader from '@components/Loader'
 import { removeQueryString } from '@commerce/utils/uri-util'
 import { Cookie } from '@framework/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -95,6 +96,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const qsFilters = router.asPath
@@ -102,7 +104,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const faq = useFaqData();
   const adaptedQuery = { ...query }
-  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
   let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
@@ -139,17 +140,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  useAnalytics(BrandViewed, {
-    entity: JSON.stringify({
-      id: brandDetails?.id,
-      name: brandDetails?.name || '',
-      manufName: brandDetails?.manufacturerName,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: brandDetails?.manufacturerName,
-    entityType: 'Brand',
-    eventType: 'BrandViewed',
-  })
+  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE,})
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))

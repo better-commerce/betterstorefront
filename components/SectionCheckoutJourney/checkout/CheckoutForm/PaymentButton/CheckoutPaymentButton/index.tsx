@@ -70,7 +70,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
       dispatchState
     )
     if (orderResult?.success && orderResult?.result?.id) {
-      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.CHECKOUT)
+      super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.CHECKOUT)
       uiContext?.hideOverlayLoaderState()
     } else {
       this.setState({

@@ -19,8 +19,6 @@ import { useShippingFormConfig, useShippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import PaymentWidget from '@components/SectionCheckoutJourney/checkout/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
@@ -257,9 +255,6 @@ export default function CheckoutForm({
   const { state: submitState, dispatch: submitDispatch } = useDataSubmit()
   const [countries, setCountries] = useState<any>(null)
   const { createAddress, updateAddress: updateAddressHandler } = asyncHandler()
-
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
-  const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [selectedAddress, setSelectedAddress] = useState()

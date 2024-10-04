@@ -56,3 +56,26 @@ export const triggerKeyPress = (element: any) => {
     element.dispatchEvent(new Event('input', { bubbles: true }));
   }
 }
+
+export const getBrowserName = () => {
+  let userAgent = navigator.userAgent;
+  let browserName;
+
+  if (userAgent.match(/chrome|chromium|crios/i)) {
+      browserName = "Chrome";
+  } else if (userAgent.match(/firefox|fxios/i)) {
+      browserName = "Firefox";
+  } else if (userAgent.match(/safari/i)) {
+      browserName = "Safari";
+  } else if (userAgent.match(/opr\//i)) {
+      browserName = "Opera";
+  } else if (userAgent.match(/edg/i)) {
+      browserName = "Edge";
+  } else if (userAgent.match(/msie|trident/i)) {
+      browserName = "Internet Explorer";
+  } else {
+      browserName = "Unknown";
+  }
+
+  return browserName;
+}

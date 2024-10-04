@@ -2,16 +2,25 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 //
-import { Cookie, OMNILYTICS_DISABLED } from '@framework/utils/constants'
+import { Cookie, } from '@framework/utils/constants'
 import { CUSTOM_EVENTS, EVENTS_MAP } from './constants'
-import { EmptyGuid, EmptyObject, EmptyString, OMNILYTICS_ASSETS_DATA, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, OMNILYTICS_ASSETS_DATA, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
 import setSessionIdCookie, { setGeoDataCookie } from '@components/utils/setSessionId'
 import { getItem } from '@components/utils/localStorage'
 import { detectDeviceType } from '@framework/utils'
+import { AnalyticsEventType } from '.'
+import { OMNILYTICS_EVENTS } from './events/omnilytics'
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
+/**
+ * Publisher function to send analytics events to configured analytics providers
+ * @param {any} data The payload of the event
+ * @param {string} event The type of event to be sent
+ * @returns {Promise<void>}
+ */
 const publisher = async (data: any, event: string) => {
-  if (OMNILYTICS_DISABLED) return
+  if (!featureToggle?.features?.enableOmnilytics) return
   const windowClone: any = typeof window !== 'undefined' ? window : {}
   const navigator: any = windowClone.navigator
   const windowDataLayer = windowClone.dataLayer && windowClone.dataLayer[0]
@@ -25,8 +34,8 @@ const publisher = async (data: any, event: string) => {
       window.location.search.replace(
         new RegExp(
           '^(?:.*[&\\?]' +
-            encodeURIComponent(n).replace(/[\.\+\*]/g, '\\$&') +
-            '(?:\\=([^&]*))?)?.*$',
+          encodeURIComponent(n).replace(/[\.\+\*]/g, '\\$&') +
+          '(?:\\=([^&]*))?)?.*$',
           'i'
         ),
         '$1'
@@ -127,7 +136,7 @@ const publisher = async (data: any, event: string) => {
       url: pageUrl,
     }
     const { data: analyticsData } = await axios.post(OMNILYTICS_ASSETS_DATA, { ...dataToPublish })
-    if (data?.eventType === EVENTS_MAP.EVENT_TYPES.ProductViewed) {
+    if (data?.eventType === AnalyticsEventType.PDP_VIEW) {
       window.dispatchEvent(new CustomEvent(CUSTOM_EVENTS.ProductViewed, { detail: analyticsData }))
     }
   }
@@ -212,105 +221,84 @@ export default function AnalyticsService() {
     return null
   }
 
-  const {
-    BasketItemAdded,
-    BasketItemRemoved,
-    BasketViewed,
-    BrandViewed,
-    CategoryViewed,
-    CheckoutConfirmation,
-    CheckoutStarted,
-    CmsPageViewed,
-    CollectionViewed,
-    CustomerCreated,
-    CustomerProfileViewed,
-    CustomerUpdated,
-    FacetSearch,
-    FaqViewed,
-    FreeText,
-    PageViewed,
-    ProductViewed,
-    Search,
-    PasswordProtection,
-  } = EVENTS_MAP.EVENT_TYPES
-
   const eventHandler = function (event: any) {
     const action = event.detail.action
     const payload = event.detail.payload
     console.log(action, payload)
     switch (action) {
-      case BasketItemAdded:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.ADD_TO_BASKET]:
         addToCart(payload)
         break
-      case BasketItemRemoved:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.REMOVE_FROM_CART]:
         removedFromCart(payload)
         break
 
-      case BasketViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.VIEW_BASKET]:
         basketViewed(payload)
         break
 
-      case BrandViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.ALL_BRANDS_VIEWED]:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.BRAND_VIEWED]:
         brandViewed(payload)
         break
 
-      case CategoryViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CATEGORY_VIEWED]:
         categoryViewed(payload)
         break
 
-      case CheckoutConfirmation:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PURCHASE]:
         checkoutConfirmation(payload)
         break
 
-      case CheckoutStarted:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.BEGIN_CHECKOUT]:
         checkoutStarted(payload)
         break
 
-      case CmsPageViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CMS_PAGE_VIEWED]:
         cmsPageViewed(payload)
         break
 
-      case CollectionViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.VIEW_PLP_ITEMS]:
         collectionViewed(payload)
         break
 
-      case CustomerCreated:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CUSTOMER_CREATED]:
         customerCreated(payload)
         break
 
-      case CustomerProfileViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CUSTOMER_PROFILE_VIEWED]:
         customerProfileViewed(payload)
         break
 
-      case CustomerUpdated:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CUSTOMER_UPDATED]:
         customerUpdated(payload)
         break
 
-      case FacetSearch:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.FACET_SEARCH]:
         facetSearch(payload)
         break
 
-      case FaqViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.FAQ_VIEWED]:
         faqViewed(payload)
         break
 
-      case FreeText:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.FREE_TEXT]:
         freeText(payload)
         break
 
-      case PageViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PAGE_VIEWED]:
         pageViewed(payload)
         break
 
-      case ProductViewed:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PDP_VIEW]:
         productViewed(payload)
         break
-      
-      case PasswordProtection:
+
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PASSWORD_PROTECTION]:
         passwordProtection(payload)
         break
 
-      case Search:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.SEARCH]:
         search(payload)
         break
 
@@ -319,16 +307,16 @@ export default function AnalyticsService() {
         break
     }
   }
-  Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
+  Object.keys(OMNILYTICS_EVENTS.eventTypes).forEach((eventType: string) => {
     console.log('event listener', eventType)
-    const eventTypes: any = EVENTS_MAP.EVENT_TYPES
+    const eventTypes: any = OMNILYTICS_EVENTS.eventTypes
     window.addEventListener(eventTypes[eventType], eventHandler)
   })
   return {
     removeListeners: () =>
-      Object.keys(EVENTS_MAP.EVENT_TYPES).forEach((eventType: string) => {
+      Object.keys(OMNILYTICS_EVENTS.eventTypes).forEach((eventType: string) => {
         console.log(eventType, '=======remove')
-        const eventTypes: any = EVENTS_MAP.EVENT_TYPES
+        const eventTypes: any = OMNILYTICS_EVENTS.eventTypes
         window.removeEventListener(
           eventTypes[eventType],
           eventHandler

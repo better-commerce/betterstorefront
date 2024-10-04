@@ -11,11 +11,11 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import DataPack from '@components/account/DataPack'
+import { AnalyticsEventType } from '@components/services/analytics'
 function DataPackPage() {
   const router = useRouter()
   const { changeMyAccountTab } = useUI()
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { user, isGuestUser } = useUI()
 
@@ -26,31 +26,16 @@ function DataPackPage() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer, }
 
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
 
   useEffect(()=>{
     changeMyAccountTab(translate('label.myAccount.dataPackText'))
   },[])
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
       <>

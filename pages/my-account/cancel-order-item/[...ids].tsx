@@ -1,8 +1,8 @@
 // Base Imports
 import { useEffect, useState } from 'react'
+
 // Package Imports
 import axios from 'axios'
-import Image from 'next/image'
 import { toNumber } from 'lodash'
 import Link from 'next/link'
 import Router from 'next/router'
@@ -19,7 +19,6 @@ import {
   NEXT_GET_ORDER_DETAILS,
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
@@ -31,9 +30,11 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 declare const window: any
 
 function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
@@ -105,11 +106,8 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         setAlert({ type: 'success', msg: translate('common.message.itemCancelledSuccessfullyText') })
         Router.push('/my-account/orders')
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'cancel_confirm', {
-            transaction_id: toNumber(payment?.id?.toString()),
-            user_id: user?.userId,
-            device: deviceCheck,
-          })
+          //debugger
+          recordAnalytics(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
         }
       } catch (error) {
         setCancelLineItemLoading(false)
@@ -118,11 +116,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
-    entityName: PAGE_TYPES.OrderCancel,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
-  })
+  useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderCancel, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
   useEffect(() => {
     const handleAsync = async () => {

@@ -14,6 +14,7 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import B2BQuotes from '@components/account/B2BQuotes'
 import axios from 'axios'
 import { NEXT_B2B_GET_QUOTES } from '@components/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyQuotes() {
   const [isShow, setShow] = useState(true)
@@ -21,7 +22,6 @@ function MyQuotes() {
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
 
   useEffect(() => {
@@ -38,31 +38,16 @@ function MyQuotes() {
     })
     setB2BQuotes(b2bQuotes)
   }
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer, }
 
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.quote'))
   }, [])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)
