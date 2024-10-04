@@ -12,11 +12,9 @@ import setSessionIdCookie from '@components/utils/setSessionId'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentStatus } from '@components/utils/payment-constants'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { EmptyString } from '@components/utils/constants'
-import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
@@ -36,7 +34,6 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
     setBasketId,
   } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
-  const { Order } = EVENTS_MAP.ENTITY_TYPES
 
   /**
    * Update order status.
@@ -81,8 +78,6 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       paymentResponseResult === PaymentStatus.PAID ||
       paymentResponseResult === PaymentStatus.AUTHORIZED
     ) {
-      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, { basketId, cartItems, orderInfo, entityType: Order, })
-
       Cookies.remove(Cookie.Key.SESSION_ID)
       setSessionIdCookie()
       Cookies.remove(Cookie.Key.BASKET_ID)

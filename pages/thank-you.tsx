@@ -29,6 +29,7 @@ import { PagePropType, getPagePropType } from '@framework/page-props'
 import { ContentSnippetInjector } from '@components/common/Content'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export default function OrderConfirmation({ config }: any) {
   const { recordAnalytics } = useAnalytics()
@@ -276,7 +277,7 @@ export default function OrderConfirmation({ config }: any) {
       if (typeof window !== 'undefined') {
         debugger
         const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, cartItems, orderInfo, orderData, itemIsBundleItem: false })
+        recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: cartItems?.id, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
       }
 
       setTimeout(() => {

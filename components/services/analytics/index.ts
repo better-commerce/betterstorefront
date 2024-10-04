@@ -46,7 +46,7 @@ export enum AnalyticsEventType {
     BRAND_VIEWED = 'BRAND_VIEWED',
     ALL_BRANDS_VIEWED = 'ALL_BRAND_VIEWED',
     CATEGORY_VIEWED = 'CATEGORY_VIEWED',
-    CHECKOUT_CONFIRMATION = 'CHECKOUT_CONFIRMATION',
+    //CHECKOUT_CONFIRMATION = 'CHECKOUT_CONFIRMATION',
     //Checkout_Started: 'CheckoutStarted',
     CMS_PAGE_VIEWED = 'CMS_PAGE_VIEWED',
     //Collection_Viewed: 'CollectionViewed',

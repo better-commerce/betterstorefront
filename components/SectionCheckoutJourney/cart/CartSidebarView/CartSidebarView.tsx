@@ -24,7 +24,6 @@ import Engraving from '@components/Product/Engraving'
 import Router from 'next/router'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { PAGE_TYPES } from '@components/withDataLayer'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -32,7 +31,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
-  const { Basket } = EVENTS_MAP.ENTITY_TYPES
   const [totalDiscount, setTotalDiscount] = useState(0)
   const [lastCartItemProductId, setLastCartItemProductId] = useState('')
   const [relatedProducts, setRelatedProducts] = useState<any>()
@@ -216,8 +214,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     //   setCartItems(items)
     // }
 
-    const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
-    recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...extras, cartItems, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: 'Cart', itemIsBundleItem: false,  })
+    //const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+    //recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...extras, cartItems, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: 'Cart', itemIsBundleItem: false,  })
     // handleCartitems()
     handleCartItemsLoadAsync()
 

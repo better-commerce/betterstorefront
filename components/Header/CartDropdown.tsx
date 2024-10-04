@@ -50,7 +50,7 @@ export default function CartDropdown() {
   }
 
   const openMiniBasket = (basket: any) => {
-    //viewCart(basket);
+    viewCart(basket);
     openCart();
   }
 

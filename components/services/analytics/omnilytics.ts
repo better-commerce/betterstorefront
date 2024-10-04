@@ -246,7 +246,7 @@ export default function AnalyticsService() {
         categoryViewed(payload)
         break
 
-      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.CHECKOUT_CONFIRMATION]:
+      case OMNILYTICS_EVENTS.eventTypes[AnalyticsEventType.PURCHASE]:
         checkoutConfirmation(payload)
         break
 

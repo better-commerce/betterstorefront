@@ -7,6 +7,8 @@ import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
 import { PaymentStatus } from '@components/utils/payment-constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { SITE_ORIGIN_URL } from '@components/utils/constants'
+import Router from 'next/router'
 
 /* ---------------- HOW TO ADD A NEW PAYMENT METHOD
 
@@ -69,7 +71,8 @@ export default function PaymentWidget({
       // TODO: Get order details
       const { basketId, customerId, billingAddress, discount, grandTotal, id, items, orderNo, paidAmount, payments, promotionsApplied, shippingCharge, shippingAddress, shipping, orderStatus, subTotal, taxPercent, orderDate, } = res.result
       const orderInfo = { orderResponse: { id, orderNo, customerId, discount, paidAmount, grandTotal, shipping, shippingAddress, billingAddress, promotionsApplied, payments, orderStatus, subTotal, taxPercent, orderDate, } }
-      recordAnalytics(AnalyticsEventType.CHECKOUT_CONFIRMATION, { basketId, cartItems: { lineItems: items, shippingCharge, }, orderInfo, entityType: Order, })
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, basketId, cartItems: { lineItems: items, shippingCharge, }, orderInfo, entityType: Order, })
       dispatch({ type: 'TRIGGER_COD', payload: false })
       checkoutCallback(orderModelResponse.id)
     }

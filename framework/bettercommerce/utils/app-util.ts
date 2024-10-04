@@ -108,12 +108,13 @@ export const sanitizeBase64 = (base64: string) => {
   return EmptyString
 }
 
-export const resetBasket = async (setBasketId: any, basketId: any) => {
+export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
   Cookies.remove(Cookie.Key.SESSION_ID)
   setSessionIdCookie()
   Cookies.remove(Cookie.Key.BASKET_ID)
+  const generatedBasketId = generateBasketId()
   if (setBasketId) {
-    setBasketId(basketId)
+    setBasketId(generatedBasketId)
   }
 }
 

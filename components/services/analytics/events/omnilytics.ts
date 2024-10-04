@@ -13,7 +13,7 @@ export const OMNILYTICS_EVENTS: any = {
         [AnalyticsEventType.ALL_BRANDS_VIEWED]: 'AllBrandsViewed',
         [AnalyticsEventType.BRAND_VIEWED]: 'BrandViewed',
         [AnalyticsEventType.CATEGORY_VIEWED]: 'CategoryViewed',
-        [AnalyticsEventType.CHECKOUT_CONFIRMATION]: 'CheckoutConfirmation',
+        [AnalyticsEventType.PURCHASE]: 'CheckoutConfirmation',
         [AnalyticsEventType.BEGIN_CHECKOUT]: 'CheckoutStarted', //
         [AnalyticsEventType.CMS_PAGE_VIEWED]: 'CmsPageViewed',
         [AnalyticsEventType.VIEW_PLP_ITEMS]: 'CollectionViewed',
@@ -103,7 +103,7 @@ export const OMNILYTICS_EVENTS: any = {
         /**
          * Event: Checkout Confirmation
          */
-        [AnalyticsEventType.CHECKOUT_CONFIRMATION]: {
+        [AnalyticsEventType.PURCHASE]: {
             transformMap: {
                 basketItemCount: (source: any) => source?.cartItems?.lineItems?.length,
                 basketTotal: (source: any) => source?.orderInfo?.orderResponse?.grandTotal?.raw?.withTax,
