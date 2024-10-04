@@ -1254,6 +1254,7 @@
       "authenticationFailedText": "Email Authentication failed",
       "requiredTextMsg": "Required",
       "invalidAccountMsg": "No account has been found with this email/password",
+      "invalidPostCodeMsg": "Please call us directly if you have an urgent need for delivery to this area",
       "alreadyLoggedInMsg": "You're already logged in",
       "registerSuccessMsg": "Registration Successful",
       "loginSuccessMsg": "Logged in Successfully",

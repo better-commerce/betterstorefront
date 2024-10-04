@@ -106,12 +106,7 @@ function LookbookPage({ data }: any) {
 
 LookbookPage.Layout = Layout
 
-export async function getStaticProps({
-  params,
-  locale,
-  locales,
-  preview,
-}: GetStaticPropsContext) {
+export async function getStaticProps({ params, locale, locales, preview, }: GetStaticPropsContext) {
   const lookbookData = await getLookbooks({[Cookie.Key.LANGUAGE]: locale})
 
   const cachedDataUID = {

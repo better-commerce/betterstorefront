@@ -186,11 +186,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   }
 
   const asyncBasket = async () => {
-    setOverlayLoaderState({
-      visible: true,
-      message: 'Please wait...',
-      backdropInvisible: true,
-    })
+    setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
     if (!isGuestUser) {
       const addressList = await fetchAddress()
       const basketRes: any = await getBasket(basketId)
@@ -208,11 +204,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   }
 
   const asyncGuestBasket = async () => {
-    setOverlayLoaderState({
-      visible: true,
-      message: 'Please wait...',
-      backdropInvisible: true,
-    })
+    setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
     const basketRes: any = await getBasket(basketId)
     await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
     if (basketRes?.shippingAddress?.id !== basketRes?.billingAddress?.id) {
@@ -592,9 +584,15 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           await updateCheckoutAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, }, true)
           setSelectedAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, })
         } else {
-          await updateCheckoutAddress({ shippingAddress: newAddressData, }, true)
+          // if billing addressId is different
+          if(basket?.billingAddress?.id !== basket?.shippingAddress?.id){
+            await updateCheckoutAddress({ shippingAddress: newAddressData, billingAddress: basket?.billingAddress }, true)
+            setSelectedAddress({ billingAddress: basket?.billingAddress, shippingAddress: newAddressData, })
+          } else {
+            await updateCheckoutAddress({ shippingAddress: newAddressData, }, true)
 
-          setSelectedAddress({ billingAddress: undefined, shippingAddress: newAddressData, })
+            setSelectedAddress({ billingAddress: undefined, shippingAddress: newAddressData, })
+          }
         }
       }
     }
@@ -608,19 +606,38 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       }
       goToStep(CheckoutStep.DELIVERY)
     } else {
-      goToStep(CheckoutStep.BILLING_ADDRESS)
+      // if billing address exists
+      if(basket?.billingAddress?.id && (address?.isBilling || address?.useSameForBilling)){
+        if (!isLoggedIn) {
+          setCompletedSteps((prev) => [
+            ...new Set([...prev, CheckoutStep.ADDRESS]),
+          ])
+        }
+        goToStep(CheckoutStep.DELIVERY)
+      } else {
+        goToStep(CheckoutStep.BILLING_ADDRESS)
+      }
     }
   }
 
   const updateAddressList = (newAddress: any) => {
     setAddressList((prevAddrList: any) => {
+      let shippingAddress = prevAddrList?.find((o: any) => o?.id !== newAddress?.id)
+      if (shippingAddress) {
+        shippingAddress = {
+          ...shippingAddress,
+          isBilling: false,
+          isDefaultBilling: false,
+        }
+        prevAddrList[0] = shippingAddress
+      }
       if (!prevAddrList || prevAddrList?.length < 1) {
         prevAddrList = new Array(2).fill(undefined)
       }
       const { isBilling, ...addressData } = newAddress
       if (size(addressData) > 0) {
         if (isBilling) {
-          prevAddrList[1] = addressData
+          prevAddrList[1] = {...addressData, isBilling:true }
         } else {
           prevAddrList[0] = addressData
         }
@@ -775,6 +792,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
     onLoginSuccess: handleLoginSuccess,
     onGuestCheckout: handleGuestCheckout,
+    appConfig: appConfigData,
   }
 
   const onContinueToSelectDeliveryType = () => {
@@ -811,6 +829,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
     deliveryMethods,
     currentStep,
+    appConfig: appConfigData,
   }
 
 
@@ -827,15 +846,18 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     featureToggle,
     deliveryMethods,
     basket,
+    appConfig: appConfigData,
   }
 
   const editAddressFormProps = {
     ...newAddressFormProps,
     editAddressValues,
+    setEditAddressValues,
     onEditAddressToggleView,
     shippingCountries: appConfigData?.shippingCountries,
     billingCountries: appConfigData?.billingCountries,
     featureToggle,
+    appConfig: appConfigData,
   }
 
   const deliveryTypeSelectionProps = {
@@ -850,6 +872,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     deliveryMethods,
     user,
     currentStep,
+    appConfig: appConfigData,
   }
 
   const deliveryMethodSelectionProps = {
@@ -938,6 +961,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         } else {
           setDeliveryTypeMethod(output[0])
         }
+      } else {
+        return setAlert({ type: AlertType.ERROR, msg: translate('common.message.invalidPostCodeMsg') })
       }
     } catch (error) {
       logError(error)

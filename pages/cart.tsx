@@ -487,7 +487,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         setMembership(membershipPlans)
       }
     }
-    fetchMembership()
+    if (featureToggle?.features?.enableMembership) {
+      fetchMembership()
+    }
   }, [basket, basket?.id, basket?.lineItems])
 
   useEffect(() => {

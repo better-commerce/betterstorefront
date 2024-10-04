@@ -21,6 +21,7 @@ const LoginOrGuest: React.FC<any> = ({
   setDeliveryTypeMethod,
   featureToggle,
   deliveryMethods,
+  appConfig,
 }) => {
   const GUEST_LOGIN_CHECKOUT2_SCHEMA = guestLoginCheckout2Schema();
   const translate = useTranslation()
@@ -95,6 +96,7 @@ const LoginOrGuest: React.FC<any> = ({
           featureToggle={featureToggle}
           deliveryMethods={deliveryMethods}
           billingCountries={billingCountries}
+          appConfig={appConfig}
         />
       )
     } else if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
@@ -109,6 +111,7 @@ const LoginOrGuest: React.FC<any> = ({
           onSubmit={onSubmit}
           useSameForBilling={false}
           shouldDisplayEmail={false}
+          appConfig={appConfig}
         />
       )
     } else {
@@ -266,6 +269,7 @@ const LoginOrGuest: React.FC<any> = ({
               featureToggle={featureToggle}
               deliveryMethods={deliveryMethods}
               billingCountries={billingCountries}
+              appConfig={appConfig}
             />
           )}
         </>

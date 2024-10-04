@@ -648,6 +648,29 @@ export const isB2BUser = (user: any): boolean => {
   return user?.companyId && user?.companyId !== Guid.empty
 }
 
+export const displayCTAByUserRole = (user: any, { roleId, isGuestUser }: { isGuestUser?: boolean, roleId: number }): boolean => {
+  /**
+   * Check for company user
+   */
+  if (isB2BUser(user)) {
+    // display CTA to company user, if the role matches with the given `roleId`
+    if (user?.companyUserRole === roleId) return true
+    return false
+  }
+  
+  // /**
+  //  * Check for non-company user which includes logged-in and guest user
+  //  */
+  // // display CTA to all non-company users
+  // if (typeof isGuestUser === 'undefined') return true
+  // 
+  // // display CTA to all logged-in users
+  // if (isGuestUser === false && user?.userId && user?.id !== Guid.empty) return true
+  // 
+  // return false 
+  return true
+}
+
 export const isIncludeVATInPriceDisplay = (
   isIncludeVAT: boolean,
   product: any

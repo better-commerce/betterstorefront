@@ -2,10 +2,6 @@ import { EmptyObject, REFERRAL_BY_SLUG } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 import { logError } from "@framework/utils/app-util";
 
-interface props{
-    slug?:string
-}
-
 export default function useReferralBySlug(){
     return async function handler(slug?:any, cookies = EmptyObject){
         const url = REFERRAL_BY_SLUG + `?referrerCode=${slug}`

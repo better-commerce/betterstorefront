@@ -2,10 +2,6 @@ import { EmptyObject, REFERRAL_BY_USERNAME } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 import { logError } from "@framework/utils/app-util";
 
-interface props{
-    username?:string
-}
-
 export default function useReferralByEmail(){
     return async function handler(username?:any, cookies = EmptyObject){
         const url = REFERRAL_BY_USERNAME + `?username=${username}`

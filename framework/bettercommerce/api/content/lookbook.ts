@@ -1,5 +1,6 @@
 import fetcher from '../../fetcher'
 import { EmptyObject, LOOKBOOK_ENDPOINT } from '@components/utils/constants'
+
 export default function getLookbook(cookies = EmptyObject) {
   async function getLookbookAsync() {
     try {
