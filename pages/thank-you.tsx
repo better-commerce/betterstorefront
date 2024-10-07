@@ -10,7 +10,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, SITE_ORIGIN_URL, SITE_NAME
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, SITE_ORIGIN_URL, SITE_NAME, EmptyObject
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
@@ -274,11 +274,13 @@ export default function OrderConfirmation({ config }: any) {
       setOrderData(data.order)
       
       // PURCHASE EVENT
-      if (typeof window !== 'undefined') {
-        //debugger
-        const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
-        recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: cartItems?.id, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
+      //debugger
+      let cartItems: any = Object.assign(EmptyObject, { ...orderData, id: orderData?.basketId, lineItems: orderData?.items, })
+      if (cartItems?.items) {
+        delete cartItems.items
       }
+      const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+      recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: orderData?.basketId, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
       setTimeout(() => {
         setSnippets(data?.snippets || [])

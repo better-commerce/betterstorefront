@@ -3,16 +3,30 @@
 import React, { useState, Fragment } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import dynamic from "next/dynamic";
+import useAnalytics from "@components/services/analytics/useAnalytics";
+import { getCurrentPage } from "@framework/utils/app-util";
+import { AnalyticsEventType } from "@components/services/analytics";
+import { EmptyString } from "@components/utils/constants";
 const NavMobile = dynamic(() => import('@components/shared/Navigation/NavMobile'))
 export interface MenuBarProps {
   navItems?: any;
-  featureToggle?:any
+  featureToggle?: any
+  deviceInfo?: any
 }
-const MenuBar: React.FC<MenuBarProps> = ({ navItems, featureToggle }) => {
+const MenuBar: React.FC<MenuBarProps> = ({ navItems, featureToggle, deviceInfo, }) => {
+  const { recordAnalytics } = useAnalytics()
+  const currentPage = getCurrentPage()
+  const deviceCheck = deviceInfo && deviceInfo?.isDesktop ? 'Desktop' : 'Mobile'
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleOpenMenu = () => setIsVisible(true);
-  const handleCloseMenu = () => setIsVisible(false);
+  const handleOpenMenu = () => {
+    recordAnalytics(AnalyticsEventType.HAMBURGER_MENU, { currentPage, deviceCheck, })
+    recordAnalytics(AnalyticsEventType.HAMBURGER_ICON_CLICK, { header: 'Menu', subHeader: EmptyString, subHeader2: EmptyString, currentPage, deviceCheck, })
+    setIsVisible(true)
+  }
+  const handleCloseMenu = () => {
+    setIsVisible(false)
+  }
 
   const renderContent = () => {
     return (

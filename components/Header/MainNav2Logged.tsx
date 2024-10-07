@@ -116,7 +116,7 @@ function handleWishlist() {
           <div className="container flex justify-between mx-auto mob-container">
             {isMobile &&
               <div className="flex items-center flex-1">
-                <MenuBar navItems={config} featureToggle={featureToggle} />
+                <MenuBar navItems={config} featureToggle={featureToggle} deviceInfo={deviceInfo} />
               </div>
             }
             <div className="flex items-center lg:flex-1">
