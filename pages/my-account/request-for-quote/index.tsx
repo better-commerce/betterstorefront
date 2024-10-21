@@ -24,10 +24,10 @@ function formatISODate(date: any) { return date.toISOString(); }
 // Calculate default dates
 const today = new Date();
 const fromDate = new Date(today);
-fromDate.setDate(today.getDate() - 30);
+fromDate.setDate(today.getDate() - 31);
 
 const toDate = new Date(today);
-toDate.setDate(today.getDate() + 30);
+toDate.setDate(today.getDate() + 31);
 
 function RequestQuote() {
   const { user, changeMyAccountTab, setBasketId, setAlert, openCart } = useUI()
@@ -168,7 +168,7 @@ function RequestQuote() {
                         <td className="flex flex-col gap-0 px-3 py-3 text-[13px] font-medium text-black">
                           <span> {rfq?.firstName}{' '}{rfq?.lastName}</span>
                           <span className="font-Inter font-light leading-4 text-xs text-gray-500 tracking-[2%]">
-                            {rfq?.createdBy}
+                            {rfq?.createdBy || rfq?.email}
                           </span>
                         </td>
                         <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{moment(new Date(rfq?.created)).format(DATE_FORMAT)}</td>

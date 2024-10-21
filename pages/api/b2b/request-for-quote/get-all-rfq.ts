@@ -15,7 +15,7 @@ const getAllRFQApiMiddleware = async (req: any, res: any) => {
   }
   try {
     const response = await getAllRFQ()(payload, req?.cookies)
-    res.status(200).json(response?.results)
+    res.status(200).json(response?.result?.results)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }

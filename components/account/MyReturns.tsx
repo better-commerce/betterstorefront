@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import {
-  IMG_PLACEHOLDER,
-} from '@components/utils/textVariables'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { DATE_FORMAT, NEXT_GET_RETURNS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import Link from 'next/link'
 import cartHandler from '@components/services/cart'
 import { isCartAssociated, vatIncluded } from '@framework/utils/app-util'
-import { generateUri } from '@commerce/utils/uri-util'
 import moment from 'moment'
 import Spinner from '@components/ui/Spinner' // Assuming you have a Spinner component
 
@@ -38,49 +34,6 @@ export default function MyReturns() {
     fetchReturns()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const handleAddToCart = (product: any) => {
-    const returnEligibility = product?.customAttributes?.find(
-      (x: any) => x.key == 'product.returnandexchangeeligibility'
-    )?.value
-    cartHandler()
-      .addToCart(
-        {
-          basketId,
-          productId: product.recordId,
-          qty: product.orderQty,
-          manualUnitPrice: product.price?.raw?.withTax,
-          stockCode: product.stockCode,
-          userId: user.userId,
-          isAssociated: isCartAssociated(cartItems),
-          CustomInfo5: JSON.stringify({
-            formatted: {
-              title: 'Return Eligibility',
-              data: { 'Return Eligibility': returnEligibility || null },
-            },
-          }),
-          CustomInfo5Formatted: returnEligibility || null,
-        },
-        'ADD',
-        {
-          product: {
-            name: product.name,
-            price: {
-              raw: {
-                withTax: product.price.raw.withTax,
-              },
-            },
-            stockCode: product.stockCode,
-            recordId: product.recordId,
-          },
-        }
-      )
-      .then((response: any) => {
-        setCartItems(response)
-        openCart()
-      })
-      .catch((err: any) => console.log('error', err))
-  }
 
   return (
     <>
