@@ -39,7 +39,7 @@ function ContactPage() {
 
   return (
       <>
-        <h1 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.contactPreferences.contactPreferencesText')}</h1>
+        <h1 className='text-xl font-normal sm:text-2xl dark:text-black'>{translate('label.contactPreferences.contactPreferencesText')}</h1>
         <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
           <ContactPreferences />
         </div>

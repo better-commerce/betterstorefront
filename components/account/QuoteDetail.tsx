@@ -582,7 +582,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         <div className='sm:col-span-4'>
                           <>
                             <section aria-labelledby="summary-heading" className="top-0 p-4 px-4 mt-0 bg-slate-100 rounded-2xl md:sticky sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
-                              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{translate('label.quotes.quoteSummaryText')}</h4>
+                              <h4 id="summary-heading" className="mb-4 font-semibold text-black uppercase font-xl">{translate('label.quotes.quoteSummaryText')}</h4>
                               <Disclosure defaultOpen>
                                 {({ open }) => (
                                   <>

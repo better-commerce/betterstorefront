@@ -66,7 +66,7 @@ export default function MyDetails() {
   return (
     <main className="pb-6 space-y-5 sm:space-y-12 sm:pb-10">
       <div className=''>
-        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
           Account information
         </h1>
         <p className="mt-2 text-sm font-normal text-black dark:text-black">

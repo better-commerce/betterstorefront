@@ -38,6 +38,7 @@
     "b2b": {
       "requestTradingAccountText": "Demander un compte commercial",
       "companyNameText": "Nom de l'entreprise",
+      "createRFQText": "Créer une demande de prix",
       "registeredNumberText": "Numéro enregistré",
       "phoneNumberText": "Numéro de téléphone",
       "basket": {
@@ -81,6 +82,7 @@
       "awesomeText": "Génial !",
       "basketText": "Panier",
       "addedText": "ajouté",
+      "noBasketAvailableText": "Aucun panier disponible, veuillez en créer un nouveau",
       "totalAmountText": "Montant total",
       "checkoutBtnText": "Payer",
       "multipleCodesApplyText": "Vous pouvez appliquer plusieurs codes",
@@ -393,7 +395,7 @@
         "quote": "Devis",
         "address": "Adresses",
         "invoice": "Factures",
-        "shoppingList": "Liste de courses",
+        "BuyingList": "Liste d'achat",
          "requestQuote":"Demandes de devis"
       },
       "rfq": {
@@ -1307,6 +1309,7 @@
       "messageRequiredMsg": "Le message est un champ obligatoire",
       "invalidRequestErrorMsg": "Les informations fournies sont incomplètes. Veuillez réessayer.",
       "requestCouldNotProcessErrorMsg": "Votre demande n'a pas pu être traitée. Veuillez réessayer ultérieurement.",
+      "basketCreatedSuccessfullMsg": "Panier créé avec succès. Continuez à ajouter des produits.",
       "noAddressFoundErrorMsg": "Aucune adresse trouvée pour le code postal donné",
       "addressAlreadyExistsErrorMsg": "L'adresse existe déjà",
       "userAlreadyExistsErrorMsg": "L'utilisateur existe déjà",

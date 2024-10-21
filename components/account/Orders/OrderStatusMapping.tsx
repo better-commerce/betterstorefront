@@ -1,7 +1,7 @@
 // Base Imports
 import React from "react";
 
-const OrderStatusMapping = ({ orderStatusDisplay, orderStatusRag }: any) => {
+const OrderStatusMapping = ({ orderStatusDisplay, orderStatusRag,isTabular }: any) => {
     let cssClass = "";
 
     switch(orderStatusRag){
@@ -19,7 +19,7 @@ const OrderStatusMapping = ({ orderStatusDisplay, orderStatusRag }: any) => {
     //console.log("ORDER-STATUS",orderStatus);
     return (
         <>
-            <label className={`px-4 py-3 text-sm font-semibold leading-none truncate rounded-lg ${cssClass}`}>
+            <label className={`${isTabular ? 'px-2 py-1 text-xs rounded-full':'px-4 py-3 text-sm rounded-lg'} font-semibold leading-none truncate ${cssClass}`}>
                 {orderStatusDisplay}
             </label>
         </>

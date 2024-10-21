@@ -1,14 +1,14 @@
 import { logError } from '@framework/utils/app-util'
-import fetcher from '../../fetcher'
-import { B2B_COMPANY_DETAILS, EmptyObject } from '@components/utils/constants'
+import fetcher from '../fetcher'
+import { B2B_COMPANY_DETAILS, B2B_QUOTE_NOTE, EmptyObject } from '@components/utils/constants'
 
-export default function getAllRFQ() {
+export default function sendNotes() {
   return async function handler(data: any, cookies: any = EmptyObject) {
-    const url = `${B2B_COMPANY_DETAILS}rfq/search?currentPage=${data?.currentPage}&pageSize=${data?.pageSize}`
+    const url = B2B_QUOTE_NOTE
     try {
       const response: any = await fetcher({
         url: url,
-        method: 'post',
+        method: 'put',
         data,
         cookies,
       })

@@ -26,7 +26,7 @@ export const PAGE_TYPES = {
   MyQuotes: 'my-quotes',
   MyOrders: 'my-orders',
   MyInvoices:'my-invoice',
-  ShoppingList:'shopping-list',
+  BuyingList:'buying-list',
   Login: 'login',
   SocialLogin: 'social-login',
   Register: 'register',

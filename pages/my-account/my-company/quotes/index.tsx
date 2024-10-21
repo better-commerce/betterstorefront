@@ -57,7 +57,7 @@ function MyQuotes() {
   return (
     <div className={'orders bg-white dark:bg-transparent'}>
       <div className=''>
-        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
           Quotes
         </h1>
       </div>

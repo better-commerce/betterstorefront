@@ -10,10 +10,12 @@ const getAllRFQApiMiddleware = async (req: any, res: any) => {
     email: data?.email,
     fromDate: data?.fromDate,
     toDate: data?.toDate,
+    currentPage: data?.currentPage,
+    pageSize:data?.pageSize
   }
   try {
-    const response = await getAllRFQ()(payload, data?.currentPage, data?.pageSize, req?.cookies)
-    res.status(200).json(response?.result)
+    const response = await getAllRFQ()(payload, req?.cookies)
+    res.status(200).json(response?.results)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }

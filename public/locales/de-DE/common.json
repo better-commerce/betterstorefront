@@ -38,6 +38,7 @@
     "b2b": {
       "requestTradingAccountText": "Handelskonto beantragen",
       "companyNameText": "Firmenname",
+      "createRFQText": "RFQ erstellen",
       "registeredNumberText": "Registriernummer",
       "phoneNumberText": "Telefonnummer",
       "basket": {
@@ -81,6 +82,7 @@
       "awesomeText": "Super!",
       "basketText": "Warenkorb",
       "addedText": "hinzugefügt",
+      "noBasketAvailableText": "Kein Warenkorb verfügbar, bitte erstellen Sie einen neuen",
       "totalAmountText": "Gesamtbetrag",
       "checkoutBtnText": "Zur Kasse",
       "multipleCodesApplyText": "Sie können mehrere Codes anwenden",
@@ -393,7 +395,7 @@
         "quote": "Angebote",
         "address": "Adressen",
         "invoice": "Rechnungen",
-        "shoppingList": "Einkaufsliste",
+        "BuyingList": "Einkaufsliste",
         "requestQuote":"Demandes de devis"
         
       },
@@ -1308,6 +1310,7 @@
       "messageRequiredMsg": "Die Nachricht ist ein Pflichtfeld",
       "invalidRequestErrorMsg": "Die bereitgestellten Informationen sind unvollständig. Bitte versuchen Sie es erneut.",
       "requestCouldNotProcessErrorMsg": "Ihre Anfrage konnte nicht verarbeitet werden. Bitte versuchen Sie es später erneut.",
+      "basketCreatedSuccessfullMsg": "Warenkorb erfolgreich erstellt. Fügen Sie weitere Produkte hinzu.",
       "noAddressFoundErrorMsg": "Keine Adresse für die angegebene Postleitzahl gefunden",
       "addressAlreadyExistsErrorMsg": "Adresse ist bereits vorhanden",
       "userAlreadyExistsErrorMsg": "Benutzer existiert bereits",

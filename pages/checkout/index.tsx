@@ -39,7 +39,7 @@ import axios from 'axios'
 import { AlertType, CheckoutStep } from '@framework/utils/enums'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import CheckoutLayoutV2 from '@components/Layout/CheckoutLayoutV2'
-import { logError, loqateAddress, saveUserToken } from '@framework/utils/app-util'
+import { isB2BUser, logError, loqateAddress, saveUserToken } from '@framework/utils/app-util'
 import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
 import cartHandler from '@components/services/cart'
 import {
@@ -185,20 +185,39 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     return basketResult
   }
 
+  const isQuoteBasket = useCallback((basket: any) => {
+    return user?.userId !== Guid.empty && isB2BUser(user) && basket?.id && basket?.id !== EmptyGuid && basket?.isQuote
+  }, [user])
+
   const asyncBasket = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
-    if (!isGuestUser) {
-      const addressList = await fetchAddress()
-      const basketRes: any = await getBasket(basketId)
-      await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
-      if (!featureToggle?.features?.enableCollectDeliveryOption) {
-        await checkIfDefaultShippingAndBilling(addressList, basketRes)
-      } else {
-        await checkIfCNCBasketUpdated(addressList, basketRes)
-      }
+    
+    const basketRes: any = await getBasket(basketId)
+    if (isQuoteBasket(basketRes)) {
+      let shippingAddress = basketRes?.shippingAddress
+      let billingAddress = basketRes?.billingAddress
+
+      await fetchAddress()
+      await loadDeliveryMethods(shippingAddress, basketRes?.id)
+      await updateCheckoutAddress({ shippingAddress, billingAddress }, true)
+      
       new Promise(() => {
-        goToStep(CheckoutStep.ADDRESS)
+        const step = getStepFromStage(BasketStage.SHIPPING_METHOD_SELECTED)
+        goToStep(step)
       })
+    } else {
+      if (!isGuestUser) {
+        const addressList = await fetchAddress()
+        await loadDeliveryMethods(basketRes?.shippingAddress, basketRes?.id)
+        if (!featureToggle?.features?.enableCollectDeliveryOption) {
+          await checkIfDefaultShippingAndBilling(addressList, basketRes)
+        } else {
+          await checkIfCNCBasketUpdated(addressList, basketRes)
+        }
+        new Promise(() => {
+          goToStep(CheckoutStep.ADDRESS)
+        })
+      }
     }
     hideOverlayLoaderState()
   }

@@ -50,7 +50,6 @@ function MyCompany({ deviceInfo }: any) {
   const config = useConfig();
   const [isAdmin, setIsAdmin] = useState(false)
 
-
   const optionsConfig = useMemo(() => {
     const options: any = []
     companyMenuTabs({ translate })?.forEach((opt: any) => {
@@ -95,7 +94,6 @@ function MyCompany({ deviceInfo }: any) {
     } else if (user?.companyId === Guid.empty) {
       router.push('/404')
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const userAdminCheck = (b2bUsers: any) => {
@@ -115,48 +113,14 @@ function MyCompany({ deviceInfo }: any) {
     }
     return b2bUsers
   }
-
-  const fetchB2BUserQuotes = async () => {
-    let { data: b2bQuotes } = await axios.post(NEXT_B2B_GET_QUOTES, {
-      userId: user?.userId,
-    })
-    setB2BQuotes(b2bQuotes)
-  }
-
-  function getAddress() {
-    return async (id: string) => {
-      const response = await axios.post(NEXT_ADDRESS, {
-        id,
-      })
-      return response.data
-    }
-  }
-
-  const fetchB2BAddressBook = async () => {
-    try {
-      const response: any = await getAddress()(user?.userId)
-      //   setIsLoading(false)
-      //   setData(response)
-    } catch (error) {
-      console.log(error, 'err')
-      //   failCb()
-      //   setIsLoading(false)
-    }
-  }
-  const fetchB2BInvoices = async () => {
-    //api logic
-  }
-
-  useEffect(() => {
+ useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyText'))
   }, [])
 
   useEffect(() => {
     const { tab: selectedTab } = router.query
     if (selectedTab) {
-      // if (selectedTab === CompanyTabs.COMPANYDETAIL) fetchB2BUsers()
       if (selectedTab === CompanyTabs.USER) fetchB2BUsers()
-      // if (selectedTab === CompanyTabs.ADDRESS) fetchB2BAddressBook()
     } else {
       router.replace({ query: { tab: optionsConfig[0]?.value } }, undefined, { shallow: true })
     }

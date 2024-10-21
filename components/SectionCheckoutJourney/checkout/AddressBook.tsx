@@ -84,7 +84,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
 
   const handleAddressSelection = (addressId: string) => {
     setSelectedAddressId(addressId)
-    const shippingAddress = mappedAddressList.find(
+    const shippingAddress = mappedAddressList?.find(
       (address: any) => address?.id === addressId
     )
     // if billing address exist

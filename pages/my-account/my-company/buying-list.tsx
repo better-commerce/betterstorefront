@@ -19,7 +19,7 @@ import CartDropdown from '@components/Header/CartDropdown'
 import B2BBaskets from '@components/account/B2BBasket'
 import { AnalyticsEventType } from '@components/services/analytics'
 
-function ShoppingList({ deviceInfo }: any) {
+function BuyingList({ deviceInfo }: any) {
   const [isShow, setShow] = useState(true)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder } = useUI()
@@ -59,7 +59,7 @@ function ShoppingList({ deviceInfo }: any) {
     loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(() => {
-    changeMyAccountTab(translate('label.myAccount.myCompanyMenus.shoppingList'))
+    changeMyAccountTab(translate('label.myAccount.myCompanyMenus.BuyingList'))
   }, [])
 
   useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
@@ -90,21 +90,15 @@ function ShoppingList({ deviceInfo }: any) {
   }, [b2bUsers])
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>
-      <div className=''>
-        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
-          Shopping List
-        </h1>
-      </div>
-      <div>
-        <B2BBaskets />
-      </div>
-    </div>)
+    <div className={'orders bg-white dark:bg-transparent'}>      
+      <B2BBaskets />
+    </div>
+  )
 }
 
-ShoppingList.LayoutAccount = LayoutAccount
+BuyingList.LayoutAccount = LayoutAccount
 
-const PAGE_TYPE = PAGE_TYPES.ShoppingList
+const PAGE_TYPE = PAGE_TYPES.BuyingList
 
 export async function getServerSideProps(context: any) {
   const { locale } = context
@@ -118,4 +112,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(ShoppingList), PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(withAuth(BuyingList), PAGE_TYPE, true, LayoutAccount)

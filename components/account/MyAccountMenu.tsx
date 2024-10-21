@@ -37,7 +37,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         mtext: translate('label.myAccount.myReturnsText'),
         props: 'returns',
         head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
-        href: '/my-account/MyReturns',
+        href: '/my-account/returns',
         displayOrder: 6
       },
       {
@@ -149,11 +149,11 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         },
         {
           type: 'tab',
-          text: translate('label.myAccount.myCompanyMenus.shoppingList'),
-          mtext: translate('label.myAccount.myCompanyMenus.shoppingList'),
-          props: 'shopping-list',
+          text: translate('label.myAccount.myCompanyMenus.BuyingList'),
+          mtext: translate('label.myAccount.myCompanyMenus.BuyingList'),
+          props: 'buying-list',
           head: <ShoppingBagIcon className="text-gray-500 w-7 h-7" />,
-          href: '/my-account/my-company/shopping-list',
+          href: '/my-account/my-company/buying-list',
           displayOrder: 1
         },
         {
@@ -242,7 +242,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                       shallow={true}
                       href={item.href}
                       passHref
-                      className={`block py-2 text-sm sm:text-base w-full menu-top-space flex justify-center ${item.text == myAccountActiveTab
+                      className={`py-2 text-sm sm:text-base w-full menu-top-space flex justify-center ${item.text == myAccountActiveTab
                         ? 'border-t-sky-500 border-t-2 menu-top-padding border-b  border-b-slate-200 pl-2 font-semibold dark:text-black icon-text-black'
                         : 'border-white border-t-2  text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                         }`}
@@ -256,7 +256,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                           shallow={true}
                           href={itemChild?.href}
                           passHref
-                          className={`block py-1 pl-4 mt-2 text-xs w-full flex justify-center ${itemChild.text == myAccountActiveTab
+                          className={`py-1 pl-4 mt-2 text-xs w-full flex justify-center ${itemChild.text == myAccountActiveTab
                             ? 'border-t-sky-500 border-t-2 border-b border-b-slate-200 pl-2 font-semibold dark:text-slate-200 icon-text-black'
                             : 'border-white border-t-2  text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                             }`}
@@ -272,7 +272,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                       shallow={true}
                       href={item.href}
                       passHref
-                      className="flex justify-center block w-full py-3 text-sm border-b sm:text-base border-slate-200"
+                      className="flex justify-center w-full py-3 text-sm border-b sm:text-base border-slate-200"
                     >
                       <span className="inline-block text-black sm:hidden dark:text-white">
                         {isMobile ? item?.head : item?.mtext}
@@ -291,9 +291,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           </div>
         </>
       ) : (
-
-        ///Desktop view
-        <div className="flex flex-col gap-0">
+        <div className="flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50">
           {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
             <>
               {item.text == myAccountActiveTab ? (
@@ -303,9 +301,9 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                     shallow={true}
                     href={item.href}
                     passHref
-                    className={`block py-2 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
-                      ? 'border-l-sky-500 border-l-2 border-b border-b-slate-200 pl-2 font-semibold dark:text-black icon-text-black'
-                      : 'border-white border-l-2  text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
+                    className={`block py-3 pl-2 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
+                      ? 'border-l-sky-500 border-l-2 slate-200 font-semibold dark:text-black icon-text-black'
+                      : 'border-white border-l-2 pl-2 text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                       }`}
                   >
                     {isMobile ? item?.head : item?.text}
@@ -318,8 +316,8 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                         href={itemChild?.href}
                         passHref
                         className={`block py-1 pl-4 mt-2 flex-shrink-0 text-xs ${itemChild.text == myAccountActiveTab
-                          ? 'border-l-sky-500 border-l-2 border-b border-b-slate-200 pl-2 font-semibold dark:text-slate-200 icon-text-black'
-                          : 'border-white border-l-2  text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
+                          ? 'border-l-sky-500 border-l-2 pl-2 font-semibold dark:text-slate-200 icon-text-black'
+                          : 'border-white border-l-2 pl-2 text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                           }`}
                       >
                         {isMobile ? itemChild?.head : itemChild?.text}
@@ -333,7 +331,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                     shallow={true}
                     href={item.href}
                     passHref
-                    className="flex-shrink-0 block py-3 text-sm border-b sm:text-base border-slate-200"
+                    className="flex-shrink-0 block py-3 pl-2 text-sm sm:text-base"
                   >
                     <span className="inline-block text-black sm:hidden dark:text-white">
                       {isMobile ? item?.head : item?.mtext}

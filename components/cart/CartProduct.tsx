@@ -13,10 +13,13 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
-import { deliveryDateFormat, matchStrings, stringFormat, tryParseJson} from '@framework/utils/parse-util'
+import { deliveryDateFormat, matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse-util'
 import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { useRouter } from 'next/router'
 
 export default function CartProduct({
   product,
@@ -34,6 +37,10 @@ export default function CartProduct({
   setItemClicked,
   reValidateData,
   soldOutMessage,
+  setBasketReValidate,
+  resetKitCart,
+  addToCart,
+  setQuoteViewData
 }: any) {
   const {
     addToWishlist,
@@ -52,6 +59,9 @@ export default function CartProduct({
   const [qtyClicked, setQtyClicked] = useState(false)
   const [qty, setQty] = useState(product?.qty)
   const [validQty, setValidQty] = useState(true)
+  const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
+  const router = useRouter()
+  const quoteId = router?.query?.quoteId?.[0]
   const getUserId = () => {
     return user?.userId && user?.userId != EmptyGuid
       ? user?.userId
@@ -76,6 +86,91 @@ export default function CartProduct({
     // setAlert({ type: 'success', msg: ADDED_TO_WISH })
     // openWishlist()
     openWishlistAfter()
+  }
+
+  const handleInputQuantity =  (product: any,updateQty:any) => {
+    const prevValue: number =  parseInt(product.qty); 
+    const newValue: number = parseInt(updateQty)
+  
+    let qtyChange = newValue - prevValue;
+    if (newValue <= 0) {
+      qtyChange = 0;
+    }
+  if (product && product?.length) {
+    product?.forEach((product: any) => {
+      asyncHandleItem(product,qtyChange)
+      setBasketReValidate([])
+    })
+    resetKitCart()
+  } else if (product?.productId) {
+    asyncHandleItem(product,qtyChange)
+  }
+  }
+
+  const asyncHandleItem = async (product: any,productQuantity:any) => {
+    const data: any = {
+      basketId:quoteId,
+      productId: product?.ProductId,
+      stockCode: product?.stockCode,
+      manualUnitPrice: product?.price,
+      displayOrder: product?.displayOrder || "0",
+      qty: productQuantity, 
+    };
+
+    try {
+      const updatedQuotes = await addToCart(data, 'ADD', { product });
+      setQuoteViewData(updatedQuotes)
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingProduct(null);
+    }
+  }
+
+   let maxBasketProductCount = 100
+  let debounceTimer: any = null; 
+  const handleQty =  (product: any,type = 'increase') => {
+
+    if (debounceTimer) {
+      clearTimeout(debounceTimer); 
+    }
+
+    debounceTimer = setTimeout(async () => {
+      setLoadingProduct(product.ProductId); 
+        let currentQty = product?.qty || 0;
+        if (type === 'increase') {
+          if (currentQty < maxBasketProductCount) {
+            currentQty = 1; 
+          } else {
+            setAlert({
+              type: 'error',
+              msg: stringFormat(translate('common.message.basket.maxBasketProductCountErrorMsg'), {
+                maxBasketProductCount,
+              }),
+            });
+            setLoadingProduct(null);
+            return;
+          }
+        }
+
+        if (type === 'decrease') {
+          if (currentQty > 1) {
+            currentQty = - 1; 
+          } else {
+            currentQty = 0;
+          }
+        }
+
+     if (product && product?.length) {
+        product?.forEach((product: any) => {
+          asyncHandleItem(product,currentQty)
+          setBasketReValidate([])
+        })
+        resetKitCart()
+      } else if (product?.productId) {
+        asyncHandleItem(product,currentQty)
+      }
+    }, 200);
   }
 
   const handleWishList = async (product: any | Array<any>) => {
@@ -118,18 +213,18 @@ export default function CartProduct({
     }
   }
 
-  const fetchAddonsProduct = async () =>{
-    const { data: relatedProducts } = await axios.get(NEXT_GET_ADDON_PRODUCTS, {
-      params: { productId: product?.productId || product?.recordId },
-    })
-    if(relatedProducts){
-      setAddonProducts(relatedProducts)
-    }
-  }
+  // const fetchAddonsProduct = async () =>{
+  //   const { data: relatedProducts } = await axios.get(NEXT_GET_ADDON_PRODUCTS, {
+  //     params: { productId: product?.productId || product?.recordId },
+  //   })
+  //   if(relatedProducts){
+  //     setAddonProducts(relatedProducts)
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchAddonsProduct()
-  }, [])
+  // useEffect(() => {
+  //   fetchAddonsProduct()
+  // }, [])
 
   const EtaDate = new Date()
   EtaDate.setDate(EtaDate.getDate() + slaDate)
@@ -162,11 +257,11 @@ export default function CartProduct({
     setQty(qty)
   }
 
-  function handleSubmitQty(e: any, quant:any) {
+  function handleSubmitQty(e: any, quant: any) {
     if (e?.target?.value > 0 || quant) {
       e?.preventDefault();
       const isValid = cartItemsValidateAddToCart(
-        cartItems, 
+        cartItems,
         maxBasketItemsCount,
         quant ? quant - product?.qty : qty - product?.qty,
       )
@@ -183,7 +278,7 @@ export default function CartProduct({
         })
       }
     }
-    else{
+    else {
       setQty(product?.qty)
       setValidQty(false)
       setAlert({
@@ -195,34 +290,18 @@ export default function CartProduct({
 
   return (
     <Fragment key={product?.id}>
-      <div
-        className="grid items-start grid-cols-12 gap-2 p-4 mb-2 bg-white rounded-sm border-gray-light group hover:border-gray-200 hover:bg-gray-50 sm:mb-2"
-        key={`cart-items-${product?.id}`}
-      >
+      <div className="grid items-start grid-cols-12 gap-2 p-4 mb-2 bg-white rounded-sm border-gray-light group hover:border-gray-200 hover:bg-gray-50 sm:mb-2" key={`cart-items-${product?.id}`} >
         <div className="flex items-center justify-center col-span-2">
-          <img
-            style={css}
-            width={140}
-            height={180}
-            src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER}
-            alt={product.name ||"product-image"}
-            className="object-cover object-center \w-16 rounded-lg sm:\w-28 image"
-          />
+          <img style={css} width={140} height={180} src={generateUri(product?.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product?.name || "product-image"} className="object-cover object-center \w-16 rounded-lg sm:\w-28 image" />
         </div>
         <div className="flex flex-col col-span-10 sm:col-span-7">
           {isMobile && (
             <div className="flex justify-between">
               <div className="mt-0 font-semibold text-green font-14 font-Inter">
-                {isIncludeVAT
-                  ? product.price?.formatted?.withTax
-                  : product.price?.formatted?.withoutTax}
-                {product.listPrice?.raw.withTax > 0 &&
-                  product.listPrice?.raw.withTax >
-                  product.price?.raw?.withTax && (
+                {isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax}
+                {product.listPrice?.raw.withTax > 0 && product.listPrice?.raw.withTax > product.price?.raw?.withTax && (
                   <span className="px-2 text-sm text-gray-400 line-through">
-                    {isIncludeVAT
-                      ? product.listPrice.formatted?.withTax
-                      : product.listPrice.formatted?.withoutTax}
+                    {isIncludeVAT ? product.listPrice.formatted?.withTax : product.listPrice.formatted?.withoutTax}
                   </span>
                 )}
               </div>
@@ -249,10 +328,7 @@ export default function CartProduct({
           )}
           <div className="flex-1">
             {product?.variantProducts?.length > 0 ? (
-              <div
-                role="button"
-                onClick={handleToggleOpenSizeChangeModal.bind(null, product)}
-              >
+              <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} >
                 <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
                   <div className="mr-1 text-sm text-gray-700">
                     Size:{' '}
@@ -291,12 +367,12 @@ export default function CartProduct({
 
               {product.listPrice?.raw.withTax > 0 &&
                 product.listPrice?.raw.withTax > product.price?.raw?.withTax && (
-                <span className="px-0 text-sm font-normal text-gray-400 line-through">
-                  {isIncludeVAT
-                    ? product.listPrice.formatted?.withTax
-                    : product.listPrice.formatted?.withoutTax}
-                </span>
-              )}
+                  <span className="px-0 text-sm font-normal text-gray-400 line-through">
+                    {isIncludeVAT
+                      ? product.listPrice.formatted?.withTax
+                      : product.listPrice.formatted?.withoutTax}
+                  </span>
+                )}
             </div>
             <div className="items-end text-xs font-light text-left text-gray-400 sm:text-right">
               {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')}
@@ -336,7 +412,7 @@ export default function CartProduct({
         <div className="grid items-center grid-cols-1 col-span-12 gap-2 sm:justify-between sm:grid-cols-12">
           <div className="sm:col-span-2">
             {reValidateData?.message != null && soldOutMessage != '' && (
-               matchStrings(soldOutMessage, "sold out", true) ? (
+              matchStrings(soldOutMessage, "sold out", true) ? (
                 <div className="flex flex-col">
                   <>
                     <div className="flex items-center text-xs font-semibold text-left text-red-500">
@@ -380,28 +456,11 @@ export default function CartProduct({
           <div className="grid w-full gap-2 sm:flex sm:justify-end sm:col-span-5">
             <div className="grid grid-cols-3 gap-2 sm:flex sm:justify-end">
 
-              {/* dropdown box start */}
-              <div className="relative custom-select">
-                {(!qtyClicked || !validQty) && <span className='absolute p-1 bg-white top-1 left-4 dark:text-black'>{product?.qty}</span>}
-                <select
-                  onChange={(e: any) => {
-                    setQtyClicked(true)
-                    handleSubmitQty(null, e?.target?.value);
-                    // handleItem(product, 'select', e.target.value)
-                  }}
-                  className="h-10 px-4 py-2 col-span-1 sm:w-20 w-full dark:bg-white text-brand-blue border-[1px] border-brand-blue rounded-[5px] dark:text-black"
-                  value={product?.qty}
-                >
-                  {Array.from(Array(MAX_ADD_TO_CART_LIMIT).keys())
-                    .map((x) => ({ id: x + 1, value: x + 1 }))
-                    .map((quant: any) => (
-                      <option className='dark:text-black'
-                        //selected={quant.value === product?.qty}
-                        value={quant.value}
-                        key={quant.id}
-                      > {quant.value}</option>
-                    ))}
-                </select>
+              {/* input box start */}
+              <div className="flex flex-row items-center px-4 text-gray-900 border">
+                <MinusIcon onClick={() => handleQty(product, 'decrease')} className="w-4 text-gray-400 cursor-pointer hover:text-black" />
+                {loadingProduct === product?.ProductId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={product} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}
+                <PlusIcon className="w-4 text-gray-400 cursor-pointer hover:text-black" onClick={() => handleQty(product, 'increase')} />
               </div>
               {isMobile ? null : (
                 <button
@@ -415,7 +474,7 @@ export default function CartProduct({
                       <LoadingDots />
                     </i>
                   ) : (
-                    <HeartIcon className='w-6 h-6'/>
+                    <HeartIcon className='w-6 h-6' />
                   )}
                 </button>
               )}
@@ -431,7 +490,7 @@ export default function CartProduct({
                 {isMobile ? (
                   <>{translate('common.label.removeText')}</>
                 ) : (
-                 <TrashIcon className='w-6 h-6'/>
+                  <TrashIcon className='w-6 h-6' />
                 )}
               </button>
             </div>

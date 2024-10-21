@@ -68,9 +68,9 @@ const MembershipBanner = ({ user }: any) => {
     switch (membershipName) {
       case MembershipType.SILVER:
         return 'back-silver'
-        case MembershipType.GOLD:
+      case MembershipType.GOLD:
         return 'back-golden'
-        case MembershipType.PLATINUM:
+      case MembershipType.PLATINUM:
         return 'back-platinum'
       default:
         return 'gray-500'
@@ -90,19 +90,21 @@ const MembershipBanner = ({ user }: any) => {
 
   if (!user?.hasMembership) {
     return <>
-      <div className='container w-full mx-auto mt-14 sm:mt-20 sm:mb-0 theme-account-container header-space'>
-        <h2 className="text-3xl font-semibold xl:text-4xl dark:text-black">{translate('common.label.accountText')}</h2>
-        <span className="block mt-2 text-base text-neutral-500 dark:text-neutral-400 sm:text-lg">
-          <span className="font-semibold text-slate-900 dark:text-slate-900"> {user?.firstName}, </span>{" "} {user?.email}
-        </span>
-        <hr className="hidden sm:mt-6 border-slate-200 dark:border-slate-200 sm:block"></hr>
+      <div className='container w-full mx-auto mt-0 sm:mt-0 sm:mb-0 theme-account-container header-space'>
+        <div className='flex items-baseline justify-between gap-4'>
+          <h2 className="text-3xl font-semibold xl:text-4xl dark:text-black">{translate('common.label.accountText')}</h2>
+          <span className="block mt-1 text-base text-neutral-500 dark:text-neutral-400 sm:text-sm">
+            <span className="font-semibold text-black dark:text-black">{user?.firstName} </span>{" |"} {user?.email}
+          </span>
+        </div>
+        <hr className="hidden sm:mt-3 border-slate-200 dark:border-slate-200 sm:block"></hr>
       </div>
     </>
   }
 
   return (
     <>
-      <div className={`${getBackgroundColor(membership?.membershipName)} p-5 header-space sm:mt-14 mt-10`}>
+      <div className={`${getBackgroundColor(membership?.membershipName)} p-5 header-space sm:mt-1 mt-0`}>
         <div className="container flex">
           <div className="w-2/4">
             <h2
@@ -114,7 +116,7 @@ const MembershipBanner = ({ user }: any) => {
               <div className="flex">
                 <Link href="/my-membership">
                   <span className={`${membershipColor} text-lg mt-2`} >
-                  {translate('label.membership.seeText')} {membership?.membershipName} {translate('label.membership.benefitsText')}{' '}
+                    {translate('label.membership.seeText')} {membership?.membershipName} {translate('label.membership.benefitsText')}{' '}
                     <ChevronDownIcon className="inline w-4 h-4 transform -rotate-90" aria-hidden="true" />
                   </span>
                 </Link>
@@ -124,7 +126,7 @@ const MembershipBanner = ({ user }: any) => {
           <div className="flex w-2/4 mt-5 gap-x-5">
             <div>
               <p className={`font-bold ${membershipColor} text-xs`} >
-              {translate('label.membership.membershipNoText')}
+                {translate('label.membership.membershipNoText')}
               </p>
               <p className={`${membershipColor}`} >
                 {membership?.membershipNo}
@@ -132,7 +134,7 @@ const MembershipBanner = ({ user }: any) => {
             </div>
             <div>
               <p className={`font-bold ${membershipColor} text-xs`} >
-              {translate('label.membership.balanceVoucherText')}
+                {translate('label.membership.balanceVoucherText')}
               </p>
               <p
                 className={`${membershipColor} ml-1`}

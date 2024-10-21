@@ -159,8 +159,8 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
     }, 50)
   }
   const isDemo = stringToBoolean(router?.query?.demo as string)
-  const isDemoStoreCode = stringToBoolean(router?.query?.storecode ? '1': '0')
-  const isInteractiveDemo = !isDemo? isDemoStoreCode : isDemo
+  const isDemoStoreCode = stringToBoolean(router?.query?.storecode ? '1' : '0')
+  const isInteractiveDemo = !isDemo ? isDemoStoreCode : isDemo
 
   return (
     <>
@@ -183,7 +183,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
-        <div className={`text-base sm:pt-24 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
+        <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           <>
@@ -201,12 +201,10 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
             <MembershipBanner user={user} />
             <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-32">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-                <div className='sticky z-10 top-7 sm:top-12 sm:border-r sm:col-span-3 border-slate-200'>
+                <div className='sticky z-10 top-7 sm:top-12 sm:col-span-3'>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
-                <div className='pt-0 sm:col-span-9 sm:pt-8 z-1'>
-                  {children}
-                </div>
+                <div className='pt-0 sm:col-span-9 sm:pt-5 z-1'> {children} </div>
               </div>
             </section>
           </>

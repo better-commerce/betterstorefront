@@ -183,7 +183,7 @@ const LayoutAccountWithoutNav: FC<Props & IExtraProps> = ({ children, config, pa
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
-        <div className={`text-base lg:pt-10 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
+        <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           <>
@@ -201,7 +201,7 @@ const LayoutAccountWithoutNav: FC<Props & IExtraProps> = ({ children, config, pa
             <MembershipBanner user={user} />
             <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-32">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-               <div className='pt-0 sm:col-span-12 sm:pt-2 z-1'>
+               <div className='pt-0 sm:col-span-12 sm:pt-0 z-1'>
                   {children}
                 </div>
               </div>

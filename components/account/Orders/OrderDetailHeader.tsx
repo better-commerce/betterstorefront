@@ -17,7 +17,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
     <>
       <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
         <li className='flex items-center text-10-mob sm:text-sm'>
-          <Link href="/my-account/orders" passHref>
+          <Link href={`${isB2B ? '/my-account/my-company/orders':'/my-account/orders'}`} passHref>
             <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" >Orders</span>
           </Link>
         </li>
@@ -33,7 +33,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
         </li>
       </ol>
       <div className='mb-4'>
-        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
           {details?.orderNo && "Order #" + details?.orderNo}
         </h1>
       </div>

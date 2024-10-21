@@ -67,8 +67,7 @@ function OrdersListView({
                                 )
                                 return (
                                   <>
-                                    {order?.orderDetails?.order?.deliveryPlans
-                                      ?.length > 0 ? (
+                                    {order?.orderDetails?.order?.deliveryPlans ?.length > 0 ? (
                                       <>
                                         {order?.orderDetails?.order?.deliveryPlans.map(
                                           (item: any, idx: number) => (

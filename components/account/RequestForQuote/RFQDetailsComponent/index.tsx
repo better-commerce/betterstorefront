@@ -58,13 +58,13 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                 </li>
                 <li className="flex items-center text-10-mob sm:text-sm" >
                     <span className={`font-semibold hover:text-gray-900 capitalize dark:text-black`} >
-                        {rfqData?.rfqNumber}
+                        {rfqData?.rfqNumber ? rfqData?.rfqNumber : 'RFQ Detail'}
                     </span>
                 </li>
             </ol>
             <div className='mb-4'>
-                <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
-                    {rfqData?.rfqNumber && "RFQ #" + rfqData?.rfqNumber}
+                <h1 className="flex items-center gap-1 text-xl font-normal sm:text-2xl justify-normal dark:text-black">
+                    {rfqData?.rfqNumber ? rfqData?.rfqNumber : 'RFQ Detail'} <Link className='text-sm font-semibold text-sky-500' href={`/my-account/my-company/quotes/${rfqData?.quoteBasketId}`}>({`Quote #: ${rfqData?.quoteNumber}`})</Link>
                 </h1>
             </div>
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
@@ -126,25 +126,25 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="flex flex-col w-full my-4">
                 <h4 className="font-bold text-18 text-secondary-full-opacity ">{translate('label.myAccount.rfq.lineItems')}</h4>
-                <div className="overflow-hidden border my-7 rounded-2xl border-slate-200">
-                    <table className="min-w-full text-left">
-                        <thead>
-                            <tr className="bg-slate-50">
-                                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200 ">{translate('label.myAccount.rfq.stockCode')}</th>
-                                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.productName')}</th>
-                                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.quantity')}</th>
-                                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.price')}</th>
-                                <th className="px-2 py-3 text-sm font-semibold text-left border border-slate-200">{translate('label.myAccount.rfq.targetPrice')}</th>
+                <div className="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-300">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="py-3 pl-3 pr-3 text-[13px] font-semibold text-left text-gray-900 sm:pl-4 ">{translate('label.myAccount.rfq.stockCode')}</th>
+                                <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.productName')}</th>
+                                <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.quantity')}</th>
+                                <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.price')}</th>
+                                <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.targetPrice')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-white divide-y divide-gray-200">
                             {rfqData?.lines?.map?.((item: any, index: any) => (
-                                <tr key={index} className="text-xs bg-white border-b shadow-none border-slate-200 hover:shadow hover:bg-gray-100">
-                                    <td className="p-2 text-sm text-left">{item?.stockCode}</td>
-                                    <td className="p-2 text-sm text-left">{item?.productName}</td>
-                                    <td className="p-2 text-sm text-left">{item?.qty}</td>
-                                    <td className="p-2 text-sm text-left">{item?.price ? `${item?.price.toFixed(2)}` : translate('label.myAccount.rfq.notAvailable')}</td>
-                                    <td className="p-2 text-sm text-left">{item?.targetPrice ? `${item?.targetPrice.toFixed(2)}` : translate('label.myAccount.rfq.notAvailable')}</td>
+                                <tr key={index}  className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
+                                    <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.stockCode}</td>
+                                    <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.productName}</td>
+                                    <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.qty}</td>
+                                    <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.price ? `${item?.price?.formatted?.withTax}` : translate('label.myAccount.rfq.notAvailable')}</td>
+                                    <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.targetPrice ? `${item?.targetPrice.formatted?.withTax}` : translate('label.myAccount.rfq.notAvailable')}</td>
                                 </tr>
                             ))}
                         </tbody>

@@ -38,6 +38,7 @@
     "b2b": {
       "requestTradingAccountText": "Solicitar cuenta comercial",
       "companyNameText": "Nombre de la empresa",
+      "createRFQText": "Crear solicitud de cotización",
       "registeredNumberText": "Número de registro",
       "phoneNumberText": "Número de teléfono",
       "basket": {
@@ -81,6 +82,7 @@
       "awesomeText": "¡Genial!",
       "basketText": "Carrito",
       "addedText": "agregado",
+      "noBasketAvailableText": "No hay cesta disponible, por favor crea una nueva",
       "totalAmountText": "Cantidad total",
       "checkoutBtnText": "Pagar",
       "multipleCodesApplyText": "Puede aplicar varios códigos",
@@ -393,7 +395,7 @@
         "quote": "Cotizaciones",
         "address": "Direcciones",
         "invoice": "Facturas",
-        "shoppingList": "Lista de compras",
+        "BuyingList": "Lista de compras",
         "requestQuote":"Solicitudes de cotización"
       },
       "rfq": {
@@ -1308,6 +1310,7 @@
       "messageRequiredMsg": "El mensaje es un campo obligatorio",
       "invalidRequestErrorMsg": "La información proporcionada está incompleta. Por favor, inténtalo de nuevo.",
       "requestCouldNotProcessErrorMsg": "Tu solicitud no pudo ser procesada. Por favor, inténtalo de nuevo más tarde.",
+      "basketCreatedSuccessfullMsg": "Cesta creada con éxito. Continuar agregando productos.",
       "noAddressFoundErrorMsg": "No se encontró ninguna dirección para el código postal dado",
       "addressAlreadyExistsErrorMsg": "La dirección ya existe",
       "userAlreadyExistsErrorMsg": "El usuario ya existe",

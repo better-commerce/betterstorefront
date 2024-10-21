@@ -29,6 +29,7 @@ export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERS
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
 export const B2B_COMPANY_USERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
+export const B2B_QUOTE_NOTE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/quote/note/`
 export const B2B_USER_QUOTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const B2B_COMPANY_DETAILS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const B2B_TRANSFER_BASKET = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/transfer`
@@ -94,6 +95,7 @@ export const NEXT_ADD_TO_CART = `/api/add-item-cart`
 export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
 export const NEXT_GET_ORDER_DETAILS = '/api/customer/order-details'
+export const NEXT_GET_RETURN_DETAILS = '/api/customer/return-details'
 export const NEXT_GET_CART = `/api/get-cart`
 export const NEXT_GET_CART_COUNT = `/api/get-cart-count`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
@@ -200,6 +202,7 @@ export const NEXT_GET_SUBJECTS = '/api/subjects'
 // Request Quote
 export const NEXT_SAVE_RFQ = '/api/b2b/request-for-quote/save-rfq'
 export const NEXT_GET_ALL_RFQ = '/api/b2b/request-for-quote/get-all-rfq'
+export const NEXT_PUT_NOTES = '/api/b2b/send-notes'
 export const NEXT_GET_DETAILS_RFQ = '/api/b2b/request-for-quote/get-details'
 export const NEXT_UPDATE_STATUS_RFQ = '/api/b2b/request-for-quote/status-update'
 
@@ -609,7 +612,7 @@ export enum CheckoutStepType {
   REVIEW_AND_PLACE_ORDER_PAYMENT_SECTION = 51, // Ordinal introduced for fix for scroll issue on checkout page.
   BILLING_DELIVERY_DETAILS = 6,
 }
-
+export const UPDATE_BASKET_DEBOUNCE_TIMEOUT = 2500
 export enum LoadingActionType {
   NONE = 0,
   REMOVE_ITEM = 1,

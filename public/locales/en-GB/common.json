@@ -38,6 +38,7 @@
     "b2b": {
       "requestTradingAccountText": "Request trading account",
       "companyNameText": "Company Name",
+      "createRFQText":"Create RFQ",
       "registeredNumberText": "Registered Number",
       "phoneNumberText": "Phone Number",
       "basket": {
@@ -81,6 +82,7 @@
       "awesomeText": "Awesome!",
       "basketText": "Basket",
       "addedText": "added",
+      "noBasketAvailableText":"No basket available, please create new one",
       "totalAmountText": "Total amount",
       "checkoutBtnText": "Checkout",
       "multipleCodesApplyText": "You may apply mutliple codes",
@@ -393,7 +395,7 @@
         "quote": "Quotes",
         "address": "Addresses",
         "invoice": "Invoice",
-        "shoppingList": "Shopping List",
+        "BuyingList": "Buying List",
         "requestQuote":"Requests For Quote"
       },
       "rfq":{
@@ -454,6 +456,7 @@
         "companyNameRequired": "Company Name is required",
         "roleRequired": "Role is required",
         "poNumberRequired": "PO Number is required",
+        "validUntilRequired":"ETA is required",
         "ETA": "ETA",
         "assignedToRequired": "Assigned To is required",
         "productRequired": "At least one product is required"
@@ -1308,6 +1311,7 @@
       "messageRequiredMsg": "Message is a required field",
       "invalidRequestErrorMsg": "The information provided is incomplete. Please try again.",
       "requestCouldNotProcessErrorMsg": "Your request could not be processed. Please try again after sometime.",
+      "basketCreatedSuccessfullMsg":"Basket Created Successfully. Continue to add products.",
       "noAddressFoundErrorMsg": "No address found for the given postcode",
       "addressAlreadyExistsErrorMsg": "Address already exists",
       "userAlreadyExistsErrorMsg": "User already exists",
@@ -1336,6 +1340,7 @@
       "basket": {
         "emptyCartErrorMsg": "Your cart is empty",
         "maxBasketItemsCountErrorMsg": "Max allowed quantity is {maxBasketItemsCount}.",
+        "maxBasketProductCountErrorMsg": "Max allowed quantity is {maxBasketProductCount}.",
         "basketValidationErrorMsg": "Basket validation failed"
       },
       "checkout": {

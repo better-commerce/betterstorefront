@@ -279,9 +279,9 @@
         },
         {
           "group": "B2B",
-          "urlCode": "shopping-list",
-          "name": "Shopping List",
-          "url": "https://fashion.bettercommerce.tech/my-account/my-company/shopping-list",
+          "urlCode": "buying-list",
+          "name": "Buying List",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company/buying-list",
           "displayOrder": 47,
           "active": 1
         },

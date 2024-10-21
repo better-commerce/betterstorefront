@@ -6,12 +6,10 @@ export const useSaveFormValidationSchema : () => any = () => {
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required(translate('label.myAccount.rfq.firstNameRequired')),
-    lastName: Yup.string().required(translate('label.myAccount.rfq.lastNameRequired')),
-    userName: Yup.string().required(translate('label.myAccount.rfq.userNameRequired')),
+    lastName: Yup.string().required(translate('label.myAccount.rfq.lastNameRequired')),    
     email: Yup.string().email(translate('label.myAccount.rfq.emailInvalid')).required(translate('label.myAccount.rfq.emailRequired')),
     phoneNumber: Yup.string().required(translate('label.myAccount.rfq.phoneNumberRequired')),
-    companyName: Yup.string().required(translate('label.myAccount.rfq.companyNameRequired')),
-    role: Yup.string().required(translate('label.myAccount.rfq.roleRequired')),
+    companyName: Yup.string().required(translate('label.myAccount.rfq.companyNameRequired')),    
     poNumber: Yup.string().required(translate('label.myAccount.rfq.poNumberRequired')),
     validUntil: Yup.date().required(translate('label.myAccount.rfq.validUntilRequired')),
     assignedTo: Yup.string().required(translate('label.myAccount.rfq.assignedToRequired')),

@@ -1,10 +1,9 @@
-import { useTranslation } from "@commerce/utils/use-translation";
+import { useTranslation } from '@commerce/utils/use-translation'
 
 export const useSaveFormConfig = () => {
+  const translate = useTranslation()
 
-  const translate = useTranslation();
-
-  const formConfig : any = {
+  const formConfig: any = {
     fields: {
       firstName: {
         label: translate('label.myAccount.rfq.firstName'),
@@ -18,35 +17,26 @@ export const useSaveFormConfig = () => {
         type: 'text',
         required: true,
       },
-      userName: {
-        label: translate('label.myAccount.rfq.userName'),
-        placeholder: translate('label.myAccount.rfq.userName'),
-        type: 'text',
-        required: true,
-      },
       email: {
         label: translate('label.myAccount.rfq.email'),
         placeholder: translate('label.myAccount.rfq.email'),
         type: 'email',
-        required: true,
-      },
-      phoneNumber: {
-        label: translate('label.myAccount.rfq.phoneNumber'),
-        placeholder: translate('label.myAccount.rfq.phoneNumber'),
-        type: 'tel',
-        required: true,
+        required: false,
+        readOnly: true,
       },
       companyName: {
         label: translate('label.myAccount.rfq.companyName'),
         placeholder: translate('label.myAccount.rfq.companyName'),
         type: 'text',
-        required: true,
+        required: false,
+        readOnly: true,
       },
-      role: {
-        label: translate('label.myAccount.rfq.role'),
-        placeholder: translate('label.myAccount.rfq.role'),
-        type: 'text',
-        required: true,
+      phoneNumber: {
+        label: translate('label.myAccount.rfq.phoneNumber'),
+        placeholder: translate('label.myAccount.rfq.phoneNumber'),
+        type: 'tel',
+        required: false,
+        readOnly: true,
       },
       poNumber: {
         label: translate('label.myAccount.rfq.poNumber'),
@@ -61,9 +51,9 @@ export const useSaveFormConfig = () => {
       },
       assignedTo: {
         label: translate('label.myAccount.rfq.assignedTo'),
-        type: 'select',
-        options: [], 
+        type: 'text',
         required: true,
+        readOnly: true,
       },
       notes: {
         label: translate('label.myAccount.rfq.notes'),
@@ -81,8 +71,8 @@ export const useSaveFormConfig = () => {
         price: translate('label.myAccount.rfq.price'),
         targetPrice: translate('label.myAccount.rfq.targetPrice'),
       },
-      initialValues: []
+      initialValues: [],
     },
-  };
+  }
   return formConfig
-};
+}

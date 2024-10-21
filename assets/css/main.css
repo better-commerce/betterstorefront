@@ -1013,6 +1013,7 @@ body {
 .label-confirmed {
   background: rgba(0, 137, 14, 0.12);
   border-radius: 2px;
+  border: 1px solid #00890e;
   color: #00890e;
   line-height: 1;
 }
@@ -1020,6 +1021,7 @@ body {
 .label-Cancelled {
   background: rgba(193, 0, 0, 0.12);
   border-radius: 2px;
+  border: 1px solid #e00000;
   color: #e00000;
   line-height: 1;
 }
@@ -1027,6 +1029,7 @@ body {
 .label-pending {
   background: rgba(255, 152, 0, 0.12);
   border-radius: 2px;
+  border: 1px solid #ff9800;
   color: #ff9800;
   line-height: 1;
 }
@@ -1035,6 +1038,7 @@ body {
 .label-blue {
   background: rgba(0, 34, 255, 0.12);
   border-radius: 2px;
+  border: 1px solid #0077ff;
   color: #0077ff;
   line-height: 1;
 }
@@ -17258,7 +17262,7 @@ input[type=time]::-webkit-calendar-picker-indicator {
 .terms-text li > a {
   color: blue;
 }
-.terms-text td, th {
+.terms-text td, .terms-text th {
   border: 1px solid;
   padding: 5px;
 }
@@ -17471,7 +17475,7 @@ body:has(.px-4.pt-16.pb-24.bg-white.sm\:px-6.sm\:pt-24.lg\:px-8.lg\:py-32) {
   }
 }
 .header-space{
-  padding-top: 1.5rem !important;
+  padding-top: 1rem !important;
 }
 body:has(.engage-announcement-bar){
   .header-space {
@@ -17871,4 +17875,67 @@ line-height: 0 !important;
 @media screen and (max-width: 767px) {
   .menu-data {
     width: 400px !important  }
+}
+.border-l-sky-500 {
+    --tw-border-opacity: 1;
+    border-left-color: rgb(14 165 233 / var(--tw-border-opacity)) !important;
+}
+.loading-dots {
+  display: inline-block;
+  font-size: 20px;
+}
+
+.loading-dots .dot {
+  animation: blink 1.4s infinite both;
+}
+
+.loading-dots .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 20%, 50%, 80%, 100% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.3;
+  }
+  60% {
+    opacity: 0.5;
+  }
+}
+.max-line-panel{
+  max-height: 70vh;
+  min-height: 70vh;
+  overflow-y: auto;
+}
+
+.max-line-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.max-line-panel::-webkit-scrollbar-track {
+  background: #fff;
+  opacity: 1;
+}
+
+.max-line-panel::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 6px;
+  border-radius: 6px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

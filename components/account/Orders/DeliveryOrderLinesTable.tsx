@@ -5,7 +5,7 @@ import OrderStatusMapping from "./OrderStatusMapping";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
+const DeliveryOrderLinesTable = ({ order, item, idx, trackPackage, groups }: any) => {
    const translate = useTranslation()
    let totalQty = 0;
    item?.items?.forEach((x: any) => { totalQty = totalQty + x.qty; });
@@ -87,5 +87,5 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
    )
 }
 
-export default DeliveryOrderLines;
+export default DeliveryOrderLinesTable;
 
