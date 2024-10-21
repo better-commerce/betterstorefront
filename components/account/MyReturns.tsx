@@ -111,7 +111,7 @@ export default function MyReturns() {
                           product?.price?.raw?.withTax > 0 ? (
                             isIncludeVAT ? (product?.price?.formatted?.withTax) : (product?.price?.formatted?.withoutTax)
                           ) : (
-                            <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                            <span key={product?.productId || product?.recordId} className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
                               {translate('label.orderSummary.freeText')}
                             </span>
                           )
@@ -119,8 +119,8 @@ export default function MyReturns() {
                       </td>
                       <td className="px-3 py-3 text-[13px] font-medium text-black">{moment(new Date(item.returnDate)).format(DATE_FORMAT)}</td>
                       <td className="px-3 py-3 text-[13px] font-medium text-black">
-                        {item?.lineItems?.map((product: any) => (
-                          <Link href={`/${product.slug}`} passHref className="text-sky-500 hover:text-sky-600" >
+                        {item?.lineItems?.map((product: any, index:number) => (
+                          <Link href={`/${product.slug}`} passHref className="text-sky-500 hover:text-sky-600" key={index}>
                             {product?.name}
                           </Link>
                         ))}
