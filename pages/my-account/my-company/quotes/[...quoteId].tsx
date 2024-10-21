@@ -495,7 +495,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
           <>
             <div className=''>
               <h1 className="flex items-center gap-1 text-xl font-normal sm:text-2xl dark:text-black justify-normal">
-                {quoteViewData?.quoteInfo?.customQuoteNo} <Link className='text-sm font-semibold text-sky-500' href={`/my-account/request-for-quote/rfq/${quoteViewData?.quoteInfo?.rfqId}`}>({`RFQ#: ${quoteViewData?.quoteInfo?.rfqNumber}`})</Link>
+                {quoteViewData?.quoteInfo?.customQuoteNo} {quoteViewData?.quoteInfo?.rfqNumber !== "" && <Link className='text-sm font-semibold text-sky-500' href={`/my-account/request-for-quote/rfq/${quoteViewData?.quoteInfo?.rfqId}`}>({`RFQ#: ${quoteViewData?.quoteInfo?.rfqNumber}`})</Link>}
               </h1>
             </div>
             <div className='grid grid-cols-1 gap-4 py-4 sm:grid-cols-12 max-panel-mobile'>

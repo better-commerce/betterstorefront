@@ -37,7 +37,7 @@ export default function B2BBaskets() {
   const [isTransferBasketModalOpen, setIsTransferBasketModalOpen] = useState<boolean>(false)
   const [isDeleteBasketModalOpen, setIsDeleteBasketModalOpen] = useState<boolean>(false)
   const [basketItemsCount, setBasketItemsCount] = useState(0)
-  const [userCarts, setUserCarts] = useState<any>()
+  const [userCarts, setUserCarts] = useState<any>([])
   let currentPage = getCurrentPage()
 
   const viewCart = (cartItems: any) => {
@@ -236,11 +236,9 @@ export default function B2BBaskets() {
         <>
           <div className="flex items-center justify-between gap-4 mb-4">
             <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Buying List </h1>
-            {userCarts?.length > 0 && renderButton()}
+            {renderButton()}
           </div>
-          {!userCarts ? (
-            <Spinner />
-          ) : (<>
+          {userCarts?.length > 0 ? (
             <div className="flex flex-col gap-2">
               {userCarts?.length > 0 ? (
                 <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} deleteBasket={deleteBasket} openTransferBasketModal={openTransferBasketModal} />
@@ -251,6 +249,9 @@ export default function B2BBaskets() {
                 </div>
               )}
             </div>
+
+          ) : (<>
+            <Spinner />
           </>)}
 
         </>

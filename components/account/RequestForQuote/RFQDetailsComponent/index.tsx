@@ -64,7 +64,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             </ol>
             <div className='mb-4'>
                 <h1 className="flex items-center gap-1 text-xl font-normal sm:text-2xl justify-normal dark:text-black">
-                    {rfqData?.rfqNumber ? rfqData?.rfqNumber : 'RFQ Detail'} <Link className='text-sm font-semibold text-sky-500' href={`/my-account/my-company/quotes/${rfqData?.quoteBasketId}`}>({`Quote #: ${rfqData?.quoteNumber}`})</Link>
+                    {rfqData?.rfqNumber ? rfqData?.rfqNumber : 'RFQ Detail'} {rfqData?.quoteNumber != null && <Link className='text-sm font-semibold text-sky-500' href={`/my-account/my-company/quotes/${rfqData?.quoteBasketId}`}>({`Quote #: ${rfqData?.quoteNumber}`})</Link>}
                 </h1>
             </div>
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
@@ -139,7 +139,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                             {rfqData?.lines?.map?.((item: any, index: any) => (
-                                <tr key={index}  className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
+                                <tr key={index} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.stockCode}</td>
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.productName}</td>
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.qty}</td>
