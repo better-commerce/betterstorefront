@@ -85,7 +85,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                         </div>
                         <div className="hidden sm:block">
                             <h5 className="uppercase font-10 text-black-light dark:text-gray-900">
-                                FFQ Created </h5>
+                                RFQ Created </h5>
                             <p className="text-sm dark:text-black text-primary">
                                 {moment(new Date(rfqData?.created)).format(DATE_FORMAT)}
                             </p>
@@ -154,9 +154,15 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="flex justify-between w-full my-4">
                 <button className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => router?.back()}>{translate('label.myAccount.rfq.backToList')}</button>
-                {(rfqData.status !== 'Cancelled') &&
-                    <button className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => setIsDialogOpen(true)}>{translate('label.myAccount.rfq.cancelRFQ')}</button>
-                }
+                {(rfqData?.status !== 'Cancelled' && rfqData?.status !== 'QuoteCreated') && (
+                    <button
+                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                        onClick={() => setIsDialogOpen(true)}
+                    >
+                        {translate('label.myAccount.rfq.cancelRFQ')}
+                    </button>
+                )}
+
             </div>
 
             <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={translate('label.myAccount.rfq.cancelRFQ')}>

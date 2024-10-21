@@ -37,7 +37,7 @@ export default function B2BBaskets() {
   const [isTransferBasketModalOpen, setIsTransferBasketModalOpen] = useState<boolean>(false)
   const [isDeleteBasketModalOpen, setIsDeleteBasketModalOpen] = useState<boolean>(false)
   const [basketItemsCount, setBasketItemsCount] = useState(0)
-  const [userCarts, setUserCarts] = useState<any>([])
+  const [userCarts, setUserCarts] = useState<any>()
   let currentPage = getCurrentPage()
 
   const viewCart = (cartItems: any) => {
@@ -236,25 +236,30 @@ export default function B2BBaskets() {
         <>
           <div className="flex items-center justify-between gap-4 mb-4">
             <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Buying List </h1>
-            {renderButton()}
+            {userCarts?.length > 0 && renderButton()}
           </div>
-          {userCarts?.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {userCarts?.length > 0 ? (
-                <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} deleteBasket={deleteBasket} openTransferBasketModal={openTransferBasketModal} />
-              ) : (
-                <div className='flex flex-col items-center justify-center w-full gap-4 py-6 sm:py-10'>
-                  <span className="text-xl font-normal text-slate-300">No basket available, please create new one</span>
-                  {renderButton()}
-                </div>
-              )}
-            </div>
 
-          ) : (<>
-            <Spinner />
-          </>)}
-
+          <div className="flex flex-col gap-2">
+            {userCarts?.length > 0 ? (
+              // If userCarts is available and has items
+              <BasketList
+                baskets={userCarts}
+                openMiniBasket={openMiniBasket}
+                deleteBasket={deleteBasket}
+                openTransferBasketModal={openTransferBasketModal}
+              />
+            ) : (
+              // If userCarts is available but empty
+              <div className='flex flex-col items-center justify-center w-full gap-4 py-6 sm:py-10'>
+                <span className="text-xl font-normal text-slate-300">
+                  No basket available, please create new one
+                </span>
+                {renderButton()}
+              </div>
+            )}
+          </div>
         </>
+
       ) : (
         <Popover.Button onClick={() => openMiniBasket(cartItems)} className={`group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
           {basketItemsCount > 0 && (

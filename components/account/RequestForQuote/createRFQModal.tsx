@@ -126,7 +126,7 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                                         </div>
                                         <div className="flex items-center justify-between gap-2 px-4 pt-3 pb-3 mt-4 border-t border-gray-200">
                                             {
-                                                (!useExistingBasket && userCarts?.length > 0) && (
+                                                !useExistingBasket && (
                                                     <div>
                                                         {/* <div onClick={() => setUseExistingBasket(true)} className='flex justify-center gap-1 m-4 cursor-pointer select-none text-sky-500'>Use Existing Basket</div> */}
                                                         <div onClick={() => {
@@ -146,7 +146,7 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                                     :
                                     <div className='flex flex-col justify-center w-full gap-4 py-20'>
                                         {
-                                            (!useExistingBasket && userCarts?.length > 0) && (
+                                            !useExistingBasket&& (
                                                 <>
                                                     <div className='text-xl font-normal text-center text-gray-300'>No Basket Available</div>
                                                     <div onClick={() => {

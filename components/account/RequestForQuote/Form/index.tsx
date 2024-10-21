@@ -217,16 +217,16 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     }, 200);
   };
 
-  const handleInputQuantity =  (product: any,updateQty:any) => {
-     
-      const prevValue: number =  parseInt(product.qty); 
-      const newValue: number = parseInt(updateQty)
-    
-      let qtyChange = newValue - prevValue;
-      if (newValue <= 0) {
-        qtyChange = 0;
-      }
-      const asyncHandleItem = async (product: any) => {
+  const handleInputQuantity = (product: any, updateQty: any) => {
+
+    const prevValue: number = parseInt(product.qty);
+    const newValue: number = parseInt(updateQty)
+
+    let qtyChange = newValue - prevValue;
+    if (newValue <= 0) {
+      qtyChange = 0;
+    }
+    const asyncHandleItem = async (product: any) => {
       const data = {
         basketId,
         productId: product?.ProductId || product?.productId,
@@ -238,7 +238,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
       try {
         const updatedCart = await addToCart(data, 'ADD', { product });
-        setCartItems(updatedCart); 
+        setCartItems(updatedCart);
         const restructuredLines = restructureProductLines(updatedCart?.lineItems);
         setLines(restructuredLines);
       } catch (error) {
@@ -247,15 +247,15 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         setLoadingProduct(null);
       }
     };
-      if (product && product?.length) {
-        product?.forEach((product: any) => {
-          asyncHandleItem(product);
-        });
-      } else if (product?.ProductId) {
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
         asyncHandleItem(product);
-      }
+      });
+    } else if (product?.ProductId) {
+      asyncHandleItem(product);
     }
-  
+  }
+
 
   const LoadingDots = () => (
     <div className="w-10 loading-dots ">
@@ -270,7 +270,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       <h1 className="text-xl font-normal sm:text-2xl dark:text-black">Request For Quote</h1>
       <div className="grid grid-cols-1 gap-6 mt-4 sm:gap-10 sm:grid-cols-12">
         <div className="flex flex-col w-full py-4 bg-white border divide-y divide-gray-200 shadow sm:col-span-8 border-slate-200 rounded-xl max-line-panel">
-          {!lines ? <Spinner/> : lines?.map((item: any, index: number) => (
+          {!lines ? <Spinner /> : lines?.map((item: any, index: number) => (
             <div key={`rfq-line-items-${index}`} className="flex items-center justify-between gap-4 px-4 py-2 bg-white hover:bg-gray-50" >
               <span className="flex flex-col w-5/12">
                 <span className="text-[13px] font-normal text-black">{item?.stockCode} - {item?.productName}</span>
@@ -286,7 +286,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 </div>
                 <div className="flex flex-row items-center px-4 text-gray-900 border">
                   <MinusIcon onClick={() => handleItem(item, 'decrease')} className="w-4 text-gray-400 cursor-pointer hover:text-black" />
-                  {loadingProduct === item?.ProductId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={item} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}                
+                  {loadingProduct === item?.ProductId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={item} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}
                   <PlusIcon className="w-4 text-gray-400 cursor-pointer hover:text-black" onClick={() => handleItem(item, 'increase')} />
                 </div>
               </div>
@@ -335,14 +335,16 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 );
               })}
             </div>
-            <div className="flex justify-between mt-4 space-x-4">
-              <button type="button" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => router.back()} >
-                {translate('label.myAccount.rfq.backToList')}
-              </button>
-              <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" >
-                Submit Request
-              </button>
-            </div>
+            {lines?.length > 0 &&
+              <div className="flex justify-between mt-4 space-x-4">
+                <button type="button" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => router.back()} >
+                  {translate('label.myAccount.rfq.backToList')}
+                </button>
+                <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" >
+                  Submit Request
+                </button>
+              </div>
+            }
           </form>
         </div>
       </div>
