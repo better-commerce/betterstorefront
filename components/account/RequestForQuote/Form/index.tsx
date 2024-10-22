@@ -368,14 +368,14 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                   <input type="text" value={newTargetPrice} onChange={(e) => setNewTargetPrice(e.target.value)} className="w-full p-3 border border-gray-300 rounded-md shadow-sm text-[12px] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div className="flex justify-end mt-6 space-x-4">
-                  <button type="button" className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" onClick={handleSetSameAsPrice} >
+                  <button type="button" className="btn btn-default !px-4 !py-2 !rounded-full !capitalize" onClick={handleSetSameAsPrice} >
                     {translate('label.myAccount.rfq.setToListedPrice')}
                   </button>
-                  <button type="button" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onClick={handleSaveTargetPrice} >
-                    {translate('label.myAccount.rfq.save')}
-                  </button>
-                  <button type="button" className="px-4 py-2 text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500" onClick={closeModal} >
+                  <button type="button" className="btn btn-default !px-4 !py-2 !rounded-full !capitalize" onClick={closeModal} >
                     {translate('label.myAccount.rfq.cancel')}
+                  </button>
+                  <button type="button" className="btn btn-primary !px-4 !py-2 !rounded-full !capitalize" onClick={handleSaveTargetPrice} >
+                    {translate('label.myAccount.rfq.save')}
                   </button>
                 </div>
               </>
@@ -383,11 +383,11 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
               <>
                 <p className="mb-4 text-gray-600">{translate('label.myAccount.rfq.removeProductConfirmation')}</p>
                 <div className="flex justify-end space-x-4">
-                  <div className="flex items-center justify-center border border-gray-300 rounded-full shadow-sm btn" onClick={() => setIsRemoveModalOpen(false)} >
+                  <div className="btn btn-default !px-4 !py-2 !rounded-full !capitalize" onClick={() => setIsRemoveModalOpen(false)} >
                     {translate('label.myAccount.rfq.cancel')}
                   </div>
                   <div
-                    className="flex items-center justify-center border border-gray-300 rounded-full shadow-sm btn btn-primary"
+                    className="btn btn-primary !px-4 !py-2 !rounded-full !capitalize"
                     onClick={() => {
                       if (selectedProduct) {
                         removeFromCart({ product: selectedProduct });

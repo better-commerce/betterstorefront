@@ -434,7 +434,7 @@
         "save": "Save",
         "removeProduct": "Remove Product",
         "removeProductConfirmation": "Are you sure you want to remove this product from the quote?",
-        "editTargetPrice": "Edit Target Price",
+        "editTargetPrice": "Target Price",
         "newTargetPrice": "New Target Price",
         "firstName": "First Name",
         "lastName": "Last Name",
