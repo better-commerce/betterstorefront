@@ -95,7 +95,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       // Optionally, you can display a general error message at the top
       setAlert({
         type: 'error',
-        msg: 'Please correct the errors in the form.'
+        msg: 'Please Enter PO Number/ETA before submit request.'
       });
     }
   };
@@ -270,7 +270,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       <h1 className="text-xl font-normal sm:text-2xl dark:text-black">Request For Quote</h1>
       <div className="grid grid-cols-1 gap-6 mt-4 sm:gap-10 sm:grid-cols-12">
         <div className="flex flex-col w-full py-4 bg-white border divide-y divide-gray-200 shadow sm:col-span-8 border-slate-200 rounded-xl max-line-panel">
-          {!lines ? <Spinner /> : lines?.map((item: any, index: number) => (
+          {!lines ? <Spinner /> : lines?.length > 0 ? lines?.map((item: any, index: number) => (
             <div key={`rfq-line-items-${index}`} className="flex items-center justify-between gap-4 px-4 py-2 bg-white hover:bg-gray-50" >
               <span className="flex flex-col w-5/12">
                 <span className="text-[13px] font-normal text-black">{item?.stockCode} - {item?.productName}</span>
@@ -294,7 +294,13 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 <TrashIcon className="w-4 h-4 col-span-1 text-gray-400 cursor-pointer hover:text-red-500" onClick={() => openModal(item, 'delete')} />
               </div>
             </div>
-          ))}
+          )) : (<>
+            <div className='flex flex-col items-center justify-center w-full gap-4 py-6 sm:py-10'>
+              <span className="text-xl font-normal text-slate-300">
+                No line item available
+              </span>
+            </div>
+          </>)}
         </div>
         <div className="sm:col-span-4">
           <form onSubmit={handleSubmit}>
