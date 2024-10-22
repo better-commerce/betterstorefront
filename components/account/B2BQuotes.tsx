@@ -13,13 +13,15 @@ function B2BQuotes({ quotes }: any) {
   const [currentPage, setCurrentPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState<string>("");
   const quotesPerPage = 10
-  const filteredQuotes = quotes?.filter((rfq: any) => {
+  const quotesList = quotes?.filter((item: any) => item?.status != QuoteStatus.DRAFT)
+
+  const filteredQuotes = quotesList?.filter((rfq: any) => {
     return (
       rfq?.rfqNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
       rfq?.customQuoteNo?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
-  const quotesList = quotes?.filter((item: any) => item?.status != QuoteStatus.DRAFT)
+
   const totalQuotes = filteredQuotes?.length || 0
   const totalPages = Math.ceil(totalQuotes / quotesPerPage)
   const indexOfLastQuote = currentPage * quotesPerPage
