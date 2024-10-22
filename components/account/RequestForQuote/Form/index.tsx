@@ -58,6 +58,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       email: user?.email || '',
       phoneNumber: user?.mobile || '',
       companyName: user?.companyName || '',
+      companyId:user?.companyId || '',
       role: user?.companyUserRole || '-',
       notes: '',
       poNumber: '',
