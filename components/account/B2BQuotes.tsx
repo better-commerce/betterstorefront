@@ -49,17 +49,7 @@ function B2BQuotes({ quotes }: any) {
                     <tr key={`quote-list-${Idx}`} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
                       <td className="py-3 pl-3 pr-3 text-[13px] font-medium cursor-pointer text-sky-500 whitespace-nowrap sm:pl-4 hover:text-sky-600">
                         <Link href={`/my-account/my-company/quotes/${quote?.quoteId}`}>
-                          <span>
-                            {quote?.quoteName != "" ? (
-                              <>
-                                {quote?.quoteName != "" && `${quote?.quoteName} - `}{`${quote?.customQuoteNo}`}
-                              </>
-                            ) : (
-                              <>
-                                {quote?.quoteName != "" && `${quote?.quoteName} - `}{`${quote?.customQuoteNo}`}
-                              </>
-                            )}
-                          </span>
+                          {quote?.customQuoteNo}
                         </Link>
                       </td>
                       <td className="px-3 py-3 text-[13px] font-medium cursor-pointer text-sky-500 sm:pl-4 hover:text-sky-600 whitespace-nowrap">

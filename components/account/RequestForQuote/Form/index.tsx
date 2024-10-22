@@ -15,6 +15,7 @@ import { stringFormat } from "@framework/utils/parse-util";
 import debounce from 'lodash/debounce'
 import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
 import Spinner from "@components/ui/Spinner";
+import Link from "next/link";
 
 export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const router = useRouter();
@@ -58,7 +59,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       email: user?.email || '',
       phoneNumber: user?.mobile || '',
       companyName: user?.companyName || '',
-      companyId:user?.companyId || '',
+      companyId: user?.companyId || '',
       role: user?.companyUserRole || '-',
       notes: '',
       poNumber: '',
@@ -107,7 +108,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     if (type === 'delete') {
       setIsRemoveModalOpen(true);
     } else {
-      setNewTargetPrice(product.targetPrice);
+      setNewTargetPrice(product?.targetPrice);
       setIsModalOpen(true);
     }
   };
@@ -132,6 +133,17 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
   const handleSaveTargetPrice = () => {
     if (selectedProduct) {
+      const targetPrice = parseFloat(newTargetPrice);
+
+      // Check if the target price is a valid number and not negative
+      if (isNaN(targetPrice) || targetPrice < 0) {
+        setAlert({
+          type: 'error',
+          msg: 'Target price must be a positive number.'
+        });
+        return;
+      }
+
       const updatedLines: any = lines.map((line: any) =>
         line.ProductId === selectedProduct.ProductId
           ? { ...line, targetPrice: newTargetPrice }
@@ -141,6 +153,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     }
     closeModal();
   };
+
 
   const handleSetSameAsPrice = () => {
     if (selectedProduct) {
@@ -162,6 +175,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
     debounceTimer = setTimeout(async () => {
       setLoadingProduct(product.ProductId); // Set loading state for this product
+
       const asyncHandleItem = async (product: any) => {
         const currentQty = product?.qty || 0;
         const data: any = {
@@ -171,6 +185,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
           manualUnitPrice: product?.price,
           displayOrder: product?.displayOrder || "0",
           qty: currentQty, // Start with current qty
+          targetPrice: product?.targetPrice || product?.price, // Keep the target price unchanged
         };
 
         if (type === 'increase') {
@@ -190,7 +205,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
         if (type === 'decrease') {
           if (currentQty > 1) {
-            data.qty = - 1; // Decrease by 1
+            data.qty = -1; // Decrease by 1
           } else {
             data.qty = 0;
           }
@@ -218,15 +233,16 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     }, 200);
   };
 
+
   const handleInputQuantity = (product: any, updateQty: any) => {
-
-    const prevValue: number = parseInt(product.qty);
-    const newValue: number = parseInt(updateQty)
-
+    const prevValue: number = parseInt(product?.qty);
+    const newValue: number = parseInt(updateQty);
     let qtyChange = newValue - prevValue;
+
     if (newValue <= 0) {
       qtyChange = 0;
     }
+
     const asyncHandleItem = async (product: any) => {
       const data = {
         basketId,
@@ -235,6 +251,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         manualUnitPrice: product?.price,
         displayOrder: product?.displayOrder || "0",
         qty: qtyChange,
+        targetPrice: product?.targetPrice || product?.price, // Preserve the target price
       };
 
       try {
@@ -248,6 +265,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         setLoadingProduct(null);
       }
     };
+
     if (product && product?.length) {
       product?.forEach((product: any) => {
         asyncHandleItem(product);
@@ -255,7 +273,8 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     } else if (product?.ProductId) {
       asyncHandleItem(product);
     }
-  }
+  };
+
 
 
   const LoadingDots = () => (
@@ -273,12 +292,17 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         <div className="flex flex-col w-full py-4 bg-white border divide-y divide-gray-200 shadow sm:col-span-8 border-slate-200 rounded-xl max-line-panel">
           {!lines ? <Spinner /> : lines?.length > 0 ? lines?.map((item: any, index: number) => (
             <div key={`rfq-line-items-${index}`} className="flex items-center justify-between gap-4 px-4 py-2 bg-white hover:bg-gray-50" >
-              <span className="flex flex-col w-5/12">
-                <span className="text-[13px] font-normal text-black">{item?.stockCode} - {item?.productName}</span>
-              </span>
+              <Link passHref legacyBehavior href={`/${item?.slug}`}>
+                <a className="text-[13px] font-medium text-sky-500 flex justify-start gap-2 items-center w-5/12">
+                  <span>
+                    <img src={item?.image} alt={item?.productName} className="w-10 h-10 rounded-md" />
+                  </span>
+                  <span>{item?.productName}</span>
+                </a>
+              </Link>
               <div className="flex justify-center w-6/12 gap-4">
                 <div className="flex flex-col w-full gap-2">
-                  <p className="flex items-center col-span-3 gap-1 text-xs"><span className="font-semibold text-black">{translate('label.myAccount.rfq.targetPrice')}:</span> {item?.targetPrice}
+                  <p className="flex items-center col-span-3 gap-1 text-xs"><span className="font-semibold text-black">{translate('label.myAccount.rfq.targetPrice')}:</span> {item?.currencySymbol}{item?.targetPrice}
                     <PencilSquareIcon className="w-4 h-4 col-span-1 text-gray-500 cursor-pointer hover:text-black" onClick={() => openModal(item, 'edit')} />
                   </p>
                   <div className="col-span-3 text-xs"><span className="text-black">
@@ -308,11 +332,21 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
             <div className="flex flex-col w-full gap-3 p-3 border shadow bg-gray-50 rounded-xl border-slate-200">
               {Object?.keys(formConfig?.fields).map((fieldKey) => {
                 const field: any = formConfig.fields[fieldKey];
+                const today = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD' format
+
                 if (field.type === 'select') {
                   return (
                     <div key={fieldKey}>
-                      <label className="block mb-1 text-xs font-medium text-black">{field.label} {field?.required && <span className="text-red-600">*</span>}</label>
-                      <select name={fieldKey} className="w-full px-2 py-1 border border-gray-300 rounded-md text-[12px]" onChange={formik?.handleChange} value={formik?.values[fieldKey]} onBlur={formik?.handleBlur} >
+                      <label className="block mb-1 text-xs font-medium text-black">
+                        {field.label} {field?.required && <span className="text-red-600">*</span>}
+                      </label>
+                      <select
+                        name={fieldKey}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-md text-[12px]"
+                        onChange={formik?.handleChange}
+                        value={formik?.values[fieldKey]}
+                        onBlur={formik?.handleBlur}
+                      >
                         <option value="">{translate('label.search.searchText')}</option>
                         {b2bUsers?.map((option: any) => (
                           <option key={option?.email} value={option?.email}>
@@ -329,11 +363,32 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
                 return (
                   <div key={fieldKey} className={`${field?.type === 'textarea' ? "col-span-12" : ""}`}>
-                    <label className="block mb-1 text-xs font-medium text-black">{field.label} {field?.required && <span className="text-red-600">*</span>}</label>
+                    <label className="block mb-1 text-xs font-medium text-black">
+                      {field.label} {field?.required && <span className="text-red-600">*</span>}
+                    </label>
                     {field.type === 'textarea' ? (
-                      <textarea name={fieldKey} placeholder={field.placeholder} className="w-full h-24 px-2 text-[12px] py-1 border border-gray-300 rounded-md" onChange={formik?.handleChange} value={formik?.values[fieldKey]} onBlur={formik?.handleBlur} />
+                      <textarea
+                        name={fieldKey}
+                        placeholder={field.placeholder}
+                        className="w-full h-24 px-2 text-[12px] py-1 border border-gray-300 rounded-md"
+                        onChange={formik?.handleChange}
+                        value={formik?.values[fieldKey]}
+                        onBlur={formik?.handleBlur}
+                      />
                     ) : (
-                      <input type={field.type} name={fieldKey} placeholder={field.placeholder} readOnly={field?.readOnly} className={`${formik?.errors[fieldKey] && formik?.touched[fieldKey] ? 'border-red-500' : ''} w-full px-2 !text-[12px] py-1 border border-gray-300 rounded-md ${field?.readOnly ? 'bg-gray-100 font-medium text-black' : ''}`} onChange={formik?.handleChange} value={formik?.values[fieldKey]} onBlur={formik?.handleBlur} />
+                      <input
+                        type={field.type}
+                        name={fieldKey}
+                        placeholder={field.placeholder}
+                        readOnly={field?.readOnly}
+                        className={`${formik?.errors[fieldKey] && formik?.touched[fieldKey] ? 'border-red-500' : ''
+                          } w-full px-2 !text-[12px] py-1 border border-gray-300 rounded-md ${field?.readOnly ? 'bg-gray-100 font-medium text-black' : ''
+                          }`}
+                        onChange={formik?.handleChange}
+                        value={formik?.values[fieldKey]}
+                        onBlur={formik?.handleBlur}
+                        min={field.type === 'date' ? today : undefined} // Set the min attribute for date fields
+                      />
                     )}
                     {formik?.errors[fieldKey] && formik?.touched[fieldKey] && (
                       <div className="text-xs text-red-600">{formik?.errors[fieldKey]}</div>
@@ -342,17 +397,25 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 );
               })}
             </div>
-            {lines?.length > 0 &&
+            {lines?.length > 0 && (
               <div className="flex justify-between mt-4 space-x-4">
-                <button type="button" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => router.back()} >
+                <button
+                  type="button"
+                  className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                  onClick={() => router.back()}
+                >
                   {translate('label.myAccount.rfq.backToList')}
                 </button>
-                <button type="submit" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" >
+                <button
+                  type="submit"
+                  className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                >
                   Submit Request
                 </button>
               </div>
-            }
+            )}
           </form>
+
         </div>
       </div>
 
@@ -422,9 +485,13 @@ const sanitizeProduct = (product: any) => {
   return {
     ProductId: product?.productId,
     productName: product?.name,
+    image: product?.image,
+    slug: product?.slug,
     stockCode: product?.stockCode,
     qty: product?.qty,
-    price: isIncludeVAT ? product?.price?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax,
-    targetPrice: isIncludeVAT ? product?.price?.raw?.withTax : product?.listPrice?.raw?.withoutTax,
+    currencySymbol: product?.price?.currencySymbol,
+    price: isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax,
+    listPrice: isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax,
+    targetPrice: isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax,
   };
 };

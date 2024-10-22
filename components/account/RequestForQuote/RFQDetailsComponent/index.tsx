@@ -93,8 +93,8 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                         <div className="hidden sm:block">
                             <h5 className="uppercase font-10 text-black-light dark:text-gray-900">
                                 Valid Until </h5>
-                            <p className="text-sm dark:text-black text-primary">
-                                {moment(new Date(rfqData?.validUntil)).format(DATE_FORMAT)}
+                            <p className={`text-sm dark:text-black ${rfqData?.validDays > 0 ? 'text-primary' : 'text-red-400'}`}>
+                                {rfqData?.validDays > 0 ? moment(new Date(rfqData?.validUntil)).format(DATE_FORMAT) : 'expired'}
                             </p>
                         </div>
                     </div>
@@ -147,13 +147,20 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.targetPrice ? `${item?.targetPrice.formatted?.withTax}` : translate('label.myAccount.rfq.notAvailable')}</td>
                                 </tr>
                             ))}
+                            <tr className="text-xs bg-gray-200 border-t shadow-none group border-slate-400 hover:shadow hover:bg-gray-100">
+                                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
+                                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
+                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.lines?.length}</td>
+                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.grandTotal?.formatted?.withTax}</td>
+                                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="flex justify-between w-full my-4">
-                <button className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => router?.back()}>{translate('label.myAccount.rfq.backToList')}</button>
+                <Link href="/my-account/request-for-quote" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">{translate('label.myAccount.rfq.backToList')}</Link>
                 {(rfqData?.status !== 'Cancelled' && rfqData?.status !== 'QuoteCreated') && (
                     <button
                         className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"

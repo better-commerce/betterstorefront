@@ -150,7 +150,7 @@ function RequestQuote() {
                       <th className="py-3 pl-3 pr-3 text-[13px] font-semibold text-left text-gray-900 sm:pl-4">RFQ No.</th>
                       <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Quote No.</th>
                       <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">User</th>
-                      <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.createdAt')}</th>
+                      <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Created On</th>
                       <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">ETA</th>
                       <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Valid Days</th>
                       <th className="px-3 py-3 text-[13px] font-semibold text-right text-gray-900">{translate('label.myAccount.rfq.status')}</th>

@@ -48,6 +48,7 @@ export const useSaveFormConfig = () => {
         label: translate('label.myAccount.rfq.generalETAText'),
         type: 'date',
         required: true,
+        min: new Date().toISOString().split('T')[0]
       },
       assignTo: {
         label: translate('label.myAccount.rfq.assignTo'),
