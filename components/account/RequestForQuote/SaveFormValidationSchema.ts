@@ -12,7 +12,7 @@ export const useSaveFormValidationSchema : () => any = () => {
     companyName: Yup.string().required(translate('label.myAccount.rfq.companyNameRequired')),    
     poNumber: Yup.string().required(translate('label.myAccount.rfq.poNumberRequired')),
     validUntil: Yup.date().required(translate('label.myAccount.rfq.validUntilRequired')),
-    assignedTo: Yup.string().required(translate('label.myAccount.rfq.assignedToRequired')),
+    assignTo: Yup.string().required(translate('label.myAccount.rfq.assignToRequired')),
     notes: Yup.string().nullable(),
     lines: Yup.array().min(1, translate('label.myAccount.rfq.productRequired')),
   });

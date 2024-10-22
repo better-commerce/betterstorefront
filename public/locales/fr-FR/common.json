@@ -444,7 +444,7 @@
         "role": "Rôle",
         "validUntil": "Ne Pas Expédier Après",
         "generalETAText": "ETA",
-        "assignedTo": "Attribué à",
+        "assignTo": "Attribué à",
         "productId": "ID Produit",
         "qty": "Quantité",
         "firstNameRequired": "Le Prénom est requis",
@@ -457,7 +457,7 @@
         "roleRequired": "Le Rôle est requis",
         "poNumberRequired": "Le Numéro de Commande est requis",
         "validUntilRequired": "Le champ Ne Pas Expédier Après est requis",
-        "assignedToRequired": "Le champ Attribué à est requis",
+        "assignToRequired": "Le champ Attribué à est requis",
         "productRequired": "Au moins un produit est requis"
       },
       "myDetailsHeadingText": "Mes Profile",

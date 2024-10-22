@@ -62,7 +62,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       notes: '',
       poNumber: '',
       validUntil: '',
-      assignedTo: user?.email || '',
+      assignTo: user?.email || '',
     },
     validationSchema,
     onSubmit: async () => { },
@@ -423,7 +423,7 @@ const sanitizeProduct = (product: any) => {
     productName: product?.name,
     stockCode: product?.stockCode,
     qty: product?.qty,
-    price: isIncludeVAT ? product?.price?.raw?.withTax : product?.listPrice?.raw?.withoutTax,
+    price: isIncludeVAT ? product?.price?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax,
     targetPrice: isIncludeVAT ? product?.price?.raw?.withTax : product?.listPrice?.raw?.withoutTax,
   };
 };

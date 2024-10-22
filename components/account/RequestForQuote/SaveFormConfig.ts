@@ -49,8 +49,8 @@ export const useSaveFormConfig = () => {
         type: 'date',
         required: true,
       },
-      assignedTo: {
-        label: translate('label.myAccount.rfq.assignedTo'),
+      assignTo: {
+        label: translate('label.myAccount.rfq.assignTo'),
         type: 'text',
         required: true,
         readOnly: true,

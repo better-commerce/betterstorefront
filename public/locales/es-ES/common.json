@@ -444,7 +444,7 @@
         "role": "Rol",
         "validUntil": "No Enviar Después de",
         "generalETAText": "ETA",
-        "assignedTo": "Asignado a",
+        "assignTo": "Asignado a",
         "productId": "ID de Producto",
         "qty": "Cantidad",
         "firstNameRequired": "El Nombre es obligatorio",
@@ -457,7 +457,7 @@
         "roleRequired": "El Rol es obligatorio",
         "poNumberRequired": "El Número de Pedido es obligatorio",
         "validUntilRequired": "El campo No Enviar Después de es obligatorio",
-        "assignedToRequired": "El campo Asignado a es obligatorio",
+        "assignToRequired": "El campo Asignado a es obligatorio",
         "productRequired": "Se requiere al menos un producto"
       },
       "myDetailsHeadingText": "Mis Profile",

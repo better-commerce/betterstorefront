@@ -444,7 +444,7 @@
         "role": "Role",
         "validUntil": "Do Not Ship Later Than",
         "generalETAText" : "ETA",
-        "assignedTo": "Assigned To",
+        "assignTo": "Assigned To",
         "productId": "Product ID",
         "qty": "Quantity",
         "firstNameRequired": "First Name is required",
@@ -458,7 +458,7 @@
         "poNumberRequired": "PO Number is required",
         "validUntilRequired":"ETA is required",
         "ETA": "ETA",
-        "assignedToRequired": "Assigned To is required",
+        "assignToRequired": "Assigned To is required",
         "productRequired": "At least one product is required"
       },
       "myDetailsHeadingText": "My Profile",

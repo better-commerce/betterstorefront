@@ -445,7 +445,7 @@
         "role": "Rolle",
         "validUntil": "Nicht später als versenden",
         "generalETAText": "ETA",
-        "assignedTo": "Zugewiesen an",
+        "assignTo": "Zugewiesen an",
         "productId": "Produkt-ID",
         "qty": "Menge",
         "firstNameRequired": "Vorname ist erforderlich",
@@ -458,7 +458,7 @@
         "roleRequired": "Rolle ist erforderlich",
         "poNumberRequired": "Bestellnummer ist erforderlich",
         "validUntilRequired": "Nicht später als versenden ist erforderlich",
-        "assignedToRequired": "Zugewiesen an ist erforderlich",
+        "assignToRequired": "Zugewiesen an ist erforderlich",
         "productRequired": "Mindestens ein Produkt ist erforderlich"
       },
       "myDetailsHeadingText": "Meine Profile",
