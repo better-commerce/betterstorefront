@@ -55,12 +55,7 @@ function MyQuotes() {
 
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>
-      <div className=''>
-        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
-          Quotes
-        </h1>
-      </div>
+    <div className={'orders bg-white dark:bg-transparent'}>     
       <B2BQuotes quotes={b2bQuotes} />
     </div>)
 }

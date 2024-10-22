@@ -37,15 +37,25 @@ function RequestQuote() {
   const router = useRouter()
   const [isCreateBasketModalOpen, setIsCreateBasketModalOpen] = useState<boolean>(false)
   const [isCreateRFQModalOpen, setIsCreateRFQModalOpen] = useState<boolean>(false)
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [currentPage, setCurrentPage] = useState(1)
   const rfqPerPage = 15
   const rfqList = rfqData
-  const totalQuotes = rfqList?.length || 0
-  const totalPages = Math.ceil(totalQuotes / rfqPerPage)
-  const indexOfLastQuote = currentPage * rfqPerPage
-  const indexOfFirstQuote = indexOfLastQuote - rfqPerPage
-  const currentRfqs = rfqList?.slice(indexOfFirstQuote, indexOfLastQuote)
+
+  const filteredRfqs = rfqList?.filter((rfq: any) => {
+    return (
+      rfq?.rfqNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      rfq?.quoteNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  const totalQuotes = filteredRfqs?.length || 0;
+  const totalPages = Math.ceil(totalQuotes / rfqPerPage);
+  const indexOfLastQuote = currentPage * rfqPerPage;
+  const indexOfFirstQuote = indexOfLastQuote - rfqPerPage;
+  const currentRfqs = filteredRfqs?.slice(indexOfFirstQuote, indexOfLastQuote);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     router.push(`?page=${page}`, undefined, { shallow: true }) // Update the URL with the current page
@@ -131,18 +141,27 @@ function RequestQuote() {
 
   return (
     <div>
-      <div className='flex items-center justify-between w-full gap-4 mb-4'>
-        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
-          Request For Quote (RFQ)
-        </h1>
-        <div className={`flex items-center justify-center flex-shrink-0 capitalize text-sky-500 hover:text-sky-600 dark:text-neutral-300 `}>
-          <div className='cursor-pointer font-medium text-[14px]' onClick={openCreateRFQModal}>Create RFQ</div>
+      <div className="flex items-center justify-between w-full gap-4 mb-4">
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">Request For Quote (RFQ)</h1>
+        <div className='flex gap-3 justify-normal'>
+          <input
+            type="text"
+            placeholder="Search by RFQ/Quote No."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 text-sm font-normal border border-gray-200 rounded-md w-72"
+          />
+          <div className="flex items-center justify-center flex-shrink-0 capitalize text-sky-500 hover:text-sky-600 dark:text-neutral-300">
+            <div className="cursor-pointer font-medium text-[14px]" onClick={openCreateRFQModal}>Create RFQ</div>
+          </div>
         </div>
+
       </div>
       {isLoading ? (<Spinner />) : (
         <>
           {rfqData?.length > 0 ? (
             <>
+
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50">
