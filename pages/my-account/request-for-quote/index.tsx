@@ -173,7 +173,7 @@ function RequestQuote() {
                         </td>
                         <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{moment(new Date(rfq?.created)).format(DATE_FORMAT)}</td>
                         <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{moment(new Date(rfq?.validUntil)).format(DATE_FORMAT)}</td>
-                        <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{rfq?.validDays} days</td>
+                        <td className={`px-3 py-3 text-[13px] whitespace-nowrap ${rfq?.validDays > 0 ? 'text-black font-semibold' : 'text-red-300 font-normal'}`}>{rfq?.validDays > 0 ? rfq?.validDays + ' days' : 'expired'}</td>
                         <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap" align='right'>
                           <span className={`px-3 py-1 text-xs font-semibold leading-none truncate rounded-full ${rfq?.status == "QuoteCreated" ? 'label-confirmed' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>
                             {rfq?.status == "QuoteCreated" ? 'Quote Created' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'Submitted' : rfq?.status == "Cancelled" ? 'Cancelled' : ''}
