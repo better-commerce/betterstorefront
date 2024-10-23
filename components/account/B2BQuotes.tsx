@@ -26,10 +26,17 @@ function B2BQuotes({ quotes }: any) {
   const indexOfLastQuote = currentPage * quotesPerPage
   const indexOfFirstQuote = indexOfLastQuote - quotesPerPage
   const currentQuotes = filteredQuotes?.slice(indexOfFirstQuote, indexOfLastQuote)
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
     router.push(`?page=${page}`, undefined, { shallow: true }) // Update the URL with the current page
   }
+
+  // Reset currentPage when searchTerm changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   useEffect(() => {
     const pageFromQuery = parseInt(router.query.page as string) || 1
     setCurrentPage(pageFromQuery)
@@ -40,12 +47,18 @@ function B2BQuotes({ quotes }: any) {
       <div className="flex items-center justify-between w-full gap-4 mb-4">
         <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Quotes </h1>
         <div className='flex gap-3 justify-normal'>
-          <input type="text" placeholder="Search by Quote/RFQ No." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="p-2 text-sm font-normal border border-gray-200 rounded-md w-72" />
+          <input
+            type="text"
+            placeholder="Search by Quote/RFQ No."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 text-sm font-normal border border-gray-200 rounded-md w-72"
+          />
         </div>
       </div>
       {!quotes ? (<Spinner />) : (
         <>
-          {currentQuotes?.length > 0 ?
+          {currentQuotes?.length > 0 ? (
             <div className="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
@@ -91,19 +104,19 @@ function B2BQuotes({ quotes }: any) {
                         <td align='right' className="px-3 py-3 text-[13px] font-semibold text-gray-500 whitespace-nowrap">
                           {
                             quote?.status == QuoteStatus.ABANDONED ?
-                            <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Abandoned</span> :
-                            quote?.status == QuoteStatus.CANCELLED ?
-                            <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Cancelled</span> :
-                            quote?.status == QuoteStatus.CONVERTED ?
-                            <span className='px-3 py-1 text-xs border rounded-full text-emerald-600 bg-emerald-200 border-emerald-400'>Converted</span> :
-                            quote?.status == QuoteStatus.DRAFT ?
-                            <span className='px-3 py-1 text-xs text-gray-600 bg-gray-200 border border-gray-400 rounded-full'>Draft</span> :
-                            quote?.status == QuoteStatus.NOT_QUOTE ?
-                            <span className='px-3 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-400 rounded-full'>Not Quote</span> :
-                            quote?.status == QuoteStatus.PAYMENT_LINK_SENT ?
-                            <span className='px-3 py-1 text-xs border rounded-full text-sky-600 bg-sky-200 border-sky-400'>Payment Link Sent</span> :
-                            quote?.status == QuoteStatus.QUOTE_SENT ?
-                            <span className='px-3 py-1 text-xs text-purple-600 bg-purple-100 border border-purple-400 rounded-full'>Quote Sent</span> : ''
+                              <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Abandoned</span> :
+                              quote?.status == QuoteStatus.CANCELLED ?
+                                <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Cancelled</span> :
+                                quote?.status == QuoteStatus.CONVERTED ?
+                                  <span className='px-3 py-1 text-xs border rounded-full text-emerald-600 bg-emerald-200 border-emerald-400'>Converted</span> :
+                                  quote?.status == QuoteStatus.DRAFT ?
+                                    <span className='px-3 py-1 text-xs text-gray-600 bg-gray-200 border border-gray-400 rounded-full'>Draft</span> :
+                                    quote?.status == QuoteStatus.NOT_QUOTE ?
+                                      <span className='px-3 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-400 rounded-full'>Not Quote</span> :
+                                      quote?.status == QuoteStatus.PAYMENT_LINK_SENT ?
+                                        <span className='px-3 py-1 text-xs border rounded-full text-sky-600 bg-sky-200 border-sky-400'>Payment Link Sent</span> :
+                                        quote?.status == QuoteStatus.QUOTE_SENT ?
+                                          <span className='px-3 py-1 text-xs text-purple-600 bg-purple-100 border border-purple-400 rounded-full'>Quote Sent</span> : ''
                           }
                         </td>
                       </tr>
@@ -111,20 +124,63 @@ function B2BQuotes({ quotes }: any) {
                   })}
                 </tbody>
               </table>
-            </div> : <>
-              <div className='flex flex-col items-center justify-center w-full py-6'>
-                <h4 className='text-xl font-normal text-gray-300'>No Quote Available</h4>
-              </div>
-            </>}
-          {quotesList?.length > 10 &&
-            <div className="flex justify-center mt-6">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button key={index + 1} onClick={() => handlePageChange(index + 1)} className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === index + 1 ? 'bg-black text-white' : 'bg-gray-100 text-gray-800'}`} >
-                  {index + 1}
-                </button>
-              ))}
             </div>
-          }
+          ) : (
+            <div className='flex flex-col items-center justify-center w-full py-6'>
+              <h4 className='text-xl font-normal text-gray-300'>No Quote Available</h4>
+            </div>
+          )}
+
+          {filteredQuotes?.length > quotesPerPage && (
+            <div className="flex justify-center mt-6">
+              {/* Previous Arrow */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-100 text-gray-800'}`}
+              >
+                &lt;
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }, (_, index) => {
+                const page = index + 1;
+
+                if (page === 1 || page === 2 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === page ? 'bg-black text-white' : 'bg-gray-100 text-gray-800'}`}
+                    >
+                      {page}
+                    </button>
+                  );
+                }
+
+                // Ellipsis (Dots)
+                if (page === 3 && currentPage > 3) {
+                  return <span key={page} className="w-8 h-8 mx-1 text-sm">...</span>;
+                }
+
+                if (page === totalPages - 1 && currentPage < totalPages - 2) {
+                  return <span key={page} className="w-8 h-8 mx-1 text-sm">...</span>;
+                }
+
+                return null;
+              })}
+
+              {/* Next Arrow */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-100 text-gray-800'}`}
+              >
+                &gt;
+              </button>
+            </div>
+          )}
+
         </>
       )}
     </section>

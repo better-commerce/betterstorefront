@@ -40,30 +40,39 @@ function RequestQuote() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [loadingAction, setLoadingAction] = useState(LoadingActionType.NONE)
   const [currentPage, setCurrentPage] = useState(1)
-  const rfqPerPage = 15
+  const rfqPerPage = 10
   const rfqList = rfqData
 
-  const filteredRfqs = rfqList?.filter((rfq: any) => {
+  // Filter the RFQs based on the search term
+  const filteredRFQs = rfqData?.filter((rfq: any) => {
     return (
-      rfq?.rfqNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      rfq?.rfqNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       rfq?.quoteNumber?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
-  const totalQuotes = filteredRfqs?.length || 0;
-  const totalPages = Math.ceil(totalQuotes / rfqPerPage);
+  // Calculate pagination variables
+  const totalRFQs = filteredRFQs?.length || 0;
+  const totalPages = Math.ceil(totalRFQs / rfqPerPage);
   const indexOfLastQuote = currentPage * rfqPerPage;
   const indexOfFirstQuote = indexOfLastQuote - rfqPerPage;
-  const currentRfqs = filteredRfqs?.slice(indexOfFirstQuote, indexOfLastQuote);
+  const currentRFQs = filteredRFQs?.slice(indexOfFirstQuote, indexOfLastQuote);
 
+  // Handle page change
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    router.push(`?page=${page}`, undefined, { shallow: true }) // Update the URL with the current page
-  }
+    setCurrentPage(page);
+    router.push(`?page=${page}`, undefined, { shallow: true }); // Update URL with page number
+  };
+
+  // Reset to page 1 when search term changes
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to the first page when a new search is made
+  };
   useEffect(() => {
-    const pageFromQuery = parseInt(router.query.page as string) || 1
-    setCurrentPage(pageFromQuery)
-  }, [router.query.page])
+    const pageFromQuery = parseInt(router.query.page as string) || 1;
+    setCurrentPage(pageFromQuery);
+  }, [router.query.page]);
 
   const { recordAnalytics } = useAnalytics()
 
@@ -142,13 +151,13 @@ function RequestQuote() {
   return (
     <div>
       <div className="flex items-center justify-between w-full gap-4 mb-4">
-        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">Request For Quote (RFQ)</h1>
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">Request For Quote</h1>
         <div className='flex gap-3 justify-normal'>
           <input
             type="text"
             placeholder="Search by RFQ/Quote No."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange} // Use the new handleSearchChange
             className="p-2 text-sm font-normal border border-gray-200 rounded-md w-72"
           />
           <div className="flex items-center justify-center flex-shrink-0 capitalize text-sky-500 hover:text-sky-600 dark:text-neutral-300">
@@ -176,7 +185,7 @@ function RequestQuote() {
                     </tr>
                   </thead>
                   <tbody className='bg-white divide-y divide-gray-200'>
-                    {currentRfqs?.map?.((rfq: any) => (
+                    {currentRFQs?.map?.((rfq: any) => (
                       <tr key={rfq?.rfqNumber} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
                         <td className="py-3 pl-3 pr-3 text-[13px] font-medium cursor-pointer text-sky-500 whitespace-nowrap sm:pl-4 hover:text-sky-600" onClick={() => navigateToRFQ(rfq?.id)}>{rfq?.rfqNumber}</td>
                         <td className="py-3 pl-3 pr-3 text-[13px] font-medium cursor-pointer text-sky-500 whitespace-nowrap sm:pl-4 hover:text-sky-600">
@@ -203,15 +212,56 @@ function RequestQuote() {
                   </tbody>
                 </table>
               </div>
-              {rfqData?.length > 15 &&
+              {totalRFQs > rfqPerPage && (
                 <div className="flex justify-center mt-6">
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <button key={index + 1} onClick={() => handlePageChange(index + 1)} className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === index + 1 ? 'bg-black text-white' : 'bg-gray-100 text-gray-800'}`} >
-                      {index + 1}
-                    </button>
-                  ))}
+                  {/* Previous Arrow */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-100 text-gray-800'}`}
+                  >
+                    &lt;
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, index) => {
+                    const page = index + 1;
+
+                    if (page === 1 || page === 2 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === page ? 'bg-black text-white' : 'bg-gray-100 text-gray-800'}`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    }
+
+                    // Ellipsis (Dots)
+                    if (page === 3 && currentPage > 3) {
+                      return <span key={page} className="w-8 h-8 mx-1 text-sm">...</span>;
+                    }
+
+                    if (page === totalPages - 1 && currentPage < totalPages - 2) {
+                      return <span key={page} className="w-8 h-8 mx-1 text-sm">...</span>;
+                    }
+
+                    return null;
+                  })}
+
+                  {/* Next Arrow */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`mx-1 w-8 h-8 text-sm font-semibold rounded-full ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-100 text-gray-800'}`}
+                  >
+                    &gt;
+                  </button>
                 </div>
-              }
+              )}
+
             </>
           ) :
             <div className="flex flex-col justify-center w-full py-6 text-center">
@@ -221,7 +271,6 @@ function RequestQuote() {
           }
         </>
       )}
-
       <AddBasketModal isOpen={isCreateBasketModalOpen} closeModal={closeCreateBasketModal} loadingAction={loadingAction} handleCreateBasket={handleCreateBasket} setLoadingAction={setLoadingAction} />
       <CreateRFQModal isOpen={isCreateRFQModalOpen} openCreateBasketModal={openCreateBasketModal} closeModal={closeCreateRFQModal} openMiniBasket={openMiniBasket} />
     </div>

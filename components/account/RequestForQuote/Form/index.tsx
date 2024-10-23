@@ -136,7 +136,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       const targetPrice = parseFloat(newTargetPrice);
 
       // Check if the target price is a valid number and not negative
-      if (isNaN(targetPrice) || targetPrice < 0) {
+      if (isNaN(targetPrice) || targetPrice <= 0) {
         setAlert({
           type: 'error',
           msg: 'Target price must be a positive number.'
@@ -508,6 +508,6 @@ const sanitizeProduct = (product: any) => {
     price: isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax,
     listPrice: isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax,
     targetPrice: isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax,
-    maxPrice: product?.listPrice?.raw?.withTax,
+    maxPrice: product?.price?.raw?.withTax,
   };
 };

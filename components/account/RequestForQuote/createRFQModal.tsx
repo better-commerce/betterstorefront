@@ -14,6 +14,7 @@ import useCart from '@components/services/cart'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { AddBasketIcon } from '@components/shared/icons'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketModal }: any) => {
     const translate = useTranslation()
@@ -72,6 +73,7 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                             <Dialog.Panel className="w-full max-w-xl overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                                 <Dialog.Title as="div" className="flex items-center justify-between w-full px-4 py-3 text-lg font-medium leading-6 text-gray-900 border-b-2 shadow xsm:text-md border-gray-50" >
                                     Select Basket
+                                    <XMarkIcon className='w-6 h-6 cursor-pointer' onClick={() => { handleCloseModal() }} />
                                 </Dialog.Title>
 
                                 {userCarts?.length > 0 ?
@@ -146,14 +148,14 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                                     :
                                     <div className='flex flex-col justify-center w-full gap-4 py-20'>
                                         {
-                                            !useExistingBasket&& (
+                                            !useExistingBasket && (
                                                 <>
                                                     <div className='text-xl font-normal text-center text-gray-300'>No Basket Available</div>
                                                     <div onClick={() => {
                                                         closeModal();
                                                         openCreateBasketModal();
                                                     }} className='flex justify-center gap-1 cursor-pointer text-sky-500'>
-                                                       <AddBasketIcon /> {translate('label.b2b.basket.createBasketLinkText')}
+                                                        <AddBasketIcon /> {translate('label.b2b.basket.createBasketLinkText')}
                                                     </div>
                                                 </>
                                             )
