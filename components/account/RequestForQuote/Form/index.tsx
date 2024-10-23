@@ -15,6 +15,10 @@ import { stringFormat } from "@framework/utils/parse-util";
 import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
 import Spinner from "@components/ui/Spinner";
 import Link from "next/link";
+import { AlertType } from "@framework/utils/enums";
+interface ITargetPrices {
+  [productId: string]: number;
+}
 
 export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const router = useRouter();
@@ -32,7 +36,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const formConfig = useSaveFormConfig();
   const validationSchema = useSaveFormValidationSchema();
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null); // To track the loading state for each product
-  const [targetPrices, setTargetPrices] = useState({});
+  const [targetPrices, setTargetPrices] = useState<ITargetPrices>({});
   useEffect(() => { if (!isClient) setIsClient(true) }, []);
   useEffect(() => { if (isClient && cartItems?.lineItems) setLines(restructureProductLines(cartItems?.lineItems, null)) }, [isIncludeVAT, isClient, cartItems]);
 
@@ -138,14 +142,14 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       // Check if the target price is a valid number and not negative
       if (isNaN(targetPrice) || targetPrice <= 0) {
         setAlert({
-          type: 'error',
-          msg: 'Target price must be a positive number.'
+          type: AlertType.ERROR,
+          msg: translate("common.message.basket.minimumTargetPriceMsg")
         });
         return;
       }
       if (newTargetPrice > selectedProduct?.maxPrice) {
         setAlert({
-          type: 'error',
+          type: AlertType.ERROR,
           msg: translate("common.message.basket.maxTargetPriceExceedErrorMsg") + ` ${selectedProduct?.maxPrice}.`,
         });
         return
@@ -160,6 +164,10 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
           : line
       );
       setLines(updatedLines);
+      setAlert({
+        type: AlertType.SUCCESS,
+        msg: translate("common.message.basket.tagetPriceUpdateSuccessMsg"),
+      });
     }
     closeModal();
   };
@@ -167,11 +175,17 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
   const handleSetSameAsPrice = () => {
     if (selectedProduct) {
-      const updatedLines: any = lines?.map((line: any) =>
-        line?.productId === selectedProduct?.productId
-          ? { ...line, targetPrice: line?.price }
-          : line
-      );
+      const updatedLines: any = lines?.map((line: any) => {
+        if (line?.productId === selectedProduct?.productId && targetPrices && targetPrices[line?.productId]) {
+          const updatedTargetPrices = { ...targetPrices };
+          delete updatedTargetPrices[line?.productId];
+          setTargetPrices(updatedTargetPrices);
+        }
+        if (line?.productId === selectedProduct?.productId) {
+          return { ...line, targetPrice: line?.price };
+        }
+        return line;
+      });
       setLines(updatedLines);
     }
     closeModal();

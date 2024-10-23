@@ -1340,7 +1340,9 @@
         "emptyCartErrorMsg": "Tu carrito está vacío",
         "maxBasketItemsCountErrorMsg": "La cantidad máxima permitida es {maxBasketItemsCount}.",
         "basketValidationErrorMsg": "Error de validación del carrito",
-        "maxTargetPriceExceedErrorMsg": "El precio objetivo no debe exceder"
+        "maxTargetPriceExceedErrorMsg": "El precio objetivo no debe exceder.",
+        "minimumTargetPriceMsg": "El precio objetivo debe ser mayor que cero.",
+        "tagetPriceUpdateSuccessMsg": "Precio objetivo actualizado correctamente."
       },
       "checkout": {
         "cardNumRequiredMsg": "El número de tarjeta es un campo obligatorio",

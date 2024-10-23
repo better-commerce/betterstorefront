@@ -1342,7 +1342,9 @@
         "maxBasketItemsCountErrorMsg": "Max allowed quantity is {maxBasketItemsCount}.",
         "maxBasketProductCountErrorMsg": "Max allowed quantity is {maxBasketProductCount}.",
         "basketValidationErrorMsg": "Basket validation failed",
-        "maxTargetPriceExceedErrorMsg":"The target price must not exceed"
+        "maxTargetPriceExceedErrorMsg":"The target price must not exceed",
+        "minimumTargetPriceMsg":"Target price must be a greater than zero.",
+        "tagetPriceUpdateSuccessMsg":"Target price updated successfully."
       },
       "checkout": {
         "cardNumRequiredMsg": "Card number is a required field",
