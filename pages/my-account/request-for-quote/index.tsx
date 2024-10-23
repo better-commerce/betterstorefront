@@ -98,7 +98,7 @@ function RequestQuote() {
         fromDate: formatISODate(fromDate),
         toDate: formatISODate(toDate),
         currentPage: 1,
-        pageSize: 40,
+        pageSize: 300,
       }
       fetchAllRFQ(data);
     } else {
