@@ -106,11 +106,10 @@ export default function CartProduct({
     asyncHandleItem(product,qtyChange)
   }
   }
-
   const asyncHandleItem = async (product: any,productQuantity:any) => {
     const data: any = {
       basketId:quoteId,
-      productId: product?.ProductId,
+      productId: product?.productId,
       stockCode: product?.stockCode,
       manualUnitPrice: product?.price,
       displayOrder: product?.displayOrder || "0",
@@ -136,7 +135,7 @@ export default function CartProduct({
     }
 
     debounceTimer = setTimeout(async () => {
-      setLoadingProduct(product.ProductId); 
+      setLoadingProduct(product?.productId); 
         let currentQty = product?.qty || 0;
         if (type === 'increase') {
           if (currentQty < maxBasketProductCount) {
@@ -459,7 +458,7 @@ export default function CartProduct({
               {/* input box start */}
               <div className="flex flex-row items-center px-4 text-gray-900 border">
                 <MinusIcon onClick={() => handleQty(product, 'decrease')} className="w-4 text-gray-400 cursor-pointer hover:text-black" />
-                {loadingProduct === product?.ProductId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={product} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}
+                {loadingProduct === product?.productId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={product} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}
                 <PlusIcon className="w-4 text-gray-400 cursor-pointer hover:text-black" onClick={() => handleQty(product, 'increase')} />
               </div>
               {isMobile ? null : (

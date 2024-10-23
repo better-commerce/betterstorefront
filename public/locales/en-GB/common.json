@@ -1341,7 +1341,8 @@
         "emptyCartErrorMsg": "Your cart is empty",
         "maxBasketItemsCountErrorMsg": "Max allowed quantity is {maxBasketItemsCount}.",
         "maxBasketProductCountErrorMsg": "Max allowed quantity is {maxBasketProductCount}.",
-        "basketValidationErrorMsg": "Basket validation failed"
+        "basketValidationErrorMsg": "Basket validation failed",
+        "maxTargetPriceExceedErrorMsg":"The target price must not exceed"
       },
       "checkout": {
         "cardNumRequiredMsg": "Card number is a required field",

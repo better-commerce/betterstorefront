@@ -2,7 +2,7 @@ import { B2B_QUOTE_NOTE, EmptyGuid, NEXT_PUT_NOTES } from '@components/utils/con
 import axios from 'axios';
 import { useState } from 'react';
 import { useUI } from '@components/ui/context'
-const B2BQuoteComments = ({ quoteId }: any) => {
+const B2BQuoteComments = ({ quoteId, fetchQuoteDetail}: any) => {
   const { setAlert } = useUI();
   const [noteText, setNoteText] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,6 +31,7 @@ const B2BQuoteComments = ({ quoteId }: any) => {
           type: 'success',
           msg: 'Comment submitted successfully.',
         });
+        fetchQuoteDetail(quoteId);
         setNoteText(''); // Clear the textarea
       } else {
         // Handle other non-200 responses

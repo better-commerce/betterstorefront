@@ -1,4 +1,4 @@
-import { PencilIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useSaveFormValidationSchema } from "../SaveFormValidationSchema";
 import { useSaveFormConfig } from "../SaveFormConfig";
@@ -12,7 +12,6 @@ import { NEXT_B2B_GET_USERS } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { stringFormat } from "@framework/utils/parse-util";
-import debounce from 'lodash/debounce'
 import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
 import Spinner from "@components/ui/Spinner";
 import Link from "next/link";
@@ -33,8 +32,9 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const formConfig = useSaveFormConfig();
   const validationSchema = useSaveFormValidationSchema();
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null); // To track the loading state for each product
+  const [targetPrices, setTargetPrices] = useState({});
   useEffect(() => { if (!isClient) setIsClient(true) }, []);
-  useEffect(() => { if (isClient && cartItems?.lineItems) setLines(restructureProductLines(cartItems?.lineItems)) }, [isIncludeVAT, isClient, cartItems]);
+  useEffect(() => { if (isClient && cartItems?.lineItems) setLines(restructureProductLines(cartItems?.lineItems, null)) }, [isIncludeVAT, isClient, cartItems]);
 
   const fetchB2BUsers = async () => {
     let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, {
@@ -121,13 +121,13 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   const removeFromCart = async ({ product }: { product: any }) => {
     const data: any = {
       basketId,
-      productId: product?.ProductId,
+      productId: product?.productId,
       stockCode: product?.stockCode,
       qty: 0,
     };
     const item: any = await addToCart(data, 'delete', { product });
     setCartItems(item);
-    const restructuredLines = restructureProductLines(item?.lineItems);
+    const restructuredLines = restructureProductLines(item?.lineItems, targetPrices);
     setLines(restructuredLines);
   };
 
@@ -143,10 +143,20 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         });
         return;
       }
-
-      const updatedLines: any = lines.map((line: any) =>
-        line.ProductId === selectedProduct.ProductId
-          ? { ...line, targetPrice: newTargetPrice }
+      if (newTargetPrice > selectedProduct?.maxPrice) {
+        setAlert({
+          type: 'error',
+          msg: translate("common.message.basket.maxTargetPriceExceedErrorMsg") + ` ${selectedProduct?.maxPrice}.`,
+        });
+        return
+      }
+      setTargetPrices((prev) => ({
+        ...prev,
+        [selectedProduct?.productId]: parseFloat(newTargetPrice),
+      }));
+      const updatedLines: any = lines?.map((line: any) =>
+        line?.productId === selectedProduct?.productId
+          ? { ...line, targetPrice: parseFloat(newTargetPrice) }
           : line
       );
       setLines(updatedLines);
@@ -157,9 +167,9 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
   const handleSetSameAsPrice = () => {
     if (selectedProduct) {
-      const updatedLines: any = lines.map((line: any) =>
-        line.ProductId === selectedProduct.ProductId
-          ? { ...line, targetPrice: line.price }
+      const updatedLines: any = lines?.map((line: any) =>
+        line?.productId === selectedProduct?.productId
+          ? { ...line, targetPrice: line?.price }
           : line
       );
       setLines(updatedLines);
@@ -174,13 +184,13 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     }
 
     debounceTimer = setTimeout(async () => {
-      setLoadingProduct(product.ProductId); // Set loading state for this product
+      setLoadingProduct(product?.productId); // Set loading state for this product
 
       const asyncHandleItem = async (product: any) => {
         const currentQty = product?.qty || 0;
         const data: any = {
           basketId,
-          productId: product?.ProductId,
+          productId: product?.productId,
           stockCode: product?.stockCode,
           manualUnitPrice: product?.price,
           displayOrder: product?.displayOrder || "0",
@@ -214,7 +224,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         try {
           const updatedCart = await addToCart(data, type, { product });
           setCartItems(updatedCart); // Update cart state
-          const restructuredLines = restructureProductLines(updatedCart?.lineItems);
+          const restructuredLines = restructureProductLines(updatedCart?.lineItems, targetPrices);
           setLines(restructuredLines);
         } catch (error) {
           console.log(error);
@@ -227,7 +237,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         product?.forEach((product: any) => {
           asyncHandleItem(product);
         });
-      } else if (product?.ProductId) {
+      } else if (product?.productId) {
         asyncHandleItem(product);
       }
     }, 200);
@@ -246,7 +256,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
     const asyncHandleItem = async (product: any) => {
       const data = {
         basketId,
-        productId: product?.ProductId || product?.productId,
+        productId:product?.productId,
         stockCode: product?.stockCode,
         manualUnitPrice: product?.price,
         displayOrder: product?.displayOrder || "0",
@@ -257,7 +267,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       try {
         const updatedCart = await addToCart(data, 'ADD', { product });
         setCartItems(updatedCart);
-        const restructuredLines = restructureProductLines(updatedCart?.lineItems);
+        const restructuredLines = restructureProductLines(updatedCart?.lineItems, targetPrices);
         setLines(restructuredLines);
       } catch (error) {
         console.error("Error adding to cart:", error);
@@ -270,7 +280,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       product?.forEach((product: any) => {
         asyncHandleItem(product);
       });
-    } else if (product?.ProductId) {
+    } else if (product?.productId) {
       asyncHandleItem(product);
     }
   };
@@ -311,7 +321,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                 </div>
                 <div className="flex flex-row items-center px-4 text-gray-900 border">
                   <MinusIcon onClick={() => handleItem(item, 'decrease')} className="w-4 text-gray-400 cursor-pointer hover:text-black" />
-                  {loadingProduct === item?.ProductId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={item} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}
+                  {loadingProduct === item?.productId ? <LoadingDots /> : <ProductQtyTextbox maxBasketItemsCount={maxBasketItemsCount} product={item} onUpdateBasket={handleInputQuantity} onLoading={setLoadingProduct} />}
                   <PlusIcon className="w-4 text-gray-400 cursor-pointer hover:text-black" onClick={() => handleItem(item, 'increase')} />
                 </div>
               </div>
@@ -330,7 +340,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         <div className="sm:col-span-4">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col w-full gap-3 p-3 border shadow bg-gray-50 rounded-xl border-slate-200">
-              {Object?.keys(formConfig?.fields).map((fieldKey) => {
+              {Object?.keys(formConfig?.fields)?.map((fieldKey) => {
                 const field: any = formConfig.fields[fieldKey];
                 const today = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD' format
 
@@ -473,9 +483,14 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
 // Helper functions
 
-const restructureProductLines = (lines: any) => {
-  const newLines = lines?.map((value: any) =>
-    sanitizeProduct(value)
+const restructureProductLines = (lines: any, targetPrices: any) => {
+  const newLines = lines?.map((value: any) => {
+    let line = sanitizeProduct(value)
+    if (targetPrices && targetPrices[line?.productId]) {
+      line.targetPrice = targetPrices[line?.productId];
+    }
+    return line;
+  }
   );
   return newLines;
 };
@@ -483,7 +498,7 @@ const restructureProductLines = (lines: any) => {
 const sanitizeProduct = (product: any) => {
   const isIncludeVAT = vatIncluded();
   return {
-    ProductId: product?.productId,
+    productId: product?.productId,
     productName: product?.name,
     image: product?.image,
     slug: product?.slug,
@@ -493,5 +508,6 @@ const sanitizeProduct = (product: any) => {
     price: isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax,
     listPrice: isIncludeVAT ? product?.listPrice?.formatted?.withTax : product?.listPrice?.formatted?.withoutTax,
     targetPrice: isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax,
+    maxPrice: product?.listPrice?.raw?.withTax,
   };
 };

@@ -1339,7 +1339,8 @@
       "basket": {
         "emptyCartErrorMsg": "Ihr Warenkorb ist leer",
         "maxBasketItemsCountErrorMsg": "Die maximale zulässige Menge beträgt {maxBasketItemsCount}.",
-        "basketValidationErrorMsg": "Validierung des Warenkorbs fehlgeschlagen"
+        "basketValidationErrorMsg": "Validierung des Warenkorbs fehlgeschlagen",
+        "maxTargetPriceExceedErrorMsg": "Der Zielpreis darf nicht überschritten werden"
       },
       "checkout": {
         "cardNumRequiredMsg": "Die Kartennummer ist ein Pflichtfeld",

@@ -583,7 +583,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
                     </div>
                   }
                 </div>
-                <B2BQuoteComments quoteId={quoteId} />
+                <B2BQuoteComments quoteId={quoteId} fetchQuoteDetail={fetchQuoteDetail} />
               </div>
               <div className='sm:col-span-4'>
                 <>

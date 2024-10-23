@@ -357,7 +357,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     return true
   }
 
-  const handleItem = (product: any, type = 'increase') => {
+  const handleItem = (product: any, type = 'increase',cb = () => { }) => {
     if (!product?.id) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
@@ -365,7 +365,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     const asyncHandleItem = async (product: any) => {
       const data: any = {
         basketId,
-        productId: product.id,
+        productId:product?.productId,
         stockCode: product.stockCode,
         manualUnitPrice: product.manualUnitPrice,
         displayOrder: product.displayOrderta,
@@ -387,6 +387,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
               maxBasketItemsCount,
             }),
           })
+          cb()
           return
         }
       }
@@ -421,6 +422,45 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
       asyncHandleItem(product)
     }
   }
+
+  const handleInputQuantity =  (product: any,updateQty:any) => {
+    const prevValue: number =  parseInt(product.qty); 
+    const newValue: number = parseInt(updateQty)
+  
+    let qtyChange = newValue - prevValue;
+    if (newValue <= 0) {
+      qtyChange = 0;
+    }
+  if (product && product?.length) {
+    product?.forEach((product: any) => {
+      asyncHandleItem(product,qtyChange)
+      setBasketReValidate([])
+    })
+  } else if (product?.productId) {
+    asyncHandleItem(product,qtyChange)
+  }
+  }
+
+  const asyncHandleItem = async (product: any,productQuantity:any) => {
+    const data: any = {
+      basketId,
+      productId: product?.productId,
+      stockCode: product?.stockCode,
+      manualUnitPrice: product?.price,
+      displayOrder: product?.displayOrder || "0",
+      qty: productQuantity, 
+      targetPrice: product?.targetPrice || product?.price, // Preserve the target price
+    };
+
+    try {
+      const item = await addToCart(data, 'ADD', { product })
+      setCartItems(item)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   const getLineItemSizeWithoutSlug = (product: any) => {
     const productData: any = tryParseJson(product?.attributesJson || {})
@@ -531,6 +571,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                       insertToLocalWishlist={insertToLocalWishlist}
                                       reValidateData={reValidateData}
                                       handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                                      maxBasketItemsCount={maxBasketItemsCount}
+                                      handleInputQuantity={handleInputQuantity}
                                     />
                                   </li>
                                 </>

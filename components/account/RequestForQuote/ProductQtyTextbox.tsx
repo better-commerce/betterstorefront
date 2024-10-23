@@ -55,7 +55,7 @@ function ProductQtyTextbox({ product, maxBasketItemsCount, onUpdateBasket, onLoa
 
   const onUpdateBasketProduct = useDebounce((updateQty: number) => {
     if (product?.qty === updateQty) return
-    onLoading(product?.ProductId)
+    onLoading(product?.productId)
     onUpdateBasket(product, updateQty)
   }, UPDATE_BASKET_DEBOUNCE_TIMEOUT)
 
