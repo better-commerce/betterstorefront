@@ -1339,7 +1339,9 @@
         "emptyCartErrorMsg": "Votre panier est vide",
         "maxBasketItemsCountErrorMsg": "La quantité maximale autorisée est de {maxBasketItemsCount}.",
         "basketValidationErrorMsg": "La validation du panier a échoué",
-        "maxTargetPriceExceedErrorMsg": "Le prix indicatif ne doit pas dépasser"
+        "maxTargetPriceExceedErrorMsg": "Le prix indicatif ne doit pas dépasser.",
+        "minimumTargetPriceMsg": "Le prix indicatif doit être supérieur à zéro.",
+        "tagetPriceUpdateSuccessMsg": "Prix ​​cible mis à jour avec succès."
       },
       "checkout": {
         "cardNumRequiredMsg": "Le numéro de carte est un champ obligatoire",
