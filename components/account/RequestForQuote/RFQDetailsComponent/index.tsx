@@ -1,21 +1,16 @@
-
 import { useTranslation } from "@commerce/utils/use-translation";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { Dialog } from '@components/account/RequestForQuote/RFQCancleDialog';
 import { DATE_FORMAT, NEXT_UPDATE_STATUS_RFQ } from "@components/utils/constants";
 import { AlertType } from "@framework/utils/enums";
 import { useUI } from "@components/ui";
 import moment from "moment";
-import { priceFormat } from "@framework/utils/parse-util";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-
 export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: any) {
     const translate = useTranslation();
-    const router = useRouter();
     const { setAlert } = useUI();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [cancelComment, setCancelComment] = useState('');
@@ -73,29 +68,17 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                     <div className="flex justify-between">
                         <div className="relative">
                             <div className="w-full">
-                                <h5 className="font-bold text-18 text-secondary-full-opacity ">
-                                    Company
-                                </h5>
-
-                                <p className="text-sm text-black-light dark:text-gray-900">
-                                    {rfqData?.companyName}
-                                </p>
-
+                                <h5 className="font-bold text-18 text-secondary-full-opacity ">Company</h5>
+                                <p className="text-sm text-black-light dark:text-gray-900">{rfqData?.companyName}</p>
                             </div>
                         </div>
                         <div className="hidden sm:block">
-                            <h5 className="uppercase font-10 text-black-light dark:text-gray-900">
-                                RFQ Created </h5>
-                            <p className="text-sm dark:text-black text-primary">
-                                {moment(new Date(rfqData?.created)).format(DATE_FORMAT)}
-                            </p>
+                            <h5 className="uppercase font-10 text-black-light dark:text-gray-900">RFQ Created</h5>
+                            <p className="text-sm dark:text-black text-primary">{moment(new Date(rfqData?.created)).format(DATE_FORMAT)}</p>
                         </div>
                         <div className="hidden sm:block">
-                            <h5 className="uppercase font-10 text-black-light dark:text-gray-900">
-                                Valid Until </h5>
-                            <p className={`text-sm dark:text-black ${rfqData?.validDays > 0 ? 'text-primary' : 'text-red-400'}`}>
-                                {rfqData?.validDays > 0 ? moment(new Date(rfqData?.validUntil)).format(DATE_FORMAT) : 'expired'}
-                            </p>
+                            <h5 className="uppercase font-10 text-black-light dark:text-gray-900">Valid Until</h5>
+                            <p className={`text-sm dark:text-black ${rfqData?.validDays > 0 ? 'text-primary' : 'text-red-400'}`}>{rfqData?.validDays > 0 ? moment(new Date(rfqData?.validUntil)).format(DATE_FORMAT) : 'expired'}</p>
                         </div>
                     </div>
                 </div>
@@ -150,7 +133,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                             <tr className="text-xs bg-gray-200 border-t shadow-none group border-slate-400 hover:shadow hover:bg-gray-100">
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
-                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap"> {rfqData?.lines?.reduce((total: number, item: any) => total + (item?.qty || 0), 0)}</td>
+                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.lines?.reduce((total: number, item: any) => total + (item?.qty || 0), 0)}</td>
                                 <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.grandTotal?.formatted?.withTax}</td>
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                             </tr>
@@ -162,24 +145,13 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             <div className="flex justify-between w-full my-4">
                 <Link href="/my-account/request-for-quote" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">{translate('label.myAccount.rfq.backToList')}</Link>
                 {(rfqData?.status !== 'Cancelled' && rfqData?.status !== 'QuoteCreated') && (
-                    <button
-                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
-                        onClick={() => setIsDialogOpen(true)}
-                    >
-                        {translate('label.myAccount.rfq.cancelRFQ')}
-                    </button>
+                    <button className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" onClick={() => setIsDialogOpen(true)} > {translate('label.myAccount.rfq.cancelRFQ')} </button>
                 )}
             </div>
-
             <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={translate('label.myAccount.rfq.cancelRFQ')}>
                 <div className="mb-4">
                     {<label htmlFor="cancelComment" className="block mb-2 text-sm font-medium text-gray-700">{translate('label.myAccount.rfq.commentRequired')}</label>}
-                    <input
-                        className={`w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                        value={cancelComment}
-                        onChange={(e) => setCancelComment(e.target.value)}
-                        placeholder={translate('label.myAccount.rfq.enterReason')}
-                    />
+                    <input className={`w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`} value={cancelComment} onChange={(e) => setCancelComment(e.target.value)} placeholder={translate('label.myAccount.rfq.enterReason')} />
                 </div>
                 <div className="flex justify-end mt-4 space-x-2">
                     <div className="flex items-center justify-center border border-gray-300 rounded-full shadow-sm btn" onClick={() => setIsDialogOpen(false)}>{translate('label.myAccount.rfq.cancel')}</div>
