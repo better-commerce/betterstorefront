@@ -150,7 +150,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                             <tr className="text-xs bg-gray-200 border-t shadow-none group border-slate-400 hover:shadow hover:bg-gray-100">
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
-                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.lines?.length}</td>
+                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap"> {rfqData?.lines?.reduce((total: number, item: any) => total + (item?.qty || 0), 0)}</td>
                                 <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.grandTotal?.formatted?.withTax}</td>
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                             </tr>
@@ -169,7 +169,6 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                         {translate('label.myAccount.rfq.cancelRFQ')}
                     </button>
                 )}
-
             </div>
 
             <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} title={translate('label.myAccount.rfq.cancelRFQ')}>
