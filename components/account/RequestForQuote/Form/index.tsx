@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useSaveFormValidationSchema } from "../SaveFormValidationSchema";
 import { useSaveFormConfig } from "../SaveFormConfig";
 import { useFormik } from "formik";
-import { useUI } from "@components/ui";
+import { LoadingDots,useUI } from "@components/ui";
 import useCart from '@components/services/cart';
 import { vatIncluded } from "@framework/utils/app-util";
 import { useEffect, useState, useCallback } from "react";
@@ -301,13 +301,6 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
 
 
 
-  const LoadingDots = () => (
-    <div className="w-10 loading-dots ">
-      <span className="dot">•</span>
-      <span className="dot">•</span>
-      <span className="dot">•</span>
-    </div>
-  );
 
   return (
     <div className="flex flex-col w-full mt-2">
