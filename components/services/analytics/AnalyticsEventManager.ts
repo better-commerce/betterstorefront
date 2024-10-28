@@ -94,7 +94,6 @@ class EventManager {
                 case AnalyticsType.OMNILYTICS:
 
                     if (featureToggle?.features?.enableOmnilytics) {
-                        debugger
                         const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
                         if (dataLayer) {
                             eventDispatcher(eventTypeName, translatedEventData)
