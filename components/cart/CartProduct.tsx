@@ -313,7 +313,7 @@ export default function CartProduct({
           )}
           <div className="flex-1">
             <Link href={`/${product.slug}`}>
-              <span className="font-light text-black font-18 font-Inter">
+              <span className="font-normal text-black font-14 font-Inter">
                 {productNameWithVoltageAttr}
               </span>
             </Link>
