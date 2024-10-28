@@ -5,7 +5,7 @@ import { Popover } from "@headlessui/react";
 import React, { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import useCart from '@components/services/cart'
-import { getCurrentPage, isB2BUser } from "@framework/utils/app-util";
+import { getCurrentPage, isB2BUser, resetBasket } from "@framework/utils/app-util";
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_TRANSFER_BASKET, SITE_ORIGIN_URL } from "@components/utils/constants";
@@ -123,10 +123,10 @@ export default function B2BBaskets() {
     }
   }
 
-  const handleTransferBasket = async (basketId: string, transitUserId: string) => {
+  const handleTransferBasket = async (basketIdToTransfer: string, transitUserId: string) => {
     setLoadingAction(LoadingActionType.TRANSFER_BASKET)
     const payload = {
-      basketId,
+      basketId: basketIdToTransfer,
       transitUserId,
       currentUserId: user?.userId,
       companyId: user?.companyId,
@@ -136,6 +136,9 @@ export default function B2BBaskets() {
 
     if (data?.recordId !== EmptyGuid) {
       closeTransferBasketModal()
+      if (basketIdToTransfer == basketId) {
+        resetBasket(setBasketId, generateBasketId);
+      }
       setAlert({ type: AlertType.SUCCESS, msg: data?.message })
       if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
         getBaskets(user?.userId)

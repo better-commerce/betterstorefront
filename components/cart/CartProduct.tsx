@@ -20,6 +20,7 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useRouter } from 'next/router'
+import wishlistHandler from '@components/services/wishlist'
 
 export default function CartProduct({
   product,
@@ -62,6 +63,7 @@ export default function CartProduct({
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
   const router = useRouter()
   const quoteId = router?.query?.quoteId?.[0]
+  const { isInWishList } = wishlistHandler()
   const getUserId = () => {
     return user?.userId && user?.userId != EmptyGuid
       ? user?.userId
@@ -80,7 +82,7 @@ export default function CartProduct({
   const insertToLocalWishlist = (product: any) => {
     addToWishlist(product)
     // setIsLoading({ action: 'move-wishlist', state: true })
-    handleItem(product, 'delete')
+    // handleItem(product, 'delete')
     // setMovedProducts((prev: any) => [...prev, { product: product, msg: MOVED_TO_WISHLIST }])
     // setIsLoading({ action: '', state: false })
     // setAlert({ type: 'success', msg: ADDED_TO_WISH })
@@ -473,7 +475,11 @@ export default function CartProduct({
                       <LoadingDots />
                     </i>
                   ) : (
-                    <HeartIcon className='w-6 h-6' />
+                      isInWishList(product?.productId) ? (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                      ) : (
+                        <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                      )
                   )}
                 </button>
               )}
