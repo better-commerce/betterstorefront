@@ -1,20 +1,13 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import axios from 'axios'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LoadingDots, useUI } from '@components/ui'
 import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline'
-import {
-  EmptyGuid,
-  MAX_ADD_TO_CART_LIMIT,
-  Messages,
-  NEXT_CREATE_WISHLIST,
-  NEXT_GET_ADDON_PRODUCTS,
-} from '@components/utils/constants'
+import { EmptyGuid, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import CartAddonsSidebar from './Addons/CartAddonsSidebar'
 import { deliveryDateFormat, matchStrings, stringFormat, tryParseJson } from '@framework/utils/parse-util'
-import { cartItemsValidateAddToCart } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
@@ -22,52 +15,17 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useRouter } from 'next/router'
 import wishlistHandler from '@components/services/wishlist'
 
-export default function CartProduct({
-  product,
-  css,
-  isIncludeVAT,
-  isMobile,
-  // key,
-  handleToggleOpenSizeChangeModal,
-  handleItem,
-  getLineItemSizeWithoutSlug,
-  deviceInfo,
-  maxBasketItemsCount,
-  slaDate,
-  openModal = () => { },
-  setItemClicked,
-  reValidateData,
-  soldOutMessage,
-  setBasketReValidate,
-  resetKitCart,
-  addToCart,
-  setQuoteViewData
-}: any) {
-  const {
-    addToWishlist,
-    openWishlist,
-    setSidebarView,
-    closeSidebar,
-    cartItems,
-    openLoginSideBar,
-    user,
-    isGuestUser,
-    setAlert,
-  } = useUI()
+export default function CartProduct({ product, css, isIncludeVAT, isMobile, handleToggleOpenSizeChangeModal, handleItem, getLineItemSizeWithoutSlug, deviceInfo, maxBasketItemsCount, slaDate, openModal = () => { }, setItemClicked, reValidateData, soldOutMessage, setBasketReValidate, resetKitCart, addToCart, setQuoteViewData }: any) {
+  const { addToWishlist, openWishlist, setSidebarView, closeSidebar, cartItems, openLoginSideBar, user, isGuestUser, setAlert, } = useUI()
   const [loadingWishlist, setLoadingWishlist] = useState(false)
   const [isAddonProducts, setAddonProducts] = useState([])
   const [isModalClose, setModalClose] = useState(false)
-  const [qtyClicked, setQtyClicked] = useState(false)
-  const [qty, setQty] = useState(product?.qty)
-  const [validQty, setValidQty] = useState(true)
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
   const router = useRouter()
   const quoteId = router?.query?.quoteId?.[0]
   const { isInWishList } = wishlistHandler()
   const getUserId = () => {
-    return user?.userId && user?.userId != EmptyGuid
-      ? user?.userId
-      : cartItems?.userId
+    return user?.userId && user?.userId != EmptyGuid ? user?.userId : cartItems?.userId
   }
   const translate = useTranslation()
   const openWishlistAfter = () => {
@@ -81,41 +39,35 @@ export default function CartProduct({
 
   const insertToLocalWishlist = (product: any) => {
     addToWishlist(product)
-    // setIsLoading({ action: 'move-wishlist', state: true })
-    // handleItem(product, 'delete')
-    // setMovedProducts((prev: any) => [...prev, { product: product, msg: MOVED_TO_WISHLIST }])
-    // setIsLoading({ action: '', state: false })
-    // setAlert({ type: 'success', msg: ADDED_TO_WISH })
-    // openWishlist()
     openWishlistAfter()
   }
 
-  const handleInputQuantity =  (product: any,updateQty:any) => {
-    const prevValue: number =  parseInt(product.qty); 
+  const handleInputQuantity = (product: any, updateQty: any) => {
+    const prevValue: number = parseInt(product.qty);
     const newValue: number = parseInt(updateQty)
-  
+
     let qtyChange = newValue - prevValue;
     if (newValue <= 0) {
       qtyChange = 0;
     }
-  if (product && product?.length) {
-    product?.forEach((product: any) => {
-      asyncHandleItem(product,qtyChange)
-      setBasketReValidate([])
-    })
-    resetKitCart()
-  } else if (product?.productId) {
-    asyncHandleItem(product,qtyChange)
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product, qtyChange)
+        setBasketReValidate([])
+      })
+      resetKitCart()
+    } else if (product?.productId) {
+      asyncHandleItem(product, qtyChange)
+    }
   }
-  }
-  const asyncHandleItem = async (product: any,productQuantity:any) => {
+  const asyncHandleItem = async (product: any, productQuantity: any) => {
     const data: any = {
-      basketId:quoteId,
+      basketId: quoteId,
       productId: product?.productId,
       stockCode: product?.stockCode,
       manualUnitPrice: product?.price,
       displayOrder: product?.displayOrder || "0",
-      qty: productQuantity, 
+      qty: productQuantity,
     };
 
     try {
@@ -128,48 +80,48 @@ export default function CartProduct({
     }
   }
 
-   let maxBasketProductCount = 100
-  let debounceTimer: any = null; 
-  const handleQty =  (product: any,type = 'increase') => {
+  let maxBasketProductCount = 100
+  let debounceTimer: any = null;
+  const handleQty = (product: any, type = 'increase') => {
 
     if (debounceTimer) {
-      clearTimeout(debounceTimer); 
+      clearTimeout(debounceTimer);
     }
 
     debounceTimer = setTimeout(async () => {
-      setLoadingProduct(product?.productId); 
-        let currentQty = product?.qty || 0;
-        if (type === 'increase') {
-          if (currentQty < maxBasketProductCount) {
-            currentQty = 1; 
-          } else {
-            setAlert({
-              type: 'error',
-              msg: stringFormat(translate('common.message.basket.maxBasketProductCountErrorMsg'), {
-                maxBasketProductCount,
-              }),
-            });
-            setLoadingProduct(null);
-            return;
-          }
+      setLoadingProduct(product?.productId);
+      let currentQty = product?.qty || 0;
+      if (type === 'increase') {
+        if (currentQty < maxBasketProductCount) {
+          currentQty = 1;
+        } else {
+          setAlert({
+            type: 'error',
+            msg: stringFormat(translate('common.message.basket.maxBasketProductCountErrorMsg'), {
+              maxBasketProductCount,
+            }),
+          });
+          setLoadingProduct(null);
+          return;
         }
+      }
 
-        if (type === 'decrease') {
-          if (currentQty > 1) {
-            currentQty = - 1; 
-          } else {
-            currentQty = 0;
-          }
+      if (type === 'decrease') {
+        if (currentQty > 1) {
+          currentQty = - 1;
+        } else {
+          currentQty = 0;
         }
+      }
 
-     if (product && product?.length) {
+      if (product && product?.length) {
         product?.forEach((product: any) => {
-          asyncHandleItem(product,currentQty)
+          asyncHandleItem(product, currentQty)
           setBasketReValidate([])
         })
         resetKitCart()
       } else if (product?.productId) {
-        asyncHandleItem(product,currentQty)
+        asyncHandleItem(product, currentQty)
       }
     }, 200);
   }
@@ -187,9 +139,7 @@ export default function CartProduct({
         try {
           await axios.post(NEXT_CREATE_WISHLIST, {
             id: getUserId(),
-            productId: itemClicked?.length
-              ? product?.productId.toLowerCase()
-              : itemClicked?.productId.toLowerCase(),
+            productId: itemClicked?.length ? product?.productId.toLowerCase() : itemClicked?.productId.toLowerCase(),
             flag: true,
           })
           insertToLocalWishlist(product)
@@ -214,19 +164,6 @@ export default function CartProduct({
     }
   }
 
-  // const fetchAddonsProduct = async () =>{
-  //   const { data: relatedProducts } = await axios.get(NEXT_GET_ADDON_PRODUCTS, {
-  //     params: { productId: product?.productId || product?.recordId },
-  //   })
-  //   if(relatedProducts){
-  //     setAddonProducts(relatedProducts)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchAddonsProduct()
-  // }, [])
-
   const EtaDate = new Date()
   EtaDate.setDate(EtaDate.getDate() + slaDate)
 
@@ -238,56 +175,17 @@ export default function CartProduct({
   }
 
   const voltageAttr: any = tryParseJson(product?.attributesJson)
-  const electricVoltAttrLength = voltageAttr?.Attributes?.filter(
-    (x: any) => x?.FieldCode == 'electrical.voltage'
-  )
+  const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
 
   let productNameWithVoltageAttr: any = product?.name?.toLowerCase()
-  productNameWithVoltageAttr = electricVoltAttrLength?.length > 0
-    ? electricVoltAttrLength?.map((volt: any, vId: number) => (
-      <span key={`voltage-${vId}`}>
-        {product.name?.toLowerCase()}{' '}
-        <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
-          {volt?.ValueText}
-        </span>
+  productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+    <span key={`voltage-${vId}`}>
+      {product.name?.toLowerCase()}{' '}
+      <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+        {volt?.ValueText}
       </span>
-    ))
-    : (productNameWithVoltageAttr = product?.name?.toLowerCase())
-
-  function handleChangeQuantity(qty: any) {
-    setQty(qty)
-  }
-
-  function handleSubmitQty(e: any, quant: any) {
-    if (e?.target?.value > 0 || quant) {
-      e?.preventDefault();
-      const isValid = cartItemsValidateAddToCart(
-        cartItems,
-        maxBasketItemsCount,
-        quant ? quant - product?.qty : qty - product?.qty,
-      )
-      if (isValid) {
-        handleItem(product, 'select', quant ? quant : qty)
-        return;
-      }
-      else {
-        setQty(product?.qty)
-        setValidQty(false)
-        setAlert({
-          type: 'error',
-          msg: stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }),
-        })
-      }
-    }
-    else {
-      setQty(product?.qty)
-      setValidQty(false)
-      setAlert({
-        type: 'error',
-        msg: translate('common.message.requestCouldNotProcessErrorMsg'),
-      })
-    }
-  }
+    </span>
+  )) : (productNameWithVoltageAttr = product?.name?.toLowerCase())
 
   return (
     <Fragment key={product?.id}>
@@ -475,11 +373,11 @@ export default function CartProduct({
                       <LoadingDots />
                     </i>
                   ) : (
-                      isInWishList(product?.productId) ? (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                      ) : (
-                        <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                      )
+                    isInWishList(product?.productId) ? (
+                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                    ) : (
+                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                    )
                   )}
                 </button>
               )}
