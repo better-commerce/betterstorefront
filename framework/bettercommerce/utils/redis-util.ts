@@ -35,7 +35,7 @@ const getAppBuildId = () => {
  */
 const getRedisUID = (key: any) => {
   const appBuildId = getAppBuildId()
-  return `${key}_${appBuildId}`
+  return `FE_${process.env.SITE_NAME!}_${appBuildId}_${key}`
 }
 
 export const getData = async (
