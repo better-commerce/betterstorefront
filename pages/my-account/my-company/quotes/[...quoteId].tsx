@@ -490,13 +490,31 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
           </span>
         </li>
       </ol>
-      <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
+      <div className="flex-1 rounded-xl">
         {!quoteViewData ? (<Spinner />) : (
           <>
-            <div className=''>
+            <div className='flex justify-between w-full'>
               <h1 className="flex items-center gap-1 text-xl font-normal sm:text-2xl dark:text-black justify-normal">
                 {quoteViewData?.quoteInfo?.customQuoteNo} {quoteViewData?.quoteInfo?.rfqNumber !== "" && <Link className='text-sm font-semibold text-sky-500' href={`/my-account/request-for-quote/rfq/${quoteViewData?.quoteInfo?.rfqId}`}>({`RFQ#: ${quoteViewData?.quoteInfo?.rfqNumber}`})</Link>}
               </h1>
+              <div>
+                {
+                  quoteViewData?.quoteInfo?.status == QuoteStatus.ABANDONED ?
+                    <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Abandoned</span> :
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.CANCELLED ?
+                      <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Cancelled</span> :
+                      quoteViewData?.quoteInfo?.status == QuoteStatus.CONVERTED ?
+                        <span className='px-3 py-1 text-xs border rounded-full text-emerald-600 bg-emerald-200 border-emerald-400'>Converted</span> :
+                        quoteViewData?.quoteInfo?.status == QuoteStatus.DRAFT ?
+                          <span className='px-3 py-1 text-xs text-gray-600 bg-gray-200 border border-gray-400 rounded-full'>Draft</span> :
+                          quoteViewData?.quoteInfo?.status == QuoteStatus.NOT_QUOTE ?
+                            <span className='px-3 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-400 rounded-full'>Not Quote</span> :
+                            quoteViewData?.quoteInfo?.status == QuoteStatus.PAYMENT_LINK_SENT ?
+                              <span className='px-3 py-1 text-xs border rounded-full text-sky-600 bg-sky-200 border-sky-400'>Payment Link Sent</span> :
+                              quoteViewData?.quoteInfo?.status == QuoteStatus.QUOTE_SENT ?
+                                <span className='px-3 py-1 text-xs text-purple-600 bg-purple-100 border border-purple-400 rounded-full'>Quote Sent</span> : ''
+                }
+              </div>
             </div>
             <div className='grid grid-cols-1 gap-4 py-4 sm:grid-cols-12 max-panel-mobile'>
               <div className='flex-1 overflow-y-auto sm:col-span-8 rounded-xl hiddenScrollbar'>
@@ -587,7 +605,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
               </div>
               <div className='sm:col-span-4'>
                 <>
-                  <section aria-labelledby="summary-heading" className="top-0 p-4 px-4 mt-0 bg-slate-100 rounded-2xl md:sticky sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
+                  <section aria-labelledby="summary-heading" className="p-4 px-4 mt-0 top-20 bg-slate-100 rounded-2xl md:sticky sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
                     <h4 id="summary-heading" className="mb-4 font-semibold text-black uppercase font-xl">{translate('label.quotes.quoteSummaryText')}</h4>
                     <Disclosure defaultOpen>
                       {({ open }) => (
@@ -670,7 +688,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
                         {quoteViewData?.grandTotal?.formatted?.withTax}
                       </dd>
                     </div>
-                    {quoteData?.status != QuoteStatus.CONVERTED && quoteData?.status != QuoteStatus.CANCELLED && quoteData?.status != QuoteStatus.ABANDONED &&
+                    {quoteViewData?.quoteInfo?.status != QuoteStatus.CONVERTED && quoteViewData?.quoteInfo?.status != QuoteStatus.CANCELLED && quoteViewData?.quoteInfo?.status != QuoteStatus.ABANDONED &&
                       <div className="flex flex-col w-full my-4">
                         <DefaultButton buttonType="button" action={async () => onPlaceOrder()} title="Place Order" />
                       </div>
