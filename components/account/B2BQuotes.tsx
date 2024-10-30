@@ -97,7 +97,7 @@ function B2BQuotes({ quotes }: any) {
                               const currentDate = moment();
                               let validDays = validUntilDate.diff(currentDate, 'days') + 1;
                               validDays = validDays < 0 ? 0 : validDays;
-                              return `${validDays} ${translate('label.product.productSidebar.daysText')}`;
+                              return validDays > 0 ? <span className='font-semibold text-black'>{validDays} {translate('label.product.productSidebar.daysText')}</span> : <span className='text-red-300'>expired</span>;
                             })()
                           }
                         </td>
