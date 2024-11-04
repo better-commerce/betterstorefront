@@ -10,6 +10,7 @@ import { NEXT_GET_DETAILS_RFQ, NEXT_UPDATE_STATUS_RFQ } from '@components/utils/
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import RFQDetailsComponent from '@components/account/RequestForQuote/RFQDetailsComponent';
 import { useTranslation } from '@commerce/utils/use-translation';
+import { isB2BUser } from '@framework/utils/app-util';
 
 interface RFQItem {
   productId : string,
@@ -36,16 +37,28 @@ const RFQDetailsPage: any = ({}) => {
   const router = useRouter();
   const rfqId = router?.query?.rfqId?.[0];
   const translate = useTranslation();
-  const { setAlert } = useUI();
+  const { setAlert,user } = useUI();
   const [rfqData, setRfqData] = useState<RFQData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
-  useEffect(() => { if (rfqId) { fetchRFQData(); } }, [rfqId]);
+  useEffect(() => { 
+    if (!isB2BUser(user)){
+      router.push('/');
+    }
+    else if (rfqId) { fetchRFQData(); }
+   }, [rfqId,user]);
 
   const fetchRFQData = async () => {
 
     setIsLoading(true);
-    try { const response: any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId }); setRfqData(response?.data); } 
+    try { 
+      const response: any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId });
+      if (response?.data?.companyId !== user?.companyId){
+        router.push('/');
+        return;
+      }
+      setRfqData(response?.data);
+    } 
     catch (err) { setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') }); } 
     finally { setIsLoading(false); }
   };

@@ -73,6 +73,16 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
         setUser(userObj)
         setIsGuestUser(false)
         DataLayerInstance.setItemInDataLayer('visitorId', userObj?.userId)
+        if(document){
+          const url = new URL(document?.URL);
+          const redirectPath = url?.searchParams?.get('referral');
+          if (redirectPath) {
+            Router.push(redirectPath);
+            return
+          }
+          Router.push('/')
+          return;
+        }
         Router.push('/')
       }
       if (cb) cb();

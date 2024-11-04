@@ -14,6 +14,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { useEffect, useState } from 'react'
 
 function LoginPage({ appConfig, pluginConfig = [] }: any) {
   const { recordAnalytics } = useAnalytics()
@@ -21,6 +22,11 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
   const translate = useTranslation()
   let b2bSettings: any = []
   let pluginSettings: any = []
+  const [url, setUrl] = useState<any>();
+
+  useEffect(() => {
+    setUrl(new URL(document?.URL))
+  },[])
 
   if (appConfig) {
     appConfig = JSON.parse(decrypt(appConfig))
@@ -40,7 +46,7 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
 
   recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Login, })
 
-  if (!isGuestUser && user.userId) {
+  if (!isGuestUser && user.userId && !url?.searchParams?.get('referral')) {
     Router.push('/')
     return <></>
   }
