@@ -16,14 +16,14 @@ import { useRouter } from 'next/router'
 import wishlistHandler from '@components/services/wishlist'
 
 export default function CartProduct({ product, css, isIncludeVAT, isMobile, handleToggleOpenSizeChangeModal, handleItem, getLineItemSizeWithoutSlug, deviceInfo, maxBasketItemsCount, slaDate, openModal = () => { }, setItemClicked, reValidateData, soldOutMessage, setBasketReValidate, resetKitCart, addToCart, setQuoteViewData }: any) {
-  const { addToWishlist, openWishlist, setSidebarView, closeSidebar, cartItems, openLoginSideBar, user, isGuestUser, setAlert, } = useUI()
+  const { addToWishlist, openWishlist, setSidebarView, closeSidebar, cartItems, openLoginSideBar, user, isGuestUser, setAlert, removeFromWishlist } = useUI()
   const [loadingWishlist, setLoadingWishlist] = useState(false)
   const [isAddonProducts, setAddonProducts] = useState([])
   const [isModalClose, setModalClose] = useState(false)
   const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
   const router = useRouter()
   const quoteId = router?.query?.quoteId?.[0]
-  const { isInWishList } = wishlistHandler()
+  const { isInWishList,deleteWishlistItem } = wishlistHandler()
   const getUserId = () => {
     return user?.userId && user?.userId != EmptyGuid ? user?.userId : cartItems?.userId
   }
@@ -161,6 +161,15 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
       closeSidebar()
       setSidebarView('LOGIN_VIEW')
       enableHtmlScroll()
+    }
+  }
+
+  const deleteItemFromWishlist = (product: any) => {
+    if (isInWishList(product?.productId)) {
+      deleteWishlistItem(user?.userId, product?.productId)
+      removeFromWishlist(product?.productId)
+      openWishlist()
+      return
     }
   }
 
@@ -362,9 +371,7 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
                 <PlusIcon className="w-4 text-gray-400 cursor-pointer hover:text-black" onClick={() => handleQty(product, 'increase')} />
               </div>
               {isMobile ? null : (
-                <button
-                  type="button"
-                  onClick={() => handleWishList(product)}
+                <button type="button"
                   className="sm:h-10 sm:w-10 w-full col-span-2 text-slate-800 hover:text-red-600 font-semibold border-[1px] rounded border-brand-blue flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-70"
                   disabled={loadingWishlist}
                 >
@@ -373,11 +380,11 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
                       <LoadingDots />
                     </i>
                   ) : (
-                    isInWishList(product?.productId) ? (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                    ) : (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                    )
+                      isInWishList(product?.productId) ? (
+                        <HeartIcon onClick={()=>{deleteItemFromWishlist(product)}} className="flex-shrink-0 w-6 h-6 text-pink" />
+                      ) : (
+                          <HeartIcon onClick={() => handleWishList(product)} className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                      )
                   )}
                 </button>
               )}
