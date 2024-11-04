@@ -117,6 +117,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                                 <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.productName')}</th>
                                 <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.quantity')}</th>
                                 <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.price')}</th>
+                                <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.linePrice')}</th>
                                 <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('label.myAccount.rfq.targetPrice')}</th>
                             </tr>
                         </thead>
@@ -127,6 +128,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.productName}</td>
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.qty}</td>
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.price ? `${item?.price?.formatted?.withTax}` : translate('label.myAccount.rfq.notAvailable')}</td>
+                                    <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{`${rfqData?.currencySymbol}` + `${((item?.qty) * (item?.price?.raw?.withTax)).toFixed(2)}`}</td>
                                     <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{item?.targetPrice ? `${item?.targetPrice.formatted?.withTax}` : translate('label.myAccount.rfq.notAvailable')}</td>
                                 </tr>
                             ))}
@@ -134,6 +136,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                                 <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.lines?.reduce((total: number, item: any) => total + (item?.qty || 0), 0)}</td>
+                                <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap"></td>
                                 <td className="px-3 py-3 text-[13px] text-black font-semibold whitespace-nowrap">{rfqData?.grandTotal?.formatted?.withTax}</td>
                                 <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap"></td>
                             </tr>

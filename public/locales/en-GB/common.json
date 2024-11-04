@@ -416,6 +416,7 @@
         "company": "Company",
         "notes": "Notes",
         "lineItems": "Line Items",
+        "linePrice": "Line Price",
         "stockCode": "Stock Code",
         "productName": "Name",
         "quantity": "Quantity",

@@ -417,6 +417,7 @@
         "company": "Firma",
         "notes": "Notizen",
         "lineItems": "Positionen",
+        "linePrice": "Linienpreis",
         "stockCode": "Bestandscode",
         "productName": "Name",
         "quantity": "Menge",
