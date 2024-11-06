@@ -419,7 +419,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   const fetchQuoteDetail = (quoteId: any) => {
     const loadView = async (quoteId: any) => {
       const { data: quoteDetails }: any = await axios.post(`${NEXT_GET_CART}?basketId=${quoteId}`)
-      if (quoteDetails?.quoteInfo?.companyId !== user?.companyId) {
+      if (quoteDetails?.quoteInfo?.companyId && quoteDetails?.quoteInfo?.companyId !== user?.companyId) {
         router.push('/my-account');
         return;
       }
@@ -474,9 +474,12 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   useEffect(() => {
     if (!isB2BUser(user)) {
       router.push('/');
+      return
     }
     const quoteId = router.query?.quoteId[0]
-    fetchQuoteDetail(quoteId)
+     if (quoteId) {
+      fetchQuoteDetail(quoteId)
+    }
   }, [router.query])
 
   return (
