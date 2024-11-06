@@ -271,6 +271,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
     autoAppliedPromos: null,
   })
   const [itemCategories, setItemCategories] = useState<any>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const currencyCode = getCurrency()
   let currentPage = getCurrentPage()
 
@@ -418,11 +419,13 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   }
   const fetchQuoteDetail = (quoteId: any) => {
     const loadView = async (quoteId: any) => {
+      setIsLoading(true);
       const { data: quoteDetails }: any = await axios.post(`${NEXT_GET_CART}?basketId=${quoteId}`)
       if (quoteDetails?.quoteInfo?.companyId && quoteDetails?.quoteInfo?.companyId !== user?.companyId) {
         router.push('/my-account');
         return;
       }
+      setIsLoading(false);
       setQuoteViewData(quoteDetails)
     }
     if (quoteId) loadView(quoteId)
@@ -481,6 +484,12 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
       fetchQuoteDetail(quoteId)
     }
   }, [router.query])
+
+  if(isLoading){
+    return (
+        <Spinner />
+      )
+  }
 
   return (
     <>
