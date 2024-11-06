@@ -54,8 +54,11 @@ const RFQDetailsPage: any = ({}) => {
     try { 
       const response: any = await axios.post(NEXT_GET_DETAILS_RFQ, { rfqId });
       if (response?.data?.companyId !== user?.companyId){
-        router.push('/');
+        router.push('/my-account');
         return;
+      }
+      if (!response?.data){
+        setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') });
       }
       setRfqData(response?.data);
     } 
@@ -66,7 +69,6 @@ const RFQDetailsPage: any = ({}) => {
   if (isLoading) { return <Spinner />; }
 
   if (!rfqData) {
-    setAlert({ type: AlertType.ERROR, msg: translate('label.myAccount.rfq.requestCouldNotProcessErrorMsg') });
     return <>NO DATA</>;
   }
 

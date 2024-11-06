@@ -39,6 +39,7 @@ import { PagePropType, getPagePropType } from '@framework/page-props'
 import Link from 'next/link'
 import { stringFormat } from "@framework/utils/parse-util";
 import B2BQuoteComments from '@components/account/B2BQuoteComments'
+import { isB2BUser } from '@framework/utils/app-util';
 
 const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -418,6 +419,10 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   const fetchQuoteDetail = (quoteId: any) => {
     const loadView = async (quoteId: any) => {
       const { data: quoteDetails }: any = await axios.post(`${NEXT_GET_CART}?basketId=${quoteId}`)
+      if (quoteDetails?.quoteInfo?.companyId !== user?.companyId) {
+        router.push('/my-account');
+        return;
+      }
       setQuoteViewData(quoteDetails)
     }
     if (quoteId) loadView(quoteId)
@@ -467,6 +472,9 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   }, [quoteId])
 
   useEffect(() => {
+    if (!isB2BUser(user)) {
+      router.push('/');
+    }
     const quoteId = router.query?.quoteId[0]
     fetchQuoteDetail(quoteId)
   }, [router.query])
