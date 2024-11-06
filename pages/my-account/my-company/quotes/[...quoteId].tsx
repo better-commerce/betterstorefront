@@ -39,6 +39,7 @@ import { PagePropType, getPagePropType } from '@framework/page-props'
 import Link from 'next/link'
 import { stringFormat } from "@framework/utils/parse-util";
 import B2BQuoteComments from '@components/account/B2BQuoteComments'
+import { isB2BUser } from '@framework/utils/app-util';
 
 const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -270,6 +271,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
     autoAppliedPromos: null,
   })
   const [itemCategories, setItemCategories] = useState<any>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const currencyCode = getCurrency()
   let currentPage = getCurrentPage()
 
@@ -417,7 +419,13 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   }
   const fetchQuoteDetail = (quoteId: any) => {
     const loadView = async (quoteId: any) => {
+      setIsLoading(true);
       const { data: quoteDetails }: any = await axios.post(`${NEXT_GET_CART}?basketId=${quoteId}`)
+      if (quoteDetails?.quoteInfo?.companyId && quoteDetails?.quoteInfo?.companyId !== user?.companyId) {
+        router.push('/my-account');
+        return;
+      }
+      setIsLoading(false);
       setQuoteViewData(quoteDetails)
     }
     if (quoteId) loadView(quoteId)
@@ -467,9 +475,21 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   }, [quoteId])
 
   useEffect(() => {
+    if (!isB2BUser(user)) {
+      router.push('/');
+      return
+    }
     const quoteId = router.query?.quoteId[0]
-    fetchQuoteDetail(quoteId)
+     if (quoteId) {
+      fetchQuoteDetail(quoteId)
+    }
   }, [router.query])
+
+  if(isLoading){
+    return (
+        <Spinner />
+      )
+  }
 
   return (
     <>
