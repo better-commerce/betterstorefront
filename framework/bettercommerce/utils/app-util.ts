@@ -59,6 +59,8 @@ export const getCurrentPage = () => {
   return undefined
 }
 
+
+
 export const obfuscateHostName = (hostname: string) => {
   if (hostname?.length > 3) {
     return `gandalf${hostname.substring(hostname.length - 3)}`
@@ -989,4 +991,33 @@ export const allEnumKeys = <T>(enumeration: T): Array<any> => {
       id: enumeration[key],
       description: String(key).replace(separatorRegex, ' '),
   }))*/
+}
+
+
+export const isFreeShippingOverXValue = (config: any): boolean => {
+  const ShippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+  if (ShippingSettings?.configKeys?.length) {
+    const freeShippingOverXValue =
+      ShippingSettings?.configKeys?.find(
+        (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+      )?.value || 0
+    return freeShippingOverXValue !== undefined
+  }
+  return false
+}
+
+export const getFreeShippingOverXValue = (config: any): number => {
+  const ShippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+  if (ShippingSettings?.configKeys?.length) {
+    const freeShippingOverXValue =
+      ShippingSettings?.configKeys?.find(
+        (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+      )?.value || 0
+    return freeShippingOverXValue
+  }
+  return 0
 }

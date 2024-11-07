@@ -37,7 +37,7 @@ export default function Newsletter() {
 
   return (
     <>
-      <div className='flex w-full py-4 bg-white border-t border-gray-400 sm:py-6'>
+      <div className='flex w-full py-4 bg-white border-t border-gray-400 sm:py-6 footer-top-bg-clr'>
         <div className='container mx-auto'>
           <div className='flex flex-col justify-between sm:flex-row sm:items-center'>
             <div className='flex flex-col'>

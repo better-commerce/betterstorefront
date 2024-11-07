@@ -67,7 +67,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
       <SearchBar onClick={setShowSearchBar} keywords={keywords} />
     );
   };
-function handleWishlist() {
+  function handleWishlist() {
     try {
       const viewWishlist = () => {
         if (currentPage) {
@@ -96,20 +96,22 @@ function handleWishlist() {
       <>
         <div className={`top-0 td-header bg-header-clr fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>
           {!isMobile &&
-            <div className="container justify-between hidden mx-auto sm:flex">
-              <div className="promotion-banner mob-marquee"></div>
-              <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
-                {b2bEnabled && featureToggle?.features?.enableQuickOrderPad && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-                {featureToggle?.features?.enablePriceIncVatToggle &&
-                  <>
-                    <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
-                    <div className="flow-root w-10 px-2 sm:w-12">
-                      <div className="flex justify-center flex-1 mx-auto">
-                        <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
+            <div className="justify-between hidden sm:flex bg-top-toggle">
+              <div className="container mx-auto">
+                <div className="promotion-banner mob-marquee"></div>
+                <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
+                  {b2bEnabled && featureToggle?.features?.enableQuickOrderPad && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
+                  {featureToggle?.features?.enablePriceIncVatToggle &&
+                    <>
+                      <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
+                      <div className="flow-root w-10 px-2 sm:w-12">
+                        <div className="flex justify-center flex-1 mx-auto">
+                          <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
+                        </div>
                       </div>
-                    </div>
-                  </>
-                }
+                    </>
+                  }
+                </div>
               </div>
             </div>
           }
@@ -139,9 +141,9 @@ function handleWishlist() {
               </button>
 
               {featureToggle?.features?.enableHeaderWishlist &&
-                <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14">
+                <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 icon-div-menu">
                   <Link href="/my-account/wishlist" passHref className="items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                    <HeartIcon className="flex-shrink-0 block mx-auto text-white w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (
                       <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
                         {wishListItems?.length}

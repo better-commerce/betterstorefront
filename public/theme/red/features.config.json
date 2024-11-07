@@ -18,7 +18,8 @@
     "enableLoqateSearch": true,
     "enableAddressIOSearch":false,
     "enableGoogleAnalytics": false,
-    "enableOmnilytics": true
+    "enableOmnilytics": true,
+    "enableHorizontalFilter": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

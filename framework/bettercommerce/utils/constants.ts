@@ -40,6 +40,7 @@ export const CONTACT_PAGE_DEFAULT_SLUG = 'contact-us'
 export const COOKIES_PAGE_DEFAULT_SLUG = 'cookies'
 export const HOME_PAGE_NEW_SLUG = 'new-home-bc'
 export const HOME_PAGE_SLUG = 'new-home-bc'
+export const TOOLS_HOME_PAGE_SLUG = 'home-ffx'
 export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
 export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 // google analytics

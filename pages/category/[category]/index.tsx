@@ -47,6 +47,7 @@ import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 import Loader from '@components/Loader'
 import { removeQueryString } from '@commerce/utils/uri-util'
 import { AnalyticsEventType } from '@components/services/analytics'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -312,7 +313,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     // Setting initial filters from query string
     filters: filters ? filters : [],
     // if featuredProductCSV and LinkGroup
-    stockCodes: (category?.featuredProductCSV && category?.linkGroups?.length) ? category?.featuredProductCSV?.split(',') : [] ,
+    stockCodes: (category?.featuredProductCSV && category?.linkGroups?.length) ? category?.featuredProductCSV?.split(',') : [],
     categoryId: category?.id,
   }
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -343,19 +344,19 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   )
 
   useEffect(() => {
-    const handleRouteChange = (url:any) => {
-        const currentSlug = url?.split('?')[0];
-        if (currentSlug !== previousSlug) {
-          dispatch({ type: RESET_STATE })
-          setPreviousSlug(currentSlug);
-        }
+    const handleRouteChange = (url: any) => {
+      const currentSlug = url?.split('?')[0];
+      if (currentSlug !== previousSlug) {
+        dispatch({ type: RESET_STATE })
+        setPreviousSlug(currentSlug);
+      }
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
 
     // Cleanup the event listener on unmount
     return () => {
-        router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [previousSlug, router]);
 
@@ -386,8 +387,10 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     dispatch({ type: PAGE, payload: 1 })
   }
 
-  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, { category, entityName: PAGE_TYPE,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Category, })
+  useAnalytics(AnalyticsEventType.CATEGORY_VIEWED, {
+    category, entityName: PAGE_TYPE,
+    entityType: EVENTS_MAP.ENTITY_TYPES.Category,
+  })
 
   useEffect(() => {
     // for Engage
@@ -556,7 +559,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           )}
         </div>
         <div className="container">
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+          <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
             <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
@@ -652,9 +655,15 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                           {isMobile ? (
                             <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                           ) : (
-                            <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                            <>
+                              {!featureToggle?.features?.enableHorizontalFilter ? (
+                                <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                              ) : (
+                                <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                              )}
+                            </>
                           )}
-                          <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                          <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' :'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                             {isMobile ? null : (
                               <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             )}

@@ -201,11 +201,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       <>
         {isMobile ? (
           <>
-            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center px-2 transition-all sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1`}>
+            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} plp-btn-section-div absolute grid justify-center px-2 transition-all sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1`}>
               {featureToggle?.features?.enableAddToBagPlp &&
-                <Button size="small" className="block" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                <Button size="small" className="block cart-btn-plp" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               }
-              <ButtonSecondary className="ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
               </ButtonSecondary>
@@ -213,11 +213,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </>
         ) : (
           <>
-            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} plp-btn-section-div absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
               {featureToggle?.features?.enableAddToBagPlp &&
-                <Button size="small" className="block" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+                <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
               }
-              <ButtonSecondary className="ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
               </ButtonSecondary>
@@ -230,7 +230,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard product-card hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">

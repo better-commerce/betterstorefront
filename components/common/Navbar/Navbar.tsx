@@ -353,7 +353,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
           <div className="promotion-banner mob-marquee"></div>
           <div className="container flex justify-end w-full px-6 pt-1 mx-auto">
             {b2bEnabled && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-            <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap"> {translate('label.navBar.pricesIncludingVatText')} </div>
+            <div className="flex flex-col py-0 text-xs font-medium text-black text-invert sm:text-xs whitespace-nowrap"> {translate('label.navBar.pricesIncludingVatText')} </div>
             <div className="flow-root w-10 px-2 sm:w-12">
               <div className="flex justify-center flex-1 mx-auto">
                 <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />

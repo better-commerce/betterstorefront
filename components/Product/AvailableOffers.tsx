@@ -98,7 +98,7 @@ export default function AvailableOffers({ currency, offers, key, product }: any)
             return (
               saving?.additionalInfo8 == 'False' && (
                 <SwiperSlide className="h-auto px-1 z-1 !w-48" key={`promo-${sid}-best-available-${saving?.code}`} >
-                  <div key={`promotions-${sid}-best-available-${saving?.code}`} className="relative inline-flex flex-col w-full text-left cursor-pointer h-28 rounded-xl group" onClick={() => setOfferData(saving)} >
+                  <div key={`promotions-${sid}-best-available-${saving?.code}`} className="relative inline-flex flex-col w-full text-left cursor-pointer min-h-28 rounded-xl group" onClick={() => setOfferData(saving)} >
                     <div className="box-border h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
                       <div className="flex">
                         <BankOfferIcon />

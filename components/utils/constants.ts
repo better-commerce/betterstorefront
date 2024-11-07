@@ -246,6 +246,11 @@ export const SHIPPING_ACTION_TYPES_MAP = {
   ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
 }
 
+export const DEFAULT_FILTER_PAGE_TYPES: any = {
+  brand: 'brandNoAnlz',
+  category: 'classification.category',
+}
+
 export const UPDATE_ORDER_STATUS = '/api/update-order-status'
 
 export const NEXT_PUBLIC_DEFAULT_CACHE_TIME =
@@ -315,10 +320,10 @@ export module Messages {
       export const NUMBERS_ONLY = /^[0-9]*$/
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-      export const EMAIL =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      export const EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      ///^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       export const FULL_NAME = /^[a-zA-Z 0-9\-]*$/
-      export const ADDRESS_LINE = /^[a-zA-Z 0-9\-\,\/\.]*$/
+      export const ADDRESS_LINE = /^[a-zA-Z0-9,\-/.'()&#+_ ]*$/
       export const ADDRESS_LABEL = /^[a-zA-Z 0-9\-]*$/
       export const CARD_NUMBER = /^[0-9]*$/
       export const CARD_EXPIRY = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/
@@ -328,20 +333,27 @@ export module Messages {
       export const FIND_EMPTY_CHARACTERS = /\s/g
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
       export const CHARACTERS_AND_ALPHABETS =
-        /([a-zA-Z/!#\$@^%&*()=;\'\]"{:<>\\\\,.?|[~_`}/])/g
+        /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
       export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
       export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
       export const QUANTITY = /^[1-9]{1}[0-9]*$/g
       export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
+      export const SEARCHABLE_ATTRIBUTES_MATCH =
+        /^(?:ordered|unordered)[(](.*)[)]$/i
+      export const APLHABETS_WITH_SPACES = /^[a-zA-Z ]+$/i
       export const EMPTY_SPACE = /\S/
-      // Extract language and product slug in Quick view URL on EngageProductCard
-      export const EXTRACT_SLUG = /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/;
+      export const REPLACE_ALL_SPECIAL_CHARACTERS = /[&\/\\#, +()$~%.'":*?<>{}]/g
     }
 
     export const Login: any = {
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
       MOBILE_NUMBER_LENGTH: 'Mobile number should be 10 characters',
+      FIRST_NAME_REQUIRED: 'First Name is a required field',
+      LAST_NAME_REQUIRED: 'Last Name is a required field',
+      VALID_EMAIL: 'Email must be a valid Email',
+      PASSWORD_MIN_LENGTH_MESSAGE: 'Password must be at least 8 characters',
+      PASSWORD_MAX_LENGTH_MESSAGE: 'Password must be at most 24 characters',
     }
 
     export const BulkOrder: any = {
@@ -352,7 +364,10 @@ export module Messages {
       NAME_REQUIRED: 'Full name is a required field',
       NAME_MIN_LENGTH: 'Full name must be at least 3 characters',
       NAME_INPUT: 'Full name should only contain alpha-numerics',
-
+      PHONE_NUMBER_REQUIRED: 'Phone Number is  required field',
+      PHONE_NUMBER_INPUT: 'Phone number should only contain numbers',
+      PHONE_MIN_INPUT: 'Phone number requires atleast 10 digits',
+      PHONE_MAX_INPUT: 'Phone number cannot exceed 10 digits',
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
       CHANGED_MOBILE_NUMBER_INPUT:
@@ -362,29 +377,37 @@ export module Messages {
     }
 
     export const AddNewAddress: any = {
+      PIN_CODE_REQUIRED: 'Pincode is a required field',
       POST_CODE_REQUIRED: 'Postcode is a required field',
-      POST_CODE_UNREACHABLE: 'Postcode non-serviceable',
-      POST_CODE_NUM: 'Postcode should contain only digits',
-      CITY_REQUIRED: 'City is a required field',
-      STATE_REQUIRED: 'State is a required field',
+      PIN_CODE_UNREACHABLE: 'Pincode non-serviceable',
+      PIN_CODE_NUM: 'Pincode should contain only digits',
+      CITY_REQUIRED: 'Town / city is a required field',
+      CITY_LEN_REQUIRED: 'City must be atleast 3 characters',
       COUNTRY_REQUIRED: 'Country is a required field',
-      ADDRESS_1_REQUIRED: 'Address 1 is a required field',
-      ADDRESS_1_INPUT: 'Address 1 should only contain alpha-numerics',
-      ADDRESS_2_INPUT: 'Address 2 should only contain alpha-numerics',
-      ADDRESS_3_INPUT: 'Address 2 should only contain alpha-numerics',
+      STATE_REQUIRED: 'County / State / Province is a required field',
 
-      FIRST_NAME_REQUIRED: 'First Name is a required field',
-      LAST_NAME_REQUIRED: 'Last Name is a required field',
-      FIRST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
-      FIRST_NAME_INPUT: 'Name should only contain alpha-numerics',
-      LAST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
-      LAST_NAME_INPUT: 'Name should only contain alpha-numerics',
+      ADDRESS_1_REQUIRED: 'Address line 1 is a required field',
+      ADDRESS_1_INPUT:
+        'House / Flat/ Office Number should only contain alpha-numerics',
+      ADDRESS_2_INPUT:
+        'Road Name / Area/ Colony should only contain alpha-numerics',
+      ADDRESS_3_INPUT: 'Address Line 3 should only contain alpha-numerics',
+      ADDRESS_LEN_REQUIRED:
+        'House / Flat/ Office Number must be atleast 3 characters',
 
-      MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
-      MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
+      NAME_REQUIRED: 'Name is a required field',
+      NAME_MIN_LENGTH: 'Name must be at least 3 characters',
+      NAME_INPUT: 'Name should only contain alpha-numerics',
+
+      MOBILE_NUMBER_REQUIRED: 'Mobile Number is a required field',
+      MOBILE_NUMBER_INPUT: 'Mobile Number should only contain numbers',
+      MOBILE_NUMBER_INPUT_PREFIX: 'Mobile Number should start with +44 or 0',
+      MOBILE_NUMBER_MAX_LEN: 'Mobile Number must be at most 12 digits',
+      MOBILE_NUMBER_MIN_LEN: 'Mobile Number must be at least 7 digits',
 
       ADDRESS_TYPE_REQUIRED: 'Address is a required field',
-      ADDRESS_TYPE_MIN_LENGTH: 'Address Field should be more than 3 characters',
+      ADDRESS_TYPE_MIN_LENGTH:
+        'House/ Flat/ Office Number should be more than 3 characters',
       ADDRESS_TYPE_INPUT: 'Address should only contain alpha-numerics',
     }
 
@@ -409,16 +432,16 @@ export module Messages {
     }
 
     export const DeliveryInfo: any = {
-      POST_CODE_REQUIRED: 'Postcode is a required field',
-      POST_CODE_MIN_LENGTH: 'Postcode must be at least 6 characters',
-      VALID_POST: 'Please enter a valid postcode',
-      POST_CODE_MAX_LENGTH: 'Postcode must be at max 6 characters',
-      POST_CODE_INPUT: 'Postcode should only contain numbers',
+      PIN_CODE_REQUIRED: 'Pincode is a required field',
+      PIN_CODE_MIN_LENGTH: 'Pincode must be at least 6 characters',
+      VALID_PIN: 'Please enter a valid pincode',
+      PIN_CODE_MAX_LENGTH: 'Pincode must be at max 6 characters',
+      PIN_CODE_INPUT: 'Pincode should only contain numbers',
     }
     export const ResetPassword: any = {
       PASSWORD_VALIDATION_MESSAGE:
         'Password should have a minimum of 8 characters and at least 1 uppercase letter.',
-      PASSWORD_REQUIRED_MESSAGE: 'Password is required.',
+      PASSWORD_REQUIRED_MESSAGE: 'Password is required',
       CONFIRM_REQUIRED_MESSAGE: 'Confirm password is required.',
       MATCHING_PASSWORD_MESSAGE: 'Passwords must match.',
       NO_EMAIL: 'Please enter correct email',
@@ -465,47 +488,73 @@ export module Messages {
       }
     }
   }
+
   export const Messages: any = {
     RETURN_SUCCESS: 'Return success',
     EXCHANGE_SUCCESS: 'Exchange successful',
     RESET_PASSWORD_SUCCESS: 'Success! You will be redirected to login page',
+    RESET_CACHE_SUCCESS: 'Cache reset successfully!',
+    GENERATE_INVOICE_FAILED: 'No invoice available.',
   }
 
-  // export const Warnings: any = {}
+  export const Warnings: any = {}
 
-  // export const Errors: any = {
-  //   INVALID_REQUEST: 'The information provided is incomplete. Please try again.',
-  //   ERR_BAD_REQUEST: 'The information provided is incomplete. Please try again.',
-  //   CARD_NOT_SUPPORTED: 'Card type is not supported. Please try again.',
-  //   INVALID_OTP_SUPPLIED: 'OTP is not valid. Please try again.',
-  //   ERROR_UPDATE_ADDITIONAL_CHARGES: 'Error applying COD additional charges. Please try again after sometime.',
-  //   UNSUPPORTED_UPI_APP: 'UPI payment is unsupported.',
-  //   NOT_FOUND:'Your request could not be processed. Please try again after sometime.',
-  //   USERNAME_ALREADY_EXISTS: 'User already exists',
-  //   CUSTOMER_NOT_FOUND: 'Customer not found.',
-  //   GENERIC_ERROR: 'Your request could not be processed. Please try again after sometime.',
-  //   DUPLICATE_ADDRESS : 'Address already exists',
-  //   CART_EMPTY: 'Your cart is empty',
-  //   CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity is {maxBasketItemsCount}.',
-  //   BASKET_VALIDATION_FAILED: 'Basket validation failed',
-  //   'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
-  //   TOKEN_INVALID: 'Woops! Token is invalid',
-  //   TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
-  //   COMPANY_NOT_FOUND: 'Company not found.',
-  //   COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
-  //   ADDRESS_NOT_FOUND: 'No address found for the given postcode'
-  // }
+  export const Errors: any = {
+    INVALID_REQUEST:
+      'The information provided is incomplete. Please try again.',
+    ERR_BAD_REQUEST:
+      'The information provided is incomplete. Please try again.',
+    CARD_NOT_SUPPORTED: 'Card type is not supported. Please try again.',
+    INVALID_OTP_SUPPLIED: 'OTP is not valid. Please try again.',
+    ERROR_UPDATE_ADDITIONAL_CHARGES:
+      'Error applying COD additional charges. Please try again after sometime.',
+    UNSUPPORTED_UPI_APP: 'UPI payment is unsupported.',
+    NOT_FOUND:
+      'Your request could not be processed. Please try again after sometime.',
+    USERNAME_ALREADY_EXISTS: 'User already exists',
+    CUSTOMER_NOT_FOUND: 'Customer not found.',
+    GENERIC_ERROR:
+      'Your request could not be processed. Please try again after sometime.',
+    CART_EMPTY: 'Your cart is empty',
+    CART_QUANTITY: 'Enter a valid quantity',
+    CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity reached',
+    BASKET_EMPTY: 'Your basket is empty.',
+    BASKET_VALIDATION_FAILED: 'Basket validation failed',
+    'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
+    TOKEN_INVALID: 'Token is invalid',
+    TOKEN_EXPIRED: 'Token is expired or invalid',
+    COMPANY_NOT_FOUND: 'Company not found.',
+    COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
+    UNABLE_TO_ADD_KIT_ITEM: 'Cart has already been updated with these items.',
+    DELIVERY_METHOD_FOR_DELIVERY_ADDRESS_NOT_FOUND:
+      'No delivery method found for your delivery address.',
+    AGE_VERIFICATION_NOT_LOADED:
+      'Unable to load age verification. Please try again.',
+    AGE_VERIFICATION_UNSUCCESSFUL:
+      'Age verification unsuccessful. Please try again.',
+    ADDRESS_NOT_FOUND: 'No address found for the given postcode',
+    CART_ITEM_QTY_MAX_ADDED: 'You have added the maximum available quantity.',
+    PAYMENT_METHOD_NOT_SUPPORTED:
+      'This card is not supported for this transaction. Please retry using a different card.',
+    SHIPPING_OPTIONS_NOT_FOUND: 'Sorry, we could not find suitable shipping method for this order. Please contact customer service for assistance.',
+  }
 
-  //   export const ContactUs: any = {
-  //     FIRST_NAME_REQUIRED: 'First Name is a required field',
-  //     FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
-  //     FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
-  //     EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
-  //     EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
-  //     FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
-  //     TITLE_REQUIRED: 'Title is a require field',
-  //     MESSAGE_REQUIRED: 'Message is a require field',
-  //   }
+  export const ManageUser: any = {
+    CREATE_USER_SUCCESS: 'User created successfully',
+    UPDATE_USER_SUCCESS: 'User updated successfully',
+    REMOVE_USER_SUCCESS: 'User removed successfully',
+  }
+
+  export const ContactUs: any = {
+    FIRST_NAME_REQUIRED: 'First Name is a required field',
+    FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
+    FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+    EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
+    EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
+    FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
+    TITLE_REQUIRED: 'Title is a require field',
+    MESSAGE_REQUIRED: 'Message is a require field',
+  }
 }
 export const EmptyObject: any = {}
 export module PageActions {

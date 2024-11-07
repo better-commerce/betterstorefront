@@ -42,6 +42,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
 const PAGE_TYPE = PAGE_TYPES.SubCategoryList
 declare const window: any
@@ -289,11 +290,12 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
   const { isCompared } = useUI()
-  const initialState = { 
-    ...DEFAULT_STATE, 
+  const initialState = {
+    ...DEFAULT_STATE,
     // Setting initial filters from query string
     filters: filters ? filters : [],
-    categoryId: category?.id, }
+    categoryId: category?.id,
+  }
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -322,19 +324,19 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   )
 
   useEffect(() => {
-    const handleRouteChange = (url:any) => {
-        const currentSlug = url?.split('?')[0];
-        if (currentSlug !== previousSlug) {
-          dispatch({ type: RESET_STATE })
-          setPreviousSlug(currentSlug);
-        }
+    const handleRouteChange = (url: any) => {
+      const currentSlug = url?.split('?')[0];
+      if (currentSlug !== previousSlug) {
+        dispatch({ type: RESET_STATE })
+        setPreviousSlug(currentSlug);
+      }
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
 
     // Cleanup the event listener on unmount
     return () => {
-        router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [previousSlug, router]);
 
@@ -529,7 +531,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
           )}
         </div>
         <div className="container mx-auto my-0 mt-1 bg-transparent">
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+          <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
             <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {category?.name.toLowerCase()}
             </h1>
@@ -584,9 +586,15 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
                       {isMobile ? (
                         <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
-                        <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                        <>
+                          {!featureToggle?.features?.enableHorizontalFilter ? (
+                            <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                          ) : (
+                            <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                          )}
+                        </>
                       )}
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
                         {isMobile ? null : (
                           <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                         )}

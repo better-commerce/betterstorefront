@@ -13,6 +13,7 @@ import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 import Link from "next/link";
+import { CURRENT_THEME } from "@components/utils/constants";
 
 export interface SectionHero2Props {
   className?: string;
@@ -82,7 +83,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
               const isActive = indexActive === index;
               return (
                 <div key={`banner-hero-${index}`} onClick={() => { setIndexActive(index); handleAfterClick(); }} className={`relative px-1 py-1.5 cursor-pointer`} >
-                  <div className={`${isActive ? 'w-20':'w-4'} relative h-1 shadow-sm rounded-md bg-gray-400 sm:bg-white `} >
+                  <div className={`${isActive ? 'w-20' : 'w-4'} relative h-1 shadow-sm rounded-md bg-gray-400 sm:bg-white `} >
                     {isActive && (
                       <div className={`nc-SectionHero2Item__dot absolute inset-0 bg-black rounded-md`} ></div>
                     )}
@@ -96,7 +97,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Next className="absolute end-1 sm:end-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-next sm:opacity-0 sm:group-hover:opacity-100 ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
           <div className="absolute inset-0 bg-banner mob-bg-banner-height cls-fix-banner">
-            <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />
+            {CURRENT_THEME != "robots" && <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />}
           </div>
 
           <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative z-0 pb-0 pt-14 sm:pt-20 lg:py-44 hero-container cls-fix-banner mob-hero-container">
@@ -104,14 +105,17 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
               <div className="w-full mob-hero inner-container">
                 <div className={`relative z-[99] w-full max-w-3xl space-y-4 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
                   <div className="space-y-5 sm:space-y-6 text-info-inner">
-                    <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700">
+                    <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700 text-dark-white">
                       {item?.subTitle}
                     </span>
-                    <h2 className="nc-SectionHero2Item__heading font-semibold text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl !leading-[114%] text-slate-900">
+                    <h2 className="nc-SectionHero2Item__heading font-semibold text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl !leading-[114%] text-dark-white text-slate-900">
                       {item?.name}
                     </h2>
+                    <span className="block text-base !font-normal nc-SectionHero2Item__subheading md:text-sm text-slate-700 text-dark-white">
+                      {item?.description}
+                    </span>
                   </div>
- 
+
                   <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
                     <span className="dark:text-white">{translate('label.home.exploreMoreBtnText')}</span>
                     <span>

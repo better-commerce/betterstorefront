@@ -8,8 +8,8 @@ import type { GetStaticPropsContext } from 'next'
 import { CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, isB2BUser, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
+import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TOOLS_HOME_PAGE_SLUG } from '@framework/utils/constants'
+import { getCurrency, getCurrentCurrency, isB2BUser, maxBasketItemsCount, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
@@ -22,17 +22,23 @@ import Heading from '@components/Heading/Heading'
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { IMAGE_CDN_URL, IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
 import { Hero } from '@components/ui'
 import { Guid } from '@commerce/types';
 import { AnalyticsEventType } from '@components/services/analytics'
+import DealProduct from '@components/home/DealProduct'
+import BrandList from '@components/home/BrandList'
+import BestSellerProduct from '@components/home/Bestseller'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
 const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'))
 const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'))
 const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
+const ImageBanner = dynamic(() => import('@components/home/ImageBanner'))
+const ChooseList = dynamic(() => import('@components/home/ChooseList'))
+const CategoryList = dynamic(() => import('@components/home/CategoryList'))
 const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 const ContentEditorJS = dynamic(() => import("@components/content-editor"), {
@@ -47,6 +53,8 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
     slug = HOME_PAGE_NEW_SLUG
   } else if (CURRENT_THEME == "orange") {
     slug = HOME_PAGE_SLUG
+  } else if (CURRENT_THEME == "tool") {
+    slug = TOOLS_HOME_PAGE_SLUG
   } else {
     slug = HOME_PAGE_SLUG;
   }
@@ -64,7 +72,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, config, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const { user, isGuestUser } = useUI()
   const { isMobile } = deviceInfo
@@ -77,6 +85,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     Page_Slug = HOME_PAGE_NEW_SLUG
   } else if (CURRENT_THEME == "orange") {
     Page_Slug = HOME_PAGE_SLUG
+  } else if (CURRENT_THEME == "tool") {
+    Page_Slug = TOOLS_HOME_PAGE_SLUG
   } else {
     Page_Slug = HOME_PAGE_SLUG;
   }
@@ -138,13 +148,13 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const redirectHref = useMemo(() => {
     if (!isGuestUser && user?.userId && user?.id !== Guid.empty && isB2BUser(user)) { // if loggedIn with B2b user 
       return '/my-account/my-company/quotes';
-    } else if(!isGuestUser && user?.userId && user?.id !== Guid.empty){  // if loggedIn user
+    } else if (!isGuestUser && user?.userId && user?.id !== Guid.empty) {  // if loggedIn user
       return 'tel:+442086915794';
     } else {
       return '/my-account/login';
     }
   }, [isGuestUser, user]);
-  
+
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -160,9 +170,34 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
+
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {CURRENT_THEME === "robots" &&
+          <>
+            <CategoryList data={pageContents?.category} deviceInfo={deviceInfo} />
+            <BestSellerProduct config={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+            <ImageBanner data={pageContents?.imagelist} deviceInfo={deviceInfo} />
+            <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />
+          </>
+        }
+        {pageContents?.featureproduct?.length > 0 &&
+          <section className="relative py-6 z-index-neg">
+            <div className="product-border-square"></div>
+            <div className="container">
+              {pageContents?.featureheading?.map((heading: any, cdhId: number) => (
+                <h4 className="block font-semibold uppercase text-brand-red sm:hidden" key={cdhId}>{heading?.featureheading_title}</h4>
+              ))}
+              <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
+            </div>
+            <div className="dot-div">
+              <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
+            </div>
+          </section>
+        }
+
+        <ChooseList info={pageContents?.whychoose} data={pageContents?.chooselist} />
         {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
           <div key={dataIdx} className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-30'>
@@ -194,7 +229,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
         {pageContents?.brandheading?.length > 0 &&
-          <div className='container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1'>
+          <div className={`container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1 ${CURRENT_THEME === 'tool' ? 'hidden' : ''}`}>
             <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
               {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
                 <h4 key={dataIdx} className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
@@ -362,7 +397,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
         {featureToggle?.features?.enableTrendingCategory &&
-          <div className="mt-14 sm:mt-24 lg:mt-32">
+          <div className={`mt-14 sm:mt-24 lg:mt-32 ${CURRENT_THEME === 'robots' ? 'hidden' : ''}`}
+          >
             <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
           </div>
         }
@@ -388,8 +424,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           </div>
         }
-        {CURRENT_THEME != 'etag' &&
-          <div className={`${(CURRENT_THEME != 'green') ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} ${CURRENT_THEME === 'cam' ? 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0' : ''}  container relative my-16 sm:my-24 lg:my-32 product-collections`}>
+        {(CURRENT_THEME != 'etag' && CURRENT_THEME != 'tool') &&
+          <div className={`${(CURRENT_THEME != 'green' && CURRENT_THEME != 'robots') ? 'space-y-16 sm:space-y-24 lg:space-y-32 my-16 sm:my-24 lg:my-32' : ' my-0 sm:my-5 lg:my-8'} ${CURRENT_THEME === 'cam' && 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0'} container relative product-collections`}>
             {pageContents?.brand?.length > 0 &&
               <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
                 {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
@@ -428,6 +464,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             {pageContents?.popular?.length > 0 &&
               <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             }
+
             {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
             <div className='flex flex-col w-full engage-product-card-section'>
               <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

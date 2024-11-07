@@ -46,6 +46,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -541,7 +542,7 @@ function CollectionPage(props: any) {
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
           <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
             {props?.name?.toLowerCase()}
           </h1>
@@ -569,9 +570,15 @@ function CollectionPage(props: any) {
                     {isMobile ? (
                       <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     ) : (
-                      <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                      <>
+                        {!featureToggle?.features?.enableHorizontalFilter ? (
+                          <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                        ) : (
+                          <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                        )}
+                      </>
                     )}
-                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12' : 'sm:col-span-9'}`}>
                       {isMobile ? null : (
                         <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
