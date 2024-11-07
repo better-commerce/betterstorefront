@@ -126,7 +126,7 @@ function MyInvoices({ deviceInfo }: any) {
                         <tr key={`invoice-list-${idx}`} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
                           <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">
                             <div onClick={() => downloadOrderInvoice(invoice)} className='flex items-center gap-2 font-medium cursor-pointer text-sky-500 '>
-                              <img className="w-4 h-4" src="/images/pdf.png" alt="" />{invoice?.customNo}
+                              <img className="w-5 h-5" src="/images/pdf-new.png" alt="" />{invoice?.customNo}
                             </div>
                           </td>
                           <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{moment(new Date(invoice?.invoiceDate)).format(DATE_FORMAT)}</td>

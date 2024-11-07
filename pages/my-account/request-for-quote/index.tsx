@@ -7,7 +7,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { basketId as generateBasketId, useUI } from '@components/ui/context'
 import Spinner from '@components/ui/Spinner'
-import { DATE_FORMAT, EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_GET_ALL_RFQ, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { DATE_FORMAT, EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_GET_ALL_RFQ, QuoteStatus, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withAuth from '@components/utils/withAuth'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
@@ -42,37 +42,6 @@ function RequestQuote() {
   const [currentPage, setCurrentPage] = useState(1)
   const rfqPerPage = 10
   const rfqList = rfqData
-
-  // Filter the RFQs based on the search term
-  const filteredRFQs = rfqData?.filter((rfq: any) => {
-    return (
-      rfq?.rfqNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      rfq?.quoteNumber?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
-
-  // Calculate pagination variables
-  const totalRFQs = filteredRFQs?.length || 0;
-  const totalPages = Math.ceil(totalRFQs / rfqPerPage);
-  const indexOfLastQuote = currentPage * rfqPerPage;
-  const indexOfFirstQuote = indexOfLastQuote - rfqPerPage;
-  const currentRFQs = filteredRFQs?.slice(indexOfFirstQuote, indexOfLastQuote);
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    router.push(`?page=${page}`, undefined, { shallow: true }); // Update URL with page number
-  };
-
-  // Reset to page 1 when search term changes
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to the first page when a new search is made
-  };
-  useEffect(() => {
-    const pageFromQuery = parseInt(router.query.page as string) || 1;
-    setCurrentPage(pageFromQuery);
-  }, [router.query.page]);
 
   const { recordAnalytics } = useAnalytics()
 
@@ -115,6 +84,39 @@ function RequestQuote() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
+
+
+  // Filter the RFQs based on the search term
+  const filteredRFQs = rfqData?.filter((rfq: any) => {
+    return (
+      rfq?.rfqNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      rfq?.quoteNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  // Calculate pagination variables
+  const totalRFQs = filteredRFQs?.length || 0;
+  const totalPages = Math.ceil(totalRFQs / rfqPerPage);
+  const indexOfLastQuote = currentPage * rfqPerPage;
+  const indexOfFirstQuote = indexOfLastQuote - rfqPerPage;
+  const currentRFQs = filteredRFQs?.slice(indexOfFirstQuote, indexOfLastQuote);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    router.push(`?page=${page}`, undefined, { shallow: true }); // Update URL with page number
+  };
+
+  // Reset to page 1 when search term changes
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to the first page when a new search is made
+  };
+  useEffect(() => {
+    const pageFromQuery = parseInt(router.query.page as string) || 1;
+    setCurrentPage(pageFromQuery);
+  }, [router.query.page]);
+
   const viewCart = (cartItems: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
@@ -189,9 +191,11 @@ function RequestQuote() {
                       <tr key={rfq?.rfqNumber} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
                         <td className="py-3 pl-3 pr-3 text-[13px] font-medium cursor-pointer text-sky-500 whitespace-nowrap sm:pl-4 hover:text-sky-600" onClick={() => navigateToRFQ(rfq?.id)}>{rfq?.rfqNumber}</td>
                         <td className="py-3 pl-3 pr-3 text-[13px] font-medium cursor-pointer text-sky-500 whitespace-nowrap sm:pl-4 hover:text-sky-600">
-                          <Link href={`/my-account/my-company/quotes/${rfq?.quoteBasketId}` || ""} passHref>
-                            {rfq?.quoteNumber}
-                          </Link>
+                          {rfq?.quoteStatus != QuoteStatus.DRAFT ?
+                            <Link href={`/my-account/my-company/quotes/${rfq?.quoteBasketId}` || ""} passHref>
+                              {rfq?.quoteNumber}
+                            </Link> : <></>
+                          }
                         </td>
                         <td className="flex flex-col gap-0 px-3 py-3 text-[13px] font-medium text-black">
                           <span> {rfq?.firstName}{' '}{rfq?.lastName}</span>
@@ -203,8 +207,8 @@ function RequestQuote() {
                         <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{moment(new Date(rfq?.validUntil)).format(DATE_FORMAT)}</td>
                         <td className={`px-3 py-3 text-[13px] whitespace-nowrap ${rfq?.validDays > 0 ? 'text-black font-semibold' : 'text-red-300 font-normal'}`}>{rfq?.validDays > 0 ? rfq?.validDays + ' days' : 'expired'}</td>
                         <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap" align='right'>
-                          <span className={`px-3 py-1 text-xs font-semibold leading-none truncate rounded-full ${rfq?.status == "QuoteCreated" ? 'label-confirmed' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>
-                            {rfq?.status == "QuoteCreated" ? 'Quote Created' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'Submitted' : rfq?.status == "Cancelled" ? 'Cancelled' : ''}
+                          <span className={`px-3 py-1 text-xs font-semibold leading-none truncate rounded-full ${rfq?.quoteStatus == QuoteStatus.DRAFT && rfq?.status == "QuoteCreated" ? 'label-progress' : rfq?.status == "QuoteCreated" ? 'label-confirmed' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'label-blue' : rfq?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>
+                            {rfq?.quoteStatus == QuoteStatus.DRAFT && rfq?.status == "QuoteCreated" ? 'In Progress' : rfq?.status == "QuoteCreated" ? 'Quote Created' : (rfq?.status == "Submitted" || rfq?.status == "Received") ? 'Submitted' : rfq?.status == "Cancelled" ? 'Cancelled' : ''}
                           </span>
                         </td>
                       </tr>

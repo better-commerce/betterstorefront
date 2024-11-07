@@ -39,6 +39,7 @@ export const REVIEW_SERVICE_BASE_API = `${process.env.BETTERCOMMERCE_REVIEW_BASE
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
 export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/newsletter/subscribe`
 export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/order/`
+export const PDF_DOWNLOAD = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/`
 export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/`
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
@@ -124,6 +125,7 @@ export const NEXT_GET_ORDERS = `/api/customer/orders`
 export const NEXT_GET_DATA_PACK = `/api/customer/data-pack`
 export const NEXT_GET_INVOICE = `/api/customer/download-invoice`
 export const NEXT_DOWNLOAD_INVOICE = `/api/order/download-order-invoice`
+export const NEXT_DOWNLOAD_PDF = `/api/pdf/download-pdf`
 export const NEXT_DOWNLOAD_DATA_PACK = `/api/customer/download-dataPack`
 export const NEXT_GET_WISHLIST = `/api/customer/get-wishlist`
 export const NEXT_CREATE_WISHLIST = `/api/customer/create-wishlist`
@@ -643,6 +645,16 @@ export enum QuoteStatus {
   ABANDONED = 4,
   CANCELLED = 5,
   QUOTE_SENT = 6,
+}
+
+export enum DocumentTypes {
+  INVOICE = 1,
+  SALES_ORDER = 2,
+  CREDIT_NOTE = 3,
+  RMA = 4,
+  QUOTE = 5,
+  PROFORMA_INVOICE = 6,
+  RFQ = 7,
 }
 
 export enum DeleteModalType {

@@ -16,3 +16,19 @@ export const generatePDF = (pdfFile: any, order: any) => {
 
   saveAs(blob, fileName)
 }
+
+export const generateDocPDF = (pdfFile: any, data: any) => {
+  if (!isString(pdfFile)) return false
+  const fileName = `PDF-${data}`
+  const pdfData = atob(pdfFile)
+  const arrayBuffer = new ArrayBuffer(pdfData.length)
+  const uint8Array = new Uint8Array(arrayBuffer)
+
+  for (let i = 0; i < pdfData.length; i++) {
+    uint8Array[i] = pdfData.charCodeAt(i)
+  }
+
+  const blob = new Blob([uint8Array], { type: 'application/pdf' })
+
+  saveAs(blob, fileName)
+}

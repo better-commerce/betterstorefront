@@ -1018,6 +1018,13 @@ body {
   line-height: 1;
 }
 
+.label-progress {
+  background: #ffe5001f;
+  border-radius: 2px;
+  border: 1px solid #ce840f;
+  color: #ce840f;
+  line-height: 1;
+}
 .label-Cancelled {
   background: rgba(193, 0, 0, 0.12);
   border-radius: 2px;

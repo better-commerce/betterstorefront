@@ -1,4 +1,4 @@
-import { DeviceIdKey, NEXT_GET_CART, QuoteStatus, SessionIdCookieKey, } from '@components/utils/constants'
+import { DeviceIdKey, DocumentTypes, NEXT_DOWNLOAD_PDF, NEXT_GET_CART, QuoteStatus, SessionIdCookieKey, } from '@components/utils/constants'
 import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
@@ -40,6 +40,7 @@ import Link from 'next/link'
 import { stringFormat } from "@framework/utils/parse-util";
 import B2BQuoteComments from '@components/account/B2BQuoteComments'
 import { isB2BUser } from '@framework/utils/app-util';
+import { generateDocPDF } from '@components/utils/order'
 
 const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -254,7 +255,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
           (x: any) => x.key === 'OrderSettings.EnabledPartialDelivery'
         )?.value || ''
     )
-  const { uiContext, setAlert } = useUI()
+  const { uiContext, setAlert, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const { setCartItems, cartItems, isPaymentLink, user, isGuestUser, basketId, referralProgramActive, setIsSplitDelivery, openLoginSideBar, isSplitDelivery, resetKitCart } = useUI()
   const { addToCart } = cartHandler()
   const [openSizeChangeModal, setOpenSizeChangeModal] = useState(false)
@@ -480,17 +481,30 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
       return
     }
     const quoteId = router.query?.quoteId[0]
-     if (quoteId) {
+    if (quoteId) {
       fetchQuoteDetail(quoteId)
     }
   }, [router.query])
 
-  if(isLoading){
+  if (isLoading) {
     return (
-        <Spinner />
-      )
+      <Spinner />
+    )
   }
 
+  async function downloadPdf(quoteViewData: any) {
+    setOverlayLoaderState({ visible: true, message: 'Generating Pdf...', })
+    const res: any = await axios.post(NEXT_DOWNLOAD_PDF, {
+      id: quoteViewData?.id,
+      documentType: DocumentTypes.QUOTE
+    })
+    if (res?.data) {
+      generateDocPDF(res?.data?.base64Pdf, res?.data?.fileName);
+    } else {
+      console.log('PDF not found')
+    }
+    hideOverlayLoaderState()
+  }
   return (
     <>
       <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0">
@@ -517,23 +531,28 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
               <h1 className="flex items-center gap-1 text-xl font-normal sm:text-2xl dark:text-black justify-normal">
                 {quoteViewData?.quoteInfo?.customQuoteNo} {quoteViewData?.quoteInfo?.rfqNumber !== "" && <Link className='text-sm font-semibold text-sky-500' href={`/my-account/request-for-quote/rfq/${quoteViewData?.quoteInfo?.rfqId}`}>({`RFQ#: ${quoteViewData?.quoteInfo?.rfqNumber}`})</Link>}
               </h1>
-              <div>
-                {
-                  quoteViewData?.quoteInfo?.status == QuoteStatus.ABANDONED ?
+              <div className='flex items-center justify-end gap-4'>
+                <div>
+                  {
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.ABANDONED ?
                     <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Abandoned</span> :
                     quoteViewData?.quoteInfo?.status == QuoteStatus.CANCELLED ?
-                      <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Cancelled</span> :
-                      quoteViewData?.quoteInfo?.status == QuoteStatus.CONVERTED ?
-                        <span className='px-3 py-1 text-xs border rounded-full text-emerald-600 bg-emerald-200 border-emerald-400'>Converted</span> :
-                        quoteViewData?.quoteInfo?.status == QuoteStatus.DRAFT ?
-                          <span className='px-3 py-1 text-xs text-gray-600 bg-gray-200 border border-gray-400 rounded-full'>Draft</span> :
-                          quoteViewData?.quoteInfo?.status == QuoteStatus.NOT_QUOTE ?
-                            <span className='px-3 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-400 rounded-full'>Not Quote</span> :
-                            quoteViewData?.quoteInfo?.status == QuoteStatus.PAYMENT_LINK_SENT ?
-                              <span className='px-3 py-1 text-xs border rounded-full text-sky-600 bg-sky-200 border-sky-400'>Payment Link Sent</span> :
-                              quoteViewData?.quoteInfo?.status == QuoteStatus.QUOTE_SENT ?
-                                <span className='px-3 py-1 text-xs text-purple-600 bg-purple-100 border border-purple-400 rounded-full'>Quote Sent</span> : ''
-                }
+                    <span className='px-3 py-1 text-xs text-red-600 bg-red-200 border border-red-400 rounded-full'>Cancelled</span> :
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.CONVERTED ?
+                    <span className='px-3 py-1 text-xs border rounded-full text-emerald-600 bg-emerald-200 border-emerald-400'>Converted</span> :
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.DRAFT ?
+                    <span className='px-3 py-1 text-xs text-gray-600 bg-gray-200 border border-gray-400 rounded-full'>Draft</span> :
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.NOT_QUOTE ?
+                    <span className='px-3 py-1 text-xs text-gray-600 bg-gray-100 border border-gray-400 rounded-full'>Not Quote</span> :
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.PAYMENT_LINK_SENT ?
+                    <span className='px-3 py-1 text-xs border rounded-full text-sky-600 bg-sky-200 border-sky-400'>Payment Link Sent</span> :
+                    quoteViewData?.quoteInfo?.status == QuoteStatus.QUOTE_SENT ?
+                    <span className='px-3 py-1 text-xs text-purple-600 bg-purple-100 border border-purple-400 rounded-full'>Quote Sent</span> : ''
+                  }
+                </div>
+                <button onClick={() => downloadPdf(quoteViewData)} className="flex items-center justify-center">
+                  <img src="/images/pdf-new.png" className="w-5 h-5" alt="PDF" />
+                </button>
               </div>
             </div>
             <div className='grid grid-cols-1 gap-4 py-4 sm:grid-cols-12 max-panel-mobile'>

@@ -2,16 +2,17 @@ import { useTranslation } from "@commerce/utils/use-translation";
 import axios from "axios";
 import { useState } from "react";
 import { Dialog } from '@components/account/RequestForQuote/RFQCancleDialog';
-import { DATE_FORMAT, NEXT_UPDATE_STATUS_RFQ } from "@components/utils/constants";
+import { DATE_FORMAT, DocumentTypes, NEXT_DOWNLOAD_PDF, NEXT_UPDATE_STATUS_RFQ, QuoteStatus } from "@components/utils/constants";
 import { AlertType } from "@framework/utils/enums";
 import { useUI } from "@components/ui";
 import moment from "moment";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ArrowDownOnSquareIcon, ChevronRightIcon, DocumentIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { generateDocPDF, generatePDF } from "@components/utils/order";
 
 export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: any) {
     const translate = useTranslation();
-    const { setAlert } = useUI();
+    const { setAlert, setOverlayLoaderState, hideOverlayLoaderState } = useUI();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [cancelComment, setCancelComment] = useState('');
 
@@ -38,6 +39,20 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
         }
     };
 
+    async function downloadPdf(rfqData: any) {
+        setOverlayLoaderState({ visible: true, message: 'Generating Pdf...', })
+        const res: any = await axios.post(NEXT_DOWNLOAD_PDF, {
+            id: rfqData?.id,
+            documentType: DocumentTypes.RFQ
+        })
+        if (res?.data) {
+            generateDocPDF(res?.data?.base64Pdf, res?.data?.fileName);
+        } else {
+            console.log('PDF not found')
+        }
+        hideOverlayLoaderState()
+    }
+
     return (
         <div>
             <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
@@ -57,10 +72,18 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
                     </span>
                 </li>
             </ol>
-            <div className='mb-4'>
+            <div className='flex items-center justify-between mb-4'>
                 <h1 className="flex items-center gap-1 text-xl font-normal sm:text-2xl justify-normal dark:text-black">
-                    {rfqData?.rfqNumber ? rfqData?.rfqNumber : 'RFQ Detail'} {rfqData?.quoteNumber != null && <Link className='text-sm font-semibold text-sky-500' href={`/my-account/my-company/quotes/${rfqData?.quoteBasketId}`}>({`Quote #: ${rfqData?.quoteNumber}`})</Link>}
+                    {rfqData?.rfqNumber ? rfqData?.rfqNumber : 'RFQ Detail'} {rfqData?.quoteNumber != null && rfqData?.quoteStatus != QuoteStatus.DRAFT && <Link className='text-sm font-semibold text-sky-500' href={`/my-account/my-company/quotes/${rfqData?.quoteBasketId}`}>({`Quote #: ${rfqData?.quoteNumber}`})</Link>}
                 </h1>
+                <div className='flex items-center justify-end gap-4'>
+                    <span className={`px-3 py-2 text-xs font-semibold leading-none truncate rounded-full ${rfqData?.quoteStatus == QuoteStatus.DRAFT && rfqData?.status == "QuoteCreated" ? 'label-progress' : rfqData?.status == "QuoteCreated" ? 'label-confirmed' : (rfqData?.status == "Submitted" || rfqData?.status == "Received") ? 'label-blue' : rfqData?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>
+                        {rfqData?.quoteStatus == QuoteStatus.DRAFT && rfqData?.status == "QuoteCreated" ? 'In Progress' : rfqData?.status == "QuoteCreated" ? 'Quote Created' : (rfqData?.status == "Submitted" || rfqData?.status == "Received") ? 'Submitted' : rfqData?.status == "Cancelled" ? 'Cancelled' : ''}
+                    </span>
+                    <button onClick={() => downloadPdf(rfqData)} className="flex items-center justify-center">
+                        <img src="/images/pdf-new.png" className="w-5 h-5" alt="PDF" />
+                    </button>
+                </div>
             </div>
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="w-full pb-2">
@@ -87,9 +110,6 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             <div className="flex flex-col w-full gap-2 my-4">
                 <div className="flex justify-between">
                     <h4 className="font-bold text-18 text-secondary-full-opacity ">Details</h4>
-                    <span className={`px-4 py-3 text-sm font-semibold leading-none truncate rounded-full ${rfqData?.status == "QuoteCreated" ? 'label-confirmed' : (rfqData?.status == "Submitted" || rfqData?.status == "Received") ? 'label-blue' : rfqData?.status == "Cancelled" ? 'label-Cancelled' : 'label-pending'}`}>
-                        {rfqData?.status == "QuoteCreated" ? 'Quote Created' : (rfqData?.status == "Submitted" || rfqData?.status == "Received") ? 'Submitted' : rfqData?.status == "Cancelled" ? 'Cancelled' : ''}
-                    </span>
                 </div>
                 <div className="flex justify-start w-full gap-1">
                     <span className="text-sm font-semibold text-black">{translate('label.myAccount.rfq.name')}:</span>
