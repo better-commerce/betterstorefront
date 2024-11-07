@@ -343,6 +343,7 @@ export module Messages {
       export const APLHABETS_WITH_SPACES = /^[a-zA-Z ]+$/i
       export const EMPTY_SPACE = /\S/
       export const REPLACE_ALL_SPECIAL_CHARACTERS = /[&\/\\#, +()$~%.'":*?<>{}]/g
+      export const EXTRACT_SLUG = /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/;
     }
 
     export const Login: any = {
