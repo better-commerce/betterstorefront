@@ -84,15 +84,17 @@ function RequestQuote() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
+  let filteredRFQs:any = []
+  if (rfqData?.length > 0) {
+    // Filter the RFQs based on the search term
+    filteredRFQs = rfqData?.filter((rfq: any) => {
+      return (
+        rfq?.rfqNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        rfq?.quoteNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+  }
 
-
-  // Filter the RFQs based on the search term
-  const filteredRFQs = rfqData?.filter((rfq: any) => {
-    return (
-      rfq?.rfqNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      rfq?.quoteNumber?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
 
   // Calculate pagination variables
   const totalRFQs = filteredRFQs?.length || 0;
