@@ -173,31 +173,30 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
-        {CURRENT_THEME === "robots" &&
+        {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {featureToggle?.features?.enableCustomHomeWidget &&
           <>
-            <CategoryList data={pageContents?.category} deviceInfo={deviceInfo} />
+            {pageContents?.brandlist?.length > 0 && <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />}
+            {pageContents?.category?.length > 0 && <CategoryList data={pageContents?.category} deviceInfo={deviceInfo} />}
+            {pageContents?.featureproduct?.length > 0 &&
+              <section className="relative py-6 z-index-neg">
+                <div className="product-border-square"></div>
+                <div className="container">
+                  {pageContents?.featureheading?.map((heading: any, cdhId: number) => (
+                    <h4 className="block font-semibold uppercase text-brand-red sm:hidden" key={cdhId}>{heading?.featureheading_title}</h4>
+                  ))}
+                  <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
+                </div>
+                <div className="dot-div">
+                  <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
+                </div>
+              </section>
+            }
             <BestSellerProduct config={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
-            <ImageBanner data={pageContents?.imagelist} deviceInfo={deviceInfo} />
-            <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />
+            {pageContents?.imagelist?.length > 0 && <ImageBanner data={pageContents?.imagelist} deviceInfo={deviceInfo} />}
           </>
         }
-        {pageContents?.featureproduct?.length > 0 &&
-          <section className="relative py-6 z-index-neg">
-            <div className="product-border-square"></div>
-            <div className="container">
-              {pageContents?.featureheading?.map((heading: any, cdhId: number) => (
-                <h4 className="block font-semibold uppercase text-brand-red sm:hidden" key={cdhId}>{heading?.featureheading_title}</h4>
-              ))}
-              <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
-            </div>
-            <div className="dot-div">
-              <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
-            </div>
-          </section>
-        }
-
-        <ChooseList info={pageContents?.whychoose} data={pageContents?.chooselist} />
+        {pageContents?.chooselist?.length > 0 && <ChooseList info={pageContents?.whychoose} data={pageContents?.chooselist} />}
         {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
           <div key={dataIdx} className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-30'>
@@ -229,7 +228,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
         {pageContents?.brandheading?.length > 0 &&
-          <div className={`container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1 ${CURRENT_THEME === 'tool' ? 'hidden' : ''}`}>
+          <div className={`container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}>
             <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
               {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
                 <h4 key={dataIdx} className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
@@ -397,7 +396,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
         {featureToggle?.features?.enableTrendingCategory &&
-          <div className={`mt-14 sm:mt-24 lg:mt-32 ${CURRENT_THEME === 'robots' ? 'hidden' : ''}`}
+          <div className={`mt-14 sm:mt-24 lg:mt-32 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}
           >
             <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
           </div>
@@ -424,7 +423,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           </div>
         }
-        {(CURRENT_THEME != 'etag' && CURRENT_THEME != 'tool') &&
+        {(CURRENT_THEME != 'etag' && !featureToggle?.features?.enableCustomHomeWidget) &&
           <div className={`${(CURRENT_THEME != 'green' && CURRENT_THEME != 'robots') ? 'space-y-16 sm:space-y-24 lg:space-y-32 my-16 sm:my-24 lg:my-32' : ' my-0 sm:my-5 lg:my-8'} ${CURRENT_THEME === 'cam' && 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0'} container relative product-collections`}>
             {pageContents?.brand?.length > 0 &&
               <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>

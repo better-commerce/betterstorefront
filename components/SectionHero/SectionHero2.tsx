@@ -97,7 +97,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
           <Next className="absolute end-1 sm:end-5 top-1/2 sm:top-1/2 -translate-y-1/2 z-10 !text-slate-700 banner-next sm:opacity-0 sm:group-hover:opacity-100 ease-in	" btnClassName="sm:w-12 sm:h-12 w-4 h-4 hover:border-slate-400 dark:hover:border-slate-400" svgSize="w-6 h-6" onClickNext={handleClickNext} />
 
           <div className="absolute inset-0 bg-banner mob-bg-banner-height cls-fix-banner">
-            {CURRENT_THEME != "robots" && <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />}
+            {(CURRENT_THEME != "robots" && CURRENT_THEME != "tool") && <Image fill sizes="(max-width: 768px) 100vw, 50vw" className="absolute object-contain w-full h-full" src={backgroundLineSvg} alt="hero" />}
           </div>
 
           <Link href={sanitizeRelativeUrl(item?.link)} passHref className="container relative z-0 pb-0 pt-14 sm:pt-20 lg:py-44 hero-container cls-fix-banner mob-hero-container">

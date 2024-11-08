@@ -20,7 +20,9 @@
     "enableAddressIOSearch":false,
     "enableGoogleAnalytics": false,
     "enableOmnilytics": true,
-    "enableHorizontalFilter": false
+    "enableHorizontalFilter": false,
+    "enableCustomHomeWidget":false,
+    "enableFullBanner":true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
