@@ -1,0 +1,33 @@
+{
+  "features": {
+    "enableLanguage": false,
+    "enablePriceIncVatToggle": true,
+    "enableQuickOrderPad": false,
+    "enableCompare": true,
+    "enableStoreLocator": false,
+    "enableCollectDeliveryOption": false,
+    "enableEngage":true,
+    "enableMyStoreFeature": false,
+    "enableAddToBagPlp": true,
+    "enableMembership": false,
+    "isImageGallery": false,
+    "enableHeaderWishlist": true,
+    "enableProductSpecification": true,
+    "enableTrendingCategory": true,
+    "enableCategory": false,
+    "enableDemoToggle": true,
+    "enableLoqateSearch": true,
+    "enableAddressIOSearch":false,
+    "enableGoogleAnalytics": false,
+    "enableOmnilytics": true,
+    "enableHorizontalFilter": false,
+    "enableCustomHomeWidget":true,
+    "enableFullBanner":false
+  },
+  "social":[
+    { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
+    { "name": "Youtube", "icon": "images/socials/twitter.svg", "href": "", "enable":false },
+    { "name": "Telegram", "icon": "images/socials/telegram.svg", "href": "", "enable":false },
+    { "name": "Twitter", "icon": "images/socials/youtube.svg", "href": "", "enable":true }
+  ]
+}
