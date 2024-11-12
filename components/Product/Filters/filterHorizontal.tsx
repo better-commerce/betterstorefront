@@ -104,13 +104,14 @@ export default function FilterHorizontal({ products = { filters: [] }, handleFil
       {displayedFiltersCount < getFilter()?.length ? (
         <div className='relative inline-block mx-1 text-left'>
           <button className='inline-flex justify-center w-full cursor-pointer select-none filter-dropdown more !bg-yellow-100 !border !border-yellow-300 hover:!bg-yellow-200' onClick={loadMoreFilters}>
-            Load More <ChevronDownIcon className='w-4 h-4'/>
+            Load More <ChevronDownIcon className='w-4 h-4' />
           </button>
         </div>
       ) : (
+        getFilter()?.length > 10 &&
         <div className='relative inline-block mx-1 text-left'>
           <button className='inline-flex justify-center w-full cursor-pointer select-none filter-dropdown !bg-red-100 !border !border-red-300 hover:!bg-red-200' onClick={showLessFilters}>
-            Show Less  <ChevronUpIcon className='w-4 h-4'/>
+            Show Less  <ChevronUpIcon className='w-4 h-4' />
           </button>
         </div>
       )}
