@@ -3,6 +3,12 @@ import { toNumber } from 'lodash'
 
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
+export const KIT_BRAND_PLATFORM = '/api/v1/kit-builder/brand-platform'
+export const KIT_BRAND_CATEGORY = '/api/v1/kit-builder/category'
+export const KIT_BRAND_PRODUCTS = '/api/v1/kit-builder/product/by-brand-platform'
+export const NEXT_PRODUCT_BY_KIT_CATEGORY = '/api/kit-builder/product-by-category'
+export const KIT_BRAND_PROD_BY_CAT =
+  '/api/v1/kit-builder/product/by-kit-category'
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`

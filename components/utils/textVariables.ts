@@ -16,3 +16,7 @@ export const IMG_PLACEHOLDER =
 export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
 export const BTN_SUBMIT = 'Submit'
 export const LOGIN_SUCCESSFUL = 'login successful'
+export const GENERAL_ADD_TO_KIT = 'Add to kit'
+export const GENERAL_EDIT_KIT = 'Edit my kit'
+export const GENERAL_KIT_TO_BASKET = 'Add kit to basket'
+export const GENERAL_REMOVE = 'Remove Item'

@@ -149,7 +149,7 @@ const Coupon = (props: IPromotionInputProps) => {
                         </div>
 
                         <div className="flex flex-col justify-start my-0 sm:hidden sm:my-0">
-                          {cartItems.promotionsApplied?.length ? cartItems.promotionsApplied.map((promo: any, key: number) => {
+                          {cartItems?.promotionsApplied?.length ? cartItems?.promotionsApplied.map((promo: any, key: number) => {
                             return (
                               <div className="flex justify-between gap-4 pt-2 my-1" key={key} >
                                 <div className="flex">

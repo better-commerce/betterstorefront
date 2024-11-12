@@ -627,29 +627,29 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
-                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax: cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems?.subTotal?.formatted?.withTax: cartItems?.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'>{translate('label.orderSummary.shippingText')}</p>
-                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems?.shippingCharge?.formatted?.withTax : cartItems?.shippingCharge?.formatted?.withoutTax}{' '} </p>
                         </div>
 
-                        {cartItems.promotionsApplied?.length > 0 && (
+                        {cartItems?.promotionsApplied?.length > 0 && (
                           <div className="flex justify-between py-2 text-sm text-gray-900">
                             <p className='text-sm'>{translate('label.orderSummary.discountText')}</p>
-                            <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
+                            <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems?.discount?.formatted?.withTax : cartItems?.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
 
-                        {!isIncludeVAT && cartItems.grandTotal?.raw?.tax > 0 &&
+                        {!isIncludeVAT && cartItems?.grandTotal?.raw?.tax > 0 &&
                           <div className="flex justify-between py-2 text-sm text-gray-900">
                             <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
-                            <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
+                            <p className='text-sm'>{cartItems?.grandTotal?.formatted?.tax}</p>
                           </div>
                         }
                         <div className="flex justify-between py-4 font-bold text-gray-900 font-20">
                           <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
-                          <p className="font-20 link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
+                          <p className="font-20 link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
                         </div>
                       </div>
                     )}
@@ -657,14 +657,14 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    {cartItems.lineItems?.length > 0 &&
+                    {cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                         <Link href="/checkout" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
                         }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
                           <span className='flex flex-col justify-start pl-5 text-left'>
-                            <span>{cartItems.grandTotal?.formatted?.withTax}</span>
+                            <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
                             <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
                           </span>
                           <span className='flex items-center gap-2 pr-5'>

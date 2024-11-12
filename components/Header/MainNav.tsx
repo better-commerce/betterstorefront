@@ -62,7 +62,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     };
   }, [scrollPosition]);
   let classTop = 'top-full'
-  if (!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature) {
+  if (!isGuestUser && user?.userId && featureToggle?.features?.enableMyStoreFeature) {
     classTop = 'top-[82px]'
   }
   const renderMagnifyingGlassIcon = () => {
@@ -146,7 +146,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
 
               {featureToggle?.features?.enableHeaderWishlist &&
                 <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
-                  <button onClick={() => { handleWishlist(); }} className="wish-hover-icon items-center justify-center w-10 h-10 rounded-full lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                  <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                     <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
                     {wishListItems?.length > 0 && delayEffect && (
                       <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">

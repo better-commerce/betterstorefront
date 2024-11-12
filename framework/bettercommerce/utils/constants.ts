@@ -13,23 +13,15 @@ export const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 export const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
 export const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 export const REVIEW_BASE_URL = process.env.BETTERCOMMERCE_REVIEW_BASE_URL
-export const STATIC_BRANDS_PATH_ENABLED = stringToBoolean(
-  process.env.STATIC_BRANDS_PATH_ENABLED
-)
+export const STATIC_BRANDS_PATH_ENABLED = stringToBoolean( process.env.STATIC_BRANDS_PATH_ENABLED )
 export const OMS_BASE_URL = process.env.OMS_BASE_URL
 export const ORG_ID = process.env.NEXT_PUBLIC_ORG_ID
-export const CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE = stringToNumber(
-  process.env.CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE
-)
-export const CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE = stringToNumber(
-  process.env.CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE
-)
+export const CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE = stringToNumber( process.env.CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE )
+export const CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE = stringToNumber( process.env.CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE )
 export const BETTERCMS_BASE_URL = process.env.BETTERCMS_BASE_URL
-export const IS_TEST_PAYMENT_ENABLED_ON_LIVE =
-  process.env.IS_TEST_PAYMENT_ENABLED_ON_LIVE
-export const TEST_PAYMENT_AMOUNT = process.env.TEST_PAYMENT_AMOUNT
-  ? parseFloat(process.env.TEST_PAYMENT_AMOUNT)
-  : 0.0
+export const IS_TEST_PAYMENT_ENABLED_ON_LIVE = process.env.IS_TEST_PAYMENT_ENABLED_ON_LIVE
+export const TEST_PAYMENT_AMOUNT = process.env.TEST_PAYMENT_AMOUNT ? parseFloat(process.env.TEST_PAYMENT_AMOUNT) : 0.0
+export const KIT_BUILDER_API_URL = process.env.KIT_BUILDER_API_URL
 
 export const BETTERCMS_API_VERSION = process.env.BETTERCMS_API_VERSION
 export const BETTERCMS_API_URL = process.env.BETTERCMS_API_URL
@@ -70,6 +62,7 @@ export module Cookie {
     export const ORDER_ID = 'orderId'
     export const COMPANY_ID = 'CompanyId'
     export const GOOGLE_TRANSLATE = 'googtrans'
+    export const KIT_BASKET_ID = 'kitBasketId'
     export const CLIENT_IP_ADDRESS = 'ClientIP'
     export const IS_PAYMENT_LINK = 'ipl'
     export const API_TOKEN = 'i'
@@ -109,4 +102,12 @@ export module AddressFinder {
     export const FIND = `${BASE_URL}/autocomplete`
     export const RETRIEVE = `${BASE_URL}/get`
   }
+}
+export const BASKET_TYPES = {
+  DEFAULT: "default",
+  KIT: "kit",
+}
+
+export const BASKET_PROMO_TYPES = {
+  KIT: 23,
 }

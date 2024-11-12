@@ -109,5 +109,7 @@ module.exports = withCommerceConfig({
     GOOGLE_MAP_API_KEY: process.env.GOOGLE_MAP_API_KEY,
     ENGAGE_QUERY_BASE_URL: process.env.ENGAGE_QUERY_BASE_URL,
     FIND_ADDRESS_KEY: process.env.FIND_ADDRESS_KEY,
+    KIT_BUILDER_API_URL: process.env.KIT_BUILDER_API_URL,
+
   },
 })

@@ -269,7 +269,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
           <I18nProvider value={i18n}>
             <ErrorBoundary>
               <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
-                <OverlayLoader />
                 <CustomerReferral router={router} />
                 <SessionProvider session={pageProps?.session}>
                   <Component

@@ -230,7 +230,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard product-card hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard product-card hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">

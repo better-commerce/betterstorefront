@@ -75,7 +75,7 @@
   --brand-white: #fff;
   --web-white: #F8F8F8;
   --tan-clr: #F3EDE3;
-  --teal-clr: #345662;
+  --teal-clr: #1f2e58;
   /* primary color variable */
 
   /* secondary color variable */
@@ -2668,4 +2668,6 @@ body .ttnc-ButtonPrimary{
 
 .menu-html{
   flex-direction: column;
+}.bg-teal {
+  background: var(--teal-clr);
 }

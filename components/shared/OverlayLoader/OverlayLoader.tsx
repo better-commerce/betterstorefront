@@ -24,7 +24,7 @@ const OverlayLoader = () => {
                     <div className="w-32 h-32 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
                     {message && (
                       <div className="flex items-center">
-                        <p className="text-white m-auto">
+                        <p className="m-auto text-white">
                           {message}
                         </p>
                       </div>
@@ -34,7 +34,7 @@ const OverlayLoader = () => {
               }
             </div>
           </div >
-        </div >
+        </div>
       )}
     </>
   )
