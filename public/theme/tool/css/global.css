@@ -2646,18 +2646,24 @@ body .ttnc-ButtonPrimary{
 
 .filter-dropdown {
     background: #f8f8f8;
-    border-radius: 5px;
+    border-radius: 6px;
     display: flex;
-    height: 40px;
-    padding: 8px 16px;
+    height: 36px;
+    padding: 5px 12px;
     align-items: center;
-    gap: 8px;
+    gap: 0px;
     color: var(--brand-blue, #212530);
-    font-size: 14px;
+    font-size: 13px;
     font-style: normal;
     font-weight: 600;
-    line-height: 16px;
-    text-transform: uppercase;
+    line-height: 14px;
+    text-transform: capitalize;
+    text-align: center;
+    border: 1px solid #e5e5e5;
+}
+
+.filter-dropdown:hover{
+  background: #e8e8e8;
 }
 
 .menu-html{

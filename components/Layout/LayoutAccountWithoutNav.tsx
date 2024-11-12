@@ -183,7 +183,7 @@ const LayoutAccountWithoutNav: FC<Props & IExtraProps> = ({ children, config, pa
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
-        <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
+        <div className={`text-base lg:pt-24 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
           {displayAlert && <AlertRibbon />}
           <>
