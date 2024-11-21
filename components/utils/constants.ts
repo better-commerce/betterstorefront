@@ -82,7 +82,7 @@ export const NEXT_DOWNLOAD_VOUCHERS =   `/api/membership/download-voucher`
 
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
-
+export const LIVE_CHAT_TIME = '07:30am-5:30pm'
 //LOCAL ENDPOINTS
 export const NEXT_PRODUCT_BY_KIT_CATEGORY = '/api/kitbuilder/product-by-category'
 export const NEXT_GET_COUNTRIES = '/api/countries'
