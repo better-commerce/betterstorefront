@@ -10,6 +10,8 @@ interface Props {
   stockCode?: string
   isMembership?: boolean
   cookies?: any
+  basketItemGroupId?: string
+  basketItemGroupData?: any
 }
 
 export default function useAddItem() {
@@ -21,6 +23,8 @@ export default function useAddItem() {
     displayOrder,
     stockCode,
     isMembership = false,
+    basketItemGroupId,
+    basketItemGroupData,
     cookies,
   }: Props) {
     const data = {
@@ -31,6 +35,8 @@ export default function useAddItem() {
       displayOrder,
       stockCode,
       isMembership,
+      basketItemGroupId,
+      basketItemGroupData,
     }
     try {
       const response: any = await fetcher({

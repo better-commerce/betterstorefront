@@ -22,7 +22,8 @@ import Spinner from '@components/ui/Spinner'
 import {
     EmptyObject,
     NEXT_BULK_ADD_TO_CART,
-  } from '@components/utils/constants'
+    OrderStatus,
+} from '@components/utils/constants'
 
 // Other Imports
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
@@ -40,6 +41,8 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
+import sumBy from 'lodash/sumBy'
+import { groupOrderItemsById } from '@components/utils/cart'
 
 function OrderDetail({ deviceInfo }: any) {
     const { recordAnalytics } = useAnalytics()
@@ -54,9 +57,40 @@ function OrderDetail({ deviceInfo }: any) {
     const [isSubmitReview, setSubmitReview] = useState<any>(false)
     const [isReviewdata, setReviewData] = useState<any>()
     const [orderData, setOrderData] = useState<any>(null)
+    const [totalQty, setTotalQty] = useState<any>(0)
     const [returnRequestedItems, setReturnRequestedItems] = useState({})
+    const [items, setItems] = useState([])
     let isB2B: any = isB2BUser(user);
-
+    useEffect(() => {
+        let items = orderData?.items
+        // check if order is cancelled
+        if (orderData?.orderStatusDisplay === OrderStatus.CANCELLED) {
+            let mergedOrderItems: any = []
+            items.forEach((o: any) => {
+                const foundItemIdx = mergedOrderItems?.findIndex(
+                    (x: any) => x.productId === o.productId
+                )
+                if (foundItemIdx > -1) {
+                    // if item found, merge quantity of duplicate items 
+                    // and all items should be cancelled
+                    mergedOrderItems.splice(foundItemIdx, 1, {
+                        ...o,
+                        qty: o.qty + mergedOrderItems[foundItemIdx].qty,
+                        statusDisplay: OrderStatus.CANCELLED
+                    })
+                } else {
+                    mergedOrderItems.push({
+                        ...o,
+                        statusDisplay: OrderStatus.CANCELLED
+                    })
+                }
+            })
+            items = mergedOrderItems
+        }
+        setTotalQty(sumBy(items, 'qty'))
+        items = Object.values(groupOrderItemsById(items))
+        setItems(items)
+    }, [orderData?.items?.length])
     const fetchOrderDetailById = async (id: any) => {
         if (!id) return
         try {
@@ -143,7 +177,7 @@ function OrderDetail({ deviceInfo }: any) {
 
     const openHelpModal = (item: any, order: any) => {
         setData({
-            orderId: order?.id,
+            orderId: orderData?.id,
             itemId: item?.productId,
         })
         setIsHelpOpen(true)
@@ -157,7 +191,7 @@ function OrderDetail({ deviceInfo }: any) {
     const chooseHelpMode = (mode: any) => {
         if (typeof window !== 'undefined')
             //debugger
-        recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
+            recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
 
     const closeHelpModal = () => {
@@ -172,7 +206,7 @@ function OrderDetail({ deviceInfo }: any) {
         setIsHelpOrderOpen(true)
         if (typeof window !== 'undefined')
             //debugger
-        recordAnalytics(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
+            recordAnalytics(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
     }
 
     const closeOrderHelpModal = () => {
@@ -237,31 +271,31 @@ function OrderDetail({ deviceInfo }: any) {
         ).toFixed(2)
 
 
-        const handleReOrder = async () => {
-            const computedProducts = orderData?.items?.reduce((acc: any, obj: any) => {
-              acc.push({
+    const handleReOrder = async () => {
+        const computedProducts = orderData?.items?.reduce((acc: any, obj: any) => {
+            acc.push({
                 ProductId: obj?.recordId || obj?.productId,
                 Qty: obj?.qty || 1,
                 StockCode: obj?.stockCode,
                 ProductName: obj?.name,
                 ManualUnitPrice: obj?.manualUnitPrice || 0.0,
-              })
-              return acc
-            }, [])
-            const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
-              basketId,
-              products: computedProducts,
             })
-            if (newCart?.data) {
-              setCartItems(newCart?.data)
-              openCart()
-            }
-          }
+            return acc
+        }, [])
+        const newCart = await axios.post(NEXT_BULK_ADD_TO_CART, {
+            basketId,
+            products: computedProducts,
+        })
+        if (newCart?.data) {
+            setCartItems(newCart?.data)
+            openCart()
+        }
+    }
     return (
         <>
             {
-                !orderData ? <> <Spinner /> </>
-                    : <>
+                !orderData ? <> <Spinner /> </> :
+                    <>
                         <NextHead>
                             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
                             <link rel="canonical" href={SITE_ORIGIN_URL + router.asPath} />
@@ -319,11 +353,11 @@ function OrderDetail({ deviceInfo }: any) {
                                                     </div>
                                                 </div>
                                             )}
-                                            <OrderItems items={orderData?.items} details={orderData} ifCancelled={ifCancelled} openHelpModal={openHelpModal} setReview={setReview} />
+                                            <OrderItems items={items} details={orderData} ifCancelled={ifCancelled} openHelpModal={openHelpModal} setReview={setReview} />
                                         </>
                                     )}
                                 </div>
-                                <OrderSummary details={orderData} subTotalAmount={subTotalAmount} openOrderHelpModal={openOrderHelpModal} handleReOrder={handleReOrder}   />
+                                <OrderSummary details={orderData} subTotalAmount={subTotalAmount} openOrderHelpModal={openOrderHelpModal} handleReOrder={handleReOrder} />
                             </div>
                         </div>
                         <HelpModal details={orderData} isHelpOpen={isHelpOpen} closeHelpModal={closeHelpModal} isHelpStatus={isHelpStatus} chooseHelpMode={chooseHelpMode} onExchangeItem={onExchangeItem} onReturnItem={onReturnItem} onCancelItem={onCancelItem} onCancelOrder={onCancelOrder} isHelpOrderOpen={isHelpOrderOpen} closeOrderHelpModal={closeOrderHelpModal} returnRequestedItems={returnRequestedItems} />

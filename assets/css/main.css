@@ -2021,23 +2021,23 @@ br {
 .max-list-panel::-webkit-scrollbar,
 .overflow-y-auto::-webkit-scrollbar,
 .max-basket-panel::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .max-list-panel::-webkit-scrollbar-track,
 .overflow-y-auto::-webkit-scrollbar-track,
 .max-basket-panel::-webkit-scrollbar-track {
-  border-radius: 24px;
-  background: rgba(33, 37, 48, 0.1);
+  border-radius: 2px;
+  background: #f3f3f3;
   opacity: 1;
 }
 
 .max-list-panel::-webkit-scrollbar-thumb,
 .overflow-y-auto::-webkit-scrollbar-thumb,
 .max-basket-panel::-webkit-scrollbar-thumb {
-  background: var(--teal-clr) !important;
-  width: 8px;
-  border-radius: 24px;
+  background: #dddddd !important;
+  width: 6px;
+  border-radius: 2px;
 }
 .max-compare-list-panel {
   max-height: 180px;
@@ -17945,4 +17945,29 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+
+.kit-basket {
+  position: fixed;
+  top: 90px;
+  z-index: 9;
+  background: #ffffff;
+  right: 0;
+  width: 24%;
+}
+.kit-basket-height {
+  height: calc(100vh - 90px);
+}
+
+.btn-primary-green {
+    background: #075d2b;
+    color: #FFFFFF;
+    font-size: var(--font-14);
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    min-height: 47px;
+    box-sizing: border-box;
 }

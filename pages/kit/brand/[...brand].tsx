@@ -210,19 +210,19 @@ function KitBrandPage({
       </NextHead>
       <section className="w-full pt-0 sm:pt-0">
         <div className="flex flex-col w-full py-10 mt-0 sm:py-20 sm:mt-0 bg-teal">
-          <h1 className="font-bold text-center text-white">MY CUSTOM KIT</h1>
-          <h2 className="mt-3 font-semibold text-center text-orange-600 capitalize font-24">
+          <h1 className="text-xl font-semibold text-center text-white sm:text-3xl">MY CUSTOM KIT</h1>
+          <h2 className="mt-3 font-semibold text-center text-yellow-400 capitalize font-24">
             {' '}
             {brandInfo?.brandName} {brandInfo?.platformName}
           </h2>
-          <div className="flex items-center justify-center flex-1 mx-auto">
+          <div className="flex items-center justify-center flex-1 mx-auto mt-4">
             <div className="flex flex-col py-0 pr-2 text-xs font-normal text-white font-14 whitespace-nowrap">
               Include out of stock products
             </div>
             <Switch
               checked={enabledOutOfStockItems}
               onChange={handleEnableOutOfStockItems}
-              className={`${enabledOutOfStockItems ? 'bg-emerald-600' : 'bg-gray-300'
+              className={`${enabledOutOfStockItems ? '!bg-emerald-600' : '!bg-gray-400'
                 } relative inline-flex h-[18px] w-[35px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
             >
               <span className="sr-only">Compare Items</span>
@@ -243,13 +243,7 @@ function KitBrandPage({
           <div className="pl-4 pr-4 sm:pr-0 sm:col-span-9 sm:pl-10 mob-col-full">
             <div className="flex flex-col w-full mt-4 sm:mt-6">
               {sortBy(products, 'displayOrder')?.map((product: any) => (
-                <BrandProduct
-                  key={product.tierId}
-                  product={product}
-                  brandInfo={brandInfo}
-                  cartLineItems={cartLineItems}
-                  setCartLineItems={setCartLineItems}
-                />
+                <BrandProduct key={product.tierId} product={product} brandInfo={brandInfo} cartLineItems={cartLineItems} setCartLineItems={setCartLineItems} />
               ))}
             </div>
             <div className="flex flex-col w-full mt-4 sm:mt-6">

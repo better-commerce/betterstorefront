@@ -78,7 +78,7 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
                       className="w-4 cursor-pointer"
                     />
                   )}
-                  <div className="w-10 h-10 flex items-center">
+                  <div className="flex items-center w-10 h-10">
                     {loadingProduct == product?.productId ? (
                       <LoadingDots />
                     ) : (

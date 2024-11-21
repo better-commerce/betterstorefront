@@ -7,18 +7,15 @@ import { HeartIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
-import { CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, EmptyObject, SITE_ORIGIN_URL, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
+import { CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, EmptyObject, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
 import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMAGE_CDN_URL, IMG_PLACEHOLDER, } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, cartItemsValidateAddToCart, getCurrency, isIncludeVATInPriceDisplay, isFreeShippingOverXValue, getFreeShippingOverXValue } from '@framework/utils/app-util'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 import cartHandler from '@components/services/cart'
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import DeliveryMessage from '../DeliveryMessage'
 const SimpleButton = dynamic(() => import('@components/ui/Button'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const PLPQuickView = dynamic(() => import('@components/ModalQuickView'))
 
 interface Props {
   readonly product: any
@@ -29,8 +26,6 @@ interface Props {
 const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product: productData, config, hideWishlistCTA = false, deviceInfo, maxBasketItemsCount, productPromoDetails = {}, }) => {
   const { isMobile } = deviceInfo
   const isIncludeVAT = vatIncluded()
-  const currency = getCurrency()
-  const router: any = useRouter()
   const [currentProductData, setCurrentProductData] = useState({ image: productData.image, link: productData.slug, })
   const { basketId, user, addToWishlist, removeFromWishlist, openWishlist, setCartItems, openNotifyUser, cartItems, wishListItems, isGuestUser, openLoginSideBar, setAlert, isCompared, compareProductList, setCompareProducts, } = useUI()
   const [quickViewData, setQuickViewData] = useState(null)
@@ -40,9 +35,9 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
   const [showProductSaleCountdown, setShowProductSaleCountdown] = useState<any>(false)
 
   const handleUpdateWishlistItem = useCallback(() => {
-    if (wishListItems.length < 1) return
-    const wishlistItemIds = wishListItems.map((o: any) => o.recordId)
-    setProduct({ ...productData, hasWishlisted: wishlistItemIds.includes(productData.recordId), })
+    if (wishListItems?.length < 1) return
+    const wishlistItemIds = wishListItems?.map((o: any) => o.recordId)
+    setProduct({ ...productData, hasWishlisted: wishlistItemIds?.includes(productData.recordId), })
   }, [wishListItems, productData])
 
   useEffect(() => {
@@ -85,7 +80,7 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
       await axios.post(NEXT_REMOVE_WISHLIST, { id: user.userId, productId: product.recordId, flag: true, })
       removeFromWishlist(product)
       openWishlist()
-    }else{
+    } else {
       if (objUser) {
         const createWishlist = async () => {
           try {
@@ -144,9 +139,9 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
       isNotifyMeEnabled: !productData?.currentStock /*&& !productData?.preOrder?.isEnabled*/,
       isPreOrderEnabled: !productData?.currentStock /*&& productData?.preOrder?.isEnabled*/,
     };
-    
-    if(!productData?.currentStock && productData?.preOrder?.isEnabled) {
-        buttonConfig.buttonType = 'button'
+
+    if (!productData?.currentStock && productData?.preOrder?.isEnabled) {
+      buttonConfig.buttonType = 'button'
     }
 
     if (productData?.currentStock <= 0 && /*!productData?.preOrder?.isEnabled &&*/ !productData?.flags?.sellWithoutInventory) {
@@ -175,7 +170,7 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
               // selectedAttrData?.productId ?? selectedAttrData?.recordId,
               cartItems,
               maxBasketItemsCount
-            ) 
+            )
             if (!isValid) {
               setAlert({
                 type: 'error',
@@ -202,7 +197,6 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
               { product: productData }
             )
             setCartItems(item)
-            
           },
           shortMessage: '',
         }
@@ -214,12 +208,6 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
         return buttonConfig
       }
     }
-    
-    /*if (buttonConfig.isNotifyMeEnabled) {
-      buttonConfig.action = async () => handleNotification();
-    } else if (buttonConfig.isPreOrderEnabled) {
-      buttonConfig.title = BTN_PRE_ORDER;
-    }*/
     return buttonConfig;
   };
 
@@ -251,12 +239,7 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
         <img src={generateUri(item?.original, `h=${height}&fm=webp`) || IMG_PLACEHOLDER} alt={product?.name} height={height} width={height} />
         {overlayImages?.length > 0 &&
           <div className='absolute z-10 top-1 right-1'>
-            <img
-              src={generateUri(overlayImage?.image, 'h=130&fm=webp') || `${IMAGE_CDN_URL}//banners/18v-redemption-jan-mar-2024-offer-icon-500x500px.png`}
-              className='overlayImage mob-overlay-img-width'
-              width="130"
-              height="130"
-              alt={product?.name} />
+            <img src={generateUri(overlayImage?.image, 'h=130&fm=webp') || `${IMAGE_CDN_URL}//banners/18v-redemption-jan-mar-2024-offer-icon-500x500px.png`} className='overlayImage mob-overlay-img-width' width="130" height="130" alt={product?.name} />
           </div>
         }
       </div>
@@ -264,89 +247,78 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
   };
   const customRenderThumbInner = (item: any) => {
     return (
-      <>
       <div className='relative image-gallery-thumbnail-inner'>
-      <img src={generateUri(item?.thumbnail, `h=${thumbHeight}&fm=webp`) || IMG_PLACEHOLDER} alt={product?.name} height={thumbHeight} width={thumbHeight} />
+        <img src={generateUri(item?.thumbnail, `h=${thumbHeight}&fm=webp`) || IMG_PLACEHOLDER} alt={product?.name} height={thumbHeight} width={thumbHeight} />
         {overlayImages?.length > 0 && !matchStrings(item?.tag, "overlay", true) &&
           <div className='absolute z-10 top-1 right-1'>
-            <img
-              src={generateUri(overlayImage?.image, 'h=30&fm=webp') || `${IMAGE_CDN_URL}/banners/18v-redemption-jan-mar-2024-offer-icon-500x500px.png`}
-              className='overlayImage'
-              width="20"
-              height="20"
-              alt={product?.name} />
+            <img src={generateUri(overlayImage?.image, 'h=30&fm=webp') || `${IMAGE_CDN_URL}/banners/18v-redemption-jan-mar-2024-offer-icon-500x500px.png`} className='overlayImage' width="20" height="20" alt={product?.name} />
           </div>
         }
       </div>
-      </>
     );
   };
   return (
-    <>
-      <div className="grid gap-8 pt-4 pb-0 sm:gap-24 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 lg:pt-20 lg:pb-20 grid-sm-1 feature-grid-sec">
-        <div className="product-image product-image-border">
-          <ImageGallery thumbnailAlt={product?.name} thumbnailTitle={product?.name} renderItem={customRenderItem} originalAlt={product?.name} items={images ?? []} thumbnailPosition="bottom" showPlayButton={false} showBullets={false} showNav={true} additionalClass="app-image-gallery" showFullscreenButton={false} renderThumbInner={customRenderThumbInner} />
+    <div className="grid gap-8 pt-4 pb-0 sm:gap-24 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 lg:pt-20 lg:pb-20 grid-sm-1 feature-grid-sec">
+      <div className="product-image product-image-border">
+        <ImageGallery thumbnailAlt={product?.name} thumbnailTitle={product?.name} renderItem={customRenderItem} originalAlt={product?.name} items={images ?? []} thumbnailPosition="bottom" showPlayButton={false} showBullets={false} showNav={true} additionalClass="app-image-gallery" showFullscreenButton={false} renderThumbInner={customRenderThumbInner} />
+      </div>
+      <div className="right-product-info">
+        <div className="flex justify-between mb-2">
+          <h2 className="hidden mt-0 font-semibold uppercase text-brand-red sm:block">Deal of the week</h2>
+          <div className="flex items-center gap-0">
+            {[0, 1, 2, 3, 4].map((rating) => (
+              <i key={rating} className={classNames(product?.rating > rating ? 'sprite-red-star-filled' : 'sprite-red-star', 'flex-shrink-0 sprite-icons')}></i>
+            ))}
+            <p className="pl-1 my-auto text-2xl font-light dark:text-black">{product?.rating}</p>
+            <span className="text-xs font-normal text-gray-500">({product?.reviewCount})</span>
+          </div>
         </div>
-        <div className="right-product-info">
-          <div className="flex justify-between mb-2">
-            <h2 className="hidden mt-0 font-semibold uppercase text-brand-red sm:block">Deal of the week</h2>
-            <div className="flex items-center gap-0">
-              {[0, 1, 2, 3, 4].map((rating) => (
-                <i key={rating} className={classNames(product?.rating > rating ? 'sprite-red-star-filled' : 'sprite-red-star', 'flex-shrink-0 sprite-icons')}></i>
-              ))}
-              <p className="pl-1 my-auto text-2xl font-light dark:text-black">{product?.rating}</p>
-              <span className="text-xs font-normal text-gray-500">({product?.reviewCount})</span>
-            </div>
-          </div>
-          <h3 className="font-semibold font-32 mob-font-24 dark:text-black">{product?.name}</h3>
-          <div className="flex items-center w-full px-0 mb-6 font-bold text-left text-black font-24 sm:mt-6 sm:text-sm">
-            {isIncludeVATInPriceDisplay(isIncludeVAT, product) ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
-            {isIncludeVATInPriceDisplay(isIncludeVAT, product) ? (
-              product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax > product?.price?.raw?.withTax && (
-                <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withTax}</span>
-              )
-            ) : (
-              product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax > product?.price?.raw?.withoutTax && (
-                <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withoutTax}</span>
-              )
-            )}
-            <div className="items-end ml-2 text-xs font-light text-right text-gray-400">{isIncludeVATInPriceDisplay(isIncludeVAT, product) ? 'inc. VAT' : 'ex. VAT'}</div>
-          </div>
-          <div className="block mb-5">
-            <div dangerouslySetInnerHTML={{ __html: product?.shortDescription, }} className="inline font-light font-18 mob-font-14 dark:text-gray-700" />
-            <Link className="inline" href={`/${currentProductData.link}`} passHref>
-              <span className="ml-2 font-semibold underline font-18 dark:text-black">View more</span>
-            </Link>
-          </div>
-          {isFreeShippingOverXEnabled && (
-            <div className='pb-5'> <DeliveryMessage product={product} freeShippingOverXValue={freeShippingOverXValue} /> </div>
+        <h3 className="font-semibold font-32 mob-font-24 dark:text-black">{product?.name}</h3>
+        <div className="flex items-center w-full px-0 mb-6 font-bold text-left text-black font-24 sm:mt-6 sm:text-sm">
+          {isIncludeVATInPriceDisplay(isIncludeVAT, product) ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
+          {isIncludeVATInPriceDisplay(isIncludeVAT, product) ? (
+            product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax > product?.price?.raw?.withTax && (
+              <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withTax}</span>
+            )
+          ) : (
+            product?.listPrice?.raw?.withoutTax > 0 && product?.listPrice?.raw?.withoutTax > product?.price?.raw?.withoutTax && (
+              <span className="px-1 font-normal text-gray-400 line-through">{product?.listPrice?.formatted?.withoutTax}</span>
+            )
           )}
-          {showProductSaleCountdown && <div className="flex flex-col gap-3 py-8 mb-5">
-            <h4 className="mb-2 font-semibold dark:text-black">Deal ends in...</h4>
-           
-          </div>}
-          <div className="col-span-12">
-            <div className="flex w-full gap-1 mb-4 sm:grid sm:grid-cols-2">
-              <button type="button" onClick={() => handleQuickViewData(product)} className="flex items-center justify-center flex-1 w-full px-1 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm xs:max-w-xs lg:py-2 sm:px-4 btn-primary-green hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black btn-c btn-primary disabled:cursor-not-allowed disabled:opacity-50">
-                {GENERAL_ADD_TO_BASKET}
-              </button>
-              {/* <Button title={buttonConfig.title} action={buttonConfig.action} validateAction={buttonConfig.validateAction} type="button" aria-label="Cart" buttonType={buttonConfig.buttonType || 'cart'} /> */}
-              <div className="wish-btn w-14">
-                {isInWishList ? (
-                  <SimpleButton aria-label="Warranty" variant="slim" className="!p-3 !rounded flex-1 !bg-white cursor-none hover:!bg-white !border !border-gray-600 shadow-none !hover:border-orange-600 flex text-center justify-center disabled:!bg-transparent" onClick={handleWishList}>
-                    <HeartIcon className="items-center w-5 h-5 mx-auto text-center text-orange-600" />
-                  </SimpleButton>
-                ) : (
-                  <SimpleButton aria-label="No Warranty" variant="slim" className="!p-3 !rounded flex-1 !bg-white hover:!bg-white !border !border-gray-600 shadow-none !hover:border-orange-600 flex text-center justify-center disabled:!bg-transparent" onClick={handleWishList} >
-                    <HeartIcon className="items-center w-6 h-6 mx-auto text-center text-black" />
-                  </SimpleButton>
-                )}
-              </div>
+          <div className="items-end ml-2 text-xs font-light text-right text-gray-400">{isIncludeVATInPriceDisplay(isIncludeVAT, product) ? 'inc. VAT' : 'ex. VAT'}</div>
+        </div>
+        <div className="block mb-5">
+          <div dangerouslySetInnerHTML={{ __html: product?.shortDescription, }} className="inline font-light font-18 mob-font-14 dark:text-gray-700" />
+          <Link className="inline" href={`/${currentProductData.link}`} passHref>
+            <span className="ml-2 font-semibold underline font-18 dark:text-black">View more</span>
+          </Link>
+        </div>
+        {isFreeShippingOverXEnabled && (
+          <div className='pb-5'> <DeliveryMessage product={product} freeShippingOverXValue={freeShippingOverXValue} /> </div>
+        )}
+        {showProductSaleCountdown && <div className="flex flex-col gap-3 py-8 mb-5">
+          <h4 className="mb-2 font-semibold dark:text-black">Deal ends in...</h4>
+        </div>}
+        <div className="col-span-12">
+          <div className="flex w-full gap-1 mb-4 sm:grid sm:grid-cols-2">
+            <button type="button" onClick={() => handleQuickViewData(product)} className="flex items-center justify-center flex-1 w-full px-1 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm xs:max-w-xs lg:py-2 sm:px-4 btn-primary-green hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black btn-c btn-primary disabled:cursor-not-allowed disabled:opacity-50">
+              {GENERAL_ADD_TO_BASKET}
+            </button>            
+            <div className="wish-btn w-14">
+              {isInWishList ? (
+                <SimpleButton aria-label="Warranty" variant="slim" className="!p-3 !rounded flex-1 !bg-white cursor-none hover:!bg-white !border !border-gray-600 shadow-none !hover:border-orange-600 flex text-center justify-center disabled:!bg-transparent" onClick={handleWishList}>
+                  <HeartIcon className="items-center w-5 h-5 mx-auto text-center text-orange-600" />
+                </SimpleButton>
+              ) : (
+                <SimpleButton aria-label="No Warranty" variant="slim" className="!p-3 !rounded flex-1 !bg-white hover:!bg-white !border !border-gray-600 shadow-none !hover:border-orange-600 flex text-center justify-center disabled:!bg-transparent" onClick={handleWishList} >
+                  <HeartIcon className="items-center w-6 h-6 mx-auto text-center text-black" />
+                </SimpleButton>
+              )}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 export default FeatureProductCard

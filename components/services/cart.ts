@@ -12,6 +12,8 @@ import axios from 'axios'
 import { BundleType } from '@framework/utils/enums'
 import { Guid } from '@commerce/types'
 import { logError } from '@framework/utils/app-util'
+import Cookies from 'js-cookie'
+import { Cookie } from '@framework/utils/constants'
 
 interface CartItem {
   basketId?: string
@@ -27,6 +29,8 @@ interface CartItem {
   CustomInfo5?: string
   CustomInfo4Formatted?: string
   CustomInfo5Formatted?: string
+  basketItemGroupId?: string
+  basketItemGroupData?: any
 }
 
 interface GetCart {
@@ -46,6 +50,8 @@ export default function cartHandler() {
         userId,
         isAssociated = true,
         isMembership = false,
+        basketItemGroupId,
+        basketItemGroupData,
       }: CartItem,
       type = 'ADD',
       data: any = {}
@@ -59,6 +65,8 @@ export default function cartHandler() {
         displayOrder,
         stockCode,
         isMembership,
+        basketItemGroupId,
+        basketItemGroupData,
       } // Set default post data
 
       const isBundledProduct =
@@ -182,7 +190,8 @@ export default function cartHandler() {
       return response?.data
     },
     getCart: async ({ basketId }: GetCart) => {
-      const response = await axios.get(`${NEXT_GET_CART}?basketId=${basketId}`)
+      const basket_id = basketId || Cookies.get(Cookie.Key.BASKET_ID)
+      const response = await axios.get(`${NEXT_GET_CART}?basketId=${basket_id}`)
       return response.data
     },
     associateCart: async (userId: string, basketId?: string) => {

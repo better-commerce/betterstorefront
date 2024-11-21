@@ -58,10 +58,7 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
       const basketId = Cookies.get(Cookie.Key.BASKET_ID)
       const kitBasketId = Cookies.get(Cookie.Key.KIT_BASKET_ID)
       let hasItemAlreadyAdded = false
-      const bulkUpdatePayload: any = {
-        basketId,
-        products: [],
-      }
+      const bulkUpdatePayload: any = { basketId, products: [], }
       const basket = await getCart({ basketId })
       const basketItems = basket?.lineItems?.filter((item: any) => {
         if (router.query?.basketItemGroupId) {
@@ -93,14 +90,7 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
       // check if same kit basket items have already added in basket
       if (isEqual(basketItemIdsAndQty, kitBasketItemIdsAndQty)) {
         hasItemAlreadyAdded = true
-        // setKitCartLoaded(false)
-        // setAlert({
-        //   type: AlertType.ERROR,
-        //   msg: Messages.Errors['UNABLE_TO_ADD_KIT_ITEM'],
-        // })
-        // return
       }
-
       /**
        * Remove kit basket with kitBasketId
        */
@@ -239,7 +229,9 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
           <div className="flex items-center justify-between">
             <h3 className="dark:text-black font-16 m-font-14">
               {brandInfo?.brandName} {brandInfo?.platformName} Kit{' '}
-              <span className="font-medium text-black font-12"> ({sumBy(kitBasket?.lineItems, 'qty')} Items) </span>
+              <span className="font-medium text-black font-12">
+                ({sumBy(kitBasket?.lineItems, 'qty')} Items)
+              </span>
             </h3>
           </div>
         </div>
@@ -247,29 +239,35 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
           {isEmptyKitBasket ? (
             <>
               <i className="mx-auto mb-6 sprite-icons icon-empty-bag"></i>
-              <h5 className="text-lg font-semibold opacity-70 dark:text-black"> Nothing in kit </h5>
-              <h5 className="opacity-70 dark:text-black"> Add products to begin building your kit </h5>
+              <h5 className="text-lg font-semibold opacity-70 dark:text-black">
+                Nothing in kit
+              </h5>
+              <h5 className="opacity-70 dark:text-black">
+                Add products to begin building your kit
+              </h5>
             </>
           ) : (
-            <div className="flex flex-col gap-2 px-4 mt-4 text-left max-kit-panel sm:px-4">
-              {kitBasket?.promotionsApplied?.length > 0 ? kitBasket?.promotionsApplied.map((promo: any, idx: number) => (
-                <div key={idx} className="border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 min-h-[150px] p-3 offer-m-sec text-secondary-full-opacity">
-                  {renderPromo(promo, kitBasketPromos)}
-                </div>
-              )) : kitBasketPromos?.map((promo: any, idx: number) => (
-                <div key={idx} className='relative px-2 py-1 font-semibold border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 offer-m-sec text-secondary-full-opacity'>
-                  {promo?.croMessage}
-                </div>
-              ))}
-              {kitBasket?.lineItems?.sort((a: any, b: any) => b.displayOrder - a.displayOrder)?.map((product: any, productIdx: number) => (
-                <KitBasketProduct key={productIdx} product={product} brandInfo={brandInfo} css={{ maxWidth: '100%', height: 'auto' }} isIncludeVAT={isIncludeVAT} openModal={() => { }} setItemClicked={() => { }} maxBasketItemsCount={maxBasketItemsCount(config)} />
-              ))}
-            </div>
+            <>
+              <div className="flex flex-col gap-2 px-4 mt-4 text-left max-kit-panel sm:px-4">
+                {kitBasket?.promotionsApplied?.length > 0 ? kitBasket?.promotionsApplied.map((promo: any, idx: number) => (
+                  <div key={idx} className="border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 min-h-[150px] p-3 offer-m-sec text-secondary-full-opacity">
+                    {renderPromo(promo, kitBasketPromos)}
+                  </div>
+                )) : kitBasketPromos?.map((promo: any, idx: number) => (
+                  <div key={idx} className='relative px-2 py-1 font-semibold border rounded border-emerald-500 m-offer-info bg-emerald-100 text-emerald-500 offer-m-sec text-secondary-full-opacity'>
+                    {promo?.croMessage}
+                  </div>
+                ))}
+                {kitBasket?.lineItems?.sort((a: any, b: any) => b.displayOrder - a.displayOrder)?.map((product: any, productIdx: number) => (
+                  <KitBasketProduct key={productIdx} product={product} brandInfo={brandInfo} css={{ maxWidth: '100%', height: 'auto' }} isIncludeVAT={isIncludeVAT} openModal={() => { }} setItemClicked={() => { }} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                ))}
+              </div>
+            </>
           )}
         </div>
         <div className="w-full text-center">
           <div className="flex flex-col items-center justify-between px-4">
-            <div className="flex items-center justify-between w-full my-0 sm:my-1">
+            <div className="flex justify-between w-full my-0 sm:my-1">
               <div className='flex justify-start text-left'>
                 <h2 className="mb-0 font-semibold capitalize font-20 m-font-16 dark:text-black">
                   Total{' '}<span className="text-gray-500 capitalize font-14 m-font-14">{isIncludeVAT ? 'inc. VAT' : 'ex. VAT'}</span>
@@ -278,16 +276,26 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
               <h6 className="text-lg font-semibold m-font-16 dark:text-black">
                 {isIncludeVAT ? kitBasket?.grandTotal?.formatted?.withTax : kitBasket?.grandTotal?.formatted?.withoutTax}
                 <span className='hidden view-mob-visible'>
-                  <span className="pl-3 underline view-span dark:text-black font-14 m-font-14" onClick={kitViewClass} >
+                  <span
+                    className="pl-3 underline view-span dark:text-black font-14 m-font-14"
+                    onClick={kitViewClass}
+                  >
                     View Kit
                   </span>
-                  <span className="hidden pl-3 underline hide-span font-14 m-font-14" onClick={kitViewClass} >
+                  <span
+                    className="hidden pl-3 underline hide-span font-14 m-font-14"
+                    onClick={kitViewClass}
+                  >
                     Hide kit
                   </span>
                 </span>
               </h6>
             </div>
-            <button className="w-full btn btn-secondary bottom-1 disabled:cursor-not-allowed disabled:opacity-70" onClick={onBulkUpdateKitBasket} disabled={kitCartLoaded || isEmptyKitBasket} >
+            <button
+              className="w-full btn-secondary btn bottom-1 disabled:cursor-not-allowed disabled:opacity-70"
+              onClick={onBulkUpdateKitBasket}
+              disabled={kitCartLoaded || isEmptyKitBasket}
+            >
               {kitCartLoaded ? <LoadingDots /> : GENERAL_KIT_TO_BASKET}
             </button>
           </div>

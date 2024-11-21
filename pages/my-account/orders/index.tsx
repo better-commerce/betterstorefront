@@ -24,13 +24,13 @@ function MyOrdersPage({ deviceInfo }: any) {
   const translate = useTranslation()
   const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
   const [pagedOrders, setPagedOrders] = useState<Array<any>>()
-  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>( undefined )
+  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(undefined)
   const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
   const [pageNumber, setPageNumber] = useState<number>(1)
 
-  useEffect(()=>{
+  useEffect(() => {
     changeMyAccountTab(translate('label.order.myOrdersText'))
-  },[])
+  }, [])
 
   useEffect(() => {
     if (allOrdersFetched) {
@@ -125,15 +125,9 @@ function MyOrdersPage({ deviceInfo }: any) {
 
   return (
     <>
-     <h1 className='text-xl font-normal sm:text-2xl dark:text-black'>{translate('label.order.orderHistory')}</h1>
+      <h1 className='text-xl font-normal sm:text-2xl dark:text-black'>{translate('label.order.orderHistory')}</h1>
       <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
-        <MyOrders
-          allOrders={allOrders}
-          handleInfiniteScroll={handleInfiniteScroll}
-          deviceInfo={deviceInfo}
-          isShowDetailedOrder={isShowDetailedOrder}
-          setIsShowDetailedOrder={setIsShowDetailedOrder}
-        />
+        <MyOrders allOrders={allOrders} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} isShowDetailedOrder={isShowDetailedOrder} setIsShowDetailedOrder={setIsShowDetailedOrder} />
       </div>
     </>
   )

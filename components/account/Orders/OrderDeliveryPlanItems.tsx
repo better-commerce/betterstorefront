@@ -17,6 +17,7 @@ import TrackingDetail from './TrackingDetail'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
+import KitOrderItems from './KitOrderItem'
 const OrderDeliveryPlanItems = ({
   items,
   details,
@@ -70,9 +71,8 @@ const OrderDeliveryPlanItems = ({
                       </p>
                       <button className="border border-gray-900 rounded-full">
                         <ChevronDownIcon
-                          className={`w-4 h-4 dark:text-gray-900 ${
-                            open && 'rotate-180 transform'
-                          }`}
+                          className={`w-4 h-4 dark:text-gray-900 ${open && 'rotate-180 transform'
+                            }`}
                         />
                       </button>
                     </Disclosure.Button>
@@ -111,7 +111,7 @@ const OrderDeliveryPlanItems = ({
           <div className="w-full">
             <div className="px-0">
               <div className="flow-root">
-                <ul role="list" className="">
+                <ul role="list" className="flex flex-col w-full gap-2 pt-4">
                   {deliveryPlan?.items?.map((item: any, idx: number) =>
                     details?.items
                       ?.filter((x: any) =>
@@ -127,8 +127,8 @@ const OrderDeliveryPlanItems = ({
                         )
                         const ifItemCancelled =
                           item?.returnQtyRequested > 0 ||
-                          productItem.status == 24 ||
-                          productItem.statusDisplay == 'Cancelled'
+                            productItem.status == 24 ||
+                            productItem.statusDisplay == 'Cancelled'
                             ? true
                             : false
                         //ItemStatus should be ideally coming from API, as of now it comes ONLY upto 'Delivered' state
@@ -154,178 +154,8 @@ const OrderDeliveryPlanItems = ({
                           </>
                         ) : (
                           <>
-                            <li
-                              className="px-0 pb-0 m-0 border-b border-gray-300 border-dashed"
-                              key={idx}
-                            >
-                              <div className="flex gap-3 py-6 sm:gap-6">
-                                <div className="flex-shrink-0">
-                                  <Link href={`/${productItem?.slug}`}>
-                                    <img
-                                      width={102}
-                                      height={148}
-                                      src={
-                                        generateUri(
-                                          customInfo1?.formatted?.data
-                                            ?.ImageUrl,
-                                          'h=148&webp'
-                                        ) ||
-                                        generateUri(
-                                          productItem?.image,
-                                          'h=148&webp'
-                                        ) ||
-                                        IMG_PLACEHOLDER
-                                      }
-                                      alt="image"
-                                      // className="basket-image"
-                                    />
-                                  </Link>
-                                </div>
-                                <div className="flex flex-col flex-1 flex-width-nob">
-                                  <div>
-                                    <div className="flex flex-col justify-between font-medium text-gray-900">
-                                      <div className="flex items-center justify-between">
-                                        <p className="font-normal text-black text-10">
-                                          {
-                                            productItem?.categoryItems[0]
-                                              ?.categoryName
-                                          }
-                                        </p>
-                                        {productItem?.isRMACreated &&
-                                        productItem?.shippedQty > 0 ? (
-                                          <label
-                                            className={`px-4 py-3 text-sm font-bold leading-none ${itemStatusCss}`}
-                                          >
-                                            {itemStatus}
-                                          </label>
-                                        ) : !ifItemCancelled || !itemStatus ? (
-                                          <a
-                                            onClick={() =>
-                                              openHelpModal(
-                                                item,
-                                                details
-                                              )
-                                            }
-                                            className="text-sm font-semibold underline cursor-pointer text-orange"
-                                          >
-                                            Help?
-                                          </a>
-                                        ) : (
-                                          itemStatus && (
-                                            <label
-                                              className={`px-4 py-3 text-sm font-bold leading-none ${itemStatusCss}`}
-                                            >
-                                              {itemStatus}
-                                            </label>
-                                          )
-                                        )}
-                                      </div>
-                                      <div className="flex flex-col">
-                                        <h3 className="max-w-sm /xsm:max-w-full /xsm:flex /xsm:flex-col /xsm:flex-wrap xsm:w-[50vw] pr-6 mt-0 dark:text-black font-normal /truncate text-14 xsm:text-sm text-primary text-ellipsis !text-sm">
-                                          <a href={`/${productItem?.slug}`}>
-                                            {productItem?.name}
-                                          </a>
-                                        </h3>
-                                      </div>
-                                      <p className="mt-2 text-lg font-bold text-secondary-full-opacity">
-                                        {productItem?.price?.raw?.withTax > 0 ? priceFormat(
-                                          productItem?.price?.raw?.withTax,
-                                          undefined,
-                                          productItem?.price?.currencySymbol
-                                        ) : <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">FREE</span>}
-                                        {productItem?.listPrice?.raw?.tax >
-                                        0 && (
-                                          <>
-                                            <span className="px-2 text-sm font-normal line-through text-brown-light sm:text-md">
-                                              {priceFormat(
-                                                productItem?.listPrice?.raw
-                                                  ?.withTax,
-                                                undefined,
-                                                productItem?.listPrice
-                                                  ?.currencySymbol
-                                              )}
-                                            </span>
-                                            {productItem?.price?.raw?.withTax > 0 &&
-                                              (<span className="text-sm font-normal text-green sm:text-md">
-                                                {discount}{translate('common.label.discountText')}
-                                              </span>)
-                                            }
-                                          </>
-                                        )}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex mt-3">
-                                    <div className="w-full">
-                                      <label className="font-medium capitalize text-12 text-primary dark:text-black">
-                                        {translate('common.label.sizeText')}{' '}
-                                        <span className="uppercase">
-                                          {productItem?.size}
-                                        </span>
-                                      </label>
-                                    </div>
-                                    <div className="w-full">
-                                      <label className="font-medium text-12 text-primary dark:text-black">
-                                      {translate('label.product.qtyText')} {productItem?.qty}
-                                      </label>
-                                    </div>
-                                  </div>
-                                  {customInfo1FormattedData && (
-                                    <div className="flex mt-3">
-                                      <div className="w-auto">
-                                        <label className="font-medium capitalize text-12 text-primary dark:text-black">
-                                          Personalization:
-                                          <span className={personalizationFont}>
-                                            {
-                                              customInfo1?.formatted?.data
-                                                ?.Message
-                                            }
-                                          </span>
-                                        </label>
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                              {rmaTrackingNo && (
-                                <div className="w-full py-4">
-                                  <h3 className="mb-1 text-black opacity-60 font-10">
-                                    {translate('label.orderDetails.returnTrackingDetailHeadingText')} </h3>
-                                  <a
-                                    className="text-orange-500 opacity-80"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href={rmaTrackingLink}
-                                  >
-                                    {rmaTrackingNo}
-                                  </a>
-                                </div>
-                              )}
-                              {details?.allowedToReview && (
-                                <>
-                                  <div className="flex w-full py-4">
-                                    <p
-                                      className="w-16 mt-2 text-xs text-black opacity-60"
-                                      onClick={() => setReview(item)}
-                                    >
-                                      {translate('label.orderDetails.rateItemText')}:{' '}
-                                    </p>
-                                    <div className="flex gap-1 sm:gap-2 flex-center">
-                                      {Array.from(Array(5).keys()).map(
-                                        (num) => (
-                                          <StarIcon
-                                            key={`starIcon-${num}`}
-                                            className="flex-shrink-0 w-8 h-8 text-gray-200 sm:h-8 sm:w-8"
-                                            onClick={() => setReview(item)}
-                                            aria-hidden="true"
-                                          />
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                </>
-                              )}
-                            </li>
+                            <KitOrderItems orderItem={productItem} isKitOrderItem={false} openHelpModal={openHelpModal} />
+
                           </>
                         )
                       })

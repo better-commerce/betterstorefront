@@ -10,7 +10,7 @@ import { ChevronDoubleUpIcon, ChevronDoubleDownIcon } from "@heroicons/react/24/
 import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
-
+import KitActiveAlertDialog from '@components/kit/KitActiveAlert'
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const MainNav = dynamic(() => import('@components/Header/MainNav'))
 const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
@@ -66,7 +66,10 @@ const ModalView: FC<
   React.PropsWithChildren<{ modalView: string; closeModal(): any }>
 > = ({ modalView, closeModal }) => {
   return (
-    <Modal onClose={closeModal}>{modalView === 'NOTIFY_USER' && null}</Modal>
+    <Modal onClose={closeModal}>
+      {modalView === 'NOTIFY_USER' && null}
+      {modalView === 'KIT_ACTIVE_ALERT' && <KitActiveAlertDialog />}
+    </Modal>
   )
 }
 

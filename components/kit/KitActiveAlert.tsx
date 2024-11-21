@@ -84,28 +84,28 @@ export default function KitActiveAlertDialog() {
   }
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md rounded-xl">
       <button
         id="close-btn"
         onClick={handleClose}
         aria-label="Close panel"
-        className="hover:text-accent-5 transition ease-in-out duration-150 absolute right-0 top-0 p-1"
+        className="absolute top-0 right-0 p-1 transition duration-150 ease-in-out hover:text-accent-5"
       >
-        <Cross className="h-6 w-6" />
+        <Cross className="w-6 h-6" />
       </button>
       <h2 className="text-lg font-semibold text-center">
         Looks like you already have an unfinished kit active
       </h2>
-      <div className="flex flex-col mt-6 gap-2">
+      <div className="flex flex-col gap-2 mt-6">
         <button
-          className="btn-secondary"
+          className="btn btn-secondary"
           onClick={handleGoToActiveKit}
           disabled={loading}
         >
           {loading ? <LoadingDots /> : 'Complete my current kit'}
         </button>
         <button
-          className="btn-default-teal hover:bg-white text-black"
+          className="text-black btn btn-default-teal hover:bg-white"
           onClick={handleStartNewKit}
           disabled={loading}
         >

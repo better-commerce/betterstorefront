@@ -77,34 +77,28 @@ function KitPage({ brandPlatforms, deviceInfo, metaTitle, metaDescription, metaK
         <meta property="og:url" content={SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       <div className="flex flex-col w-full px-4 py-10 sm:py-20 bg-teal sm:px-0">
-        <h1 className="font-bold text-center text-white">
+        <h1 className="text-xl font-semibold text-center text-yellow-400 sm:text-4xl">
           WELCOME TO KITBUILDER
         </h1>
-        <h2 className="mt-3 font-semibold text-center text-white capitalize font-24">
+        <h2 className="mt-3 font-medium text-center text-white capitalize font-20">
           Start building your custom kit of cordless power tools
         </h2>
         <div className="flex justify-center gap-2 mt-6 sm:gap-6">
-          <div className="flex flex-col items-center justify-center text-center border-2 border-white rounded-md w-28 h-28">
-            <span className="font-bold text-white font-32">1</span>
-            <span className="font-semibold text-white font-14">
-              Pick a brand
-            </span>
+          <div className="flex flex-col items-center justify-center gap-2 text-center border-2 border-yellow-400 rounded-md w-28 h-28">
+            <span className="font-semibold text-yellow-400 font-32">1</span>
+            <span className="font-medium text-white font-14"> Pick a brand </span>
           </div>
-          <div className="flex flex-col items-center justify-center text-center border-2 border-white rounded-md w-28 h-28">
-            <span className="font-bold text-white font-32">2</span>
-            <span className="font-semibold text-white font-14">
-              Add kit items
-            </span>
+          <div className="flex flex-col items-center justify-center gap-2 text-center border-2 border-yellow-400 rounded-md w-28 h-28">
+            <span className="font-semibold text-yellow-400 font-32">2</span>
+            <span className="font-medium text-white font-14"> Add kit items </span>
           </div>
-          <div className="flex flex-col items-center justify-center text-center border-2 border-white rounded-md w-28 h-28">
-            <span className="font-bold text-white font-32">3</span>
-            <span className="font-semibold text-white font-14">
-              Add to basket
-            </span>
+          <div className="flex flex-col items-center justify-center gap-2 text-center border-2 border-yellow-400 rounded-md w-28 h-28">
+            <span className="font-semibold text-yellow-400 font-32">3</span>
+            <span className="font-medium text-white font-14"> Add to basket </span>
           </div>
         </div>
       </div>
-      
+
       <div className="container flex flex-col pt-4 pb-10 mx-auto mob-container sm:pb-20 sm:pt-6">
         <h2 className="!mb-3 mt-2 font-24 font-semibold dark:text-black">
           Pick a brand to start a kit
@@ -127,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const cookies = cookie.parse((context?.req && context?.req?.headers?.cookie) || EmptyString)
   try {
     const brandPlatforms = await kitBrandPlatform({ cookies })
-    
+
     const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
     const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
     return {

@@ -75,12 +75,7 @@ const setDeviceIdCookie = () => {
   }
 }
 
-export const SCROLLABLE_LOCATIONS = [
-  '/collection/',
-  '/brands/',
-  '/category/',
-  '/kit/'
-]
+export const SCROLLABLE_LOCATIONS = [ '/collection/', '/brands/', '/category/', '/kit/' ]
 
 function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }: any) {
   const [location, setUserLocation] = useState({ Ip: '' })

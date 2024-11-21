@@ -3,8 +3,6 @@ import { useRouter } from 'next/router'
 import { MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import cn from 'classnames'
 import Cookies from 'js-cookie'
-
-//
 import { useUI } from '@components/ui'
 import { GENERAL_ADD_TO_KIT } from '@components/utils/textVariables'
 import { matchStrings } from '@framework/utils/parse-util'
@@ -21,12 +19,12 @@ const CART_ACTION_TYPES = {
 }
 
 function AddToBasket({ product, brandInfo, selectedCat }: any) {
+  const router = useRouter()
   const [kitQty, setKitQty] = useState(1)
   const { setAlert, kitBasket, setKitBasket } = useUI()
-  const router = useRouter()
   const [basketItem, setBasketItem] = useState<any>(undefined)
   const [basketLoading, setBasketLoading] = useState(false)
-  
+
   useEffect(() => {
     const item = kitBasket?.lineItems?.find((o: any) => matchStrings(o?.productId, product?.recordId, true) || matchStrings(o?.productId, product?.productId, true))
     setBasketItem(item)
@@ -63,7 +61,7 @@ function AddToBasket({ product, brandInfo, selectedCat }: any) {
     } else {
       item.selectQty = 0
     }
-    cartItemQtyHandler(item, kitBasket, action, { basketName: BASKET_TYPES.KIT }, (err:any, data:any) => {
+    cartItemQtyHandler(item, kitBasket, action, { basketName: BASKET_TYPES.KIT }, (err: any, data: any) => {
       setBasketLoading(false)
       if (err) return setAlert(err)
       if (!data || data?.id === EmptyGuid) {
@@ -79,73 +77,36 @@ function AddToBasket({ product, brandInfo, selectedCat }: any) {
     })
   }
 
-  const basketItemQty = basketItem?.qty / (basketItem?.basketItemGroupData?.kitQty * 1)
-
   return (
-    <div className={cn('w-full h-full', {
-      'animate-pulse opacity-90 pointer-events-none': basketLoading,
-    })}>
-      {!basketItem || basketItemQty === 0 ? (
-        <>
-          {isOutOfStock(product) ? (
-            <ButtonNotifyMe
-              product={product}
-              className="w-full sm:block btn-secondary"
-            />
-          ) : (
-            <button
-              onClick={() => onUpdateKitBasket(product)}
-              className="w-full sm:block btn btn-secondary"
-            >
-              {GENERAL_ADD_TO_KIT}
-            </button>
-          )}
-        </>
+    <div className={cn('w-full h-full', { 'animate-pulse opacity-90 pointer-events-none': basketLoading, })}>
+      {!basketItem || basketItem?.qty === 0 ? (
+        isOutOfStock(product) ? (
+          <ButtonNotifyMe product={product} className="w-full sm:block btn-secondary" />
+        ) : (
+          <button onClick={() => onUpdateKitBasket(product)} className="w-full sm:block btn btn-primary-green">{GENERAL_ADD_TO_KIT}</button>
+        )
       ) : (
-        <div className="overflow-hidden flex gap-4 items-center w-full !p-0 btn-secondary h-full">
-          <span className="flex items-center h-full px-4 py-1 select-none">
-            Added
-          </span>
+        <div className="overflow-hidden flex gap-4 items-center w-full !p-0 btn btn-secondary h-full">
+          <span className="flex items-center h-full px-4 py-1 select-none"> Added </span>
           <div className="flex items-center justify-between flex-1 col-span-2 px-2 text-black rounded-md hover:text-blue">
-            {basketItemQty === 1 ? (
+            {basketItem?.qty === 1 ? (
               <button onClick={() => onUpdateKitBasket(product, CART_ACTION_TYPES.DELETE)}>
-                <TrashIcon
-                  className="w-5 h-5 text-white stroke-2"
-                  title="Remove from Cart"
-                />
+                <TrashIcon className="w-5 h-5 text-white stroke-2" title="Remove from Cart" />
               </button>
             ) : (
               <button onClick={() => onUpdateKitBasket(product, CART_ACTION_TYPES.DECREASE)}>
-                <MinusIcon
-                  className="w-5 h-5 text-white stroke-2"
-                  title="Decrease quantity in Cart"
-                />
+                <MinusIcon className="w-5 h-5 text-white stroke-2" title="Decrease quantity in Cart" />
               </button>
             )}
             <span className="relative inline-block py-2 mx-5 rounded text-md custom-select">
-              <select
-                value={basketItemQty}
-                className="w-20 px-2 py-1 text-black border border-gray-200 rounded-sm dark:bg-white dark:text-black"
-                onChange={(e) => handleSelectItemQty(e, product)}
-                name="qty"
-              >
-                {Array(maxBasketItemsCount)
-                  .fill('')
-                  ?.map((o: any, idx: number) => (
-                    <option key={idx} value={idx + 1}>
-                      {idx + 1}
-                    </option>
-                  ))}
+              <select value={basketItem?.qty} className="w-20 px-2 py-1 text-black border border-gray-200 rounded-sm dark:bg-white dark:text-black" onChange={(e) => handleSelectItemQty(e, product)} name="qty" >
+                {Array(maxBasketItemsCount).fill('')?.map((o: any, idx: number) => (
+                  <option key={idx} value={idx + 1}>{idx + 1}</option>
+                ))}
               </select>
             </span>
-            <button
-              onClick={() => onUpdateKitBasket(product)}
-              disabled={basketItemQty === maxBasketItemsCount}
-            >
-              <PlusIcon
-                className="w-5 h-5 text-white stroke-2"
-                title="Increase quantity in Cart"
-              />
+            <button onClick={() => onUpdateKitBasket(product)} disabled={basketItem?.qty === maxBasketItemsCount} >
+              <PlusIcon className="w-5 h-5 text-white stroke-2" title="Increase quantity in Cart" />
             </button>
           </div>
         </div>
@@ -153,5 +114,4 @@ function AddToBasket({ product, brandInfo, selectedCat }: any) {
     </div>
   )
 }
-
 export default AddToBasket

@@ -63,7 +63,7 @@ function BrandCategory({
   return (
     <div className="flex flex-col w-full gap-y-5">
       <div className="flex-1">
-        <h3 className="mt-6 font-semibold dark:text-black">{tierName}</h3>
+        <h3 className="mt-6 text-lg font-medium sm:text-2xl dark:text-black">{tierName}</h3>
       </div>
       <div className="flex-1">
         {kitCategories?.map((categories: any, categoryIdx: number) => (

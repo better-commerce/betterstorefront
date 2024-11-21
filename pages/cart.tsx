@@ -1,5 +1,5 @@
 // Base Imports
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 
 // Package Imports
 import NextHead from 'next/head'
@@ -23,8 +23,8 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
-import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { getCartValidateMessages, getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
+import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST, BASKET_PROMO_TYPES } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -39,6 +39,10 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { round, sortBy } from 'lodash'
+import { groupCartItemsById } from '@components/utils/cart'
+import CartSideBarProductCard from '@components/CartSideBarProductCard'
+import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const allowSplitShipping = stringToBoolean(
@@ -55,7 +59,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       )?.value || ''
   )
 
-  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const { setCartItems, cartItems, resetKitCart, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
   const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
@@ -163,6 +167,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
     })
+    if (basketPromos?.applicablePromotions?.length) {
+      basketPromos.applicablePromotions = basketPromos?.applicablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
+    if (basketPromos?.availablePromotions?.length) {
+      basketPromos.availablePromotions = basketPromos?.availablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
     setBasketPromos(basketPromos)
     return basketPromos
   }
@@ -378,27 +388,27 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     if (items?.length < 1) {
       items = { ...cartItems }
     }
-    const shippingMethodItem: any = cart.shippingMethods.find(
-      (method: any) => method.id === cart.shippingMethodId
+    const shippingMethodItem: any = cart?.shippingMethods.find(
+      (method: any) => method.id === cart?.shippingMethodId
     )
 
     const model = {
       BasketId: basketId,
       OrderId: Guid.empty,
       PostCode: cartItems?.postCode || '',
-      ShippingMethodType: shippingMethodItem.type,
+      ShippingMethodType: shippingMethodItem?.type,
       ShippingMethodId: cart?.shippingMethodId,
-      ShippingMethodName: shippingMethodItem.displayName,
-      ShippingMethodCode: shippingMethodItem.shippingCode,
+      ShippingMethodName: shippingMethodItem?.displayName,
+      ShippingMethodCode: shippingMethodItem?.shippingCode,
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
-          BasketLineId: Number(item.id),
+          BasketLineId: Number(item?.id),
           OrderLineRecordId: Guid.empty,
-          ProductId: item.productId,
-          ParentProductId: item.parentProductId,
-          StockCode: item.stockCode,
-          Qty: item.qty,
-          PoolCode: item.poolCode || null,
+          ProductId: item?.productId,
+          ParentProductId: item?.parentProductId,
+          StockCode: item?.stockCode,
+          Qty: item?.qty,
+          PoolCode: item?.poolCode || null,
         }
       }),
       AllowPartialOrderDelivery: true,
@@ -416,19 +426,19 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       BasketId: basketId,
       OrderId: Guid.empty,
       PostCode: cartItems?.postCode || '',
-      ShippingMethodType: shippingMethodItem.type,
+      ShippingMethodType: shippingMethodItem?.type,
       ShippingMethodId: cart?.shippingMethodId,
-      ShippingMethodName: shippingMethodItem.displayName,
-      ShippingMethodCode: shippingMethodItem.shippingCode,
+      ShippingMethodName: shippingMethodItem?.displayName,
+      ShippingMethodCode: shippingMethodItem?.shippingCode,
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
-          BasketLineId: Number(item.id),
+          BasketLineId: Number(item?.id),
           OrderLineRecordId: Guid.empty,
-          ProductId: item.productId,
-          ParentProductId: item.parentProductId,
-          StockCode: item.stockCode,
-          Qty: item.qty,
-          PoolCode: item.poolCode || null,
+          ProductId: item?.productId,
+          ParentProductId: item?.parentProductId,
+          StockCode: item?.stockCode,
+          Qty: item?.qty,
+          PoolCode: item?.poolCode || null,
         }
       }),
       AllowPartialOrderDelivery: true,
@@ -448,21 +458,21 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     if (shippingPlans.length > 1 && allowSplitShipping) {
       setIsSplitDelivery(true)
       splitDeliveryExtract(
-        mapSplitDeliveryPlansToItems(shippingPlans || [], items.lineItems) //cart
+        mapSplitDeliveryPlansToItems(shippingPlans || [], items?.lineItems) //cart
       )
 
       setCartItems({
         ...items, //cart
         lineItems: mapSplitDeliveryPlansToItems(
           shippingPlans || [],
-          items.lineItems
+          items?.lineItems
         ),
       })
     } else {
       setIsSplitDelivery(false)
       setCartItems({
         ...cart,
-        lineItems: mapShippingPlansToItems(shippingPlans || [], cart.lineItems),
+        lineItems: mapShippingPlansToItems(shippingPlans || [], cart?.lineItems),
       })
     }
   }
@@ -551,7 +561,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       await fetchShippingPlans([])
     }
 
-    if (cart?.shippingMethods.length > 0) {
+    if (cart?.shippingMethods?.length > 0) {
       loadShippingPlans()
     } else {
       setCartItems(cart)
@@ -561,45 +571,67 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleItem = (product: any, type = 'increase') => {
-    if (!product?.id) return
-    if (isOpen && !(type === 'delete')) {
-      closeModal()
-    }
-    const asyncHandleItem = async () => {
+  const handleItem = (
+    product: any,
+    type = 'increase',
+    selectQuantity: number = 1
+  ) => {
+    const asyncHandleItem = async (product: any) => {
       let data: any = {
         basketId,
         productId: product?.id,
+        name: product?.name,
         stockCode: product?.stockCode,
-        manualUnitPrice: product?.manualUnitPrice,
+        manualUnitPrice: product?.price?.raw?.withoutTax,
         displayOrder: product?.displayOrderta,
         qty: -1,
       }
+      // add prop 'basketItemGroupData' for removing Kit items
+      if (product?.basketItemGroupData) {
+        data.basketItemGroupData = product?.basketItemGroupData
+      }
+      // add prop 'basketItemGroupId' for removing Kit items
+      if (product?.basketItemGroupId) {
+        data.basketItemGroupId = product?.basketItemGroupId
+      }
       if (type === 'increase') {
         data.qty = 1
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o?.productId, product?.recordId, true) || matchStrings(o?.productId, product?.productId, true)) {
+            return o
+          }
+        })
+        const attributeData: any = tryParseJson(product?.attributesJson || {})
+
       }
-      if (type === 'delete') {
-        data.qty = 0
-        userCart.lineItems = userCart.lineItems.filter(
-          (item: { id: any }) => item.id !== product?.id
-        )
+      if (type === 'select') {
+        if (product?.qty !== selectQuantity) {
+          //increase or decrease quantity by finding difference between values
+          data.qty = selectQuantity - product?.qty
+        }
       }
       try {
-        const item = await addToCart(data)
-        setCartItems(item)
-        setBasket(item)
+        const item = await addToCart(data, type, { product })
+        getBasketPromos(basketId)
         if (isSplitDelivery) {
+          setCartItems(item)
           fetchShippingPlans(item)
+        } else {
+          setCartItems(item)
         }
       } catch (error) {
-        console.log(error)
-      }
-      if (isOpen && type === 'delete') {
-        setLoadingAction(LoadingActionType.NONE)
-        closeModal()
+        //console.log(error)
       }
     }
-    asyncHandleItem()
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product)
+        setBasketReValidate([])
+      })
+      resetKitCart()
+    } else if (product?.productId) {
+      asyncHandleItem(product)
+    }
   }
 
   const openModal = () => {
@@ -609,7 +641,15 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   const closeModal = () => {
     setIsOpen(false)
   }
-
+  const itemsInBag = () => {
+    return cartItems?.lineItems
+      ?.map((item: any) => item.qty)
+      .reduce((sum: number, current: number) => sum + current, 0)
+  }
+  const handleClose = () => {
+    setTimeout(() => closeSidebar(), 500)
+    // setCartSidebarOpen(false)
+  }
   const isIncludeVAT = vatIncluded()
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
@@ -623,6 +663,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const [userCartItems, setUserCartItems] = useState<any>(null)
+  function handleRedirectToPDP() { }
+  useEffect(() => {
+    let items = sortBy(cartItems?.lineItems, 'displayOrder')
+    items = Object.values(groupCartItemsById(cartItems?.lineItems))
+    setUserCartItems(items)
+  }, [cartItems?.lineItems])
   const renderStatusSoldOut = (soldOutMessage: any) => {
     return (
       <div className="">
@@ -677,21 +724,110 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div className={`container w-full py-4 pt-10  lg:pb-28 lg:pt-20 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
-        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16 basket-h1 dark:text-black">
+      <div className={`container w-full py-4 pt-4 lg:pb-10 lg:pt-10 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
+        <h1 className="block mb-2 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-0 basket-h1 dark:text-black">
           <span>{translate('label.basket.shoppingCartText')}{' '}</span>
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
-        <hr className={`${CURRENT_THEME != 'green' ? 'my-2 xl:my-12 border-slate-200 dark:border-slate-700' : 'my-0 xl:my-0'} border-[#EEEEEE] dark:border-slate-700`} />
+        <hr className={`${CURRENT_THEME != 'green' ? 'my-2 xl:my-4 border-slate-200 dark:border-slate-700' : 'my-0 xl:my-0'} border-[#EEEEEE] dark:border-slate-700`} />
         {!isEmpty && !isSplitDelivery && (
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
-              <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} itemClicked={itemClicked} setItemClicked={setItemClicked} />
+              <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
+                {userCartItems?.map((product: any, productIdx: number) => {
+                  let soldOutMessage = ''
+                  const saving = (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax) - (isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax)
+                  const discount = round((saving / (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax)) * 100, 0)
+                  soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                  const voltageAttr: any = tryParseJson(product?.attributesJson)
+                  const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
+                  let productNameWithVoltageAttr: any = product?.name
+                  productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                    <span key={`voltage-${vId}`}>
+                      {product?.name?.toLowerCase()}{' '}
+                      <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                        {volt?.ValueText}
+                      </span>
+                    </span>
+                  )) : (productNameWithVoltageAttr = product?.name)
+
+                  if (product?.length) {
+                    soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                    const voltageAttr: any = tryParseJson(product?.attributesJson)
+                    const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
+                    let productNameWithVoltageAttr: any = product?.name
+                    productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                      <span key={`voltage-${vId}`}>
+                        {product?.name?.toLowerCase()}{' '}
+                        <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                          {volt?.ValueText}
+                        </span>
+                      </span>
+                    )) : (productNameWithVoltageAttr = product?.name)
+                    if (product?.length) {
+                      return (
+                        <div key={product?.productId}>
+                          <BasketGroupProduct products={product} closeSidebar={closeSidebar} openModal={openModal} setItemClicked={setItemClicked} />
+                        </div>
+                      )
+                    }
+                    return (
+                      <div key={product?.productId}>
+                        <BasketGroupProduct products={product} closeSidebar={closeSidebar} openModal={openModal} setItemClicked={setItemClicked} />
+                      </div>
+                    )
+                  }
+                  return (
+                    <Fragment key={productIdx}>
+                      <CartSideBarProductCard
+                        product={product}
+                        productNameWithVoltageAttr={productNameWithVoltageAttr}
+                        css={css}
+                        itemsInBag={itemsInBag}
+                        handleRedirectToPDP={handleRedirectToPDP}
+                        handleClose={handleClose}
+                        handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                        maxBasketItemsCount={maxBasketItemsCount}
+                        isIncludeVAT={isIncludeVAT}
+                        discount={discount}
+                        handleItem={handleItem}
+                        openModal={openModal}
+                        setItemClicked={setItemClicked}
+                        reValidateData={reValidateData}
+                        soldOutMessage={soldOutMessage}
+                        getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                      />
+                      {product.children?.map(
+                        (child: any, idx: number) => (
+                          <CartSideBarProductCard
+                            product={child}
+                            css={css}
+                            handleRedirectToPDP={handleRedirectToPDP}
+                            handleClose={handleClose}
+                            handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                            isIncludeVAT={isIncludeVAT}
+                            discount={discount}
+                            handleItem={handleItem}
+                            openModal={openModal}
+                            setItemClicked={setItemClicked}
+                            reValidateData={reValidateData}
+                            soldOutMessage={soldOutMessage}
+                            getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                            key={idx}
+                          />
+                        )
+                      )}
+                    </Fragment>
+                  )
+                }
+                )}
+              </section>
+              {/* <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} itemClicked={itemClicked} setItemClicked={setItemClicked} /> */}
               <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded-md shadow-md top-2' : 'bg-slate-50 rounded-2xl top-24'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky lg:col-span-5 sm:mt-0`} >
-                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6 dark:text-black" >
+                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6 dark:text-black">
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
