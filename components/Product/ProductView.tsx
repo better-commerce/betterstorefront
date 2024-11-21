@@ -40,6 +40,8 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
+const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/productDetails'))
+const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
@@ -1043,8 +1045,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {product && <AccordionInfo product={product} data={detailsConfig} />}
-        {renderProductSpecification()}
+           {!featureToggle?.features?.enableCustomToolWidget ? (
+               <>
+               {product && <AccordionInfo product={product} data={detailsConfig} />}
+               {renderProductSpecification()}
+              </>
+              ) : (
+               <></>
+          )}
         <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
           <DeliveryInfo product={product} grpData={attrGroup} config={config} />
         </div>
@@ -1089,7 +1097,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <>
               {featureToggle?.features?.isImageGallery ? (
-                <div className="w-full lg:w-[55%] sticky top-0">
+                <div className="w-full lg:w-[55%] sticky top-0 product-image-border">
                   <ImageGallery
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
@@ -1134,6 +1142,22 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {renderSectionContent()}
           </div>
         </div>
+         {featureToggle?.features?.enableCustomToolWidget ? (
+               <>
+                  <div className="flex w-full bg-white product-tab-active">
+                     <div className="lg:mx-auto container-ffx">
+                      <PDPDetails product={product} description={product?.description} />
+                      </div>
+                   </div>
+                   <div className="pb-10 bg-white sm:pb-0">
+                <div className="grid grid-cols-12 px-0 lg:mx-auto container-ffx sm:grid-cols-12 sm:px-4 md:px-0 lg:px-6 2xl:px-0">
+                  <ProductSpecification attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+                </div>
+              </div>
+              </>
+              ) : (
+               <></>
+          )}
         {/* {LookBook} */}
         {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />

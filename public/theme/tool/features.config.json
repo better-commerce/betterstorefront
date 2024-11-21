@@ -10,7 +10,7 @@
     "enableMyStoreFeature": false,
     "enableAddToBagPlp": true,
     "enableMembership": false,
-    "isImageGallery": false,
+    "isImageGallery": true,
     "enableHeaderWishlist": true,
     "enableProductSpecification": true,
     "enableTrendingCategory": true,
@@ -22,7 +22,8 @@
     "enableOmnilytics": true,
     "enableHorizontalFilter": true,
     "enableCustomHomeWidget":true,
-    "enableFullBanner":false
+    "enableFullBanner":false,
+    "enableCustomToolWidget": true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

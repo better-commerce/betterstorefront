@@ -1876,6 +1876,7 @@ p {
 }
 body .ttnc-ButtonPrimary{
   background: #075d2b !important;
+  border-radius:6px !important;
 }
 .drop-acc-icon svg{
   color: #000 !important;
@@ -2670,4 +2671,66 @@ body .ttnc-ButtonPrimary{
   flex-direction: column;
 }.bg-teal {
   background: var(--teal-clr);
+}
+.product-image-border .image-gallery-slide-wrapper {
+  border: 1px solid #21253033;
+  border-radius: 12px;
+  padding: 30px;
+  background: #fff;
+  margin-bottom: 20px;
+  min-height: 502px;
+  padding-bottom: 65px;
+  padding-top: 30px;
+}
+@media(max-width: 768px) {
+	.image-gallery-thumbnail {
+		border: 1px solid transparent;
+		width: 81px
+	}
+}
+
+.image-gallery-thumbnail+.image-gallery-thumbnail {
+	margin-left: 2px
+}
+
+.image-gallery-thumbnail .image-gallery-thumbnail-inner {
+	display: block;
+	position: relative
+}
+
+.image-gallery-thumbnail .image-gallery-thumbnail-image {
+	vertical-align: middle;
+	width: 100%;
+	line-height: 0
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:focus {
+	outline: none  !important;
+	border: 1px solid #df340c !important;
+}
+.product-image-border .image-gallery-slide-wrapper.image-gallery-thumbnails-left, .product-image-border .image-gallery-slide-wrapper.image-gallery-thumbnails-right{
+  width: calc(100% - 180px) !important;
+}
+@media screen and (min-width: 768px) and (max-width: 800px) {
+  .product-image-border .image-gallery-slide-wrapper.image-gallery-thumbnails-left, .product-image-border .image-gallery-slide-wrapper.image-gallery-thumbnails-right{
+    width: calc(100% - 145px) !important;
+  }
+}
+.height-full-cls{
+  height: 100% !important;
+}
+.specification-container {
+  max-width: 847px;
+  margin: 0 auto;
+  width: 100%;
+}
+body .round-md-btn, .btn-radius-sm{
+  border-radius:6px  !important;
+}
+.desktop-w-88.logo-link-chk{
+  width:180px;
+}
+.plp-btn-section-div  button{
+  border-radius:6px  !important;
 }

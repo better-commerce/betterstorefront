@@ -35,7 +35,7 @@ function SaveQuoteSuccessModal({ quoteDetails, isQuoteSuccessOpen = false, handl
                     quoteNum: quoteDetails?.message,
                   })}
                 </p>
-                <Button type="button" onClick={onCloseAndGoBack} className="!rounded-full !bg-slate-900 !capitalize mt-8 float-right hover:!bg-slate-800 dark:!bg-slate-100 focus:!ring-black focus:!outline-none focus:!ring-2 focus:!ring-offset-2">
+                <Button type="button" onClick={onCloseAndGoBack} className="!rounded-full !bg-slate-900 !capitalize mt-8 float-right hover:!bg-slate-800 dark:!bg-slate-100 focus:!ring-black focus:!outline-none focus:!ring-2 focus:!ring-offset-2 round-md-btn">
                   {translate('common.label.backToHomepageText')}
                 </Button>
               </Dialog.Panel>

@@ -22,7 +22,8 @@
     "enableOmnilytics": true,
     "enableHorizontalFilter": false,
     "enableCustomHomeWidget":false,
-    "enableFullBanner":true
+    "enableFullBanner":false,
+    "enableCustomToolWidget": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

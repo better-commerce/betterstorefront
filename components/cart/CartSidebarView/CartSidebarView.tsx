@@ -751,7 +751,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                        <Link href="/cart" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
-                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
+                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
                           <span className='flex flex-col justify-start pl-5 text-left'>
                             <span>{cartItems?.totalWithoutShipping?.formatted?.withTax}</span>
                             <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
