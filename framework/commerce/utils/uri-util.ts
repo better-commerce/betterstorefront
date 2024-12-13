@@ -1,5 +1,7 @@
 import { EmptyObject } from "@components/utils/constants";
 
+const microsites = require('../../bettercommerce/microsites.json')
+
 export const generateUri = (uri: string, qs: string) => {
    if (uri) {
       return uri.indexOf("?") == -1 ? sanitizeUri(`${uri}?${qs}`) : sanitizeUri(`${uri}&${qs}`);
@@ -11,7 +13,7 @@ export const sanitizeUri = (uri: string) => {
    const params = uriParams(uri);
    if (params) {
       var qs;
-      for(let key in params) {
+      for (let key in params) {
          if (!qs) {
             qs = `?${key}=${params[key]}`;
          } else {
@@ -54,4 +56,33 @@ export const hasBaseUrl = (uri: string) => {
       return false
    }
    return (uri?.startsWith('http://') || uri?.startsWith('https://'))
+}
+
+export const micrositeMatch = (pathname: string) => {
+   // Match URLs with a microsite slug prefix (e.g., `/us/path*`)
+   const micrositeSlugPattern = /^\/([a-z]+)(\/.*)?$/;
+   const match = pathname.match(micrositeSlugPattern);
+   return match
+}
+
+export const isMicrosite = (pathname: string) => {
+   const match = micrositeMatch(pathname)
+   if (match) {
+      const microsite = match[1];
+      const micrositeConfig = getMicrositeConfig(microsite)
+      if (micrositeConfig) {
+         return micrositeConfig
+      }
+   }
+   return null
+}
+
+export const getMicrositeConfig = (microsite: string) => {
+   if (microsite && microsites?.microsites?.length) {
+      const micrositeConfig = microsites?.microsites.find((m: any) => m.slug === microsite);
+      if (micrositeConfig) {
+         return micrositeConfig
+      }
+   }
+   return null
 }

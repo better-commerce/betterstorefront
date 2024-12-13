@@ -137,7 +137,7 @@ const getMicroSiteSlug = (slug) => {
   try {
     const url = new URL(slug)
     const pathname = url.pathname
-    return pathname
+    return pathname?.startsWith('/') ? pathname?.substring(1) : pathname
   } catch (error) {
   }
   return ""
@@ -152,40 +152,6 @@ module.exports = {
     const redirects = await getRedirects(token)
     return redirects
   },
-
-  /*async rewrites() {
-    let allReWrites = []
-    const token = await getToken()
-
-    // Microsite rewrites
-    const { result: microsites } = await getMicroSites(token)
-    if (microsites?.length) {
-      const micrositeReWrites = microsites?.filter((m) => getMicroSiteSlug(m?.slug) === "/" ? false : true)?.map((m) => ({
-        source: `${getMicroSiteSlug(m?.slug)}/:locale(${m?.defaultLangCulture})/:path*`,
-        destination: `${getMicroSiteSlug(m?.slug)}/:locale/:path*`,
-      }))
-      console.log("----------------- | Supported Microsites | -----------------")
-      console.log(micrositeReWrites)
-      console.log("------------------------------------------------------------")
-      allReWrites = allReWrites.concat([...new Set(micrositeReWrites)])
-    }
-
-    // Default locale rewrites
-    const { result: infraConfig } = await getInfraConfig(token)
-    const siteLocales = [...new Set(infraConfig?.languages?.map((i) => i.languageCulture))]
-    if (siteLocales?.length) {
-      const siteReWrites = siteLocales?.map((locale) => ({
-        source: `/:locale(${locale})/:path*`,
-        destination: `/:locale/:path*`,
-      }))
-      allReWrites = allReWrites.concat(siteReWrites)
-    }
-    console.log("----------------- | Supported Sites | -----------------")
-    console.log(allReWrites)
-    console.log("------------------------------------------------------")
-    return allReWrites
-  },*/
-
   i18n: { ...locales, localeDetection: false, },
 }
 

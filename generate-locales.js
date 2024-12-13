@@ -151,6 +151,18 @@ const getSiteLocales = () => {
     console.log("------------------------------------------------------")
     // fs.writeFileSync(__dirname.join('/'))
     fs.writeFileSync(__dirname + '/framework/bettercommerce/locales.json', JSON.stringify(locales), (e) => console.log(e))
+    fs.writeFileSync(__dirname + '/framework/bettercommerce/microsites.json', JSON.stringify({ microsites: microsites?.map((m) => { 
+      let origin = "", slug = ""
+      if (m?.slug) {
+        try {
+          const url = new URL(m?.slug)
+          origin = url.origin
+          slug = url.pathname?.startsWith('/') ? url.pathname?.substring(1) : url.pathname
+        } catch(error) {
+        }
+      }
+      return { id: m?.id, origin, slug, countryCode: m?.countryCode, defaultLangCode: m?.defaultLangCode, defaultLangCulture: m.defaultLangCulture, defaultCurrencyCode: m?.defaultCurrencyCode, } 
+    }) || [] }), (e) => console.log(e))
   }
   siteLocalesHandler()
 }
@@ -166,10 +178,7 @@ const getSeoConfig = async function () {
     const infra = await axios({
       url: `${INFRA_URL}`,
       method: 'get',
-      headers: {
-        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-        Authorization: 'Bearer ' + token,
-      },
+      headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
     })
     const seoConfig = infra.data.result.configSettings
       .find((i) => i.configType === 'SeoSettings')
@@ -182,11 +191,7 @@ const getSeoConfig = async function () {
           acc['keywords'] = obj.value || JSON.stringify(obj.value)
         return acc
       }, {})
-    fs.writeFileSync(
-      path.join(__dirname, '/framework/bettercommerce/seo.json'),
-      JSON.stringify(seoConfig),
-      (err) => console.log(err)
-    )
+    fs.writeFileSync(path.join(__dirname, '/framework/bettercommerce/seo.json'), JSON.stringify(seoConfig), (err) => console.log(err))
   } catch (error) {
     console.log(error)
   }
