@@ -87,7 +87,7 @@ export abstract class BasePagePropsProvider {
    * Returns the prop values of review summary from Redis cache.
    * @returns 
    */
-  protected async getReviewSummary() {
+  protected async getReviewSummary({ cookies = {} }) {
     const key = Redis.Key.REVIEW_SUMMARY
     const cachedData = await getDataByUID([
         key,
@@ -100,7 +100,7 @@ export abstract class BasePagePropsProvider {
                 baseUrl: REVIEW_BASE_URL,
                 url: `${REVIEW_SERVICE_BASE_API}/summary`,
                 method: 'post',
-                cookies: {},
+                cookies,
             })
             reviewSummaryUIDData = res?.Result
             await setData([{ key, value: reviewSummaryUIDData }])

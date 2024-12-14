@@ -65,7 +65,7 @@ export class ContactUsPageProps extends BasePagePropsProvider implements IPagePr
     const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
