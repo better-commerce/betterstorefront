@@ -48,7 +48,7 @@ import FeaturedBrand from '@components/category/FeaturedBrand'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
 import Loader from '@components/Loader'
-import { removeQueryString } from '@commerce/utils/uri-util'
+import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { AnalyticsEventType } from '@components/services/analytics'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
@@ -61,7 +61,8 @@ export async function getStaticProps(context: any) {
   const slug = slugName + '/' + context.params[slugName]
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,

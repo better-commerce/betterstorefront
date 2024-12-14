@@ -196,14 +196,14 @@ export abstract class BasePagePropsProvider {
     return allMembershipsUIDData
   }
 
-  protected async getDefaultMembershipPlan(plans: Array<any>) {
+  protected async getDefaultMembershipPlan(plans: Array<any>, cookies = {}) {
     let defaultDisplayMembership: any = EmptyObject
     if (plans?.length) {
         const membershipPlan = plans?.sort((a: any, b: any) => (a?.price?.raw?.withTax || 0) - (b?.price?.raw?.withTax || 0))[0]
         if (membershipPlan) {
             const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
             if (promoCode) {
-                const promotion = await commerce.getPromotion(promoCode)
+                const promotion = await commerce.getPromotion(promoCode, cookies)
                 defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
             }
         }

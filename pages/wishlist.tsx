@@ -14,6 +14,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 
 export async function getStaticProps({
@@ -30,7 +31,8 @@ export async function getStaticProps({
 
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ cookies })
 
   return {
     props: {

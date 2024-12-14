@@ -3,26 +3,14 @@ import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET, Cookie } from './utils/co
 import axios from 'axios'
 import store from 'store'
 import { writeFetcherLog } from './utils'
-import {
-  BETTERCOMMERCE_COUNTRY,
-  BETTERCOMMERCE_CURRENCY,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_CURRENCY,
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
-  BETTERCOMMERCE_LANGUAGE,
-  EmptyString,
-  NEXT_PUBLIC_API_CACHING_LOG_ENABLED,
-} from '@components/utils/constants'
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, NEXT_PUBLIC_API_CACHING_LOG_ENABLED, } from '@components/utils/constants'
 import { Guid } from '@commerce/types'
 import { IFetcherProps } from 'framework/contracts/api/IFetcherProps'
 import { decrypt } from './utils/cipher'
 
 const SingletonFactory = (function () {
   let accessToken = ''
-  const axiosInstance = axios.create({
-    baseURL: BASE_URL,
-    withCredentials: true,
-  })
+  const axiosInstance = axios.create({ baseURL: BASE_URL, withCredentials: true, })
   const getToken = () => accessToken
 
   const setToken = (token: string) => (accessToken = token)
@@ -58,21 +46,14 @@ const SingletonFactory = (function () {
         // return getAuthToken().finally(createAxiosResponseInterceptor)
         const url = new URL('oAuth/token', AUTH_URL)
 
-        return axiosInstance({
-          url: url.href,
-          method: 'post',
-          data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
-        })
+        return axiosInstance({ url: url.href, method: 'post', data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`, })
           .then((res: any) => {
             setToken(res.data.access_token)
-            error.response.config.headers['Authorization'] =
-              'Bearer ' + res.data.access_token
+            error.response.config.headers['Authorization'] = 'Bearer ' + res.data.access_token
             return axiosInstance(error.response.config)
-          })
-          .catch((error) => {
+          }).catch((error) => {
             return Promise.reject(error)
-          })
-          .finally(createAxiosResponseInterceptor)
+          }).finally(createAxiosResponseInterceptor)
       }
     )
   }
@@ -99,11 +80,10 @@ const fetcher = async (props: IFetcherProps | any) => {
     Country: cookies.Country || store.get('Country') || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY || EmptyString,
     DeviceId: cookies?.deviceId || EmptyString,
     SessionId: cookies?.sessionId || EmptyString,
-    CompanyId: cookies?.CompanyId && cookies?.CompanyId != Guid.empty
-        ? cookies?.CompanyId
-        : Guid.empty,
+    CompanyId: cookies?.CompanyId && cookies?.CompanyId != Guid.empty ? cookies?.CompanyId : Guid.empty,
     ClientIP: cookies?.ClientIP ?? null,
     UserToken: cookies[Cookie.Key.USER_TOKEN] ? decrypt(cookies[Cookie.Key.USER_TOKEN]) : null,
+    MicrositeId: cookies[Cookie.Key.MICROSITE_ID] || EmptyString,
   }
 
   const config: any = {

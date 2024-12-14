@@ -10,7 +10,7 @@ import 'swiper/css/navigation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import SwiperCore, { Navigation } from 'swiper'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
@@ -107,7 +107,8 @@ function LookbookPage({ data }: any) {
 LookbookPage.Layout = Layout
 
 export async function getStaticProps({ params, locale, locales, preview, }: GetStaticPropsContext) {
-  const lookbookData = await getLookbooks({[Cookie.Key.LANGUAGE]: locale})
+  const cookies = serverSideMicrositeCookies(locale!)
+  const lookbookData = await getLookbooks(cookies)
 
   const cachedDataUID = {
     infraUID: Redis.Key.INFRA_CONFIG,

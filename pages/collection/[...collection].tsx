@@ -19,7 +19,7 @@ import Layout from '@components/Layout/Layout'
 import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri, removeQueryString, } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString, serverSideMicrositeCookies, } from '@commerce/utils/uri-util'
 import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
@@ -661,7 +661,8 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   let hostName = EmptyString
   hostName = os.hostname()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COLLECTION_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

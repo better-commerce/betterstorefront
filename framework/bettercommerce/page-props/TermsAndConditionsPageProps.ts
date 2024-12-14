@@ -46,6 +46,7 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
                                 currency: currencyCode,
                                 cachedCopy: true,
                                 language: cookies?.Language,
+                                cookies,
                             })
                             const pageContent = await pageContentsPromise
                             pageContentUIDData.push({

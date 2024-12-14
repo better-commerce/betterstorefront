@@ -23,7 +23,7 @@ import Heading from '@components/Heading/Heading'
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
 import { IMAGE_CDN_URL, IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Hero } from '@components/ui'
 import { Guid } from '@commerce/types';
 import { AnalyticsEventType } from '@components/services/analytics'
@@ -59,7 +59,8 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
     slug = HOME_PAGE_SLUG;
   }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.HOME })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   return {
     props: {

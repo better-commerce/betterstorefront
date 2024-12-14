@@ -1,6 +1,6 @@
 import { NextRouter } from 'next/router'
 
-import { uriParams } from '@commerce/utils/uri-util'
+import { isMicrosite, uriParams } from '@commerce/utils/uri-util'
 import {
   DataSubmit,
   ISubmitStateInterface,
@@ -155,9 +155,22 @@ export const routeToPLPWithSelectedFiltersOld = (router: any, currentFilters: Ar
   }
 }
 
+/**
+ * Returns the localization data for the given locale, flattened to a single level object.
+ * @param {string} locale - The locale code, e.g. "en-GB", "de-DE", etc.
+ * @returns {{ locale: string, localized: Object }} - An object with two properties: locale, and localized.
+ * localized is an object with the localization data, flattened to a single level.
+ * If the locale is not found, or if the locale is empty, an empty object is returned.
+ */
 export const i18nLocalization = (locale: string) : { locale: string, localized: Object } => {
   if (locale) {
-    const localized = localizations.find(x => x?.locale == locale)?.data || EmptyObject
+    let localized: any
+    const micrositeConfig = isMicrosite(locale)
+    if (micrositeConfig) {
+      localized = localizations.find(x => x?.locale == micrositeConfig?.defaultLangCulture)?.data || EmptyObject
+    } else {
+      localized = localizations.find(x => x?.locale == locale)?.data || EmptyObject
+    }
     const localeInfo = {
       locale,
       localized: flattenObject(localized),
@@ -167,6 +180,15 @@ export const i18nLocalization = (locale: string) : { locale: string, localized: 
   return EmptyObject
 }
 
+/**
+ * Flattens an object to a single level.
+ * @param {Object} obj - The object to flatten.
+ * @param {string} [parentKey=''] - The parent key to prefix to each key.
+ * @param {Object} [result={}] - The object to store the flattened result in.
+ * @returns {Object} - An object with the flattened result.
+ * @example
+ * flattenObject({ a: { b: 1, c: 2 } }) // { 'a.b': 1, 'a.c': 2 }
+ */
 export const flattenObject = (obj: any, parentKey = '', result: any = {}) => {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {

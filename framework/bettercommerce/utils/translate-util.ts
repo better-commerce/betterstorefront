@@ -117,3 +117,27 @@ export const mapObject = (source: any, mapping: any) => {
   }
   return target;
 }
+
+/**
+ * Generates a currency symbol based on the given currency code.
+ * @param {string} currencyCode - The ISO 4217 currency code (e.g., USD, EUR, INR).
+ * @returns {string} - The corresponding currency symbol or a fallback if the code is invalid.
+ */
+export const getCurrencySymbol = (currencyCode: string) => {
+  try {
+      // Use Intl.NumberFormat to format a number and extract the currency symbol
+      const formatter = new Intl.NumberFormat('en', {
+          style: 'currency',
+          currency: currencyCode,
+      });
+
+      // Extract the symbol by formatting a dummy value
+      const parts = formatter.formatToParts(0);
+      const symbolPart = parts.find(part => part.type === 'currency');
+
+      return symbolPart ? symbolPart.value : `Invalid code: ${currencyCode}`;
+  } catch (error) {
+      // Return a fallback in case of an invalid currency code
+      return `Invalid code: ${currencyCode}`;
+  }
+}

@@ -19,6 +19,7 @@ import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 function CollectionList(props: any) {
   const router = useRouter();
@@ -89,7 +90,8 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext) {
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ cookies })
   const collectionUID = Redis.Key.Collection
   const cachedData = await getDataByUID([collectionUID])
   let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []

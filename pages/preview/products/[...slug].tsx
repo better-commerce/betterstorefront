@@ -9,10 +9,12 @@ import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framewor
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string }>) {
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PDP_PREVIEW })
-  const pageProps = await props.getPageProps({ slug: params!.slug[0], cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug: params!.slug[0], cookies })
 
   return {
     props: {

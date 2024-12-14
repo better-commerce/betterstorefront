@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
@@ -158,7 +158,8 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext) {
   const slug: any = params!.lookbook
-  const response = await getSingleLookbook(slug[0], { [Cookie.Key.LANGUAGE]: locale })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const response = await getSingleLookbook(slug[0], cookies)
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,

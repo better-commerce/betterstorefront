@@ -52,6 +52,7 @@ export const STATIC_CATEGORIES_PATH_ENABLED = stringToBoolean(
 
 export module Cookie {
   export module Key {
+    export const MICROSITE_ID = 'MicrositeId'
     export const CURRENCY = 'Currency'
     export const CURRENT_CURRENCY = 'CurCurrency'
     export const CURRENCY_SYMBOL = 'CurrencySymbol'

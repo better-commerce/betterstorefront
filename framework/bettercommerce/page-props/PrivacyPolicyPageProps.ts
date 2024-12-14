@@ -42,28 +42,26 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
                 new Promise(async (resolve: any, reject: any) => {
                     try {
                         const pageContentsPromise = commerce.getPagePreviewContent({
-                        id: '',
-                        slug,
-                        workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                        channel: channel,
-                        currency: currencyCode,
-                        cachedCopy: true,
-                        language: cookies?.Language,
+                            id: '',
+                            slug,
+                            workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                            channel: channel,
+                            currency: currencyCode,
+                            cachedCopy: true,
+                            language: cookies?.Language,
+                            cookies,
                         })
                         const pageContent = await pageContentsPromise
                         pageContentUIDData.push({
                         key: currencyCode,
                         value: pageContent,
                         })
-                        await setData([
-                        { key: pageContentUIDKey, value: pageContentUIDData },
-                        ])
+                        await setData([ { key: pageContentUIDKey, value: pageContentUIDData }, ])
                         resolve()
                     } catch (error: any) {
                         resolve()
                     }
-                })
-            )
+                }))
             })
         }
     }
