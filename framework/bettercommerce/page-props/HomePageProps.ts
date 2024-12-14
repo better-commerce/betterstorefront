@@ -18,7 +18,6 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-    console.log({cookies})
     const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
     let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
     const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
@@ -65,7 +64,7 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
     const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
-    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
+    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData, cookies)

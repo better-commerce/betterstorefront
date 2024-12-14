@@ -152,7 +152,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
     }
 
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
-    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
+    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
     const reviewData = await this.getReviewSummary()
     const appConfig = await this.getAppConfig(infraUIDData, cookies)

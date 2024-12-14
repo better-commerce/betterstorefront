@@ -184,22 +184,35 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       //const microsite = isMicrosite(routePath)
       const microsite = isMicrosite(pageProps?.locale || EmptyString)
       if (microsite && microsite?.id && microsite?.id !== Guid.empty) {
-        if (microsite) {
-          Cookies.set(Cookie.Key.MICROSITE_ID, microsite?.id)
-          Cookies.set(Cookie.Key.CURRENCY, microsite?.defaultCurrencyCode)
-          Cookies.set(Cookie.Key.CURRENCY_SYMBOL, getCurrencySymbol(microsite?.defaultCurrencyCode))
-          Cookies.set(Cookie.Key.LANGUAGE, microsite?.defaultLangCulture)
-          Cookies.set(Cookie.Key.COUNTRY, microsite?.countryCode)
+        Cookies.set(Cookie.Key.MICROSITE_ID, microsite?.id)
+        Cookies.set(Cookie.Key.CURRENCY, microsite?.defaultCurrencyCode)
+        Cookies.set(Cookie.Key.CURRENCY_SYMBOL, getCurrencySymbol(microsite?.defaultCurrencyCode))
+        Cookies.set(Cookie.Key.LANGUAGE, microsite?.defaultLangCulture)
+        Cookies.set(Cookie.Key.COUNTRY, microsite?.countryCode)
+      } else {
+        const micrositeId = Cookies.get(Cookie.Key.MICROSITE_ID)
+        if (micrositeId) {
+          Cookies.remove(Cookie.Key.MICROSITE_ID)
+          Cookies.remove(Cookie.Key.CURRENCY)
+          Cookies.remove(Cookie.Key.CURRENCY_SYMBOL)
+          Cookies.remove(Cookie.Key.LANGUAGE)
+          Cookies.remove(Cookie.Key.COUNTRY)
         }
-      } else if (appConfig) {
-        Cookies.set(Cookie.Key.MICROSITE_ID, EmptyString)
-        const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
-        Cookies.set(Cookie.Key.CURRENCY, currencyCode)
-        const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
-        Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
-        const languageCulture = /*appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture ||*/ pageProps?.locale || EmptyString
-        Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
-        Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
+
+        const currency = Cookies.get(Cookie.Key.CURRENCY)
+        const country = Cookies.get(Cookie.Key.COUNTRY)
+        const language = Cookies.get(Cookie.Key.LANGUAGE)
+
+        // If any of the required cookies is undefined
+        if (!currency || !country || !language) {
+          const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
+          Cookies.set(Cookie.Key.CURRENCY, currencyCode)
+          const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
+          Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
+          const languageCulture = /*appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture ||*/ pageProps?.locale || EmptyString
+          Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
+          Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
+        }
       }
       setTimeout(() => {
         setIsInitialized(true)
