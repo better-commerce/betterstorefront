@@ -15,6 +15,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props';
 import useAnalytics from '@components/services/analytics/useAnalytics';
 import { AnalyticsEventType } from '@components/services/analytics';
+import { parseMicrositeLocale, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 interface Props {
   data: any
@@ -141,7 +142,8 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params, locale }: GetStaticPropsContext) {
   const response = await getAllStores()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ cookies })
 
   return {
     props: {

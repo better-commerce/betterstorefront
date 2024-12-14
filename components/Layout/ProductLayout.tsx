@@ -210,7 +210,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <ProductMembershipOfferModal {...productMembershipModalData} />
-          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={getDefaultLanguage} defaultCountry={getDefaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={getDefaultLanguage} defaultCountry={getDefaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} locale={locale} />
           {displayAlert && <AlertRibbon />}
           {children}
           <Footer navItems={navTree?.footer} />

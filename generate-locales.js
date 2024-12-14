@@ -117,6 +117,13 @@ const getMicroSites = async (token) => {
 const getSiteLocales = () => {
   let defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
 
+/**
+ * This function gets the locales from the infra config and microsites.
+ * It sets the default locale based on the regional settings config key "RegionalSettings.DefaultLanguageCode".
+ * It gets all microsites and their default locales, and it sets the "locales" property of the locales object to the union of all locales.
+ * It writes the locales object to a file in the framework/bettercommerce directory.
+ * @returns {Promise<void>}
+ */
   const siteLocalesHandler = async () => {
     const token = await getToken()
     const { result: infraConfig } = await getInfraConfig(token)
@@ -137,6 +144,17 @@ const getSiteLocales = () => {
     const { result: microsites } = await getMicroSites(token)
     if (microsites?.length) {
       micrositeLocales = [...new Set(microsites?.filter((m) => m?.isActive)?.map((m) => m.defaultLangCulture))]
+      
+      const micrositeSlugs = microsites?.filter((m) => m?.isActive)?.map((m) => {
+        let slug = ""
+        try {
+          const url = new URL(m?.slug)
+          slug = url.pathname?.startsWith('/') ? url.pathname?.substring(1) : url.pathname
+        } catch(error) {
+        }
+        return slug
+      })
+      micrositeLocales = micrositeLocales.concat(micrositeSlugs.filter(Boolean))
     }
 
     const siteLocales = [...new Set(infraConfig?.languages?.map((i) => i.languageCulture))]

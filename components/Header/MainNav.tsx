@@ -13,6 +13,7 @@ import { HeartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { AnalyticsEventType } from "@components/services/analytics";
 import useAnalytics from "@components/services/analytics/useAnalytics";
+import { isMicrosite } from "@commerce/utils/uri-util";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -29,9 +30,10 @@ interface Props {
   keywords?: any
   defaultLanguage: string
   defaultCountry: string
+  locale: string
 }
 
-const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle }) => {
+const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle, locale }) => {
   const { recordAnalytics } = useAnalytics()
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
@@ -137,7 +139,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
             }
 
             <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
-              {featureToggle?.features?.enableLanguage &&
+              {!isMicrosite(locale) && featureToggle?.features?.enableLanguage &&
                 <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
               }
               <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">

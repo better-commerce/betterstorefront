@@ -28,6 +28,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -38,7 +39,8 @@ export async function getStaticProps({
   const config = { locale, locales }
   const hostName = os.hostname()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.TERMS_AND_CONDITIONS })
-  const pageProps = await props.getPageProps({ slug: TERMS_PAGE_DEFAULT_SLUG, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug: TERMS_PAGE_DEFAULT_SLUG, cookies })
 
   return {
     props: {

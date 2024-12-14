@@ -34,7 +34,7 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-import { removeQueryString } from '@commerce/utils/uri-util'
+import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Cookie } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 
@@ -540,7 +540,8 @@ export async function getStaticProps({
   }
   const slug = `brands/${brandSlug}`
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

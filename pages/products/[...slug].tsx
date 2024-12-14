@@ -11,11 +11,13 @@ import ProductView from '@components/Product/ProductView'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { getPLPFilterSelection } from 'framework/utils/app-util'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 export async function getStaticProps({ params, locale, locales, preview }: GetStaticPropsContext<{ slug: string; recordId: string }>) {
   const slug = params!?.slug[0]
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PDP })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
     if (process.env.npm_lifecycle_event === 'build') {

@@ -18,6 +18,7 @@ import { getSecondsInMinutes } from '@framework/utils/parse-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 
@@ -178,7 +179,8 @@ export async function getStaticProps({
   }
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ cookies })
 
   return {
     props: {

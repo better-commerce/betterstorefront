@@ -3,32 +3,15 @@ import { PAGE_PREVIEW_CONTENT_ENDPOINT } from '@components/utils/constants'
 import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
 
 export default function getPagePreviewContentOperation() {
-  async function getPagePreviewContent({
-    id,
-    slug = '/',
-    workingVersion = false,
-    channel,
-    cachedCopy = true,
-    currency,
-    language = 'en-GB',
-  }: any) {
+  async function getPagePreviewContent({ id, slug = '/', workingVersion = false, channel, cachedCopy = true, currency, language = 'en-GB', cookies = {}, }: any) {
     try {
       const response: any = await fetcher({
         url: `${PAGE_PREVIEW_CONTENT_ENDPOINT}`,
         method: 'get',
-        params: {
-          id: id,
-          slug: slug,
-          workingVersion: workingVersion,
-          cachedCopy: cachedCopy,
-        },
-        headers: {
-          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-          Channel: channel,
-          Language: language,
-          Currency: currency,
-        },
+        params: { id: id, slug: slug, workingVersion: workingVersion, cachedCopy: cachedCopy, },
+        headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Channel: channel, Language: language, Currency: currency, },
         baseUrl: BETTERCMS_BASE_URL,
+        cookies,
       })
       return response.result
     } catch (error) {

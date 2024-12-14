@@ -180,8 +180,9 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }, [])
 
   useEffect(() => {
-    if (routePath) {
-      const microsite = isMicrosite(routePath)
+    if (appConfig && routePath) {
+      //const microsite = isMicrosite(routePath)
+      const microsite = isMicrosite(pageProps?.locale || EmptyString)
       if (microsite && microsite?.id && microsite?.id !== Guid.empty) {
         if (microsite) {
           Cookies.set(Cookie.Key.MICROSITE_ID, microsite?.id)
@@ -192,17 +193,19 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         }
       } else if (appConfig) {
         Cookies.set(Cookie.Key.MICROSITE_ID, EmptyString)
-        const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || appConfig?.defaultCurrency || EmptyString
+        const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
         Cookies.set(Cookie.Key.CURRENCY, currencyCode)
         const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
         Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
-        const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale || EmptyString
+        const languageCulture = /*appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture ||*/ pageProps?.locale || EmptyString
         Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
         Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
       }
-      setIsInitialized(true)
+      setTimeout(() => {
+        setIsInitialized(true)
+      }, 200);
     }
-  }, [routePath])
+  }, [appConfig, routePath])
 
   const setGeoData = async () => {
     try {

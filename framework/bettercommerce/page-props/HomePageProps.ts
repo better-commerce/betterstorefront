@@ -18,7 +18,7 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
+    console.log({cookies})
     const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
     let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
     const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
@@ -38,13 +38,14 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
                 promises.push(new Promise(async (resolve: any, reject: any) => {
                     try {
                         const pageContentsPromise = commerce.getPagePreviewContent({
-                        id: '',
-                        slug,
-                        workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                        channel: channel,
-                        currency: currencyCode,
-                        cachedCopy: true,
-                        language: cookies?.Language,
+                          id: '',
+                          slug,
+                          workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                          channel: channel,
+                          currency: currencyCode,
+                          cachedCopy: true,
+                          language: cookies?.Language,
+                          cookies,
                         })
                         const pageContent = await pageContentsPromise || null
                         pageContentUIDData.push({ key: currencyCode, value: pageContent })
