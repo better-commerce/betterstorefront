@@ -50,7 +50,7 @@ import { I18nProvider } from '@components/ui/i18nContext';
 import { i18nLocalization } from 'framework/utils/app-util';
 import { getCurrencySymbol } from '@framework/utils/translate-util'
 import { Guid } from '@commerce/types'
-
+declare const window: any
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const tagManagerArgs: any = {
@@ -176,6 +176,17 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     return function cleanup() {
       analyticsCb.removeListeners()
       Cookies.remove(SessionIdCookieKey)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      if (typeof window !== 'undefined' && window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+        for (const key in window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+          // Replace the hook methods with no-op functions
+          window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = () => {}
+        }
+      }
     }
   }, [])
 
