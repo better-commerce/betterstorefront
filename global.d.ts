@@ -1,10 +1,9 @@
-// Declarations for modules without types
-declare module 'next-themes'
-declare module 'react-image-zooom'
-declare module 'react-image-gallery'
-declare module '@schlomoh/react-cookieconsent'
-declare module 'algoliasearch/lite'
-declare module 'react-instantsearch'
-declare module 'instantsearch.js'
-declare module 'react-use-keypress'
-declare module 'file-saver'
+import type NodeCache from 'node-cache';
+
+declare global {
+    var cacheConfigs: NodeCache;
+    var cacheUser: NodeCache;
+    //your cache names
+}
+
+export { };

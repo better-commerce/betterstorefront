@@ -12,6 +12,9 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   output: 'standalone',
   poweredByHeader: false,
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech','cdn.shopify.com'],
     cacheDuration: 31536000,
