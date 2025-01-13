@@ -80,10 +80,9 @@ export default function CategoryGrid({
               </div>
             ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             ))}
           </div>
-
           {products.pages > 1 && (
             <Pagination
               currentPage={currentPage}
@@ -96,9 +95,7 @@ export default function CategoryGrid({
                   undefined,
                   { shallow: true }
                 )
-              }}
-              pageCount={products.pages}
-            />
+              }} pageCount={products.pages} />
           )}
         </>
       )}
