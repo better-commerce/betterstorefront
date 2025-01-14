@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { Cookie } from "@framework/utils/constants";
 import { useRouter } from "next/router";
 import { getCurrency } from '@framework/utils/app-util'
+import { EmptyString } from "@components/utils/constants";
 
 interface LangDropdownProps {
   readonly currencies: Array<any>;
@@ -34,7 +35,7 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
   }, [defaultLanguage, defaultCountry, router.asPath])
   const isActiveLocale = useMemo(() => (language: any) => language?.languageCulture === router?.locale, [router?.locale])
   return (
-    <div className="grid gap-8 grid-cols-2">
+    <div className="grid grid-cols-2 gap-8">
       {languages?.map((language: any, index: number) => (
         <Link key={index} legacyBehavior href={getLocaleUrl(language)} locale={language?.languageCulture}>
           <a key={index} href={getLocaleUrl(language)} onClick={() => {
@@ -66,9 +67,12 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
     router.reload()
   }, [router])
 
+  const activeCurrencyName = useMemo(() => currencies?.find((currency: any) => currency?.currencyCode === getCurrency())?.currencyCode || EmptyString, [router])
+  const activeLanguageName = useMemo(() => languages?.find((language: any) => language?.languageCulture === router?.locale)?.name || EmptyString, [router?.locale])
+
   const Currencies = ({ close }: any) => {
     return (
-      <div className="grid gap-7 grid-cols-2">
+      <div className="grid grid-cols-2 gap-7">
         {currencies?.map((currency, index) => {
           return (
             <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-gray-100 cursor-not-allowed select-none' : ''} `}>
@@ -84,35 +88,33 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
   };
 
   return (
-    <div className="LangDropdown">
+    <div className="flex LangDropdown justify-normal">
       <Popover className="relative">
         {({ open, close }) => (
           <>
             <Popover.Button className={` ${open ? "" : "text-opacity-80"} group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-neutral-200 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`} >
-              <GlobeAltIcon className="glob-icon-height w-[18px] h-[18px] opacity-80" />
-              <span className="ml-2 hidden md:block">{translateText('common.label.languageText')}</span>
-              <ChevronDownIcon className={`${open ? "-rotate-180" : "text-opacity-70"} ml-1 h-4 w-4  group-hover:text-opacity-80 transition ease-in-out duration-150`} aria-hidden="true" />
+              <span className="hidden ml-2 text-black md:block">{activeCurrencyName}</span>
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className={`absolute z-20 w-96 mt-3.5 lang-width right-0 ${panelClassName}`} >
-                <div className="p-3 sm:p-6 bg-white shadow-lg rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
-                  <Tab.Group>
-                    <Tab.List className="flex p-1 space-x-1 bg-gray-100 rounded-full dark:bg-slate-700">
-                      {[translateText('common.label.languageText'), translateText('label.navBar.currencyText')].map((category) => (
-                        <Tab key={category} className={({ selected }) => classNames("w-full rounded-full py-2 text-sm font-medium leading-5 text-gray-700", "focus:outline-none focus:ring-0", selected ? "bg-white shadow" : "text-gray-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-900/40")} >
-                          {category}
-                        </Tab>
-                      ))}
-                    </Tab.List>
-                    <Tab.Panels className="mt-5">
-                      <Tab.Panel className={classNames("rounded-xl p-3", "focus:outline-none focus:ring-0")} >
-                        <Languages close={close} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} languages={languages} />
-                      </Tab.Panel>
-                      <Tab.Panel className={classNames("rounded-xl p-3", "focus:outline-none focus:ring-0")} >
-                        <Currencies close={close} />
-                      </Tab.Panel>
-                    </Tab.Panels>
-                  </Tab.Group>
+                <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
+                  <Currencies close={close} />
+                </div>
+              </Popover.Panel>
+            </Transition>
+          </>
+        )}
+      </Popover>
+      <Popover className="relative">
+        {({ open, close }) => (
+          <>
+            <Popover.Button className={` ${open ? "" : "text-opacity-80"} group h-10 sm:h-12 px-3 py-1.5 inline-flex items-center text-sm text-gray-800 dark:text-neutral-200 font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`} >
+              <span className="hidden ml-2 md:block"><span className={`sprite-flag flag-${activeLanguageName?.toLowerCase()}`}></span></span>
+            </Popover.Button>
+            <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
+              <Popover.Panel className={`absolute z-20 w-96 mt-3.5 lang-width right-0 ${panelClassName}`} >
+                <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
+                  <Languages close={close} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} languages={languages} />
                 </div>
               </Popover.Panel>
             </Transition>

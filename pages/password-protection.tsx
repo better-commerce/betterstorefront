@@ -96,11 +96,9 @@ function PasswordProtectionPage({ config }: any) {
       </NextHead>
       <header className="fixed top-0 right-0 w-full py-0 bg-white shadow-md lg:top-0 sm:py-3 bg-header-color z-999 navbar-min-64">
         <div className="flex justify-center w-full">
-          <Link href="#" title={getSeoConfig()?.title}>
-            <div className="flex items-center justify-center cursor-pointer">
-              <Logo />
-            </div>
-          </Link>
+          <div className="flex items-center justify-center cursor-pointer">
+            <Logo />
+          </div>
         </div>
       </header>
       <main className="grid h-screen px-4 pt-6 pb-24 bg-gray-50 sm:px-4 sm:pt-4 lg:px-8 lg:py-2 place-items-center">

@@ -17971,3 +17971,140 @@ input[type=number] {
     min-height: 47px;
     box-sizing: border-box;
 }
+
+.sprite-flag {
+	background: url(/images/flag-v1.png) no-repeat;
+	background-repeat: no-repeat;
+	position: relative;
+	display: inline-block;
+  top: 4px;
+}
+
+.flag-cyprus{
+  background-position: -13px -12px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-czech{
+  background-position: -51px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+
+}
+.flag-danish{
+  background-position: -93px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+
+}
+.flag-dutch{
+  background-position: -130px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-english{
+  background-position: -169px -14px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-finnish{
+  background-position: -208px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-french{
+  background-position: -246px -12px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-german{
+  background-position: -14px -61px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-greek{
+  background-position:-53px -61px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-italian{
+  background-position: -93px -60px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-norwegian{
+  background-position: -131px -60px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-polish{
+  background-position: -171px -61px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-portuguese{
+  background-position: -209px -59px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-romania{
+  background-position:-249px -60px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-russian{
+  background-position: -16px -108px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-slovak{
+  background-position:-57px -109px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-spanish{
+  background-position: -94px -108px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-swedish{
+  background-position:-134px -108px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
