@@ -96,7 +96,7 @@ function PasswordProtectionPage({ config }: any) {
       </NextHead>
       <header className="fixed top-0 right-0 w-full py-0 bg-white shadow-md lg:top-0 sm:py-3 bg-header-color z-999 navbar-min-64">
         <div className="flex justify-center w-full">
-          <Link href="/" title={getSeoConfig()?.title}>
+          <Link href="#" title={getSeoConfig()?.title}>
             <div className="flex items-center justify-center cursor-pointer">
               <Logo />
             </div>
