@@ -165,7 +165,7 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getMembershipPlans({ cookies }: any) {
-    const key = Redis.Key.MEMBERSHIP_PLANS
+    const key = `${Redis.Key.MEMBERSHIP_PLANS}_${cookies?.Country}_${cookies?.Currency}`
     const cachedData = await getDataByUID([key,])
     let allMembershipsUIDData: any = parseDataValue(cachedData, key)
     if (!allMembershipsUIDData) {
