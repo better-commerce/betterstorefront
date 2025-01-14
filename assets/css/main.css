@@ -17980,14 +17980,14 @@ input[type=number] {
   top: 4px;
 }
 
-.flag-cyprus{
+.flag-cyprus,.flag-cy{
   background-position: -13px -12px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-czech{
+.flag-czech,.flag-cs{
   background-position: -51px -13px;
 	width: 28px;
 	height: 28px;
@@ -17995,7 +17995,7 @@ input[type=number] {
   border: 1px solid #dddddd;
 
 }
-.flag-danish{
+.flag-danish, .flag-da{
   background-position: -93px -13px;
 	width: 28px;
 	height: 28px;
@@ -18003,105 +18003,106 @@ input[type=number] {
   border: 1px solid #dddddd;
 
 }
-.flag-dutch{
+.flag-dutch, .flag-nl{
   background-position: -130px -13px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-english{
+.flag-english,
+.flag-en{
   background-position: -169px -14px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-finnish{
+.flag-finnish, .flag-fi{
   background-position: -208px -13px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-french{
+.flag-french, .flag-fr{
   background-position: -246px -12px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-german{
+.flag-german, .flag-de{
   background-position: -14px -61px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-greek{
+.flag-greek, .flag-gr{
   background-position:-53px -61px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-italian{
+.flag-italian,.flag-it{
   background-position: -93px -60px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-norwegian{
+.flag-norwegian,.flag-nn{
   background-position: -131px -60px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-polish{
+.flag-polish,.flag-pl{
   background-position: -171px -61px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-portuguese{
+.flag-portuguese, .flag-pt{
   background-position: -209px -59px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-romania{
+.flag-romania,.flag-ro{
   background-position:-249px -60px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-russian{
+.flag-russian, .flag-ru{
   background-position: -16px -108px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-slovak{
+.flag-slovak, .flag-sk{
   background-position:-57px -109px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-spanish{
+.flag-spanish,.flag-es{
   background-position: -94px -108px;
 	width: 28px;
 	height: 28px;
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
-.flag-swedish{
+.flag-swedish, .flag-sv{
   background-position:-134px -108px;
 	width: 28px;
 	height: 28px;

@@ -45,7 +45,7 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
           }} className={`flex items-center mb-1 px-2 pb-2 pt-0.5 -m-3 transition border duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${isActiveLocale(language) ? "bg-sky-100 dark:bg-gray-700 border-sky-300" : "bg-transparent border-white"}`}
           >
             <div className="flex items-center justify-start gap-1 text-sm font-medium text-black dark:text-gray-400">
-              <span className={`sprite-flag flag-${language?.name?.toLowerCase()}`}></span>
+              <span className={`sprite-flag flag-${language?.languageCode?.toLowerCase()}`}></span>
               <span className="relative text-[13px] font-normal top-1">{language?.name}</span>
             </div>
           </a>
@@ -69,7 +69,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
   }, [router])
 
   const activeCurrencyName = useMemo(() => currencies?.find((currency: any) => currency?.currencyCode === getCurrency())?.currencyCode || EmptyString, [router])
-  const activeLanguageName = useMemo(() => languages?.find((language: any) => language?.languageCulture === router?.locale)?.name || EmptyString, [router?.locale])
+  const activeLanguageName = useMemo(() => languages?.find((language: any) => language?.languageCulture === router?.locale)?.languageCode || EmptyString, [router?.locale])
 
   const Currencies = ({ close }: any) => {
     return (
