@@ -1,10 +1,7 @@
 import { NextRouter } from 'next/router'
 
 import { isMicrosite, uriParams } from '@commerce/utils/uri-util'
-import {
-  DataSubmit,
-  ISubmitStateInterface,
-} from '@commerce/utils/use-data-submit'
+import { DataSubmit, ISubmitStateInterface, } from '@commerce/utils/use-data-submit'
 import { EmptyObject, EmptyString, IGNORE_QUERY_KEYS } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
@@ -12,12 +9,16 @@ import enGBLocalization from '../../public/locales/en-GB/common.json'
 import deDELocalization from '../../public/locales/de-DE/common.json'
 import esESLocalization from '../../public/locales/es-ES/common.json'
 import frFRLocalization from '../../public/locales/fr-FR/common.json'
+import csCZLocalization from '../../public/locales/cs-CZ/common.json'
+import daDKLocalization from '../../public/locales/da-DK/common.json'
+import enCYLocalization from '../../public/locales/en-CY/common.json'
+import nlNLLocalization from '../../public/locales/nl-NL/common.json'
 import { getCookie, removeCookie } from '@framework/utils'
 import { Cookie } from '@framework/utils/constants'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { setCookie } from '@components/utils/cookieHandler'
 
-const localizations = [{ locale: 'en-GB', data: enGBLocalization }, { locale: 'de-DE', data: deDELocalization }, { locale: 'es-ES', data: esESLocalization }, { locale: 'fr-FR', data: frFRLocalization }]
+const localizations = [{ locale: 'en-GB', data: enGBLocalization }, { locale: 'de-DE', data: deDELocalization }, { locale: 'es-ES', data: esESLocalization }, { locale: 'fr-FR', data: frFRLocalization }, { locale: 'cs-CZ', data: csCZLocalization }, { locale: 'da-DK', data: daDKLocalization }, { locale: 'en-CY', data: enCYLocalization }, { locale: 'nl-NL', data: nlNLLocalization }]
 
 
 export const resetSubmitData = (dispatch: any) => {

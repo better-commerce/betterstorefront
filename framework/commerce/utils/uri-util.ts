@@ -98,7 +98,7 @@ export const isMicrosite = (locale: string) => {
  */
 export const getMicrositeConfig = (microsite: string) => {
    if (microsite && microsites?.microsites?.length) {
-      const micrositeConfig = microsites?.microsites.find((m: any) => m.slug === microsite);
+      const micrositeConfig = microsites?.microsites.find((m: any) => m?.slug === microsite);
       if (micrositeConfig) {
          return micrositeConfig
       }
