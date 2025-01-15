@@ -30,7 +30,7 @@ import "styles/index.scss";
 import 'swiper/css/bundle'
 import packageInfo from '../package.json'
 import { decrypt, } from '@framework/utils/cipher'
-import { tryParseJson } from '@framework/utils/parse-util'
+import { stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
 import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
 import '@assets/css/algolia-instant-search.css'
@@ -122,16 +122,22 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     })
 
     const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => window.location.pathname.startsWith(x))
-    if (isScrollEnabled) {
-      router.events.on('routeChangeComplete', () => { backToPageScrollLocation(window.location) })
-    }
+    router.events.on('routeChangeComplete', (url: any) => { 
+      if (url === '/password-protection') {
+        setPasswordProtectionLoader(false)
+      }
+
+      if (isScrollEnabled) {
+        backToPageScrollLocation(window.location) 
+      }
+    })
 
     // Dispose listener.
     return () => {
       router.events.off('routeChangeStart', () => { })
-      if (isScrollEnabled) {
-        router.events.off('routeChangeComplete', () => { })
-      }
+      //if (isScrollEnabled) {
+      router.events.off('routeChangeComplete', () => { })
+      //}
     }
   }, [router.events])
 
@@ -190,8 +196,36 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }, [])
 
+  const [showPasswordProtectionLoader, setPasswordProtectionLoader] = useState(true)
+
   useEffect(() => {
     if (appConfig && routePath) {
+
+      let configSettings: any
+      let isPasswordProtectionEnabled: boolean = true, isAuthenticated = false
+      if (appConfig) {
+        configSettings = appConfig?.configSettings
+        if (configSettings) {
+          const passwordProtectionSettings = configSettings?.find((x: any) => x?.configType === 'PasswordProtectionSettings')?.configKeys || []
+          isPasswordProtectionEnabled = stringToBoolean(passwordProtectionSettings?.find((x: any) => x?.key === 'PasswordProtectionSettings.LivePasswordEnabled')?.value || 'False')
+        }
+      }
+      if (configSettings) {
+        const passwordProtectionSettings = configSettings?.find((x: any) => x?.configType === 'PasswordProtectionSettings')?.configKeys || []
+        isPasswordProtectionEnabled = stringToBoolean(passwordProtectionSettings?.find((x: any) => x?.key === 'PasswordProtectionSettings.LivePasswordEnabled')?.value || 'False')
+    
+        //const authenticated = Cookies.get(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)
+        const authenticated = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)!
+        isAuthenticated = stringToBoolean(authenticated)
+  
+        if (isPasswordProtectionEnabled && !isAuthenticated) {
+          router.push('/password-protection')
+        } else {
+          setPasswordProtectionLoader(false)
+        }
+      }
+
+
       //const microsite = isMicrosite(routePath)
       const microsite = isMicrosite(pageProps?.locale || EmptyString)
       if (microsite && microsite?.id && microsite?.id !== Guid.empty) {
@@ -283,9 +317,9 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       </NextHead>
 
       <Head {...appConfig}></Head>
+      {showPasswordProtectionLoader && <Loader backdropInvisible={true} message={''} />}
       {<ContentSnippetInjector snippets={snippets} />}
       <ManagedUIContext>
-        <PasswordProtectedRoute config={appConfig}>
           <CustomCacheBuster buildVersion={packageInfo?.version} />
           <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
           {
@@ -304,7 +338,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
               </Layout>
             </ErrorBoundary>
           </I18nProvider>
-        </PasswordProtectedRoute>
       </ManagedUIContext>
     </>
   )
