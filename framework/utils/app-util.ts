@@ -11,7 +11,7 @@ import { decrypt, encrypt } from '@framework/utils/cipher'
 import { setCookie } from '@components/utils/cookieHandler'
 import * as microsites from '../bettercommerce/microsites.json'
 
-const ALL_LOCALES = [...new Set(microsites?.microsites?.length ? microsites?.microsites?.filter((m: any) => m?.defaultLangCulture?.includes('-'))?.map((m: any) => m?.defaultLangCulture) : [])]
+const ALL_LOCALES = [...new Set(microsites?.microsites?.length ? microsites?.microsites?.filter((m: any) => m?.defaultLangCulture?.includes('-'))?.map((m: any) => m?.defaultLangCulture) : ['en-GB', 'de-DE', 'es-ES', 'fr-FR'])]
 
 const getLocalizationData = (locale: string) => {
   try {
