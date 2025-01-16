@@ -9,6 +9,9 @@ import { getCookie, removeCookie } from '@framework/utils'
 import { Cookie } from '@framework/utils/constants'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { setCookie } from '@components/utils/cookieHandler'
+import * as microsites from '../bettercommerce/microsites.json'
+
+const ALL_LOCALES = [...new Set(microsites?.microsites?.length ? microsites?.microsites?.filter((m: any) => m?.defaultLangCulture?.includes('-'))?.map((m: any) => m?.defaultLangCulture) : [])]
 
 const getLocalizationData = (locale: string) => {
   try {
@@ -19,6 +22,8 @@ const getLocalizationData = (locale: string) => {
     return EmptyObject
   }
 }
+
+const localizations: any = ALL_LOCALES?.map((locale: string) => ({ locale, data: getLocalizationData(locale) }))
 
 export const resetSubmitData = (dispatch: any) => {
   if (dispatch) {
@@ -162,39 +167,22 @@ export const routeToPLPWithSelectedFiltersOld = (router: any, currentFilters: Ar
  * localized is an object with the localization data, flattened to a single level.
  * If the locale is not found, or if the locale is empty, an empty object is returned.
  */
-
-
-// export const i18nLocalization = (locale: string) : { locale: string, localized: Object } => {
-//   if (locale) {
-//     let localized: any
-//     const micrositeConfig = isMicrosite(locale)
-//     if (micrositeConfig) {
-//       localized = localizations.find(x => x?.locale == micrositeConfig?.defaultLangCulture)?.data || EmptyObject
-//     } else {
-//       localized = localizations.find(x => x?.locale == locale)?.data || EmptyObject
-//     }
-//     const localeInfo = {
-//       locale,
-//       localized: flattenObject(localized),
-//     }
-//     return localeInfo
-//   }
-//   return EmptyObject
-// }
-
-
-export const i18nLocalization = (locale: string): any => {
-  if (!locale) {
-    return EmptyObject
+export const i18nLocalization = (locale: string) : { locale: string, localized: Object } => {
+  if (locale) {
+    let localized: any
+    const micrositeConfig = isMicrosite(locale)
+    if (micrositeConfig) {
+      localized = localizations.find((x: any) => x?.locale == micrositeConfig?.defaultLangCulture)?.data || EmptyObject
+    } else {
+      localized = localizations.find((x: any) => x?.locale == locale)?.data || EmptyObject
+    }
+    const localeInfo = {
+      locale,
+      localized: flattenObject(localized),
+    }
+    return localeInfo
   }
-
-  const micrositeConfig = isMicrosite(locale)
-  const resolvedLocale = micrositeConfig?.defaultLangCulture || locale
-  const localizationData = getLocalizationData(resolvedLocale)
-  return {
-    locale,
-    localized: flattenObject(localizationData),
-  }
+  return EmptyObject
 }
 
 /**
