@@ -103,7 +103,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className={`absolute z-20 w-96 mt-3.5 lang-width right-0 ${panelClassName}`} >
                 <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
-                  <h3 className="text-lg font-semibold text-black mb-7">Select your Currency</h3>
+                  <h3 className="text-lg font-semibold text-black mb-7">{translateText('label.navBar.selectCurrencyText')}</h3>
                   <Currencies close={close} />
                 </div>
               </Popover.Panel>
@@ -120,7 +120,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className={`absolute z-20 w-[600px] mt-3.5 lang-width right-0 ${panelClassName}`} >
                 <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
-                  <h3 className="mb-6 text-lg font-semibold text-black">Select your language</h3>
+                  <h3 className="mb-6 text-lg font-semibold text-black">{translateText('label.navBar.selectLanguageText')}</h3>
                   <Languages close={close} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} languages={languages} />
                 </div>
               </Popover.Panel>

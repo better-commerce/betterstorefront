@@ -9,9 +9,9 @@ import { getCookie, removeCookie } from '@framework/utils'
 import { Cookie } from '@framework/utils/constants'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { setCookie } from '@components/utils/cookieHandler'
-import * as microsites from '../bettercommerce/microsites.json'
+import * as locales from '../bettercommerce/locales.json'
 
-const ALL_LOCALES = [...new Set(microsites?.microsites?.length ? microsites?.microsites?.filter((m: any) => m?.defaultLangCulture?.includes('-'))?.map((m: any) => m?.defaultLangCulture) : ['en-GB', 'de-DE', 'es-ES', 'fr-FR'])]
+const ALL_LOCALES = [...new Set(locales?.locales?.length ? locales?.locales?.filter((l: any) => l?.includes('-'))?.map((l: any) => l) : [])]
 
 const getLocalizationData = (locale: string) => {
   try {
