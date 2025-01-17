@@ -25,7 +25,7 @@ function BrandProduct({ product, hideTier = false, brandInfo }: any) {
         ) : (
           <h3 className="my-2 text-lg font-medium sm:text-2xl dark:text-black">Add To Kit</h3>
         )}
-        {products.length > 2 && 
+        {products?.length > 2 && 
           <div className="flex gap-4">
             <button onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded arrow-container hover:border-black" >
               <ChevronLeft className="text-black w-7 h-7" />
