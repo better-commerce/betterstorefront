@@ -31,6 +31,7 @@ import Cookies from 'js-cookie'
 import { removeQueryString } from '@commerce/utils/uri-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
+import { MESSAGE_ITEMS_NOT_AVAILABLE } from '@components/utils/textVariables'
 
 function KitBrandPage({
   relatedBrand,
@@ -239,7 +240,7 @@ function KitBrandPage({
             START ADDING ITEMS TO BUILD YOUR KIT
           </h4>
         </div>
-        {!products?.length && <h4 className="font-semibold text-center text-gray-300 font-32 p-20"> ITEMS NOT AVAILABLE </h4>}  
+        {!products?.length && <h4 className="font-semibold text-center text-gray-300 font-32 p-20"> {MESSAGE_ITEMS_NOT_AVAILABLE} </h4>}  
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
           <div className="pl-4 pr-4 sm:pr-0 sm:col-span-9 sm:pl-10 mob-col-full">
             <div className="flex flex-col w-full mt-4 sm:mt-6">
