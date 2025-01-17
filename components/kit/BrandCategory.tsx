@@ -55,7 +55,7 @@ function BrandCategory({
     }
   }
 
-  if (!kitCategoriesData) {
+  if (!kitCategoriesData?.length) {
     return <></>
   }
 

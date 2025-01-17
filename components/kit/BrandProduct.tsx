@@ -25,14 +25,16 @@ function BrandProduct({ product, hideTier = false, brandInfo }: any) {
         ) : (
           <h3 className="my-2 text-lg font-medium sm:text-2xl dark:text-black">Add To Kit</h3>
         )}
-        <div className="flex gap-4">
-          <button onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded arrow-container hover:border-black" >
-            <ChevronLeft className="text-black w-7 h-7" />
-          </button>
-          <button onClick={() => swiperRef.current.swiper.slideNext()} className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded arrow-container hover:border-black" >
-            <ChevronRight className="text-black w-7 h-7" />
-          </button>
-        </div>
+        {products?.length > 2 && 
+          <div className="flex gap-4">
+            <button onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded arrow-container hover:border-black" >
+              <ChevronLeft className="text-black w-7 h-7" />
+            </button>
+            <button onClick={() => swiperRef.current.swiper.slideNext()} className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded arrow-container hover:border-black" >
+              <ChevronRight className="text-black w-7 h-7" />
+            </button>
+          </div>
+        }
       </div>
       <Swiper spaceBetween={10} navigation={false} ref={swiperRef} loop={true} breakpoints={{ 320: { slidesPerView: 1, }, 640: { slidesPerView: 2, }, 768: { slidesPerView: 2, }, 1200: { slidesPerView: 2, }, 1400: { slidesPerView: 3, }, 1700: { slidesPerView: 4, }, }}>
         {products?.map((prod: any) => (
