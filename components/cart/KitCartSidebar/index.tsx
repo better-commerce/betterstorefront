@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { isEqual, size, sumBy } from 'lodash'
 import { useRouter } from 'next/router'
@@ -22,6 +22,8 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
   const isIncludeVAT = stringToBoolean(includeVAT)
   const { getCart } = useCart()
   const [kitBasketPromos, setKitBasketPromos] = useState<any>(null)
+  const [brandDetails, setBrandDetails] = useState(brandInfo)
+  const previousKitBasket = useRef(kitBasket?.lineItems?.length || 0);
 
   const getKitBasketPromos = useCallback(async (basketId: string) => {
     if (!basketId || basketId === EmptyGuid) return
@@ -187,6 +189,14 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
 
   const isEmptyKitBasket = !kitBasket || kitBasket?.lineItems?.length < 1 || size(kitBasket) < 1
 
+  useEffect(() => {
+    const currentLineItemCount = kitBasket?.lineItems?.length || 0;
+    if (currentLineItemCount === 0 || previousKitBasket.current !== currentLineItemCount) {
+      setBrandDetails(brandInfo);
+    }
+    previousKitBasket.current = currentLineItemCount;
+  }, [brandInfo, kitBasket]);
+
   const renderPromo = (appliedPromo: any, kitPromos: any) => {
     const appliedKitPromo = kitPromos?.find((o: any) => matchStrings(o?.code, appliedPromo?.promoCode))
     return (
@@ -228,7 +238,7 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
         <div className="w-full px-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h3 className="dark:text-black font-16 m-font-14">
-              {brandInfo?.brandName} {brandInfo?.platformName} Kit{' '}
+              {brandDetails?.brandName} {brandDetails?.platformName} Kit{' '}
               <span className="font-medium text-black font-12">
                 ({sumBy(kitBasket?.lineItems, 'qty')} Items)
               </span>
