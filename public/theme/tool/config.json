@@ -17,7 +17,7 @@
                     "group": "PLP",
                     "urlCode": "plp-product-listing",
                     "name": "Product Listing",
-                    "url": "https://demotools.bettercommerce.tech/collection/shop-all-dresses",
+                    "url": "https://demotools.bettercommerce.tech/collection/all-screws",
                     "displayOrder": 7,
                     "active": 1
                 },
@@ -25,7 +25,7 @@
                     "group": "PLP",
                     "urlCode": "plp-compare-products",
                     "name": "Compare Products",
-                    "url": "https://demotools.bettercommerce.tech/collection/shop-all-dresses",
+                    "url": "https://demotools.bettercommerce.tech/collection/all-screws",
                     "displayOrder": 8,
                     "active": 1
                 },
@@ -33,7 +33,7 @@
                     "group": "PLP",
                     "urlCode": "plp-badges",
                     "name": "Badges",
-                    "url": "https://demotools.bettercommerce.tech/collection/dresses/midi-dresses",
+                    "url": "https://demotools.bettercommerce.tech/collection/clearance",
                     "displayOrder": 9,
                     "active": 1
                 },
@@ -41,7 +41,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-simple-product",
                     "name": "Type Simple Product",
-                    "url": "https://demotools.bettercommerce.tech/products/betteryou-one-piece-pink-stylish-woman-western-dress-wwd001",
+                    "url": "https://demotools.bettercommerce.tech/products/milwaukee-milwaukee-as2-250em-ac-25l-m-class-vac-25l-m-class-dust-extractor-293496",
                     "displayOrder": 11,
                     "active": 1
                 },
@@ -49,7 +49,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-variant-",
                     "name": "Type Variant",
-                    "url": "https://demotools.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+                    "url": "https://demotools.bettercommerce.tech/products/dewalt-dewalt-dewtitaniumtan9-titanium-tan-s3-safety-boots-uk-9-euro-43-80453",
                     "displayOrder": 12,
                     "active": 1
                 },
@@ -57,7 +57,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-complex-variant",
                     "name": "Type Complex Variant",
-                    "url": "https://demotools.bettercommerce.tech/products/women-regular-fit-solid-casual-shirt-wrfss001-green-rayon",
+                    "url": "https://demotools.bettercommerce.tech/products/tough-grit-tough-grit-686024-hi-vis-2-tone-jogger-yellow-navy-285182",
                     "displayOrder": 13,
                     "active": 1
                 },
@@ -65,7 +65,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-bundle-product",
                     "name": "Type Bundle Product",
-                    "url": "https://demotools.bettercommerce.tech/products/super-saver-bundle-blazer-shirt-jeans-headscarf-ssb001",
+                    "url": "https://demotools.bettercommerce.tech/products/dewalt-dewalt-super-saver-bundle-dtb001",
                     "displayOrder": 14,
                     "active": 1
                 },
@@ -73,7 +73,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-gift-with-products",
                     "name": "Type Gift with Products",
-                    "url": "https://demotools.bettercommerce.tech/products/black-jersey-mini-dress-with-drape-detail-1-ss221081",
+                    "url": "https://demotools.bettercommerce.tech/products/metabo-metabo-dmh-290-set-compressed-air-chipping-hammer-117676",
                     "displayOrder": 15,
                     "active": 1
                 },
@@ -89,7 +89,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-check-store-stock",
                     "name": "Check Store Stock",
-                    "url": "https://demotools.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+                    "url": "https://demotools.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
                     "displayOrder": 17,
                     "active": 1
                 },
@@ -105,7 +105,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-rich-attributes",
                     "name": "Rich Attributes",
-                    "url": "https://demotools.bettercommerce.tech/products/izzy-wide-leg-trouser-with-gathered-waistband-in-green-ss23220",
+                    "url": "https://demotools.bettercommerce.tech/products/festool-festool-575304-ks120-reb-240v-240v-260mm-kapex-sliding-compound-mitre-saw-235692",
                     "displayOrder": 19,
                     "active": 1
                 },
@@ -113,7 +113,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-technical-specs",
                     "name": "Technical Specs",
-                    "url": "https://demotools.bettercommerce.tech/products/betteryou-one-piece-pink-stylish-woman-western-dress-wwd001",
+                    "url": "https://demotools.bettercommerce.tech/products/festool-festool-575304-ks120-reb-240v-240v-260mm-kapex-sliding-compound-mitre-saw-235692",
                     "displayOrder": 20,
                     "active": 1
                 },
@@ -121,7 +121,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-compare-product",
                     "name": "Compare Product",
-                    "url": "https://demotools.bettercommerce.tech/products/majestic-blue-prom-dress-one-size-mbpd001",
+                    "url": "https://demotools.bettercommerce.tech/products/hikoki-hikoki-dh18dpaj3z-18v-sds-plus-hammer-drill-bare-unit-259278",
                     "displayOrder": 21,
                     "active": 1
                 },
@@ -137,7 +137,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-applicable-promos",
                     "name": "Applicable Promos",
-                    "url": "https://demotools.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+                    "url": "https://demotools.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
                     "displayOrder": 23,
                     "active": 1
                 },
@@ -145,7 +145,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-quantity-break-pricing",
                     "name": "Quantity Break Pricing",
-                    "url": "https://demotools.bettercommerce.tech/products/majestic-blue-prom-dress-one-size-mbpd001",
+                    "url": "https://demotools.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
                     "displayOrder": 24,
                     "active": 1
                 },
@@ -185,7 +185,7 @@
                     "group": "Brand",
                     "urlCode": "brand-brand-rich-landing-page",
                     "name": "Brand Rich Landing Page",
-                    "url": "https://demotools.bettercommerce.tech/brands/signature-6940",
+                    "url": "https://demotools.bettercommerce.tech/brands/dewalt-15886?brand=DEWALT&ireftp=nav&iref=nav--brands-dewalt-15886",
                     "displayOrder": 29,
                     "active": 1
                 },
@@ -193,7 +193,7 @@
                     "group": "Brand",
                     "urlCode": "brand-brand-standard-plp",
                     "name": "Brand Standard PLP",
-                    "url": "https://demotools.bettercommerce.tech/brands/unitycraft-6942",
+                    "url": "https://demotools.bettercommerce.tech/brands/yale-15852?brand=Yale",
                     "displayOrder": 30,
                     "active": 1
                 },
@@ -201,7 +201,7 @@
                     "group": "Category",
                     "urlCode": "category-category-rich-landing-page",
                     "name": "Category Rich Landing Page",
-                    "url": "https://demotools.bettercommerce.tech/category/dresses",
+                    "url": "https://demotools.bettercommerce.tech/category/clothing-protection",
                     "displayOrder": 31,
                     "active": 1
                 },
@@ -209,7 +209,7 @@
                     "group": "Category",
                     "urlCode": "category-category-plp",
                     "name": "Category PLP",
-                    "url": "https://demotools.bettercommerce.tech/category/dresses/maxi",
+                    "url": "https://demotools.bettercommerce.tech/category/hardware-consumables",
                     "displayOrder": 32,
                     "active": 1
                 },
@@ -225,32 +225,8 @@
                     "group": "Omnichannel",
                     "urlCode": "omnichannel-check-store-stock",
                     "name": "Check Store Stock",
-                    "url": "https://demotools.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+                    "url": "https://demotools.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
                     "displayOrder": 39,
-                    "active": 1
-                },
-                {
-                    "group": "Membership",
-                    "urlCode": "membership-tiers-landing-page",
-                    "name": "Tiers Landing Page",
-                    "url": "https://demotools.bettercommerce.tech/my-membership",
-                    "displayOrder": 41,
-                    "active": 1
-                },
-                {
-                    "group": "Membership",
-                    "urlCode": "membership-special-pricing-on-plp",
-                    "name": "Special Pricing on PLP",
-                    "url": "https://demotools.bettercommerce.tech/collection/shop-all-dresses",
-                    "displayOrder": 42,
-                    "active": 1
-                },
-                {
-                    "group": "Membership",
-                    "urlCode": "membership-special-pricing-on-pdp",
-                    "name": "Special Pricing on PDP",
-                    "url": "https://demotools.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
-                    "displayOrder": 43,
                     "active": 1
                 },
                 {
