@@ -15,7 +15,7 @@ const ALL_LOCALES = [...new Set(locales?.locales?.length ? locales?.locales?.fil
 
 const getLocalizationData = (locale: string) => {
   try {
-    const module = require(`public/locales/${locale}/common.json`)
+    const module = require(`../../public/locales/${locale}/common.json`)
     return module || EmptyObject
   } catch (error) {
     logError(error)

@@ -11,7 +11,7 @@ import { uriParams } from '@commerce/utils/uri-util';
 import { EmptyString } from '@components/utils/constants';
 
 declare const window: any
-const config = require(`../../public/theme/${CURRENT_THEME}/config.json`);
+const config = require(`./${CURRENT_THEME}/config.json`);
 
 interface IWebsite {
   readonly name: string;
