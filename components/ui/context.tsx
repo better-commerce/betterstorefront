@@ -96,6 +96,7 @@ export interface State {
   isPaymentLink: boolean
   isGhostUser: boolean
   kitBasketId: string
+  kitCartLoaded: boolean
 }
 
 const initialState = {
@@ -143,6 +144,7 @@ const initialState = {
   productInfo: undefined,
   isGhostUser: getItem('isGhostUser') || false,
   kitBasketId: '',
+  kitCartLoaded: false,
 }
 
 type Action =
@@ -263,6 +265,7 @@ type Action =
     type: 'SET_IS_GHOST_USER'
     payload: boolean
   }
+  | { type: 'KIT_CART_LOADED'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -607,6 +610,13 @@ function uiReducer(state: State, action: Action) {
         ...state,
         isGhostUser: action.payload,
       }
+    }
+    case 'KIT_CART_LOADED': {
+      state = {
+        ...state,
+        kitCartLoaded: action.payload,
+      }
+      return state
     }
   }
 }

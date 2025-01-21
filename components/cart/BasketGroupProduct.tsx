@@ -14,6 +14,7 @@ const maxKitBasketItemsCount = 5
 export default function BasketGroupProduct({ products, closeSidebar = () => { }, openModal, setItemClicked, checkoutItem }: any) {
   const translate = useTranslation()
   const { basketId, setCartItems, cartItems, kitCartLoaded, setKitCartLoaded, includeVAT, currency } = useUI()
+  const [isKitItemLoading, setIsKitItemLoading] = useState(false)
   const isIncludeVAT = stringToBoolean(includeVAT)
   const [brandInfo, setBrandInfo] = useState<any>({})
   const [totalKitPriceWithTax, setTotalKitPriceWithTax] = useState('0.00')
@@ -64,6 +65,7 @@ export default function BasketGroupProduct({ products, closeSidebar = () => { },
     if (kitCartLoaded) return
     try {
       setKitCartLoaded(true)
+      setIsKitItemLoading(true)
       const bulkAddPayload: any = {
         basketId,
         products: [],
@@ -88,8 +90,10 @@ export default function BasketGroupProduct({ products, closeSidebar = () => { },
       setCartItems(newCart)
       setKitQty(kitQty)
       setKitCartLoaded(false)
+      setIsKitItemLoading(false)
     } catch (error) {
       setKitCartLoaded(false)
+      setIsKitItemLoading(false)
       // console.log(error)
     }
   }
@@ -134,7 +138,7 @@ export default function BasketGroupProduct({ products, closeSidebar = () => { },
               <div className="flex items-center justify-between pb-1 font-semibold dark:text-black">
                 <span className='text-sm font-semibold text-black uppercase'>
                   {translate('label.basket.kitItemsText')}({products?.length})
-                  {kitCartLoaded && (
+                  {isKitItemLoading && (
                     <span className="ml-2"> <LoadingDots /> </span>
                   )}
                 </span>
