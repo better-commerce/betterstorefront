@@ -10,8 +10,6 @@ import { useTranslation } from '@commerce/utils/use-translation';
 import { uriParams } from '@commerce/utils/uri-util';
 import { EmptyString } from '@components/utils/constants';
 
-const config = require(`./${CURRENT_THEME}/config.json`);
-
 declare const window: any
 
 interface IWebsite {
@@ -30,6 +28,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const router = useRouter();
   const translate = useTranslation()
   const { setOverlayLoaderState, hideOverlayLoaderState } = useUI()
+  const [config, setConfig] = useState<any>()
   const websites = config?.websites || []
   const [selectedWebsite, setSelectedWebsite] = useState<IWebsite | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -59,6 +58,21 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
       }
     }
     return qsFilters
+  }, [])
+
+  useEffect(() => {
+    let config = {};
+    try {
+      config = require(`./${CURRENT_THEME}/config.json`);
+    } catch (error: any) {
+      if (error.code === 'MODULE_NOT_FOUND') {
+        console.error(`Configuration file not found: ./${CURRENT_THEME}/config.json`);
+        // Handle the error, e.g., set default config or rethrow
+        config = {}; // Set a default configuration or handle as needed
+      }
+    } finally {
+      setConfig(config)
+    }
   }, [])
 
   useEffect(() => {
