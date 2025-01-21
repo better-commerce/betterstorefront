@@ -10,13 +10,16 @@ import { useUI } from '@components/ui'
 import { stringToBoolean } from '@framework/utils/parse-util'
 import { isIncludeVATInPriceDisplay } from '@framework/utils/app-util'
 import { ChevronLeft, ChevronRight } from '@components/icons'
-function BrandProduct({ product, hideTier = false, brandInfo }: any) {
+function BrandProduct({ product, hideTier = false, brandInfo, deviceInfo}: any) {
   const { includeVAT } = useUI()
   const isIncludeVAT = stringToBoolean(includeVAT)
   const { tierName, products } = product
   const swiperRef: any = useRef(null)
   const [selectedCat, setSelectedCat] = useState({ categoryId: product?.categoryId, category: product?.categoryName, tierId: product?.tierId, tier: product?.tierName })
+  const { isDesktop, isMobile } = deviceInfo
+  const [isSliderButtonsVisible, setIsSliderButtonsVisible] = useState(() => (isDesktop && products?.length > 4) || (isMobile && products?.length > 1) || false );
   const css = { maxWidth: '100%', height: 'auto' }
+
   return (
     <div className="mb-6 overflow-hidden">
       <div className="flex justify-between gap-1 mb-2 lg:gap-3 ">
@@ -25,7 +28,7 @@ function BrandProduct({ product, hideTier = false, brandInfo }: any) {
         ) : (
           <h3 className="my-2 text-lg font-medium sm:text-2xl dark:text-black">Add To Kit</h3>
         )}
-        {products?.length > 2 && 
+        {isSliderButtonsVisible && 
           <div className="flex gap-4">
             <button onClick={() => swiperRef.current.swiper.slidePrev()} className="flex items-center justify-center w-10 h-10 border border-gray-200 rounded arrow-container hover:border-black" >
               <ChevronLeft className="text-black w-7 h-7" />

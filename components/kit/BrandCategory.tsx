@@ -119,6 +119,7 @@ function BrandCategory({
                         brandInfo={brandInfo}
                         cartLineItems={cartLineItems}
                         setCartLineItems={setCartLineItems}
+                        deviceInfo={deviceInfo}
                       />
                     )
                   )}

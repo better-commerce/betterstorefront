@@ -245,7 +245,7 @@ function KitBrandPage({
           <div className="pl-4 pr-4 sm:pr-0 sm:col-span-9 sm:pl-10 mob-col-full">
             <div className="flex flex-col w-full mt-4 sm:mt-6">
               {sortBy(products, 'displayOrder')?.map((product: any) => (
-                <BrandProduct key={product.tierId} product={product} brandInfo={brandInfo} cartLineItems={cartLineItems} setCartLineItems={setCartLineItems} />
+                <BrandProduct key={product.tierId} product={product} brandInfo={brandInfo} cartLineItems={cartLineItems} setCartLineItems={setCartLineItems} deviceInfo={deviceInfo}/>
               ))}
             </div>
             <div className="flex flex-col w-full mt-4 sm:mt-6">
