@@ -1,8 +1,8 @@
 {
     "websites": [
         {
-            "name": "Fashion Store",
-            "code": "fashion",
+            "name": "Demo Tools",
+            "code": "tool",
             "url": "https://demotools.bettercommerce.tech",
             "features": [
                 {
