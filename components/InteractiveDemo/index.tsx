@@ -11,6 +11,7 @@ import { uriParams } from '@commerce/utils/uri-util';
 import { EmptyString } from '@components/utils/constants';
 
 declare const window: any
+const config = require(`../../public/theme/${CURRENT_THEME}/config.json`);
 
 interface IWebsite {
   readonly name: string;
@@ -28,16 +29,6 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const router = useRouter();
   const translate = useTranslation()
   const { setOverlayLoaderState, hideOverlayLoaderState } = useUI()
-  let config: any = {};
-  try {
-    config = require(`./${CURRENT_THEME}/config.json`);
-  } catch (error: any) {
-    if (error.code === 'MODULE_NOT_FOUND') {
-      console.error(`Configuration file not found: ./${CURRENT_THEME}/config.json`);
-      // Handle the error, e.g., set default config or rethrow
-      config = {}; // Set a default configuration or handle as needed
-    }
-  }
   const websites = config?.websites || []
   const [selectedWebsite, setSelectedWebsite] = useState<IWebsite | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -116,6 +107,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
 
   useEffect(() => {
     const onRouteChangeStart = (ev: any) => {
+      debugger
       const currentUrl = new URL(window.location.href)
       const currentUrlParams = uriParams(currentUrl.search)
       const url = new URL(`${window.location.origin}${ev}`)
