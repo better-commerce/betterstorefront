@@ -295,10 +295,18 @@
                 },
                 {
                     "group": "B2B",
+                    "urlCode": "returns",
+                    "name": "Returns",
+                    "url": "https://demotools.bettercommerce.tech/my-account/returns",
+                    "displayOrder": 52,
+                    "active": 1
+                },
+                {
+                    "group": "B2B",
                     "urlCode": "orders",
                     "name": "Orders",
                     "url": "https://demotools.bettercommerce.tech/my-account/my-company/orders",
-                    "displayOrder": 52,
+                    "displayOrder": 53,
                     "active": 1
                 },
                 {
@@ -306,7 +314,7 @@
                     "urlCode": "reorder",
                     "name": "Reorder",
                     "url": "https://demotools.bettercommerce.tech/my-account/orders/e594ab73-6960-ef11-991b-dae0ad15fcc4",
-                    "displayOrder": 53,
+                    "displayOrder": 54,
                     "active": 1
                 },
                 {
@@ -314,7 +322,15 @@
                     "urlCode": "custom-pricing",
                     "name": "Custom Pricing",
                     "url": "https://demotools.bettercommerce.tech/products/billie-tailored-short-with-pleated-detail-in-apple-ss23594",
-                    "displayOrder": 54,
+                    "displayOrder": 55,
+                    "active": 1
+                },
+                {
+                    "group": "B2B",
+                    "urlCode": "wishlist",
+                    "name": "Wishlist",
+                    "url": "https://demotools.bettercommerce.tech/my-account/wishlist",
+                    "displayOrder": 56,
                     "active": 1
                 }
             ]
