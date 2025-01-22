@@ -98,7 +98,7 @@ function PasswordProtectionPage({ config }: any) {
         <meta name="keywords" content={getSeoConfig()?.keywords} />
         <title>{SITE_NAME} - Password Protection</title>
       </NextHead>
-      <header className="fixed top-0 right-0 w-full py-0 bg-white shadow-md lg:top-0 sm:py-3 bg-header-color z-999 navbar-min-64">
+      <header className="fixed top-0 right-0 w-full py-0 bg-white shadow-md lg:top-0 sm:py-3 bg-header-color z-999 navbar-min-64 black-bg-theme">
         <div className="flex justify-center w-full">
           <div className="flex items-center justify-center cursor-pointer">
             <Logo />
