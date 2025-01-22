@@ -2734,3 +2734,9 @@ body .round-md-btn, .btn-radius-sm{
 .plp-btn-section-div  button{
   border-radius:6px  !important;
 }
+.icon-div-menu .black-icon-svg  svg{
+  color: #000 !important;
+}
+.black-bg-theme{
+  background: #000 !important;
+}
