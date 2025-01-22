@@ -47,6 +47,7 @@ import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/u
 import { Cookie } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -141,7 +142,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE,})
+  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE, })
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -560,18 +561,18 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <div className="mt-0 md:mt-2">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
-            
-          <div className="w-full mt-10 md:mt-20">
-            {/* NOTE : manufacturerSettingType for this widget is 'ImageBanner' & code is 'MidBanner' */}
-            <ImageBanner midBanners={midBanners} heading={midBannerHeading} link={midBannerLink} bgColor={bgColor} textColor={textColor} />
 
-            {/* NOTE : manufacturerSettingType for this widget is 'Video' & code is 'MultipleBrandVideos' */}
-            {multipleBrandVideoName ?
-              <div className="mt-10 lg:mt-20">
-                <MultiBrandVideo videos={multipleBrandVideos || ''} name={multipleBrandVideoName || ''} />
-              </div> : null
-            }
-          </div>
+            <div className="w-full mt-10 md:mt-20">
+              {/* NOTE : manufacturerSettingType for this widget is 'ImageBanner' & code is 'MidBanner' */}
+              <ImageBanner midBanners={midBanners} heading={midBannerHeading} link={midBannerLink} bgColor={bgColor} textColor={textColor} />
+
+              {/* NOTE : manufacturerSettingType for this widget is 'Video' & code is 'MultipleBrandVideos' */}
+              {multipleBrandVideoName ?
+                <div className="mt-10 lg:mt-20">
+                  <MultiBrandVideo videos={multipleBrandVideos || ''} name={multipleBrandVideoName || ''} />
+                </div> : null
+              }
+            </div>
           </div>
 
           <div className="container w-full mx-auto">
@@ -584,39 +585,39 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
               </div>
             )}
-              {saleProductCollectionRes?.length > 0 && (
-                <div className="mt-10 border-gray-200 border-y">
-                  <div className={`nc-SectionSliderProductCard`}>
-                    <div ref={sliderRefNew} className={`flow-root`}>
-                      <div className="flex justify-between">
-                        <HeadingWithButton 
-                          className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" 
-                          desc="" 
-                          rightDescText="2024" 
-                          hasNextPrev 
-                          onButtonClick={onToggleBrandListPage} 
-                          buttonText="See All"
-                        >
-                          {translate('label.product.saleProductText')}
-                        </HeadingWithButton>
-                      </div>
-                      <div className="glide__track" data-glide-el="track">
-                        <ul className="glide__slides">
-                          {saleProductCollectionRes?.map((item: any, index: number) => (
-                            <li key={index} className={`glide__slide`}>
-                              <ProductCard 
-                                data={item} 
-                                featureToggle={featureToggle} 
-                                defaultDisplayMembership={defaultDisplayMembership} 
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+            {saleProductCollectionRes?.length > 0 && (
+              <div className="mt-10 border-gray-200 border-y">
+                <div className={`nc-SectionSliderProductCard`}>
+                  <div ref={sliderRefNew} className={`flow-root`}>
+                    <div className="flex justify-between">
+                      <HeadingWithButton
+                        className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50"
+                        desc=""
+                        rightDescText="2024"
+                        hasNextPrev
+                        onButtonClick={onToggleBrandListPage}
+                        buttonText="See All"
+                      >
+                        {translate('label.product.saleProductText')}
+                      </HeadingWithButton>
+                    </div>
+                    <div className="glide__track" data-glide-el="track">
+                      <ul className="glide__slides">
+                        {saleProductCollectionRes?.map((item: any, index: number) => (
+                          <li key={index} className={`glide__slide`}>
+                            <ProductCard
+                              data={item}
+                              featureToggle={featureToggle}
+                              defaultDisplayMembership={defaultDisplayMembership}
+                            />
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
             <div className="max-w-4xl mx-auto my-10">
               <p className="mb-6 text-3xl font-semibold capitalize md:text-4xl text-slate-900">{faq.title}</p>
               {faq?.results?.map((val: any, Idx: number) => {
@@ -676,14 +677,26 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                       {isMobile ? (
                         <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
-                        <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} isBrandPLP={true} />
+                        <>
+                          {!featureToggle?.features?.enableHorizontalFilter ? (
+                            <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                          ) : (
+                            <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
+                          )}
+                        </>
                       )}
-                      <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                        {isMobile ? null : (
+                          <ProductFiltersTopBar products={data?.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} isBrandPLP={true} featureToggle={featureToggle} />
+                        )}
+                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </div>
+                      {/* <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
                         {isMobile ? null : (
                           <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
                         )}
                         {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-                      </div>
+                      </div> */}
                     </>
                   ) : (
                     <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
