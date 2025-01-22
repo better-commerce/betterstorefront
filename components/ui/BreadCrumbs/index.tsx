@@ -26,7 +26,7 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
   const createBreadcrumbs = (items: any = []) => {
     const map: any = flattenBreadcrumbs(items)
     const currentCrumb: any = {
-      title: currentProduct.name,
+      title: currentProduct?.name,
       slug: '#',
       isCurrent: true,
     }
@@ -47,14 +47,14 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
           <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
         </span>
       </li>
-      {flattenedItems.map((breadcrumb: any, breadcrumbIdx: number) => (
+      {flattenedItems?.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx} className="flex items-center text-10-mob sm:text-sm" >
-          <Link href={`/${breadcrumb.slug}`} passHref>
-            <span className={`font-light hover:text-gray-900 capitalize dark:text-black  ${breadcrumb.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
-              {breadcrumb.title.toLowerCase()}
+          <Link href={`/${breadcrumb?.slug}`} passHref>
+            <span className={`font-light hover:text-gray-900 capitalize dark:text-black  ${breadcrumb?.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
+              {breadcrumb?.title?.toLowerCase()}
             </span>
           </Link>
-          {breadcrumbIdx !== flattenedItems.length - 1 && (
+          {breadcrumbIdx !== flattenedItems?.length - 1 && (
             <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true" className="flex-shrink-0 w-4 h-4 ml-0 text-gray-300 sm:ml-0" >
               <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
             </svg>

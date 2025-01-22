@@ -2740,3 +2740,31 @@ body .round-md-btn, .btn-radius-sm{
 .black-bg-theme{
   background: #000 !important;
 }
+.bg-header-color {
+    background: #212530;
+}
+.container-ffx {
+    max-width: 1310px !important;
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+}
+h1 {
+    font-size: 52px !important;
+    line-height: 64px;
+}
+
+h3 {
+    font-size: 24px !important;
+    line-height: 28px !important;
+}
+
+.cat-hover .hover-bg {
+    background: rgba(0, 0, 0, .3) !important;
+}
+
+.cat-hover:hover .hover-bg {
+    background: rgba(255, 54, 0, .8) !important;
+}
