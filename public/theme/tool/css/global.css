@@ -2751,12 +2751,12 @@ body .round-md-btn, .btn-radius-sm{
     margin: 0 auto !important;
     box-sizing: border-box;
 }
-h1 {
+.heading-h1 {
     font-size: 52px !important;
     line-height: 64px;
 }
 
-h3 {
+.heading-h3 h3 {
     font-size: 24px !important;
     line-height: 28px !important;
 }

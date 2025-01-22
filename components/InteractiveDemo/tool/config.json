@@ -121,7 +121,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-compare-product",
                     "name": "Compare Product",
-                    "url": "https://demotools.bettercommerce.tech/products/einhell-einhell-ge-sp-18-li-solo-18v-5000-l-h-clear-water-pump-bare-unit-295471",
+                    "url": "https://demotools.bettercommerce.tech/products/milwaukee-milwaukee-m18fh-0-18v-m18-fuel-4-mode-sds-plus-hammer-drill-bare-unit-285133",
                     "displayOrder": 21,
                     "active": 1
                 },
@@ -129,7 +129,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-personalize-product",
                     "name": "Personalize Product",
-                    "url": "https://demotools.bettercommerce.tech/products/concept-customisation-custom-info-2347",
+                    "url": "https://demotools.bettercommerce.tech/products/einhell-einhell-te-cd18-2li-ikit-18v-2x1-5ah-combi-drill-kit-201969?storecode=tool&urlcode=home",
                     "displayOrder": 22,
                     "active": 1
                 },
@@ -155,22 +155,6 @@
                     "name": "Upsell and Cross-sell",
                     "url": "https://demotools.bettercommerce.tech/products/draper-draper-d20cd60-d20-20v-brushless-combi-drill-bare-unit-238828",
                     "displayOrder": 25,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
-                    "urlCode": "pdp-ai-recommendations",
-                    "name": "AI Recommendations",
-                    "url": "https://demotools.bettercommerce.tech/products/draper-draper-d20cd60-d20-20v-brushless-combi-drill-bare-unit-238828",
-                    "displayOrder": 26,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
-                    "urlCode": "pdp-social-proofing",
-                    "name": "Social Proofing",
-                    "url": "https://demotools.bettercommerce.tech/products/einhell-einhell-te-cd18-2li-ikit-18v-2x1-5ah-combi-drill-kit-201969",
-                    "displayOrder": 27,
                     "active": 1
                 },
                 {
