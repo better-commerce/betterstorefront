@@ -46,6 +46,17 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
     return widgets;
   };
 
+  const sanitizeContent = (htmlString: string): string => {
+    if (!htmlString) return ''; // Handle null or undefined input
+
+    // Remove unwanted tags using refined regex
+    return htmlString
+      .replace(/<title[\s\S]*?>[\s\S]*?<\/title>/gi, '') // Removes <title>...</title>
+      .replace(/<head[\s\S]*?>[\s\S]*?<\/head>/gi, '')   // Removes <head>...</head>
+      .replace(/<body[\s\S]*?>|<\/body>/gi, '')          // Removes <body> tags
+      .replace(/<html[\s\S]*?>|<\/html>/gi, '');         // Removes <html> tags
+  };
+
   return (
     <>
       <ul className="flex items-center nc-Navigation navigation-ul">
@@ -92,7 +103,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                                                 ))}
                                               </ul>
                                             ) : (
-                                              <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: removeTitleTags(navItem?.contentBody) }}></div>
+                                              <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: sanitizeContent(navItem?.contentBody) }}></div>
                                             )}
                                           </div>
                                         ))}
@@ -143,7 +154,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                                       ))}
                                     </ul>
                                   ) : (
-                                    <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: removeTitleTags(navItem?.contentBody), }} ></div>
+                                    <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: sanitizeContent(navItem?.contentBody), }} ></div>
                                   )}
                                 </div>
                               ))}
