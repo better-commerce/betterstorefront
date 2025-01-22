@@ -77,6 +77,10 @@ function PasswordProtectionPage({ config }: any) {
   useAnalytics(AnalyticsEventType.PASSWORD_PROTECTION, { entityName: PAGE_TYPES.PasswordProtection, })
 
   useEffect(() => {
+    localStorage.removeItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH_STARTED}`)
+  }, [])
+
+  useEffect(() => {
     setPasswordProtectionConfig()
   }, [configSettings])
 

@@ -217,9 +217,13 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         //const authenticated = Cookies.get(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)
         const authenticated = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)!
         isAuthenticated = stringToBoolean(authenticated)
-  
-        if (isPasswordProtectionEnabled && !isAuthenticated) {
-          router.push('/password-protection')
+        
+        if (!router.pathname.startsWith('/password-protection') && isPasswordProtectionEnabled && !isAuthenticated) {
+          const isStarted = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH_STARTED}`)
+          if (!isStarted) {
+            localStorage.setItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH_STARTED}`, 'true')
+            router.push('/password-protection')
+          }
         } else {
           setPasswordProtectionLoader(false)
         }

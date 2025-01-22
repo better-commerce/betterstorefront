@@ -74,6 +74,7 @@ export module Cookie {
     export const ALGOLIA_SETTINGS_DATA_CACHED = 'asdc'
     export const DISABLE_USER_LOCATION_POPUP = 'dulp'
     export const PASSWORD_PROTECTION_AUTH = 'ppa'
+    export const PASSWORD_PROTECTION_AUTH_STARTED = 'ppas'
     export const ENGAGE_SESSION = 'ch_cookie'
     export const GEO_ENDPOINT_DATA_CACHED = 'gedc'
     export const APPLIED_PLP_FILTERS = 'aplpf'
