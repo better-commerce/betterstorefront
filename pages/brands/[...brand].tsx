@@ -21,7 +21,7 @@ import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_UR
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
-import { ImageCollection, PlainText, Video } from '@components/SectionBrands'
+import { ImageBanner, ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 const HeadingWithButton = dynamic(() => import('@components/Heading/HeadingWithButton'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
@@ -46,6 +46,7 @@ import Loader from '@components/Loader'
 import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Cookie } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
+import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -178,19 +179,13 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     useState('')
   const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] =
     useState('')
-  const [
-    manufacturerSettingTypeImgBanner,
-    setManufacturerSettingTypeImgBanner,
-  ] = useState(IMG_PLACEHOLDER)
-  const [manufImgBannerLink, setManufImgBannerLink] = useState('')
-  const [manufacturerImgBannerHeading, setManufacturerImgBannerHeading] =
-    useState('')
-  const [
-    manufacturerStateMultiBrandVidNames,
-    setManufacturerStateMultiBrandVidNames,
-  ] = useState('')
-  const [multiBrandVidHeading, setMultiBrandVidHeading] = useState('')
   const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
+  const [midBannerHeading, setMidBannerHeading] = useState('')
+  const [multipleBrandVideoName, setMultipleBrandVideoName] = useState('')
+  const [multipleBrandVideos, setMultipleBrandVideos] = useState('')
+  const [midBanners, setMidBanners] = useState('')
+  const [midBannerLink, setMidBannerLink] = useState('')
+  const [brandColor, setBrandColor] = useState('')
   const [manufacturerStateTextHeading, setManufacturerStateTextHeading] =
     useState('')
   const [textNames, setTextNames] = useState([])
@@ -382,6 +377,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [])
 
   useEffect(() => {
+    setMidBanners('')
+    setMidBannerHeading('')
+    setMidBannerLink('')
     const Widgets = JSON.parse(brandDetails?.widgetsConfig || '[]')
     Widgets.map((val: any) => {
       if (val.manufacturerSettingType == 'Video' && val.code == 'BrandVideo') {
@@ -389,17 +387,17 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         setManufacturerStateVideoName(val.name)
       } else if (
         val.manufacturerSettingType == 'ImageBanner' &&
-        val.code == 'MidBannerKitBuilder'
+        val.code == 'MidBanner'
       ) {
-        setManufacturerSettingTypeImgBanner(val.name)
-        setManufacturerImgBannerHeading(val.heading)
-        setManufImgBannerLink(val.buttonLink)
+        setMidBanners(val.name)
+        setMidBannerHeading(val.heading)
+        setMidBannerLink(val.buttonLink)
       } else if (
         val.manufacturerSettingType == 'Video' &&
         val.code === 'MultipleBrandVideos'
       ) {
-        setManufacturerStateMultiBrandVidNames(val.name)
-        setMultiBrandVidHeading(val.heading)
+        setMultipleBrandVideoName(val.name)
+        setMultipleBrandVideos(val.heading)
       } else if (
         val.manufacturerSettingType == 'PlainText' &&
         val.code == 'BrandInnovations'
@@ -475,6 +473,35 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
+  let bgColor = "#dddddd"
+  if (brandColor != "") {
+    bgColor = brandColor
+  }
+  const [textColor, setTextColor] = useState('#ffffff'); // Default text color for dark background
+
+  useEffect(() => {
+    // Function to determine if the background color is dark
+    const isColorDark = (color: any) => {
+      // Convert hex color to RGB
+      const rgb = parseInt(color.substring(1), 16);
+      const r = (rgb >> 16) & 0xff;
+      const g = (rgb >> 8) & 0xff;
+      const b = (rgb >> 0) & 0xff;
+
+      // Calculate luminance
+      const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+      // Check if the luminance is below a certain threshold
+      return luminance < 128; // Adjust the threshold as needed
+    };
+
+    // Change text color based on background color
+    if (isColorDark(bgColor)) {
+      setTextColor('#ffffff'); // Light text color for dark background      
+    } else {
+      setTextColor('#212530'); // Dark text color for light background
+    }
+  }, [bgColor]);
   const emptyHtmlString = "<html>\n<head>\n\t<title></title>\n</head>\n<body></body>\n</html>\n"
   const cleanPath = removeQueryString(router.asPath)
   return (
@@ -533,6 +560,18 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <div className="mt-0 md:mt-2">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
+            
+          <div className="w-full mt-10 md:mt-20">
+            {/* NOTE : manufacturerSettingType for this widget is 'ImageBanner' & code is 'MidBanner' */}
+            <ImageBanner midBanners={midBanners} heading={midBannerHeading} link={midBannerLink} bgColor={bgColor} textColor={textColor} />
+
+            {/* NOTE : manufacturerSettingType for this widget is 'Video' & code is 'MultipleBrandVideos' */}
+            {multipleBrandVideoName ?
+              <div className="mt-10 lg:mt-20">
+                <MultiBrandVideo videos={multipleBrandVideos || ''} name={multipleBrandVideoName || ''} />
+              </div> : null
+            }
+          </div>
           </div>
 
           <div className="container w-full mx-auto">
@@ -545,28 +584,39 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
               </div>
             )}
-
-            <div className="mt-10 border-gray-200 border-y">
-              <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRefNew} className={`flow-root`}>
-                  <div className='flex justify-between'>
-                    <HeadingWithButton className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All"
-                    >
-                      {translate('label.product.saleProductText')}
-                    </HeadingWithButton>
-                  </div>
-                  <div className="glide__track" data-glide-el="track">
-                    <ul className="glide__slides">
-                      {saleProductCollectionRes?.map((item: any, index: number) => (
-                        <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        </li>
-                      ))}
-                    </ul>
+              {saleProductCollectionRes?.length > 0 && (
+                <div className="mt-10 border-gray-200 border-y">
+                  <div className={`nc-SectionSliderProductCard`}>
+                    <div ref={sliderRefNew} className={`flow-root`}>
+                      <div className="flex justify-between">
+                        <HeadingWithButton 
+                          className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" 
+                          desc="" 
+                          rightDescText="2024" 
+                          hasNextPrev 
+                          onButtonClick={onToggleBrandListPage} 
+                          buttonText="See All"
+                        >
+                          {translate('label.product.saleProductText')}
+                        </HeadingWithButton>
+                      </div>
+                      <div className="glide__track" data-glide-el="track">
+                        <ul className="glide__slides">
+                          {saleProductCollectionRes?.map((item: any, index: number) => (
+                            <li key={index} className={`glide__slide`}>
+                              <ProductCard 
+                                data={item} 
+                                featureToggle={featureToggle} 
+                                defaultDisplayMembership={defaultDisplayMembership} 
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              )}
             <div className="max-w-4xl mx-auto my-10">
               <p className="mb-6 text-3xl font-semibold capitalize md:text-4xl text-slate-900">{faq.title}</p>
               {faq?.results?.map((val: any, Idx: number) => {
