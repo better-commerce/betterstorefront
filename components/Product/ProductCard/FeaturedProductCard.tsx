@@ -259,9 +259,11 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
   };
   return (
     <div className="grid gap-8 pt-4 pb-0 sm:gap-24 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 lg:pt-20 lg:pb-20 grid-sm-1 feature-grid-sec">
-      <div className="product-image product-image-border">
-        <ImageGallery thumbnailAlt={product?.name} thumbnailTitle={product?.name} renderItem={customRenderItem} originalAlt={product?.name} items={images ?? []} thumbnailPosition="bottom" showPlayButton={false} showBullets={false} showNav={true} additionalClass="app-image-gallery" showFullscreenButton={false} renderThumbInner={customRenderThumbInner} />
-      </div>
+      <Link href={product?.slug} passHref legacyBehavior>
+        <div className="product-image product-image-border">
+          <ImageGallery thumbnailAlt={product?.name} thumbnailTitle={product?.name} renderItem={customRenderItem} originalAlt={product?.name} items={images ?? []} thumbnailPosition="bottom" showPlayButton={false} showBullets={false} showNav={true} additionalClass="app-image-gallery" showFullscreenButton={false} renderThumbInner={customRenderThumbInner} />
+        </div>
+      </Link>
       <div className="right-product-info">
         <div className="flex justify-between mb-2">
           <h2 className="hidden mt-0 font-semibold uppercase text-brand-red sm:block">Deal of the week</h2>
@@ -303,7 +305,7 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
           <div className="flex w-full gap-1 mb-4 sm:grid sm:grid-cols-2">
             <button type="button" onClick={() => handleQuickViewData(product)} className="flex items-center justify-center flex-1 w-full px-1 py-3 font-medium text-white uppercase bg-black border border-transparent rounded-sm xs:max-w-xs lg:py-2 sm:px-4 btn-primary-green hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-black btn-c btn-primary disabled:cursor-not-allowed disabled:opacity-50">
               {GENERAL_ADD_TO_BASKET}
-            </button>            
+            </button>
             <div className="wish-btn w-14">
               {isInWishList ? (
                 <SimpleButton aria-label="Warranty" variant="slim" className="!p-3 !rounded flex-1 !bg-white cursor-none hover:!bg-white !border !border-gray-600 shadow-none !hover:border-orange-600 flex text-center justify-center disabled:!bg-transparent" onClick={handleWishList}>

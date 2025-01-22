@@ -25,7 +25,7 @@
                     "group": "PLP",
                     "urlCode": "plp-compare-products",
                     "name": "Compare Products",
-                    "url": "https://demotools.bettercommerce.tech/collection/all-screws",
+                    "url": "https://demotools.bettercommerce.tech/collection/pumps",
                     "displayOrder": 8,
                     "active": 1
                 },
@@ -196,7 +196,7 @@
                     "url": "https://demotools.bettercommerce.tech/brands/yale-15852?brand=Yale",
                     "displayOrder": 30,
                     "active": 1
-                },
+                },      
                 {
                     "group": "Category",
                     "urlCode": "category-category-rich-landing-page",
