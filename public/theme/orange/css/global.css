@@ -1835,3 +1835,37 @@ p {
     max-height: 715px !important;
   }
 }
+.scroll-left-section{
+  padding-right: 40px; 
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  font-size: 14px;
+  color: #424554;
+}
+.scroll-left-section .min-width-offer{
+min-width: 200px;
+}
+/* Customize the scrollbar */
+.scroll-left-section::-webkit-scrollbar {
+height: 8px; /* Effective height for better click area */
+}
+
+.scroll-left-section::-webkit-scrollbar-thumb {
+background-color: grey; /* Thumb color */
+border-radius: 10px; /* Smooth rounded edges */
+height: 0.5px; /* This is just a visual setting */
+}
+
+.scroll-left-section::-webkit-scrollbar-track {
+background-color: transparent; /* Optional: background of the track */
+}
+
+/* To make the thumb visually thin while keeping it clickable */
+.scroll-left-section::-webkit-scrollbar-thumb {
+background-clip: padding-box;
+border: 3.75px solid transparent; /* The border reduces the visible thickness */
+}
+.height-full-cls{
+  height: 100%;;
+}
