@@ -36,3 +36,7 @@ export enum CheckoutStep {
   DELIVERY_TYPE_SELECT = 'select-delivery-type',
   REVIEW = 'review',
 }
+
+export enum ProductType {
+  BUNDLE = 7
+}
