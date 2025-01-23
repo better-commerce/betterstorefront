@@ -27,6 +27,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 import { groupCartItemsById } from '@components/utils/cart'
 import { round, sortBy } from 'lodash'
+import { ProductType } from '@framework/utils/enums'
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, } = useUI()
@@ -652,7 +653,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                     soldOutMessage={soldOutMessage}
                                     getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                   />
-                                  {product.children?.map(
+                                  {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                                     (child: any, idx: number) => (
                                       <CartSideBarProductCard
                                         product={child}
