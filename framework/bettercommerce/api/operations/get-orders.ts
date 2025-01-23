@@ -30,8 +30,12 @@ export default function getOrders() {
   async function getOrdersAsync({ query, cookies }: any) {
     try {
       const { pageSize = 10, pageNumber = 1 } = query
+
+      // TODO: Fix the pagination issue on FE & pass the pageSize and pageNumber to the API20.
+      //const url = `${CUSTOMER_BASE_API}${query.id}/orders?hasMembership=${query?.hasMembership ?? false}&pageSize=${pageSize}&pageNumber=${pageNumber}`
+      const url = `${CUSTOMER_BASE_API}${query.id}/orders?hasMembership=${query?.hasMembership ?? false}`
       const response: any = await fetcher({
-        url: `${CUSTOMER_BASE_API}${query.id}/orders?hasMembership=${query?.hasMembership ?? false}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+        url,
         method: 'get',
         data: query,
         cookies,
