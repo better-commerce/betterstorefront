@@ -289,7 +289,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }, [router.asPath])
 
   const seoInfo = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps : pageProps?.data?.product || undefined
-  const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
+  const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images?.[0]?.url : pageProps?.data?.product?.image || undefined
   const cleanPath = removeQueryString(router.asPath)
   return (
     <>
