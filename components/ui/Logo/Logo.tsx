@@ -18,7 +18,7 @@ const Logo = ({ className = '', ...props }) => {
     }
   }
   const logoSrc = useMemo(() => {
-    const fileExtension = CURRENT_THEME === 'schbang' ? 'gif' : CURRENT_THEME === 'cam' ? 'svg' : 'png';
+    const fileExtension = CURRENT_THEME === 'schbang' ? 'gif' : (CURRENT_THEME === 'cam' || CURRENT_THEME === 'camera') ? 'svg' : 'png';
     return `/theme/${CURRENT_THEME}/image/logo.${fileExtension}?fm=webp&h=200`;
   }, [CURRENT_THEME]);
 
