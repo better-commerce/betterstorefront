@@ -367,7 +367,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }
 
   const handleItem = (product: any, type = 'increase', cb = () => { }) => {
-    if (!product?.id) return
+    if (!product?.id && !product?.length) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
     }
@@ -378,6 +378,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         stockCode: product.stockCode,
         manualUnitPrice: product.manualUnitPrice,
         displayOrder: product.displayOrderta,
+        basketItemGroupId: product?.basketItemGroupId,
+        basketItemGroupData: product?.basketItemGroupData,
         qty: -1,
       }
       if (type === 'increase') {

@@ -23,52 +23,11 @@ function MyOrdersPage({ deviceInfo }: any) {
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const translate = useTranslation()
   const [allOrders, setAllOrders] = useState<Array<any> | undefined>(undefined)
-  const [pagedOrders, setPagedOrders] = useState<Array<any>>()
-  const [allOrderIds, setAllOrderIds] = useState<Array<string> | undefined>(undefined)
-  const [allOrdersFetched, setAllOrdersFetched] = useState<boolean>(false)
   const [pageNumber, setPageNumber] = useState<number>(1)
 
   useEffect(() => {
     changeMyAccountTab(translate('label.order.myOrdersText'))
   }, [])
-
-  useEffect(() => {
-    if (allOrdersFetched) {
-      setAllOrderIds(pagedOrders?.map((x: any) => x?.id))
-    } else {
-      fetchOrders(pageNumber)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allOrdersFetched])
-
-  useEffect(() => {
-    setAllOrdersFetched(false)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber])
-
-  useEffect(() => {
-    if (allOrderIds?.length) {
-      allOrderIds?.forEach((id: string, index: number) => {
-        handleFetchOrderDetails(id).then((orderDetails: any) => {
-          const newOrders = pagedOrders?.map((obj: any) =>
-            matchStrings(obj?.id, id, true)
-              ? Object.assign(obj, { orderDetails: orderDetails })
-              : obj
-          )
-          setPagedOrders(newOrders)
-          setAllOrders((allOrders ?? [])?.concat(newOrders))
-        })
-      })
-    } else {
-      if (allOrderIds !== undefined) {
-        setAllOrders([])
-      }
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allOrderIds])
 
   useEffect(() => {
     if (isGuestUser) {
@@ -77,9 +36,7 @@ function MyOrdersPage({ deviceInfo }: any) {
       //todo get new users created with different roles and make them place orders to verify the endpoint
       fetchOrders(pageNumber)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [pageNumber])
 
   const fetchOrders = async (pageNumber: number) => {
     const { data: ordersResult }: any = await axios.post(NEXT_GET_ORDERS, {
@@ -90,19 +47,7 @@ function MyOrdersPage({ deviceInfo }: any) {
     })
 
     // console.log('setPagedOrders ::', ordersResult);<a
-    setPagedOrders(ordersResult)
-    setAllOrdersFetched(true)
-  }
-
-  const handleFetchOrderDetails = async (id: any) => {
-    const { data: orderDetails }: any = await axios.post(
-      NEXT_GET_ORDER_DETAILS,
-      {
-        id: user?.userId,
-        orderId: id,
-      }
-    )
-    return orderDetails
+    setAllOrders(ordersResult)
   }
 
   const handleInfiniteScroll = () => {

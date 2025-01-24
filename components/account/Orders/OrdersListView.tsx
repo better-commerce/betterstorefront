@@ -8,7 +8,7 @@ import DeliveryOrderLines from './DeliveryOrderLines'
 import OrderDetail from './OrderDetail'
 import OrderLines from './OrderLines'
 import { useTranslation } from '@commerce/utils/use-translation'
-function OrdersListView({ isShowDetailedOrder, alertRibbon, displayAlert, isIPadorTablet, isMobile, alertBgColor, ordersList, trackPackage, onOrderDetail, handleInfiniteScroll, setIsShowDetailedOrder, deviceInfo, orderDetails, }: any) {
+function OrdersListView({ isShowDetailedOrder, alertRibbon, displayAlert, isIPadorTablet, isMobile, alertBgColor, ordersList, trackPackage, handleInfiniteScroll, setIsShowDetailedOrder, deviceInfo, orderDetails, }: any) {
   const translate = useTranslation()
   const router = useRouter();
   return (
@@ -30,8 +30,8 @@ function OrdersListView({ isShowDetailedOrder, alertRibbon, displayAlert, isIPad
                   component={ordersList?.map((order: any) => {
                     const groups: any = groupBy(order?.itemsBasic, 'category')
                     return (
-                      order?.orderDetails?.order?.deliveryPlans?.length > 0 ? (
-                        order?.orderDetails?.order?.deliveryPlans.map((item: any, idx: number) => (
+                      order?.deliveryPlans?.length > 0 ? (
+                        order?.deliveryPlans.map((item: any, idx: number) => (
                           <a onClick={async () => { router.push(`/my-account/orders/${order?.id}`) }} className="inline-block w-full mb-6 border cursor-pointer rounded-2xl" key={idx} >
                             <DeliveryOrderLines groups={groups} trackPackage={trackPackage} order={order} item={item} idx={idx} />
                           </a>
@@ -40,7 +40,6 @@ function OrdersListView({ isShowDetailedOrder, alertRibbon, displayAlert, isIPad
                         <a
                           onClick={async () => {
                             router.push(`/my-account/orders/${order?.id}`)
-                            await onOrderDetail(order.id)
                           }} className="inline-block w-full mb-6 border cursor-pointer rounded-2xl" key={order.orderNo}>
                           <OrderLines groups={groups} trackPackage={trackPackage} order={order} item={order} idx="" />
                         </a>

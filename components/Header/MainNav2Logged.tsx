@@ -59,7 +59,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
     };
   }, [scrollPosition]);
   let classTop = 'top-full'
-  if (!isGuestUser && user.userId && featureToggle?.features?.enableMyStoreFeature) {
+  if (!isGuestUser && user?.userId && featureToggle?.features?.enableMyStoreFeature) {
     classTop = 'top-[82px]'
   }
   const renderMagnifyingGlassIcon = () => {
