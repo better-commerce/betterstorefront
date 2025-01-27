@@ -22,26 +22,32 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
      * @param snippets - Array of snippets to inject.
      */
     const injectSnippetsBody = useCallback((snippets: any, container: any, snippetAttrName?: string) => {
-        snippets?.filter((x: any)=> x.innerHTML)?.forEach((snippet: any, index: number) => {
+        snippets?./*filter((x: any)=> x.innerHTML)?.*/forEach((snippet: any, index: number) => {
+            const snippetName = `${snippet?.name}${index + 1}`
             const script = document.createElement('script')
-            script.innerHTML = snippet?.innerHTML
-            script.async = true
-            if (snippetAttrName) {
-                script.setAttribute(snippetAttrName, snippet?.name)
+            if (snippet?.innerHTML) {
+                script.innerHTML = snippet?.innerHTML
+            } else if (snippet?.src) {
+                script.async = true
+                script.src = snippet?.src
             }
-            script.setAttribute("data-bc-name", snippet?.name)
+            if (snippetAttrName) {
+                script.setAttribute(snippetAttrName, snippetName)
+            }
+            script.setAttribute("data-bc-name", snippetName)
 
             // Prevent duplicate injections
-            const findElem: any = container?.querySelector(`[data-bc-name="${snippet?.name}"]`)
+            const findElem: any = container?.querySelector(`[data-bc-name="${snippetName}"]`)
             if (findElem) {
                 return
             }
 
-            if (container && container?.appendChild && script)
+            if (container && container?.appendChild && script) {
 			    try {
 					container.appendChild(script)
 				} catch(error: any) {
 				}
+            }
         })
     }, [])
 
