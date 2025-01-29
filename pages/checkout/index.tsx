@@ -449,16 +449,16 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     }
 
     if (!basket?.shippingAddress?.id && defaultDeliveryAddr?.id > 0) {
-      await updateCheckoutAddress({ shippingAddress: defaultDeliveryAddr }, true)
+      await updateCheckoutAddress({ shippingAddress: defaultDeliveryAddr }, true, basket)
     } else {
-      await updateCheckoutAddress({ shippingAddress: basket?.shippingAddress }, true)
+      await updateCheckoutAddress({ shippingAddress: basket?.shippingAddress }, true, basket)
     }
 
     const billingAddress = !defaultBillingAddr ? defaultDeliveryAddr : defaultBillingAddr
     if (!basket?.billingAddress?.id && billingAddress?.id > 0) {
-      await updateCheckoutAddress({ billingAddress: billingAddress }, false)
+      await updateCheckoutAddress({ billingAddress: billingAddress }, false, basket)
     } else {
-      await updateCheckoutAddress({ billingAddress: basket?.billingAddress }, false)
+      await updateCheckoutAddress({ billingAddress: basket?.billingAddress }, false, basket)
     }
 
     if (redirectToStep) {
@@ -739,13 +739,13 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     goToStep(CheckoutStep.REVIEW)
   }
 
-  const updateCheckoutAddress = async (address: any, cdp = false) => {
+  const updateCheckoutAddress = async (address: any, cdp = false, basketDetails = basket) => {
     const response = await axios.post(NEXT_UPDATE_CHECKOUT2_ADDRESS, {
       basketId,
       model: address,
       cdp,
-      basket,
-      postCode: basket?.postCode,
+      basket: basketDetails,
+      postCode: basketDetails?.postCode,
       isCNC: deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT),
     })
     return response
