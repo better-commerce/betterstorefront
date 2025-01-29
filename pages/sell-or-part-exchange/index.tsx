@@ -29,6 +29,7 @@ import { CheckIcon } from '@heroicons/react/24/solid'
 import AddItems from '@components/trade-in/AddItems'
 import ConfirmDetails from '@components/trade-in/ConfirmDetail'
 import GetQuote from '@components/trade-in/GetQuote'
+import ShippingDetail from '@components/trade-in/ShippingDetail'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 declare const window: any
 const steps = [
@@ -47,6 +48,11 @@ const conditions = [
   { "name": "Well Used", "desc": "Your equipment will be showing significant signs of wear.", "icon": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg", "id": "5" }
 ]
 
+const shipping = [
+  { "name": "DPD Pickup Shop", "desc": "Drop your parcel off to any local DPD store (to find your nearest eligible store enter your post code below)", "image": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/dpd_pickup_paketshop.jpg", "type": "DPD", "id": "1" },
+  { "name": "DPD Home Collection", "desc": "Have your parcel collected from your doorstep Mon-Fri (excluding bank holidays) on a nominated day.", "image": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/dpd-delivery-driver-with-handheld.jpg", "type": "DPD_Home", "id": "2" },
+  { "name": "Come to Park Camera", "desc": "Visit one of our pro stores to complete your trade in, with the help from our friendly staff.", "image": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/bh-store-2022.jpg", "type": "Visit", "id": "3" }
+]
 const accessories = [
   {
     name: "Boxed?", icon: () => (
@@ -72,10 +78,75 @@ const accessories = [
   }
 ];
 
+const dpd = [
+  {
+    "name": "Argos",
+    "distance": "0.1 miles",
+    "info": ["Parking"],
+    "address": {
+      "store": "Argos (Inside Sainsbury's)",
+      "street": "31 ESSEX PLACE",
+      "city": "CHISWICK",
+      "postcode": "W4 5UT"
+    },
+    "opening_hours": {
+      "Monday": "08:00 - 21:00",
+      "Tuesday": "08:00 - 21:00",
+      "Wednesday": "08:00 - 21:00",
+      "Thursday": "08:00 - 21:00",
+      "Friday": "08:00 - 21:00",
+      "Saturday": "08:00 - 21:00",
+      "Sunday": "08:00 - 21:00"
+    }
+  },
+  {
+    "name": "Co-op",
+    "distance": "0.3 miles",
+    "info": ["Disabled Access", "Parking"],
+    "address": {
+      "store": "Co-op",
+      "street": "578-586 CHISWICK HIGH ROAD",
+      "area": "GUNNERSBURY",
+      "city": "LONDON",
+      "postcode": "W4 5RP"
+    },
+    "opening_hours": {
+      "Monday": "07:00 - 23:00",
+      "Tuesday": "07:00 - 23:00",
+      "Wednesday": "07:00 - 23:00",
+      "Thursday": "07:00 - 23:00",
+      "Friday": "07:00 - 23:00",
+      "Saturday": "07:00 - 23:00",
+      "Sunday": "07:00 - 23:00"
+    }
+  },
+  {
+    "name": "Express Stop News Extra",
+    "distance": "0.6 miles",
+    "info": [],
+    "address": {
+      "store": "Express Stop News Extra",
+      "street": "116 CHISWICK HIGH ROAD",
+      "city": "LONDON",
+      "postcode": "W4 1PU"
+    },
+    "opening_hours": {
+      "Monday": "00:01 - 23:59",
+      "Tuesday": "00:01 - 23:59",
+      "Wednesday": "00:01 - 23:59",
+      "Thursday": "00:01 - 23:59",
+      "Friday": "00:01 - 23:59",
+      "Saturday": "00:01 - 23:59",
+      "Sunday": "00:01 - 23:59"
+    }
+  }
+]
+
+
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
   const hostName = os.hostname()
   let slug = TRADE_IN_PAGE_SLUG;
-  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.HOME })
+  const props: IPagePropsProvider = getPagePropType({ type: PagePropType.TRADE_IN })
   const cookies = serverSideMicrositeCookies(locale!)
   const pageProps = await props.getPageProps({ slug, cookies })
 
@@ -101,7 +172,9 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedAccIndexes, setSelectedAccIndexes] = useState<number[]>([]);
+  const [isStore, setStore] = useState<any>("0");
   const [isGuest, setIsGuest] = useState<any>(false);
+  const [showDpdStore, setShowDpdStore] = useState<any>(false);
   const handleAccessoryClick = (index: number) => {
     setSelectedAccIndexes(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -119,6 +192,13 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
     }
   };
 
+  const setSelectedStore = (id: any) => {
+    setStore(id)
+  }
+
+  const showStores = () => {
+    setShowDpdStore(true)
+  }
   const setGuestCheckout = () => {
     setIsGuest(true)
   }
@@ -224,6 +304,9 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
               }
               {steps[currentStep].step === "3" &&
                 <GetQuote nextStep={nextStep} currentStep={currentStep} steps={steps} />
+              }
+              {steps[currentStep].step === "4" &&
+                <ShippingDetail shipping={shipping} isStore={isStore} setSelectedStore={setSelectedStore} showStores={showStores} showDpdStore={showDpdStore} dpd={dpd} nextStep={nextStep} />
               }
             </div>
           </div>

@@ -64,9 +64,14 @@ export default function GetQuote({ nextStep, currentStep, steps }: any) {
           </tfoot>
         </table>
       </div>
-      <button onClick={nextStep} disabled={currentStep === steps.length - 1} className="w-full px-4 py-3 text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" >
-        Accept quote
-      </button>
+      <div className="flex justify-between gap-4">
+        <button onClick={nextStep} disabled={currentStep === steps.length - 1} className="w-full px-4 py-3 text-sm text-white bg-red-600 rounded disabled:bg-gray-300" >
+          Reject quote
+        </button>
+        <button onClick={nextStep} disabled={currentStep === steps.length - 1} className="w-full px-4 py-3 text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" >
+          Accept quote
+        </button>
+      </div>
     </>
   )
 }
