@@ -1,4 +1,7 @@
-export default function ShippingDetail({shipping, isStore, setSelectedStore, showStores, showDpdStore, dpd, nextStep}:any) {
+import { useState } from "react";
+
+export default function ShippingDetail({ shipping, isStore, setSelectedStore, showStores, showDpdStore, dpd, nextStep, stores }: any) {
+  const [selectedCameraStore, setSelectedCameraStore] = useState<any>(null);
   return (
     <>
       <div className='flex justify-start flex-1 mt-6'>
@@ -66,27 +69,27 @@ export default function ShippingDetail({shipping, isStore, setSelectedStore, sho
         </>
       }
       {isStore == "2" &&
-        <div className='flex flex-col w-full sm:w-5/12'>
+        <div className='flex flex-col w-full gap-4 sm:w-5/12'>
           <div className='flex flex-col w-full gap-1 mt-4 mb-5'>
             <h4 className='text-xl font-medium text-left text-black'>Your Address</h4>
           </div>
-          <div className='flex flex-col justify-start w-full gap-2 text-left'>
+          <div className='flex flex-col justify-start w-full gap-1 text-left'>
             <span className='text-sm font-normal text-black'>House No/Name</span>
             <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
           </div>
-          <div className='flex flex-col justify-start w-full gap-2 text-left'>
+          <div className='flex flex-col justify-start w-full gap-1 text-left'>
             <span className='text-sm font-normal text-black'>Street</span>
             <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
           </div>
-          <div className='flex flex-col justify-start w-full gap-2 text-left'>
+          <div className='flex flex-col justify-start w-full gap-1 text-left'>
             <span className='text-sm font-normal text-black'>Town</span>
             <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
           </div>
-          <div className='flex flex-col justify-start w-full gap-2 text-left'>
+          <div className='flex flex-col justify-start w-full gap-1 text-left'>
             <span className='text-sm font-normal text-black'>Postcode</span>
             <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
           </div>
-          <div className='flex flex-col justify-start w-full gap-2 text-left'>
+          <div className='flex flex-col justify-start w-full gap-1 text-left'>
             <span className='text-sm font-normal text-black'>Collection/Drop-off date</span>
             <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
           </div>
@@ -94,6 +97,63 @@ export default function ShippingDetail({shipping, isStore, setSelectedStore, sho
             Confirm collection from DPD
           </button>
         </div>
+      }
+      {isStore == "3" &&
+        <>
+          <div className='flex flex-col w-full gap-1 mt-4'>
+            <h4 className='text-xl font-medium text-left text-black'>Where would you like to drop off your items?</h4>
+          </div>
+          <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-2">
+            {stores.map((store: any, index: number) => {
+              const isSelected = selectedCameraStore === index;
+              return (
+                <div
+                  key={index}
+                  className={`p-4 text-left border rounded-lg shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`}
+                  onClick={() => setSelectedCameraStore(index)}
+                >
+                  <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
+                    <input
+                      type="radio"
+                      name="store"
+                      checked={isSelected}
+                      onChange={() => setSelectedCameraStore(index)}
+                      className="relative w-5 h-5 text-blue-500 focus:ring-blue-400"
+                    />
+                    <h2 className="w-full text-xl font-semibold text-gray-700 uppercase">
+                      {store?.name}
+                    </h2>
+                  </div>
+                  <img src={store?.image} className="w-full h-auto" />
+                  <div className="grid grid-cols-12 gap-1">
+                    <div className='sm:col-span-6'>
+                      <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
+                      <p>{store?.address?.store}</p>
+                      <p>{store?.address?.street}</p>
+                      {store?.address?.area && <p>{store?.address?.area}</p>}
+                      <p>{store?.address?.city}, {store?.address?.postcode}</p>
+                      <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
+                      <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">
+                        {Object.entries(store?.opening_hours).map(([day, hours]: any) => (
+                          <li className='grid grid-cols-2 px-3 pt-2' key={day}>
+                            <span className='text-sm font-semibold text-black uppercase'>{day}</span>
+                            <span>{hours}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className='sm:col-span-6'>
+                      <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <button className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" onClick={nextStep}>
+            Confirm Drop off to Park Cameras Store
+          </button>
+        </>
       }
     </>
   )

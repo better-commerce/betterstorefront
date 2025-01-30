@@ -336,7 +336,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                       </p>
                     </div>
                     <div className='items-end justify-center flex-1'>
-                      <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-sky-600 group-hover:bg-sky-500'>
+                      <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
                         {item?.category_buttontext}
                       </div>
                     </div>
@@ -365,7 +365,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>{item?.brandcategory_subtitle}</p>
                   </div>
                   <div className='items-end justify-center flex-1'>
-                    <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-sky-600 group-hover:bg-sky-500'>
+                    <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
                       {item?.brandcategory_buttontext}
                     </div>
                   </div>

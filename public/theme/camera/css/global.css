@@ -662,6 +662,12 @@ p {
   color: var(--btn-text-color-primary) !important;
 }
 
+.ttnc-ButtonPrimary{
+  background: var(--btn-bg-primary) !important;
+  color: var(--btn-text-color-primary) !important;
+  border-radius: 4px !important;
+}
+
 .btn-c.btn-primary {
   background: var(--btn-bg-primary) !important;
   color: var(--btn-text-color-primary) !important;
