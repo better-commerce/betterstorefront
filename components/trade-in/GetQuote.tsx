@@ -1,4 +1,6 @@
-export default function GetQuote({ nextStep, currentStep, steps }: any) {
+import { CurrencyPoundIcon } from "@heroicons/react/24/outline";
+
+export default function GetQuote({ nextStep, currentStep, steps, selectedItems, setCurrentStep }: any) {
   return (
     <>
       <div className='flex flex-col w-full gap-6 mt-4 sm:mt-5'>
@@ -16,52 +18,35 @@ export default function GetQuote({ nextStep, currentStep, steps }: any) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            <tr>
-              <td className="flex gap-10 py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                <img src='https://dtz3um9jw7ngl.cloudfront.net/p/m/1010055C/1010055C.webp' className='w-auto h-10' />
-                <div className='flex flex-col w-full gap-1'>
-                  <span> Canon EOS 5D Mark IV Digital SLR Camera Body</span>
-                  <span className='text-xs text-gray-600'><strong>Condition: </strong>Like New</span>
-                  <span className='text-xs text-gray-600'><strong>Accessories: </strong>Battery Charger Boxed</span>
-                </div>
-              </td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
-                £649
-              </td>
-            </tr>
-            <tr>
-              <td className="flex gap-10 py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                <img src='https://dtz3um9jw7ngl.cloudfront.net/p/m/1240174/1240174.jpg' className='w-auto h-10' />
-                <div className='flex flex-col w-full gap-1'>
-                  <span> Canon EF 50mm f/1.8 STM Standard Lens</span>
-                  <span className='text-xs text-gray-600'><strong>Condition: </strong>Excellent</span>
-                  <span className='text-xs text-gray-600'><strong>Accessories: </strong>Boxed</span>
-                </div>
-              </td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
-                £49
-              </td>
-            </tr>
-            <tr>
-              <td className="flex gap-10 py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                <img src='https://dtz3um9jw7ngl.cloudfront.net/p/m/3010366/3010366.webp' className='w-auto h-10' />
-                <div className='flex flex-col w-full gap-1'>
-                  <span> Nikon D850 Digital SLR Camera Body</span>
-                  <span className='text-xs text-gray-600'><strong>Condition: </strong>Very Good</span>
-                  <span className='text-xs text-gray-600'><strong>Accessories: </strong>Battery Charger</span>
-                </div>
-              </td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
-                £752
-              </td>
-            </tr>
+            {selectedItems?.map((item: any, itemIdx: number) => (
+              <tr key={`item-${itemIdx}`}>
+                <td className="flex gap-10 py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                  <img src={item?.selectedProductImage} className='inline-block w-auto h-10' alt={item?.selectedProduct} />
+                  <div className='flex flex-col w-full gap-1'>
+                    <span>{item?.selectedProduct}</span>
+                    <span className='text-xs text-gray-600'><strong>Condition: </strong>{item?.selectedCondition?.name}</span>
+                    <span className='text-xs text-gray-600'><strong>Accessories: </strong>
+                      {item?.selectedAccessories?.map((acc: any, accId: number) => (
+                        <span key={`accessories-${accId}`} className="pr-2">{acc?.replace("?", " ")}</span>
+                      ))}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
+                  {item?.selectedProductCurrency === "GBP" && "£"}{item?.selectedProductPrice}
+                </td>
+              </tr>
+            ))}
           </tbody>
           <tfoot>
             <tr>
-              <td className="py-4 pl-10 text-sm text-left text-gray-500 whitespace-nowrap">Total</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">	£1450</td>
+              <td className="py-4 pl-10 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
+              <td className="px-3 py-4 text-xl font-semibold text-left text-black whitespace-nowrap">
+                £{selectedItems?.reduce((total: number, item: any) => total + (item?.selectedProductPrice || 0), 0).toFixed(2)}
+              </td>
             </tr>
           </tfoot>
+
         </table>
       </div>
       <div className="flex justify-between gap-4">

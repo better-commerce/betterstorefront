@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import ConditionCarousal from "./ConditionCarousal";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 export default function AddItems({ products, conditions, accessories, nextStep, setSelectedItems, currentStep, steps, selectedItems, setCurrentStep }: any) {
-const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", selectedProductImage: "", selectedCondition: null, selectedAccessories: [] }]);
+  const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
 
   useEffect(() => {
     // Pre-fill the form if selectedItems are provided
@@ -11,7 +13,7 @@ const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", 
   }, [selectedItems]);
 
   const addNewItem = () => {
-    setItems([...items, { searchTerm: "", selectedProduct: "", selectedProductImage: "", selectedCondition: null, selectedAccessories: [] }]);
+    setItems([...items, { searchTerm: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
   };
 
   const updateItem = (index: number, key: string, value: any) => {
@@ -19,7 +21,10 @@ const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", 
     newItems[index][key] = value;
     setItems(newItems);
   };
-
+  const removeItem = (index: number) => {
+    const newItems = items.filter((_:any, i:number) => i !== index);
+    setItems(newItems);
+  };
 
   return (
     <>
@@ -29,19 +34,34 @@ const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", 
           <h4 className='mb-4 font-medium text-black text-md sm:text-lg sm:mb-6'>Simply complete our form below and receive an instant quote.*</h4>
         </div>
       </div>
+      {/* <div className="ceCSDL">
+        <ConditionCarousal />
+      </div> */}
       {items.map((item: any, index: number) => (
-        <div key={index} className="flex flex-col gap-6 mt-4">
-          <div className='flex flex-col justify-start w-full gap-2 text-left'>
+        <div key={index} className="flex flex-col gap-6 pb-6 border-b border-gray-200">
+          <div className='relative flex flex-col justify-start w-full gap-2 text-left'>
             <label className='text-lg font-semibold text-[#2d4d9c]'>Item {index + 1}</label>
             <span className='text-sm font-normal text-black'>Tell us about your item</span>
+            {/* Remove Button - Only for additional items */}
+            {index > 0 && (
+              <button
+                onClick={() => removeItem(index)}
+                className="absolute right-0 top-4">
+                <TrashIcon className="w-5 h-5 text-gray-600 hover:text-red-500"/>
+              </button>
+            )}
             <div className="relative flex flex-col w-full">
               <input
                 type='text'
-                value={item.selectedProduct || item.searchTerm}
-                onChange={(e) => updateItem(index, "searchTerm", e.target.value)}
+                value={item.searchTerm || item.selectedProduct}  // Display search term first, fallback to selected product
+                onChange={(e) => {
+                  updateItem(index, "searchTerm", e.target.value);
+                  updateItem(index, "selectedProduct", ""); // Clear selected product if user starts typing again
+                }}
                 className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400'
                 placeholder='Please search and Select Your Model'
               />
+
               {products.filter((p: any) => p.product_name.toLowerCase().includes(item.searchTerm.toLowerCase())).length > 0 && item.searchTerm && (
                 <ul className='absolute z-10 w-full overflow-y-auto bg-white border border-gray-300 divide-y divide-gray-200 shadow-lg top-12 max-h-60'>
                   {products.filter((p: any) => p.product_name.toLowerCase().includes(item.searchTerm.toLowerCase())).map((product: any) => (
@@ -50,6 +70,8 @@ const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", 
                       onClick={() => {
                         updateItem(index, "selectedProduct", product.product_name);
                         updateItem(index, "selectedProductImage", product.image);
+                        updateItem(index, "selectedProductPrice", product.price);
+                        updateItem(index, "selectedProductCurrency", product.currency);
                         updateItem(index, "searchTerm", ""); // Clear the search term
                       }}
                       className='flex items-center gap-2 px-2 py-1 text-sm cursor-pointer hover:bg-gray-100 justify-normal'
@@ -109,7 +131,7 @@ const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", 
         </div>
       ))}
       {/* Navigation Buttons */}
-      <div className="flex flex-col gap-5 pt-6 mt-2 border-t border-gray-200">
+      <div className="flex flex-col gap-5 mt-2">
         <button onClick={addNewItem} className="w-full px-4 py-3 text-[#2d4d9c] text-sm border border-[#2d4d9c] bg-white rounded disabled:bg-gray-300">
           [+] Add another item
         </button>

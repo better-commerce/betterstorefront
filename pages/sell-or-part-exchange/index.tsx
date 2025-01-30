@@ -382,7 +382,13 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
                   isGuest={isGuest} />
               }
               {steps[currentStep].step === "3" &&
-                <GetQuote nextStep={nextStep} currentStep={currentStep} steps={steps} />
+                <GetQuote
+                  selectedItems={selectedItems}
+                  setCurrentStep={setCurrentStep}
+                  nextStep={nextStep}
+                  currentStep={currentStep}
+                  steps={steps}
+                />
               }
               {steps[currentStep].step === "4" &&
                 <ShippingDetail shipping={shipping} isStore={isStore} setSelectedStore={setSelectedStore} showStores={showStores} showDpdStore={showDpdStore} dpd={dpd} stores={stores} nextStep={nextStep} />
