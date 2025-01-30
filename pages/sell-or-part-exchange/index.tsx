@@ -222,6 +222,18 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
   const [isStore, setStore] = useState<any>("0");
   const [isGuest, setIsGuest] = useState<any>(false);
   const [showDpdStore, setShowDpdStore] = useState<any>(false);
+  const [products, setProducts] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  useEffect(() => {
+    fetch('https://api.mockaroo.com/api/da82c2e0?count=0&key=2d403e40')
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
+
+
   const handleAccessoryClick = (index: number) => {
     setSelectedAccIndexes(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -344,10 +356,30 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
             {/* Step Content */}
             <div className="flex flex-col justify-start gap-4">
               {steps[currentStep].step === "1" &&
-                <AddItems conditions={conditions} accessories={accessories} nextStep={nextStep} steps={steps} selectedIndex={selectedIndex} selectedAccIndexes={selectedAccIndexes} setSelectedIndex={setSelectedIndex} handleAccessoryClick={handleAccessoryClick} currentStep={currentStep} />
+                <AddItems
+                  selectedItems={selectedItems}
+                  setCurrentStep={setCurrentStep}
+                  products={products}
+                  setSelectedItems={setSelectedItems}
+                  conditions={conditions}
+                  accessories={accessories}
+                  nextStep={nextStep}
+                  steps={steps}
+                  selectedIndex={selectedIndex}
+                  selectedAccIndexes={selectedAccIndexes}
+                  setSelectedIndex={setSelectedIndex}
+                  handleAccessoryClick={handleAccessoryClick}
+                  currentStep={currentStep} />
               }
               {steps[currentStep].step === "2" &&
-                <ConfirmDetails setCurrentStep={setCurrentStep} currentStep={currentStep} steps={steps} nextStep={nextStep} setGuestCheckout={setGuestCheckout} isGuest={isGuest} />
+                <ConfirmDetails
+                  selectedItems={selectedItems}
+                  setCurrentStep={setCurrentStep}
+                  steps={steps}
+                  nextStep={nextStep}
+                  setGuestCheckout={setGuestCheckout}
+                  currentStep={currentStep}
+                  isGuest={isGuest} />
               }
               {steps[currentStep].step === "3" &&
                 <GetQuote nextStep={nextStep} currentStep={currentStep} steps={steps} />

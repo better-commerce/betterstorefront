@@ -1,7 +1,7 @@
 import TradeInLogin from "@components/shared/Login/TradeInLogin";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
-export default function ConfirmDetails({setCurrentStep, currentStep, steps, nextStep, setGuestCheckout, isGuest}:any) {
+export default function ConfirmDetails({ setCurrentStep, selectedItems, currentStep, steps, nextStep, setGuestCheckout, isGuest, }: any) {
   return (
     <>
       <div className='flex flex-col w-full gap-6 mt-4 sm:mt-5'>
@@ -15,36 +15,34 @@ export default function ConfirmDetails({setCurrentStep, currentStep, steps, next
             <tr>
               <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Description</th>
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Condition</th>
-              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Accessories</th>
+              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[200px]">Accessories</th>
               <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Instant Quote Available</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            <tr>
-              <td className="py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6"><img src='https://dtz3um9jw7ngl.cloudfront.net/p/m/1010055C/1010055C.webp' className='inline-block w-10 h-auto' /> Canon EOS 5D Mark IV Digital SLR Camera Body</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">Like New</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">Battery Charger Boxed</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
-                <CheckIcon className='w-6 h-6 text-emerald-600' />
-              </td>
-            </tr>
-            <tr>
-              <td className="py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6"><img src='https://dtz3um9jw7ngl.cloudfront.net/p/m/1240174/1240174.jpg' className='inline-block w-10 h-auto' /> Canon EF 50mm f/1.8 STM Standard Lens</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">Excellent</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">Boxed</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap"><CheckIcon className='w-6 h-6 text-emerald-600' /></td>
-            </tr>
-            <tr>
-              <td className="py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6"><img src='https://dtz3um9jw7ngl.cloudfront.net/p/m/3010366/3010366.webp' className='inline-block w-10 h-auto' /> Nikon D850 Digital SLR Camera Body</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">Very Good</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">Battery Charger</td>
-              <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap"><CheckIcon className='w-6 h-6 text-emerald-600' /></td>
-            </tr>
+            {selectedItems?.map((item: any, itemIdx: number) => (
+              <tr key={`items-${itemIdx}`}>
+                <td className="py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6"><img src={item?.selectedProductImage} className='inline-block w-10 h-auto' /> {item?.selectedProduct}</td>
+                <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">{item?.selectedCondition?.name}</td>
+                <td className="items-center gap-2 px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
+                  {item?.selectedAccessories?.map((acc: any, accId: number) => (
+                    <span key={`accessories-${accId}`} className="pr-2">{acc?.replace("?"," ")}</span>
+                  ))}
+                </td>
+                <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
+                  <CheckIcon className='w-6 h-6 text-emerald-600' />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       <div className='flex justify-end flex-1'>
-        <button onClick={() => setCurrentStep(0)} disabled={currentStep === steps.length - 1} className="px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
+        <button
+          onClick={() => setCurrentStep(0)} // Ensure you're setting the correct step here
+          disabled={currentStep === steps.length - 1}
+          className="px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300"
+        >
           Edit Items
         </button>
       </div>
