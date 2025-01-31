@@ -116,7 +116,6 @@ export default function AddItems({ products, conditions, images, accessories, ne
                   </p>
                 </button>
               ))}
-
             </div>
           </div>
 
@@ -145,14 +144,9 @@ export default function AddItems({ products, conditions, images, accessories, ne
           [+] Add another item
         </button>
         <div className='flex flex-col w-full gap-1'>
-          <button
-            onClick={() => { setSelectedItems(items); nextStep(); }}
-            disabled={items.length === 0 || currentStep === steps.length - 1}  // Disable if no items selected or on the last step
-            className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300"
-          >
+          <button onClick={() => { setSelectedItems(items); nextStep(); }} disabled={items.length === 0 || currentStep === steps.length - 1} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
             Next add your details
           </button>
-
           <span className='text-xs font-normal text-left text-black'>*Some products require further attention. One of used specialists will update the quote within 2 working days.</span>
         </div>
       </div>
@@ -162,7 +156,6 @@ export default function AddItems({ products, conditions, images, accessories, ne
             <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
               <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => setModalClose()} />
             </Transition.Child>
-
             <div className="fixed inset-0 flex items-center justify-center">
               <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
                 <div className="w-screen max-w-xl p-6 min-w-[600px]">
@@ -185,28 +178,20 @@ export default function AddItems({ products, conditions, images, accessories, ne
                       <div className="flex flex-col w-full">
                         <div className="relative flex w-[220px] px-0 pt-2 mx-auto bg-[#f4f5f5] rounded-full -top-10">
                           <div className="w-11/12 mx-auto bg-white rounded-full shadow">
-                            <button
-                              className={`px-1 py-1 flex-1 text-[13px] ${activeTab === "camera" ? "font-medium" : "text-gray-500"}`}
-                              onClick={() => setActiveTab("camera")}
-                            >
+                            <button className={`px-1 py-1 flex-1 text-[13px] ${activeTab === "camera" ? "font-medium" : "text-gray-500"}`} onClick={() => setActiveTab("camera")} >
                               <img src="https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/tab-cam.svg" className="inline-block w-8 h-8 p-2 bg-gray-200 rounded-full hover:bg-sky-700" /> Cameras
                             </button>
-                            <button
-                              className={`px-1 py-1 flex-1 text-[13px] ${activeTab === "lens" ? "font-medium" : "text-gray-500"}`}
-                              onClick={() => setActiveTab("lens")}
-                            >
+                            <button className={`px-1 py-1 flex-1 text-[13px] ${activeTab === "lens" ? "font-medium" : "text-gray-500"}`} onClick={() => setActiveTab("lens")} >
                               <img src="https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/tab-lence.svg" className="inline-block w-8 h-8 p-2 bg-gray-200 rounded-full hover:bg-sky-700" />  Lenses
                             </button>
                           </div>
                         </div>
-
                         <div className="relative flex px-4 -top-8 -mb-14">
                           {activeTab === "camera" && (
-                            <Carousel images={images} />
+                            <Carousel images={images?.camera} />
                           )}
-
                           {activeTab === "lens" && (
-                            <Carousel images={images} />
+                            <Carousel images={images?.lens} />
                           )}
                         </div>
                       </div>
