@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import "swiper/css/autoplay";
-import { Autoplay, EffectCreative } from "swiper";
+import { Autoplay, EffectCreative, Pagination } from "swiper";
 
 export default function Carousel({ images }: any) {
   const [selectedCategory, setSelectedCategory] = useState("cameras"); // Default Category
@@ -23,13 +23,13 @@ export default function Carousel({ images }: any) {
   
   const handlePrev = () => {
     if (swiperRef.current) {
-      swiperRef.current.swiper.slidePrev(700);
+      swiperRef.current.swiper.slidePrev();
     }
   };
 
   const handleNext = () => {
     if (swiperRef.current) {
-      swiperRef.current.swiper.slideNext(700);
+      swiperRef.current.swiper.slideNext();
     }
   };
 
@@ -79,21 +79,22 @@ export default function Carousel({ images }: any) {
               delay: 6000,
               disableOnInteraction: false,
             }}
+            pagination={{ clickable: true }}
             creativeEffect={{
               prev: {
                 shadow: false,
                 translate: ["-150%", "0%", -200],
-                rotate: [0, 0, -90],
+                rotate: [0, 0, -40],
                 opacity: 0,
               },
               next: {
                 shadow: false,
                 translate: ["150%", "0%", -200],
-                rotate: [0, 0, 90],
+                rotate: [0, 0, 40],
                 opacity: 0,
               },
             }}
-            modules={[EffectCreative]}
+            modules={[EffectCreative, Pagination, Autoplay]}
             className="w-full max-w-lg"
             onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
           >
