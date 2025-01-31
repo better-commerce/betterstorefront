@@ -23,13 +23,13 @@ export default function Carousel({ images }: any) {
   
   const handlePrev = () => {
     if (swiperRef.current) {
-      swiperRef.current.swiper.slidePrev();
+      swiperRef.current.swiper.slidePrev(700);
     }
   };
 
   const handleNext = () => {
     if (swiperRef.current) {
-      swiperRef.current.swiper.slideNext();
+      swiperRef.current.swiper.slideNext(700);
     }
   };
 
@@ -94,7 +94,7 @@ export default function Carousel({ images }: any) {
                 opacity: 0,
               },
             }}
-            modules={[EffectCreative, Pagination, Autoplay]}
+            modules={[EffectCreative, Pagination]}
             className="w-full max-w-lg"
             onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
           >
