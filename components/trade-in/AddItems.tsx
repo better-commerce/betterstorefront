@@ -175,9 +175,9 @@ export default function AddItems({ products, conditions, images, accessories, ne
                       <h5 className="text-sm font-normal text-center text-gray-600">Whether you buy, sell or trade in gear, choose from five cosmetic conditions.</h5>
                     </div>
                     <div className="relative flex flex-col w-full pt-4 pb-10 mt-10 mb-4 bg-[#f4f5f5]">
-                      <div className="flex flex-col w-full">                        
+                      <div className="flex flex-col w-full">
                         <div className="relative flex px-4 -mb-14">
-                         <Carousel images={images} />
+                          <Carousel images={images} />
                         </div>
                       </div>
                     </div>
