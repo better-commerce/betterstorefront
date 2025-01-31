@@ -1,0 +1,42 @@
+{
+    "steps":
+    [
+        {"step":"1","name":"Enter your items"},
+        {"step":"2","name":"Confirm your details"},
+        {"step":"3","name":"Get your quote"},
+        {"step":"4","name":"Shipping Options"},
+        {"step":"5","name":"Postage Details"}
+    ],
+    "conditions":
+    [
+        {"name":"Like New","desc":"Your equipment is in the condition as if you have just bought it.","icon":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg","id":"1"},
+        {"name":"Excellent","desc":"The item may have some small cosmetic blemishes that lower its grade.","icon":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg","id":"2"},
+        {"name":"Very Good","desc":"Your item may have some cosmetic wear to the paintwork.","icon":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg","id":"3"},
+        {"name":"Good","desc":"Equipment is showing more obvious signs of cosmetic wear.","icon":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg","id":"4"},
+        {"name":"Well Used","desc":"Your equipment will be showing significant signs of wear.","icon":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg","id":"5"}
+    ],
+    "shipping":
+    [
+        {"name":"DPD Pickup Shop","desc":"Drop your parcel off to any local DPD store (to find your nearest eligible store enter your post code below)","image":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/dpd_pickup_paketshop.jpg","type":"DPD","id":"1"},
+        {"name":"DPD Home Collection","desc":"Have your parcel collected from your doorstep Mon-Fri (excluding bank holidays) on a nominated day.","image":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/dpd-delivery-driver-with-handheld.jpg","type":"DPD_Home","id":"2"},
+        {"name":"Come to Park Camera","desc":"Visit one of our pro stores to complete your trade in, with the help from our friendly staff.","image":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/bh-store-2022.jpg","type":"Visit","id":"3"}
+    ],
+    "dpd":
+    [
+        {"name":"Argos","distance":"0.1 miles","info":["Parking"],"address":{"store":"Argos (Inside Sainsbury's)","street":"31 ESSEX PLACE","city":"CHISWICK","postcode":"W4 5UT"},"opening_hours":{"Monday":"08:00 - 21:00","Tuesday":"08:00 - 21:00","Wednesday":"08:00 - 21:00","Thursday":"08:00 - 21:00","Friday":"08:00 - 21:00","Saturday":"08:00 - 21:00","Sunday":"08:00 - 21:00"}},
+        {"name":"Co-op","distance":"0.3 miles","info":["Disabled Access","Parking"],"address":{"store":"Co-op","street":"578-586 CHISWICK HIGH ROAD","area":"GUNNERSBURY","city":"LONDON","postcode":"W4 5RP"},"opening_hours":{"Monday":"07:00 - 23:00","Tuesday":"07:00 - 23:00","Wednesday":"07:00 - 23:00","Thursday":"07:00 - 23:00","Friday":"07:00 - 23:00","Saturday":"07:00 - 23:00","Sunday":"07:00 - 23:00"}}
+    ],
+    "stores":
+    [
+        {"name":"Burgess Hill Store","image":"https://dtz3um9jw7ngl.cloudfront.net/images/footer/burgess-hill.jpg","map":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/store-1.png","distance":"0.1 miles","info":["Parking"],"address":{"store":"Burgess Hill Store","street":"Victoria Business Park, York Road","city":"Burgess Hill","postcode":"RH15 9TT"},"opening_hours":{"Monday":"09:00 - 21:00","Tuesday":"08:00 - 21:00","Wednesday":"08:00 - 21:00","Thursday":"08:00 - 21:00","Friday":"08:00 - 21:00","Saturday":"08:00 - 21:00","Sunday":"08:00 - 21:00"}},
+        {"name":"London Store","image":"https://dtz3um9jw7ngl.cloudfront.net/images/footer/london.jpg","map":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/store-2.png","distance":"0.3 miles","info":["Disabled Access","Parking"],"address":{"store":"Co-op","street":"53-54 Rathbone Place","city":"LONDON","postcode":"W1T 1JR"},"opening_hours":{"Monday":"07:00 - 23:00","Tuesday":"07:00 - 23:00","Wednesday":"07:00 - 23:00","Thursday":"07:00 - 23:00","Friday":"07:00 - 23:00","Saturday":"07:00 - 23:00","Sunday":"07:00 - 23:00"}}
+    ],
+    "images":
+    [
+        {"src":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/1.png","title":"Like New","description":"Equipment should be 'as new' and free from any signs of cosmetic wear. This includes the rear screens on cameras and the glass elements on lenses."},
+        {"src":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/5.png","title":"Excellent","description":"Your equipment should be close to being 'Like New' but it has small cosmetic blemishes to the exterior."},
+        {"src":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/6.png","title":"Very Good","description":"There will be signs of wear and tear to your equipment. Any cosmetic wear should not affect the performance."},
+        {"src":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/5.png","title":"Good","description":"Equipment will have obvious signs of wear to several areas."},
+        {"src":"https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/6.png","title":"Well Used","description":"Your equipment will have significant signs of wear."}
+    ]
+}

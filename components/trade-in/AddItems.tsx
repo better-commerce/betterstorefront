@@ -1,10 +1,19 @@
-import { useEffect, useState } from "react";
-import ConditionCarousal from "./ConditionCarousal";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { Fragment, useEffect, useState } from "react";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Dialog, Transition } from "@headlessui/react";
+import Carousel from "./Carousal";
 
-export default function AddItems({ products, conditions, accessories, nextStep, setSelectedItems, currentStep, steps, selectedItems, setCurrentStep }: any) {
+export default function AddItems({ products, conditions, images, accessories, nextStep, setSelectedItems, currentStep, steps, selectedItems, setCurrentStep }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
+  const [isOpen, setOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState("camera");
+  const setModalClose = () => {
+    setOpen(false)
+  }
 
+  const setRightCondition = () => {
+    setOpen(true)
+  }
   useEffect(() => {
     // Pre-fill the form if selectedItems are provided
     if (selectedItems.length > 0) {
@@ -22,7 +31,7 @@ export default function AddItems({ products, conditions, accessories, nextStep, 
     setItems(newItems);
   };
   const removeItem = (index: number) => {
-    const newItems = items.filter((_:any, i:number) => i !== index);
+    const newItems = items.filter((_: any, i: number) => i !== index);
     setItems(newItems);
   };
 
@@ -34,9 +43,6 @@ export default function AddItems({ products, conditions, accessories, nextStep, 
           <h4 className='mb-4 font-medium text-black text-md sm:text-lg sm:mb-6'>Simply complete our form below and receive an instant quote.*</h4>
         </div>
       </div>
-      {/* <div className="ceCSDL">
-        <ConditionCarousal />
-      </div> */}
       {items.map((item: any, index: number) => (
         <div key={index} className="flex flex-col gap-6 pb-6 border-b border-gray-200">
           <div className='relative flex flex-col justify-start w-full gap-2 text-left'>
@@ -47,7 +53,7 @@ export default function AddItems({ products, conditions, accessories, nextStep, 
               <button
                 onClick={() => removeItem(index)}
                 className="absolute right-0 top-4">
-                <TrashIcon className="w-5 h-5 text-gray-600 hover:text-red-500"/>
+                <TrashIcon className="w-5 h-5 text-gray-600 hover:text-red-500" />
               </button>
             )}
             <div className="relative flex flex-col w-full">
@@ -86,7 +92,10 @@ export default function AddItems({ products, conditions, accessories, nextStep, 
           </div>
 
           <div className='flex flex-col justify-start w-full gap-2 text-left'>
-            <label className='text-lg font-semibold text-[#2d4d9c]'>Condition</label>
+            <label className='text-lg font-semibold text-[#2d4d9c]'>
+              <span>Condition</span>
+              <span className="pl-1 text-sm font-normal underline cursor-pointer" onClick={() => setRightCondition()}>(Click here for help choosing the right condition)</span>
+            </label>
             <div className="grid grid-cols-5 gap-3">
               {conditions?.map((cn: any, cnIdx: number) => (
                 <button
@@ -147,6 +156,71 @@ export default function AddItems({ products, conditions, accessories, nextStep, 
           <span className='text-xs font-normal text-left text-black'>*Some products require further attention. One of used specialists will update the quote within 2 working days.</span>
         </div>
       </div>
+      <Transition.Root show={isOpen} as={Fragment}>
+        <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => setModalClose()} >
+          <div className="absolute inset-0 overflow-hidden z-999">
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+              <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => setModalClose()} />
+            </Transition.Child>
+
+            <div className="fixed inset-0 flex items-center justify-center">
+              <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+                <div className="w-screen max-w-xl p-6 min-w-[600px]">
+                  <div className="flex flex-col h-full pt-4 pb-2 bg-white shadow-xl rounded-xl">
+                    <div className="flex-1 px-4">
+                      <div className="relative flex items-center justify-center py-2 mt-2 sm:px-0">
+                        <button type="button" className="absolute -top-11 right-3 lg:top-2 lg:right-0 p-0.5 bg-gray-300 rounded-full" onClick={() => setModalClose()} >
+                          <span className="sr-only">Close</span>
+                          <XMarkIcon className="w-6 h-6" aria-hidden="true" />
+                        </button>
+                        <div className="flex flex-col justify-center w-full text-center">
+                          <h2 className="mx-auto mt-0 text-2xl font-medium text-[#2d4d9c] sm:w-11/12">How to choose the right cosmetic condition?</h2>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full">
+                      <h5 className="text-sm font-normal text-center text-gray-600">Whether you buy, sell or trade in gear, choose from five cosmetic conditions.</h5>
+                    </div>
+                    <div className="relative flex flex-col w-full pt-4 pb-10 mt-10 mb-4 bg-[#f4f5f5]">
+                      <div className="flex flex-col w-full">
+                        <div className="relative flex w-[220px] px-0 pt-2 mx-auto bg-[#f4f5f5] rounded-full -top-10">
+                          <div className="w-11/12 mx-auto bg-white rounded-full shadow">
+                            <button
+                              className={`px-1 py-1 flex-1 text-[13px] ${activeTab === "camera" ? "font-medium" : "text-gray-500"}`}
+                              onClick={() => setActiveTab("camera")}
+                            >
+                              <img src="https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/tab-cam.svg" className="inline-block w-8 h-8 p-2 bg-gray-200 rounded-full hover:bg-sky-700" /> Cameras
+                            </button>
+                            <button
+                              className={`px-1 py-1 flex-1 text-[13px] ${activeTab === "lens" ? "font-medium" : "text-gray-500"}`}
+                              onClick={() => setActiveTab("lens")}
+                            >
+                              <img src="https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/tab-lence.svg" className="inline-block w-8 h-8 p-2 bg-gray-200 rounded-full hover:bg-sky-700" />  Lenses
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="relative flex px-4 -top-8 -mb-14">
+                          {activeTab === "camera" && (
+                            <Carousel images={images} />
+                          )}
+
+                          {activeTab === "lens" && (
+                            <Carousel images={images} />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center w-full px-4 text-center">
+                      <p className="text-sm font-normal text-center text-gray-600">Not sure which cosmetic condition to choose? Don’t worry - a product specialist will inspect your gear and confirm its cosmetic condition once it arrives at our Circular Commerce Center.</p>
+                    </div>
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </div >
+        </Dialog >
+      </Transition.Root >
     </>
   )
 }
