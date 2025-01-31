@@ -175,24 +175,9 @@ export default function AddItems({ products, conditions, images, accessories, ne
                       <h5 className="text-sm font-normal text-center text-gray-600">Whether you buy, sell or trade in gear, choose from five cosmetic conditions.</h5>
                     </div>
                     <div className="relative flex flex-col w-full pt-4 pb-10 mt-10 mb-4 bg-[#f4f5f5]">
-                      <div className="flex flex-col w-full">
-                        <div className="relative flex w-[220px] px-0 pt-2 mx-auto bg-[#f4f5f5] rounded-full -top-10">
-                          <div className="w-11/12 mx-auto bg-white rounded-full shadow">
-                            <button className={`px-1 py-1 flex-1 group text-[13px] ${activeTab === "camera" ? "font-medium" : "text-gray-500"}`} onClick={() => setActiveTab("camera")} >
-                              <img src="https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/tab-cam.svg" className={`inline-block w-8 h-8 p-2 ${activeTab === "camera" ? 'bg-sky-300':'bg-gray-200'} rounded-full group-hover:bg-sky-300`} /> Cameras
-                            </button>
-                            <button className={`px-1 py-1 flex-1 group text-[13px] ${activeTab === "lens" ? "font-medium" : "text-gray-500"}`} onClick={() => setActiveTab("lens")} >
-                              <img src="https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/tab-lence.svg" className={`inline-block w-8 h-8 p-2 ${activeTab === "lens" ? 'bg-sky-300':'bg-gray-200'} rounded-full group-hover:bg-sky-300`} />  Lenses
-                            </button>
-                          </div>
-                        </div>
-                        <div className="relative flex px-4 -top-8 -mb-14">
-                          {activeTab === "camera" && (
-                            <Carousel images={images?.camera} />
-                          )}
-                          {activeTab === "lens" && (
-                            <Carousel images={images?.lens} />
-                          )}
+                      <div className="flex flex-col w-full">                        
+                        <div className="relative flex px-4 -mb-14">
+                         <Carousel images={images} />
                         </div>
                       </div>
                     </div>
