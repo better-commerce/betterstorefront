@@ -61,7 +61,10 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
                   </div>
                 ))}
               </div>
-              <button className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" onClick={nextStep}>
+              <button onClick={() => {
+                nextStep();
+                document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }} className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300">
                 Confirm Drop off at DPD Store
               </button>
             </>
@@ -93,7 +96,10 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
             <span className='text-sm font-normal text-black'>Collection/Drop-off date</span>
             <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
           </div>
-          <button className="px-10 py-3 mt-4 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" onClick={nextStep}>
+          <button onClick={() => {
+            nextStep();
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} className="px-10 py-3 mt-4 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300">
             Confirm collection from DPD
           </button>
         </div>
@@ -150,7 +156,10 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
               );
             })}
           </div>
-          <button className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" onClick={nextStep}>
+          <button onClick={() => {
+            nextStep();
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300">
             Confirm Drop off to Park Cameras Store
           </button>
         </>

@@ -188,7 +188,7 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
             <SellingGuide data={pageContents?.sellguide} />
           }
           {pageContents?.sellingdescription != "" && <div className='w-full mx-auto mb-4 text-xl font-normal text-black sm:w-10/12 sm:mb-8 cms-para-xl' dangerouslySetInnerHTML={{ __html: pageContents?.sellingdescription }}></div>}
-          <div className="flex flex-col w-full gap-6 p-6 mx-auto bg-white border border-gray-200">
+          <div id='step-component' className="flex flex-col w-full gap-6 p-6 mx-auto bg-white border border-gray-200">
             <Steps data={data?.steps} setCurrentStep={setCurrentStep} currentStep={currentStep} />
 
             {/* Step Content */}

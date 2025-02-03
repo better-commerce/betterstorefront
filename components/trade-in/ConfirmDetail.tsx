@@ -60,7 +60,11 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, currentS
             <input type='email' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Email' />
             <input type='number' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Phone Number' />
           </div>
-          <button onClick={nextStep} className="px-4 py-3 w-full text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
+          <button
+            onClick={() => {
+              nextStep();
+              document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }} className="px-4 py-3 w-full text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
             Continue as guest
           </button>
         </div> :

@@ -137,7 +137,15 @@ export default function AddItems({ products, conditions, images, accessories, ne
           [+] Add another item
         </button>
         <div className='flex flex-col w-full gap-1'>
-          <button onClick={() => { setSelectedItems(items); nextStep(); }} disabled={items?.length === 0 || currentStep === steps?.length - 1} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
+          <button
+            onClick={() => {
+              setSelectedItems(items);
+              nextStep();
+              document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            disabled={items?.length === 0 || currentStep === steps?.length - 1}
+            className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300"
+          >
             Next add your details
           </button>
           <span className='text-xs font-normal text-left text-black'>*Some products require further attention. One of used specialists will update the quote within 2 working days.</span>
