@@ -196,7 +196,6 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
               {data?.steps[currentStep].step === "1" &&
                 <AddItems
                   selectedItems={selectedItems}
-                  setCurrentStep={setCurrentStep}
                   products={products}
                   setSelectedItems={setSelectedItems}
                   conditions={data?.conditions}
