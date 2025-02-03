@@ -23,7 +23,7 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, currentS
             {selectedItems?.map((item: any, itemIdx: number) => (
               <tr key={`items-${itemIdx}`}>
                 <td className="py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6">
-                  <img src={item?.selectedProductImage} className='inline-block w-10 h-auto' /> {item?.selectedProduct}
+                  <img src={item?.selectedProductImage} className='inline-block w-10 h-auto' alt={item?.selectedProduct} /> {item?.selectedProduct}
                 </td>
                 <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">{item?.selectedCondition?.name}</td>
                 <td className="items-center gap-2 px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">

@@ -46,7 +46,6 @@ export default function GetQuote({ nextStep, currentStep, steps, selectedItems, 
               </td>
             </tr>
           </tfoot>
-
         </table>
       </div>
       <div className="flex justify-between gap-4">

@@ -38,7 +38,7 @@ export default function Carousel({ images }: any) {
         <div className="w-11/12 mx-auto bg-white rounded-full shadow">
           {["cameras", "lenses"].map((category) => (
             <button key={category} className={`px-1 py-1 flex-1 capitalize group text-[13px] ${selectedCategory === category ? "font-medium" : "text-gray-500"}`} onClick={() => { setSelectedCategory(category); setCurrentIndex(0); }} >
-              <img src={`https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/tab-${category}.svg`} className={`inline-block w-8 h-8 p-2 ${selectedCategory === category ? 'bg-sky-300' : 'bg-gray-200'} rounded-full group-hover:bg-sky-300`} /> {category}
+              <img src={`https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/tab-${category}.svg`} alt={category} className={`inline-block w-8 h-8 p-2 ${selectedCategory === category ? 'bg-sky-300' : 'bg-gray-200'} rounded-full group-hover:bg-sky-300`} /> {category}
             </button>
           ))}
         </div>
@@ -60,7 +60,7 @@ export default function Carousel({ images }: any) {
       <div className="flex justify-center mt-4 space-x-4">
         {categoryTabs.map((tab) => (
           <button key={tab} onClick={() => { setSelectedTab(tab); setCurrentIndex(0); }} className={`w-8 h-8 border border-sky-700 rounded-full flex justify-center items-center ${selectedTab === tab ? "bg-sky-300" : "bg-white"}`} >
-            <img src={`https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/${selectedCategory === "cameras" ? 'cam' : 'lenses'}-${tab}.svg`} />
+            <img src={`https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/${selectedCategory === "cameras" ? 'cam' : 'lenses'}-${tab}.svg`} alt={tab} />
           </button>
         ))}
       </div>
@@ -87,7 +87,7 @@ export default function Carousel({ images }: any) {
             {imagesArray.map((img: any, index: number) => (
               <SwiperSlide key={index} className="flex justify-center">
                 <div className="relative">
-                  <img src={img.src} alt={img.title} className="object-cover !w-auto !h-[340px] !mx-auto" />
+                  <img src={img?.src} alt={img?.title} className="object-cover !w-auto !h-[340px] !mx-auto" />
                 </div>
               </SwiperSlide>
             ))}

@@ -68,22 +68,22 @@ export default function AddItems({ products, conditions, images, accessories, ne
                 placeholder='Please search and Select Your Model'
               />
 
-              {products.filter((p: any) => p.product_name.toLowerCase().includes(item.searchTerm.toLowerCase())).length > 0 && item.searchTerm && (
+              {products.filter((p: any) => p?.product_name.toLowerCase().includes(item?.searchTerm.toLowerCase()))?.length > 0 && item?.searchTerm && (
                 <ul className='absolute z-10 w-full overflow-y-auto bg-white border border-gray-300 divide-y divide-gray-200 shadow-lg top-12 max-h-60'>
-                  {products.filter((p: any) => p.product_name.toLowerCase().includes(item.searchTerm.toLowerCase())).map((product: any) => (
+                  {products?.filter((p: any) => p?.product_name.toLowerCase().includes(item?.searchTerm.toLowerCase())).map((product: any) => (
                     <li
                       key={product.id}
                       onClick={() => {
-                        updateItem(index, "selectedProduct", product.product_name);
-                        updateItem(index, "selectedProductImage", product.image);
-                        updateItem(index, "selectedProductPrice", product.price);
-                        updateItem(index, "selectedProductCurrency", product.currency);
+                        updateItem(index, "selectedProduct", product?.product_name);
+                        updateItem(index, "selectedProductImage", product?.image);
+                        updateItem(index, "selectedProductPrice", product?.price);
+                        updateItem(index, "selectedProductCurrency", product?.currency);
                         updateItem(index, "searchTerm", ""); // Clear the search term
                       }}
                       className='flex items-center gap-2 px-2 py-1 text-sm cursor-pointer hover:bg-gray-100 justify-normal'
                     >
-                      <span><img src={product.image} className="w-auto h-7" alt={product.product_name} /></span>
-                      <span>{product.product_name}</span>
+                      <span><img src={product?.image} className="w-auto h-7" alt={product?.product_name} /></span>
+                      <span>{product?.product_name}</span>
                     </li>
                   ))}
                 </ul>

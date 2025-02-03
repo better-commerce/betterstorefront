@@ -124,7 +124,7 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
                       {store?.name}
                     </h2>
                   </div>
-                  <img src={store?.image} className="w-full h-auto" />
+                  <img src={store?.image} alt={store?.name} className="w-full h-auto" />
                   <div className="grid grid-cols-12 gap-1">
                     <div className='sm:col-span-6'>
                       <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>

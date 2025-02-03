@@ -47,7 +47,7 @@ export default function PostgreDetail({ data }: any) {
         })}
       </div>
       <div className='flex flex-col justify-start w-full gap-4 mt-4 text-left'>
-        <p className='text-sm font-normal text-black'>If in the meantime you decide that you would rather a collections be organised please call us on 01444 237070 or email us at sales@parkcameras.com and someone will be willing to help you change the shipping method.</p>
+        <p className='text-sm font-normal text-black'>If in the meantime you decide that you would rather a collections be organized please call us on 01444 237070 or email us at sales@parkcameras.com and someone will be willing to help you change the shipping method.</p>
         <p className='text-sm font-normal text-black'>Before coming into store, why not check out our extensive range of camera gear.</p>
       </div>
     </>
