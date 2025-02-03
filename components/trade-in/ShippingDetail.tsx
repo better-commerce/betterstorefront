@@ -42,7 +42,7 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
             <>
               <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-3">
                 {dpd.map((store: any, index: number) => (
-                  <div key={index} className="p-4 text-left bg-white border rounded-lg shadow-lg">
+                  <div key={index} className="p-4 text-left bg-white border rounded shadow-lg">
                     <h2 className="pb-1 mb-4 text-xl font-semibold text-gray-700 uppercase border-b border-gray-200">{store.name}</h2>
                     <h2 className="mb-2 text-sm font-semibold text-gray-700 uppercase">Store Detail:</h2>
                     <p className="text-gray-600">Distance: {store.distance}</p>
@@ -109,7 +109,7 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
               return (
                 <div
                   key={index}
-                  className={`p-4 text-left border rounded-lg shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`}
+                  className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`}
                   onClick={() => setSelectedCameraStore(index)}
                 >
                   <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">

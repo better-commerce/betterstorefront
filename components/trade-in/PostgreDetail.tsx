@@ -15,13 +15,13 @@ export default function PostgreDetail({ data }: any) {
       <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-1 lg:grid-cols-1">
         {data.slice(0, 1).map((store: any, index: number) => {
           return (
-            <div key={index} className={`p-4 text-left border rounded-lg shadow-lg cursor-pointer bg-white`} >
+            <div key={index} className={`p-4 text-left border rounded shadow-lg cursor-pointer bg-white`}>
               <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
                 <h2 className="w-full text-xl font-semibold text-gray-700 uppercase">
                   {store?.name}
                 </h2>
               </div>
-              <div className="grid grid-cols-12 gap-1">
+              <div className="grid grid-cols-12 gap-4">
                 <div className='sm:col-span-5'>
                   <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
                   <p>{store?.address?.store}</p>
@@ -29,9 +29,9 @@ export default function PostgreDetail({ data }: any) {
                   {store?.address?.area && <p>{store?.address?.area}</p>}
                   <p>{store?.address?.city}, {store?.address?.postcode}</p>
                   <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
-                  <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">
+                  <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200 rounded">
                     {Object.entries(store?.opening_hours).map(([day, hours]: any) => (
-                      <li className='grid grid-cols-2 px-3 pt-2' key={day}>
+                      <li className='grid grid-cols-2 px-3 py-2 mt-0' key={day}>
                         <span className='text-sm font-semibold text-black uppercase'>{day}</span>
                         <span>{hours}</span>
                       </li>

@@ -9,7 +9,7 @@ export default function GetQuote({ nextStep, currentStep, steps, selectedItems, 
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">Your Quote Reference Number: UQ622273</h3>
         </div>
       </div>
-      <div className='flex flex-col w-full mb-6 overflow-hidden shadow ring-2 ring-sky-600 sm:rounded-lg'>
+      <div className='flex flex-col w-full mb-6 overflow-hidden shadow ring-2 ring-sky-600 sm:rounded'>
         <table className='min-w-full divide-y divide-gray-300'>
           <thead className="bg-gray-50">
             <tr>

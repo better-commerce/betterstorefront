@@ -9,7 +9,7 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, currentS
           <h3 className='mb-1 text-xl font-semibold sm:text-3xl text-[#2d4d9c] sm:mb-1'>Quote Summary</h3>
         </div>
       </div>
-      <div className='flex flex-col w-full overflow-hidden shadow ring-1 ring-black/5 sm:rounded-lg'>
+      <div className='flex flex-col w-full overflow-hidden shadow ring-1 ring-black/5 sm:rounded'>
         <table className='min-w-full divide-y divide-gray-300'>
           <thead className="bg-gray-50">
             <tr>
