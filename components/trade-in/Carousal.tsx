@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import "swiper/css/autoplay";
-import { Autoplay, EffectCreative, Pagination } from "swiper";
+import { EffectCreative, Pagination } from "swiper";
 
 export default function Carousel({ images }: any) {
   const [selectedCategory, setSelectedCategory] = useState("cameras"); // Default Category
@@ -20,8 +20,7 @@ export default function Carousel({ images }: any) {
   }
 
   const imagesArray = images[selectedCategory]?.[selectedTab] || [];
-  
-  const handlePrev = () => {
+    const handlePrev = () => {
     if (swiperRef.current) {
       swiperRef.current.swiper.slidePrev(700);
     }
@@ -75,24 +74,11 @@ export default function Carousel({ images }: any) {
             centeredSlides={true}
             slidesPerView={1}
             loop={true}
-            autoplay={{
-              delay: 6000,
-              disableOnInteraction: false,
-            }}
+            autoplay={{ delay: 6000, disableOnInteraction: false, }}
             pagination={{ clickable: true }}
             creativeEffect={{
-              prev: {
-                shadow: false,
-                translate: ["-150%", "0%", -200],
-                rotate: [0, 0, -40],
-                opacity: 0,
-              },
-              next: {
-                shadow: false,
-                translate: ["150%", "0%", -200],
-                rotate: [0, 0, 40],
-                opacity: 0,
-              },
+              prev: { shadow: false, translate: ["-150%", "0%", -200], rotate: [0, 0, -40], opacity: 0, },
+              next: { shadow: false, translate: ["150%", "0%", -200], rotate: [0, 0, 40], opacity: 0, },
             }}
             modules={[EffectCreative, Pagination]}
             className="w-full max-w-lg"
@@ -101,11 +87,7 @@ export default function Carousel({ images }: any) {
             {imagesArray.map((img: any, index: number) => (
               <SwiperSlide key={index} className="flex justify-center">
                 <div className="relative">
-                  <img
-                    src={img.src}
-                    alt={img.title}
-                    className="object-cover !w-auto !h-[340px] !mx-auto"
-                  />
+                  <img src={img.src} alt={img.title} className="object-cover !w-auto !h-[340px] !mx-auto" />
                 </div>
               </SwiperSlide>
             ))}
