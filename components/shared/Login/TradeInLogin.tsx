@@ -85,7 +85,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
 
   if (!isGuestUser && user.userId) {
     return (
-      <div className="w-full h-full font-extrabold text-center text-gray-900">
+      <div className="w-full py-3 h-full font-extrabold text-center text-gray-900">
         {translate('common.message.alreadyLoggedInMsg')}
       </div>
     )
