@@ -318,6 +318,349 @@
                     "active": 1
                 }
             ]
+        },
+ {
+      "name": "Fashion Store",
+      "code": "fashion",
+      "url": "https://fashion.bettercommerce.tech",
+      "features": [
+        {
+          "group": "Global",
+          "urlCode": "home",
+          "name": "Home Page",
+          "url": "https://fashion.bettercommerce.tech",
+          "displayOrder": 6,
+          "active": 1
+        },
+        {
+          "group": "PLP",
+          "urlCode": "plp-product-listing",
+          "name": "Product Listing",
+          "url": "https://fashion.bettercommerce.tech/collection/shop-all-dresses",
+          "displayOrder": 7,
+          "active": 1
+        },
+        {
+          "group": "PLP",
+          "urlCode": "plp-compare-products",
+          "name": "Compare Products",
+          "url": "https://fashion.bettercommerce.tech/collection/shop-all-dresses",
+          "displayOrder": 8,
+          "active": 1
+        },
+        {
+          "group": "PLP",
+          "urlCode": "plp-badges",
+          "name": "Badges",
+          "url": "https://fashion.bettercommerce.tech/collection/dresses/midi-dresses",
+          "displayOrder": 9,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-type-simple-product",
+          "name": "Type Simple Product",
+          "url": "https://fashion.bettercommerce.tech/products/betteryou-one-piece-pink-stylish-woman-western-dress-wwd001",
+          "displayOrder": 11,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-type-variant-",
+          "name": "Type Variant",
+          "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 12,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-type-complex-variant",
+          "name": "Type Complex Variant",
+          "url": "https://fashion.bettercommerce.tech/products/women-regular-fit-solid-casual-shirt-wrfss001-green-rayon",
+          "displayOrder": 13,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-type-bundle-product",
+          "name": "Type Bundle Product",
+          "url": "https://fashion.bettercommerce.tech/products/super-saver-bundle-blazer-shirt-jeans-headscarf-ssb001",
+          "displayOrder": 14,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-type-gift-with-products",
+          "name": "Type Gift with Products",
+          "url": "https://fashion.bettercommerce.tech/products/black-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 15,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-type-gift-cards",
+          "name": "Type Gift Cards",
+          "url": "https://fashion.bettercommerce.tech/products/e-gift-cards-voucher-10-gc0010",
+          "displayOrder": 16,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-check-store-stock",
+          "name": "Check Store Stock",
+          "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 17,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-product-reviews",
+          "name": "Product Reviews",
+          "url": "https://fashion.bettercommerce.tech/products/pink-tulle-mini-dress-with-grosgrain-belt-1-ss23305",
+          "displayOrder": 18,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-rich-attributes",
+          "name": "Rich Attributes",
+          "url": "https://fashion.bettercommerce.tech/products/izzy-wide-leg-trouser-with-gathered-waistband-in-green-ss23220",
+          "displayOrder": 19,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-technical-specs",
+          "name": "Technical Specs",
+          "url": "https://fashion.bettercommerce.tech/products/betteryou-one-piece-pink-stylish-woman-western-dress-wwd001",
+          "displayOrder": 20,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-compare-product",
+          "name": "Compare Product",
+          "url": "https://fashion.bettercommerce.tech/products/majestic-blue-prom-dress-one-size-mbpd001",
+          "displayOrder": 21,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-personalize-product",
+          "name": "Personalize Product",
+          "url": "https://fashion.bettercommerce.tech/products/satin-headscarf-yellow-1-exsd21383",
+          "displayOrder": 22,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-applicable-promos",
+          "name": "Applicable Promos",
+          "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 23,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-quantity-break-pricing",
+          "name": "Quantity Break Pricing",
+          "url": "https://fashion.bettercommerce.tech/products/majestic-blue-prom-dress-one-size-mbpd001",
+          "displayOrder": 24,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-upsell-and-cross-sell",
+          "name": "Upsell and Cross-sell",
+          "url": "https://fashion.bettercommerce.tech/products/ex21371-blustpt-ex21371",
+          "displayOrder": 25,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-ai-recommendations",
+          "name": "AI Recommendations",
+          "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 26,
+          "active": 1
+        },
+        {
+          "group": "PDP",
+          "urlCode": "pdp-social-proofing",
+          "name": "Social Proofing",
+          "url": "https://fashion.bettercommerce.tech/products/majestic-blue-prom-dress-one-size-mbpd001",
+          "displayOrder": 27,
+          "active": 1
+        },
+        {
+          "group": "Brand",
+          "urlCode": "brand-brand-directory",
+          "name": "Brand Directory",
+          "url": "https://fashion.bettercommerce.tech/brands",
+          "displayOrder": 28,
+          "active": 1
+        },
+        {
+          "group": "Brand",
+          "urlCode": "brand-brand-rich-landing-page",
+          "name": "Brand Rich Landing Page",
+          "url": "https://fashion.bettercommerce.tech/brands/signature-6940",
+          "displayOrder": 29,
+          "active": 1
+        },
+        {
+          "group": "Brand",
+          "urlCode": "brand-brand-standard-plp",
+          "name": "Brand Standard PLP",
+          "url": "https://fashion.bettercommerce.tech/brands/unitycraft-6942",
+          "displayOrder": 30,
+          "active": 1
+        },
+        {
+          "group": "Category",
+          "urlCode": "category-category-rich-landing-page",
+          "name": "Category Rich Landing Page",
+          "url": "https://fashion.bettercommerce.tech/category/dresses",
+          "displayOrder": 31,
+          "active": 1
+        },
+        {
+          "group": "Category",
+          "urlCode": "category-category-plp",
+          "name": "Category PLP",
+          "url": "https://fashion.bettercommerce.tech/category/dresses/maxi",
+          "displayOrder": 32,
+          "active": 1
+        },
+        {
+          "group": "Omnichannel",
+          "urlCode": "omnichannel-store-locator",
+          "name": "Store Locator",
+          "url": "https://fashion.bettercommerce.tech/store-locator",
+          "displayOrder": 37,
+          "active": 1
+        },
+        {
+          "group": "Omnichannel",
+          "urlCode": "omnichannel-check-store-stock",
+          "name": "Check Store Stock",
+          "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 39,
+          "active": 1
+        },
+        {
+          "group": "Membership",
+          "urlCode": "membership-tiers-landing-page",
+          "name": "Tiers Landing Page",
+          "url": "https://fashion.bettercommerce.tech/my-membership",
+          "displayOrder": 41,
+          "active": 1
+        },
+        {
+          "group": "Membership",
+          "urlCode": "membership-special-pricing-on-plp",
+          "name": "Special Pricing on PLP",
+          "url": "https://fashion.bettercommerce.tech/collection/shop-all-dresses",
+          "displayOrder": 42,
+          "active": 1
+        },
+        {
+          "group": "Membership",
+          "urlCode": "membership-special-pricing-on-pdp",
+          "name": "Special Pricing on PDP",
+          "url": "https://fashion.bettercommerce.tech/products/red-jersey-mini-dress-with-drape-detail-1-ss221081",
+          "displayOrder": 43,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "account-credit-facility",
+          "name": "Account Credit Facility",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company?tab=company",
+          "displayOrder": 44,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "b2b-account-management",
+          "name": "B2B Account Management",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company?tab=users",
+          "displayOrder": 45,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "address-management",
+          "name": "Address Management",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company?tab=addresses",
+          "displayOrder": 46,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "buying-list",
+          "name": "Buying List",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company/buying-list",
+          "displayOrder": 47,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "rfq",
+          "name": "RFQ",
+          "url": "https://fashion.bettercommerce.tech/my-account/request-for-quote",
+          "displayOrder": 48,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "data-pack",
+          "name": "Datapack",
+          "url": "https://fashion.bettercommerce.tech/my-account/data-pack",
+          "displayOrder": 49,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "quotes",
+          "name": "Quotes",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company/quotes",
+          "displayOrder": 50,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "invoice",
+          "name": "Invoice",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company/invoices",
+          "displayOrder": 51,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "orders",
+          "name": "Orders",
+          "url": "https://fashion.bettercommerce.tech/my-account/my-company/orders",
+          "displayOrder": 52,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "reorder",
+          "name": "Reorder",
+          "url": "https://fashion.bettercommerce.tech/my-account/orders/e594ab73-6960-ef11-991b-dae0ad15fcc4",
+          "displayOrder": 53,
+          "active": 1
+        },
+        {
+          "group": "B2B",
+          "urlCode": "custom-pricing",
+          "name": "Custom Pricing",
+          "url": "https://fashion.bettercommerce.tech/products/billie-tailored-short-with-pleated-detail-in-apple-ss23594",
+          "displayOrder": 54,
+          "active": 1
         }
+      ]
+    }
     ]
 }
