@@ -45,6 +45,7 @@ import CartSideBarProductCard from '@components/CartSideBarProductCard'
 import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
+  const router = useRouter()
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
@@ -283,7 +284,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   }
 
   let currentPage = getCurrentPage()
-  const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+  const extras = { originalLocation: SITE_ORIGIN_URL + router?.asPath }
   useAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
 
   useEffect(() => {
@@ -654,7 +655,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
   const css = { maxWidth: '100%', height: 'auto' }
-  const router = useRouter()
+
   const getLineItemSizeWithoutSlug = (product: any) => {
     const productData: any = tryParseJson(product?.attributesJson || {})
     return productData?.Size
