@@ -605,6 +605,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         const attributeData: any = tryParseJson(product?.attributesJson || {})
 
       }
+      if (type === 'delete') {
+        data.qty = 0
+        if (window?.ch_session) {
+          window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
+        }
+      }
       if (type === 'select') {
         if (product?.qty !== selectQuantity) {
           //increase or decrease quantity by finding difference between values
@@ -633,6 +639,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     } else if (product?.productId) {
       asyncHandleItem(product)
     }
+    setLoadingAction(LoadingActionType.NONE)
+    closeModal()
   }
 
   const openModal = () => {
@@ -857,7 +865,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {isIncludeVAT ? cartItems?.shippingCharge?.formatted?.withTax : cartItems?.shippingCharge?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  {userCart.promotionsApplied?.length > 0 && (
+                  {userCart?.promotionsApplied?.length > 0 && (
                     <div className="flex items-center justify-between py-4 basket-summary-price">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>
