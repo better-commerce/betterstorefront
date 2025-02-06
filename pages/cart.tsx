@@ -60,7 +60,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       )?.value || ''
   )
 
-  const { setCartItems, cartItems, resetKitCart, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const { setCartItems, cartItems, resetKitCart, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar, setOverlayLoaderState } = useUI()
   const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
@@ -619,6 +619,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       }
       try {
         const item = await addToCart(data, type, { product })
+        if(item){
+          setLoadingAction(LoadingActionType.NONE)
+          closeModal()
+        }
         getBasketPromos(basketId)
         if (isSplitDelivery) {
           setCartItems(item)
@@ -639,8 +643,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     } else if (product?.productId) {
       asyncHandleItem(product)
     }
-    setLoadingAction(LoadingActionType.NONE)
-    closeModal()
+    setOverlayLoaderState({
+      visible: false,
+      message: "",
+    })
   }
 
   const openModal = () => {
@@ -1069,7 +1075,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  {userCart.promotionsApplied?.length > 0 && (
+                  {userCart?.promotionsApplied?.length > 0 && (
                     <div className="flex items-center justify-between pt-2 sm:pt-2">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>

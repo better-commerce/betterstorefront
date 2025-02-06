@@ -7,8 +7,8 @@ import { IOverlayLoaderState, useUI } from '@components/ui/context'
 import Spinner from '@components/ui/Spinner'
 
 const OverlayLoader = () => {
-  const { overlayLoaderState = false }: any = useUI()
-  const { visible = false, message = EmptyString, backdropInvisible = false, }: IOverlayLoaderState = overlayLoaderState
+  const { overlayLoaderState }: any = useUI()
+  const { visible = false, message = EmptyString, backdropInvisible = false, }: IOverlayLoaderState = overlayLoaderState 
 
   return (
     <>
