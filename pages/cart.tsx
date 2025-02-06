@@ -607,9 +607,6 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       }
       if (type === 'delete') {
         data.qty = 0
-        if (window?.ch_session) {
-          window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
-        }
       }
       if (type === 'select') {
         if (product?.qty !== selectQuantity) {
