@@ -27,9 +27,11 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
   const [reValidateData, setBasketReValidate] = useState<any>([])
   const [isOpen, setIsOpen] = useState(false)
   const [itemClicked, setItemClicked] = useState<any | Array<any>>()
+  const [shippingPlans, setShippingPlans] = useState<any>([])
 
   useEffect(() => {
-    let splitProducts = groupItemsByDeliveryDate(cartItems?.lineItems)
+    const cartLineItems = mapSplitDeliveryPlansToItems(shippingPlans, cartItems?.lineItems)
+    let splitProducts = groupItemsByDeliveryDate(cartLineItems)
     setSplitBasketProducts(splitProducts)
   }, [cartItems?.lineItems])
 
@@ -186,6 +188,7 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
     const { data: shippingPlans } = await axios.post(NEXT_SHIPPING_PLANS, {
       model: allowSplitShipping ? splitModel : model,
     })
+    setShippingPlans(shippingPlans)
     // const shippingPlans = await getShippingPlans()({ model: model })
     if (shippingPlans.length > 1 && allowSplitShipping) {
       setIsSplitDelivery(true)
