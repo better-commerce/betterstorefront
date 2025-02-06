@@ -30,7 +30,7 @@ import { round, sortBy } from 'lodash'
 import { ProductType } from '@framework/utils/enums'
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -433,6 +433,10 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     } else if (product?.productId) {
       asyncHandleItem(product)
     }
+    setOverlayLoaderState({
+      visible: false,
+      message: "",
+    })
   }
 
   const handleInputQuantity = (product: any, updateQty: any) => {
@@ -539,7 +543,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }, [cartItems?.lineItems])
 
   const css = { maxWidth: '100%', height: 'auto' }
-  return (
+    return (
     <>
       <Transition.Root show={cartSidebarOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 overflow-hidden z-99" onClose={handleClose} >
