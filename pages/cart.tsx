@@ -616,10 +616,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       }
       try {
         const item = await addToCart(data, type, { product })
-        if(item){
-          setLoadingAction(LoadingActionType.NONE)
-          closeModal()
-        }
+        setLoadingAction(LoadingActionType.NONE)
+        closeModal()
         getBasketPromos(basketId)
         if (isSplitDelivery) {
           setCartItems(item)
