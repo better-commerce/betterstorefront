@@ -367,14 +367,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             item.ProductId.toLowerCase() === cartItem.productId.toLowerCase()
           )
         })
-        let deliveryDateTarget = obj.Items?.find(
-          (item: any) =>
-            item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase()
-        )?.DeliveryDateTarget
-        let shippingSpeed = obj.Items?.find(
-          (item: any) =>
-            item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase()
-        )?.ShippingSpeed
+        let deliveryDateTarget = obj.Items?.find((item: any) => item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase())?.DeliveryDateTarget
+        let shippingSpeed = obj.Items?.find((item: any) => item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase())?.ShippingSpeed
         if (foundShippingPlan) {
           cartItem.shippingPlan = obj
           cartItem.deliveryDateTarget = deliveryDateTarget
@@ -908,133 +902,77 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
               <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
                 <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-                  {Object.keys(splitBasketProducts)?.map(
-                    (deliveryDate: any, Idx: any) => (
-                      <>
-                        {Object.keys(splitBasketProducts)[0] === 'Invalid Date' ? (
-                          <LoadingDots />
-                        ) : (
-                          <h2 className="text-sm font-bold">
-                            {translate('label.checkout.deliveryText')`${Idx + 1}`}
-                          </h2>
-                        )}
-                        {splitBasketProducts[deliveryDate]?.map(
-                          (product: any, productIdx: number) => (
-                            <div key={productIdx} className="relative flex py-2 sm:py-2 xl:py-2 first:pt-0 last:pb-0" >
-                              <div className="flex-shrink-0">
-                                <img style={css} width={140} height={180} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'cart-item'} className="object-cover object-center w-16 rounded-lg sm:w-28 image" />
-                              </div>
-                              <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                                <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
-                                  {product.brand}
-                                </h3>
-                                <h3 className="my-2 text-sm sm:text-sm sm:my-1">
-                                  <Link href={`/${product.slug}`}>
-                                    <span className="font-normal text-gray-700 hover:text-gray-800">
-                                      {product.name}
-                                    </span>
-                                  </Link>
-                                </h3>
-                                <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                                  {product?.price?.raw?.withTax > 0 ? (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax) : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
-                                  {product?.price?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product.price?.raw?.withTax && (
-                                    <span className="px-2 text-sm text-red-400 line-through">
-                                      {translate('label.basket.priceLabelText')}{' '}
-                                      {isIncludeVAT ? product?.listPrice.formatted?.withTax : product?.listPrice.formatted?.withoutTax}
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                                  {product?.variantProducts?.length > 0 ? (
-                                    <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} >
-                                      <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                                        <div className="mr-1 text-sm text-gray-700">
-                                          {translate('common.label.sizeText')}{' '}
-                                          <span className="font-semibold text-black uppercase">
-                                            {getLineItemSizeWithoutSlug(product)}
-                                          </span>
-                                        </div>
-                                        <ChevronDownIcon className="w-4 h-4 text-black" />
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <div></div>
-                                  )}
-                                  {isSplitDelivery && splitDeliveryDates && (
-                                    <p className="w-full">
-                                      {product?.shippingSpeed}
-                                    </p>
-                                  )}
-                                  <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
-                                    <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
-                                      {product.qty}
-                                    </span>
-                                    {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
-                                  </div>
-                                </div>
+                  {Object.entries(splitBasketProducts)
+                    .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
+                    .map(([deliveryDate, products]: any, index: number) => (
+                      <div key={deliveryDate}>
+                        {/* Delivery Header */}
+                        <h2 className="py-3 text-sm font-semibold">
+                          {translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length} - {deliveryDate}
+                        </h2>
 
-                                {product.children?.map(
-                                  (child: any, idx: number) => (
-                                    <div className="flex mt-10" key={'child' + idx} >
-                                      <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                                        <img src={child.image} alt={child.name || 'cart-image'} className="object-cover object-center w-full h-full" />
-                                      </div>
-                                      <div className="flex justify-between ml-5 font-medium text-gray-900">
-                                        <Link href={`/${child.slug}`}> {child.name} </Link>
-                                        <p className="ml-4">
-                                          {child.price?.formatted?.withTax > 0 ? isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax : ''}
-                                        </p>
-                                      </div>
-                                      {!child.parentProductId ? (
-                                        <div className="flex items-center justify-end flex-1 text-sm">
-                                          <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
-                                            {isInWishList(product?.productId) ? (
-                                              <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
-                                            ) : (
-                                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
-                                            )
-                                            }
-                                          </button>
-                                          <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
-                                            <span className="sr-only"> {translate('common.label.removeText')} </span>
-                                            <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                                          </button>
-                                        </div>
-                                      ) : (
-                                        <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
-                                          {child.qty}
-                                        </div>
-                                      )}
-                                    </div>
-                                  )
-                                )}
-                                <div className="absolute top-0 right-0">
-                                  <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
-                                    {isInWishList(product?.productId) ? (
-                                      <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
-                                    ) : (
-                                      <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
-                                    )
-                                    }
-                                  </button>
-                                  <button type="button" onClick={() => handleItem(product, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
-                                    <span className="sr-only">
-                                      {translate('common.label.removeText')}
-                                    </span>
-                                    <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" />
-                                  </button>
-                                </div>
-                                <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                                  {product.shippingPlan?.shippingSpeed}
-                                </div>
-                              </div>
-                            </div>
+                        {/* Loop through Products */}
+                        {products?.map((product: any, productIdx: number) => {
+                          let soldOutMessage = ''
+                          const saving = (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax) - (isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax)
+                          const discount = round((saving / (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax)) * 100, 0)
+                          soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                          const voltageAttr: any = tryParseJson(product?.attributesJson)
+                          const electricVoltAttrLength = voltageAttr?.Attributes?.filter(
+                            (x: any) => x?.FieldCode == 'electrical.voltage'
                           )
-                        )}
-                      </>
-                    )
-                  )}
+                          let productNameWithVoltageAttr: any = product?.name
+                          productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                            <span key={`voltage-${vId}`}>
+                              {product?.name?.toLowerCase()}{' '}
+                              <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded"> {volt?.ValueText} </span>
+                            </span>
+                          )) : <span>{product?.name}</span>
+
+                          return (
+                            <>
+                              <CartSideBarProductCard
+                                key={product?.productId}
+                                product={product}
+                                productNameWithVoltageAttr={productNameWithVoltageAttr}
+                                css={css}
+                                itemsInBag={itemsInBag}
+                                handleRedirectToPDP={handleRedirectToPDP}
+                                handleClose={handleClose}
+                                handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                                maxBasketItemsCount={maxBasketItemsCount}
+                                isIncludeVAT={isIncludeVAT}
+                                discount={discount}
+                                handleItem={handleItem}
+                                openModal={openModal}
+                                setItemClicked={setItemClicked}
+                                reValidateData={reValidateData}
+                                soldOutMessage={soldOutMessage}
+                                getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                              />
+                              {product.children?.map((child: any, idx: number) => (
+                                <CartSideBarProductCard
+                                  product={child}
+                                  css={css}
+                                  handleRedirectToPDP={handleRedirectToPDP}
+                                  handleClose={handleClose}
+                                  handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                                  isIncludeVAT={isIncludeVAT}
+                                  discount={discount}
+                                  handleItem={handleItem}
+                                  openModal={openModal}
+                                  setItemClicked={setItemClicked}
+                                  reValidateData={reValidateData}
+                                  soldOutMessage={soldOutMessage}
+                                  getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                  key={idx}
+                                />
+                              ))}
+                            </>
+                          )
+                        })}
+                      </div>
+                    ))}
                 </div>
               </section>
               <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded' : 'bg-slate-50 rounded-2xl'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0`} >
@@ -1095,7 +1033,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>

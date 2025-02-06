@@ -77,7 +77,7 @@ export enum BasketStage {
 }
 
 
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, defaultDisplayMembership}: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, config, defaultDisplayMembership}: any) => {
   const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const uiContext: any = useUI()
@@ -1007,6 +1007,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     defaultDisplayMembership, 
     refreshBasket,
     featureToggle,
+    config
   }
 
   useEffect(() => {

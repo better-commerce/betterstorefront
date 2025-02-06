@@ -13,6 +13,7 @@ import { groupCartItemsById } from '@components/utils/cart';
 import { BASKET_PROMO_TYPES } from '@framework/utils/constants';
 import Summary from './Summary';
 import BasketItems from './BasketItems';
+import SplitDeliveryBasketItems from './SplitDeliveryBasket';
 interface BasketItem {
   id: string;
   name: string;
@@ -20,7 +21,7 @@ interface BasketItem {
   price: number;
 }
 
-const BasketDetails = ({ basket, deviceInfo, promotionsUpdate = [], onUpdatePromoCode = () => { } }: any) => {
+const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUpdatePromoCode = () => { } }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, isGuestUser, setAlert } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -147,7 +148,7 @@ const BasketDetails = ({ basket, deviceInfo, promotionsUpdate = [], onUpdateProm
                           <span className='font-semibold text-black'>{userCartItems?.length}{' '}{userCartItems?.length > 1 ? 'items' : 'item'}</span>
                         </div>
                         <div className="w-full px-0 pt-3 pb-2">
-                          <BasketItems userCartItems={userCartItems} />
+                          <SplitDeliveryBasketItems cartItem={userCartItems} cart={basket} config={config} />
                         </div>
                       </div>
                       {referralAvailable && isGuestUser && basket?.contactDetails?.emailAddress && (//user?.userEmail && (
@@ -175,7 +176,7 @@ const BasketDetails = ({ basket, deviceInfo, promotionsUpdate = [], onUpdateProm
                     </Disclosure.Button>
                     <Disclosure.Panel className="px-0 pt-3 pb-2">
                       <div className="w-full max-basket-panel">
-                        <BasketItems userCartItems={userCartItems} />
+                        <SplitDeliveryBasketItems cartItem={userCartItems} cart={basket} config={config} />
                       </div>
                     </Disclosure.Panel>
                   </>
@@ -193,41 +194,14 @@ const BasketDetails = ({ basket, deviceInfo, promotionsUpdate = [], onUpdateProm
       }
 
       <Transition.Root show={referralModalShow} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 overflow-hidden z-999"
-          onClose={() => {
-            setReferralModalShow(!referralModalShow)
-          }}
-        >
+        <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => { setReferralModalShow(!referralModalShow) }} >
           <div className="absolute inset-0 overflow-hidden z-999">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay
-                className="w-full h-screen bg-black opacity-50"
-                onClick={() => {
-                  setReferralModalShow(!referralModalShow)
-                }}
-              />
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+              <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => { setReferralModalShow(!referralModalShow) }} />
             </Transition.Child>
 
             <div className="fixed inset-0 flex items-center justify-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
+              <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
                 <div className="2xl:w-screen 2xl:h-auto  xl:h-[500px] max-w-xl 2xl:max-w-xl">
                   <div className="flex flex-col h-full overflow-y-auto rounded shadow-xl bg-gray-50">
                     <div className="flex-1 px-0 overflow-y-auto">
@@ -236,13 +210,7 @@ const BasketDetails = ({ basket, deviceInfo, promotionsUpdate = [], onUpdateProm
                           {BEEN_REFERRED_BY_A_FRIEND}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
-                          <button
-                            type="button"
-                            className="p-2 -m-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => {
-                              setReferralModalShow(!referralModalShow)
-                            }}
-                          >
+                          <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={() => { setReferralModalShow(!referralModalShow) }} >
                             <span className="sr-only">{CLOSE_PANEL}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>

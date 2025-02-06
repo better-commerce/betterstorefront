@@ -181,12 +181,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, entityType: Product, })
     if (response?.data?.product) {
       setUpdatedProduct(response.data.product)
-      // Commenting it, as it override selectedAttribute from attributesHandler
-      // setSelectedAttrData({
-      //   productId: response?.data?.product?.recordId,
-      //   stockCode: response?.data?.product?.stockCode,
-      //   ...response?.data?.product,
-      // })
       if (typeof window !== "undefined" && window?.ch_session) {
         window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
