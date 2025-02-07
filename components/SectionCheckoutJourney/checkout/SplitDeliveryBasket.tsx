@@ -353,11 +353,10 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
               .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
               .map(([deliveryDate, products]: any, index: number) => (
                 <div key={deliveryDate}>
-                  {/* Delivery Header */}
+                  {/* Delivery Header */}                  
                   <h2 className="py-3 text-sm font-semibold">
-                    {translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length} - {deliveryDate}
+                    {translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length} - {new Date(deliveryDate).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}
                   </h2>
-
                   {/* Loop through Products */}
                   {products?.map((product: any, productIdx: number) => {
                     let soldOutMessage = ''

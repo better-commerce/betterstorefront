@@ -916,8 +916,10 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                     .map(([deliveryDate, products]: any, index: number) => (
                       <div key={deliveryDate}>
                         {/* Delivery Header */}
-                        <h2 className="py-3 text-sm font-semibold">
-                          {translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length} - {deliveryDate}
+                        <h2 className="flex justify-start gap-1 py-3 text-sm">
+                          <span className='font-semibold text-black'>{translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length}</span>
+                          <span>- Expected date:</span>
+                          <span className='font-normal text-black'>{new Date(deliveryDate).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}</span>
                         </h2>
 
                         {/* Loop through Products */}
