@@ -1,13 +1,9 @@
-import { REFERRAL_VOUCHERS } from "@components/utils/constants";
+import { EmptyObject, REFERRAL_VOUCHERS } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 import { logError } from "@framework/utils/app-util";
 
-interface props{
-    userId?:string
-}
-
 export default function useReferralVouchers(){
-    return async function handler(userId:string){
+    return async function handler(userId:string, cookies = EmptyObject){
         const url = REFERRAL_VOUCHERS + `?userId=${userId}`
         try {
             const response: any = await fetcher({
@@ -16,6 +12,7 @@ export default function useReferralVouchers(){
                 headers: {
                     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
                 },
+                cookies
             })
             return response
         } catch (error: any) {

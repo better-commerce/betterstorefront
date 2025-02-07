@@ -19,9 +19,8 @@ import Layout from '@components/Layout/Layout'
 import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri, removeQueryString, } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString, serverSideMicrositeCookies, } from '@commerce/utils/uri-util'
 import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
@@ -46,6 +45,8 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
+import { AnalyticsEventType } from '@components/services/analytics'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -106,6 +107,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function CollectionPage(props: any) {
+  const { recordAnalytics } = useAnalytics()
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
@@ -132,18 +134,6 @@ function CollectionPage(props: any) {
     loading: false,
   })
   const { isCompared } = useUI()
-
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
-    entity: JSON.stringify({
-      id: props?.id || EmptyGuid,
-      name: props?.name || EmptyString,
-    }),
-    entityId: props?.id || EmptyGuid,
-    entityName: props?.name || EmptyString,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
-    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
-  })
-
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
   const initialState = {
@@ -254,25 +244,9 @@ function CollectionPage(props: any) {
   useEffect(() => {
     if (productDataToPass?.results?.length > 0) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'view_item_list', {
-          ecommerce: {
-            items: productDataToPass?.results?.map(
-              (item: any, itemId: number) => ({
-                item_name: item?.name,
-                item_id: item?.sku,
-                price: item?.price?.raw?.withTax,
-                item_brand: item?.brand,
-                item_category1: item?.classification?.mainCategoryName,
-                item_category2: item?.classification?.category,
-                item_variant: item?.variantGroupCode,
-                item_list_name: props?.name,
-                item_list_id: props?.id,
-                index: itemId + 1,
-                item_var_id: item?.stockCode,
-              })
-            ),
-          },
-        })
+        //debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+        recordAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: productDataToPass, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Collection, })
       }
     }
   }, [productDataToPass])
@@ -568,9 +542,9 @@ function CollectionPage(props: any) {
         {props?.breadCrumbs && (
           <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
         )}
-        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
           <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
-            {props?.name.toLowerCase()}
+            {props?.name?.toLowerCase()}
           </h1>
           {props?.description &&
             <div className='flex justify-between w-full align-bottom'>
@@ -596,9 +570,15 @@ function CollectionPage(props: any) {
                     {isMobile ? (
                       <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     ) : (
-                      <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                      <>
+                        {!featureToggle?.features?.enableHorizontalFilter ? (
+                          <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                        ) : (
+                          <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                        )}
+                      </>
                     )}
-                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12' : 'sm:col-span-9'}`}>
                       {isMobile ? null : (
                         <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
@@ -681,7 +661,8 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   let hostName = EmptyString
   hostName = os.hostname()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COLLECTION_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

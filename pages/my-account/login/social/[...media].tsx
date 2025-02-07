@@ -24,7 +24,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 interface ISocialLoginPageProps {
   readonly medium: SocialMediaType
@@ -32,6 +32,7 @@ interface ISocialLoginPageProps {
 
 const SocialLoginPage = (props: ISocialLoginPageProps) => {
   const { medium } = props
+  const { recordAnalytics } = useAnalytics()
   const { data: userData, status } = useSession()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
@@ -49,11 +50,7 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
     basketId,
   } = useUI()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
-    entityName: PAGE_TYPES.SocialLogin,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.SocialLogin, })
 
   useEffect(() => {
     const asyncLoginHandler = async (media: string) => {

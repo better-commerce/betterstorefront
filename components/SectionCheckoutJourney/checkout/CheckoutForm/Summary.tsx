@@ -163,13 +163,6 @@ export default function Summary({
                   <div className="flex w-full px-3 justify-left">
                     <div className="flex text-initial">
                       <h2 className="align-middle text-md img-sumry-view">
-                        {/* <img
-                          className="align-middle"
-                          height={22}
-                          width={22}
-                          src="/image/bas1.png"
-                          alt="logo"
-                        ></img> */}
                         <ShoppingCartIcon className="w-4 h-4" />
                         <span className="ml-3 link-button !text-base">
                           {translate('label.orderSummary.orderSummaryText')}
@@ -177,21 +170,15 @@ export default function Summary({
                       </h2>
                     </div>
                     <div className="mobile-view-on">
-                      <ChevronUpIcon
-                        className={`${!open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 mt-1 ml-1 text-gray-900`}
-                      />
+                      <ChevronUpIcon className={`${!open ? 'rotate-180 transform' : ''} h-5 w-5 mt-1 ml-1 text-gray-900`} />
                     </div>
                     <div className="flex-1 font-bold text-right xsm:w-full">
-                      {isIncludeVAT
-                        ? cart.grandTotal?.formatted?.withTax
-                        : cart.grandTotal?.formatted?.withoutTax}
+                      {isIncludeVAT ? cart.grandTotal?.formatted?.withTax : cart.grandTotal?.formatted?.withoutTax}
                     </div>
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className="w-full p-6 pb-2 mb-3 text-sm text-gray-500 bg-white border border-gray-200 shadow desk-disclouser-view-hide">
                   <div className="mt-0 bg-white">
-                    {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{translate('label.orderSummary.orderSummaryText')}</h2> */}
                     <h3 className="sr-only">{translate('label.basket.itemsYourCartText')}</h3>
                     <ul role="list" className="divide-y divide-gray-200">
                       {cart.lineItems?.map((product: any) => {
@@ -222,126 +209,57 @@ export default function Summary({
                               <div className="flex">
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-start justify-between text-sm">
-                                    <Link
-                                      href={`/${product.slug}`}
-                                      className="inline-block font-bold text-gray-900 uppercase hover:text-gray-800 hover:underline"
-                                    >
+                                    <Link href={`/${product.slug}`} className="inline-block font-bold text-gray-900 uppercase hover:text-gray-800 hover:underline" >
                                       <p className='break-words'>{product?.name}</p>
                                     </Link>
                                     <p className="inline-block text-sm font-medium text-gray-900">
-                                      {isIncludeVAT
-                                        ? product.price?.formatted?.withTax
-                                        : product.price?.formatted?.withoutTax}
-                                      {product?.price?.raw?.withTax > 0 &&
-                                        product.listPrice?.raw.withTax > 0 &&
-                                        product.listPrice?.raw.withTax !=
-                                        product.price?.raw?.withTax && (
+                                      {isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax}
+                                      {product?.price?.raw?.withTax > 0 && product.listPrice?.raw.withTax > 0 && product.listPrice?.raw.withTax != product.price?.raw?.withTax && (
                                         <span className="px-2 text-sm text-red-400 line-through">
-                                          {isIncludeVAT
-                                            ? product.listPrice.formatted
-                                              ?.withTax
-                                            : product.listPrice.formatted
-                                              ?.withoutTax}
+                                          {isIncludeVAT ? product.listPrice.formatted?.withTax : product.listPrice.formatted?.withoutTax}
                                         </span>
                                       )}
                                     </p>
                                   </div>
                                   <p className="font-normal text-gray-700 text-ms">
-                                    Size:{' '}
-                                    <span className="uppercase">
-                                      {getLineItemSizeWithoutSlug(product)}
-                                    </span>
+                                    Size:{' '} <span className="uppercase">{getLineItemSizeWithoutSlug(product)}</span>
                                   </p>
-                                  {product?.children?.map(
-                                    (child: any, childId: number) => {
-                                      const message = JSON.parse(
-                                        child.customInfo1
-                                      )
-                                      const customMsg =
-                                        message?.formatted?.data?.Message
-                                      const customCol =
-                                        message?.formatted?.data?.Colour
-                                      const customFont =
-                                        message?.formatted?.data?.Font
-                                      const customPos =
-                                        message?.formatted?.data?.Position
-
-                                      return (
-                                        <>
-                                          <div
-                                            className="flex justify-between mt-1"
-                                            key={childId}
-                                          >
-                                            <div>
-                                              <p className="text-sm text-gray-900">
-                                                {child.name}
-                                              </p>
-                                            </div>
-                                            <label className="text-sm text-gray-900">
-                                              <PlusIcon
-                                                className="inline-block -mt-1"
-                                                style={{
-                                                  width: '0.85rem',
-                                                  height: '0.85rem',
-                                                }}
-                                              />
-                                              {isIncludeVAT
-                                                ? child?.price?.formatted
-                                                  ?.withTax
-                                                : child?.price?.formatted
-                                                  ?.withoutTax}
-                                            </label>
+                                  {product?.children?.map((child: any, childId: number) => {
+                                    const message = JSON.parse(child.customInfo1)
+                                    const customMsg = message?.formatted?.data?.Message
+                                    const customCol = message?.formatted?.data?.Colour
+                                    const customFont = message?.formatted?.data?.Font
+                                    const customPos = message?.formatted?.data?.Position
+                                    return (
+                                      <>
+                                        <div className="flex justify-between mt-1" key={childId} >
+                                          <div>
+                                            <p className="text-sm text-gray-900"> {child.name} </p>
                                           </div>
-                                          <div className="text-gray-700 text-ms">
-                                            <span
-                                              title={translate('label.product.messageText')}
-                                              className={classNames({
-                                                'font-rubikBubblesMerged':
-                                                  customFont ===
-                                                  'rubikBubblesMerged',
-                                                'font-YeonSungRegularMerged':
-                                                  customFont ===
-                                                  'YeonSungRegularMerged',
-                                                'font-KSTM1Merged':
-                                                  customFont === 'KSTM1Merged',
-                                                'font-Cantarell-RegularMergedSymbols':
-                                                  customFont ===
-                                                  'Cantarell-RegularMergedSymbols',
-                                              })}
-                                            >
-                                              {customMsg}
-                                            </span>
-                                            {' | '}
-                                            <span
-                                              className="align-middle cursor-pointer"
-                                              onClick={() =>
-                                                handleToggleEngravingModal(
-                                                  product
-                                                )
-                                              }
-                                              title={translate('common.label.viewPersonalisationText')}
-                                            >
-                                              <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
-                                            </span>
-                                            {/* <span 
-                                title="Colour"
-                                className='inline-block w-4 h-4 border border-gray-300' 
-                                style={{
-                                  backgroundColor: customCol,
-                                  verticalAlign: 'sub',
-                                }}
-                              />{' | '}
-                              <span title='Font'>
-                                {customFont}
-                              </span>{' | '}
-                              <span title='Font'>
-                                {customPos}
-                              </span> */}
-                                          </div>
-                                        </>
-                                      )
-                                    }
-                                  )}
+                                          <label className="text-sm text-gray-900">
+                                            <PlusIcon className="inline-block -mt-1" style={{ width: '0.85rem', height: '0.85rem', }} />
+                                            {isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax}
+                                          </label>
+                                        </div>
+                                        <div className="text-gray-700 text-ms">
+                                          <span
+                                            title={translate('label.product.messageText')}
+                                            className={classNames({
+                                              'font-rubikBubblesMerged': customFont === 'rubikBubblesMerged',
+                                              'font-YeonSungRegularMerged': customFont === 'YeonSungRegularMerged',
+                                              'font-KSTM1Merged': customFont === 'KSTM1Merged',
+                                              'font-Cantarell-RegularMergedSymbols': customFont === 'Cantarell-RegularMergedSymbols',
+                                            })}>
+                                            {customMsg}
+                                          </span>
+                                          {' | '}
+                                          <span className="align-middle cursor-pointer" onClick={() => handleToggleEngravingModal(product)} title={translate('common.label.viewPersonalisationText')}>
+                                            <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
+                                          </span>
+                                        </div>
+                                      </>
+                                    )
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -353,29 +271,15 @@ export default function Summary({
                     {
                       !isPaymentLink && (
                         <div className="pt-2 mx-4 ">
-                          <Disclosure
-                            defaultOpen={cart.promotionsApplied?.length > 0}
-                          >
+                          <Disclosure defaultOpen={cart.promotionsApplied?.length > 0} >
                             {({ open }) => (
                               <>
                                 <Disclosure.Button className="flex justify-between py-2 text-sm font-medium text-left underline rounded-lg text-green focus-visible:ring-opacity-75 link-button">
                                   <span>{translate('common.label.applyPromoText')}?</span>
                                 </Disclosure.Button>
-                                <Transition
-                                  enter="transition duration-100 ease-out"
-                                  enterFrom="transform scale-95 opacity-0"
-                                  enterTo="transform scale-100 opacity-100"
-                                  leave="transition duration-75 ease-out"
-                                  leaveFrom="transform scale-100 opacity-100"
-                                  leaveTo="transform scale-95 opacity-0"
-                                >
+                                <Transition enter="transition duration-100 ease-out" enterFrom="transform scale-95 opacity-0" enterTo="transform scale-100 opacity-100" leave="transition duration-75 ease-out" leaveFrom="transform scale-100 opacity-100" leaveTo="transform scale-95 opacity-0" >
                                   <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                                    <PromotionInput
-                                      basketPromos={basketPromos}
-                                      items={cartItems}
-                                      getBasketPromoses={getBasketPromos}
-                                      membership={membership}
-                                    />
+                                    <PromotionInput basketPromos={basketPromos} items={cartItems} getBasketPromoses={getBasketPromos} membership={membership} />
                                   </Disclosure.Panel>
                                 </Transition>
                               </>
@@ -388,14 +292,10 @@ export default function Summary({
                     <dl className="px-4 py-2 space-y-2 border-gray-200 sm:px-6">
                       <div className="flex items-center justify-between">
                         <dt className="text-sm text-gray-900">
-                          {isIncludeVAT
-                            ? translate('label.orderSummary.subTotalVATIncText')
-                            : translate('label.orderSummary.subTotalVATExText')}
+                          {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
                         </dt>
                         <dd className="text-gray-900 text-md">
-                          {isIncludeVAT
-                            ? cart.subTotal?.formatted?.withTax
-                            : cart.subTotal?.formatted?.withoutTax}
+                          {isIncludeVAT ? cart.subTotal?.formatted?.withTax : cart.subTotal?.formatted?.withoutTax}
                         </dd>
                       </div>
                       {isShippingDisabled ? null : (
@@ -404,9 +304,7 @@ export default function Summary({
                             {translate('label.orderSummary.shippingText')}
                           </dt>
                           <dd className="text-gray-900 text-md">
-                            {isIncludeVAT
-                              ? cart.shippingCharge?.formatted?.withTax
-                              : cart.shippingCharge?.formatted?.withoutTax}
+                            {isIncludeVAT ? cart.shippingCharge?.formatted?.withTax : cart.shippingCharge?.formatted?.withoutTax}
                           </dd>
                         </div>
                       )}
@@ -416,12 +314,7 @@ export default function Summary({
                             <span>{translate('label.orderSummary.discountText')}</span>
                           </dt>
                           <dd className="text-red-500 text-md">
-                            <p>
-                              {'-'}
-                              {isIncludeVAT
-                                ? cart.discount?.formatted?.withTax
-                                : cart.discount?.formatted?.withoutTax}
-                            </p>
+                            <p> {'-'} {isIncludeVAT ? cart.discount?.formatted?.withTax : cart.discount?.formatted?.withoutTax} </p>
                           </dd>
                         </div>
                       )}
@@ -436,46 +329,24 @@ export default function Summary({
                           {translate('label.orderSummary.totalText')}
                         </dt>
                         <dd className="text-xl font-semibold text-gray-900">
-                          {isIncludeVAT
-                            ? cart.grandTotal?.formatted?.withTax
-                            : cart.grandTotal?.formatted?.withoutTax}
+                          {isIncludeVAT ? cart.grandTotal?.formatted?.withTax : cart.grandTotal?.formatted?.withoutTax}
                         </dd>
                       </div>
                     </dl>
-
-                    {/* <div className="px-4 py-6 border-t border-gray-200 sm:px-6">
-          <button
-            type="button"
-            onClick={confirmOrder}
-            className="w-full px-4 py-3 font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-700"
-          >
-            {translate('label.checkout.confirmOrderText')}
-          </button>
-        </div> */}
-
-                    {/* read-only engraving modal */}
                     {selectedEngravingProduct && (
-                      <Engraving
-                        show={isEngravingOpen}
-                        showEngravingModal={setIsEngravingOpen}
-                        product={selectedEngravingProduct}
-                        handleToggleDialog={handleToggleEngravingModal}
-                        readOnly={true}
-                      />
+                      <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
                   </div>
                 </Disclosure.Panel>
               </>
             )}
           </Disclosure>
-          {/* /////////hide data */}
           <div className="mt-0 bg-white border border-gray-200 shadow-sm deskdataonmobile hideipad">
             <h4 className="px-5 py-4 mb-3 font-bold text-gray-900 uppercase bg-gray-200 border-b bg-nav !mt-0">
               {translate('label.orderSummary.orderSummaryText')}
             </h4>
 
             <div className="mt-0 bg-white shadow-sm deskdataonmobile">
-              {/* <h2 className="px-5 py-4 mb-3 text-lg font-bold text-gray-900 uppercase bg-gray-200 border-b rounded-t-md">{translate('label.orderSummary.orderSummaryText')}</h2> */}
               <h3 className="sr-only">{translate('label.basket.itemsYourCartText')}</h3>
               <ul role="list" className="divide-y divide-gray-200">
                 {cart.lineItems?.map((product: any) => {
@@ -495,17 +366,8 @@ export default function Summary({
                         }
                       })}
                       <div className="flex-shrink-0">
-                        <Link
-                          href={!isPaymentLink ? `/${product.slug}` : "#"}
-                          className="inline-block w-20 font-medium text-gray-700 hover:text-gray-800 hover:underline"
-                        >
-                          <img
-                            width={80}
-                            height={100}
-                            src={generateUri(`${product.image}`, 'h=100&fm=webp') || IMG_PLACEHOLDER}
-                            alt={product.name || 'product-image'}
-                            className="object-cover w-full h-full"
-                          />
+                        <Link href={!isPaymentLink ? `/${product.slug}` : "#"} className="inline-block w-20 font-medium text-gray-700 hover:text-gray-800 hover:underline" >
+                          <img width={80} height={100} src={generateUri(`${product.image}`, 'h=100&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'product-image'} className="object-cover w-full h-full" />
                         </Link>
                       </div>
 
@@ -513,27 +375,15 @@ export default function Summary({
                         <div className="flex">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between text-sm">
-                              <Link
-                                href={!isPaymentLink ? `/${product.slug}` : "#"}
-                                className="inline-block font-bold text-gray-700 uppercase hover:text-gray-800 hover:underline"
-                              >
+                              <Link href={!isPaymentLink ? `/${product.slug}` : "#"} className="inline-block font-bold text-gray-700 uppercase hover:text-gray-800 hover:underline" >
                                 <p>{product?.name}</p>
                               </Link>
                               <p className="inline-block text-sm font-bold text-gray-700 uppercase">
-                                {product?.price?.raw?.withTax > 0 ? 
-                                  (isIncludeVAT
-                                    ? product.price?.formatted?.withTax
-                                    : product.price?.formatted?.withoutTax)
-                                    :<span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
-                                {product?.price?.raw?.withTax > 0 &&
-                                product.listPrice?.raw.withTax > 0 &&
-                                  product.listPrice?.raw.withTax !=
-                                  product.price?.raw?.withTax ? (
+                                {product?.price?.raw?.withTax > 0 ? (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax)
+                                  : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>FREE</span>}
+                                {product?.price?.raw?.withTax > 0 && product.listPrice?.raw.withTax > 0 && product.listPrice?.raw.withTax != product.price?.raw?.withTax ? (
                                   <span className="px-2 text-sm text-red-400 line-through">
-                                    {isIncludeVAT
-                                      ? product.listPrice?.formatted?.withTax
-                                      : product.listPrice?.formatted
-                                        ?.withoutTax}
+                                    {isIncludeVAT ? product.listPrice?.formatted?.withTax : product.listPrice?.formatted?.withoutTax}
                                   </span>
                                 ) : null}
                               </p>
@@ -545,62 +395,41 @@ export default function Summary({
                               </span>
                             </p>
                             <div>{ }</div>
-                            {product?.children?.map(
-                              (child: any, childId: number) => {
-                                const customInfo1: any = tryParseJson(
-                                  child.customInfo1
-                                )
-                                const customInfo1FormattedData =
-                                  customInfo1?.formatted?.data || null
-                                const personalizationFont = `font-${customInfo1FormattedData?.Font}`
-
-                                return (
-                                  <>
-                                    <div
-                                      className="flex justify-between mt-1"
-                                      key={childId}
-                                    >
-                                      <div>
-                                        <p className="text-sm text-gray-900">
-                                          {child.name}
-                                        </p>
-                                      </div>
-                                      <label className="text-sm text-gray-900">
-                                        <PlusIcon
-                                          className="inline-block -mt-1"
-                                          style={{
-                                            width: '0.85rem',
-                                            height: '0.85rem',
-                                          }}
-                                        />
-                                        {isIncludeVAT
-                                          ? child?.price?.formatted?.withTax
-                                          : child?.price?.formatted?.withoutTax}
-                                      </label>
+                            {product?.children?.map((child: any, childId: number) => {
+                              const customInfo1: any = tryParseJson(child.customInfo1)
+                              const customInfo1FormattedData = customInfo1?.formatted?.data || null
+                              const personalizationFont = `font-${customInfo1FormattedData?.Font}`
+                              return (
+                                <>
+                                  <div className="flex justify-between mt-1" key={childId} >
+                                    <div>
+                                      <p className="text-sm text-gray-900"> {child.name} </p>
                                     </div>
-                                    {customInfo1FormattedData && (
-                                      <div className="text-gray-700 text-ms">
-                                        <span
-                                          title={translate('label.product.messageText')}
-                                          className={personalizationFont}
-                                        >
-                                          {customInfo1FormattedData?.Message}
-                                        </span>
-                                        {' | '}
-                                        <span
-                                          className="align-middle cursor-pointer"
-                                          onClick={() =>
-                                            handleToggleEngravingModal(product)
-                                          }
-                                          title={translate('common.label.viewPersonalisationText')}
-                                        >
-                                          <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
-                                        </span>
-                                      </div>
-                                    )}
-                                  </>
-                                )
-                              }
+                                    <label className="text-sm text-gray-900">
+                                      <PlusIcon className="inline-block -mt-1" style={{ width: '0.85rem', height: '0.85rem', }} />
+                                      {isIncludeVAT ? child?.price?.formatted?.withTax : child?.price?.formatted?.withoutTax}
+                                    </label>
+                                  </div>
+                                  {customInfo1FormattedData && (
+                                    <div className="text-gray-700 text-ms">
+                                      <span title={translate('label.product.messageText')} className={personalizationFont} >
+                                        {customInfo1FormattedData?.Message}
+                                      </span>
+                                      {' | '}
+                                      <span
+                                        className="align-middle cursor-pointer"
+                                        onClick={() =>
+                                          handleToggleEngravingModal(product)
+                                        }
+                                        title={translate('common.label.viewPersonalisationText')}
+                                      >
+                                        <EyeIcon className="inline-block w-4 h-4 -mt-3 text-gray-900 hover:text-gray-400" />
+                                      </span>
+                                    </div>
+                                  )}
+                                </>
+                              )
+                            }
                             )}
                           </div>
                         </div>
@@ -775,7 +604,7 @@ export default function Summary({
                                 </div>
                               </div>
                               <div className="flex flex-row sm:px-0">
-                                {/*Referal Program Info view*/}
+                                {/*Program Info view*/}
                                 {referralAvailable && !referralInfo && (
                                   <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                                     <h2 className="mx-2 text-[30px] text-center">

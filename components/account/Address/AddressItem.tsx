@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import Form from './AddressBookForm'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { getCurrentPage, isB2BUser } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { UserRoleType } from '@framework/utils/enums'
 import DeleteModal from './DeleteModal'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { useUI } from '@components/ui'
+
 export default function AddressItem({
   item,
   updateAddress,
@@ -16,40 +17,20 @@ export default function AddressItem({
   deleteAddress,
   onEditAddress = (id: number) => { },
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [isEditMode, setEditMode] = useState(false)
-  const {
-    title,
-    firstName,
-    lastName,
-    address1,
-    address2,
-    address3,
-    city,
-    state,
-    postCode,
-    country,
-    phoneNo,
-    isDefault,
-    isDefaultBilling,
-    isDefaultDelivery,
-    isDefaultSubscription,
-    countryCode,
-    user,
-    label,
-  } = item
+  const { user: storeFrontUser } = useUI()
+  const { title, firstName, lastName, address1, address2, address3, city, state, postCode, country, phoneNo, isDefault, isDefaultBilling, isDefaultDelivery, isDefaultSubscription, countryCode, user, label, } = item
 
-  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
   let [isOpen, setIsOpen] = useState(false)
 
   const handleAddressSubmit = async (values: any) => {
     let currentPage = getCurrentPage()
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        recordGA4Event(window, 'address_changes', {
-          delivery_address_name: values?.address1,
-          current_page: currentPage,
-        })
+        //debugger
+        recordAnalytics(AnalyticsEventType.ADDRESS_CHANGE, { deliveryAddressName: values?.address1, currentPage, })
       }
     }
     return updateAddress({ ...item, ...values, ...{ userId } })
@@ -57,19 +38,7 @@ export default function AddressItem({
         () =>
           successCallback() &&
           isEditMode &&
-          eventDispatcher(CustomerUpdated, {
-            entity: JSON.stringify({
-              id: user.userId,
-              name: user.username,
-              dateOfBirth: user.yearOfBirth,
-              gender: user.gender,
-              email: user.email,
-              postCode: user.postCode,
-            }),
-            entityId: user.userId,
-            entityName: user.firstName + user.lastName,
-            eventType: CustomerUpdated,
-          })
+          recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
       )
       .catch(() => errCallback())
   }
@@ -79,19 +48,7 @@ export default function AddressItem({
       .then(
         () =>
           successCallback() &&
-          eventDispatcher(CustomerUpdated, {
-            entity: JSON.stringify({
-              id: user.userId,
-              name: user.username,
-              dateOfBirth: user.yearOfBirth,
-              gender: user.gender,
-              email: user.email,
-              postCode: user.postCode,
-            }),
-            entityId: user.userId,
-            entityName: user.firstName + user.lastName,
-            eventType: CustomerUpdated,
-          })
+          recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
       )
       .catch(() => errCallback)
     deleteCloseModal()
@@ -164,12 +121,8 @@ export default function AddressItem({
                   <span>{item?.phoneNo}</span>
                 </div>
                 <div className='w-full'>
-                  {user?.companyUserRole === UserRoleType.ADMIN && <div className="justify-end w-full mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
-                    <button
-                      onClick={() => {
-                        onEditAddress(item?.id)
-                      }}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
+                {(!isB2BUser(storeFrontUser) || (isB2BUser(storeFrontUser) && storeFrontUser?.companyUserRole === UserRoleType.ADMIN)) && <div className="justify-end w-full mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
+                    <button onClick={() => onEditAddress(item?.id)} className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
                     >
                       {translate('common.label.editText')}
                     </button>
@@ -179,8 +132,8 @@ export default function AddressItem({
                     >
                       {translate('common.label.deleteText')}
                     </button>
-                  </div>}
-
+                  </div>
+                }
                 </div>
               </div>
             </div>
@@ -216,20 +169,33 @@ export default function AddressItem({
                 </div>
                 <div className='w-full'>
                   <div className="justify-end w-full mt-6 space-y-4 sm:flex sm:space-x-4 sm:space-y-0 md:mt-0">
-                    <button
-                      onClick={() => {
-                        onEditAddress(item?.id)
-                      }}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
-                    >
-                      {translate('common.label.editText')}
-                    </button>
-                    <button
-                      onClick={deleteOpenModal}
-                      className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
-                    >
-                      {translate('common.label.deleteText')}
-                    </button>
+                  {(!isB2BUser(storeFrontUser) || (isB2BUser(storeFrontUser) && storeFrontUser?.companyUserRole === UserRoleType.ADMIN)) && (
+                      <>
+                        <button onClick={() => onEditAddress(item?.id)} className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
+                        >
+                          {translate('common.label.editText')}
+                        </button>
+                        <button onClick={deleteOpenModal} className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 md:w-auto"
+                        >
+                          {translate('common.label.deleteText')}
+                        </button>
+                      </>
+                    )}
+
+                    {item?.label && (
+                      <span className="py-2 text-sm font-medium text-[#00739e;]">
+                        {label}
+                      </span>
+                    )}
+                    
+                    {item?.isDefault && (
+                      <>
+                        <span className="text-gray-300">|</span>
+                        <span className="py-2 text-sm font-medium text-[#00739e;]">
+                          {translate('common.label.defaultText')}
+                        </span>
+                      </>
+                    )}
                   </div>
 
                 </div>

@@ -47,7 +47,7 @@ const BrandFilterItem = ({ option, optionIdx, sectionKey, isChecked = false, isC
         <span>
           <input name={`${optionIdx}-input[]`} defaultValue={option.value} type="checkbox" className="w-4 h-4 border-gray-300 rounded filter-input" />
         </span>
-        <img src={CURRENT_THEME === 'green' ? (generateUri(`https://www.imagedelivery.space/tagdeal/brand/${option?.name?.toLowerCase().replaceAll(" ", "-")}.jpg`, 'h=50&fm=webp') || IMG_PLACEHOLDER) : (generateUri(`https://www.imagedelivery.space/fashion/brand/${option?.name?.toLowerCase().replaceAll(" ", "-")}.jpg`, 'h=50&fm=webp') || IMG_PLACEHOLDER)} title={option.name} className="object-contain object-center h-10 brand-logo-category max-h-[50px] dark:text-black" alt={option.name} width={100} height={50} />
+        <img src={CURRENT_THEME === 'tool' ? (generateUri(`https://www.imagedelivery.space/bettertools/${option?.name}`, 'h=80&fm=webp') || IMG_PLACEHOLDER) : CURRENT_THEME === 'green' ? (generateUri(`https://www.imagedelivery.space/tagdeal/brand/${option?.name?.toLowerCase().replaceAll(" ", "-")}.jpg`, 'h=50&fm=webp') || IMG_PLACEHOLDER) : (generateUri(`https://www.imagedelivery.space/fashion/brand/${option?.name?.toLowerCase().replaceAll(" ", "-")}.jpg`, 'h=50&fm=webp') || IMG_PLACEHOLDER)} title={option.name} className="object-contain object-center h-10 brand-logo-category max-h-[50px] dark:text-black" alt={option.name} width={100} height={50} />
       </label>
     </div>
   )

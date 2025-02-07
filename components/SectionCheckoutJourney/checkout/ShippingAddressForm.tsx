@@ -16,10 +16,9 @@ import BillingAddressForm from './BillingAddressForm'
 import { CheckoutStep } from '@framework/utils/enums'
 import { retrieveAddress } from '@framework/utils/app-util'
 
-const DEFAULT_COUNTRY = 'United Kingdom'
-
 const ShippingAddressForm: React.FC<any> = ({
   editAddressValues,
+  setEditAddressValues,
   onSubmit,
   searchAddressByPostcode,
   guestCheckoutFormik,
@@ -30,7 +29,9 @@ const ShippingAddressForm: React.FC<any> = ({
   deliveryTypeMethod,
   billingCountries,
   currentStep,
-  featureToggle
+  featureToggle,
+  appConfig,
+  basket,
 }) => {
   const ADDRESS_FINDER_SCHEMA = addressFinderSchema();
   const CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA = checkout2AddressWithPhoneSchema();
@@ -38,7 +39,14 @@ const ShippingAddressForm: React.FC<any> = ({
   const [searchedAddresses, setSearchedAddresses] = useState([])
   const { user, setOverlayLoaderState, hideOverlayLoaderState, isGuestUser } = useUI()
   const [useSameForBilling, setUseSameForBilling] = useState(true)
+  const [hasSameBillingChanged, setHasSameBillingChanged] = useState(false)
   const [isGuestCheckoutSubmit, setIsGuestCheckoutSubmit] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      if (setEditAddressValues) setEditAddressValues(undefined)
+    }
+  }, [setEditAddressValues])
 
   const addressFinderFormik = useFormik({
     initialValues: {
@@ -55,6 +63,14 @@ const ShippingAddressForm: React.FC<any> = ({
       setSubmitting(false)
     },
   })
+
+  const getDefaultCountry = useMemo(() => {
+    const regionalSettingsConfigKeys = appConfig?.configSettings?.find((x: any) => x?.configType === "RegionalSettings")?.configKeys || []
+    if (regionalSettingsConfigKeys?.length) {
+      const defaultCountry = regionalSettingsConfigKeys?.find((x: any) => x?.key === "RegionalSettings.DefaultCountry")?.value || EmptyString
+      return appConfig?.shippingCountries?.find((item: any) => item?.twoLetterIsoCode === defaultCountry)?.name || EmptyString
+    }
+  }, [appConfig])
 
   const formik: any = useFormik({
     enableReinitialize: true,
@@ -73,7 +89,7 @@ const ShippingAddressForm: React.FC<any> = ({
       address3: editAddressValues?.address3 || EmptyString,
       city: editAddressValues?.city || EmptyString,
       state: editAddressValues?.state || EmptyString,
-      country: editAddressValues?.country || DEFAULT_COUNTRY,
+      country: editAddressValues?.country || getDefaultCountry,
     },
     validationSchema: CHECKOUT2_ADDRESS_WITH_PHONE_SCHEMA,
     onSubmit: (values, { setSubmitting }) => {
@@ -84,7 +100,7 @@ const ShippingAddressForm: React.FC<any> = ({
       )?.twoLetterIsoCode
       const isNewAddress = !Boolean(editAddressValues)
       onSubmit(
-        { ...payload, useSameForBilling },
+        { ...payload, useSameForBilling : isSameAddress, isDefaultDelivery: true, isDefaultBilling: isSameAddress },
         isNewAddress,
         () => {
           setSubmitting(false)
@@ -148,6 +164,14 @@ const ShippingAddressForm: React.FC<any> = ({
     }
     return translate('label.checkout.saveAndContinueToDeliveryText')
   }, [currentStep, useSameForBilling, translate])
+
+  const isSameAddress = useMemo(() => {
+    if (hasSameBillingChanged) return useSameForBilling
+    if (basket?.shippingAddress && basket?.billingAddress) {
+      return basket?.shippingAddress?.id === basket?.billingAddress?.id
+    }
+    return useSameForBilling
+  }, [basket, useSameForBilling, hasSameBillingChanged])
 
   return (
     <>
@@ -437,9 +461,10 @@ const ShippingAddressForm: React.FC<any> = ({
                   id="useSameForBilling"
                   name="useSameForBilling"
                   type="checkbox"
-                  checked={useSameForBilling}
+                  defaultChecked={isSameAddress}
                   onChange={(e) => {
                     setUseSameForBilling(e.target.checked)
+                    setHasSameBillingChanged(true)
                   }}
                 />
                 <label
@@ -482,6 +507,7 @@ const ShippingAddressForm: React.FC<any> = ({
             onSubmit={onSubmit}
             useSameForBilling={useSameForBilling}
             shouldDisplayEmail={false}
+            appConfig={appConfig}
           />
         </div>
       )}

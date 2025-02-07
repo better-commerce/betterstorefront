@@ -59,6 +59,8 @@ export const getCurrentPage = () => {
   return undefined
 }
 
+
+
 export const obfuscateHostName = (hostname: string) => {
   if (hostname?.length > 3) {
     return `gandalf${hostname.substring(hostname.length - 3)}`
@@ -108,12 +110,13 @@ export const sanitizeBase64 = (base64: string) => {
   return EmptyString
 }
 
-export const resetBasket = async (setBasketId: any, basketId: any) => {
+export const resetBasket = async (setBasketId: any, generateBasketId: any) => {
   Cookies.remove(Cookie.Key.SESSION_ID)
   setSessionIdCookie()
   Cookies.remove(Cookie.Key.BASKET_ID)
+  const generatedBasketId = generateBasketId()
   if (setBasketId) {
-    setBasketId(basketId)
+    setBasketId(generatedBasketId)
   }
 }
 
@@ -647,6 +650,29 @@ export const isB2BUser = (user: any): boolean => {
   return user?.companyId && user?.companyId !== Guid.empty
 }
 
+export const displayCTAByUserRole = (user: any, { roleId, isGuestUser }: { isGuestUser?: boolean, roleId: number }): boolean => {
+  /**
+   * Check for company user
+   */
+  if (isB2BUser(user)) {
+    // display CTA to company user, if the role matches with the given `roleId`
+    if (user?.companyUserRole === roleId) return true
+    return false
+  }
+  
+  // /**
+  //  * Check for non-company user which includes logged-in and guest user
+  //  */
+  // // display CTA to all non-company users
+  // if (typeof isGuestUser === 'undefined') return true
+  // 
+  // // display CTA to all logged-in users
+  // if (isGuestUser === false && user?.userId && user?.id !== Guid.empty) return true
+  // 
+  // return false 
+  return true
+}
+
 export const isIncludeVATInPriceDisplay = (
   isIncludeVAT: boolean,
   product: any
@@ -949,4 +975,49 @@ export const getRedirectionLocale = (defaultCulture: string): string => {
     }
   }
   return EmptyString
+}
+
+/**
+ * Returns an array of all keys in an enumeration.
+ * @param enumeration The enumeration to retrieve keys from.
+ * @returns An array of all keys in the enumeration.
+ */
+export const allEnumKeys = <T>(enumeration: T): Array<any> => {
+  return (Object.keys(enumeration!) as Array<keyof T>)
+      .filter(key => isNaN(Number(key)))
+      .filter(key => typeof enumeration[key] === "number" || typeof enumeration[key] === "string")
+      .map(key => enumeration[key])
+  /*.map(key => ({
+      id: enumeration[key],
+      description: String(key).replace(separatorRegex, ' '),
+  }))*/
+}
+
+
+export const isFreeShippingOverXValue = (config: any): boolean => {
+  const ShippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+  if (ShippingSettings?.configKeys?.length) {
+    const freeShippingOverXValue =
+      ShippingSettings?.configKeys?.find(
+        (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+      )?.value || 0
+    return freeShippingOverXValue !== undefined
+  }
+  return false
+}
+
+export const getFreeShippingOverXValue = (config: any): number => {
+  const ShippingSettings = config?.configSettings?.find(
+    (x: any) => x.configType === 'ShippingSettings'
+  )
+  if (ShippingSettings?.configKeys?.length) {
+    const freeShippingOverXValue =
+      ShippingSettings?.configKeys?.find(
+        (x: any) => x.key === 'ShippingSettings.FreeShippingOverXValue'
+      )?.value || 0
+    return freeShippingOverXValue
+  }
+  return 0
 }

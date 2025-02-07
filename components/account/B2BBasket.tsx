@@ -1,28 +1,32 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Popover, Transition } from "@headlessui/react";
-import React, { useMemo, Fragment, useState, useEffect } from "react";
+import { Popover } from "@headlessui/react";
+import React, { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import useCart from '@components/services/cart'
-import { getCurrentPage, isB2BUser } from "@framework/utils/app-util";
-import { recordGA4Event } from "@components/services/analytics/ga4";
+import { getCurrentPage, isB2BUser, resetBasket } from "@framework/utils/app-util";
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_TRANSFER_BASKET } from "@components/utils/constants";
+import { EmptyGuid, LoadingActionType, NEXT_CREATE_BASKET, NEXT_TRANSFER_BASKET, SITE_ORIGIN_URL } from "@components/utils/constants";
 import axios from "axios";
-import { matchStrings } from "@framework/utils/parse-util";
 import { Guid } from "@commerce/types";
 import { AlertType } from '@framework/utils/enums';
-import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
+import { AddBasketIcon } from '@components/shared/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import BasketList from "./BasketList";
 import TransferBasket from "@components/TransferBasket";
+import { AnalyticsEventType } from "@components/services/analytics";
+import Router from "next/router";
+import useAnalytics from "@components/services/analytics/useAnalytics";
+import { EVENTS_MAP } from "@components/services/analytics/constants";
+import Spinner from "@components/ui/Spinner";
 
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
 export default function B2BBaskets() {
+  const { recordAnalytics } = useAnalytics()
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
@@ -39,24 +43,9 @@ export default function B2BBaskets() {
   const viewCart = (cartItems: any) => {
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'view_cart', {
-          ecommerce: {
-            items: cartItems?.lineItems?.map((items: any, itemId: number) => ({
-              item_name: items?.name,
-              item_id: items?.sku,
-              price: items?.price?.raw?.withTax,
-              item_brand: items?.brand,
-              item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
-              item_variant: items?.colorName,
-              item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
-              item_list_id: '',
-              index: itemId,
-              quantity: items?.qty,
-              item_var_id: items?.stockCode,
-            })),
-            current_page: currentPage,
-          },
-        })
+        //debugger
+        const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+        recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
       }
     }
   }
@@ -79,7 +68,7 @@ export default function B2BBaskets() {
       id: 'createBasket',
       href: '#',
       title: translate('label.b2b.basket.createBasketLinkText'),
-      className: 'max-w-xs text-black text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
+      className: 'max-w-xs text-left flex-1 font-medium py-3 px-2 flex sm:w-full',
       head: <AddBasketIcon />,
       onClick: (ev: any) => {
         ev.preventDefault()
@@ -88,42 +77,17 @@ export default function B2BBaskets() {
       },
       enabled: true
     },
-    // {
-    //   id: 'transferBasket',
-    //   href: '#',
-    //   title: translate('label.b2b.basket.transferBasketLinkText'),
-    //   className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
-    //   head: <TransferIcon />,
-    //   onClick: (ev: any) => {
-    //     ev.preventDefault();
-    //     ev.stopPropagation();
-    //     openTransferBasketModal();
-    //   },
-    //   enabled: true,
-    // },
     {
       id: 'deleteBasket',
       href: '#',
       title: translate('label.b2b.basket.deleteBasketLinkText'),
-      className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
+      className: 'max-w-xs text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
       head: <TrashIcon className='w-6 h-6' />,
       onClick: (ev: any) => {
         ev.preventDefault()
         ev.stopPropagation()
       },
       enabled: false
-    },
-    {
-      id: 'listBasket',
-      href: '#',
-      title: translate('label.b2b.basket.listBasketsHeadingText'),
-      className: 'max-w-xs text-black text-left flex-1 op-75 py-3 px-2 flex font-medium sm:w-full',
-      head: null,
-      onClick: (ev: any) => {
-        ev.preventDefault()
-        ev.stopPropagation()
-      },
-      enabled: true
     },
   ]
 
@@ -132,11 +96,11 @@ export default function B2BBaskets() {
     setUserCarts(userCarts)
   }
 
-  useEffect(()=>{
-    if(user?.userId && user?.userId !== Guid.empty){
+  useEffect(() => {
+    if (user?.userId && user?.userId !== Guid.empty) {
       getBaskets(user?.userId)
     }
-  },[cartItems?.lineItems?.length])
+  }, [cartItems?.lineItems?.length])
 
   const handleCreateBasket = async (basketName: string) => {
     if (basketName) {
@@ -159,10 +123,10 @@ export default function B2BBaskets() {
     }
   }
 
-  const handleTransferBasket = async (basketId: string, transitUserId: string) => {
+  const handleTransferBasket = async (basketIdToTransfer: string, transitUserId: string) => {
     setLoadingAction(LoadingActionType.TRANSFER_BASKET)
     const payload = {
-      basketId,
+      basketId: basketIdToTransfer,
       transitUserId,
       currentUserId: user?.userId,
       companyId: user?.companyId,
@@ -172,6 +136,9 @@ export default function B2BBaskets() {
 
     if (data?.recordId !== EmptyGuid) {
       closeTransferBasketModal()
+      if (basketIdToTransfer == basketId) {
+        resetBasket(setBasketId, generateBasketId);
+      }
       setAlert({ type: AlertType.SUCCESS, msg: data?.message })
       if (!isGuestUser && user?.userId && user?.userId !== Guid.empty) {
         getBaskets(user?.userId)
@@ -235,49 +202,67 @@ export default function B2BBaskets() {
     }
   }, [basketIdToDelete])
 
+  const renderButton = () => {
+    return (
+      b2bBasketConfig?.filter((item: any) => item?.enabled)?.map((item: any) => {
+        if (item?.id === 'listBasket' && !userCarts?.length) {
+          return
+        }
+        return (
+          <Link key={item?.title} title={item?.id} passHref href="#" className={`flex items-center text-sky-500 group p-2 -m-3 hover:text-black transition duration-150 ease-in-out rounded-lg dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
+            if (item?.onClick) {
+              item?.onClick(ev)
+            }
+            if (item?.id !== 'listBasket') {
+              close()
+            }
+          }}>
+            {item?.head && (
+              <div className={`flex items-center justify-center flex-shrink-0 capitalize text-sky-500 group-hover:text-black dark:text-neutral-300 ${item?.id === 'deleteBasket' ? '' : ''}`}>
+                {item?.head}
+              </div>
+            )}
+            <div className={item?.head ? 'ml-1' : ''}>
+              <p className="text-sm font-medium capitalize text-sky-500 group-hover:text-black">
+                {item?.title}
+              </p>
+            </div>
+          </Link>
+        )
+      })
+    )
+  }
+
   return (
     <>
       {b2bUser ? (
         <>
-          <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7">
-            {
-              b2bBasketConfig?.filter((item: any) => item?.enabled)?.map((item: any) => {
-                if (item?.id === 'listBasket' && !userCarts?.length) {
-                  return
-                }
-
-                return (
-                  <Link key={item?.title} title={item?.id} passHref href="#" className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
-                    if (item?.onClick) {
-                      item?.onClick(ev)
-                    }
-
-                    if (item?.id !== 'listBasket') {
-                      close()
-                    }
-                  }}>
-                    {item?.head && (
-                      <div className={`flex items-center justify-center flex-shrink-0 capitalize text-neutral-500 dark:text-neutral-300 ${item?.id === 'deleteBasket' ? '' : ''}`}>
-                        {item?.head}
-                      </div>
-                    )}
-
-                    <div className={item?.head ? 'ml-4' : ''}>
-                      <p className="text-sm font-medium capitalize">
-                        {item?.title}
-                      </p>
-                    </div>
-                  </Link>
-                )
-              })
-            }
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Buying List </h1>
+            {userCarts?.length > 0 && renderButton()}
           </div>
-          <div className="flex flex-col gap-2 -mx-2">
-            {(userCarts?.length > 0) && (
-              <BasketList baskets={userCarts} openMiniBasket={openMiniBasket} deleteBasket={deleteBasket} openTransferBasketModal={openTransferBasketModal} />
+
+          <div className="flex flex-col gap-2">
+            {userCarts?.length > 0 ? (
+              // If userCarts is available and has items
+              <BasketList
+                baskets={userCarts}
+                openMiniBasket={openMiniBasket}
+                deleteBasket={deleteBasket}
+                openTransferBasketModal={openTransferBasketModal}
+              />
+            ) : (
+              // If userCarts is available but empty
+              <div className='flex flex-col items-center justify-center w-full gap-4 py-6 sm:py-10'>
+                <span className="text-xl font-normal text-slate-300">
+                  No basket available, please create new one
+                </span>
+                {renderButton()}
+              </div>
             )}
           </div>
         </>
+
       ) : (
         <Popover.Button onClick={() => openMiniBasket(cartItems)} className={`group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
           {basketItemsCount > 0 && (

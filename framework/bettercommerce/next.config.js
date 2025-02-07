@@ -15,19 +15,31 @@ const locales = { ...rest }
 
 const url = new URL('oAuth/token', AUTH_URL)
 
+/**
+ * Retrieves an access token from the BetterCommerce authorization endpoint.
+ * 
+ * This function will throw an error if the request to the authorization endpoint fails.
+ * @returns {Promise<string>} - A promise that resolves with the access token.
+ */
 const getToken = async () => {
   try {
-    const response = await axios({
-      url: url.href,
-      method: 'post',
-      data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`,
-    })
+    const response = await axios({ url: url.href, method: 'post', data: `client_id=${CLIENT_ID}&client_secret=${SHARED_SECRET}&grant_type=client_credentials`, })
     return response.data.access_token
   } catch (error) {
     throw new Error(error)
   }
 }
 
+/**
+ * Fetches and writes the SEO configuration to a JSON file.
+ * 
+ * @param {string} token - The authentication token to access the infra endpoint.
+ * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+ * 
+ * The function retrieves the SEO settings from the BetterCommerce infrastructure endpoint 
+ * and writes them to a `seo.json` file. The SEO settings include the default title, 
+ * meta description, and meta keywords.
+ */
 const getSeoConfig = async function (token) {
   try {
     const INFRA_URL = new URL(INFRA_ENDPOINT, BASE_URL).href
@@ -35,13 +47,10 @@ const getSeoConfig = async function (token) {
     const infra = await axios({
       url: `${INFRA_URL}`,
       method: 'get',
-      headers: {
-        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-        Authorization: 'Bearer ' + token,
-      },
+      headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
     })
     const seoConfig = infra.data.result.configSettings
-      .find((i) => i.configType === 'SeoSettings')
+      ?.find((i) => i.configType === 'SeoSettings')
       ?.configKeys.reduce((acc, obj) => {
         if (obj.key === 'SeoSettings.DefaultTitle')
           acc['title'] = obj.value || JSON.stringify(obj.value)
@@ -52,28 +61,21 @@ const getSeoConfig = async function (token) {
         return acc
       }, {})
     //console.log(path.join(__dirname), '====')
-    fs.writeFileSync(
-      path.join(__dirname, '/seo.json'),
-      JSON.stringify(seoConfig),
-      (err) => console.log(err)
-    )
+    fs.writeFileSync(path.join(__dirname, '/seo.json'), JSON.stringify(seoConfig), (err) => console.log(err))
   } catch (error) { }
 }
 
-const handler = async () => {
-  const token = await getToken()
-  await Promise.all([getSeoConfig(token)])
-}
-
-const getKeywords = async function () {
-  const token = await getToken()
+/**
+ * Fetches the redirects from the BetterCommerce API, and maps it to Next.js redirects format.
+ * 
+ * @param {string} token The access token to authenticate the request.
+ * @returns {Promise<import('next').Redirect[]>} The redirects in the Next.js format.
+ */
+const getRedirects = async function (token) {
   const response = await axios({
     method: 'get',
     url: new URL('/api/v2/content/redirects', BASE_URL).href,
-    headers: {
-      DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-      Authorization: 'Bearer ' + token,
-    },
+    headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
   })
   return response.data.result.map((item) => {
     let pathName = ''
@@ -93,51 +95,64 @@ const getKeywords = async function () {
   })
 }
 
-const getMicrosites = () => {
-  const defaultLocale = `${process.env.BETTERCOMMERCE_DEFAULT_LANGUAGE}-${process.env.BETTERCOMMERCE_DEFAULT_COUNTRY}`
-
-  const microSitesHandler = async () => {
-    const token = await getToken()
-    const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
-    const { data } = await axios({
-      method: 'get',
-      url: url,
-      headers: {
-        DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-        Authorization: 'Bearer ' + token,
-      },
-    })
-    return {
-      locales: data?.result?.length
-        ? data?.result?.map((i) => i.defaultLangCulture)
-        : [defaultLocale],
-      defaultLocale: defaultLocale,
-    }
-  }
-  return microSitesHandler()
+/**
+ * Gets the infra config from the infra endpoint.
+ * @param {string} token
+ * @returns {Promise<*>}
+ */
+const getInfraConfig = async (token) => {
+  const INFRA_URL = new URL(INFRA_ENDPOINT, BASE_URL).href
+  const { data } = await axios({
+    url: `${INFRA_URL}`,
+    method: 'get',
+    headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
+  })
+  return data
 }
 
-const localeStore = {}
+/**
+ * Gets all microsites from the API.
+ * @param {string} token
+ * @returns {Promise<*[]>}
+ */
+const getMicroSites = async (token) => {
+  const url = new URL('/api/v2/content/microsite/all', BASE_URL).href
+  const req = {
+    method: 'get',
+    url: url,
+    headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
+  }
+  const { data } = await axios(req)
+  return data
+}
 
-let func = (async () => {
-  let microsites = await getMicrosites()
-  //console.log(microsites)
-  localeStore.i18n = microsites
-})()
+/**
+ * Returns the slug of the microsite from a given URL string.
+ * The slug is the part of the URL between the domain and the first slash.
+ * If the URL is invalid, an empty string is returned.
+ * @param {string} slug - The URL string to extract the slug from.
+ * @returns {string} - The microsite slug.
+ */
+const getMicroSiteSlug = (slug) => {
+  try {
+    const url = new URL(slug)
+    const pathname = url.pathname
+    return pathname?.startsWith('/') ? pathname?.substring(1) : pathname
+  } catch (error) {
+  }
+  return ""
+}
 
 //console.log(locales, '====')
 module.exports = {
   //https://nextjs.org/docs/api-reference/next.config.js/redirects nextjs documentation on redirects
   commerce,
   async redirects() {
-    const keywords = await getKeywords()
-    return keywords
+    const token = await getToken()
+    const redirects = await getRedirects(token)
+    return redirects
   },
-
-  i18n: {
-    ...locales,
-    localeDetection: false,
-  },
+  i18n: { ...locales, localeDetection: false, },
 }
 
 // console.log(

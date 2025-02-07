@@ -38,13 +38,14 @@ export class CookiePolicyPageProps extends BasePagePropsProvider implements IPag
                     new Promise(async (resolve: any, reject: any) => {
                     try {
                         const pageContentsPromise = commerce.getPagePreviewContent({
-                        id: '',
-                        slug,
-                        workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                        channel: channel,
-                        currency: currencyCode,
-                        cachedCopy: true,
-                        language: cookies?.Language,
+                            id: '',
+                            slug,
+                            workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                            channel: channel,
+                            currency: currencyCode,
+                            cachedCopy: true,
+                            language: cookies?.Language,
+                            cookies,
                         })
                         const pageContent = await pageContentsPromise
                         pageContentUIDData.push({ key: currencyCode, value: pageContent, })
@@ -64,7 +65,7 @@ export class CookiePolicyPageProps extends BasePagePropsProvider implements IPag
     const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

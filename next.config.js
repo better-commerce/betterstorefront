@@ -12,6 +12,9 @@ const isBetterCommerce = provider === 'bettercommerce'
 module.exports = withCommerceConfig({
   output: 'standalone',
   poweredByHeader: false,
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech','cdn.shopify.com'],
     cacheDuration: 31536000,
@@ -87,7 +90,6 @@ module.exports = withCommerceConfig({
     SITE_ORIGIN_URL: process.env.SITE_ORIGIN_URL,
     SITE_NAME: process.env.SITE_NAME,
     GA4_DISABLED: process.env.GA4_DISABLED,
-    GA4_MEASUREMENT_ID: process.env.GA4_MEASUREMENT_ID,
     CIPHER_ENCRYPTION_KEY: process.env.CIPHER_ENCRYPTION_KEY,
     ENABLE_SECURED_PAYMENT_PAYLOAD: process.env.ENABLE_SECURED_PAYMENT_PAYLOAD,
     SECURE_PAYMENT_METHODS_SETTINGS_FIELDS: process.env.SECURE_PAYMENT_METHODS_SETTINGS_FIELDS,
@@ -98,7 +100,6 @@ module.exports = withCommerceConfig({
     CURRENT_THEME: process.env.CURRENT_THEME,
     PDP_SIZE_OPTIONS_COUNT: process.env.PDP_SIZE_OPTIONS_COUNT,
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
-    OMNILYTICS_DISABLED: process.env.OMNILYTICS_DISABLED,
     OMNILYTICS_BASE_URL: process.env.OMNILYTICS_BASE_URL,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
     SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
@@ -111,5 +112,7 @@ module.exports = withCommerceConfig({
     GOOGLE_MAP_API_KEY: process.env.GOOGLE_MAP_API_KEY,
     ENGAGE_QUERY_BASE_URL: process.env.ENGAGE_QUERY_BASE_URL,
     FIND_ADDRESS_KEY: process.env.FIND_ADDRESS_KEY,
+    KIT_BUILDER_API_URL: process.env.KIT_BUILDER_API_URL,
+
   },
 })

@@ -21,7 +21,7 @@ import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_UR
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
-import { ImageCollection, PlainText, Video } from '@components/SectionBrands'
+import { ImageBanner, ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 const HeadingWithButton = dynamic(() => import('@components/Heading/HeadingWithButton'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
@@ -43,8 +43,11 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import Loader from '@components/Loader'
-import { removeQueryString } from '@commerce/utils/uri-util'
+import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Cookie } from '@framework/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
+import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -95,6 +98,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const qsFilters = router.asPath
@@ -102,7 +106,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const faq = useFaqData();
   const adaptedQuery = { ...query }
-  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile, isOnlyMobile } = deviceInfo
   let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
@@ -139,17 +142,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  useAnalytics(BrandViewed, {
-    entity: JSON.stringify({
-      id: brandDetails?.id,
-      name: brandDetails?.name || '',
-      manufName: brandDetails?.manufacturerName,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: brandDetails?.manufacturerName,
-    entityType: 'Brand',
-    eventType: 'BrandViewed',
-  })
+  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE, })
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -187,19 +180,13 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     useState('')
   const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] =
     useState('')
-  const [
-    manufacturerSettingTypeImgBanner,
-    setManufacturerSettingTypeImgBanner,
-  ] = useState(IMG_PLACEHOLDER)
-  const [manufImgBannerLink, setManufImgBannerLink] = useState('')
-  const [manufacturerImgBannerHeading, setManufacturerImgBannerHeading] =
-    useState('')
-  const [
-    manufacturerStateMultiBrandVidNames,
-    setManufacturerStateMultiBrandVidNames,
-  ] = useState('')
-  const [multiBrandVidHeading, setMultiBrandVidHeading] = useState('')
   const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
+  const [midBannerHeading, setMidBannerHeading] = useState('')
+  const [multipleBrandVideoName, setMultipleBrandVideoName] = useState('')
+  const [multipleBrandVideos, setMultipleBrandVideos] = useState('')
+  const [midBanners, setMidBanners] = useState('')
+  const [midBannerLink, setMidBannerLink] = useState('')
+  const [brandColor, setBrandColor] = useState('')
   const [manufacturerStateTextHeading, setManufacturerStateTextHeading] =
     useState('')
   const [textNames, setTextNames] = useState([])
@@ -391,6 +378,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [])
 
   useEffect(() => {
+    setMidBanners('')
+    setMidBannerHeading('')
+    setMidBannerLink('')
     const Widgets = JSON.parse(brandDetails?.widgetsConfig || '[]')
     Widgets.map((val: any) => {
       if (val.manufacturerSettingType == 'Video' && val.code == 'BrandVideo') {
@@ -398,17 +388,17 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         setManufacturerStateVideoName(val.name)
       } else if (
         val.manufacturerSettingType == 'ImageBanner' &&
-        val.code == 'MidBannerKitBuilder'
+        val.code == 'MidBanner'
       ) {
-        setManufacturerSettingTypeImgBanner(val.name)
-        setManufacturerImgBannerHeading(val.heading)
-        setManufImgBannerLink(val.buttonLink)
+        setMidBanners(val.name)
+        setMidBannerHeading(val.heading)
+        setMidBannerLink(val.buttonLink)
       } else if (
         val.manufacturerSettingType == 'Video' &&
         val.code === 'MultipleBrandVideos'
       ) {
-        setManufacturerStateMultiBrandVidNames(val.name)
-        setMultiBrandVidHeading(val.heading)
+        setMultipleBrandVideoName(val.name)
+        setMultipleBrandVideos(val.heading)
       } else if (
         val.manufacturerSettingType == 'PlainText' &&
         val.code == 'BrandInnovations'
@@ -484,6 +474,35 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
+  let bgColor = "#dddddd"
+  if (brandColor != "") {
+    bgColor = brandColor
+  }
+  const [textColor, setTextColor] = useState('#ffffff'); // Default text color for dark background
+
+  useEffect(() => {
+    // Function to determine if the background color is dark
+    const isColorDark = (color: any) => {
+      // Convert hex color to RGB
+      const rgb = parseInt(color.substring(1), 16);
+      const r = (rgb >> 16) & 0xff;
+      const g = (rgb >> 8) & 0xff;
+      const b = (rgb >> 0) & 0xff;
+
+      // Calculate luminance
+      const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+      // Check if the luminance is below a certain threshold
+      return luminance < 128; // Adjust the threshold as needed
+    };
+
+    // Change text color based on background color
+    if (isColorDark(bgColor)) {
+      setTextColor('#ffffff'); // Light text color for dark background      
+    } else {
+      setTextColor('#212530'); // Dark text color for light background
+    }
+  }, [bgColor]);
   const emptyHtmlString = "<html>\n<head>\n\t<title></title>\n</head>\n<body></body>\n</html>\n"
   const cleanPath = removeQueryString(router.asPath)
   return (
@@ -542,6 +561,18 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <div className="mt-0 md:mt-2">
               <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
             </div>
+
+            <div className="w-full mt-10 md:mt-20">
+              {/* NOTE : manufacturerSettingType for this widget is 'ImageBanner' & code is 'MidBanner' */}
+              <ImageBanner midBanners={midBanners} heading={midBannerHeading} link={midBannerLink} bgColor={bgColor} textColor={textColor} />
+
+              {/* NOTE : manufacturerSettingType for this widget is 'Video' & code is 'MultipleBrandVideos' */}
+              {multipleBrandVideoName ?
+                <div className="mt-10 lg:mt-20">
+                  <MultiBrandVideo videos={multipleBrandVideos || ''} name={multipleBrandVideoName || ''} />
+                </div> : null
+              }
+            </div>
           </div>
 
           <div className="container w-full mx-auto">
@@ -554,28 +585,39 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <ImageCollection range={4} AttrArray={imgFeatureCollection?.images || []} />
               </div>
             )}
-
-            <div className="mt-10 border-gray-200 border-y">
-              <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRefNew} className={`flow-root`}>
-                  <div className='flex justify-between'>
-                    <HeadingWithButton className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50" desc="" rightDescText="2024" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All"
-                    >
-                      {translate('label.product.saleProductText')}
-                    </HeadingWithButton>
-                  </div>
-                  <div className="glide__track" data-glide-el="track">
-                    <ul className="glide__slides">
-                      {saleProductCollectionRes?.map((item: any, index: number) => (
-                        <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        </li>
-                      ))}
-                    </ul>
+            {saleProductCollectionRes?.length > 0 && (
+              <div className="mt-10 border-gray-200 border-y">
+                <div className={`nc-SectionSliderProductCard`}>
+                  <div ref={sliderRefNew} className={`flow-root`}>
+                    <div className="flex justify-between">
+                      <HeadingWithButton
+                        className="mt-10 mb-6 capitalize lg:mb-8 text-neutral-900 dark:text-neutral-50"
+                        desc=""
+                        rightDescText="2024"
+                        hasNextPrev
+                        onButtonClick={onToggleBrandListPage}
+                        buttonText="See All"
+                      >
+                        {translate('label.product.saleProductText')}
+                      </HeadingWithButton>
+                    </div>
+                    <div className="glide__track" data-glide-el="track">
+                      <ul className="glide__slides">
+                        {saleProductCollectionRes?.map((item: any, index: number) => (
+                          <li key={index} className={`glide__slide`}>
+                            <ProductCard
+                              data={item}
+                              featureToggle={featureToggle}
+                              defaultDisplayMembership={defaultDisplayMembership}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
             <div className="max-w-4xl mx-auto my-10">
               <p className="mb-6 text-3xl font-semibold capitalize md:text-4xl text-slate-900">{faq.title}</p>
               {faq?.results?.map((val: any, Idx: number) => {
@@ -605,7 +647,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               </li>
             </ol>
           </div>
-          <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+          <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
             <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
               {brandDetails?.name}
             </h1>
@@ -635,14 +677,26 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                       {isMobile ? (
                         <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
-                        <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} isBrandPLP={true} />
+                        <>
+                          {!featureToggle?.features?.enableHorizontalFilter ? (
+                            <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                          ) : (
+                            <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
+                          )}
+                        </>
                       )}
-                      <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                        {isMobile ? null : (
+                          <ProductFiltersTopBar products={data?.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} isBrandPLP={true} featureToggle={featureToggle} />
+                        )}
+                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </div>
+                      {/* <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
                         {isMobile ? null : (
                           <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
                         )}
                         {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-                      </div>
+                      </div> */}
                     </>
                   ) : (
                     <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
@@ -686,7 +740,8 @@ export async function getStaticProps({
   }
   const slug = `brands/${brandSlug}`
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

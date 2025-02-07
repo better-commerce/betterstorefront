@@ -17,16 +17,7 @@ interface Props {
   defaultDisplayMembership: any;
 }
 
-export default function CategoryGrid({
-  products,
-  currentPage,
-  handlePageChange = () => { },
-  handleInfiniteScroll,
-  deviceInfo,
-  maxBasketItemsCount,
-  isCompared,
-  featureToggle, defaultDisplayMembership,
-}: Props & IExtraProps) {
+export default function CategoryGrid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll, deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership, }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   useEffect(() => {
     Router.events.on('routeChangeComplete', () => {
@@ -35,7 +26,6 @@ export default function CategoryGrid({
         handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
       }
     })
-
     return () => {
       Router.events.off('routeChangeComplete', () => { })
     }
@@ -44,11 +34,7 @@ export default function CategoryGrid({
   return (
     <>
       {IS_INFINITE_SCROLL && (
-        <InfiniteScroll
-          fetchData={handleInfiniteScroll}
-          className="w-full mx-auto overflow-hidden sm:px-8"
-          total={products.total}
-          currentNumber={products?.results?.length}
+        <InfiniteScroll fetchData={handleInfiniteScroll} className="w-full mx-auto overflow-hidden sm:px-8" total={products.total} currentNumber={products?.results?.length}
           component={
             <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
               {!products?.results?.length && rangeMap(12, (i) => (
@@ -80,25 +66,16 @@ export default function CategoryGrid({
               </div>
             ))}
             {products?.results?.map((product: any, productIdx: number) => (
-              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount}  key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} key={`products-${productIdx}`} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             ))}
           </div>
-
           {products.pages > 1 && (
-            <Pagination
-              currentPage={currentPage}
+            <Pagination currentPage={currentPage}
               onPageChange={(page: any) => {
                 Router.push(
-                  {
-                    pathname: Router.pathname,
-                    query: { ...Router.query, currentPage: page.selected + 1 },
-                  },
-                  undefined,
-                  { shallow: true }
+                  { pathname: Router.pathname, query: { ...Router.query, currentPage: page.selected + 1 }, }, undefined, { shallow: true }
                 )
-              }}
-              pageCount={products.pages}
-            />
+              }} pageCount={products.pages} />
           )}
         </>
       )}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from '@commerce/utils/use-translation'
 import axios from 'axios'
-import { DATE_TIME_FORMAT, NEXT_DOWNLOAD_DATA_PACK, NEXT_GET_DATA_PACK } from '@components/utils/constants'
+import { DATE_FORMAT, DATE_TIME_FORMAT, NEXT_DOWNLOAD_DATA_PACK, NEXT_GET_DATA_PACK } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import { downloadBase64AsFile } from 'framework/utils/app-util'
 import { ArrowDownIcon, DocumentArrowDownIcon, DocumentIcon } from '@heroicons/react/24/outline'
@@ -89,34 +89,38 @@ export default function DataPack() {
 const DataPackDetailTable = ({ rows, onDownloadProductsCSV, onDownloadImagesCSV }: any) => {
   const translate = useTranslation()
   return (
-    <table className="min-w-full">
-      <thead className='bg-gray-100'>
-        <tr className='border border-gray-200 divide-x divide-gray-300'>
-          <th scope="col" className="py-3.5 p-4 border border-gray-300 pr-3 text-left text-sm font-semibold text-gray-900">{translate('common.label.nameText')}</th>
-          <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{translate('common.label.generatedOnText')}</th>
-          <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">{translate('common.label.productsText')}</th>
-          <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">{translate('common.label.imagesText')}</th>
-        </tr>
-      </thead>
-      {(rows?.length > 0) &&
-        <tbody className="divide-y divide-gray-200">
-          {rows?.map((data: any) => (
-            <tr key={data?.dataPackId} className='border border-gray-200 divide-x divide-gray-300'>
-              <td className="py-4 pl-4 pr-3 text-base font-semibold text-gray-900 whitespace-nowrap">{data?.dataPackName}</td>
-              <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">{moment(new Date(data?.created)).format(DATE_TIME_FORMAT)}</td>
-              <td className="justify-end px-3 py-4 text-sm text-right text-gray-500 whitespace-nowrap">
-                {data?.productDataPackUrl && (
-                  <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadProductsCSV(data?.companyId, data?.id)} />
-                )}
-              </td>
-              <td className="justify-end px-3 py-4 text-sm text-right text-gray-500 whitespace-nowrap">
-                {data?.imageDataPackUrl && (
-                  <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadImagesCSV(data?.companyId, data?.id)} />
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>}
-    </table>
+    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+      <table className="min-w-full divide-y divide-gray-300">
+        <thead className="bg-gray-50">
+          <tr>
+            <th scope="col" className="py-3 pl-3 pr-3 text-[13px] font-semibold text-left text-gray-900 sm:pl-4">{translate('common.label.nameText')}</th>
+            <th scope="col" className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('common.label.generatedOnText')}</th>
+            <th scope="col" className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('common.label.productsText')}</th>
+            <th scope="col" className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">{translate('common.label.imagesText')}</th>
+          </tr>
+        </thead>
+        {(rows?.length > 0) &&
+          <tbody className='bg-white divide-y divide-gray-200'>
+            {rows?.map((data: any, idx: number) => (
+              <tr key={`data-pack-${idx}`} className="text-xs bg-white border-b shadow-none group border-slate-200 hover:shadow hover:bg-gray-100">
+                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">{data?.dataPackName}</td>
+                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">
+                  {moment(new Date(data?.created)).format(DATE_FORMAT)}
+                </td>
+                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">
+                  {data?.productDataPackUrl && (
+                    <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadProductsCSV(data?.companyId, data?.id)} />
+                  )}
+                </td>
+                <td className="px-3 py-3 text-[13px] text-gray-500 whitespace-nowrap">
+                  {data?.imageDataPackUrl && (
+                    <DocumentArrowDownIcon className='inline-block w-5 h-5 cursor-pointer text-sky-500 hover:text-black' onClick={async () => await onDownloadImagesCSV(data?.companyId, data?.id)} />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>}
+      </table>
+    </div>
   )
 }

@@ -20,7 +20,6 @@ import {
   Messages,
 } from '@components/utils/constants'
 import { sanitizeBase64, vatIncluded } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import Spinner from '@components/ui/Spinner'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -33,12 +32,14 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function ReturnOrder({
   orderId = Guid.empty,
   itemId = Guid.empty,
   deviceInfo,
 }: any) {
+  const { recordAnalytics } = useAnalytics()
   const { setAlert, user } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [orderDetails, setOrderDetails] = useState<any>()
@@ -133,11 +134,8 @@ function ReturnOrder({
         setAlert({ type: 'success', msg: Messages.Messages['RETURN_SUCCESS'] })
         setItemReturnLoading(false)
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'return_confirm', {
-            transaction_id: data?.orderId,
-            user_id: user?.userId,
-            device: deviceCheck,
-          })
+          //debugger
+          recordAnalytics(AnalyticsEventType.RETURN_CONFIRM, { transactionId: data?.orderId, user, deviceCheck, })
         }
         setTimeout(() => {
           Router.push('/my-account/orders')
@@ -152,11 +150,7 @@ function ReturnOrder({
     setShowReturnReasons(!showReturnReasons)
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.OrderPageViewed, {
-    entityName: PAGE_TYPES.OrderReturn,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Order,
-    eventType: EVENTS_MAP.EVENT_TYPES.OrderPageViewed,
-  })
+  useAnalytics(AnalyticsEventType.ORDER_PAGE_VIEWED, { entityName: PAGE_TYPES.OrderReturn, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
 
   useEffect(() => {
     const handleAsync = async () => {

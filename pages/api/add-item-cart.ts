@@ -11,6 +11,8 @@ async function addItemToCartApiMiddleware(req: any, res: any) {
     displayOrder,
     stockCode,
     isMembership,
+    basketItemGroupId,
+    basketItemGroupData,
   }: any = req.body.data
   try {
     const response = await useAddItem()({
@@ -21,6 +23,8 @@ async function addItemToCartApiMiddleware(req: any, res: any) {
       displayOrder,
       stockCode,
       isMembership,
+      basketItemGroupId,
+      basketItemGroupData,
       cookies: req.cookies,
     })
     res.status(200).json(response)

@@ -2,6 +2,7 @@ import { EmptyObject } from '@components/utils/constants'
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { logError } from '@framework/utils/app-util'
+import { tryParseJson } from '@framework/utils/parse-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import commerce from '@lib/api/commerce'
@@ -59,9 +60,9 @@ export class PDPPreviewPageProps extends BasePagePropsProvider implements IPageP
         } catch (error: any) {}
     }
     
-    const pdpCachedImages = productImagesUID?.images ? JSON.parse(productImagesUID?.images) : []
+    const pdpCachedImages = productImagesUID?.images ? tryParseJson(productImagesUID?.images) : []
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

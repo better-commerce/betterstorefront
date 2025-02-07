@@ -14,11 +14,10 @@ import {
   NEXT_GET_SINGLE_LOOKBOOK,
 } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import commerce from '@lib/api/commerce'
-import { generateUri } from '@commerce/utils/uri-util'
+import { generateUri, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_200_SECONDS } from '@framework/utils/constants'
@@ -27,8 +26,10 @@ import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Guid } from '@commerce/types'
 import { stringToNumber } from '@framework/utils/parse-util'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const { basketId, openCart, setCartItems, isCompared } = useUI()
@@ -39,11 +40,7 @@ function LookbookDetailPage({ data, slug, deviceInfo, config, featureToggle, def
     setProducts(response?.data?.products)
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
-    entityName: PAGE_TYPES.Lookbook,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Lookbook, })
 
   useEffect(() => {
     if (slug) loadProducts()
@@ -161,7 +158,8 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext) {
   const slug: any = params!.lookbook
-  const response = await getSingleLookbook(slug[0], { [Cookie.Key.LANGUAGE]: locale })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const response = await getSingleLookbook(slug[0], cookies)
 
   const cachedDataUID = {
     allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,

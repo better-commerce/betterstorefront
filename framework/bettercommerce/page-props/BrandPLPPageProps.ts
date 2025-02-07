@@ -7,6 +7,9 @@ import getCollectionById from '@framework/api/content/getCollectionById'
 import getBrandBySlug from '@framework/api/endpoints/catalog/getBrandBySlug'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
+import { mapObject } from '@framework/utils/translate-util'
+import isEmpty from 'lodash/isEmpty'
+import { getCollectionHeroBannerTransform, getCollectionOfferBannerCollectionTransform, getProductCollectionTransformMap } from '@framework/api/content/getCollectionBySlug'
 
 /**
  * Class {BrandPLPPageProps} inherits and implements the base behavior of {BasePagePropsProvider} and {IPagePropsProvider} respectively to return the PageProp values.
@@ -51,11 +54,11 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
       }
     
       const collections: any = {
-        imageBannerCollection: collectionUIDData?.imageBannerCollection || [],
-        imageCategoryCollection: collectionUIDData?.imageCategoryCollection || [],
-        imgFeatureCollection: collectionUIDData?.imgFeatureCollection || [],
-        offerBannerCollection: collectionUIDData?.offerBannerCollection || [],
-        productCollection: collectionUIDData?.productCollection || [],
+        imageBannerCollection: !isEmpty(collectionUIDData?.imageBannerCollection) ? mapObject(collectionUIDData?.imageBannerCollection, getCollectionHeroBannerTransform)?.data || null : null,
+        imageCategoryCollection: !isEmpty(collectionUIDData?.imageCategoryCollection) ? collectionUIDData?.imageCategoryCollection || []: [],
+        imgFeatureCollection: !isEmpty(collectionUIDData?.imgFeatureCollection) ? mapObject(collectionUIDData?.imgFeatureCollection, getCollectionHeroBannerTransform)?.data || null : null,
+        offerBannerCollection: !isEmpty(collectionUIDData?.offerBannerCollection) ? mapObject(collectionUIDData?.offerBannerCollection, getCollectionOfferBannerCollectionTransform)?.data || []: [],
+        productCollection: mapObject(collectionUIDData?.productCollection, getProductCollectionTransformMap)?.data || [],
       }
     
       try {
@@ -70,7 +73,8 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    collections.imageBannerCollection = await getCollectionById(widget.recordId, cookies)
+                    const imageBannerCollection = await getCollectionById(widget.recordId, cookies)
+                    collections.imageBannerCollection = !isEmpty(imageBannerCollection) ? mapObject(imageBannerCollection, getCollectionHeroBannerTransform)?.data || null : null
                   } catch (error: any) { }
                   resolve()
                 })
@@ -95,7 +99,8 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    collections.imgFeatureCollection = await getCollectionById(widget.recordId, cookies)
+                    const imgFeatureCollection = await getCollectionById(widget.recordId, cookies)
+                    collections.imgFeatureCollection = !isEmpty(imgFeatureCollection) ? mapObject(imgFeatureCollection, getCollectionHeroBannerTransform)?.data || null : null
                   } catch (error: any) { }
                   resolve()
                 })
@@ -108,7 +113,8 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
                 new Promise(async (resolve: any, reject: any) => {
                   try {
                     const res = await getCollectionById(widget.recordId, cookies)
-                    collections.offerBannerCollection = res.images
+                    const offerBannerCollection = res?.images
+                    collections.offerBannerCollection = !isEmpty(offerBannerCollection) ? mapObject(offerBannerCollection, getCollectionOfferBannerCollectionTransform)?.data || []: []
                   } catch (error: any) { }
                   resolve()
                 })
@@ -121,7 +127,8 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
                 new Promise(async (resolve: any, reject: any) => {
                   try {
                     const res = await getCollectionById(widget.recordId, cookies)
-                    collections.productCollection = res.products.results
+                    const productCollection = res?.products?.results
+                    collections.productCollection = mapObject(productCollection, getProductCollectionTransformMap)?.data || []
                   } catch (error: any) { }
                   resolve()
                 })
@@ -134,7 +141,8 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
                 new Promise(async (resolve: any, reject: any) => {
                   try {
                     const res = await getCollectionById(widget.recordId, cookies)
-                    collections.saleProductCollection = res.products.results
+                    const saleProductCollection = res?.products?.results
+                    collections.saleProductCollection = mapObject(saleProductCollection, getProductCollectionTransformMap)?.data || []
                   } catch (error: any) { }
                   resolve()
                 })
@@ -152,9 +160,9 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
     }
 
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
-    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
+    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

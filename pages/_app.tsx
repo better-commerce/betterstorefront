@@ -1,52 +1,56 @@
-import '@assets/css/main.css'
-import "fonts/line-awesome-1.3.0/css/line-awesome.css";
-import "styles/index.scss";
-import 'swiper/css/bundle'
-import '@assets/css/algolia-instant-search.css'
-import React, { FC, useCallback, useEffect, useState } from 'react'
-import NextHead from 'next/head'
-import Cookies from 'js-cookie'
-import TagManager from 'react-gtm-module'
-import { v4 as uuid_v4 } from 'uuid'
-import axios from 'axios'
-import { useRouter } from 'next/router'
-import { AppContext, AppInitialProps } from 'next/app'
-import uniqBy from 'lodash/uniqBy'
-import { SessionProvider } from 'next-auth/react'
+// Base Imports
+import React, { FC, useCallback, useEffect, useState, useMemo } from 'react'
+
+// Package Imports
 import os from 'os'
-
-import { ELEM_ATTR, ISnippet, SnippetContentType, resetSnippetElements, } from '@framework/content/use-content-snippet'
+import Cookies from 'js-cookie'
+import NextHead from 'next/head'
+import { v4 as uuid_v4 } from 'uuid'
+import { useRouter } from 'next/router'
+import TagManager from 'react-gtm-module'
+import { SessionProvider } from 'next-auth/react'
+import { AppContext, AppInitialProps } from 'next/app'
 import { IncomingMessage, ServerResponse } from 'http'
-import { Cookie, GA4_DISABLED, GA4_MEASUREMENT_ID, } from '@framework/utils/constants'
-import { DeviceType } from '@commerce/utils/use-device'
 
-import packageInfo from '../package.json'
-import { decrypt, } from '@framework/utils/cipher'
-import { tryParseJson } from '@framework/utils/parse-util'
-import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
-import { OMNILYTICS_DISABLED } from '@framework/utils/constants'
-import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
-import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
-import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, NEXT_API_KEYWORDS_ENDPOINT, ENGAGE_QUERY_WEB_CAMPAIGN, NEXT_GET_NAVIGATION } from '@components/utils/constants'
-import DataLayerInstance from '@components/utils/dataLayer'
-import geoData from '@components/utils/geographicService'
-import analytics from '@components/services/analytics/analytics'
-import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, setGeoDataCookie, } from '@components/utils/setSessionId'
-import { initializeGA4 as initGA4 } from '@components/services/analytics/ga4'
-import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
+// Component Imports
+import Loader from '@components/Loader'
 import Head from '@components/shared/Head/Head';
-import NonHeadContentSnippet from '@components/shared/Snippet/NonHeadContentSnippet';
-import { IScriptSnippet } from '@components/shared/Snippet/ScriptContentSnippet';
 import InitDeviceInfo from '@components/shared/InitDeviceInfo';
 import BrowserNavigation from '@components/shared/routing/BrowserNavigation';
 import ErrorBoundary from '@components/shared/error';
 import CustomCacheBuster from '@components/shared/CustomCacheBuster';
 import CustomerReferral from '@components/customer/Referral';
+import OverlayLoader from '@components/shared/OverlayLoader/OverlayLoader';
+import { ContentSnippetInjector } from '@components/common/Content'
+
+// Other Imports
+import '@assets/css/main.css'
+import "fonts/line-awesome-1.3.0/css/line-awesome.css";
+import "styles/index.scss";
+import 'swiper/css/bundle'
+import packageInfo from '../package.json'
+import { decrypt, } from '@framework/utils/cipher'
+import { stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
+import { backToPageScrollLocation, logError, maxBasketItemsCount } from '@framework/utils/app-util'
+import PasswordProtectedRoute from '@components/route/PasswordProtectedRoute'
+import '@assets/css/algolia-instant-search.css'
+import { Cookie, } from '@framework/utils/constants'
+import { DeviceType } from '@commerce/utils/use-device'
+import { resetSnippetElements, } from '@framework/content/use-content-snippet'
+import { SessionIdCookieKey, DeviceIdKey, SITE_NAME, SITE_ORIGIN_URL, EmptyString, } from '@components/utils/constants'
+import DataLayerInstance from '@components/utils/dataLayer'
+import geoData from '@components/utils/geographicService'
+import analytics from '@components/services/analytics/omnilytics'
+import setSessionIdCookie, { createSession, isValidSession, getExpiry, getMinutesInDays, setGeoDataCookie, } from '@components/utils/setSessionId'
+import { ManagedUIContext, IDeviceInfo } from '@components/ui/context'
 import { CURRENT_THEME } from "@components/utils/constants";
 import { fetchCampaignsByPagePath } from '@components/utils/engageWidgets';
-import { hasBaseUrl, removeQueryString } from '@commerce/utils/uri-util';
+import { hasBaseUrl, isMicrosite, removeQueryString } from '@commerce/utils/uri-util';
 import { I18nProvider } from '@components/ui/i18nContext';
 import { i18nLocalization } from 'framework/utils/app-util';
+import { getCurrencySymbol } from '@framework/utils/translate-util'
+import { Guid } from '@commerce/types'
+declare const window: any
 const featureToggle = require(`../public/theme/${CURRENT_THEME}/features.config.json`);
 
 const tagManagerArgs: any = {
@@ -57,62 +61,35 @@ const Noop: FC<React.PropsWithChildren<unknown>> = ({ children }) => (
   <>{children}</>
 )
 
-const TEST_GEO_DATA = {
-  Ip: '81.196.3.147',
-  Country: 'Romania',
-  CountryCode: 'RO',
-  City: 'Bucharest',
-  CityCode: 'B',
-  DetailJson: null,
-  Message: null,
-  IsValid: false,
-}
+const TEST_GEO_DATA = { Ip: '81.196.3.147', Country: 'Romania', CountryCode: 'RO', City: 'Bucharest', CityCode: 'B', DetailJson: null, Message: null, IsValid: false, }
 
 const setDeviceIdCookie = () => {
   if (!Cookies.get(DeviceIdKey)) {
     const deviceId = uuid_v4()
-    Cookies.set(DeviceIdKey, deviceId, {
-      expires: getExpiry(getMinutesInDays(365)),
-    })
+    Cookies.set(DeviceIdKey, deviceId, { expires: getExpiry(getMinutesInDays(365)), })
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, deviceId)
   } else {
     DataLayerInstance.setItemInDataLayer(DeviceIdKey, Cookies.get(DeviceIdKey))
   }
 }
 
-export const SCROLLABLE_LOCATIONS = [
-  '/collection/',
-  '/brands/',
-  '/category/',
-  '/kit/'
-]
+export const SCROLLABLE_LOCATIONS = [ '/collection/', '/brands/', '/category/', '/kit/' ]
 
 function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }: any) {
   const [location, setUserLocation] = useState({ Ip: '' })
   const [isAnalyticsEnabled, setAnalyticsEnabled] = useState(false)
   const [isAppLoading, setAppIsLoading] = useState(true)
-  const [language, setLanguage] = useState('')
-  const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
-  const [headJSSnippets, setHeadJSSnippets] = useState(new Array<any>())
-  const [deviceInfo, setDeviceInfo] = useState<IDeviceInfo>({
-    isMobile: undefined,
-    isDesktop: undefined,
-    isIPadorTablet: undefined,
-    deviceType: DeviceType.UNKNOWN,
-    isOnlyMobile: undefined,
-  })
+  const [isInitialized, setIsInitialized] = useState(false)
+  const [deviceInfo, setDeviceInfo] = useState<IDeviceInfo>({ isMobile: undefined, isDesktop: undefined, isIPadorTablet: undefined, deviceType: DeviceType.UNKNOWN, isOnlyMobile: undefined, })
   const [updatedPageProps, setUpdatedPageProps] = useState({ ...pageProps, featureToggle })
   const [campaignData, setCampaignData] = useState()
 
   const keywordsData = pageProps?.keywords || []
-  let snippets = [
-    ...(pageProps?.globalSnippets ?? []),
-    ...(pageProps?.snippets ?? []),
-    ...(pageProps?.data?.snippets ?? []),
-  ]
-  snippets = uniqBy(snippets, 'name'); //Prevent duplicate data being passed on to snippets rendering engine.
+  const snippets = [ ...(pageProps?.globalSnippets ?? []), ...(pageProps?.snippets ?? []), ...(pageProps?.data?.snippets ?? []), ]
+  //snippets = uniqBy(snippets, 'name'); //Prevent duplicate data being passed on to snippets rendering engine.
 
   const router = useRouter()
+  const routePath = useMemo(() => router.asPath, [router.asPath])
   const Layout = (Component as any).Layout || Noop
   const setClientIPAddress = (pageProps: any) => {
     if (pageProps?.clientIPAddress) {
@@ -120,17 +97,6 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     }
   }
   const i18n = i18nLocalization(pageProps?.locale || EmptyString)
-
-  const setNavTree = useCallback(async () => {
-    const { data: navResult }: any = await axios.get(NEXT_GET_NAVIGATION)
-    const { nav = [], footer = [] } = navResult
-    if (nav?.length || footer?.length) {
-      const newPageProps = { ...updatedPageProps, navTree: navResult }
-      setUpdatedPageProps(newPageProps)
-    }
-  }, [])
-
-
   const fetchEngageCampaigns = useCallback(async () => {
     try {
       const campaignRes = await fetchCampaignsByPagePath(router.asPath)
@@ -156,18 +122,22 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     })
 
     const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => window.location.pathname.startsWith(x))
-    if (isScrollEnabled) {
-      router.events.on('routeChangeComplete', () => {
-        backToPageScrollLocation(window.location)
-      })
-    }
+    router.events.on('routeChangeComplete', (url: any) => { 
+      if (url === '/password-protection') {
+        setPasswordProtectionLoader(false)
+      }
+
+      if (isScrollEnabled) {
+        backToPageScrollLocation(window.location) 
+      }
+    })
 
     // Dispose listener.
     return () => {
       router.events.off('routeChangeStart', () => { })
-      if (isScrollEnabled) {
-        router.events.off('routeChangeComplete', () => { })
-      }
+      //if (isScrollEnabled) {
+      router.events.off('routeChangeComplete', () => { })
+      //}
     }
   }, [router.events])
 
@@ -186,34 +156,10 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       TagManager.initialize(tagManagerArgs)
   }
 
-  const initializeGA4 = () => {
-    if (GA4_MEASUREMENT_ID) {
-      initGA4(GA4_MEASUREMENT_ID)
-    }
-  }
-
   useEffect(() => {
-    setNavTree()
+    const microsite = router?.query?.microsite || EmptyString
     initializeGTM()
     document.body.classList?.remove('loading')
-    if (appConfig) {
-      const currencyCode = Cookies.get(Cookie.Key.CURRENCY) || appConfig?.defaultCurrency || EmptyString
-      Cookies.set(Cookie.Key.CURRENCY, currencyCode)
-      const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
-      Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
-      const languageCulture = appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture || pageProps?.locale || EmptyString
-      Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
-      Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
-    }
-
-    if (!GA4_DISABLED) {
-      initializeGA4()
-    }
-  }, [])
-
-  useEffect(() => {
-    setTopHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'TopHead' && x?.type === SnippetContentType.JAVASCRIPT))
-    setHeadJSSnippets(snippets?.filter((x: ISnippet) => x?.placement === 'Head' && x?.type === SnippetContentType.JAVASCRIPT))
   }, [])
 
   useEffect(() => {
@@ -226,7 +172,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     } else {
       setAppIsLoading(false)
     }
-    if (!OMNILYTICS_DISABLED) {
+    if (featureToggle?.features?.enableOmnilytics) {
       setGeoData()
     }
     let analyticsCb = analytics()
@@ -238,6 +184,90 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       Cookies.remove(SessionIdCookieKey)
     }
   }, [])
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      if (typeof window !== 'undefined' && window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+        for (const key in window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+          // Replace the hook methods with no-op functions
+          window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = () => {}
+        }
+      }
+    }
+  }, [])
+
+  const [showPasswordProtectionLoader, setPasswordProtectionLoader] = useState(true)
+
+  useEffect(() => {
+    if (appConfig && routePath) {
+
+      let configSettings: any
+      let isPasswordProtectionEnabled: boolean = true, isAuthenticated = false
+      if (appConfig) {
+        configSettings = appConfig?.configSettings
+        if (configSettings) {
+          const passwordProtectionSettings = configSettings?.find((x: any) => x?.configType === 'PasswordProtectionSettings')?.configKeys || []
+          isPasswordProtectionEnabled = stringToBoolean(passwordProtectionSettings?.find((x: any) => x?.key === 'PasswordProtectionSettings.LivePasswordEnabled')?.value || 'False')
+        }
+      }
+      if (configSettings) {
+        const passwordProtectionSettings = configSettings?.find((x: any) => x?.configType === 'PasswordProtectionSettings')?.configKeys || []
+        isPasswordProtectionEnabled = stringToBoolean(passwordProtectionSettings?.find((x: any) => x?.key === 'PasswordProtectionSettings.LivePasswordEnabled')?.value || 'False')
+    
+        //const authenticated = Cookies.get(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)
+        const authenticated = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)!
+        isAuthenticated = stringToBoolean(authenticated)
+        
+        if (!router.pathname.startsWith('/password-protection') && isPasswordProtectionEnabled && !isAuthenticated) {
+          const isStarted = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH_STARTED}`)
+          if (!isStarted) {
+            localStorage.setItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH_STARTED}`, 'true')
+            router.push('/password-protection')
+          }
+        } else {
+          setPasswordProtectionLoader(false)
+        }
+      }
+
+
+      //const microsite = isMicrosite(routePath)
+      const microsite = isMicrosite(pageProps?.locale || EmptyString)
+      if (microsite && microsite?.id && microsite?.id !== Guid.empty) {
+        Cookies.set(Cookie.Key.MICROSITE_ID, microsite?.id)
+        Cookies.set(Cookie.Key.CURRENCY, microsite?.defaultCurrencyCode)
+        Cookies.set(Cookie.Key.CURRENCY_SYMBOL, getCurrencySymbol(microsite?.defaultCurrencyCode))
+        Cookies.set(Cookie.Key.LANGUAGE, microsite?.defaultLangCulture)
+        Cookies.set(Cookie.Key.COUNTRY, microsite?.countryCode)
+      } else {
+        const micrositeId = Cookies.get(Cookie.Key.MICROSITE_ID)
+        if (micrositeId) {
+          Cookies.remove(Cookie.Key.MICROSITE_ID)
+          Cookies.remove(Cookie.Key.CURRENCY)
+          Cookies.remove(Cookie.Key.CURRENCY_SYMBOL)
+          Cookies.remove(Cookie.Key.LANGUAGE)
+          Cookies.remove(Cookie.Key.COUNTRY)
+        }
+
+        const currency = Cookies.get(Cookie.Key.CURRENCY)
+        const country = Cookies.get(Cookie.Key.COUNTRY)
+        const language = Cookies.get(Cookie.Key.LANGUAGE)
+
+        // If any of the required cookies is undefined
+        if (!currency || !country || !language) {
+          const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
+          Cookies.set(Cookie.Key.CURRENCY, currencyCode)
+          const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
+          Cookies.set(Cookie.Key.CURRENCY_SYMBOL, currencySymbol)
+          const languageCulture = /*appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture ||*/ pageProps?.locale || EmptyString
+          Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
+          Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
+        }
+      }
+      setTimeout(() => {
+        setIsInitialized(true)
+      }, 200);
+    }
+  }, [appConfig, routePath])
 
   const setGeoData = async () => {
     try {
@@ -253,74 +283,17 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
-    if (!OMNILYTICS_DISABLED) {
+    if (featureToggle?.features?.enableOmnilytics) {
       fetchEngageCampaigns()
     }
   }, [router.asPath])
 
-  const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
-    let scripts = new Array<IScriptSnippet>()
-    if (typeof document !== undefined) {
-      let container = document.createElement('div')
-      container.insertAdjacentHTML('beforeend', snippet.content)
-      const arrNodes = container.querySelectorAll('*')
-      arrNodes.forEach((node: any, key: number) => {
-        if (node.innerHTML) {
-          scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node.innerHTML, })
-        } else if (node.src) {
-          scripts.push({ name: snippet.name, type: 'text/javascript', src: node.src, })
-        }
-      })
-    }
-    return scripts
-  }
-
-  const topHeadElements = (
-    topHeadJSSnippets?.map((snippet: ISnippet, index: number) => {
-      const scripts = getScriptSnippets(snippet)
-      return (
-        scripts.length > 0 &&
-        scripts?.map((script: IScriptSnippet, index: number) => (
-          <>
-            {script?.src && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
-            )}
-            {script?.innerHTML && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
-            )}
-          </>
-        ))
-      )
-    })
-  )
-
-  const headElements = (
-    headJSSnippets?.map((snippet: ISnippet, index: number) => {
-      const scripts = getScriptSnippets(snippet)
-      return (
-        scripts.length > 0 &&
-        scripts?.map((script: IScriptSnippet, index: number) => (
-          <>
-            {script?.src && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
-            )}
-            {script?.innerHTML && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
-            )}
-          </>
-        ))
-      )
-    })
-  )
   const seoInfo = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps : pageProps?.data?.product || undefined
-  const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images[0]?.url : pageProps?.data?.product?.image || undefined
-  const bodyStartScrCntrRef = React.createRef<any>()
-  const bodyEndScrCntrRef = React.createRef<any>()
+  const seoImage = pageProps?.metaTitle || pageProps?.metaDescription || pageProps?.metaKeywords ? pageProps?.products?.images?.[0]?.url : pageProps?.data?.product?.image || undefined
   const cleanPath = removeQueryString(router.asPath)
   return (
     <>
       <NextHead>
-        {topHeadElements}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
@@ -345,15 +318,13 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={SITE_ORIGIN_URL + router.asPath} key="ogurl" />
         <meta property="og:image" content={seoImage} />
-        {headElements}
       </NextHead>
 
       <Head {...appConfig}></Head>
+      {showPasswordProtectionLoader && <Loader backdropInvisible={true} message={''} />}
+      {<ContentSnippetInjector snippets={snippets} />}
+      {!isInitialized && <Loader backdropInvisible={true} message={''} />}
       <ManagedUIContext>
-        <PasswordProtectedRoute config={appConfig}>
-          {(snippets?.length > 0) && (
-            <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
-          )}
           <CustomCacheBuster buildVersion={packageInfo?.version} />
           <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
           {
@@ -363,26 +334,15 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
           }
           <I18nProvider value={i18n}>
             <ErrorBoundary>
-              <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)} >
-                <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr`} ></div>
+              <Layout nav={nav} footer={footer} config={appConfig} pluginConfig={pluginConfig} pageProps={updatedPageProps} keywords={keywordsData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(appConfig)}>
                 <OverlayLoader />
                 <CustomerReferral router={router} />
                 <SessionProvider session={pageProps?.session}>
-                  <Component
-                    {...{...pageProps, featureToggle}}
-                    campaignData={campaignData}
-                    location={location}
-                    ipAddress={location.Ip}
-                    config={appConfig}
-                    pluginConfig={pluginConfig}
-                    deviceInfo={deviceInfo}
-                  />
+                  <Component {...{...pageProps, featureToggle}} campaignData={campaignData} location={location} ipAddress={location.Ip} config={appConfig} pluginConfig={pluginConfig} deviceInfo={deviceInfo} />
                 </SessionProvider>
-                <div ref={bodyEndScrCntrRef} className={`${ELEM_ATTR}body-end-script-cntr`} ></div>
               </Layout>
             </ErrorBoundary>
           </I18nProvider>
-        </PasswordProtectedRoute>
       </ManagedUIContext>
     </>
   )
@@ -395,23 +355,17 @@ MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> =>
   const req: any = ctx?.req
   const res: ServerResponse<IncomingMessage> | undefined = ctx?.res
 
-  let navTreeResult = { nav: new Array(), footer: new Array(), }
   let clientIPAddress = req?.ip ?? req?.headers['x-real-ip']
   const forwardedFor = req?.headers['x-forwarded-for']
   if (!clientIPAddress && forwardedFor) {
     clientIPAddress = forwardedFor.split(',').at(0) ?? ''
   }
-  const serverHost = os.hostname()
+  const serverHost = os?.hostname?.()
   const urlReferrer = req?.headers?.referer
-
+  //const cookies: any = { [Cookie.Key.LANGUAGE]: locale }
+  
   return {
-    pageProps: {
-      serverHost,
-      urlReferrer,
-      navTree: navTreeResult,
-      clientIPAddress,
-      locale,
-    },
+    pageProps: { serverHost, urlReferrer, clientIPAddress, locale, },
   }
 }
 

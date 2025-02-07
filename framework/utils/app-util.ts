@@ -1,24 +1,29 @@
 import { NextRouter } from 'next/router'
 
-import { uriParams } from '@commerce/utils/uri-util'
-import {
-  DataSubmit,
-  ISubmitStateInterface,
-} from '@commerce/utils/use-data-submit'
+import { isMicrosite, uriParams } from '@commerce/utils/uri-util'
+import { DataSubmit, ISubmitStateInterface, } from '@commerce/utils/use-data-submit'
 import { EmptyObject, EmptyString, IGNORE_QUERY_KEYS } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 import { tryParseJson } from '@framework/utils/parse-util'
-import enGBLocalization from '../../public/locales/en-GB/common.json'
-import deDELocalization from '../../public/locales/de-DE/common.json'
-import esESLocalization from '../../public/locales/es-ES/common.json'
-import frFRLocalization from '../../public/locales/fr-FR/common.json'
 import { getCookie, removeCookie } from '@framework/utils'
 import { Cookie } from '@framework/utils/constants'
 import { decrypt, encrypt } from '@framework/utils/cipher'
 import { setCookie } from '@components/utils/cookieHandler'
+import * as locales from '../bettercommerce/locales.json'
 
-const localizations = [{ locale: 'en-GB', data: enGBLocalization }, { locale: 'de-DE', data: deDELocalization }, { locale: 'es-ES', data: esESLocalization }, { locale: 'fr-FR', data: frFRLocalization }]
+const ALL_LOCALES = [...new Set(locales?.locales?.length ? locales?.locales?.filter((l: any) => l?.includes('-'))?.map((l: any) => l) : [])]
 
+const getLocalizationData = (locale: string) => {
+  try {
+    const module = require(`../../public/locales/${locale}/common.json`)
+    return module || EmptyObject
+  } catch (error) {
+    logError(error)
+    return EmptyObject
+  }
+}
+
+const localizations: any = ALL_LOCALES?.map((locale: string) => ({ locale, data: getLocalizationData(locale) }))
 
 export const resetSubmitData = (dispatch: any) => {
   if (dispatch) {
@@ -155,9 +160,22 @@ export const routeToPLPWithSelectedFiltersOld = (router: any, currentFilters: Ar
   }
 }
 
+/**
+ * Returns the localization data for the given locale, flattened to a single level object.
+ * @param {string} locale - The locale code, e.g. "en-GB", "de-DE", etc.
+ * @returns {{ locale: string, localized: Object }} - An object with two properties: locale, and localized.
+ * localized is an object with the localization data, flattened to a single level.
+ * If the locale is not found, or if the locale is empty, an empty object is returned.
+ */
 export const i18nLocalization = (locale: string) : { locale: string, localized: Object } => {
   if (locale) {
-    const localized = localizations.find(x => x?.locale == locale)?.data || EmptyObject
+    let localized: any
+    const micrositeConfig = isMicrosite(locale)
+    if (micrositeConfig) {
+      localized = localizations.find((x: any) => x?.locale == micrositeConfig?.defaultLangCulture)?.data || EmptyObject
+    } else {
+      localized = localizations.find((x: any) => x?.locale == locale)?.data || EmptyObject
+    }
     const localeInfo = {
       locale,
       localized: flattenObject(localized),
@@ -167,6 +185,15 @@ export const i18nLocalization = (locale: string) : { locale: string, localized: 
   return EmptyObject
 }
 
+/**
+ * Flattens an object to a single level.
+ * @param {Object} obj - The object to flatten.
+ * @param {string} [parentKey=''] - The parent key to prefix to each key.
+ * @param {Object} [result={}] - The object to store the flattened result in.
+ * @returns {Object} - An object with the flattened result.
+ * @example
+ * flattenObject({ a: { b: 1, c: 2 } }) // { 'a.b': 1, 'a.c': 2 }
+ */
 export const flattenObject = (obj: any, parentKey = '', result: any = {}) => {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {

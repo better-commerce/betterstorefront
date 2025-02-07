@@ -86,7 +86,13 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   }, [deliveryMethod])
 
   useEffect(() => {
-    if (basket?.shippingMethodId && basket?.shippingMethodId !== Guid.empty) {
+    if(basket?.shippingMethodId === Guid.empty){
+      const defaultShippingMethod = basket.shippingMethods.find((method: any) => method?.isDefault)
+      if (defaultShippingMethod) {
+        setSelectedShippingMethodId(defaultShippingMethod.id)
+        setSelectedShippingMethod(defaultShippingMethod)
+      }
+    } else if (basket?.shippingMethodId && basket?.shippingMethodId !== Guid.empty) {
       const selectedShippingMethod = basket?.shippingMethods?.find(
         (x: any) => x?.id === basket?.shippingMethodId
       )
@@ -133,8 +139,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
             <h5 className="font-semibold uppercase font-18 dark:text-black">{translate('label.checkout.deliveryText')}</h5>
             <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
               {selectedDeliveryMethod?.children?.map((method: any) => (
-                <div key={method?.id} className={`${selectedShippingMethodId === method?.id ? 'bg-gray-200' : 'bg-white border-gray-200'} border flex sm:flex-row flex-col items-center sm:justify-between justify-start sm:p-4 p-2 cursor-pointer rounded`}
-                  onClick={() => handleMethodSelection(method)}>
+                <div key={method?.id} className={`${selectedShippingMethodId === method?.id ? 'bg-gray-200' : 'bg-white border-gray-200'} border flex sm:flex-row flex-col items-center sm:justify-between justify-start sm:p-4 p-2 cursor-pointer rounded`} onClick={() => handleMethodSelection(method)}>
                   <div className="flex justify-start w-full gap-0 sm:gap-3">
                     <div className="check-panel">
                       <span className={`rounded-check rounded-full check-address ${selectedShippingMethodId === method.id ? 'bg-black border border-black' : 'bg-white border border-gray-600'}`}></span>
@@ -145,11 +150,20 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                           {method?.id === basket?.shippingMethodId ? basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)?.displayName : method?.displayName}{' '}
                         </h4>
                         <div dangerouslySetInnerHTML={{ __html: method?.description, }} className="my-0 font-12 dark:text-black delivery-method-desc" />
-                        {basket?.estimatedDeliveryDate && (
+                        {(basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate !== "0001-01-01T00:00:00") && (
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
                             <span className="font-bold">
                               {isDeliverTypeSelected(method) ? eddDateFormat(basket?.estimatedDeliveryDate) : eddDateFormat(method?.expectedDeliveryDate)}{' '}
+                            </span>
+                          </span>
+                        )}
+
+                        {(!basket?.estimatedDeliveryDate || (basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate === "0001-01-01T00:00:00")) && (
+                          <span className="block text-xs font-normal text-wrap-p">
+                            {translate('common.label.expectedDeliveryDateText')}:{' '}
+                            <span className="font-bold">
+                              {eddDateFormat(method?.expectedDeliveryDate)}{' '}
                             </span>
                           </span>
                         )}

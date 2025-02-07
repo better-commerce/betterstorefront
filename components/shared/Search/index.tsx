@@ -5,7 +5,6 @@ import Link from 'next/link'
 import axios from 'axios'
 import { SEARCH_PROVIDER, NEXT_SEARCH_PRODUCTS, } from '@components/utils/constants'
 import rangeMap from '@lib/range-map'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
@@ -17,15 +16,17 @@ import { pushSearchToNavigationStack } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function Search(props: any) {
+  const { recordAnalytics } = useAnalytics()
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, searchDefaultSortBy } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [path, setCurrentPath] = useState(Router.asPath)
-  const SearchEvent = EVENTS_MAP.EVENT_TYPES.Search
   const translate = useTranslation()
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
 
@@ -39,16 +40,7 @@ export default function Search(props: any) {
         })
         setProducts(response?.data?.results)
         setIsLoading(false)
-        eventDispatcher(SearchEvent, {
-          entity: JSON.stringify({
-            FreeText: inputValue,
-            ResultCount: response?.data?.results?.length || 0,
-          }),
-          entityId: inputValue,
-          entityName: inputValue,
-          entityType: SearchEntity,
-          eventType: SearchEvent,
-        })
+        recordAnalytics(AnalyticsEventType.SEARCH, { inputValue, products: response?.data?.products, entityType: SearchEntity, })
       } catch (error) {
         console.log(error)
         setIsLoading(false)
@@ -79,7 +71,7 @@ export default function Search(props: any) {
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
       <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-primary-50 '></div>
-      <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden" onClick={closeWrapper} >
+      <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden black-icon-svg" onClick={closeWrapper} >
         <XMarkIcon />
       </div>
       <div className="absolute z-10 flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10 top-5">
@@ -92,7 +84,7 @@ export default function Search(props: any) {
               <ChevronLeftIcon />
             </div>
             <input id={'search-bar'} autoFocus className="w-full min-w-0 px-5 py-4 text-xl text-gray-700 placeholder-gray-500 bg-white border-0 border-b border-gray-300 rounded-full shadow appearance-none focus:outline-none focus:ring-0 focus:ring-white focus:border-gray-700 search-input" placeholder={translate('label.search.searchText')} onChange={(e: any) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} />
-            <div className="relative py-4 text-gray-400 right-10 mob-right-pos">
+            <div className="relative py-4 text-gray-400 right-10 mob-right-pos black-icon-svg">
               <MagnifyingGlassIcon onClick={handleClickSearch} className="w-6 h-6" aria-hidden="true" />
             </div>
           </div>

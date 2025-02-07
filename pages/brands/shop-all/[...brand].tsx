@@ -34,8 +34,9 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-import { removeQueryString } from '@commerce/utils/uri-util'
+import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Cookie } from '@framework/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -86,13 +87,13 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const adaptedQuery = { ...query }
-  const { BrandViewed, PageViewed } = EVENTS_MAP.EVENT_TYPES
   const sliderRef = useRef(null);
   const sliderRefNew = useRef(null);
   const [isShow, setIsShow] = useState(false);
@@ -122,17 +123,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     };
   }, [sliderRefNew]);
 
-  useAnalytics(BrandViewed, {
-    entity: JSON.stringify({
-      id: brandDetails?.id,
-      name: brandDetails?.name || '',
-      manufName: brandDetails?.manufacturerName,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: brandDetails?.manufacturerName,
-    entityType: 'Brand',
-    eventType: 'BrandViewed',
-  })
+  useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE,})
 
   adaptedQuery.currentPage
     ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage))
@@ -496,7 +487,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             </li>
           </ol>
         </div>
-        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
           <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
             {brandDetails?.name}
           </h1>
@@ -549,7 +540,8 @@ export async function getStaticProps({
   }
   const slug = `brands/${brandSlug}`
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
     return notFoundRedirect()

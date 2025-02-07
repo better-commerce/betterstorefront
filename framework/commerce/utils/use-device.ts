@@ -15,6 +15,9 @@ export enum DeviceType {
   DESKTOP = 1,
   MOBILE = 2,
   TABLET = 3,
+  ANDROID = 5,
+  WINDOWS_PHONE = 4,
+  IOS = 6,
 }
 
 const useDevice = (): DeviceDetection => {

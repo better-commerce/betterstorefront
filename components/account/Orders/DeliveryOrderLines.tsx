@@ -31,11 +31,7 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
                </p>
             </div>
             <div className="mt-3 sm:mt-0">
-               <button
-                  type="button"
-                  className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm font-medium py-2.5 px-4 sm:px-6  ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-white dark:text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-100  border border-slate-300 dark:border-slate-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
-               >
-                  {translate('label.order.viewOrderBtnText')}</button>
+               <button type="button" className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm font-medium py-2.5 px-4 sm:px-6  ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-white dark:text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-100  border border-slate-300 dark:border-slate-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" > {translate('label.order.viewOrderBtnText')}</button>
             </div>
          </div>
          {/* top info end */}

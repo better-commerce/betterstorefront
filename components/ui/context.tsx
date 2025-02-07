@@ -2,17 +2,18 @@ import React, { useCallback, useMemo } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { setItem, getItem, removeItem } from '@components/utils/localStorage'
-import { ALERT_TIMER } from '@components/utils/constants'
+import { ALERT_TIMER, SessionIdCookieKey } from '@components/utils/constants'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { Guid } from '@commerce/types'
 import { DeviceType } from '@commerce/utils/use-device'
-import { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
+import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import { processCartData, resetBasket } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { keyBy, map, size } from 'lodash'
 
 declare const window: any
 
@@ -25,11 +26,21 @@ export const basketId = (generateOnly = false) => {
   if (Cookies.get(Cookie.Key.BASKET_ID)) {
     return Cookies.get(Cookie.Key.BASKET_ID) || ''
   }
-  
+
   Cookies.set(Cookie.Key.BASKET_ID, basketId, {
     expires: getExpiry(getMinutesInDays(365)),
   })
   return basketId
+}
+export const kitBasketId = () => {
+  if (Cookies.get(Cookie.Key.KIT_BASKET_ID)) {
+    return Cookies.get(Cookie.Key.KIT_BASKET_ID) || ''
+  }
+  const kitBasketId = uuid()
+  Cookies.set(Cookie.Key.KIT_BASKET_ID, kitBasketId, {
+    expires: getExpiry(getMinutesInDays(365)),
+  })
+  return kitBasketId
 }
 
 export interface IDeviceInfo {
@@ -60,7 +71,7 @@ export interface IPLPFilterState {
 export interface State {
   displaySidebar: boolean
   displayDropdown: boolean
-  myAccountActiveTab : string
+  myAccountActiveTab: string
   displayModal: boolean
   sidebarView: string
   modalView: string
@@ -84,6 +95,8 @@ export interface State {
   compareProductList: any
   isPaymentLink: boolean
   isGhostUser: boolean
+  kitBasketId: string
+  kitCartLoaded: boolean
 }
 
 const initialState = {
@@ -130,103 +143,105 @@ const initialState = {
   isPaymentLink: getItem('isPaymentLink') || false,
   productInfo: undefined,
   isGhostUser: getItem('isGhostUser') || false,
+  kitBasketId: '',
+  kitCartLoaded: false,
 }
 
 type Action =
-| {
-  type: 'OPEN_SIDEBAR'
-}
-| {
-  type: 'CLOSE_SIDEBAR'
-}
-| {
-  type: 'OPEN_DROPDOWN'
-}
-| {
-  type: 'CLOSE_DROPDOWN'
-}
-| {
-  type: 'OPEN_MODAL'
-}
-| {
-  type: 'SHOW_ALERT'
-}
-| {
-  type: 'HIDE_ALERT'
-}
-| {
-  type: 'USE_ALERT'
-  payload: any
-}
-| {
-  type: 'OPEN_NOTIFY_USER_POPUP'
-  payload: string
-}
-| {
-  type: 'CLOSE_NOTIFY_USER_POPUP'
-}
-| {
-  type: 'CLOSE_MODAL'
-}
-| {
-  type: 'SET_MODAL_VIEW'
-  view: MODAL_VIEWS
-}
-| {
-  type: 'SET_SIDEBAR_VIEW'
-  view: SIDEBAR_VIEWS
-}
-| {
-  type: 'SHOW_DETAILED_ORDER'
-}
-| {
-  type: 'HIDE_DETAILED_ORDER'
-}
-| {
-  type: 'SET_USER_AVATAR'
-  value: string
-}
-| {
-  type: 'ADD_TO_WISHLIST'
-  payload: any
-}
-| {
-  type: 'REMOVE_FROM_WISHLIST'
-  payload: any
-}
-| {
-  type: 'ADD_TO_CART'
-  payload: any
-}
-| {
-  type: 'REMOVE_FROM_CART'
-  payload: any
-}
-| { type: 'SET_CART_ITEMS'; payload: any }
-| { type: 'SET_CART_ITEMS_COUNT'; payload: any }
-| {
-  type: 'SET_USER'
-  payload: any
-}
-| {
-  type: 'SET_GUEST_USER'
-  payload: any
-}
-| {
-  type: 'SET_IS_GUEST_USER'
-  payload: boolean
-}
-| {
-  type: 'SET_IS_PAYMENT_LINK'
-  payload: boolean
-}
-| {
-  type: 'SET_IS_SPLIT_DELIVERY'
-  payload: boolean
-} | {
-  type: 'SET_REFERRAL_PROGRAM_ACTIVE'
-  payload: boolean
-}
+  | {
+    type: 'OPEN_SIDEBAR'
+  }
+  | {
+    type: 'CLOSE_SIDEBAR'
+  }
+  | {
+    type: 'OPEN_DROPDOWN'
+  }
+  | {
+    type: 'CLOSE_DROPDOWN'
+  }
+  | {
+    type: 'OPEN_MODAL'
+  }
+  | {
+    type: 'SHOW_ALERT'
+  }
+  | {
+    type: 'HIDE_ALERT'
+  }
+  | {
+    type: 'USE_ALERT'
+    payload: any
+  }
+  | {
+    type: 'OPEN_NOTIFY_USER_POPUP'
+    payload: string
+  }
+  | {
+    type: 'CLOSE_NOTIFY_USER_POPUP'
+  }
+  | {
+    type: 'CLOSE_MODAL'
+  }
+  | {
+    type: 'SET_MODAL_VIEW'
+    view: MODAL_VIEWS
+  }
+  | {
+    type: 'SET_SIDEBAR_VIEW'
+    view: SIDEBAR_VIEWS
+  }
+  | {
+    type: 'SHOW_DETAILED_ORDER'
+  }
+  | {
+    type: 'HIDE_DETAILED_ORDER'
+  }
+  | {
+    type: 'SET_USER_AVATAR'
+    value: string
+  }
+  | {
+    type: 'ADD_TO_WISHLIST'
+    payload: any
+  }
+  | {
+    type: 'REMOVE_FROM_WISHLIST'
+    payload: any
+  }
+  | {
+    type: 'ADD_TO_CART'
+    payload: any
+  }
+  | {
+    type: 'REMOVE_FROM_CART'
+    payload: any
+  }
+  | { type: 'SET_CART_ITEMS'; payload: any }
+  | { type: 'SET_CART_ITEMS_COUNT'; payload: any }
+  | {
+    type: 'SET_USER'
+    payload: any
+  }
+  | {
+    type: 'SET_GUEST_USER'
+    payload: any
+  }
+  | {
+    type: 'SET_IS_GUEST_USER'
+    payload: boolean
+  }
+  | {
+    type: 'SET_IS_PAYMENT_LINK'
+    payload: boolean
+  }
+  | {
+    type: 'SET_IS_SPLIT_DELIVERY'
+    payload: boolean
+  } | {
+    type: 'SET_REFERRAL_PROGRAM_ACTIVE'
+    payload: boolean
+  }
   | { type: 'REMOVE_USER'; payload: any }
   | { type: 'SET_WISHLIST'; payload: any }
   | { type: 'SET_BASKET_ID'; payload: string }
@@ -234,6 +249,8 @@ type Action =
   | { type: 'SET_APP_CONFIG'; payload: any }
   | { type: 'SET_ORDER_ID'; payload: any }
   | { type: 'SET_USER_IP'; payload: string }
+  | { type: 'SET_KIT_BASKET_ID'; payload: string }
+  | { type: 'SET_KIT_BASKET'; payload: any }
   | { type: 'SET_OVERLAY_STATE'; payload: IOverlayLoaderState }
   | { type: 'SETUP_DEVICE_INFO'; payload: IDeviceInfo }
   | { type: 'SET_SELECTED_ADDRESS_ID'; payload: number }
@@ -243,11 +260,12 @@ type Action =
   | { type: 'RESET_COMPARE_PRODUCTS'; payload: any }
   | { type: 'SET_CURRENCY'; payload: any }
   | { type: 'SET_PRODUCT_INFO'; payload: any }
-  | { type: 'CHANGE_TAB'; payload: string}
+  | { type: 'CHANGE_TAB'; payload: string }
   | {
-      type: 'SET_IS_GHOST_USER'
-      payload: boolean
-    }
+    type: 'SET_IS_GHOST_USER'
+    payload: boolean
+  }
+  | { type: 'KIT_CART_LOADED'; payload: any }
 
 type MODAL_VIEWS =
   | 'SIGNUP_VIEW'
@@ -257,6 +275,8 @@ type MODAL_VIEWS =
   | 'NEW_SHIPPING_ADDRESS'
   | 'NEW_PAYMENT_METHOD'
   | 'NOTIFY_USER'
+  | 'KIT_ACTIVE_ALERT'
+  | 'BASKET_REMOVE_ITEM_VIEW'
 
 type SIDEBAR_VIEWS =
   | 'CART_VIEW'
@@ -351,6 +371,18 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         modalView: action.view,
+      }
+    }
+    case 'SET_KIT_BASKET_ID': {
+      return {
+        ...state,
+        kitBasketId: action.payload,
+      }
+    }
+    case 'SET_KIT_BASKET': {
+      return {
+        ...state,
+        kitBasket: action.payload,
       }
     }
     case 'SET_SIDEBAR_VIEW': {
@@ -471,7 +503,7 @@ function uiReducer(state: State, action: Action) {
       }
     }
 
-    case 'CHANGE_TAB' : {
+    case 'CHANGE_TAB': {
       return {
         ...state,
         myAccountActiveTab: action.payload
@@ -579,6 +611,13 @@ function uiReducer(state: State, action: Action) {
         isGhostUser: action.payload,
       }
     }
+    case 'KIT_CART_LOADED': {
+      state = {
+        ...state,
+        kitCartLoaded: action.payload,
+      }
+      return state
+    }
   }
 }
 
@@ -589,7 +628,7 @@ type UIProviderProps = {
 export const UIProvider: React.FC<any> = (props) => {
   const Router = useRouter()
   const translate = useTranslation()
- 
+
   const [state, dispatch] = React.useReducer<React.Reducer<any, any>>(
     uiReducer,
     initialState
@@ -610,11 +649,11 @@ export const UIProvider: React.FC<any> = (props) => {
       const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini|iPhone|iPod|Windows Phone/i;
       const tabletRegex = /iPad|Android(?!.*(mobile|mobi)).*?(Tablet|Tab)/i;
 
-      if ( mobileRegex.test(userAgent)) {
+      if (mobileRegex.test(userAgent)) {
         return DeviceType.MOBILE
-      }else if (tabletRegex.test(userAgent)) {
+      } else if (tabletRegex.test(userAgent)) {
         return DeviceType.TABLET
-      }else {
+      } else {
         return DeviceType.DESKTOP
       }
     }
@@ -686,14 +725,14 @@ export const UIProvider: React.FC<any> = (props) => {
   )
   const toggleSidebar = useCallback(
     () =>
-      state.displaySidebar
+      state?.displaySidebar
         ? dispatch({ type: 'CLOSE_SIDEBAR' })
         : dispatch({ type: 'OPEN_SIDEBAR' }),
-    [dispatch, state.displaySidebar]
+    [dispatch, state?.displaySidebar]
   )
   const closeSidebarIfPresent = useCallback(
-    () => state.displaySidebar && dispatch({ type: 'CLOSE_SIDEBAR' }),
-    [dispatch, state.displaySidebar]
+    () => state?.displaySidebar && dispatch({ type: 'CLOSE_SIDEBAR' }),
+    [dispatch, state?.displaySidebar]
   )
 
   const openDropdown = useCallback(
@@ -777,7 +816,7 @@ export const UIProvider: React.FC<any> = (props) => {
     (payload: any) => dispatch({ type: 'SHOW_SEARCH_BAR', payload }),
     [dispatch]
   )
-  
+
   const setCartItems = useCallback(
     (payload: any) => {
       // Don't set empty payloads to basket items
@@ -788,8 +827,7 @@ export const UIProvider: React.FC<any> = (props) => {
       setItem('cartItems', newCartData)
 
       if (newCartData?.lineItems?.length == 0) {
-        let generatedBasketId = basketId()
-        resetBasket(setBasketId, generatedBasketId)
+        resetBasket(setBasketId, basketId)
         /*const user = {
           ...state?.user,
           ...{
@@ -899,11 +937,14 @@ export const UIProvider: React.FC<any> = (props) => {
         setItem('cartItems', { lineItems: [] })
         dispatch({ type: 'SET_CART_ITEMS', payload: { lineItems: [] } })
         dispatch({ type: 'SET_CART_ITEMS_COUNT', payload: 0 })
+        Cookies.remove(Cookie.Key.USER_TOKEN)
+        Cookies.remove(SessionIdCookieKey)
         Cookies.remove(Cookie.Key.COMPANY_ID)
         const basketIdRef = uuid()
         Cookies.set(Cookie.Key.BASKET_ID, basketIdRef, {
           expires: getExpiry(getMinutesInDays(365)),
         })
+        setSessionIdCookie()
         dispatch({ type: 'SET_BASKET_ID', payload: basketIdRef })
         dispatch({ type: 'REMOVE_USER', payload: {} })
         removeItem('isPaymentLink')
@@ -950,6 +991,16 @@ export const UIProvider: React.FC<any> = (props) => {
         expires: getExpiry(getMinutesInDays(365)),
       })
       dispatch({ type: 'SET_BASKET_ID', payload: basketId })
+    },
+    [dispatch]
+  )
+
+  const setKitBasketId = useCallback(
+    (basketId: string) => {
+      Cookies.set(Cookie.Key.KIT_BASKET_ID, basketId, {
+        expires: getExpiry(getMinutesInDays(365)),
+      })
+      dispatch({ type: 'SET_KIT_BASKET_ID', payload: basketId })
     },
     [dispatch]
   )
@@ -1134,6 +1185,245 @@ export const UIProvider: React.FC<any> = (props) => {
     },
     [dispatch]
   )
+  const setKitBasket = useCallback(
+    (payload: boolean) => {
+      dispatch({ type: 'SET_KIT_BASKET', payload })
+    },
+    [dispatch]
+  )
+
+  const saveItemToKitCart = useCallback(
+    (payload: any) => {
+      if (state.kitCartLoaded) return
+      const { data: productData, action } = payload
+      let { basketItemGroupId, productId = '', basketItemGroupData } = productData
+      productId = productId?.toLowerCase()
+      let kitCartItems = {
+        ...state.kitCartItems,
+      }
+      let cartItemsObj = state.cartItems.lineItems?.find((o: any) => {
+        if (o.productId) {
+          return (
+            o.productId.toLowerCase() === productId &&
+            o.basketItemGroupId.toLowerCase() === basketItemGroupId
+          )
+        }
+        return o.recordId.toLowerCase() === productId
+      })
+      switch (action) {
+        case 'add':
+          if (!kitCartItems[basketItemGroupId]) {
+            // init empty dataset
+            kitCartItems[basketItemGroupId] = {
+              isActive: true,
+              isSaved: false,
+              items: {},
+            }
+          }
+          kitCartItems = {
+            ...kitCartItems,
+            [basketItemGroupId]: {
+              isActive: kitCartItems[basketItemGroupId].isActive,
+              isSaved: false,
+              items: {
+                ...kitCartItems[basketItemGroupId].items,
+                [productId]: {
+                  ...productData,
+                  qty:
+                    (kitCartItems[basketItemGroupId].items[productId]?.qty ||
+                      0) + 1,
+                  shouldUpdate: true,
+                },
+              },
+            },
+          }
+          if (cartItemsObj) {
+            kitCartItems[basketItemGroupId].items[productId].dbQty =
+              kitCartItems[basketItemGroupId].items[productId].qty *
+              cartItemsObj?.basketItemGroupData?.kitQty -
+              cartItemsObj.qty
+            kitCartItems[basketItemGroupId].items[productId].shouldUpdate = true
+            if (kitCartItems[basketItemGroupId].items[productId].dbQty === 0) {
+              delete kitCartItems[basketItemGroupId].items[productId].dbQty
+              kitCartItems[basketItemGroupId].items[productId].shouldUpdate =
+                false
+            }
+          }
+
+          // if (kitCartItems[basketItemGroupId].items[productId].dbQty === undefined) {
+          //   kitCartItems[basketItemGroupId].items[productId].shouldUpdate = true
+          //   kitCartItems[basketItemGroupId].items[productId].dbQty = 
+          //     kitCartItems[basketItemGroupId].items[productId].qty * basketItemGroupData?.kitQty
+          // }
+
+          dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+          return
+        case 'update_more':
+          kitCartItems[basketItemGroupId].items[productId] = {
+            ...kitCartItems[basketItemGroupId].items[productId],
+            qty: productData.qty,
+            dbQty: undefined,
+          }
+          if (cartItemsObj) {
+            kitCartItems[basketItemGroupId].items[productId].dbQty =
+              kitCartItems[basketItemGroupId].items[productId].qty *
+              cartItemsObj?.basketItemGroupData?.kitQty -
+              cartItemsObj.qty
+            kitCartItems[basketItemGroupId].items[productId].shouldUpdate = true
+            if (kitCartItems[basketItemGroupId].items[productId].dbQty === 0) {
+              delete kitCartItems[basketItemGroupId].items[productId].dbQty
+              kitCartItems[basketItemGroupId].items[productId].shouldUpdate =
+                false
+            }
+          }
+          // if (
+          //   kitCartItems[basketItemGroupId].items[productId].dbQty === undefined ||
+          //   kitCartItems[basketItemGroupId].items[productId].dbQty === 1
+          // ) {
+          //   kitCartItems[basketItemGroupId].items[productId].shouldUpdate = true
+          //   kitCartItems[basketItemGroupId].items[productId].dbQty = 
+          //     kitCartItems[basketItemGroupId].items[productId].qty * basketItemGroupData?.kitQty
+          // }
+          dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+          return
+        case 'remove':
+          kitCartItems[basketItemGroupId].items[productId] = {
+            ...kitCartItems[basketItemGroupId].items[productId],
+            qty: kitCartItems[basketItemGroupId].items[productId].qty - 1,
+            dbQty: undefined,
+          }
+          if (cartItemsObj) {
+            kitCartItems[basketItemGroupId].items[productId].dbQty =
+              kitCartItems[basketItemGroupId].items[productId].qty *
+              cartItemsObj?.basketItemGroupData?.kitQty -
+              cartItemsObj.qty
+            kitCartItems[basketItemGroupId].items[productId].shouldUpdate = true
+            if (kitCartItems[basketItemGroupId].items[productId].dbQty === 0) {
+              delete kitCartItems[basketItemGroupId].items[productId].dbQty
+              kitCartItems[basketItemGroupId].items[productId].shouldUpdate =
+                false
+            }
+          }
+          dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+          return
+        case 'remove_all':
+          if (!cartItemsObj) {
+            if (size(kitCartItems[basketItemGroupId].items) <= 1) {
+              delete kitCartItems[basketItemGroupId]
+            } else {
+              delete kitCartItems[basketItemGroupId].items[productId]
+            }
+          } else {
+            kitCartItems[basketItemGroupId].items[productId] = {
+              ...kitCartItems[basketItemGroupId].items[productId],
+              qty: 0,
+            }
+            if (cartItemsObj) {
+              kitCartItems[basketItemGroupId].items[productId].shouldUpdate =
+                true
+              kitCartItems[basketItemGroupId].items[productId].dbQty = 0
+            }
+          }
+          dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+          return
+        default:
+          dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+          return
+      }
+    },
+    [state?.kitCartItems]
+  )
+
+  const resetKitCart = useCallback(() => {
+    dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: {} })
+  }, [state?.kitCartItems])
+
+  const regenerateKitCart = useCallback(
+    (payload: any) => {
+      let { data: productList, basketItemGroupId } = payload
+      productList = map(productList, (o: any) => {
+        return {
+          ...o,
+          qty: o.qty / o.basketItemGroupData.kitQty,
+        }
+      })
+      productList = keyBy(productList, (o: any) => o.productId?.toLowerCase())
+      let kitCartItems = {
+        ...state.kitCartItems,
+      }
+      if (!kitCartItems[basketItemGroupId]) {
+        // init empty dataset
+        kitCartItems[basketItemGroupId] = {
+          isActive: false,
+          isSaved: true,
+          items: {},
+        }
+      }
+      kitCartItems = {
+        ...kitCartItems,
+        [basketItemGroupId]: {
+          isActive: kitCartItems[basketItemGroupId].isActive,
+          isSaved: true,
+          items: {
+            ...productList,
+          },
+        },
+      }
+      dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+    },
+    [state?.kitCartItems]
+  )
+
+  const addKitToCart = useCallback(
+    (payload: any) => {
+      const { basketItemGroupId } = payload
+      let kitCartItems = { ...state.kitCartItems }
+      delete kitCartItems[basketItemGroupId]
+      dispatch({ type: 'SAVE_ITEM_TO_KIT', payload: kitCartItems })
+    },
+    [state?.kitCartItems]
+  )
+
+  const getKitCartItemsById = useCallback(
+    (payload: any) => {
+      let kitCartItems = []
+      if (
+        state?.kitCartItems[payload] &&
+        state?.kitCartItems[payload].isActive &&
+        state?.cartItems?.lineItems?.some(
+          (o: any) => o.basketItemGroupId === payload
+        )
+      ) {
+        kitCartItems = state.cartItems?.lineItems?.filter(
+          (o: any) => o.basketItemGroupId === payload
+        )
+      } else {
+        kitCartItems = state.kitCartItems[payload]
+          ? Object.values(state.kitCartItems[payload].items)
+          : []
+      }
+      return kitCartItems
+    },
+    [state?.kitCartItems]
+  )
+
+  const setKitCartLoaded = useCallback(
+    (payload: any) => {
+      dispatch({ type: 'KIT_CART_LOADED', payload })
+    },
+    [state?.kitCartLoaded]
+  )
+
+  const openActiveKitAlert = () => {
+    setModalView('KIT_ACTIVE_ALERT')
+    openModal()
+  }
+
+  const openBasketRemoveItemView = (payload: any) => {
+    setModalView('BASKET_REMOVE_ITEM_VIEW')
+    dispatch({ type: 'SET_BASKET_REMOVABLE_ITEM', payload })
+    openModal()
+  }
 
   const value = useMemo(
     () => ({
@@ -1169,6 +1459,8 @@ export const UIProvider: React.FC<any> = (props) => {
       openWishlist,
       setWishlist,
       removeFromWishlist,
+      setKitBasketId,
+      setKitBasket,
       setBasketId,
       setShowSearchBar,
       setAppConfig,
@@ -1190,6 +1482,14 @@ export const UIProvider: React.FC<any> = (props) => {
       setCurrency,
       setProductInfo,
       setIsGhostUser,
+      saveItemToKitCart,
+      addKitToCart,
+      resetKitCart,
+      regenerateKitCart,
+      getKitCartItemsById,
+      setKitCartLoaded,
+      openActiveKitAlert,
+      openBasketRemoveItemView,
     }),
 
     [state]

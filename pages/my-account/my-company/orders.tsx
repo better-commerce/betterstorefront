@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import withAuth from '@components/utils/withAuth'
 import { useRouter } from 'next/router'
@@ -6,52 +6,37 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import React from 'react'
-import MyDetails from '@components/account/MyDetails'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-import B2BQuotes from '@components/account/B2BQuotes'
 import axios from 'axios'
-import { NEXT_B2B_GET_QUOTES, NEXT_B2B_GET_USERS, NEXT_GET_ORDERS } from '@components/utils/constants'
+import { NEXT_B2B_GET_USERS, NEXT_GET_ORDERS } from '@components/utils/constants'
 import B2BOrders from '@components/account/Orders/B2BOrders'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function MyOrders({ deviceInfo }: any) {
   const [isShow, setShow] = useState(true)
-  const [b2bQuotes, setB2BQuotes] = useState<any>(null)
   const [userOrderIdMap, setUserOrderIdMap] = useState<any>(null)
   const { user, isGuestUser, changeMyAccountTab, displayDetailedOrder } = useUI()
   const router = useRouter()
   const [isAdmin, setIsAdmin] = useState(false)
   const [b2bUsers, setB2BUsers] = useState<any>(null)
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
-  const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const [isShowDetailedOrder, setIsShowDetailedOrder] = useState(displayDetailedOrder)
   useEffect(() => {
     setIsShowDetailedOrder(displayDetailedOrder)
   }, [displayDetailedOrder])
   useEffect(() => {
-    fetchB2BUserQuotes()
     if (isGuestUser) {
       router.push('/')
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  const fetchB2BUserQuotes = async () => {
-    let { data: b2bQuotes } = await axios.post(NEXT_B2B_GET_QUOTES, {
-      userId: user?.userId,
-    })
-    setB2BQuotes(b2bQuotes)
-  }
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, }
   const userAdminCheck = (b2bUsers: any) => {
-    let isAdmin =
-      b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole ===
-      'Admin'
+    let isAdmin = b2bUsers.find((x: any) => x?.userId === user?.userId)?.companyUserRole === 'Admin'
     setIsAdmin(isAdmin)
   }
 
@@ -66,26 +51,13 @@ function MyOrders({ deviceInfo }: any) {
     return b2bUsers
   }
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(() => {
     changeMyAccountTab(translate('label.myAccount.myCompanyMenus.order'))
   }, [])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   const handleToggleShowState = () => {
     setShow(!isShow)
@@ -114,23 +86,13 @@ function MyOrders({ deviceInfo }: any) {
 
   return (
     <div className={'orders bg-white dark:bg-transparent'}>
-      <div className=''>
-        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
-          Orders
-        </h1>
-      </div>
-      <B2BOrders
-        deviceInfo={deviceInfo}
-        isShowDetailedOrder={isShowDetailedOrder}
-        setIsShowDetailedOrder={setIsShowDetailedOrder}
-        isAdmin={isAdmin}
-        userOrderIdMap={userOrderIdMap}
-      />
-    </div>)
+      <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Orders </h1>
+      <B2BOrders deviceInfo={deviceInfo} isShowDetailedOrder={isShowDetailedOrder} setIsShowDetailedOrder={setIsShowDetailedOrder} isAdmin={isAdmin} userOrderIdMap={userOrderIdMap} />
+    </div>
+  )
 }
 
 MyOrders.LayoutAccount = LayoutAccount
-
 const PAGE_TYPE = PAGE_TYPES.MyOrders
 
 export async function getServerSideProps(context: any) {
@@ -141,8 +103,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...pageProps,
-    }, // will be passed to the page component as props
+    }
   }
 }
-
 export default withDataLayer(withAuth(MyOrders), PAGE_TYPE, true, LayoutAccount)

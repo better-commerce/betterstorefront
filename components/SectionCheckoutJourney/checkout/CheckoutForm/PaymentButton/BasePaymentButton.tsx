@@ -16,7 +16,7 @@ import { getOrderId, getOrderInfo, parsePaymentMethods } from '@framework/utils/
 import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
-import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -30,8 +30,8 @@ export interface IPaymentButtonProps {
   readonly scrollToBottomEnabled?: boolean
   readonly contactDetails?: any
   onScrollToSection?: any
-  recordEvent?: any
   translate?: any
+  recordAnalytics?: any
 }
 
 export interface IApplePaymentProps {
@@ -162,59 +162,12 @@ export default abstract class BasePaymentButton
     }
   }
 
-  public recordAddPaymentInfoEvent(uiContext: any, recordEvent: Function, paymentType: string) {
-    if (recordEvent) {
-      const { user, cartItems } = uiContext
-      const orderInfo = getOrderInfo()
-      const transactionId = getOrderId(orderInfo?.order)
-      const data = {
-        event: 'add_payment_info',
-        gtm: {
-          uniqueEventId: GTMUniqueEventID.ADD_PAYMENT_INFO,
-          start: new Date().getTime(),
-        },
-        crto: {
-          email: user?.email,
-          transactionId,
-          products: cartItems?.lineItems?.map((item: any, itemId: number) => ({
-            id: item?.sku,
-            price: item?.price?.raw?.withTax,
-            quantity: item?.qty,
-          })),
-        },
-        ecommerce: {
-          items: cartItems?.lineItems?.map(
-            (item: any, itemId: number) => ({
-              item_id: item?.stockCode,
-              item_name: item?.name,
-              Affliation: "FFX Website",
-              Coupon: "",
-              discount: "",
-              index: itemId,
-              item_list_name: item?.categoryItems?.length
-                ? item?.categoryItems[0]?.categoryName
-                : item?.classification?.category,
-              item_list_id: item?.categoryItems?.length
-                ? item?.categoryItems[0]?.categoryId
-                : item?.stockCode,
-              item_variant: item?.variantGroupCode || item?.colorName,
-              item_brand: item?.brand,
-              quantity: item?.qty,
-              item_is_bundle_item: false,
-              price: item?.price?.raw?.withTax,
-            })
-          ),
-          value: cartItems?.grandTotal?.raw?.withTax,
-          currency: cartItems?.baseCurrency,
-          payment_type: paymentType.toUpperCase(),
-        },
-      }
-      
-      recordEvent({
-        name: 'add_payment_info',
-        data,
-      })
-    }
+  public recordAddPaymentInfoEvent(uiContext: any, paymentType: string) {
+    const { user, cartItems } = uiContext
+    const orderInfo = getOrderInfo()
+    const transactionId = getOrderId(orderInfo?.order)
+    //debugger
+    this.props?.recordAnalytics(AnalyticsEventType.ADD_PAYMENT_INFO, { user, cartItems, transactionId, paymentType, })
   }
 
   /**

@@ -8,7 +8,7 @@ export default function FeaturedCategory({ featuredCategory }: any) {
       <Swiper spaceBetween={10} slidesPerView={2.3} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 3, }, 768: { slidesPerView: 5 }, 1024: { slidesPerView: 6.8 }, 1400: { slidesPerView: 8.4 }, }} className="px-20 mySwiper center-content swiper-center" >
         {featuredCategory?.map((featured: any, featuredIdx: number) => (featured?.isFeatured == true && (
           <SwiperSlide key={featuredIdx}>
-            <Link href={`/${featured?.link}`} className="flex justify-center w-full px-0 py-2 font-semibold text-center text-black bg-gray-100 border border-gray-100 rounded-xl hover:bg-gray-200 font-14">
+            <Link href={`/${featured?.link}`} className="flex min-h-[70px] items-center justify-center w-full px-0 py-2 font-semibold text-center text-black bg-gray-100 border border-gray-100 rounded-xl hover:bg-gray-200 text-[13px]">
               <span>{featured?.name}</span>
             </Link>
           </SwiperSlide>

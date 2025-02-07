@@ -1,5 +1,5 @@
 // Base Imports
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 
 // Package Imports
 import NextHead from 'next/head'
@@ -7,7 +7,7 @@ import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import cookie from 'cookie'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import MembershipOfferCard from '@components/membership/MembershipOfferCard'
 import OptMembershipModal from '@components/membership/OptMembershipModal'
 
@@ -23,8 +23,8 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { vatIncluded, } from '@framework/utils/app-util'
-import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST } from '@components/utils/constants'
+import { getCartValidateMessages, getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
+import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST, BASKET_PROMO_TYPES } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
 import { stringToBoolean } from '@framework/utils/parse-util'
@@ -38,8 +38,14 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
+import { round, sortBy } from 'lodash'
+import { groupCartItemsById } from '@components/utils/cart'
+import CartSideBarProductCard from '@components/CartSideBarProductCard'
+import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
+  const router = useRouter()
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
       ?.find((x: any) => x.configType === 'DomainSettings')
@@ -54,7 +60,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       )?.value || ''
   )
 
-  const { setCartItems, cartItems, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar } = useUI()
+  const { setCartItems, cartItems, resetKitCart, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar, setOverlayLoaderState } = useUI()
   const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
   const [isGetBasketPromoRunning, setIsGetBasketPromoRunning] = useState(false)
@@ -162,6 +168,12 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
     })
+    if (basketPromos?.applicablePromotions?.length) {
+      basketPromos.applicablePromotions = basketPromos?.applicablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
+    if (basketPromos?.availablePromotions?.length) {
+      basketPromos.availablePromotions = basketPromos?.availablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
     setBasketPromos(basketPromos)
     return basketPromos
   }
@@ -271,22 +283,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     }
   }
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.BasketViewed, {
-    entity: JSON.stringify({
-      id: basketId,
-      grandTotal: cartItems?.grandTotal?.raw.withTax,
-      lineItems: cartItems?.lineItems,
-      promoCode: cartItems?.promotionsApplied,
-      shipCharge: cartItems?.shippingCharge?.raw?.withTax,
-      shipTax: cartItems?.shippingCharge?.raw?.tax,
-      taxPercent: cartItems?.taxPercent,
-      tax: cartItems?.grandTotal?.raw?.tax,
-    }),
-    entityName: PAGE_TYPES.Cart,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Basket,
-    eventType: EVENTS_MAP.EVENT_TYPES.BasketViewed,
-    promoCodes: cartItems.promotionsApplied,
-  })
+  let currentPage = getCurrentPage()
+  const extras = { originalLocation: SITE_ORIGIN_URL + router?.asPath }
+  useAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, })
 
   useEffect(() => {
     let splitProducts = groupItemsByDeliveryDate(cartItems?.lineItems)
@@ -368,14 +367,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             item.ProductId.toLowerCase() === cartItem.productId.toLowerCase()
           )
         })
-        let deliveryDateTarget = obj.Items?.find(
-          (item: any) =>
-            item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase()
-        )?.DeliveryDateTarget
-        let shippingSpeed = obj.Items?.find(
-          (item: any) =>
-            item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase()
-        )?.ShippingSpeed
+        let deliveryDateTarget = obj.Items?.find((item: any) => item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase())?.DeliveryDateTarget
+        let shippingSpeed = obj.Items?.find((item: any) => item.ProductId?.toLowerCase() === cartItem.productId.toLowerCase())?.ShippingSpeed
         if (foundShippingPlan) {
           cartItem.shippingPlan = obj
           cartItem.deliveryDateTarget = deliveryDateTarget
@@ -390,27 +383,27 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     if (items?.length < 1) {
       items = { ...cartItems }
     }
-    const shippingMethodItem: any = cart.shippingMethods.find(
-      (method: any) => method.id === cart.shippingMethodId
+    const shippingMethodItem: any = cart?.shippingMethods.find(
+      (method: any) => method.id === cart?.shippingMethodId
     )
 
     const model = {
       BasketId: basketId,
       OrderId: Guid.empty,
       PostCode: cartItems?.postCode || '',
-      ShippingMethodType: shippingMethodItem.type,
+      ShippingMethodType: shippingMethodItem?.type,
       ShippingMethodId: cart?.shippingMethodId,
-      ShippingMethodName: shippingMethodItem.displayName,
-      ShippingMethodCode: shippingMethodItem.shippingCode,
+      ShippingMethodName: shippingMethodItem?.displayName,
+      ShippingMethodCode: shippingMethodItem?.shippingCode,
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
-          BasketLineId: Number(item.id),
+          BasketLineId: Number(item?.id),
           OrderLineRecordId: Guid.empty,
-          ProductId: item.productId,
-          ParentProductId: item.parentProductId,
-          StockCode: item.stockCode,
-          Qty: item.qty,
-          PoolCode: item.poolCode || null,
+          ProductId: item?.productId,
+          ParentProductId: item?.parentProductId,
+          StockCode: item?.stockCode,
+          Qty: item?.qty,
+          PoolCode: item?.poolCode || null,
         }
       }),
       AllowPartialOrderDelivery: true,
@@ -428,19 +421,19 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       BasketId: basketId,
       OrderId: Guid.empty,
       PostCode: cartItems?.postCode || '',
-      ShippingMethodType: shippingMethodItem.type,
+      ShippingMethodType: shippingMethodItem?.type,
       ShippingMethodId: cart?.shippingMethodId,
-      ShippingMethodName: shippingMethodItem.displayName,
-      ShippingMethodCode: shippingMethodItem.shippingCode,
+      ShippingMethodName: shippingMethodItem?.displayName,
+      ShippingMethodCode: shippingMethodItem?.shippingCode,
       DeliveryItems: cart?.lineItems?.map((item: any) => {
         return {
-          BasketLineId: Number(item.id),
+          BasketLineId: Number(item?.id),
           OrderLineRecordId: Guid.empty,
-          ProductId: item.productId,
-          ParentProductId: item.parentProductId,
-          StockCode: item.stockCode,
-          Qty: item.qty,
-          PoolCode: item.poolCode || null,
+          ProductId: item?.productId,
+          ParentProductId: item?.parentProductId,
+          StockCode: item?.stockCode,
+          Qty: item?.qty,
+          PoolCode: item?.poolCode || null,
         }
       }),
       AllowPartialOrderDelivery: true,
@@ -460,21 +453,21 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     if (shippingPlans.length > 1 && allowSplitShipping) {
       setIsSplitDelivery(true)
       splitDeliveryExtract(
-        mapSplitDeliveryPlansToItems(shippingPlans || [], items.lineItems) //cart
+        mapSplitDeliveryPlansToItems(shippingPlans || [], items?.lineItems) //cart
       )
 
       setCartItems({
         ...items, //cart
         lineItems: mapSplitDeliveryPlansToItems(
           shippingPlans || [],
-          items.lineItems
+          items?.lineItems
         ),
       })
     } else {
       setIsSplitDelivery(false)
       setCartItems({
         ...cart,
-        lineItems: mapShippingPlansToItems(shippingPlans || [], cart.lineItems),
+        lineItems: mapShippingPlansToItems(shippingPlans || [], cart?.lineItems),
       })
     }
   }
@@ -499,7 +492,9 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         setMembership(membershipPlans)
       }
     }
-    fetchMembership()
+    if (featureToggle?.features?.enableMembership) {
+      fetchMembership()
+    }
   }, [basket, basket?.id, basket?.lineItems])
 
   useEffect(() => {
@@ -561,7 +556,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       await fetchShippingPlans([])
     }
 
-    if (cart?.shippingMethods.length > 0) {
+    if (cart?.shippingMethods?.length > 0) {
       loadShippingPlans()
     } else {
       setCartItems(cart)
@@ -571,45 +566,76 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleItem = (product: any, type = 'increase') => {
-    if (!product?.id) return
-    if (isOpen && !(type === 'delete')) {
-      closeModal()
-    }
-    const asyncHandleItem = async () => {
+  const handleItem = (
+    product: any,
+    type = 'increase',
+    selectQuantity: number = 1
+  ) => {
+    const asyncHandleItem = async (product: any) => {
       let data: any = {
         basketId,
         productId: product?.id,
+        name: product?.name,
         stockCode: product?.stockCode,
-        manualUnitPrice: product?.manualUnitPrice,
+        manualUnitPrice: product?.price?.raw?.withoutTax,
         displayOrder: product?.displayOrderta,
         qty: -1,
       }
+      // add prop 'basketItemGroupData' for removing Kit items
+      if (product?.basketItemGroupData) {
+        data.basketItemGroupData = product?.basketItemGroupData
+      }
+      // add prop 'basketItemGroupId' for removing Kit items
+      if (product?.basketItemGroupId) {
+        data.basketItemGroupId = product?.basketItemGroupId
+      }
       if (type === 'increase') {
         data.qty = 1
+        const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
+          if (matchStrings(o?.productId, product?.recordId, true) || matchStrings(o?.productId, product?.productId, true)) {
+            return o
+          }
+        })
+        const attributeData: any = tryParseJson(product?.attributesJson || {})
+
       }
       if (type === 'delete') {
         data.qty = 0
-        userCart.lineItems = userCart.lineItems.filter(
-          (item: { id: any }) => item.id !== product?.id
-        )
+      }
+      if (type === 'select') {
+        if (product?.qty !== selectQuantity) {
+          //increase or decrease quantity by finding difference between values
+          data.qty = selectQuantity - product?.qty
+        }
       }
       try {
-        const item = await addToCart(data)
-        setCartItems(item)
-        setBasket(item)
-        if (isSplitDelivery) {
-          fetchShippingPlans(item)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-      if (isOpen && type === 'delete') {
+        const item = await addToCart(data, type, { product })
         setLoadingAction(LoadingActionType.NONE)
         closeModal()
+        getBasketPromos(basketId)
+        if (isSplitDelivery) {
+          setCartItems(item)
+          fetchShippingPlans(item)
+        } else {
+          setCartItems(item)
+        }
+      } catch (error) {
+        //console.log(error)
       }
     }
-    asyncHandleItem()
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product)
+        setBasketReValidate([])
+      })
+      resetKitCart()
+    } else if (product?.productId) {
+      asyncHandleItem(product)
+    }
+    setOverlayLoaderState({
+      visible: false,
+      message: "",
+    })
   }
 
   const openModal = () => {
@@ -619,12 +645,20 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   const closeModal = () => {
     setIsOpen(false)
   }
-
+  const itemsInBag = () => {
+    return cartItems?.lineItems
+      ?.map((item: any) => item.qty)
+      .reduce((sum: number, current: number) => sum + current, 0)
+  }
+  const handleClose = () => {
+    setTimeout(() => closeSidebar(), 500)
+    // setCartSidebarOpen(false)
+  }
   const isIncludeVAT = vatIncluded()
   const userCart = cartItems
   const isEmpty: boolean = userCart?.lineItems?.length === 0
   const css = { maxWidth: '100%', height: 'auto' }
-  const router = useRouter()
+
   const getLineItemSizeWithoutSlug = (product: any) => {
     const productData: any = tryParseJson(product?.attributesJson || {})
     return productData?.Size
@@ -633,6 +667,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
+  const [userCartItems, setUserCartItems] = useState<any>(null)
+  function handleRedirectToPDP() { }
+  useEffect(() => {
+    let items = sortBy(cartItems?.lineItems, 'displayOrder')
+    items = Object.values(groupCartItemsById(cartItems?.lineItems))
+    setUserCartItems(items)
+  }, [cartItems?.lineItems])
   const renderStatusSoldOut = (soldOutMessage: any) => {
     return (
       <div className="">
@@ -687,21 +728,110 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div className={`container w-full py-4 pt-10  lg:pb-28 lg:pt-20 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
-        <h1 className="block mb-4 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-16 basket-h1 dark:text-black">
+      <div className={`container w-full py-4 pt-4 lg:pb-10 lg:pt-10 ${CURRENT_THEME == 'green' ? 'bg-[#EEEEEE]' : 'bg-white'}`}>
+        <h1 className="block mb-2 text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-0 basket-h1 dark:text-black">
           <span>{translate('label.basket.shoppingCartText')}{' '}</span>
           <span className="pl-2 text-sm font-normal tracking-normal text-gray-400 top-2">
             {userCart?.lineItems?.length}{' '}
             {userCart?.lineItems?.length > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')} {translate('label.basket.addedText')}
           </span>
         </h1>
-        <hr className={`${CURRENT_THEME != 'green' ? 'my-2 xl:my-12 border-slate-200 dark:border-slate-700' : 'my-0 xl:my-0'} border-[#EEEEEE] dark:border-slate-700`} />
+        <hr className={`${CURRENT_THEME != 'green' ? 'my-2 xl:my-4 border-slate-200 dark:border-slate-700' : 'my-0 xl:my-0'} border-[#EEEEEE] dark:border-slate-700`} />
         {!isEmpty && !isSplitDelivery && (
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
-              <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} itemClicked={itemClicked} setItemClicked={setItemClicked} />
+              <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
+                {userCartItems?.map((product: any, productIdx: number) => {
+                  let soldOutMessage = ''
+                  const saving = (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax) - (isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax)
+                  const discount = round((saving / (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax)) * 100, 0)
+                  soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                  const voltageAttr: any = tryParseJson(product?.attributesJson)
+                  const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
+                  let productNameWithVoltageAttr: any = product?.name
+                  productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                    <span key={`voltage-${vId}`}>
+                      {product?.name?.toLowerCase()}{' '}
+                      <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                        {volt?.ValueText}
+                      </span>
+                    </span>
+                  )) : (productNameWithVoltageAttr = product?.name)
+
+                  if (product?.length) {
+                    soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                    const voltageAttr: any = tryParseJson(product?.attributesJson)
+                    const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
+                    let productNameWithVoltageAttr: any = product?.name
+                    productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                      <span key={`voltage-${vId}`}>
+                        {product?.name?.toLowerCase()}{' '}
+                        <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                          {volt?.ValueText}
+                        </span>
+                      </span>
+                    )) : (productNameWithVoltageAttr = product?.name)
+                    if (product?.length) {
+                      return (
+                        <div key={product?.productId}>
+                          <BasketGroupProduct products={product} closeSidebar={closeSidebar} openModal={openModal} setItemClicked={setItemClicked} />
+                        </div>
+                      )
+                    }
+                    return (
+                      <div key={product?.productId}>
+                        <BasketGroupProduct products={product} closeSidebar={closeSidebar} openModal={openModal} setItemClicked={setItemClicked} />
+                      </div>
+                    )
+                  }
+                  return (
+                    <Fragment key={productIdx}>
+                      <CartSideBarProductCard
+                        product={product}
+                        productNameWithVoltageAttr={productNameWithVoltageAttr}
+                        css={css}
+                        itemsInBag={itemsInBag}
+                        handleRedirectToPDP={handleRedirectToPDP}
+                        handleClose={handleClose}
+                        handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                        maxBasketItemsCount={maxBasketItemsCount}
+                        isIncludeVAT={isIncludeVAT}
+                        discount={discount}
+                        handleItem={handleItem}
+                        openModal={openModal}
+                        setItemClicked={setItemClicked}
+                        reValidateData={reValidateData}
+                        soldOutMessage={soldOutMessage}
+                        getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                      />
+                      {product.children?.map(
+                        (child: any, idx: number) => (
+                          <CartSideBarProductCard
+                            product={child}
+                            css={css}
+                            handleRedirectToPDP={handleRedirectToPDP}
+                            handleClose={handleClose}
+                            handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                            isIncludeVAT={isIncludeVAT}
+                            discount={discount}
+                            handleItem={handleItem}
+                            openModal={openModal}
+                            setItemClicked={setItemClicked}
+                            reValidateData={reValidateData}
+                            soldOutMessage={soldOutMessage}
+                            getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                            key={idx}
+                          />
+                        )
+                      )}
+                    </Fragment>
+                  )
+                }
+                )}
+              </section>
+              {/* <CartItems userCart={userCart} reValidateData={reValidateData} handleItem={handleItem} openModal={openModal} itemClicked={itemClicked} setItemClicked={setItemClicked} /> */}
               <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded-md shadow-md top-2' : 'bg-slate-50 rounded-2xl top-24'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky lg:col-span-5 sm:mt-0`} >
-                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6 dark:text-black" >
+                <h4 id="summary-heading" className="block mb-4 text-xl font-semibold sm:text-2xl lg:text-2xl sm:mb-6 dark:text-black">
                   {translate('label.orderSummary.basketSummaryText')}
                 </h4>
                 {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
@@ -730,7 +860,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {isIncludeVAT ? cartItems?.shippingCharge?.formatted?.withTax : cartItems?.shippingCharge?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  {userCart.promotionsApplied?.length > 0 && (
+                  {userCart?.promotionsApplied?.length > 0 && (
                     <div className="flex items-center justify-between py-4 basket-summary-price">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>
@@ -781,133 +911,79 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
               <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
                 <div className='w-full divide-y divide-slate-200 dark:divide-slate-700'>
-                  {Object.keys(splitBasketProducts)?.map(
-                    (deliveryDate: any, Idx: any) => (
-                      <>
-                        {Object.keys(splitBasketProducts)[0] === 'Invalid Date' ? (
-                          <LoadingDots />
-                        ) : (
-                          <h2 className="text-sm font-bold">
-                            {translate('label.checkout.deliveryText')`${Idx + 1}`}
-                          </h2>
-                        )}
-                        {splitBasketProducts[deliveryDate]?.map(
-                          (product: any, productIdx: number) => (
-                            <div key={productIdx} className="relative flex py-2 sm:py-2 xl:py-2 first:pt-0 last:pb-0" >
-                              <div className="flex-shrink-0">
-                                <img style={css} width={140} height={180} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={product.name || 'cart-item'} className="object-cover object-center w-16 rounded-lg sm:w-28 image" />
-                              </div>
-                              <div className="relative flex flex-col flex-1 w-full gap-0 ml-4 sm:ml-6">
-                                <h3 className="py-0 text-xs font-normal text-black sm:py-0 sm:text-xs">
-                                  {product.brand}
-                                </h3>
-                                <h3 className="my-2 text-sm sm:text-sm sm:my-1">
-                                  <Link href={`/${product.slug}`}>
-                                    <span className="font-normal text-gray-700 hover:text-gray-800">
-                                      {product.name}
-                                    </span>
-                                  </Link>
-                                </h3>
-                                <div className="mt-0 font-bold text-black text-md sm:font-semibold">
-                                  {product?.price?.raw?.withTax > 0 ? (isIncludeVAT ? product.price?.formatted?.withTax : product.price?.formatted?.withoutTax) : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
-                                  {product?.price?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax > 0 && product?.listPrice?.raw?.withTax != product.price?.raw?.withTax && (
-                                    <span className="px-2 text-sm text-red-400 line-through">
-                                      {translate('label.basket.priceLabelText')}{' '}
-                                      {isIncludeVAT ? product?.listPrice.formatted?.withTax : product?.listPrice.formatted?.withoutTax}
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex justify-between pl-0 pr-0 mt-2 sm:mt-2 sm:pr-0">
-                                  {product?.variantProducts?.length > 0 ? (
-                                    <div role="button" onClick={handleToggleOpenSizeChangeModal.bind(null, product)} >
-                                      <div className="border w-[fit-content] flex items-center mt-3 py-2 px-2">
-                                        <div className="mr-1 text-sm text-gray-700">
-                                          {translate('common.label.sizeText')}{' '}
-                                          <span className="font-semibold text-black uppercase">
-                                            {getLineItemSizeWithoutSlug(product)}
-                                          </span>
-                                        </div>
-                                        <ChevronDownIcon className="w-4 h-4 text-black" />
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <div></div>
-                                  )}
-                                  {isSplitDelivery && splitDeliveryDates && (
-                                    <p className="w-full">
-                                      {product?.shippingSpeed}
-                                    </p>
-                                  )}
-                                  <div className="flex items-center justify-around px-2 text-gray-900 border sm:px-4">
-                                    {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
-                                    <span className="w-10 h-8 px-4 py-2 text-md sm:py-2">
-                                      {product.qty}
-                                    </span>
-                                    {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
-                                  </div>
-                                </div>
+                  {Object.entries(splitBasketProducts)
+                    .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
+                    .map(([deliveryDate, products]: any, index: number) => (
+                      <div key={deliveryDate}>
+                        {/* Delivery Header */}
+                        <h2 className="flex justify-start gap-1 py-3 text-sm">
+                          <span className='font-semibold text-black'>{translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length}</span>
+                          <span>- Expected date:</span>
+                          <span className='font-normal text-black'>{new Date(deliveryDate).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                        </h2>
 
-                                {product.children?.map(
-                                  (child: any, idx: number) => (
-                                    <div className="flex mt-10" key={'child' + idx} >
-                                      <div className="flex-shrink-0 w-12 h-12 overflow-hidden border border-gray-200 rounded-md">
-                                        <img src={child.image} alt={child.name || 'cart-image'} className="object-cover object-center w-full h-full" />
-                                      </div>
-                                      <div className="flex justify-between ml-5 font-medium text-gray-900">
-                                        <Link href={`/${child.slug}`}> {child.name} </Link>
-                                        <p className="ml-4">
-                                          {child.price?.formatted?.withTax > 0 ? isIncludeVAT ? child.price?.formatted?.withTax : child.price?.formatted?.withoutTax : ''}
-                                        </p>
-                                      </div>
-                                      {!child.parentProductId ? (
-                                        <div className="flex items-center justify-end flex-1 text-sm">
-                                          <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
-                                            {isInWishList(product?.productId) ? (
-                                              <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
-                                            ) : (
-                                              <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
-                                            )
-                                            }
-                                          </button>
-                                          <button type="button" onClick={() => handleItem(child, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
-                                            <span className="sr-only"> {translate('common.label.removeText')} </span>
-                                            <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                                          </button>
-                                        </div>
-                                      ) : (
-                                        <div className="flex flex-row px-2 pl-2 pr-0 text-gray-900 border sm:px-4 text-md sm:py-2 sm:pr-9">
-                                          {child.qty}
-                                        </div>
-                                      )}
-                                    </div>
-                                  )
-                                )}
-                                <div className="absolute top-0 right-0">
-                                  <button className="flex items-center gap-1 text-xs font-medium text-left text-gray-700 hover:text-black" onClick={() => { insertToLocalWishlist(product) }} disabled={isInWishList(product?.productId)} >
-                                    {isInWishList(product?.productId) ? (
-                                      <><HeartIcon className="w-4 h-4 text-sm text-red-500 hover:text-red-700" />{' '}{translate('label.product.wishlistedText')}</>
-                                    ) : (
-                                      <> <HeartIcon className="w-4 h-4 text-sm text-gray-500 dark:text-slate-500" />{' '}{translate('label.wishlist.moveToWishlistText')} </>
-                                    )
-                                    }
-                                  </button>
-                                  <button type="button" onClick={() => handleItem(product, 'delete')} className="inline-flex p-2 -m-2 text-gray-400 hover:text-gray-500" >
-                                    <span className="sr-only">
-                                      {translate('common.label.removeText')}
-                                    </span>
-                                    <TrashIcon className="w-4 h-4 mt-2 text-red-500 sm:h-5 sm:w-5" aria-hidden="true" />
-                                  </button>
-                                </div>
-                                <div className="flex flex-col pt-3 text-xs font-bold text-gray-700 sm:hidden sm:text-sm">
-                                  {product.shippingPlan?.shippingSpeed}
-                                </div>
-                              </div>
-                            </div>
+                        {/* Loop through Products */}
+                        {products?.map((product: any, productIdx: number) => {
+                          let soldOutMessage = ''
+                          const saving = (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax) - (isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax)
+                          const discount = round((saving / (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax)) * 100, 0)
+                          soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                          const voltageAttr: any = tryParseJson(product?.attributesJson)
+                          const electricVoltAttrLength = voltageAttr?.Attributes?.filter(
+                            (x: any) => x?.FieldCode == 'electrical.voltage'
                           )
-                        )}
-                      </>
-                    )
-                  )}
+                          let productNameWithVoltageAttr: any = product?.name
+                          productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                            <span key={`voltage-${vId}`}>
+                              {product?.name?.toLowerCase()}{' '}
+                              <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded"> {volt?.ValueText} </span>
+                            </span>
+                          )) : <span>{product?.name}</span>
+
+                          return (
+                            <>
+                              <CartSideBarProductCard
+                                key={product?.productId}
+                                product={product}
+                                productNameWithVoltageAttr={productNameWithVoltageAttr}
+                                css={css}
+                                itemsInBag={itemsInBag}
+                                handleRedirectToPDP={handleRedirectToPDP}
+                                handleClose={handleClose}
+                                handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                                maxBasketItemsCount={maxBasketItemsCount}
+                                isIncludeVAT={isIncludeVAT}
+                                discount={discount}
+                                handleItem={handleItem}
+                                openModal={openModal}
+                                setItemClicked={setItemClicked}
+                                reValidateData={reValidateData}
+                                soldOutMessage={soldOutMessage}
+                                getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                              />
+                              {product.children?.map((child: any, idx: number) => (
+                                <CartSideBarProductCard
+                                  product={child}
+                                  css={css}
+                                  handleRedirectToPDP={handleRedirectToPDP}
+                                  handleClose={handleClose}
+                                  handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                                  isIncludeVAT={isIncludeVAT}
+                                  discount={discount}
+                                  handleItem={handleItem}
+                                  openModal={openModal}
+                                  setItemClicked={setItemClicked}
+                                  reValidateData={reValidateData}
+                                  soldOutMessage={soldOutMessage}
+                                  getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                  key={idx}
+                                />
+                              ))}
+                            </>
+                          )
+                        })}
+                      </div>
+                    ))}
                 </div>
               </section>
               <section aria-labelledby="summary-heading" className={` ${CURRENT_THEME == 'green' ? 'bg-white rounded' : 'bg-slate-50 rounded-2xl'} p-4 mt-10 border sm:p-6  border-slate-100 md:sticky top-24 lg:col-span-5 sm:mt-0`} >
@@ -934,7 +1010,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                       {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}
                     </dd>
                   </div>
-                  {userCart.promotionsApplied?.length > 0 && (
+                  {userCart?.promotionsApplied?.length > 0 && (
                     <div className="flex items-center justify-between pt-2 sm:pt-2">
                       <dt className="flex items-center text-sm text-gray-600">
                         <span>{translate('label.orderSummary.discountText')}</span>
@@ -968,7 +1044,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>

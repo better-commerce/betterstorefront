@@ -10,6 +10,7 @@ import {
   NEXT_UPDATE_SHIPPING,
   NEXT_SHIPPING_ENDPOINT,
   NEXT_CLICK_AND_COLLECT,
+  BETTERCOMMERCE_DEFAULT_COUNTRY,
 } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 import axios from 'axios'
@@ -127,7 +128,7 @@ function DeliveryOptions({
       else {
         const defaultCountry = appConfig.shippingCountries[0] || {
           name: translate('label.checkout.defaultShippingCountryText'),
-          twoLetterIsoCode: 'GB',
+          twoLetterIsoCode: BETTERCOMMERCE_DEFAULT_COUNTRY,
         }
         setSelectedCountry(defaultCountry)
       }

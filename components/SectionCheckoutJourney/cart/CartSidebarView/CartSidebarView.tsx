@@ -9,10 +9,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon, CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, SITE_ORIGIN_URL, BASKET_PROMO_TYPES, } from '@components/utils/constants'
 import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/Layout/Layout'
@@ -24,14 +22,18 @@ import RelatedProducts from '@components/Product/RelatedProducts'
 import CartItemRemoveModal from '@components/CartItemRemoveModal'
 import Engraving from '@components/Product/Engraving'
 import Router from 'next/router'
-
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import BasketGroupProduct from '@components/cart/BasketGroupProduct'
+import { groupCartItemsById } from '@components/utils/cart'
+import { round, sortBy } from 'lodash'
+import { ProductType } from '@framework/utils/enums'
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
+  const { recordAnalytics } = useAnalytics()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
-  const { BasketViewed } = EVENTS_MAP.EVENT_TYPES
-  const { Basket } = EVENTS_MAP.ENTITY_TYPES
   const [totalDiscount, setTotalDiscount] = useState(0)
   const [lastCartItemProductId, setLastCartItemProductId] = useState('')
   const [relatedProducts, setRelatedProducts] = useState<any>()
@@ -82,6 +84,12 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
     })
+    if (basketPromos?.applicablePromotions?.length) {
+      basketPromos.applicablePromotions = basketPromos?.applicablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
+    if (basketPromos?.availablePromotions?.length) {
+      basketPromos.availablePromotions = basketPromos?.availablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
     setBasketPromos(basketPromos)
     return basketPromos
   }
@@ -215,22 +223,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     //   setCartItems(items)
     // }
 
-    eventDispatcher(BasketViewed, {
-      entity: JSON.stringify({
-        id: basketId,
-        grandTotal: cartItems.grandTotal?.raw.withTax,
-        lineItems: cartItems.lineItems,
-        promoCode: cartItems.promotionsApplied,
-        shipCharge: cartItems.shippingCharge?.raw?.withTax,
-        shipTax: cartItems.shippingCharge?.raw?.tax,
-        taxPercent: cartItems.taxPercent,
-        tax: cartItems.grandTotal?.raw?.tax,
-      }),
-      entityName: 'Cart',
-      entityType: Basket,
-      eventType: BasketViewed,
-      promoCodes: cartItems.promotionsApplied,
-    })
+    //const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+    //recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...extras, cartItems, entityType: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: 'Cart', itemIsBundleItem: false,  })
     // handleCartitems()
     handleCartItemsLoadAsync()
 
@@ -372,18 +366,20 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     return true
   }
 
-  const handleItem = (product: any, type = 'increase') => {
-    if (!product?.id) return
+  const handleItem = (product: any, type = 'increase', cb = () => { }) => {
+    if (!product?.id && !product?.length) return
     if (isOpen && !(type === 'delete')) {
       closeModal()
     }
     const asyncHandleItem = async (product: any) => {
       const data: any = {
         basketId,
-        productId: product.id,
+        productId: product?.productId,
         stockCode: product.stockCode,
         manualUnitPrice: product.manualUnitPrice,
         displayOrder: product.displayOrderta,
+        basketItemGroupId: product?.basketItemGroupId,
+        basketItemGroupData: product?.basketItemGroupData,
         qty: -1,
       }
       if (type === 'increase') {
@@ -391,15 +387,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
           data.qty = 1
           if (currentPage) {
             if (typeof window !== 'undefined') {
-              recordGA4Event(window, 'select_quantity', {
-                category: product?.categoryItems?.length
-                  ? product?.categoryItems[0]?.categoryName
-                  : '',
-                final_quantity: data.qty,
-                current_page: currentPage,
-                number_of_plus_clicked: 1,
-                number_of_minus_clicked: 0,
-              })
+              //debugger
+              recordAnalytics(AnalyticsEventType.SELECT_QUANTITY, { ...product, qty: data?.qty, currentPage, })
             }
           }
         } else {
@@ -409,30 +398,16 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
               maxBasketItemsCount,
             }),
           })
+          cb()
           return
         }
       }
       if (type === 'delete') {
         data.qty = 0
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'remove_from_cart', {
-            ecommerce: {
-              items: [
-                {
-                  item_name: product?.name,
-                  price: product?.price?.raw?.withTax,
-                  quantity: product?.qty,
-                  item_id: product?.sku,
-                  item_size: getLineItemSizeWithoutSlug(product),
-                  item_brand: product?.brand,
-                  item_variant: product?.colorName,
-                  item_var_id: product?.stockCode,
-                },
-              ],
-              loggedin: user?.userId && user?.userId !== Guid.empty,
-              current_page: 'Cart',
-            },
-          })
+          //debugger
+          const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          recordAnalytics(AnalyticsEventType.REMOVE_FROM_CART, { ...{ ...extras }, ...{ ...product }, cartItems, itemListName: 'Cart', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Basket })
         }
         if (window?.ch_session) {
           window.ch_remove_from_cart_before({ item_id: product?.sku || EmptyString })
@@ -454,10 +429,54 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         asyncHandleItem(product)
         setBasketReValidate([])
       })
+      resetKitCart()
     } else if (product?.productId) {
       asyncHandleItem(product)
     }
+    setOverlayLoaderState({
+      visible: false,
+      message: "",
+    })
   }
+
+  const handleInputQuantity = (product: any, updateQty: any) => {
+    const prevValue: number = parseInt(product.qty);
+    const newValue: number = parseInt(updateQty)
+
+    let qtyChange = newValue - prevValue;
+    if (newValue <= 0) {
+      qtyChange = 0;
+    }
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product, qtyChange)
+        setBasketReValidate([])
+      })
+    } else if (product?.productId) {
+      asyncHandleItem(product, qtyChange)
+    }
+  }
+
+  const asyncHandleItem = async (product: any, productQuantity: any) => {
+    const data: any = {
+      basketId,
+      productId: product?.productId,
+      stockCode: product?.stockCode,
+      manualUnitPrice: product?.price,
+      displayOrder: product?.displayOrder || "0",
+      qty: productQuantity,
+      targetPrice: product?.targetPrice || product?.price, // Preserve the target price
+    };
+
+    try {
+      const item = await addToCart(data, 'ADD', { product })
+      setCartItems(item)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   const getLineItemSizeWithoutSlug = (product: any) => {
     const productData: any = tryParseJson(product?.attributesJson || {})
@@ -466,27 +485,9 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
 
   const beginCheckout = (cartItems: any) => {
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'begin_checkout', {
-        ecommerce: {
-          items: [
-            cartItems?.lineItems?.map((item: any, itemId: number) => ({
-              item_name: item?.name,
-              price: item?.price?.raw?.withTax,
-              quantity: item?.qty,
-              item_brand: item?.brand,
-              item_id: item?.sku,
-              item_size: getLineItemSizeWithoutSlug(item),
-              item_variant: item?.colorName,
-            })),
-          ],
-          current_page: 'Checkout',
-          loggedin_status: user?.userId && user?.userId !== Guid.empty,
-          paymode: '',
-          address: '',
-          value: cartItems?.grandTotal?.raw?.withTax,
-          item_var_id: cartItems?.lineItems[0]?.stockCode,
-        },
-      })
+      //debugger
+      const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+      recordAnalytics(AnalyticsEventType.BEGIN_CHECKOUT, { ...extras, user, cartItems, entityName: EVENTS_MAP.ENTITY_TYPES.Basket, currentPage: "Checkout", itemIsBundleItem: false, })
     }
   }
 
@@ -533,8 +534,16 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     setCartSidebarOpen(false)
   }
   const isEmpty: boolean = cartItems?.lineItems?.length === 0
+  const [userCartItems, setUserCartItems] = useState<any>(null)
   function handleRedirectToPDP() { }
-  return (
+  useEffect(() => {
+    let items = sortBy(cartItems?.lineItems, 'displayOrder')
+    items = Object.values(groupCartItemsById(cartItems?.lineItems))
+    setUserCartItems(items)
+  }, [cartItems?.lineItems])
+
+  const css = { maxWidth: '100%', height: 'auto' }
+    return (
     <>
       <Transition.Root show={cartSidebarOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 overflow-hidden z-99" onClose={handleClose} >
@@ -559,37 +568,127 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         <div className="flex items-center ml-3 h-7">
                           <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={handleClose} >
                             <span className="sr-only">{translate('common.label.closePanelText')}</span>
-                             <i className='sprite-icon cross-icon'></i>
-                             {/* <XMarkIcon className="w-6 h-6" aria-hidden="true" /> */}
+                            <i className='sprite-icon cross-icon'></i>
+                            {/* <XMarkIcon className="w-6 h-6" aria-hidden="true" /> */}
                           </button>
                         </div>
                       </div>
                       <div className="mt-2">
                         <div className="flow-root">
                           <ul role="list" className="px-4">
-                            {cartItems?.lineItems?.sort((lineItem1: any, lineItem2: any) => { return (lineItem1?.displayOrder - lineItem2?.displayOrder) })?.map((product: any) => {
-                              const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
-                              return product?.itemType !== CartProductType.ENGRAVING &&
-                                <>
-                                  <li key={product.id} className="mb-2">
-                                    <CartSideBarProductCard 
-                                      openModal={openModal}
-                                      isIncludeVAT={isIncludeVAT}
-                                      product={product} 
-                                      handleClose={handleClose} 
-                                      handleItem={handleItem}
-                                      handleRedirectToPDP={handleRedirectToPDP}
-                                      soldOutMessage={soldOutMessage}
-                                      getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
-                                      handleToggleEngravingModal={handleToggleEngravingModal}
-                                      setItemClicked={setItemClicked}
-                                      insertToLocalWishlist={insertToLocalWishlist}
-                                      reValidateData={reValidateData}
-                                      handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
-                                    />
-                                  </li>
-                                </>
-                            })}
+                            {userCartItems?.map((product: any, productIdx: number) => {
+                              let soldOutMessage = ''
+                              const saving = (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax) - (isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax)
+                              const discount = round((saving / (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax)) * 100, 0)
+                              soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+                              const voltageAttr: any = tryParseJson(product?.attributesJson)
+                              const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
+                              let productNameWithVoltageAttr: any = product?.name
+                              productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+                                <span key={`voltage-${vId}`}>
+                                  {product?.name?.toLowerCase()}{' '}
+                                  <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                                    {volt?.ValueText}
+                                  </span>
+                                </span>
+                              )) : (productNameWithVoltageAttr = product?.name)
+
+                              if (product?.length) {
+                                soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
+
+                                const voltageAttr: any = tryParseJson(
+                                  product?.attributesJson
+                                )
+                                const electricVoltAttrLength =
+                                  voltageAttr?.Attributes?.filter(
+                                    (x: any) =>
+                                      x?.FieldCode == 'electrical.voltage'
+                                  )
+                                let productNameWithVoltageAttr: any =
+                                  product?.name
+                                productNameWithVoltageAttr =
+                                  electricVoltAttrLength?.length > 0
+                                    ? electricVoltAttrLength?.map(
+                                      (volt: any, vId: number) => (
+                                        <span key={`voltage-${vId}`}>
+                                          {product?.name?.toLowerCase()}{' '}
+                                          <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+                                            {volt?.ValueText}
+                                          </span>
+                                        </span>
+                                      )
+                                    )
+                                    : (productNameWithVoltageAttr =
+                                      product?.name)
+
+                                if (product?.length) {
+                                  return (
+                                    <div key={product?.productId}>
+                                      <BasketGroupProduct
+                                        products={product}
+                                        closeSidebar={closeSidebar}
+                                        openModal={openModal}
+                                        setItemClicked={setItemClicked}
+                                      />
+                                    </div>
+                                  )
+                                }
+                                return (
+                                  <div key={product?.productId}>
+                                    <BasketGroupProduct products={product} closeSidebar={closeSidebar} openModal={openModal} setItemClicked={setItemClicked} />
+                                  </div>
+                                )
+                              }
+                              return (
+                                <Fragment key={productIdx}>
+                                  <CartSideBarProductCard
+                                    product={product}
+                                    productNameWithVoltageAttr={productNameWithVoltageAttr}
+                                    css={css}
+                                    itemsInBag={itemsInBag}
+                                    handleRedirectToPDP={handleRedirectToPDP}
+                                    handleClose={handleClose}
+                                    handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
+                                    maxBasketItemsCount={maxBasketItemsCount}
+                                    isIncludeVAT={isIncludeVAT}
+                                    discount={discount}
+                                    handleItem={handleItem}
+                                    openModal={openModal}
+                                    setItemClicked={setItemClicked}
+                                    reValidateData={reValidateData}
+                                    soldOutMessage={soldOutMessage}
+                                    getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                  />
+                                  {product?.itemType !== ProductType.BUNDLE && product.children?.map(
+                                    (child: any, idx: number) => (
+                                      <CartSideBarProductCard
+                                        product={child}
+                                        css={css}
+                                        handleRedirectToPDP={
+                                          handleRedirectToPDP
+                                        }
+                                        handleClose={handleClose}
+                                        handleToggleOpenSizeChangeModal={
+                                          handleToggleOpenSizeChangeModal
+                                        }
+                                        isIncludeVAT={isIncludeVAT}
+                                        discount={discount}
+                                        handleItem={handleItem}
+                                        openModal={openModal}
+                                        setItemClicked={setItemClicked}
+                                        reValidateData={reValidateData}
+                                        soldOutMessage={soldOutMessage}
+                                        getLineItemSizeWithoutSlug={
+                                          getLineItemSizeWithoutSlug
+                                        }
+                                        key={idx}
+                                      />
+                                    )
+                                  )}
+                                </Fragment>
+                              )
+                            }
+                            )}
                             {isWishlistClicked && (
                               <div className="items-center justify-center w-full h-full py-5 text-xl text-gray-500">
                                 <CheckCircleIcon className="flex items-center justify-center w-full h-12 text-center text-indigo-600" />
@@ -640,29 +739,29 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                       <div className="px-5 text-sm divide-y mt-7 text-slate-500 dark:text-slate-400 divide-slate-200/70 dark:divide-slate-700/80">
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'> {' '} {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}{' '} </p>
-                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.subTotal?.formatted?.withTax: cartItems.subTotal?.formatted?.withoutTax}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems?.subTotal?.formatted?.withTax : cartItems?.subTotal?.formatted?.withoutTax}{' '} </p>
                         </div>
                         <div className="flex justify-between py-2 text-sm text-gray-900">
                           <p className='text-sm'>{translate('label.orderSummary.shippingText')}</p>
-                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems.shippingCharge?.formatted?.withTax : cartItems.shippingCharge?.formatted?.withoutTax}{' '} </p>
+                          <p className='text-sm'> {' '} {isIncludeVAT ? cartItems?.shippingCharge?.formatted?.withTax : cartItems?.shippingCharge?.formatted?.withoutTax}{' '} </p>
                         </div>
 
-                        {cartItems.promotionsApplied?.length > 0 && (
+                        {cartItems?.promotionsApplied?.length > 0 && (
                           <div className="flex justify-between py-2 text-sm text-gray-900">
                             <p className='text-sm'>{translate('label.orderSummary.discountText')}</p>
-                            <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems.discount?.formatted?.withTax : cartItems.discount?.formatted?.withoutTax}{' '} </p>
+                            <p className="text-sm text-red-500"> {' '} {'-'}{' '} {isIncludeVAT ? cartItems?.discount?.formatted?.withTax : cartItems?.discount?.formatted?.withoutTax}{' '} </p>
                           </div>
                         )}
 
-                        {!isIncludeVAT && cartItems.grandTotal?.raw?.tax > 0 &&
+                        {!isIncludeVAT && cartItems?.grandTotal?.raw?.tax > 0 &&
                           <div className="flex justify-between py-2 text-sm text-gray-900">
                             <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
-                            <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
+                            <p className='text-sm'>{cartItems?.grandTotal?.formatted?.tax}</p>
                           </div>
                         }
                         <div className="flex justify-between py-4 font-bold text-gray-900 font-20">
                           <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
-                          <p className="font-20 link-button"> {' '} {cartItems.grandTotal?.formatted?.withTax}{' '} </p>
+                          <p className="font-20 link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
                         </div>
                       </div>
                     )}
@@ -670,14 +769,14 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    {cartItems.lineItems?.length > 0 &&
+                    {cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                         <Link href="/checkout" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
-                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn">
+                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
                           <span className='flex flex-col justify-start pl-5 text-left'>
-                            <span>{cartItems.grandTotal?.formatted?.withTax}</span>
+                            <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
                             <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
                           </span>
                           <span className='flex items-center gap-2 pr-5'>

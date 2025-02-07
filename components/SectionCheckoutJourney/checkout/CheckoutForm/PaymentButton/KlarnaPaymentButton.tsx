@@ -51,7 +51,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
-      super.recordAddPaymentInfoEvent(uiContext, this.props.recordEvent, PaymentMethodType.KLARNA)
+      super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.KLARNA)
       uiContext?.hideOverlayLoaderState()
 
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingPaymentText'), })

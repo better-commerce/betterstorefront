@@ -1,83 +1,27 @@
 // Base Imports
 import React, { FC, useEffect, useState } from 'react'
-import Head from 'next/head'
+
 // Package Imports
+import Head from 'next/head'
 import Router, { useRouter } from 'next/router'
 
 // Component Imports
 import AlertRibbon from '@components/ui/AlertRibbon'
+import { ContentSnippetInjector } from '@components/common/Content'
 
 // Other Imports
 import { useUI } from '@components/ui'
 import { CURRENT_THEME } from '@components/utils/constants'
-import { ISnippet } from '@framework/content/use-content-snippet'
-import { IScriptSnippet } from '@components/shared/Snippet/ScriptContentSnippet'
 import InteractiveDemoSideBar from '@components/InteractiveDemo'
 import { stringToBoolean } from '@framework/utils/parse-util'
 const featureToggle = require(`../../public/theme/${CURRENT_THEME}/features.config.json`);
 
-const CheckoutLayoutV2: FC<any> = ({ children }) => {
+const CheckoutLayoutV2: FC<any> = (props: any) => {
   const router = useRouter()
   const { displayAlert } = useUI()
   const [isLoading, setIsLoading] = useState(false)
-  const [topHeadJSSnippets, setTopHeadJSSnippets] = useState(new Array<any>())
-  const [headJSSnippets, setHeadJSSnippets] = useState(new Array<any>())
-
-  const getScriptSnippets = (snippet: ISnippet): Array<IScriptSnippet> => {
-    let scripts = new Array<IScriptSnippet>()
-    if (typeof document !== undefined) {
-      let container = document.createElement('div')
-      container.insertAdjacentHTML('beforeend', snippet.content)
-      const arrNodes = container.querySelectorAll('*')
-      arrNodes.forEach((node: any, key: number) => {
-        if (node.innerHTML) {
-          scripts.push({ name: snippet.name, type: 'text/javascript', innerHTML: node.innerHTML, })
-        } else if (node.src) {
-          scripts.push({ name: snippet.name, type: 'text/javascript', src: node.src, })
-        }
-      })
-    }
-    return scripts
-  }
-
-  const topHeadElements = (
-    topHeadJSSnippets?.map((snippet: ISnippet, index: number) => {
-      const scripts = getScriptSnippets(snippet)
-      return (
-        scripts.length > 0 &&
-        scripts?.map((script: IScriptSnippet, index: number) => (
-          <>
-            {script?.src && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
-            )}
-            {script?.innerHTML && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
-            )}
-          </>
-        ))
-      )
-    })
-  )
-
-  const headElements = (
-    headJSSnippets?.map((snippet: ISnippet, index: number) => {
-      const scripts = getScriptSnippets(snippet)
-      return (
-        scripts.length > 0 &&
-        scripts?.map((script: IScriptSnippet, index: number) => (
-          <>
-            {script?.src && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} src={script?.src}></script>
-            )}
-            {script?.innerHTML && (
-              <script data-bc-name={snippet.name} type={script?.type || 'text/javascript'} dangerouslySetInnerHTML={{ __html: script?.innerHTML }}></script>
-            )}
-          </>
-        ))
-      )
-    })
-  )
-
+  const { children, pageProps } = props
+  const snippets = pageProps?.snippets || []
 
   useEffect(() => {
     Router.events.on('routeChangeStart', () => setIsLoading(true))
@@ -100,7 +44,6 @@ const CheckoutLayoutV2: FC<any> = ({ children }) => {
   return (
     <>
       <Head>
-        {topHeadElements}
         <link
           rel="apple-touch-icon"
           sizes="57x57"
@@ -171,8 +114,8 @@ const CheckoutLayoutV2: FC<any> = ({ children }) => {
           href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`}
         />
         <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
-        {headElements}
       </Head>
+      <ContentSnippetInjector snippets={snippets} />
       <main className="sm:fit gradient">
         {displayAlert && <AlertRibbon />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}

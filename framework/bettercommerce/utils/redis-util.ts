@@ -2,13 +2,10 @@ import path from 'path'
 import fs from 'fs'
 
 //
-import {
-  clearAllRedisKeys,
-  getFromRedis,
-  saveToRedis,
-} from '@lib/redis/service'
+import { clearAllRedisKeys, getFromRedis, saveToRedis, } from '@lib/caching/redis'
 import { logError } from '@framework/utils/app-util'
 import { Redis } from '@framework/utils/redis-constants'
+import { clearAllNodeKeys, getFromNode, saveToNode } from '@lib/caching/node'
 
 /**
  * Create app build ID
@@ -35,28 +32,31 @@ const getAppBuildId = () => {
  */
 const getRedisUID = (key: any) => {
   const appBuildId = getAppBuildId()
-  return `${key}_${appBuildId}`
+  return `FE_${process.env.SITE_NAME!}_${appBuildId}_${key}`
 }
 
 export const getData = async (
   keys: Array<string>
 ): Promise<Array<{ key: string; value: any }> | null> => {
-  if (!Redis.Server.REDIS_CACHE_DISABLED) {
-    const data = new Array<any>()
-    const promises = new Array<Promise<any>>()
-    keys?.forEach(async (key: string) => {
-      promises.push(
-        new Promise(async (resolve: any) => {
-          const value = await getFromRedis(key)
-          data.push({ key, value })
-          resolve()
-        })
-      )
-    })
-    if (promises.length) {
-      await Promise.all(promises)
-      return data
-    }
+  const data = new Array<any>()
+  const promises = new Array<Promise<any>>()
+  keys?.forEach(async (key: string) => {
+    promises.push(
+      new Promise(async (resolve: any) => {
+        let value = null
+        if (!Redis.Server.REDIS_CACHE_DISABLED) {
+          value = await getFromRedis(key)
+        } else {
+          value = await getFromNode(key)
+        }
+        data.push({ key, value })
+        resolve()
+      })
+    )
+  })
+  if (promises.length) {
+    await Promise.all(promises)
+    return data
   }
   return null
 }
@@ -64,50 +64,58 @@ export const getData = async (
 export const getDataByUID = async (
   keys: Array<string>
 ): Promise<Array<{ key: string; value: any }> | null> => {
-  if (!Redis.Server.REDIS_CACHE_DISABLED) {
-    const data = new Array<any>()
-    const promises = new Array<Promise<any>>()
+  const data = new Array<any>()
+  const promises = new Array<Promise<any>>()
 
-    keys?.forEach(async (key: string) => {
-      promises.push(
-        new Promise(async (resolve: any) => {
-          const value = await getFromRedis(getRedisUID(key))
-          data.push({ key, value })
-          resolve()
-        })
-      )
-    })
+  keys?.forEach(async (key: string) => {
+    promises.push(
+      new Promise(async (resolve: any) => {
+        const computedKey = getRedisUID(key)
+        let value = null
+        if (!Redis.Server.REDIS_CACHE_DISABLED) {
+          value = await getFromRedis(computedKey)
+        } else {
+          value = await getFromNode(computedKey)
+        }
+        data.push({ key, value })
+        resolve()
+      })
+    )
+  })
 
-    if (promises.length) {
-      await Promise.all(promises)
-      return data
-    }
+  if (promises.length) {
+    await Promise.all(promises)
+    return data
   }
   return null
 }
 
 export const setData = async (data: Array<any>) => {
-  if (!Redis.Server.REDIS_CACHE_DISABLED) {
-    const promises = new Array<Promise<any>>()
+  const promises = new Array<Promise<any>>()
+  data?.forEach(async (x: any) => {
+    promises.push(
+      new Promise(async (resolve: any) => {
+        const computedKey = getRedisUID(x.key)
+        if (!Redis.Server.REDIS_CACHE_DISABLED) {
+          await saveToRedis(computedKey, x.value)
+        } else {
+          await saveToNode(computedKey, x.value)
+        }
+        resolve()
+      })
+    )
+  })
 
-    data?.forEach(async (x: any) => {
-      promises.push(
-        new Promise(async (resolve: any) => {
-          await saveToRedis(getRedisUID(x.key), x.value)
-          resolve()
-        })
-      )
-    })
-
-    if (promises.length) {
-      await Promise.all(promises)
-    }
+  if (promises.length) {
+    await Promise.all(promises)
   }
 }
 
 export const resetRedisCache = async () => {
   if (!Redis.Server.REDIS_CACHE_DISABLED) {
     await clearAllRedisKeys()
+  } else {
+    await clearAllNodeKeys()
   }
 }
 

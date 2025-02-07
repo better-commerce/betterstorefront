@@ -2,11 +2,12 @@ import { useEffect, Fragment, useState, FC } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import useWishlist from '@components/services/wishlist'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import useCart from '@components/services/cart'
 import PLPSort from './PLPSort'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 type PLPFilterSidebarProps = {
   handleSortBy: Function
@@ -16,6 +17,7 @@ type PLPFilterSidebarProps = {
 }
 
 const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar, handleTogglePLPSidebar, plpFilterState }) => {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { closeSidebar, setWishlist, user, wishlistItems, basketId, setCartItems, removeFromWishlist } = useUI()
   const { getWishlist, deleteWishlistItem } = useWishlist()
@@ -59,11 +61,8 @@ const PLPFilterSidebar: FC<PLPFilterSidebarProps> = ({ handleSortBy, openSidebar
     }
 
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'remove_item', {
-        product_name: product?.name,
-        availability: productAvailability,
-        product_id: product?.sku,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.REMOVE_FROM_WISHLIST, { ...product, productAvailability, })
     }
 
     if (accessToken) {

@@ -21,11 +21,13 @@ import { useTranslation } from '@commerce/utils/use-translation'
 // Other Imports
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { PaymentStatus } from '@components/utils/payment-constants'
-import { DATE_FORMAT, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { recordGA4Event } from '@components/services/analytics/ga4'
+import { DATE_FORMAT, EmptyObject, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function OrderDetail({ details, showDetailedOrder, show, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [isHelpOpen, setIsHelpOpen] = useState(false)
@@ -99,19 +101,15 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
     setIsHelpOpen(true)
     setIsHelpStatus(item)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'help_icon', {
-        helpmode: 'cancel/return/exchange/chat',
-        device: deviceCheck,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.HELP_ICON, { helpMode: 'cancel/return/exchange/chat', deviceCheck })
     }
   }
 
   const chooseHelpMode = (mode: any) => {
     if (typeof window !== 'undefined')
-      recordGA4Event(window, 'help_sidebar_menu', {
-        helpmode: mode,
-        device: deviceCheck,
-      })
+      //debugger
+    recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
   }
 
   const closeHelpModal = () => {
@@ -125,10 +123,8 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
     })
     setIsHelpOrderOpen(true)
     if (typeof window !== 'undefined')
-      recordGA4Event(window, 'need_help_with_your_order', {
-        helpmode: 'Order',
-        device: deviceCheck,
-      })
+      //debugger
+    recordAnalytics(AnalyticsEventType.NEED_HELP_WITH_ORDER, { deviceCheck, })
   }
 
   const closeOrderHelpModal = () => {
@@ -140,45 +136,34 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
       `/my-account/cancel-order-item/${data?.orderId}/${data?.itemId}`
     )
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'proceed_to_cancel_item', {})
-      recordGA4Event(window, 'help_sidebar_menu', {
-        helpmode: mode,
-        device: deviceCheck,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ITEM, EmptyObject)
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   const onCancelOrder = async (mode: any) => {
     Router.push(`/my-account/cancel-order/${data?.orderId}`)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'proceed_to_cancel_order', {})
-      recordGA4Event(window, 'help_sidebar_menu', {
-        helpmode: mode,
-        device: deviceCheck,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_CANCEL_ORDER, EmptyObject)
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   const onReturnItem = async (mode: any) => {
     Router.push(`/my-account/return-order/${data?.orderId}/${data?.itemId}`)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'proceed_to_return', {})
-      recordGA4Event(window, 'help_sidebar_menu', {
-        helpmode: mode,
-        device: deviceCheck,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_RETURN, EmptyObject)
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   const onExchangeItem = async (mode: any) => {
     Router.push(`/my-account/exchange-order/${data?.orderId}/${data?.itemId}`)
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'proceed_to_exchange', {})
-      recordGA4Event(window, 'track_package', {
-        transaction_id: details?.payments?.id,
-        device: deviceCheck,
-      })
-      recordGA4Event(window, 'help_sidebar_menu', {
-        helpmode: mode,
-        device: deviceCheck,
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
+      recordAnalytics(AnalyticsEventType.TRACK_PACKAGE, { details, deviceCheck, })
+      recordAnalytics(AnalyticsEventType.HELP_SIDEBAR_MENU, { mode, deviceCheck, })
     }
   }
   useEffect(() => {
@@ -190,7 +175,8 @@ export default function OrderDetail({ details, showDetailedOrder, show, deviceIn
   // console.log('ENTIRE_ORDER_', details?.order)
   const trackPackage = (details: any) => {
     if (typeof window !== 'undefined')
-      recordGA4Event(window, 'proceed_to_exchange', {})
+      //debugger
+      recordAnalytics(AnalyticsEventType.PROCEED_TO_EXCHANGE, EmptyObject)
   }
   const isIncludeVAT = vatIncluded()
   const subTotalAmount = isIncludeVAT

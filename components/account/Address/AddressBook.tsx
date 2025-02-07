@@ -6,7 +6,6 @@ import AddressItem from './AddressItem'
 import Form from './AddressBookForm'
 import { LoadingDots } from '@components/ui'
 import { CustomerAddressModel } from 'models/customer'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 // import useDevice from '@commerce/utils/use-device'
@@ -15,8 +14,11 @@ import { matchStrings } from '@framework/utils/parse-util'
 import Link from 'next/link'
 import { Guid } from '@commerce/types'
 import { AlertType } from '@framework/utils/enums'
-import { DEFAULT_COUNTRY } from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import Spinner from '@components/ui/Spinner'
+
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -53,6 +55,7 @@ export function asyncHandler() {
 }
 
 export default function AddressBook({ deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [data, setData] = useState([])
   const translate = useTranslation();
   const [isNewFormMode, setNewFormMode] = useState(false)
@@ -61,7 +64,7 @@ export default function AddressBook({ deviceInfo }: any) {
   const { getAddress, updateAddress, createAddress, deleteAddress } =
     asyncHandler()
 
-  const { user, isGuestUser, cartItems, setAddressId ,setAlert } = useUI()
+  const { user, isGuestUser, cartItems, setAddressId, setAlert } = useUI()
   const [selectedAddress, setSelectedAddress] = useState()
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [defaultShippingAddress, setDefaultShippingAddress] = useState({})
@@ -189,11 +192,11 @@ export default function AddressBook({ deviceInfo }: any) {
     }
   }
 
- useEffect(() => {
+  useEffect(() => {
     const fetchCountries = async () => {
       try {
         const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-        if ( data?.result?.length > 0) {
+        if (data?.result?.length > 0) {
           setCountries(data?.result)
         } else {
           setCountries([])
@@ -242,9 +245,8 @@ export default function AddressBook({ deviceInfo }: any) {
 
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        recordGA4Event(window, 'save_new_address', {
-          current_page: currentPage,
-        })
+        //debugger
+        recordAnalytics(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
       }
     }
 
@@ -328,7 +330,7 @@ export default function AddressBook({ deviceInfo }: any) {
     const newValues = {
       ...values,
       userId: user?.userId,
-      country: data?.country?.split('&')?.[1] || data?.country || DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1] || data?.country,
       countryCode: data?.country?.includes('&') ? data.country.split('&')[0] : data?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY
     }
     if (data?.id == 0) {
@@ -340,7 +342,7 @@ export default function AddressBook({ deviceInfo }: any) {
               // setUser(updatedUser);
               // axios.post(NEXT_UPDATE_DETAILS, updatedUser).then((updateUserResult: any) => {
               // });
-    
+
               fetchAddress()
               const values = {
                 ...newValues,
@@ -355,7 +357,7 @@ export default function AddressBook({ deviceInfo }: any) {
               // setAlert({type:'success',msg:NEW_ADDRESS})
             })
             .catch((error: any) => {
-              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
+              setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
               closeNewAddressModal()
             })
         } else {
@@ -375,13 +377,13 @@ export default function AddressBook({ deviceInfo }: any) {
           // });
           fetchAddress()
 
-          if (callback) { callback()}
-          else{ setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})}
+          if (callback) { callback() }
+          else { setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') }) }
           closeNewAddressModal()
           // setAlert({type:'success',msg:ADDRESS_UPDATE})
         })
         .catch((error: any) => {
-          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg')})
+          setAlert({ type: AlertType.ERROR, msg: translate('common.message.requestCouldNotProcessErrorMsg') })
           closeNewAddressModal()
         })
     }
@@ -435,28 +437,15 @@ export default function AddressBook({ deviceInfo }: any) {
   }
   return (
     <>
-      {/* <div className="px-2 py-4 mb-4 border-b mob-header md:hidden full-m-header">
-        <h3 className="max-w-4xl mx-auto text-xl font-semibold text-black">
-          <Link href="/my-account">
-            <span className="mr-2 leading-none">
-              <i className="sprite-icon sprite-left-arrow"></i>
-            </span>
-          </Link>
-          {translate('label.checkout.addressesText')} </h3>
-      </div> */}
       <main className="mt-4">
         <div className="max-w-4xl mx-auto">
           {!data.length && !isLoading && (
             <div className="py-4 sm:py-10 lg:mx-0">{translate('label.addressBook.emptyAddressBookText')}</div>
           )}
-          {isLoading ? <LoadingDots /> : null}
+          {isLoading ? <Spinner /> : null}
         </div>
         {isNewFormMode && (
-          <Form
-            initialValues={{}}
-            closeEditMode={() => setNewFormMode(false)}
-            onSubmit={addNewAddress}
-          />
+          <Form initialValues={{}} closeEditMode={() => setNewFormMode(false)} onSubmit={addNewAddress} />
         )}
         {!isNewFormMode && (
           <>
@@ -527,7 +516,7 @@ export default function AddressBook({ deviceInfo }: any) {
           selectedAddress={selectedAddress}
           submitState={submitState}
           isOpen={isNewAddressModalOpen}
-          countries = {countries}
+          countries={countries}
           onSubmit={(data: any) => {
             submitData(submitDispatch, AddressPageAction.SAVE)
             handleNewAddress(data, () => {

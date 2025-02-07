@@ -13,8 +13,8 @@ const TopNav: React.FC<ITopNavProps> = (props: ITopNavProps) => {
   return (
     <div className="relative flow-root px-4 mr-4 text-left border-r border-gray-300">
       <button className="flex items-center justify-center gap-1 mx-auto text-center group icon-grp align-center" onClick={onClick} >
-        <ShoppingBagIcon className="w-[16px] h-[16px] opacity-80" />
-        <span className="flex flex-col py-0 text-xs font-medium text-black group-hover:text-primary sm:text-xs whitespace-nowrap">
+        <ShoppingBagIcon className="w-[16px] h-[16px] header-dark opacity-80" />
+        <span className="flex flex-col py-0 text-xs font-medium text-black header-dark group-hover:text-primary sm:text-xs whitespace-nowrap">
           {translate('label.bulkAdd.quickOrderText')} </span>
       </button>
     </div>

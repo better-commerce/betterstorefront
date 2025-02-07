@@ -6,6 +6,8 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { useRouter } from 'next/router'
 import { isB2BUser } from '@framework/utils/app-util'
 import { useUI } from '@components/ui'
+import Link from 'next/link'
+import { ChevronRightIcon } from '@heroicons/react/24/solid'
 const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
   const translate = useTranslation();
   const router = useRouter();
@@ -13,35 +15,33 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
   const isB2B = isB2BUser(user)
   return (
     <>
+      <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+        <li className='flex items-center text-10-mob sm:text-sm'>
+          <Link href={`${isB2B ? '/my-account/my-company/orders':'/my-account/orders'}`} passHref>
+            <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" >Orders</span>
+          </Link>
+        </li>
+        <li className='flex items-center text-10-mob sm:text-sm'>
+          <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+            <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+          </span>
+        </li>
+        <li className="flex items-center text-10-mob sm:text-sm" >
+          <span className={`font-semibold hover:text-gray-900 capitalize dark:text-black`} >
+            {details?.orderNo}
+          </span>
+        </li>
+      </ol>
+      <div className='mb-4'>
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
+          {details?.orderNo && "Order #" + details?.orderNo}
+        </h1>
+      </div>
+      <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
       <div className="w-full pb-2">
         <div className="w-full">
           <div className="flex justify-between">
-            <div className="relative pl-9">
-              <a
-                href="#"
-                className="absolute left-0 top-2/4 -translate-y-2/4 dark:text-gray-900"
-                onClick={() => {
-                  isB2B ?
-                    router.push('/my-account/my-company/orders')
-                    : router.push('/my-account/orders');
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-arrow-left"
-                  viewBox="0 0 16 16"
-                >
-                  {' '}
-                  <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />{' '}
-                </svg>
-              </a>
-              {
-                //let orderLabel.order=  Details";
-              }
-
+            <div className="relative">
               <div className="w-full">
                 <h5 className="font-bold text-18 text-secondary-full-opacity ">
                   {translate('label.orderDetails.orderDetailsHeadingText')}
@@ -53,7 +53,7 @@ const OrderDetailHeader = ({ details, showDetailedOrder }: any) => {
                   </>
                 )}
                 <p className="text-sm text-black-light dark:text-gray-900">
-                  #{details?.orderNo} • {details?.items?.length}{' '}
+                  {details?.items?.length}{' '}
                   {details?.items?.length > 1 ? (
                     <span>{translate('common.label.itemPluralText')}</span>
                   ) : (

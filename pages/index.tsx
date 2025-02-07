@@ -1,16 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
-import { CURRENT_THEME, EmptyGuid, EmptyObject, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
+import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TOOLS_HOME_PAGE_SLUG } from '@framework/utils/constants'
+import { getCurrency, getCurrentCurrency, isB2BUser, maxBasketItemsCount, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
@@ -23,15 +22,23 @@ import Heading from '@components/Heading/Heading'
 // @ts-ignore
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { generateUri, removeQueryString } from '@commerce/utils/uri-util'
+import { IMAGE_CDN_URL, IMG_PLACEHOLDER } from '@components/utils/textVariables'
+import { generateUri, removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Hero } from '@components/ui'
+import { Guid } from '@commerce/types';
+import { AnalyticsEventType } from '@components/services/analytics'
+import DealProduct from '@components/home/DealProduct'
+import BrandList from '@components/home/BrandList'
+import BestSellerProduct from '@components/home/Bestseller'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
 const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'))
 const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'))
 const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
+const ImageBanner = dynamic(() => import('@components/home/ImageBanner'))
+const ChooseList = dynamic(() => import('@components/home/ChooseList'))
+const CategoryList = dynamic(() => import('@components/home/CategoryList'))
 const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 const ContentEditorJS = dynamic(() => import("@components/content-editor"), {
@@ -46,11 +53,14 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
     slug = HOME_PAGE_NEW_SLUG
   } else if (CURRENT_THEME == "orange") {
     slug = HOME_PAGE_SLUG
+  } else if (CURRENT_THEME == "tool") {
+    slug = TOOLS_HOME_PAGE_SLUG
   } else {
     slug = HOME_PAGE_SLUG;
   }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.HOME })
-  const pageProps = await props.getPageProps({ slug, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug, cookies })
 
   return {
     props: {
@@ -63,10 +73,9 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
+function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, config, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
-  const { user } = useUI()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
+  const { user, isGuestUser } = useUI()
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
@@ -77,6 +86,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     Page_Slug = HOME_PAGE_NEW_SLUG
   } else if (CURRENT_THEME == "orange") {
     Page_Slug = HOME_PAGE_SLUG
+  } else if (CURRENT_THEME == "tool") {
+    Page_Slug = TOOLS_HOME_PAGE_SLUG
   } else {
     Page_Slug = HOME_PAGE_SLUG;
   }
@@ -105,23 +116,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     }
   }, [])
 
-  useAnalytics(PageViewed, {
-    entity: JSON.stringify({
-      id: '',
-      name: pageContents?.metatitle,
-      metaTitle: pageContents?.metaTitle,
-      MetaKeywords: pageContents?.metaKeywords,
-      MetaDescription: pageContents?.metaDescription,
-      Slug: pageContents?.slug,
-      Title: pageContents?.metatitle,
-      ViewType: 'Page View',
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: pageContents?.metaTitle,
-    entityType: 'Page',
-    entityId: '',
-    eventType: 'PageViewed',
-  })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPES.Home, })
 
   if (!pageContents) {
     return (
@@ -151,6 +146,16 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     };
   }, [sliderRef]);
   const cleanPath = removeQueryString(router.asPath)
+  const redirectHref = useMemo(() => {
+    if (!isGuestUser && user?.userId && user?.id !== Guid.empty && isB2BUser(user)) { // if loggedIn with B2b user 
+      return '/my-account/my-company/quotes';
+    } else if (!isGuestUser && user?.userId && user?.id !== Guid.empty) {  // if loggedIn user
+      return 'tel:+442086915794';
+    } else {
+      return '/my-account/login';
+    }
+  }, [isGuestUser, user]);
+
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -166,9 +171,98 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           {pageContents?.metadescription && (<meta property="og:description" content={pageContents?.metadescription} key="ogdesc" />)}
         </NextHead>
       )}
+
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {featureToggle?.features?.enableCustomHomeWidget &&
+          <>
+            {pageContents?.brandlist?.length > 0 && <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />}
+            {pageContents?.category?.length > 0 && <CategoryList data={pageContents?.category} deviceInfo={deviceInfo} />}
+            {pageContents?.featureproduct?.length > 0 &&
+              <section className="relative py-6 z-index-neg">
+                <div className="product-border-square"></div>
+                <div className="container">
+                  {pageContents?.featureheading?.map((heading: any, cdhId: number) => (
+                    <h4 className="block font-semibold uppercase text-brand-red sm:hidden" key={cdhId}>{heading?.featureheading_title}</h4>
+                  ))}
+                  <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
+                </div>
+                <div className="dot-div">
+                  <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
+                </div>
+              </section>
+            }
+            <BestSellerProduct config={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+            {pageContents?.imagelist?.length > 0 && <ImageBanner data={pageContents?.imagelist} deviceInfo={deviceInfo} />}
+          </>
+        }
+        {pageContents?.chooselist?.length > 0 && <ChooseList info={pageContents?.whychoose} data={pageContents?.chooselist} />}
+        {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
+          <div key={dataIdx} className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-30'>
+              <div className='flex flex-col justify-center gap-6 text-center sm:gap-10'>
+                <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
+                <div className='text-2xl font-normal text-black cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
+                <div>
+                  <Link href={redirectHref} className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
+                </div>
+              </div>
+              <div className='flex flex-col sm:p-20'>
+                <img alt={data?.about_title} src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+              </div>
+            </div>
+          </div>
+        ))}
+        {pageContents?.allcategories?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6'>
+              {pageContents?.allcategories?.map((data: any, dataIdx: number) => (
+                <div className='flex flex-col justify-center p-4 text-center rounded-lg shadow-md hover:bg-white hover:shadow-xl bg-slate-50' key={`data-${dataIdx}`}>
+                  <div className='h-60'>
+                    <img alt={data?.allcategories_name} src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-60 rounded-xl' />
+                  </div>
+                  <Link href={data?.allcategories_link} className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.brandheading?.length > 0 &&
+          <div className={`container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}>
+            <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
+              {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
+                <h4 key={dataIdx} className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.allbrands?.length > 0 &&
+          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-6 sm:gap-6'>
+              {pageContents?.allbrands?.map((data: any, dataIdx: number) => (
+                <div className='flex flex-col justify-center p-4 text-center bg-white rounded-lg shadow-md hover:shadow-xl' key={`data-${dataIdx}`}>
+                  <div className='h-32'>
+                    <img alt={data?.allbrands_name} src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-32 rounded-xl' />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        {pageContents?.promotionbanner != "" && CURRENT_THEME == 'etag' &&
+          <div className='flex flex-col pt-10 mt-0'>
+            <img alt="Banner" src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-full' />
+          </div>
+        }
+        {CURRENT_THEME === 'etag' &&
+          <div className='flex flex-col w-full mt-10 bg-orange-600 sm:mt-20'>
+            <div className='container relative flex items-center justify-between py-4'>
+              <span className='text-sm font-normal text-white sm:text-xl'>Ready to take your order now</span>
+              <Link href="tel:02086915794" className='text-xl font-semibold text-white sm:text-5xl'>020 869 15794</Link>
+            </div>
+          </div>
+        }
         {pageContents?.shopbygender?.length > 0 &&
           <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
@@ -242,7 +336,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                       </p>
                     </div>
                     <div className='items-end justify-center flex-1'>
-                      <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-sky-600 group-hover:bg-sky-500'>
+                      <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
                         {item?.category_buttontext}
                       </div>
                     </div>
@@ -257,6 +351,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             <img src={pageContents?.bannerimage} className='w-full h-full' alt='Promotion' />
           </div>
         }
+
         {pageContents?.brandcategory?.length > 0 &&
           <div className='flex flex-col justify-center gap-4 py-6 text-center bg-gray-50 sm:py-10'>
             <div className='container grid grid-cols-2 gap-2 mx-auto sm:grid-cols-4 sm:gap-6'>
@@ -270,7 +365,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>{item?.brandcategory_subtitle}</p>
                   </div>
                   <div className='items-end justify-center flex-1'>
-                    <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-sky-600 group-hover:bg-sky-500'>
+                    <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
                       {item?.brandcategory_buttontext}
                     </div>
                   </div>
@@ -302,14 +397,15 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           </div>
         }
         {featureToggle?.features?.enableTrendingCategory &&
-          <div className="mt-14 sm:mt-24 lg:mt-32">
+          <div className={`mt-14 sm:mt-24 lg:mt-32 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}
+          >
             <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
           </div>
         }
 
-        {pageContents?.newarrivals?.length > 0 && 
+        {pageContents?.newarrivals?.length > 0 &&
           <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
-             <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         }
 
@@ -328,56 +424,58 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             </div>
           </div>
         }
+        {(CURRENT_THEME != 'etag' && !featureToggle?.features?.enableCustomHomeWidget) &&
+          <div className={`${(CURRENT_THEME != 'green' && CURRENT_THEME != 'robots') ? 'space-y-16 sm:space-y-24 lg:space-y-32 my-16 sm:my-24 lg:my-32' : ' my-0 sm:my-5 lg:my-8'} ${CURRENT_THEME === 'cam' && 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0'} container relative product-collections`}>
+            {pageContents?.brand?.length > 0 &&
+              <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
+                {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
+                  <div key={`brands-${bIdx}`}>
+                    <SectionBrandCard data={b} />
+                  </div>
+                ))}
+              </div>
+            }
+            {pageContents?.departments?.length > 0 &&
+              <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
+                <BackgroundSection />
+                <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
+              </div>
+            }
+            {pageContents?.newlookbook?.length > 0 &&
+              <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+            }
+            {pageContents?.brand?.length > 0 &&
+              <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
+                {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
+                  <SectionBrandCard data={b} key={bIdx} />
+                ))}
+              </div>
+            }
+            {pageContents?.nevermisssale?.length > 0 &&
+              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            }
+            {pageContents?.brand?.length > 0 &&
+              <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
+                {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
+                  <SectionBrandCard data={b} key={bIdx} />
+                ))}
+              </div>
+            }
+            {pageContents?.popular?.length > 0 &&
+              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            }
 
-        <div className={`${CURRENT_THEME != 'green' ? 'space-y-16 sm:space-y-24 lg:space-y-32' : ''} ${CURRENT_THEME === 'cam' ? 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0' : ''}  container relative my-16 sm:my-24 lg:my-32 product-collections`}>
-          {pageContents?.brand?.length > 0 &&
-            <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
-              {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
-                <div key={`brands-${bIdx}`}>
-                  <SectionBrandCard data={b} />
-                </div>
-              ))}
+            {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
+            <div className='flex flex-col w-full engage-product-card-section'>
+              <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+              <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+              <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+              <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+              <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+              <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
             </div>
-          }
-          {pageContents?.departments?.length > 0 &&
-            <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
-              <BackgroundSection />
-              <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
-            </div>
-          }
-          {pageContents?.newlookbook?.length > 0 &&
-            <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
-          }
-          {pageContents?.brand?.length > 0 &&
-            <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
-              {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
-                <SectionBrandCard data={b} key={bIdx} />
-              ))}
-            </div>
-          }
-          {pageContents?.nevermisssale?.length > 0 &&
-            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          }
-          {pageContents?.brand?.length > 0 &&
-            <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
-              {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
-                <SectionBrandCard data={b} key={bIdx} />
-              ))}
-            </div>
-          }
-          {pageContents?.popular?.length > 0 &&
-            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          }
-          {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
-          <div className='flex flex-col w-full engage-product-card-section'>
-            <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           </div>
-        </div>
+        }
       </div>
     </>
   )

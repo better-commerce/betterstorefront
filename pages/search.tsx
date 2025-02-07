@@ -27,6 +27,8 @@ const NoProductFound = dynamic(() => import('@components/noProductFound'))
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Loader from '@components/Loader'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
+import { AnalyticsEventType } from '@components/services/analytics'
+import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 declare const window: any
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', FREE_TEXT: 'FREE_TEXT', }
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
@@ -132,15 +134,13 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
       },
     }
   )
-  
+
   useEffect(() => {
     if (state?.filters?.length) {
       routeToPLPWithSelectedFilters(router, state?.filters)
     }
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
-
-  const { CategoryViewed, FacetSearch } = EVENTS_MAP.EVENT_TYPES
 
   useEffect(() => {
     if (
@@ -215,26 +215,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
     (filter: any) => filter.name === 'Category'
   )
 
-  useAnalytics(FacetSearch, {
-    entity: JSON.stringify({
-      FreeText: '',
-      Page: state.currentPage,
-      SortBy: state.sortBy,
-      SortOrder: state.sortOrder,
-      Brand: BrandFilter ? BrandFilter.value : null,
-      Category: CategoryFilter ? CategoryFilter.value : null,
-      Gender: user.gender,
-      CurrentPage: state.currentPage,
-      PageSize: 20,
-      Filters: state.filters,
-      AllowFacet: true,
-      ResultCount: data.products.total,
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: 'Catalog',
-    entityType: 'Page',
-    eventType: 'Search',
-  })
+  useAnalytics(AnalyticsEventType.FACET_SEARCH, { ...state, ...user, products: data?.products, brand: BrandFilter ? BrandFilter.value : null, category: CategoryFilter ? CategoryFilter.value : null, entityName: PAGE_TYPE, })
 
   const handleInfiniteScroll = () => {
     if (
@@ -262,14 +243,14 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
   }
 
   const removeFilter = (key: string) => {
-    if(filters?.length == 1){
+    if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
   }
 
   const handleFilters = (filter: null, type: string) => {
-    if (filters?.length == 1 && type == REMOVE_FILTERS){
+    if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({
@@ -353,7 +334,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
       <div className="container pt-10 pb-24 mx-auto dark:bg-white">
-        <div className={`max-w-screen-sm ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
           <h1 className={`block text-2xl font-semibold dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
             {translate('label.basket.catalogText')}
           </h1>
@@ -370,26 +351,32 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           </div>
         </div>
         <hr className="border-slate-200 dark:border-slate-200" />
-       {isValidating ? (
-         <Loader />  
+        {isValidating ? (
+          <Loader />
         ) : (
           <>
-          {!!productDataToPass?.results?.length ? (
-            <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
-              {isMobile ? (
-                <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-              ) : (
-                <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
-                  <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+            {!!productDataToPass?.results?.length ? (
+              <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+                {isMobile ? (
+                  <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                ) : (
+                  <>
+                    {!featureToggle?.features?.enableHorizontalFilter ? (
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
+                        <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                      </div>
+                    ) : (
+                      <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                    )}
+                  </>
+                )}
+                <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                  <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                 </div>
-              )}
-              <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
-              </div>
-              <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-            </div>)
-            : <NoProductFound />}
+                <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
+              </div>)
+              : <NoProductFound />}
           </>
         )}
 

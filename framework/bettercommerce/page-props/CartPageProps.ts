@@ -24,9 +24,9 @@ export class CartPageProps extends BasePagePropsProvider implements IPagePropsPr
       await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
     }
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
-    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
+    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

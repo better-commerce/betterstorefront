@@ -6,7 +6,6 @@ import AddressItem from '@components/account/Address/AddressItem'
 import Form from '@components/account/Address/AddressBookForm'
 import { LoadingDots } from '@components/ui'
 import { CustomerAddressModel } from 'models/customer'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, resetSubmitData, submitData, parseFullName, } from '@framework/utils/app-util'
 import useDataSubmit from '@commerce/utils/use-data-submit'
 // import useDevice from '@commerce/utils/use-device'
@@ -16,6 +15,9 @@ import Link from 'next/link'
 import Spinner from '@components/ui/Spinner'
 import { AlertType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+
 export function asyncHandler() {
   function getAddress() {
     return async (id: string) => {
@@ -52,6 +54,7 @@ export function asyncHandler() {
 }
 
 export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation();
   const [data, setData] = useState([])
   const [isNewFormMode, setNewFormMode] = useState(false)
@@ -241,9 +244,8 @@ export default function B2BAddressBook({ deviceInfo, isAdmin }: any) {
 
     if (typeof window !== 'undefined') {
       if (currentPage) {
-        recordGA4Event(window, 'save_new_address', {
-          current_page: currentPage,
-        })
+        debugger
+        recordAnalytics(AnalyticsEventType.SAVE_NEW_ADDRESS, { currentPage, })
       }
     }
 

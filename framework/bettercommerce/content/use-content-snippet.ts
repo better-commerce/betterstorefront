@@ -45,7 +45,7 @@ export const ELEM_ATTR = 'data-bc-snippet-'
 /**
  * Attribute names for snippet injections inside <head>.
  */
-const HEAD_ELEM_SELECTORS = ['top-head', 'head']
+export const HEAD_ELEM_SELECTORS = ['top-head', 'head']
 
 /**
  * Attribute names for snippet injections inside <body>.
@@ -389,7 +389,7 @@ const buildAttrs = (attrSet: Array<string>): object => {
   return attrs
 }
 
-const removeInjections = (
+export const removeInjections = (
   elemSelectors: Array<string>,
   parentNode?: HTMLElement
 ) => {

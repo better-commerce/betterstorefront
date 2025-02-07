@@ -32,18 +32,18 @@ const OrderLines = ({ order, item, idx, trackPackage, groups }: any) => {
             <div className="flex justify-between">
                <div>
                   {
-                     order?.orderDetails?.order?.id && (
+                     order?.id && (
                         <p className='text-sm font-medium text-black'>
-                           {order?.orderDetails?.order?.deliveryPlans?.length > 0 ? (
-                              <span>{translate('label.orderDetails.packageText')} {idx + 1}/{order?.orderDetails?.order?.deliveryPlans?.length} • </span>
+                           {order?.deliveryPlans?.length > 0 ? (
+                              <span>{translate('label.orderDetails.packageText')} {idx + 1}/{order?.deliveryPlans?.length} • </span>
                            ) : (
                               <span>{translate('label.orderDetails.packageText')} {idx + 1}/1 • </span>
                            )}
 
-                           <span className='mx-2'>{order?.orderDetails?.order?.items?.length > 1
+                           <span className='mx-2'>{order?.itemsBasic?.length > 1
                               ? <span>{translate('common.label.itemPluralText')}</span>
                               : <span>{translate('common.label.itemSingularText')}</span>
-                           }: {order?.orderDetails?.order?.items?.length}</span>
+                           }: {order?.itemsBasic?.length}</span>
                            {
                               order?.showETA && (
                                  item?.deliveryDateTarget ?

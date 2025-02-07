@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import _, { groupBy } from 'lodash';
-import config from './config.json'
+import { CURRENT_THEME } from "@components/utils/constants";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/24/outline';
 import { matchStrings } from '@framework/utils/parse-util';
@@ -28,7 +28,9 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   const router = useRouter();
   const translate = useTranslation()
   const { setOverlayLoaderState, hideOverlayLoaderState } = useUI()
-  const websites = config?.websites || []
+  const config = require(`./${CURRENT_THEME}/config.json`);
+  const [websites, setWebsites] = useState<any>();
+  //const websites = config?.websites || []
   const [selectedWebsite, setSelectedWebsite] = useState<IWebsite | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [openIndex, setOpenIndex] = useState(undefined);
@@ -60,6 +62,10 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   }, [])
 
   useEffect(() => {
+    setWebsites(config?.websites || [])
+  }, [])
+
+  useEffect(() => {
     if (websites?.length) {
       const currentOrigin = window.location.origin
       const qs = new URL(window.location.href);
@@ -68,7 +74,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
         const urlCode = qs.searchParams.get('urlcode');
 
         //const store: any = websites.find(o => o.code === (storeCode || 'fashion'));
-        const store: any = websites.find(o => o.url === currentOrigin);
+        const store: any = websites.find((o: any) => o.url === currentOrigin);
         if (store) {
           const storeUrlCode = store?.code
           const feature = store?.features?.find((o: any) => o.urlCode === urlCode || storeUrlCode);
@@ -147,7 +153,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
   }, []);
 
   const handleWebsiteChange = (e: any) => {
-    const website = websites.find(w => w.name === e.target.value);
+    const website = websites.find((w: any) => w.name === e.target.value);
     if (website) {
       setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
 
@@ -210,7 +216,7 @@ export default function InteractiveDemoSideBar({ featureToggle }: any) {
                 </div>
                 <div className='flex flex-col px-3 pb-3 mb-3 border-b border-gray-200'>
                   <select onChange={handleWebsiteChange} value={selectedWebsite?.name || ''} className='w-full p-2 text-sm font-medium text-black bg-white border border-gray-400 rounded-md'>
-                    {websites.map(website => (
+                    {websites.map((website: any) => (
                       <option key={website.name} value={website.name}>{website.name}</option>
                     ))}
                   </select>

@@ -5,9 +5,6 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 
-// Component Imports
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-
 // Other Imports
 import cartHandler from '@components/services/cart'
 import { getOrderId, getOrderInfo, getRedirectionLocale } from '@framework/utils/app-util'
@@ -15,14 +12,15 @@ import setSessionIdCookie from '@components/utils/setSessionId'
 import { processPaymentResponse } from '@framework/utils/payment-util'
 import { PaymentStatus } from '@components/utils/payment-constants'
 import { useUI, basketId as generateBasketId } from '@components/ui/context'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Cookie } from '@framework/utils/constants'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { EmptyString } from '@components/utils/constants'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 
 const PaymentGatewayNotification = (props: IGatewayPageProps) => {
+  const { recordAnalytics } = useAnalytics()
   const orderInfo = getOrderInfo()
   const { associateCart } = cartHandler()
   const { gateway, params, isCancelled, isCOD = false, config } = props
@@ -36,8 +34,6 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
     setBasketId,
   } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
-  const { Order } = EVENTS_MAP.ENTITY_TYPES
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
 
   /**
    * Update order status.
@@ -82,66 +78,6 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       paymentResponseResult === PaymentStatus.PAID ||
       paymentResponseResult === PaymentStatus.AUTHORIZED
     ) {
-      const { orderNo, grandTotal } = orderInfo?.orderResponse
-      eventDispatcher(CheckoutConfirmation, {
-        basketItemCount: cartItems?.lineItems?.length,
-        basketTotal: grandTotal?.raw?.withTax,
-        shippingCost: cartItems?.shippingCharge?.raw?.withTax,
-        promoCodes: cartItems?.promotionsApplied,
-        basketItems: JSON.stringify(
-          cartItems?.lineItems?.map((i: any) => {
-            return {
-              categories: i?.categoryItems,
-              discountAmt: i?.discount?.raw?.withTax,
-              id: i?.id,
-              img: i?.image,
-              isSubscription: i?.isSubscription,
-              itemType: i?.itemType,
-              manufacturer: i?.manufacturer || '',
-              name: i?.name,
-              price: i?.price?.raw?.withTax,
-              productId: i?.productId,
-              qty: i?.qty,
-              rootManufacturer: i?.rootManufacturer || '',
-              stockCode: i?.stockCode,
-              subManufacturer: i?.subManufacturer,
-              tax: i?.totalPrice?.raw?.withTax,
-            }
-          })
-        ),
-        entity: JSON.stringify({
-          basketId: basketId,
-          billingAddress: orderInfo?.orderResponse?.billingAddress,
-          customerId: orderInfo?.orderResponse?.customerId,
-          discount: orderInfo?.orderResponse?.discount?.raw?.withTax,
-          grandTotal: grandTotal?.raw?.withTax,
-          id: orderInfo?.orderResponse?.id,
-          lineitems: orderInfo?.orderResponse?.items,
-          orderNo: orderNo,
-          paidAmount: grandTotal?.raw?.withTax,
-          payments: orderInfo?.orderResponse?.payments?.map((i: any) => {
-            return {
-              methodName: i.paymentMethod,
-              paymentGateway: i.paymentGateway,
-              amount: i.paidAmount,
-            }
-          }),
-          promoCode: orderInfo?.orderResponse?.promotionsApplied,
-          shipCharge: orderInfo?.orderResponse?.shippingCharge?.raw?.withTax,
-          shippingAddress: orderInfo?.orderResponse?.shippingAddress,
-          shippingMethod: orderInfo?.orderResponse?.shipping,
-          status: orderInfo?.orderResponse?.orderStatus,
-          subTotal: orderInfo?.orderResponse?.subTotal?.raw?.withTax,
-          tax: grandTotal?.raw?.withTax,
-          taxPercent: orderInfo?.orderResponse?.taxPercent,
-          timestamp: orderInfo?.orderResponse?.orderDate,
-        }),
-        entityId: orderInfo?.orderResponse?.id,
-        entityName: orderNo,
-        entityType: Order,
-        eventType: CheckoutConfirmation,
-      })
-
       Cookies.remove(Cookie.Key.SESSION_ID)
       setSessionIdCookie()
       Cookies.remove(Cookie.Key.BASKET_ID)

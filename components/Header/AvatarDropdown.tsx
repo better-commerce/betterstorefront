@@ -15,8 +15,13 @@ import { useTranslation } from "@commerce/utils/use-translation";
 import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import DataLayerInstance from '@components/utils/dataLayer';
 import { AlertType } from "@framework/utils/enums";
+import { AnalyticsEventType } from "@components/services/analytics";
+import { getBrowserName } from "@framework/utils/ui-util";
+import useAnalytics from "@components/services/analytics/useAnalytics";
 
-export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any) {
+export default function AvatarDropdown({ pluginConfig = [], featureToggle, deviceInfo }: any) {
+  const { recordAnalytics } = useAnalytics()
+  const { isDesktop } = deviceInfo
   const translate = useTranslation()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const socialLogins: Array<string> = SOCIAL_LOGINS_ENABLED.split(',')
@@ -71,6 +76,15 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
         </svg>
       ),
       tail: null,
+      onClick: async () => {
+        let currentPage = getCurrentPage()
+        if (currentPage) {
+          if (typeof window !== 'undefined') {
+            //debugger
+            recordAnalytics(AnalyticsEventType.LOGIN_ATTEMPT, { browser: getBrowserName(), currentPage, deviceCheck: isDesktop? 'Desktop': 'Mobile', })
+          }
+        }
+      },
       isEnable: true
     },
     {
@@ -157,7 +171,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
   ]
   let accountDropdownConfig = accountDropDownConfigUnauthorized
   let title = !isGuestUser ? user?.userId ? (translate('common.label.hiText') + `, ${user?.firstName}`) : translate('label.common.myAccountText') : ''
-  if (!isGuestUser && user.userId) {
+  if (!isGuestUser && user?.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
   return (
@@ -165,14 +179,14 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle }: any
       <Popover className="relative">
         {({ open, close }) => (
           <>
-            <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none flex items-center justify-center`} >
-              <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto" />
+            <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full group text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none flex items-center justify-center`} >
+              <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto group-hover:text-black" />
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
                 <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
-                  <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-white py-7">
-                    {!isGuestUser && user.userId && <>
+                  <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-white py-7 drop-acc-icon">
+                    {!isGuestUser && user?.userId && <>
                       <div className="flex items-center space-x-3">
                         <img className="w-10 h-10 text-lg rounded-full" alt={title} src={`/assets/user-avatar.png`} />
                         <div className="flex-grow">

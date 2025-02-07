@@ -1,12 +1,11 @@
 
-import type { GetServerSideProps, GetStaticPropsContext } from 'next'
+import type { GetStaticPropsContext } from 'next'
 import getAllStores from '@framework/store-locator/get-all-stores'
-import dynamic from 'next/dynamic';
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
-import { Cookie, GOOGLE_MAP_API_KEY, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import Layout from '@components/Layout/Layout';
 import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
@@ -14,22 +13,19 @@ import MapWithMarker from '@components/ui/Map/Marker';
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer';
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider';
 import { getPagePropType, PagePropType } from '@framework/page-props';
-const PAGE_TYPE = PAGE_TYPES.MyStore
 import useAnalytics from '@components/services/analytics/useAnalytics';
-import { EVENTS_MAP } from '@components/services/analytics/constants';
+import { AnalyticsEventType } from '@components/services/analytics';
+import { parseMicrositeLocale, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 interface Props {
   data: any
 }
 
 function StoreLocatorDetailsPage({ data }: Props) {
+  const { recordAnalytics } = useAnalytics()
   const router = useRouter()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.PageViewed, {
-    entityName: PAGE_TYPES.StoreLocatorDetail,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Page,
-    eventType: EVENTS_MAP.EVENT_TYPES.PageViewed,
-  })
+  recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.StoreLocatorDetail, })
 
   let absPath = ''
   if (typeof window !== 'undefined') {
@@ -146,7 +142,8 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params, locale }: GetStaticPropsContext) {
   const response = await getAllStores()
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ cookies })
 
   return {
     props: {

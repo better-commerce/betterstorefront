@@ -5,7 +5,7 @@ import apiRouteGuard from '../base/api-route-guard'
 const getCompanyUsersApiMiddleware = async (req: any, res: any) => {
   const { companyId }: any = req?.body
   try {
-    const response = await useB2BCompanyUsers()(companyId)
+    const response = await useB2BCompanyUsers()(companyId, req?.cookies)
 
     res.status(200).json(response?.result)
   } catch (error) {

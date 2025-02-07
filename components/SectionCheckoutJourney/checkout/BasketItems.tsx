@@ -1,127 +1,63 @@
-import { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
+import BasketGroupProduct from "@components/cart/BasketGroupProduct"
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables"
+import { vatIncluded } from "@framework/utils/app-util"
+import { tryParseJson } from "@framework/utils/parse-util"
 
-import { processCartData, vatIncluded } from '@framework/utils/app-util'
-import { tryParseJson } from '@framework/utils/parse-util'
-import { Cookie } from '@framework/utils/constants'
-
-import { useTranslation } from '@commerce/utils/use-translation'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { CartProductType } from '@components/utils/constants'
-import BundleProductCard from '@components/BundleProductCard'
-import cartHandler from '@components/services/cart'
-
-interface Props {
-  readonly userBasket?: any
-}
-
-const BasketItems = (props: Props) => {
-  const { userBasket } = props
-  const translate = useTranslation()
+const BasketItems = ({ userCartItems }: any) => {
   const isIncludeVAT = vatIncluded()
-  const [basket, setBasket] = useState<any>(null)
-  const { getCart } = cartHandler()
-
-  useEffect(() => {
-    if (!userBasket) {
-        const getBasket = async () => {
-        const basketId = Cookies.get(Cookie.Key.BASKET_ID)
-        const basketRes: any = await getCart({ basketId })
-        setBasket(processCartData(basketRes))
-      }
-      getBasket()
-    } else {
-      setBasket(processCartData(userBasket))
-    }
-  }, [userBasket])
-
   return (
     <>
-      {basket?.lineItems?.map((product: any, index: number) => {
+      {userCartItems?.map((product: any, index: number) => {
         const voltageAttr: any = tryParseJson(product?.attributesJson)
-        const electricVoltAttrLength = voltageAttr?.Attributes?.filter(
-          (x: any) => x?.FieldCode == 'electrical.voltage'
-        )
+        const electricVoltAttrLength = voltageAttr?.Attributes?.filter((x: any) => x?.FieldCode == 'electrical.voltage')
         let productNameWithVoltageAttr: any = product?.name
-        productNameWithVoltageAttr =
-          electricVoltAttrLength?.length > 0
-            ? electricVoltAttrLength?.map((volt: any, vId: number) => (
-                <span key={`voltage-${vId}`}>
-                  {product?.name?.toLowerCase()}{' '}
-                  <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
-                    {volt?.ValueText}
-                  </span>
-                </span>
-              ))
-            : (productNameWithVoltageAttr = product?.name)
-
+        productNameWithVoltageAttr = electricVoltAttrLength?.length > 0 ? electricVoltAttrLength?.map((volt: any, vId: number) => (
+          <span key={`voltage-${vId}`}>
+            {product?.name?.toLowerCase()}{' '}
+            <span className="p-0.5 text-xs font-bold text-black bg-white border border-gray-500 rounded">
+              {volt?.ValueText}
+            </span>
+          </span>
+        ))
+          : (productNameWithVoltageAttr = product?.name)
+        if (product?.length) {
+          return (
+            <div className='checkout-summary' key={`summary-${product?.productId}`}>
+              <BasketGroupProduct key={product?.productId} products={product} checkoutItem={true} />
+            </div>
+          )
+        }
         return (
-          <div
-            key={product?.id}
-            className={`w-full px-2 py-2 mb-2 border rounded items-list ${
-              product?.price?.raw?.withTax > 0
-                ? 'bg-white'
-                : 'bg-emerald-50 border-emerald-400'
-            }`}
-          >
-            <div className="grid grid-cols-12 gap-2">
-              <div className="col-span-3 img-container">
-                <img
-                  width={120}
-                  height={150}
-                  src={`${product?.image}` || IMG_PLACEHOLDER}
-                  alt={product?.name}
-                  className="object-cover object-center w-32 image"
-                />
+          <div key={product?.id} className={`w-full px-2 py-2 mb-2 border rounded items-list ${product?.price?.raw?.withTax > 0 ? 'bg-white' : 'bg-emerald-50 border-emerald-400'}`}>
+            <div className='grid grid-cols-12 gap-2'>
+              <div className='col-span-3 img-container'>
+                <img width={120} height={150} src={`${product?.image}` || IMG_PLACEHOLDER} alt={product?.name} className="object-cover object-center w-32 image" />
               </div>
-              <div className="col-span-9">
-                <h6 className="font-light text-black">
-                  {productNameWithVoltageAttr}
-                </h6>
+              <div className='col-span-9'>
+                <h6 className="font-light text-black">{productNameWithVoltageAttr}</h6>
                 <div className="flex items-center justify-between w-full my-2 gap-y-3">
-                  <div className="justify-start text-left">
-                    {product?.price?.raw?.withTax > 0 ? (
+                  <div className='justify-start text-left'>
+                    {product?.price?.raw?.withTax > 0 ?
                       <>
-                        <span className="block font-semibold text-black font-14 dark:text-black">
-                          {isIncludeVAT
-                            ? product?.price?.formatted?.withTax
-                            : product?.price?.formatted?.withoutTax}
-                          {product?.listPrice?.raw.withTax > 0 &&
-                          product?.listPrice?.raw.withTax !=
-                            product?.price?.raw?.withTax ? (
+                        <span className="block font-semibold text-black font-14">
+                          {isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax}
+                          {product?.listPrice?.raw.withTax > 0 && product?.listPrice?.raw.withTax != product?.price?.raw?.withTax ? (
                             <span className="pl-2 font-normal text-gray-400 line-through font-14">
-                              {' '}
-                              {isIncludeVAT
-                                ? product?.listPrice.formatted?.withTax
-                                : product?.listPrice.formatted?.withoutTax}
+                              {' '}{isIncludeVAT ? product?.listPrice.formatted?.withTax : product?.listPrice.formatted?.withoutTax}
                             </span>
                           ) : null}
                           <span className="pl-2 font-light text-black font-12">
-                            {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText') }
+                            {isIncludeVAT ? 'inc.' : 'excl.'} VAT
                           </span>
                         </span>
-                      </>
-                    ) : (
+                      </> :
                       <>
-                        <span className="flex flex-col font-semibold text-red-500">
-                          {translate('label.orderSummary.freeText')}
-                        </span>
-                        <span className="flex flex-col font-semibold text-black">
-                        {translate('label.product.qtyText')} {product?.qty}
-                        </span>
+                        <span className='flex flex-col font-semibold text-red-500'>FREE</span>
                       </>
-                    )}
+                    }
                   </div>
-                  <div className="justify-end">
-                    <span className="flex flex-col font-semibold text-black">
-                    {translate('label.product.qtyText')} {product?.qty}
-                    </span>
-                  </div>
+                  <div className='justify-end'><span className='flex flex-col font-semibold text-black'>Qty: {product?.qty}</span></div>
                 </div>
-                {product?.children
-                  ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
-                  ?.map((child: any, index: number) => <BundleProductCard key={index} product={child}/>
-                )}
               </div>
             </div>
           </div>

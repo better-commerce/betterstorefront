@@ -3,7 +3,6 @@ import { isMobile } from 'react-device-detect'
 import Spinner from '@components/ui/Spinner'
 import { useUI } from '@components/ui/context'
 import cartHandler from '@components/services/cart'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { uniq } from 'lodash'
@@ -29,8 +28,11 @@ import Cookies from 'js-cookie'
 import setSessionIdCookie, { getExpiry, getMinutesInDays } from '@components/utils/setSessionId'
 import DataLayerInstance from '@components/utils/dataLayer'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData, config, location, }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const isBrowser = typeof window !== 'undefined'
   const INITIAL_STATE = {
@@ -266,12 +268,8 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
       const viewWishlist = () => {
         if (currentPage) {
           if (typeof window !== 'undefined') {
-            recordGA4Event(window, 'wishlist', {
-              ecommerce: {
-                header: 'Menu Bar',
-                current_page: currentPage,
-              },
-            })
+            //debugger
+            recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'Quote Detail', currentPage, })
           }
         }
       }
@@ -584,7 +582,7 @@ function QuoteDetail({ quoteId, isQuoteViewOpen, handleCloseQuoteView, quoteData
                         <div className='sm:col-span-4'>
                           <>
                             <section aria-labelledby="summary-heading" className="top-0 p-4 px-4 mt-0 bg-slate-100 rounded-2xl md:sticky sm:mt-0 sm:px-6 lg:px-6 lg:mt-0 lg:col-span-4">
-                              <h4 id="summary-heading" className="mb-1 font-semibold text-black uppercase font-24">{translate('label.quotes.quoteSummaryText')}</h4>
+                              <h4 id="summary-heading" className="mb-4 font-semibold text-black uppercase font-xl">{translate('label.quotes.quoteSummaryText')}</h4>
                               <Disclosure defaultOpen>
                                 {({ open }) => (
                                   <>

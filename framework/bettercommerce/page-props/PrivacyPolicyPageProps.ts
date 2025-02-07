@@ -42,28 +42,26 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
                 new Promise(async (resolve: any, reject: any) => {
                     try {
                         const pageContentsPromise = commerce.getPagePreviewContent({
-                        id: '',
-                        slug,
-                        workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                        channel: channel,
-                        currency: currencyCode,
-                        cachedCopy: true,
-                        language: cookies?.Language,
+                            id: '',
+                            slug,
+                            workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                            channel: channel,
+                            currency: currencyCode,
+                            cachedCopy: true,
+                            language: cookies?.Language,
+                            cookies,
                         })
                         const pageContent = await pageContentsPromise
                         pageContentUIDData.push({
                         key: currencyCode,
                         value: pageContent,
                         })
-                        await setData([
-                        { key: pageContentUIDKey, value: pageContentUIDData },
-                        ])
+                        await setData([ { key: pageContentUIDKey, value: pageContentUIDData }, ])
                         resolve()
                     } catch (error: any) {
                         resolve()
                     }
-                })
-            )
+                }))
             })
         }
     }
@@ -74,7 +72,7 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
     const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

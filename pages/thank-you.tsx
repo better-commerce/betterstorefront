@@ -10,25 +10,29 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import {
   NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING,
-  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, SITE_ORIGIN_URL, SITE_NAME
+  TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, SITE_ORIGIN_URL, SITE_NAME, EmptyObject
 } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
 import { removeItem } from '@components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
-import { vatIncluded } from '@framework/utils/app-util'
+import { getOrderInfo, vatIncluded } from '@framework/utils/app-util'
 import classNames from 'classnames'
 import { eddDateFormat, parseItemId, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
-import NonHeadContentSnippet from '@components/common/Content/NonHeadContentSnippet'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import SplitDeliveryOrderItems from '@components/SectionCheckoutJourney/cart/SplitDeliveryOrderItems'
 import OrderItems from '@components/SectionCheckoutJourney/cart/CartItem/OrderItems'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
+import { ContentSnippetInjector } from '@components/common/Content'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import { EVENTS_MAP } from '@components/services/analytics/constants'
 
 export default function OrderConfirmation({ config }: any) {
+  const { recordAnalytics } = useAnalytics()
   const [order, setOrderData] = useState<any>()
   const [isSnippetLoaded, setIsSnippetLoaded] = useState(false)
   const [snippets, setSnippets] = useState(new Array<any>())
@@ -50,16 +54,7 @@ export default function OrderConfirmation({ config }: any) {
   const [referralLink, setReferralLink] = useState('')
   const [copied, setCopied] = useState(false)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
-  const {
-    setOrderId,
-    orderId,
-    user,
-    setGuestUser,
-    setIsGuestUser,
-    guestUser,
-    isGuestUser,
-    resetIsPaymentLink,
-  } = useUI()
+  const { setOrderId, orderId, user, cartItems, setGuestUser, setIsGuestUser, guestUser, isGuestUser, resetIsPaymentLink, } = useUI()
   const shareOptionsConfig = [
     {
       name: 'email',
@@ -270,11 +265,23 @@ export default function OrderConfirmation({ config }: any) {
   }
 
   useEffect(() => {
+    const orderInfo: any = getOrderInfo()
     const fetchOrder = async () => {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
         id: orderId,
       })
+      const orderData: any = order?.data
       setOrderData(data.order)
+      
+      // PURCHASE EVENT
+      //debugger
+      let cartItems: any = Object.assign(EmptyObject, { ...orderData, id: orderData?.basketId, lineItems: orderData?.items, })
+      if (cartItems?.items) {
+        delete cartItems.items
+      }
+      const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+      recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: orderData?.basketId, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
+
       setTimeout(() => {
         setSnippets(data?.snippets || [])
       }, 100);
@@ -398,9 +405,6 @@ export default function OrderConfirmation({ config }: any) {
     )
   }
 
-  const bodyStartScrCntrRef = React.createRef<any>()
-  const bodyEndScrCntrRef = React.createRef<any>()
-
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -421,7 +425,6 @@ export default function OrderConfirmation({ config }: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <div ref={bodyStartScrCntrRef} className={`${ELEM_ATTR}body-start-script-cntr-pc`} ></div>
       <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
         <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
           <div className="max-w-xl">
@@ -809,13 +812,8 @@ export default function OrderConfirmation({ config }: any) {
         </Dialog>
       </Transition.Root>
 
-      <div
-        ref={bodyEndScrCntrRef}
-        className={`${ELEM_ATTR}body-end-script-cntr-pc`}
-      ></div>
-
       {(!isSnippetLoaded && snippets?.length > 0) && (
-        <NonHeadContentSnippet snippets={snippets} refs={{ bodyStartScrCntrRef, bodyEndScrCntrRef }} />
+        <ContentSnippetInjector snippets={snippets} />
       )}
     </>
   )

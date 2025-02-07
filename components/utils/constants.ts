@@ -3,6 +3,10 @@ import { toNumber } from 'lodash'
 
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
+export const KIT_BRAND_PLATFORM = '/api/v1/kit-builder/brand-platform'
+export const KIT_BRAND_CATEGORY = '/api/v1/kit-builder/category'
+export const KIT_BRAND_PRODUCTS = '/api/v1/kit-builder/product/by-brand-platform'
+export const KIT_BRAND_PROD_BY_CAT = '/api/v1/kit-builder/product/by-kit-category'
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
@@ -29,6 +33,7 @@ export const BASKET_VALIDATE_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERS
 export const REGISTER_CUSTOMER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/create`
 export const REGISTER_CUSTOMER_TRADING_ACCOUNT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/create`
 export const B2B_COMPANY_USERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
+export const B2B_QUOTE_NOTE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/quote/note/`
 export const B2B_USER_QUOTES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const B2B_COMPANY_DETAILS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/`
 export const B2B_TRANSFER_BASKET = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/b2b/transfer`
@@ -38,6 +43,7 @@ export const REVIEW_SERVICE_BASE_API = `${process.env.BETTERCOMMERCE_REVIEW_BASE
 export const CUSTOMER_BASE_API = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/`
 export const CUSTOMER_NEWSLETTER = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer/newsletter/subscribe`
 export const ORDERS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/order/`
+export const PDF_DOWNLOAD = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/`
 export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/`
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
@@ -76,8 +82,9 @@ export const NEXT_DOWNLOAD_VOUCHERS =   `/api/membership/download-voucher`
 
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
-
+export const LIVE_CHAT_TIME = '07:30am-5:30pm'
 //LOCAL ENDPOINTS
+export const NEXT_PRODUCT_BY_KIT_CATEGORY = '/api/kitbuilder/product-by-category'
 export const NEXT_GET_COUNTRIES = '/api/countries'
 export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
@@ -94,6 +101,7 @@ export const NEXT_ADD_TO_CART = `/api/add-item-cart`
 export const NEXT_BULK_ADD_TO_CART = `/api/bulk-add-cart`
 export const NEXT_UPDATE_CART_INFO = `/api/update-cart-info`
 export const NEXT_GET_ORDER_DETAILS = '/api/customer/order-details'
+export const NEXT_GET_RETURN_DETAILS = '/api/customer/return-details'
 export const NEXT_GET_CART = `/api/get-cart`
 export const NEXT_GET_CART_COUNT = `/api/get-cart-count`
 export const NEXT_ASSOCIATE_CART = '/api/customer/associate-cart'
@@ -120,6 +128,9 @@ export const NEXT_UPDATE_DETAILS = `/api/customer/update-details`
 export const NEXT_SUBSCRIBE = `/api/customer/subscribe`
 export const NEXT_GET_ORDERS = `/api/customer/orders`
 export const NEXT_GET_DATA_PACK = `/api/customer/data-pack`
+export const NEXT_GET_INVOICE = `/api/customer/download-invoice`
+export const NEXT_DOWNLOAD_INVOICE = `/api/order/download-order-invoice`
+export const NEXT_DOWNLOAD_PDF = `/api/pdf/download-pdf`
 export const NEXT_DOWNLOAD_DATA_PACK = `/api/customer/download-dataPack`
 export const NEXT_GET_WISHLIST = `/api/customer/get-wishlist`
 export const NEXT_CREATE_WISHLIST = `/api/customer/create-wishlist`
@@ -195,6 +206,13 @@ export const NEXT_LOG_ACTIVITY = '/api/log/activity'
 export const NEXT_LOG_PAYMENT = '/api/log/payment'
 export const NEXT_GET_SUBJECTS = '/api/subjects'
 
+// Request Quote
+export const NEXT_SAVE_RFQ = '/api/b2b/request-for-quote/save-rfq'
+export const NEXT_GET_ALL_RFQ = '/api/b2b/request-for-quote/get-all-rfq'
+export const NEXT_PUT_NOTES = '/api/b2b/send-notes'
+export const NEXT_GET_DETAILS_RFQ = '/api/b2b/request-for-quote/get-details'
+export const NEXT_UPDATE_STATUS_RFQ = '/api/b2b/request-for-quote/status-update'
+
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
@@ -231,6 +249,11 @@ export const SHIPPING_ACTION_TYPES_MAP = {
   GET_ALL: 'GET_ALL',
   CLICK_AND_COLLECT: 'CLICK_AND_COLLECT',
   ACTIVE_SHIPPING_METHODS: 'ACTIVE_SHIPPING_METHODS',
+}
+
+export const DEFAULT_FILTER_PAGE_TYPES: any = {
+  brand: 'brandNoAnlz',
+  category: 'classification.category',
 }
 
 export const UPDATE_ORDER_STATUS = '/api/update-order-status'
@@ -287,7 +310,6 @@ export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
 export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
 export const CURRENT_THEME = process.env.CURRENT_THEME
 
-export const OMNILYTICS_DISABLED = stringToBoolean(process.env.OMNILYTICS_DISABLED)
 export const OMNILYTICS_ASSETS_DATA = `${process.env.OMNILYTICS_BASE_URL}/data`
 export const OMNILYTICS_IP_INFO = `${process.env.OMNILYTICS_BASE_URL}/api/v1/IpInfo`
 
@@ -303,10 +325,10 @@ export module Messages {
       export const NUMBERS_ONLY = /^[0-9]*$/
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-      export const EMAIL =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      export const EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      ///^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       export const FULL_NAME = /^[a-zA-Z 0-9\-]*$/
-      export const ADDRESS_LINE = /^[a-zA-Z 0-9\-\,\/\.]*$/
+      export const ADDRESS_LINE = /^[a-zA-Z0-9,\-/.'()&#+_ ]*$/
       export const ADDRESS_LABEL = /^[a-zA-Z 0-9\-]*$/
       export const CARD_NUMBER = /^[0-9]*$/
       export const CARD_EXPIRY = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/
@@ -316,13 +338,16 @@ export module Messages {
       export const FIND_EMPTY_CHARACTERS = /\s/g
       export const REPLACE_DEFAULT_UPI_WEB_PREFIX_URL = /upi:\/\//g
       export const CHARACTERS_AND_ALPHABETS =
-        /([a-zA-Z/!#\$@^%&*()=;\'\]"{:<>\\\\,.?|[~_`}/])/g
+        /([a-zA-Z/!#\$@^%&*()+=;\-'\]"{:<>\\\\,.?|[~_`}/])/g
       export const PASSWORD_VALIDATION = /^(?=.*[A-Z]).{8,}$/
       export const STOCK_CODE = /^[a-zA-Z0-9\\-]+$/g
       export const QUANTITY = /^[1-9]{1}[0-9]*$/g
       export const CSV_DATA = /^[a-zA-Z0-9\-]+\,([1-9]{1}\d*)([\r]*[\n])*$/gm
+      export const SEARCHABLE_ATTRIBUTES_MATCH =
+        /^(?:ordered|unordered)[(](.*)[)]$/i
+      export const APLHABETS_WITH_SPACES = /^[a-zA-Z ]+$/i
       export const EMPTY_SPACE = /\S/
-      // Extract language and product slug in Quick view URL on EngageProductCard
+      export const REPLACE_ALL_SPECIAL_CHARACTERS = /[&\/\\#, +()$~%.'":*?<>{}]/g
       export const EXTRACT_SLUG = /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/;
     }
 
@@ -330,6 +355,11 @@ export module Messages {
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
       MOBILE_NUMBER_LENGTH: 'Mobile number should be 10 characters',
+      FIRST_NAME_REQUIRED: 'First Name is a required field',
+      LAST_NAME_REQUIRED: 'Last Name is a required field',
+      VALID_EMAIL: 'Email must be a valid Email',
+      PASSWORD_MIN_LENGTH_MESSAGE: 'Password must be at least 8 characters',
+      PASSWORD_MAX_LENGTH_MESSAGE: 'Password must be at most 24 characters',
     }
 
     export const BulkOrder: any = {
@@ -340,7 +370,10 @@ export module Messages {
       NAME_REQUIRED: 'Full name is a required field',
       NAME_MIN_LENGTH: 'Full name must be at least 3 characters',
       NAME_INPUT: 'Full name should only contain alpha-numerics',
-
+      PHONE_NUMBER_REQUIRED: 'Phone Number is  required field',
+      PHONE_NUMBER_INPUT: 'Phone number should only contain numbers',
+      PHONE_MIN_INPUT: 'Phone number requires atleast 10 digits',
+      PHONE_MAX_INPUT: 'Phone number cannot exceed 10 digits',
       MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
       MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
       CHANGED_MOBILE_NUMBER_INPUT:
@@ -350,29 +383,37 @@ export module Messages {
     }
 
     export const AddNewAddress: any = {
+      PIN_CODE_REQUIRED: 'Pincode is a required field',
       POST_CODE_REQUIRED: 'Postcode is a required field',
-      POST_CODE_UNREACHABLE: 'Postcode non-serviceable',
-      POST_CODE_NUM: 'Postcode should contain only digits',
-      CITY_REQUIRED: 'City is a required field',
-      STATE_REQUIRED: 'State is a required field',
+      PIN_CODE_UNREACHABLE: 'Pincode non-serviceable',
+      PIN_CODE_NUM: 'Pincode should contain only digits',
+      CITY_REQUIRED: 'Town / city is a required field',
+      CITY_LEN_REQUIRED: 'City must be atleast 3 characters',
       COUNTRY_REQUIRED: 'Country is a required field',
-      ADDRESS_1_REQUIRED: 'Address 1 is a required field',
-      ADDRESS_1_INPUT: 'Address 1 should only contain alpha-numerics',
-      ADDRESS_2_INPUT: 'Address 2 should only contain alpha-numerics',
-      ADDRESS_3_INPUT: 'Address 2 should only contain alpha-numerics',
+      STATE_REQUIRED: 'County / State / Province is a required field',
 
-      FIRST_NAME_REQUIRED: 'First Name is a required field',
-      LAST_NAME_REQUIRED: 'Last Name is a required field',
-      FIRST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
-      FIRST_NAME_INPUT: 'Name should only contain alpha-numerics',
-      LAST_NAME_MIN_LENGTH: 'Name must be at least 3 characters',
-      LAST_NAME_INPUT: 'Name should only contain alpha-numerics',
+      ADDRESS_1_REQUIRED: 'Address line 1 is a required field',
+      ADDRESS_1_INPUT:
+        'House / Flat/ Office Number should only contain alpha-numerics',
+      ADDRESS_2_INPUT:
+        'Road Name / Area/ Colony should only contain alpha-numerics',
+      ADDRESS_3_INPUT: 'Address Line 3 should only contain alpha-numerics',
+      ADDRESS_LEN_REQUIRED:
+        'House / Flat/ Office Number must be atleast 3 characters',
 
-      MOBILE_NUMBER_REQUIRED: 'Mobile number is a required field',
-      MOBILE_NUMBER_INPUT: 'Mobile number should only contain numbers',
+      NAME_REQUIRED: 'Name is a required field',
+      NAME_MIN_LENGTH: 'Name must be at least 3 characters',
+      NAME_INPUT: 'Name should only contain alpha-numerics',
+
+      MOBILE_NUMBER_REQUIRED: 'Mobile Number is a required field',
+      MOBILE_NUMBER_INPUT: 'Mobile Number should only contain numbers',
+      MOBILE_NUMBER_INPUT_PREFIX: 'Mobile Number should start with +44 or 0',
+      MOBILE_NUMBER_MAX_LEN: 'Mobile Number must be at most 12 digits',
+      MOBILE_NUMBER_MIN_LEN: 'Mobile Number must be at least 7 digits',
 
       ADDRESS_TYPE_REQUIRED: 'Address is a required field',
-      ADDRESS_TYPE_MIN_LENGTH: 'Address Field should be more than 3 characters',
+      ADDRESS_TYPE_MIN_LENGTH:
+        'House/ Flat/ Office Number should be more than 3 characters',
       ADDRESS_TYPE_INPUT: 'Address should only contain alpha-numerics',
     }
 
@@ -397,16 +438,16 @@ export module Messages {
     }
 
     export const DeliveryInfo: any = {
-      POST_CODE_REQUIRED: 'Postcode is a required field',
-      POST_CODE_MIN_LENGTH: 'Postcode must be at least 6 characters',
-      VALID_POST: 'Please enter a valid postcode',
-      POST_CODE_MAX_LENGTH: 'Postcode must be at max 6 characters',
-      POST_CODE_INPUT: 'Postcode should only contain numbers',
+      PIN_CODE_REQUIRED: 'Pincode is a required field',
+      PIN_CODE_MIN_LENGTH: 'Pincode must be at least 6 characters',
+      VALID_PIN: 'Please enter a valid pincode',
+      PIN_CODE_MAX_LENGTH: 'Pincode must be at max 6 characters',
+      PIN_CODE_INPUT: 'Pincode should only contain numbers',
     }
     export const ResetPassword: any = {
       PASSWORD_VALIDATION_MESSAGE:
         'Password should have a minimum of 8 characters and at least 1 uppercase letter.',
-      PASSWORD_REQUIRED_MESSAGE: 'Password is required.',
+      PASSWORD_REQUIRED_MESSAGE: 'Password is required',
       CONFIRM_REQUIRED_MESSAGE: 'Confirm password is required.',
       MATCHING_PASSWORD_MESSAGE: 'Passwords must match.',
       NO_EMAIL: 'Please enter correct email',
@@ -453,47 +494,73 @@ export module Messages {
       }
     }
   }
+
   export const Messages: any = {
     RETURN_SUCCESS: 'Return success',
     EXCHANGE_SUCCESS: 'Exchange successful',
     RESET_PASSWORD_SUCCESS: 'Success! You will be redirected to login page',
+    RESET_CACHE_SUCCESS: 'Cache reset successfully!',
+    GENERATE_INVOICE_FAILED: 'No invoice available.',
   }
 
-  // export const Warnings: any = {}
+  export const Warnings: any = {}
 
-  // export const Errors: any = {
-  //   INVALID_REQUEST: 'The information provided is incomplete. Please try again.',
-  //   ERR_BAD_REQUEST: 'The information provided is incomplete. Please try again.',
-  //   CARD_NOT_SUPPORTED: 'Card type is not supported. Please try again.',
-  //   INVALID_OTP_SUPPLIED: 'OTP is not valid. Please try again.',
-  //   ERROR_UPDATE_ADDITIONAL_CHARGES: 'Error applying COD additional charges. Please try again after sometime.',
-  //   UNSUPPORTED_UPI_APP: 'UPI payment is unsupported.',
-  //   NOT_FOUND:'Your request could not be processed. Please try again after sometime.',
-  //   USERNAME_ALREADY_EXISTS: 'User already exists',
-  //   CUSTOMER_NOT_FOUND: 'Customer not found.',
-  //   GENERIC_ERROR: 'Your request could not be processed. Please try again after sometime.',
-  //   DUPLICATE_ADDRESS : 'Address already exists',
-  //   CART_EMPTY: 'Your cart is empty',
-  //   CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity is {maxBasketItemsCount}.',
-  //   BASKET_VALIDATION_FAILED: 'Basket validation failed',
-  //   'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
-  //   TOKEN_INVALID: 'Woops! Token is invalid',
-  //   TOKEN_EXPIRED: 'Woops! Token is expired or invalid',
-  //   COMPANY_NOT_FOUND: 'Company not found.',
-  //   COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
-  //   ADDRESS_NOT_FOUND: 'No address found for the given postcode'
-  // }
+  export const Errors: any = {
+    INVALID_REQUEST:
+      'The information provided is incomplete. Please try again.',
+    ERR_BAD_REQUEST:
+      'The information provided is incomplete. Please try again.',
+    CARD_NOT_SUPPORTED: 'Card type is not supported. Please try again.',
+    INVALID_OTP_SUPPLIED: 'OTP is not valid. Please try again.',
+    ERROR_UPDATE_ADDITIONAL_CHARGES:
+      'Error applying COD additional charges. Please try again after sometime.',
+    UNSUPPORTED_UPI_APP: 'UPI payment is unsupported.',
+    NOT_FOUND:
+      'Your request could not be processed. Please try again after sometime.',
+    USERNAME_ALREADY_EXISTS: 'User already exists',
+    CUSTOMER_NOT_FOUND: 'Customer not found.',
+    GENERIC_ERROR:
+      'Your request could not be processed. Please try again after sometime.',
+    CART_EMPTY: 'Your cart is empty',
+    CART_QUANTITY: 'Enter a valid quantity',
+    CART_ITEM_QTY_LIMIT_EXCEEDED: 'Max allowed quantity reached',
+    BASKET_EMPTY: 'Your basket is empty.',
+    BASKET_VALIDATION_FAILED: 'Basket validation failed',
+    'YourBag.Links.EmptyBag': 'Payment for your basket is already completed.',
+    TOKEN_INVALID: 'Token is invalid',
+    TOKEN_EXPIRED: 'Token is expired or invalid',
+    COMPANY_NOT_FOUND: 'Company not found.',
+    COMPANY_CREDIT_LIMIT_EXCEEDED: 'Not enough credit available.',
+    UNABLE_TO_ADD_KIT_ITEM: 'Cart has already been updated with these items.',
+    DELIVERY_METHOD_FOR_DELIVERY_ADDRESS_NOT_FOUND:
+      'No delivery method found for your delivery address.',
+    AGE_VERIFICATION_NOT_LOADED:
+      'Unable to load age verification. Please try again.',
+    AGE_VERIFICATION_UNSUCCESSFUL:
+      'Age verification unsuccessful. Please try again.',
+    ADDRESS_NOT_FOUND: 'No address found for the given postcode',
+    CART_ITEM_QTY_MAX_ADDED: 'You have added the maximum available quantity.',
+    PAYMENT_METHOD_NOT_SUPPORTED:
+      'This card is not supported for this transaction. Please retry using a different card.',
+    SHIPPING_OPTIONS_NOT_FOUND: 'Sorry, we could not find suitable shipping method for this order. Please contact customer service for assistance.',
+  }
 
-  //   export const ContactUs: any = {
-  //     FIRST_NAME_REQUIRED: 'First Name is a required field',
-  //     FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
-  //     FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
-  //     EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
-  //     EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
-  //     FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
-  //     TITLE_REQUIRED: 'Title is a require field',
-  //     MESSAGE_REQUIRED: 'Message is a require field',
-  //   }
+  export const ManageUser: any = {
+    CREATE_USER_SUCCESS: 'User created successfully',
+    UPDATE_USER_SUCCESS: 'User updated successfully',
+    REMOVE_USER_SUCCESS: 'User removed successfully',
+  }
+
+  export const ContactUs: any = {
+    FIRST_NAME_REQUIRED: 'First Name is a required field',
+    FIRST_NAME_MIN_LEN: 'First Name must be at least 3 characters',
+    FIRST_NAME_INPUT: 'First Name should only contain alpha-numerics',
+    EMAIL_ADDRESS_REQUIRED: 'Email Address is a required field',
+    EMAIL_ADDRESS_INPUT: 'Email Address is not valid',
+    FORM_SUBMIT_SUCCESS: 'Form Submit successfully',
+    TITLE_REQUIRED: 'Title is a require field',
+    MESSAGE_REQUIRED: 'Message is a require field',
+  }
 }
 export const EmptyObject: any = {}
 export module PageActions {
@@ -502,6 +569,13 @@ export module PageActions {
     ADD_TO_CART = 1,
   }
 }
+
+export const RFQStatusStyles:any = {
+  Cancelled: 'text-red-600',
+  Recieved: 'text-gray-600',
+  QuoteCreated: 'text-emerald-600', 
+};
+
 export const ALERT_TIMER = 5000
 
 export const DATE_FORMAT = 'DD-MMM-yy'
@@ -595,7 +669,7 @@ export enum CheckoutStepType {
   REVIEW_AND_PLACE_ORDER_PAYMENT_SECTION = 51, // Ordinal introduced for fix for scroll issue on checkout page.
   BILLING_DELIVERY_DETAILS = 6,
 }
-
+export const UPDATE_BASKET_DEBOUNCE_TIMEOUT = 2500
 export enum LoadingActionType {
   NONE = 0,
   REMOVE_ITEM = 1,
@@ -626,6 +700,16 @@ export enum QuoteStatus {
   ABANDONED = 4,
   CANCELLED = 5,
   QUOTE_SENT = 6,
+}
+
+export enum DocumentTypes {
+  INVOICE = 1,
+  SALES_ORDER = 2,
+  CREDIT_NOTE = 3,
+  RMA = 4,
+  QUOTE = 5,
+  PROFORMA_INVOICE = 6,
+  RFQ = 7,
 }
 
 export enum DeleteModalType {
@@ -666,3 +750,8 @@ export enum MembershipType {
 export enum CartProductType {
   ENGRAVING = 10,
 }
+
+export const BASKET_PROMO_TYPES = {
+  KIT: 23,
+}
+

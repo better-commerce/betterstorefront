@@ -18,18 +18,15 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 
 function CollectionList(props: any) {
   const router = useRouter();
   const translate = useTranslation()
 
-  useAnalytics(EVENTS_MAP.EVENT_TYPES.CollectionViewed, {
-    entity: JSON.stringify({ id: props?.id || EmptyGuid, name: props?.name || EmptyString, }),
-    entityId: props?.id || EmptyGuid,
-    entityName: props?.name || EmptyString,
-    entityType: EVENTS_MAP.ENTITY_TYPES.Collection,
-    eventType: EVENTS_MAP.EVENT_TYPES.CollectionViewed,
-  })
+  const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+  useAnalytics(AnalyticsEventType.VIEW_PLP_ITEMS, { ...{ ...extras }, plpDetails: props, product: null, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Collection, })
 
   return (
     <>
@@ -93,7 +90,8 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext) {
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
-  const pageProps = await props.getPageProps({ cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ cookies })
   const collectionUID = Redis.Key.Collection
   const cachedData = await getDataByUID([collectionUID])
   let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []

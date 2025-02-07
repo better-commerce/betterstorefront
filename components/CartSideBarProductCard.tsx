@@ -7,11 +7,19 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { CartProductType, DeleteModalType } from '@components/utils/constants'
 import wishlistHandler from '@components/services/wishlist'
 import BundleProductCard from '@components/BundleProductCard'
+import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
+import { useEffect, useState } from 'react'
+import { LoadingDots, useUI } from '@components/ui'
 
-export default function CartSideBarProductCard({ openModal, product, handleClose, handleItem, isIncludeVAT, getLineItemSizeWithoutSlug, handleRedirectToPDP, soldOutMessage, handleToggleEngravingModal, setItemClicked, insertToLocalWishlist, reValidateData, handleToggleOpenSizeChangeModal }: any) {
+export default function CartSideBarProductCard({ openModal, product, handleClose, handleItem, isIncludeVAT, getLineItemSizeWithoutSlug, handleRedirectToPDP, soldOutMessage, handleToggleEngravingModal, setItemClicked, insertToLocalWishlist, reValidateData, handleToggleOpenSizeChangeModal,maxBasketItemsCount,handleInputQuantity}: any) {
   const translate = useTranslation()
   const { isInWishList } = wishlistHandler()
   const css = { maxWidth: '100%', height: 'auto' }
+  const {cartItems} = useUI();
+  const [loadingProduct, setLoadingProduct] = useState<string | null>(null);
+  useEffect(()=>{
+    setLoadingProduct(null)
+  },[cartItems])
   return (
     <div className={`grid items-start grid-cols-12 gap-1 py-4 ${product?.price?.raw?.withTax == 0 ? 'bg-green-100 border border-emerald-300 rounded-lg p-2' : 'bg-white border-b border-slate-200 p-2'}`}>
       <div className="flex-shrink-0 col-span-3 overflow-hidden rounded-md">
@@ -59,9 +67,40 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
               </span>
               {product?.price?.raw?.withTax > 0 && (
                 <div className="flex flex-row items-center justify-end px-4 text-gray-900 border">
-                  {!product?.isMembership && <MinusIcon onClick={() => handleItem(product, 'decrease')} className="w-4 cursor-pointer" />}
-                  <span className="px-2 py-2 text-md"> {product?.qty} </span>
-                  {!product?.isMembership && <PlusIcon className="w-4 cursor-pointer" onClick={() => handleItem(product, 'increase')} />}
+                  {!product?.isMembership && (
+                    <MinusIcon
+                      onClick={() => {
+                        setLoadingProduct(product?.productId)
+                        handleItem(product, 'decrease', () => {
+                          setLoadingProduct(null)
+                        })
+                      }}
+                      className="w-4 cursor-pointer"
+                    />
+                  )}
+                  <div className="flex items-center w-10 h-10">
+                    {loadingProduct == product?.productId ? (
+                      <LoadingDots />
+                    ) : (
+                      <ProductQtyTextbox
+                        maxBasketItemsCount={maxBasketItemsCount}
+                        product={product}
+                        onUpdateBasket={handleInputQuantity}
+                        onLoading={setLoadingProduct}
+                      />
+                    )}
+                  </div>
+                  {!product?.isMembership && (
+                    <PlusIcon
+                      className="w-4 cursor-pointer"
+                      onClick={() => {
+                        setLoadingProduct(product?.productId)
+                        handleItem(product, 'increase', () => {
+                          setLoadingProduct(null)
+                        })
+                      }}
+                    />
+                  )}
                 </div>
               )}
             </div>

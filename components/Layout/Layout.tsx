@@ -10,7 +10,7 @@ import { ChevronDoubleUpIcon, ChevronDoubleDownIcon } from "@heroicons/react/24/
 import type { Page } from '@commerce/types/page'
 import type { Category } from '@commerce/types/site'
 import { useTranslation } from '@commerce/utils/use-translation'
-
+import KitActiveAlertDialog from '@components/kit/KitActiveAlert'
 const NotifyUserPopup = dynamic(() => import('@components/ui/NotifyPopup'))
 const MainNav = dynamic(() => import('@components/Header/MainNav'))
 const AlertRibbon = dynamic(() => import('@components/ui/AlertRibbon'))
@@ -66,7 +66,10 @@ const ModalView: FC<
   React.PropsWithChildren<{ modalView: string; closeModal(): any }>
 > = ({ modalView, closeModal }) => {
   return (
-    <Modal onClose={closeModal}>{modalView === 'NOTIFY_USER' && null}</Modal>
+    <Modal onClose={closeModal}>
+      {modalView === 'NOTIFY_USER' && null}
+      {modalView === 'KIT_ACTIVE_ALERT' && <KitActiveAlertDialog />}
+    </Modal>
   )
 }
 
@@ -212,7 +215,7 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         <div className={`text-base lg:pt-20 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
           <ProductMembershipOfferModal {...productMembershipModalData} />
-          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={getDefaultLanguage} defaultCountry={getDefaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+          <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={getDefaultLanguage} defaultCountry={getDefaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} locale={locale} />
           {displayAlert && <AlertRibbon />}
           {children}
           <Footer navItems={navTree?.footer} />

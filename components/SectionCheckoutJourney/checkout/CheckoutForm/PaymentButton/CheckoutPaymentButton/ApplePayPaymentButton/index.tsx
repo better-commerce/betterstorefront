@@ -101,7 +101,7 @@ class CheckoutApplePayPaymentButton extends BasePaymentButton {
       }
 
       if (isOrderConfirmed) {
-        that.recordAddPaymentInfoEvent(uiContext, that.props.recordEvent, PaymentMethodType.CHECKOUT_APPLE_PAY)
+        that.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.CHECKOUT_APPLE_PAY)
 
         that.setState({
           isScriptLoaded: true,

@@ -3,16 +3,17 @@ import { Formik, Form, Field } from 'formik'
 import { useDetailsFormConfig, useSchema } from './configs/details'
 import { useUI } from '@components/ui/context'
 import { useHandleSubmit } from './common'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Button } from '@components/ui'
 import { findByFieldName } from '@framework/utils/app-util'
 import FormField from '@components/utils/FormField'
 import { Messages } from '@components/utils/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
 import ContactPreferences from './ContactPreferences'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export default function MyDetails() {
+  const { recordAnalytics } = useAnalytics()
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
   const schema:any = useSchema();
@@ -20,7 +21,6 @@ export default function MyDetails() {
   const formConfig = useDetailsFormConfig();
   const [title, setTitle] = useState(translate('label.myAccount.myDetailsHeadingText'))
   const { user, setUser, changeMyAccountTab } = useUI()
-  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const ContactNumberLenCheck: any =  schema?.fields?.mobile?.tests?.find((t:any) => t?.OPTIONS?.name === 'max').OPTIONS?.params?.max;
 
@@ -55,19 +55,7 @@ export default function MyDetails() {
 
   const handleDataSubmit = async (values: any) => {
     await handleSubmit(values, user, setUser, setTitle)
-    eventDispatcher(CustomerUpdated, {
-      entity: JSON.stringify({
-        id: user.userId,
-        name: user.username,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        email: user.email,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      eventType: CustomerUpdated,
-    })
+    recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
     setSubmitContactPreferences(true)
   }
 
@@ -78,7 +66,7 @@ export default function MyDetails() {
   return (
     <main className="pb-6 space-y-5 sm:space-y-12 sm:pb-10">
       <div className=''>
-        <h1 className="text-2xl font-semibold sm:text-3xl dark:text-black">
+        <h1 className="text-xl font-normal sm:text-2xl dark:text-black">
           Account information
         </h1>
         <p className="mt-2 text-sm font-normal text-black dark:text-black">

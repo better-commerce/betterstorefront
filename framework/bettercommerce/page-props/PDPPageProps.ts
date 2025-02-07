@@ -4,8 +4,11 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { logError } from '@framework/utils/app-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { mapObject } from '@framework/utils/translate-util'
 import commerce from '@lib/api/commerce'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import { getProductTransformMap } from 'pages/api/catalog/get-product'
+import { getRelatedProductsTransformMap } from 'pages/api/catalog/products'
 
 /**
  * Class {PDPPageProps} inherits and implements the base behavior of {BasePagePropsProvider} and {IPagePropsProvider} respectively to return the PageProp values.
@@ -46,6 +49,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
 
+    let productSlugData: any, relatedProductData: any
     let productSlugUIDData: any = parseDataValue(cachedData, cachedDataUID.productSlugUID)
     let productReviewUIDData: any = parseDataValue(cachedData, cachedDataUID.productReviewUID)
     let relatedProductUIDData: any = parseDataValue(cachedData, cachedDataUID.relatedProductUID)
@@ -59,7 +63,11 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
         if (!productSlugUIDData) {
             const productPromise = commerce.getProduct({ query: slug, cookies })
             productSlugUIDData = await productPromise
-            await setData([{ key: cachedDataUID.productSlugUID, value: productSlugUIDData }])
+            //console.log({productSlugUIDData})
+            productSlugData = mapObject(productSlugUIDData, getProductTransformMap)?.data
+            await setData([{ key: cachedDataUID.productSlugUID, value: productSlugData }])
+        } else {
+            productSlugData = mapObject(productSlugUIDData, getProductTransformMap)?.data
         }
 
         if (productSlugUIDData?.status === "NotFound") {
@@ -81,7 +89,10 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
         if(!relatedProductUIDData){
             const relatedProductsPromise = commerce.getRelatedProducts({ query: productSlugUIDData?.product?.recordId, cookies })
             relatedProductUIDData = await relatedProductsPromise
-            await setData([{ key: cachedDataUID.relatedProductUID, value: relatedProductUIDData }])
+            relatedProductData = mapObject(relatedProductUIDData?.relatedProducts || [], getRelatedProductsTransformMap)?.data
+            await setData([{ key: cachedDataUID.relatedProductUID, value: { relatedProducts: relatedProductData } }])
+        } else {
+            relatedProductData = { relatedProducts: mapObject(relatedProductUIDData?.relatedProducts || [], getRelatedProductsTransformMap)?.data }
         }
 
         
@@ -128,9 +139,9 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
     }
 
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
-    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
+    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

@@ -11,12 +11,12 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
+import { AnalyticsEventType } from '@components/services/analytics'
 
 function AddressBookPage() {
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
   const translate = useTranslation()
-  const { CustomerProfileViewed } = EVENTS_MAP.EVENT_TYPES
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
 
   useEffect(() => {
@@ -27,35 +27,20 @@ function AddressBookPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
-  let loggedInEventData: any = {
-    eventType: CustomerProfileViewed,
-  }
+  let loggedInEventData: any = { eventType: AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, entityType: Customer, }
 
   if (user && user.userId) {
-    loggedInEventData = {
-      ...loggedInEventData,
-      entity: JSON.stringify({
-        email: user.email,
-        dateOfBirth: user.yearOfBirth,
-        gender: user.gender,
-        id: user.userId,
-        name: user.firstName + user.lastName,
-        postCode: user.postCode,
-      }),
-      entityId: user.userId,
-      entityName: user.firstName + user.lastName,
-      entityType: Customer,
-    }
+    loggedInEventData = { ...loggedInEventData, ...user, }
   }
   useEffect(()=>{
     changeMyAccountTab(translate('label.myAccount.mySavedAddressText'))
   },[])
 
-  useAnalytics(CustomerProfileViewed, loggedInEventData)
+  useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return (
     <>
-      <h1 className='text-2xl font-semibold sm:text-3xl dark:text-black'>{translate('label.addressBook.addressBookTitleText')}</h1>
+      <h1 className='text-xl font-normal sm:text-2xl dark:text-black'>{translate('label.addressBook.addressBookTitleText')}</h1>
       <div className={'orders bg-white dark:bg-transparent my-2 sm:my-6'}>
         <AddressBook />
       </div>

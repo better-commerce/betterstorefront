@@ -1,47 +1,52 @@
-import { NEXT_GET_BASKET_PROMOS, NEXT_MEMBERSHIP_BENEFITS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO, } from '@components/utils/constants'
-import { formatFromToDates } from '@framework/utils/parse-util'
-import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import { ChevronDownIcon, ClipboardIcon, ShoppingCartIcon, XMarkIcon, } from '@heroicons/react/24/outline'
-import axios from 'axios'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import { NEXT_GET_BASKET_PROMOS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO } from '@components/utils/constants';
+import { BEEN_REFERRED_BY_A_FRIEND, CLOSE_PANEL, FIND_THEM, USER_NOT_FOUND } from '@components/utils/textVariables';
+import { formatFromToDates } from '@framework/utils/parse-util';
+import { Dialog, Disclosure, Transition } from '@headlessui/react';
+import { ChevronDownIcon, ClipboardIcon, ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import axios from 'axios';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Button, LoadingDots, useUI } from '@components/ui'
 import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
-import classNames from 'classnames'
-import { Guid } from '@commerce/types'
-import Summary from '@components/SectionCheckoutJourney/checkout/Summary'
-import MembershipOfferCard from '@components/membership/MembershipOfferCard'
-import OptMembershipModal from '@components/membership/OptMembershipModal'
-import BasketItems from '@components/SectionCheckoutJourney/checkout/BasketItems'
-import { useTranslation } from '@commerce/utils/use-translation'
-import SplitDeliveryBasketItems from '../cart/SplitDeliveryBasketItems'
-
+import classNames from 'classnames';
+import sortBy from 'lodash/sortBy';
+import { groupCartItemsById } from '@components/utils/cart';
+import { BASKET_PROMO_TYPES } from '@framework/utils/constants';
+import Summary from './Summary';
+import BasketItems from './BasketItems';
+import SplitDeliveryBasketItems from './SplitDeliveryBasket';
 interface BasketItem {
-  id: string
-  name: string
-  quantity: number
-  price: number
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
 }
 
-const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayMembership, refreshBasket, setBasket, featureToggle }: any) => {
+const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUpdatePromoCode = () => { } }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { isGuestUser , user, cartItemsCount } = useUI()
+  const { user, isGuestUser, setAlert } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
   const [referralModalShow, setReferralModalShow] = useState(false)
   const [referralInfo, setReferralInfo] = useState<any>(null)
   const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [refCodeInput, setRefCodeInput] = useState('')
-  const [error, setError] = useState<any>('')
+  const [error, setError] = useState('')
   const [referralEmail, setReferralEmail] = useState<any>('')
-  const [membership, setMembership] = useState([])
+  const [userCartItems, setUserCartItems] = useState<any>(null)
   const [groupedPromotions, setGroupedPromotions] = useState<any>({
     appliedPromos: null,
     autoAppliedPromos: null,
   })
-  const translate = useTranslation()
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
-  const [openOMM, setOpenOMM] = useState(false)
-
+  useEffect(() => {
+    const fetchReferralPromotion = async () => {
+      let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
+      if (referralPromotions?.referralDetails) {
+        setReferralAvailable(true)
+      }
+    }
+    fetchReferralPromotion()
+  }, [])
   const handleReferralRegisterUser = async (referralId: any) => {
     let { data: voucherInfo } = await axios.post(
       NEXT_REFERRAL_ADD_USER_REFEREE,
@@ -49,12 +54,14 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
     )
     if (!voucherInfo?.referralDetails?.isUserExist) {
       setReferralInfo(voucherInfo?.referralDetails)
-    } else if (voucherInfo?.referralDetails?.isUserExist) {
+    }
+    else if (voucherInfo?.referralDetails?.isUserExist) {
       setIsLoading(false)
       setError(voucherInfo?.referralDetails?.message)
-    } else {
+    }
+    else {
       setIsLoading(false)
-      setError(translate('label.checkout.referralNotAvailableUserText'))
+      setError('Referral Vouchers not available for this user!')
     }
   }
   const handleInputChange = (e: any) => {
@@ -72,15 +79,15 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
           handleReferralRegisterUser(referrerReferralId)
         } else {
           setIsLoading(false)
-          setError(translate('common.message.userWithNameNotFoundErrorMsg'))
+          setError(USER_NOT_FOUND)
         }
       } else {
         setIsLoading(false)
-        setError(translate('label.checkout.referralCodeNotFoundErrorMsg'))
+        setError('Referral Code not found')
       }
     } else {
       setIsLoading(false)
-      setError(translate('label.checkout.EnterReferralCodeText'))
+      setError('Please enter appropriate Referral Code')
     }
   }
 
@@ -92,20 +99,6 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
       console.error('Failed to copy link:', error)
     }
   }
-
-  useEffect(()=>{
-    async function fetchMembership(){
-      const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
-      const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
-      const data = { userId, basketId: basket?.id, membershipPlanId: null }
-
-      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
-      if (membershipBenefitsResult?.result) {
-        const membership = membershipBenefitsResult?.result
-        setMembership(membership)}
-    }
-    fetchMembership()
-  },[basket,basket?.id,basket?.lineItems])
 
   useEffect(() => {
     const fetchReferralPromotion = async () => {
@@ -120,187 +113,105 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
     const { data: basketPromos } = await axios.get(NEXT_GET_BASKET_PROMOS, {
       params: { basketId: basketId },
     })
+    if (basketPromos?.applicablePromotions?.length) {
+      basketPromos.applicablePromotions = basketPromos?.applicablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
+    if (basketPromos?.availablePromotions?.length) {
+      basketPromos.availablePromotions = basketPromos?.availablePromotions?.filter((o: any) => o?.promoType !== BASKET_PROMO_TYPES.KIT)
+    }
     setBasketPromos(basketPromos)
     return basketPromos
   }
 
-  const isMembershipItemOnly = useMemo(() => {
-    const membershipItemsCount = basket?.lineItems?.filter((x: any) => x?.isMembership || false)?.length || 0
-    return (membershipItemsCount === basket?.lineItems?.length)
-  }, [basket])
+  useEffect(() => {
+    let items = sortBy(basket?.lineItems, 'displayOrder')
+    items = Object.values(groupCartItemsById(basket?.lineItems))
+    setUserCartItems(items)
+  }, [basket?.lineItems])
 
   return (
     <>
-      {isMobile || isIPadorTablet ? (
-        <>
-          <Disclosure>
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-white">
-                  <span className="font-medium text-orange-700 font-12">
-                    <ShoppingCartIcon className="inline-block w-4 h-4 text-orange-700" />{' '}
-                    {open ? translate('label.orderSummary.orderHideSummaryText') : translate('label.orderSummary.orderSummaryText')}{' '}
-                    <ChevronDownIcon className={`inline-block w-4 h-4 text-orange-700 ${open ? 'rotate-180 transform' : ''}`} />
-                  </span>
-                  <span className="font-semibold text-black">
-                    {basket?.grandTotal?.formatted?.withTax}
-                  </span>
-                </Disclosure.Button>
-                <Disclosure.Panel className="px-0 pt-3 pb-0 bg-gray-100">
-                  <div className="h-auto border-b border-gray-300 card-summary">
-                    <div className="w-full px-4 py-0 cart-items ">
-                      <div className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
-                        <span className="font-semibold text-black">
-                          {cartItemsCount}{' '}
-                          {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
-                        </span>
+      {isMobile || isIPadorTablet ?
+        (
+          <>
+            <Disclosure>
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="flex items-center justify-between w-full gap-2 p-3 text-sm font-light text-left text-black normal-case border-b border-gray-700 bg-gray-50">
+                    <span className="font-medium text-orange-700 font-12"><ShoppingCartIcon className='inline-block w-4 h-4 text-orange-700' /> {open ? 'Hide' : 'Show'} order summary <ChevronDownIcon className={`inline-block w-4 h-4 text-orange-700 ${open ? 'rotate-180 transform' : ''}`} /></span>
+                    <span className="font-semibold text-black">{basket?.grandTotal?.formatted?.withTax}</span>
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="px-0 pt-3 pb-0 bg-gray-100">
+                    <div className="h-auto border-b border-gray-300 card-summary">
+                      <div className="w-full px-4 py-0 cart-items ">
+                        <div className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
+                          <span className='font-semibold text-black'>{userCartItems?.length}{' '}{userCartItems?.length > 1 ? 'items' : 'item'}</span>
+                        </div>
+                        <div className="w-full px-0 pt-3 pb-2">
+                          <SplitDeliveryBasketItems cartItem={userCartItems} cart={basket} config={config} />
+                        </div>
                       </div>
-                      <div className="w-full px-0 pt-3 pb-2">
-                        <BasketItems userBasket={basket} />
-                      </div>
-                    </div>
-                    {referralAvailable &&
-                      isGuestUser &&
-                      basket?.contactDetails?.emailAddress && ( //user?.userEmail && (
-                        <h3
-                          className="text-sm font-semibold underline cursor-pointer text-green"
-                          onClick={() => {
-                            setReferralModalShow(true)
-                          }}
-                        >
-                          {translate('label.myAccount.beenReferredByFriendHeadingText')}
-                        </h3>
+                      {referralAvailable && isGuestUser && basket?.contactDetails?.emailAddress && (//user?.userEmail && (
+                        <h3 className="text-sm font-semibold underline cursor-pointer text-green" onClick={() => { setReferralModalShow(true) }}>{BEEN_REFERRED_BY_A_FRIEND}</h3>
                       )}
-                    <Summary
-                      basket={basket}
-                      groupedPromotions={groupedPromotions}
-                      deviceInfo={deviceInfo}
-                      basketPromos={basketPromos}
-                      getBasketPromos={getBasketPromos}
-                      setBasket={setBasket}
-                    />
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        </>
-      ) : (
-        <div className="h-auto card-summary right-panel-basket">
-          <h3 className="mb-4 text-2xl font-semibold text-black uppercase">{translate('label.orderSummary.orderSummaryText')}</h3>
-          {/* product list start */}
-          {basket?.deliveryPlans?.length < 1 ? (
+                      <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} promotionsUpdate={promotionsUpdate} onUpdatePromoCode={onUpdatePromoCode} />
+                    </div>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+          </>
+        )
+        : (
+          <div className="h-auto card-summary right-panel-basket">
+            <h3 className="mb-4 font-semibold text-black">Order Summary</h3>
+            {/* product list start */}
             <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
               <Disclosure defaultOpen={true}>
                 {({ open }) => (
                   <>
                     <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
-                      <span className="font-semibold text-black">
-                        {cartItemsCount}{' '}
-                        {cartItemsCount > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}
-                      </span>
-                      <i
-                        className={`${open ? 'rotate-180 transform' : ''
-                          } sprite-icons sprite-dropdown`}
-                      />
+                      <span className='font-semibold text-black'>{userCartItems?.length}{' '}{userCartItems?.length > 1 ? 'items' : 'item'}</span>
+                      <i className={`${open ? 'rotate-180 transform' : ''} sprite-icons sprite-dropdown`} />
                     </Disclosure.Button>
                     <Disclosure.Panel className="px-0 pt-3 pb-2">
                       <div className="w-full max-basket-panel">
-                        <BasketItems userBasket={basket} />
+                        <SplitDeliveryBasketItems cartItem={userCartItems} cart={basket} config={config} />
                       </div>
                     </Disclosure.Panel>
                   </>
                 )}
               </Disclosure>
             </div>
-          ) : (
-            <div className="mt-4 w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
-              <SplitDeliveryBasketItems basket={basket} />
-            </div>
-          )}
-          {!isMembershipItemOnly && featureToggle?.features?.enableMembership && (
-            <>
-              <MembershipOfferCard basket={basket} setOpenOMM={setOpenOMM} defaultDisplayMembership={defaultDisplayMembership} membership={membership} setBasket={setBasket} />
-              <OptMembershipModal open={openOMM} basket={basket} setOpenOMM={setOpenOMM} allMembershipPlans={allMembershipPlans} defaultDisplayMembership={defaultDisplayMembership} refreshBasket={refreshBasket} setBasket={setBasket} />
-            </>
-            )
-          }
-          {referralAvailable &&
-            isGuestUser &&
-            basket?.contactDetails?.emailAddress && ( //user?.userEmail && (
-              <h3
-                className="text-sm font-semibold underline cursor-pointer text-green"
-                onClick={() => {
-                  setReferralModalShow(true)
-                }}
-              >
-                {translate('label.myAccount.beenReferredByFriendHeadingText')}
+            {referralAvailable && isGuestUser && basket?.contactDetails?.emailAddress && (//user?.userEmail && (
+              <h3 className="text-sm font-semibold underline cursor-pointer text-green" onClick={() => { setReferralModalShow(true) }}>
+                {BEEN_REFERRED_BY_A_FRIEND}
               </h3>
             )}
-          <Summary
-            basket={basket}
-            groupedPromotions={groupedPromotions}
-            deviceInfo={deviceInfo}
-            basketPromos={basketPromos}
-            getBasketPromos={getBasketPromos}
-            setBasket={setBasket}
-            membership={membership}
-          />
-        </div>
-      )}
+            <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} promotionsUpdate={promotionsUpdate} onUpdatePromoCode={onUpdatePromoCode} />
+          </div>
+        )
+      }
 
       <Transition.Root show={referralModalShow} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 overflow-hidden z-999"
-          onClose={() => {
-            setReferralModalShow(!referralModalShow)
-          }}
-        >
+        <Dialog as="div" className="fixed inset-0 overflow-hidden z-999" onClose={() => { setReferralModalShow(!referralModalShow) }} >
           <div className="absolute inset-0 overflow-hidden z-999">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay
-                className="w-full h-screen bg-black opacity-50"
-                onClick={() => {
-                  setReferralModalShow(!referralModalShow)
-                }}
-              />
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+              <Dialog.Overlay className="w-full h-screen bg-black opacity-50" onClick={() => { setReferralModalShow(!referralModalShow) }} />
             </Transition.Child>
 
             <div className="fixed inset-0 flex items-center justify-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
+              <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
                 <div className="2xl:w-screen 2xl:h-auto  xl:h-[500px] max-w-xl 2xl:max-w-xl">
                   <div className="flex flex-col h-full overflow-y-auto rounded shadow-xl bg-gray-50">
                     <div className="flex-1 px-0 overflow-y-auto">
                       <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 py-4 border-b shadow bg-indigo-50">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                        {translate('label.myAccount.beenReferredByFriendHeadingText')}
+                          {BEEN_REFERRED_BY_A_FRIEND}
                         </Dialog.Title>
                         <div className="flex items-center ml-3 h-7">
-                          <button
-                            type="button"
-                            className="p-2 -m-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => {
-                              setReferralModalShow(!referralModalShow)
-                            }}
-                          >
-                            <span className="sr-only">{translate('common.label.closePanelText')}</span>
+                          <button type="button" className="p-2 -m-2 text-gray-400 hover:text-gray-500" onClick={() => { setReferralModalShow(!referralModalShow) }} >
+                            <span className="sr-only">{CLOSE_PANEL}</span>
                             <XMarkIcon className="w-6 h-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -310,14 +221,15 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                         {referralAvailable && !referralInfo && (
                           <div className="flex flex-col w-full max-w-lg my-10 2xl:justify-center xl:items-center px-9">
                             <h2 className="mx-2 text-[30px] text-center">
-                              {translate('label.checkout.searchFriendByReferralCodeText')}
+                              Search your Friend by their Referral Code
                             </h2>
                             <p className="px-8 text-[18px] text-center">
-                              {translate('label.checkout.friendSignupConfirmationText')}
+                              If you think they have signed up, please check and
+                              confirm their details below
                             </p>
                             <input
                               type="text"
-                              placeholder={translate('label.checkout.enterReferralCodeText')}
+                              placeholder="Enter your friend's Referral Code.."
                               className="px-5 w-full my-2 py-3 border-[1px] border-gray-500"
                               onChange={handleInputChange}
                             />
@@ -330,7 +242,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                                 handleReferralSearch()
                               }}
                             >
-                              {isLoading ? <LoadingDots /> : translate('label.myAccount.findReferralBtnText')}
+                              {isLoading ? <LoadingDots /> : FIND_THEM}
                             </Button>
                           </div>
                         )}
@@ -341,11 +253,11 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                             )}
                           >
                             <h2 className="px-5 text-center">
-                              {translate('label.checkout.friendFoundConfirmationText')}
+                              Congratulations, We found your friend!
                             </h2>
                             <div className="py-2 flex flex-row border-[1px] my-5 items-center justify-center border-gray-600">
                               <p className="px-3 !mt-0 text-center font-bold ">
-                               {translate('label.checkout.voucherCodeText')}{' '}{referralInfo?.voucherCode}
+                                Voucher-code: {referralInfo?.voucherCode}
                               </p>
                               <div
                                 className="w-5 m-0 "
@@ -360,18 +272,16 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
                               </div>
                             </div>
                             <p className="px-5 font-bold text-center">
-                            {translate('label.checkout.offerText')}: {referralInfo?.promoName}
+                              Offer: {referralInfo?.promoName}
                             </p>
                             <p className="font-bold">
-                            {translate('label.checkout.validityText')}:{' '}
+                              Validity:{' '}
                               {/* {`This offer is valid for ${referralInfo?.validityDays} Days`} */}
-                              {`${formatFromToDates(
-                                referralInfo?.validFrom,
-                                referralInfo?.validTo
-                              )}`}
+                              {`${formatFromToDates(referralInfo?.validFrom, referralInfo?.validTo)}`}
                             </p>
                             <p className="px-12 text-center">
-                              {translate('common.label.availGiftText')}
+                              Use this voucher code in the Apply promotion
+                              section to avail this offer
                             </p>
                           </div>
                         )}
@@ -394,7 +304,7 @@ const BasketDetails = ({ basket, deviceInfo, allMembershipPlans, defaultDisplayM
         </Dialog>
       </Transition.Root>
     </>
-  )
-}
+  );
+};
 
-export default BasketDetails
+export default BasketDetails;

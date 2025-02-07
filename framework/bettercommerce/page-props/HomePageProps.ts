@@ -18,7 +18,6 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
     const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
     let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
     const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
@@ -38,13 +37,14 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
                 promises.push(new Promise(async (resolve: any, reject: any) => {
                     try {
                         const pageContentsPromise = commerce.getPagePreviewContent({
-                        id: '',
-                        slug,
-                        workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
-                        channel: channel,
-                        currency: currencyCode,
-                        cachedCopy: true,
-                        language: cookies?.Language,
+                          id: '',
+                          slug,
+                          workingVersion: process.env.NODE_ENV === 'production' ? true : true, // TRUE for preview, FALSE for prod.
+                          channel: channel,
+                          currency: currencyCode,
+                          cachedCopy: true,
+                          language: cookies?.Language,
+                          cookies,
                         })
                         const pageContent = await pageContentsPromise || null
                         pageContentUIDData.push({ key: currencyCode, value: pageContent })
@@ -64,9 +64,9 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
     const slugsPromise = commerce.getSlugs({ slug, cookies });
     const slugs = await slugsPromise;
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
-    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result)
+    const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary()
+    const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })

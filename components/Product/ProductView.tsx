@@ -12,14 +12,12 @@ import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
 import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG } from '@components/utils/constants'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { getCurrentPage, sanitizeRelativeUrl, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import wishlistHandler from '@components/services/wishlist'
@@ -38,7 +36,12 @@ import ProductSocialProof from './ProductSocialProof'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import TechnicalSpecifications from './TechnicalSpecification'
 import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
+import { AnalyticsEventType } from '@components/services/analytics'
+import Router from 'next/router'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
+const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/productDetails'))
+const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
@@ -68,6 +71,7 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership,  selectedFilters = [] }: any) {
+  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
@@ -124,7 +128,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setAttributeNames(mappedAttribsArrStr)
   }, [allProductsByCategory])
 
-  const { ProductViewed } = EVENTS_MAP.EVENT_TYPES
   const handleSetProductVariantInfo = ({ colour, clothSize }: any) => {
     if (colour) {
       setVariantInfo((v: any) => ({
@@ -168,28 +171,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         productCode: response?.data?.product?.productCode,
       })
     }
+    //debugger
+    const product: any = response?.data?.product
+    let color = ''
+    if (product?.variantGroupCode) {
+      color = product?.variantGroupCode?.split('-')[1]
+    }
+    const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+    recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, entityType: Product, })
     if (response?.data?.product) {
-      eventDispatcher(ProductViewed, {
-        entity: JSON.stringify({
-          id: response?.data?.product?.recordId,
-          sku: response?.data?.product?.sku,
-          name: response?.data?.product?.name,
-          stockCode: response?.data?.product?.stockCode,
-          img: response?.data?.product?.image,
-        }),
-        entityId: response?.data?.product?.recordId,
-        entityName: response?.data?.product?.name,
-        entityType: Product,
-        eventType: ProductViewed,
-        omniImg: response?.data?.product?.image,
-      })
       setUpdatedProduct(response.data.product)
-      // Commenting it, as it override selectedAttribute from attributesHandler
-      // setSelectedAttrData({
-      //   productId: response?.data?.product?.recordId,
-      //   stockCode: response?.data?.product?.stockCode,
-      //   ...response?.data?.product,
-      // })
       if (typeof window !== "undefined" && window?.ch_session) {
         window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
@@ -386,53 +377,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         )
         setCartItems(item)
         if (typeof window !== 'undefined') {
-          recordGA4Event(window, 'add_to_cart', {
-            ecommerce: {
-              items: [
-                {
-                  item_name: product?.name,
-                  item_brand: product?.brand,
-                  item_category2: product?.mappedCategories[1]?.categoryName,
-                  item_variant: product?.variantGroupCode,
-                  quantity: 1,
-                  item_id: product?.productCode,
-                  price: product?.price?.raw?.withTax,
-                  item_var_id: product?.stockCode,
-                  item_list_name: product?.mappedCategories[2]?.categoryName,
-                  index: 1,
-                },
-              ],
-              cart_quantity: 1,
-              total_value: product?.price?.raw?.withTax,
-              current_page: 'PDP',
-              section_title: 'Product Detail',
-            },
-          })
+          //debugger
+          const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
+
           if (currentPage) {
-            recordGA4Event(window, 'view_cart', {
-              ecommerce: {
-                items: cartItems?.lineItems?.map(
-                  (items: any, itemId: number) => ({
-                    item_name: items?.name,
-                    item_id: items?.sku,
-                    price: items?.price?.raw?.withTax,
-                    item_brand: items?.brand,
-                    item_category2: items?.categoryItems?.length
-                      ? items?.categoryItems[1]?.categoryName
-                      : '',
-                    item_variant: items?.colorName,
-                    item_list_name: items?.categoryItems?.length
-                      ? items?.categoryItems[0]?.categoryName
-                      : '',
-                    item_list_id: '',
-                    index: itemId,
-                    quantity: items?.qty,
-                    item_var_id: items?.stockCode,
-                  })
-                ),
-                current_page: currentPage,
-              },
-            })
+            //debugger
+            const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+            recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
           }
           if (window?.ch_session && memoizedDataForEngage) {
             window?.ch_add_to_cart_before(memoizedDataForEngage)
@@ -508,49 +460,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             )
             setCartItems(item)
             if (typeof window !== 'undefined') {
-              recordGA4Event(window, 'add_to_cart', {
-                ecommerce: {
-                  items: [
-                    {
-                      item_name: product?.name,
-                      item_brand: product?.brand,
-                      item_category2: product?.mappedCategories[1]?.categoryName,
-                      item_variant: product?.variantGroupCode,
-                      quantity: 1,
-                      item_id: product?.productCode,
-                      price: product?.price?.raw?.withTax,
-                      item_var_id: product?.stockCode,
-                      item_list_name: product?.mappedCategories[2]?.categoryName,
-                      index: 1,
-                    },
-                  ],
-                  cart_quantity: 1,
-                  total_value: product?.price?.raw?.withTax,
-                  current_page: 'PDP',
-                  section_title: 'Product Detail',
-                },
-              })
+              //debugger
+              const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
+
               if (currentPage) {
-                recordGA4Event(window, 'view_cart', {
-                  ecommerce: {
-                    items: cartItems?.lineItems?.map(
-                      (items: any, itemId: number) => ({
-                        item_name: items?.name,
-                        item_id: items?.sku,
-                        price: items?.price?.raw?.withTax,
-                        item_brand: items?.brand,
-                        item_category2: items?.categoryItems?.length ? items?.categoryItems[1]?.categoryName : '',
-                        item_variant: items?.colorName,
-                        item_list_name: items?.categoryItems?.length ? items?.categoryItems[0]?.categoryName : '',
-                        item_list_id: '',
-                        index: itemId,
-                        quantity: items?.qty,
-                        item_var_id: items?.stockCode,
-                      })
-                    ),
-                    current_page: currentPage,
-                  },
-                })
+                //debugger
+                const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+                recordAnalytics(AnalyticsEventType.VIEW_BASKET, { ...{ ...extras }, cartItems, currentPage, itemListName: 'Product View', itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
               }
             }
           },
@@ -666,43 +583,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
 
     if (typeof window !== 'undefined') {
-      recordGA4Event(window, 'wishlist', {
-        ecommerce: {
-          header: product?.name,
-          current_page: 'PDP',
-        },
-      })
-
-      recordGA4Event(window, 'add_to_wishlist', {
-        ecommerce: {
-          items: [
-            {
-              item_name: product?.name,
-              item_brand: product?.brand,
-              item_category: product?.mappedCategories[0]?.categoryName,
-              item_category2: product?.mappedCategories[1]?.categoryName,
-              item_variant: product?.variantGroupCode,
-              quantity: 1,
-              item_id: product?.productCode,
-              price: product?.price?.raw?.withTax,
-            },
-          ],
-          item_var_id: product?.stockCode,
-          header: 'PDP',
-          current_page: 'PDP',
-          availability: productAvailability,
-        },
-      })
+      //debugger
+      recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: product?.name, currentPage: 'PDP', })
+      recordAnalytics(AnalyticsEventType.ADD_TO_WISHLIST, { ...product, productAvailability, header: 'PDP', currentPage: 'PDP', })
     }
 
     if (currentPage) {
       if (typeof window !== 'undefined') {
-        recordGA4Event(window, 'wishlist', {
-          ecommerce: {
-            header: 'PDP',
-            current_page: currentPage,
-          },
-        })
+        //debugger
+        recordAnalytics(AnalyticsEventType.VIEW_WISHLIST, { header: 'PDP', currentPage, })
       }
     }
 
@@ -1150,8 +1039,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           )}
         </div>
         <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {product && <AccordionInfo product={product} data={detailsConfig} />}
-        {renderProductSpecification()}
+           {!featureToggle?.features?.enableCustomToolWidget ? (
+               <>
+               {product && <AccordionInfo product={product} data={detailsConfig} />}
+               {renderProductSpecification()}
+              </>
+              ) : (
+               <></>
+          )}
         <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
           <DeliveryInfo product={product} grpData={attrGroup} config={config} />
         </div>
@@ -1196,7 +1091,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <>
               {featureToggle?.features?.isImageGallery ? (
-                <div className="w-full lg:w-[55%] sticky top-0">
+                <div className="w-full lg:w-[55%] sticky top-0 product-image-border">
                   <ImageGallery
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
@@ -1241,6 +1136,22 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {renderSectionContent()}
           </div>
         </div>
+         {featureToggle?.features?.enableCustomToolWidget ? (
+               <>
+                  <div className="flex w-full bg-white product-tab-active">
+                     <div className="lg:mx-auto container-ffx">
+                      <PDPDetails product={product} description={product?.description} />
+                      </div>
+                   </div>
+                   <div className="pb-10 bg-white sm:pb-0">
+                <div className="grid grid-cols-12 px-0 lg:mx-auto container-ffx sm:grid-cols-12 sm:px-4 md:px-0 lg:px-6 2xl:px-0">
+                  <ProductSpecification attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+                </div>
+              </div>
+              </>
+              ) : (
+               <></>
+          )}
         {/* {LookBook} */}
         {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />

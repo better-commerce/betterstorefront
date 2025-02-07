@@ -4,9 +4,9 @@ import { Formik} from 'formik'
 import { useUI } from '@components/ui/context'
 import { useHandleSubmit, URLS } from './common'
 import Button from '@components/ui/Button'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { AnalyticsEventType } from '@components/services/analytics'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 interface ContactPreferencesProps {
   hideSubmitBtn?: boolean;
@@ -21,6 +21,7 @@ interface FormStates {
 }
 
 export default function ContactPreferences({hideSubmitBtn = false, customSubmit = false, setCustomSubmit }: ContactPreferencesProps) {
+  const { recordAnalytics } = useAnalytics()
   const handleSubmit = useHandleSubmit();
   const translate = useTranslation();
   const [title, setTitle] = useState('Contact')
@@ -50,7 +51,6 @@ export default function ContactPreferences({hideSubmitBtn = false, customSubmit 
     },
   ]
   const { user, setUser } = useUI()
-  const { CustomerUpdated } = EVENTS_MAP.EVENT_TYPES
 
   const initialValues = {
     email: user.email,
@@ -119,19 +119,7 @@ export default function ContactPreferences({hideSubmitBtn = false, customSubmit 
   const handleDataSubmit = async () => {
     if(data?.notifyByEmail != user?.notifyByEmail || data?.notifyByPost != user?.notifyByPost || data?.notifyBySMS != user?.notifyBySMS){
       await handleSubmit(data, user, setUser, setTitle, URLS.subscribe)
-      eventDispatcher(CustomerUpdated, {
-        entity: JSON.stringify({
-          id: user.userId,
-          name: user.username,
-          dateOfBirth: user.yearOfBirth,
-          gender: user.gender,
-          email: user.email,
-          postCode: user.postCode,
-        }),
-        entityId: user.userId,
-        entityName: user.firstName + user.lastName,
-        eventType: CustomerUpdated,
-      })
+      recordAnalytics(AnalyticsEventType.CUSTOMER_UPDATED, { ...user })
       if(hideSubmitBtn) setCustomSubmit(false)
     }
   }

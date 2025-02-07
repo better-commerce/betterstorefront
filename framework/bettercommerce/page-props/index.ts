@@ -16,6 +16,7 @@ import { CollectionPLPPageProps } from "./CollectionPLPPageProps";
 import { CheckoutPageProps } from "./CheckoutPageProps";
 import { BrandPLPPageProps } from "./BrandPLPPageProps";
 import { PDPPageProps } from "./PDPPageProps";
+import { TradeInPageProps } from "./TradeInPageProps";
 
 export enum PagePropType {
     HOME = 'home',
@@ -33,6 +34,7 @@ export enum PagePropType {
     COOKIE_POLICY = 'cookie_policy',
     PRIVACY_POLICY = 'privacy_policy',
     TERMS_AND_CONDITIONS = 'terms_and_conditions',
+    TRADE_IN = 'trade_in',
     COMMON = 'common'
 }
 
@@ -117,6 +119,9 @@ const getObject = (type: PagePropType): IPagePropsProvider | undefined => {
             obj = new TermsAndConditionsPageProps()
             break
 
+        case PagePropType.TRADE_IN:
+            obj = new TradeInPageProps()
+            break
         case PagePropType.COMMON:
             obj = new CommonPageProps()
             break

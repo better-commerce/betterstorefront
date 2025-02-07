@@ -111,7 +111,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemC
         {cartItems?.lineItems?.map((product: any, productIdx: number) => {
           const soldOutMessage = getCartValidateMessages(reValidateData?.messageCode, product)
           return (
-            <>
+            <> 
               <div key={`cart-${productIdx}`} className={`relative flex flex-col last:pb-0 ${product?.price?.raw?.withTax > 0 ? 'py-4 sm:py-6 xl:py-8' : 'bg-green-100 items-center mb-2 py-2 sm:py-2 xl:py-2 px-4'}`} >
                 <div className='flex'>
                   <div className={`${product?.price?.raw?.withTax > 0 ? 'w-24 overflow-hidden h-36 sm:w-32' : 'w-16 overflow-hidden h-20 sm:w-16'} relative flex-shrink-0 rounded-xl bg-slate-100`}>
@@ -156,7 +156,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemC
                               </>
                             }
                           </div>
-                          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between w-full mt-3 sm:hidden gap-2">
+                          <div className="relative flex flex-col justify-between w-full gap-2 mt-3 sm:flex-row sm:items-center sm:hidden">
                             {!product?.isMembership && product?.price?.raw?.withTax > 0 ?
                               <div className='relative block text-left'>
                                 <div className='inline-block'>

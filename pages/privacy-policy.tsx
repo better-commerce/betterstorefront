@@ -11,7 +11,6 @@ import {
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import {
   Cookie,
@@ -28,6 +27,8 @@ import { getSecondsInMinutes, matchStrings } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { AnalyticsEventType } from '@components/services/analytics'
+import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 
 export async function getStaticProps({
@@ -37,7 +38,8 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   const config = { locale, locales }
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.PRIVACY_POLICY })
-  const pageProps = await props.getPageProps({ slug: PRIVACY_PAGE_DEFAULT_SLUG, cookies: { [Cookie.Key.LANGUAGE]: locale } })
+  const cookies = serverSideMicrositeCookies(locale!)
+  const pageProps = await props.getPageProps({ slug: PRIVACY_PAGE_DEFAULT_SLUG, cookies })
     
   const hostName = os.hostname()
   return {
@@ -61,7 +63,6 @@ function Privacy({
   deviceInfo,
 }: any) {
   const router = useRouter()
-  const { PageViewed } = EVENTS_MAP.EVENT_TYPES
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
@@ -90,23 +91,7 @@ function Privacy({
     }
   }, [currencyCode, isMobile])
 
-  useAnalytics(PageViewed, {
-    entity: JSON.stringify({
-      id: '',
-      name: pageContents?.metatitle,
-      metaTitle: pageContents?.metaTitle,
-      MetaKeywords: pageContents?.metaKeywords,
-      MetaDescription: pageContents?.metaDescription,
-      Slug: pageContents?.slug,
-      Title: pageContents?.metatitle,
-      ViewType: 'Page View',
-    }),
-    entityName: PAGE_TYPE,
-    pageTitle: pageContents?.metaTitle,
-    entityType: 'Page',
-    entityId: '',
-    eventType: 'PageViewed',
-  })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPE, })
 
   if (!pageContents) {
     return (

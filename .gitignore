@@ -51,7 +51,9 @@ tsconfig.tsbuildinfo
 # npm build output
 .env.dev
 .env.prod
+.vscode
 .vscode/settings.json
 .env-demostore
 .env-forever
 .env-tagdeal
+.scannerwork/

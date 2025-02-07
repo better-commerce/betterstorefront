@@ -4,7 +4,7 @@ import apiRouteGuard from '../../base/api-route-guard'
 
 const referralInfoApiMiddleware = async (req: any, res: any) => {
   try {
-    const response: any = await useReferralInfo()
+    const response: any = await useReferralInfo(req?.cookies)
     res.status(200).json({ referralDetails: response.result })
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

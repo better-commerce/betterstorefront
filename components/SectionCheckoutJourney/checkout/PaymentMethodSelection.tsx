@@ -28,9 +28,9 @@ import setSessionIdCookie from '@components/utils/setSessionId'
 import cartHandler from '@components/services/cart'
 import { Guid } from '@commerce/types'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { recordGA4Event } from '@components/services/analytics/ga4'
 import { useTranslation } from '@commerce/utils/use-translation'
 import SaveB2BQuote from './SaveB2BQuote'
+import useAnalytics from '@components/services/analytics/useAnalytics'
 
 interface PaymentMethodSelectionProps {
   readonly basket: any
@@ -56,6 +56,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     hideOverlayLoaderState,
     generateBasketId,
   }) => {
+    const { recordAnalytics } = useAnalytics()
     const translate = useTranslation()
     const { shippingAddress, billingAddress }: any = basket || EmptyObject
     const selectedAddress = { shippingAddress, billingAddress }
@@ -319,15 +320,6 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
       phoneNumber: user?.mobile || user?.telephone,
     }
 
-    const recordEvent = (event: { name: string; data: any }) => {
-      if (event?.name && typeof window !== undefined) {
-        recordGA4Event(window, event?.name, {
-          ...event?.data,
-          originalLocation: window.location.href,
-        })
-      }
-    }
-
     return paymentMethods ? (
       <>
         {paymentMethods?.length > 0 ? (
@@ -447,7 +439,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                       contactDetails={contactDetails}
                       isApplePayScriptLoaded={isApplePayScriptLoaded}
                       onScrollToSection={() => { }}
-                      recordEvent={recordEvent}
+                      recordAnalytics={recordAnalytics}
                     />
                     {(state?.isPaymentWidgetActive ||
                       !!state?.isPaymentIntent) && (

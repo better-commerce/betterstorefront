@@ -1,12 +1,8 @@
-import { REFERRAL_INFO_ENDPOINT } from "@components/utils/constants";
+import { EmptyObject, REFERRAL_INFO_ENDPOINT } from "@components/utils/constants";
 import fetcher from "@framework/fetcher";
 import { logError } from "@framework/utils/app-util";
 
-interface props{
-
-}
-
-export default async function useReferralInfo(){
+export default async function useReferralInfo(cookies = EmptyObject){
         const url = REFERRAL_INFO_ENDPOINT
         try {
             const response: any = await fetcher({
@@ -15,6 +11,7 @@ export default async function useReferralInfo(){
                 headers: {
                     DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
                 },
+                cookies
             })
             return response
         } catch (error: any) {

@@ -63,7 +63,7 @@ export abstract class BasePagePropsProvider {
         ...{
           configSettings:
             configSettings?.filter((x: any) =>
-              ['SearchSettings', 'B2BSettings', 'BasketSettings', 'ShippingSettings', 'DomainSettings', 'PasswordProtectionSettings', 'RegionalSettings'].includes(
+              ['SearchSettings', 'B2BSettings', 'BasketSettings', 'ShippingSettings', 'DomainSettings', 'PasswordProtectionSettings', 'RegionalSettings','OrderSettings', 'OmsSettings', 'FeatureToggleSettings'].includes(
                 x?.configType
               )
             ) || [],
@@ -87,7 +87,7 @@ export abstract class BasePagePropsProvider {
    * Returns the prop values of review summary from Redis cache.
    * @returns 
    */
-  protected async getReviewSummary() {
+  protected async getReviewSummary({ cookies = {} }) {
     const key = Redis.Key.REVIEW_SUMMARY
     const cachedData = await getDataByUID([
         key,
@@ -100,7 +100,7 @@ export abstract class BasePagePropsProvider {
                 baseUrl: REVIEW_BASE_URL,
                 url: `${REVIEW_SERVICE_BASE_API}/summary`,
                 method: 'post',
-                cookies: {},
+                cookies,
             })
             reviewSummaryUIDData = res?.Result
             await setData([{ key, value: reviewSummaryUIDData }])
@@ -165,7 +165,7 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getMembershipPlans({ cookies }: any) {
-    const key = Redis.Key.MEMBERSHIP_PLANS
+    const key = `${Redis.Key.MEMBERSHIP_PLANS}_${cookies?.Country}_${cookies?.Currency}`
     const cachedData = await getDataByUID([key,])
     let allMembershipsUIDData: any = parseDataValue(cachedData, key)
     if (!allMembershipsUIDData) {
@@ -196,14 +196,14 @@ export abstract class BasePagePropsProvider {
     return allMembershipsUIDData
   }
 
-  protected async getDefaultMembershipPlan(plans: Array<any>) {
+  protected async getDefaultMembershipPlan(plans: Array<any>, cookies = {}) {
     let defaultDisplayMembership: any = EmptyObject
     if (plans?.length) {
         const membershipPlan = plans?.sort((a: any, b: any) => (a?.price?.raw?.withTax || 0) - (b?.price?.raw?.withTax || 0))[0]
         if (membershipPlan) {
             const promoCode = membershipPlan?.membershipBenefits?.[0]?.code
             if (promoCode) {
-                const promotion = await commerce.getPromotion(promoCode)
+                const promotion = await commerce.getPromotion(promoCode, cookies)
                 defaultDisplayMembership = { membershipPromoDiscountPerc: stringToNumber(promotion?.result?.additionalInfo1), membershipPrice: membershipPlan?.price?.raw?.withTax }
             }
         }
@@ -212,8 +212,8 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getNavTree({ cookies }: any) {
-    return EmptyObject
-    /*const key = Redis.Key.NavTree
+    //return EmptyObject
+    const key = Redis.Key.NavTree
     const cachedData = await getDataByUID([
         key,
     ])
@@ -226,7 +226,7 @@ export abstract class BasePagePropsProvider {
         await setData([{ key, value: navTreeUIDData }])
       }
     }
-    return navTreeUIDData || EmptyObject*/
+    return navTreeUIDData || EmptyObject
   }
 
   protected async getKeywords({ cookies }: any) {

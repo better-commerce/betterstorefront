@@ -18,7 +18,7 @@ export const useConfig: any = () => {
         mtext: translate('label.myAccount.myReturnsText'),
         props: 'returns',
         head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
-        href: '/my-account/MyReturns',
+        href: '/my-account/returns',
         displayOrder: 3
       },
       {

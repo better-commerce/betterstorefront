@@ -74,17 +74,8 @@ export default function AvailableOffers({ currency, offers, key, product }: any)
         <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-black offer-heading-text">
           {translate('label.basket.moreOffersText')} <span className='sr-only'>{' '}of {product?.name}</span>
         </h2>
-        <Swiper
-          className="inline-flex mx-4 space-x-0 sm:mx-0 lg:mx-0 lg:space-x-0 lg:grid lg:grid-cols-4 lg:gap-x-0 h-60"
-          slidesPerView={1}
-          spaceBetween={2}
-          navigation={true}
-          loop={false}
-          breakpoints={{
-            640: { slidesPerView: 1.5 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 2 },
-          }}
+        <div
+          className="scroll-left-section"
         >
           {offers?.availablePromotions?.map((saving: any, sid: number) => {
             const percentagePrice = saving?.additionalInfo1
@@ -96,34 +87,53 @@ export default function AvailableOffers({ currency, offers, key, product }: any)
               (currency.raw.withTax * percentagePrice) / 100
             const percentagePay = currency.raw.withTax - percentDiscount
             return (
-              saving?.additionalInfo8 == 'False' && (
-                <SwiperSlide className="h-auto px-1 z-1 !w-48" key={`promo-${sid}-best-available-${saving?.code}`} >
-                  <div key={`promotions-${sid}-best-available-${saving?.code}`} className="relative inline-flex flex-col w-full text-left cursor-pointer h-28 rounded-xl group" onClick={() => setOfferData(saving)} >
-                    <div className="box-border h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3">
-                      <div className="flex">
-                        <BankOfferIcon />
-                        <div className="pl-2">
-                          <p className="font-semibold text-md dark:text-black">{translate('label.basket.moreOffersText')}</p>
-                          <p className="font-semibold text-left text-black uppercase font-10 break-word-text"> {saving.name} </p>
-                          {saving?.promoType == 1 && (
-                            <span>
-                              {saving.additionalInfo2 == 'False' || saving.additionalInfo2 == 'false' ? (
-                                <p className="text-xs font-medium text-black break-word-text"> {saving?.code} </p>
-                              ) : (
-                                <p className="font-medium text-left text-black font-12 break-word-text"> {saving?.code} </p>
-                              )}
-                            </span>
-                          )}
-                          <p className="mt-1 text-sm font-medium text-gray-700 font-10 break-word-text"> {saving?.additionalInfo6} </p>
+              <>
+                     {saving?.additionalInfo8 === 'False' && (
+                      <div
+                        className="h-auto px-1 z-1 !w-48 min-width-offer"
+                        key={`promo-${sid}-best-available-${saving?.code}`}
+                      >
+                        <div
+                          key={`promotions-${sid}-best-available-${saving?.code}`}
+                          className="relative inline-flex flex-col w-full text-left cursor-pointer min-h-28 rounded-xl group height-full-cls"
+                          onClick={() => setOfferData(saving)}
+                        >
+                          <div className="box-border h-full p-2 bg-transparent border cursor-pointer promo-bg sm:p-3 height-full-cls">
+                            <div className="flex">
+                              <BankOfferIcon />
+                              <div className="pl-2">
+                                <p className="font-semibold text-md dark:text-black">
+                                  {translate('label.basket.moreOffersText')}
+                                </p>
+                                <p className="font-semibold text-left text-black uppercase font-10 break-word-text">
+                                  {saving.name}
+                                </p>
+                                {saving?.promoType === 1 && (
+                                  <span>
+                                    {saving.additionalInfo2 === 'False' || saving.additionalInfo2 === 'false' ? (
+                                      <p className="text-xs font-medium text-black break-word-text">
+                                        {saving?.code}
+                                      </p>
+                                    ) : (
+                                      <p className="font-medium text-left text-black font-12 break-word-text">
+                                        {saving?.code}
+                                      </p>
+                                    )}
+                                  </span>
+                                )}
+                                <p className="mt-1 text-sm font-medium text-gray-700 font-10 break-word-text">
+                                  {saving?.additionalInfo6}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              )
+                    )}
+              </>
             )
           })}
-        </Swiper>
+        </div>
       </div>
     </section>
   )

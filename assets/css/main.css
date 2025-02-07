@@ -1013,13 +1013,22 @@ body {
 .label-confirmed {
   background: rgba(0, 137, 14, 0.12);
   border-radius: 2px;
+  border: 1px solid #00890e;
   color: #00890e;
   line-height: 1;
 }
 
+.label-progress {
+  background: #ffe5001f;
+  border-radius: 2px;
+  border: 1px solid #ce840f;
+  color: #ce840f;
+  line-height: 1;
+}
 .label-Cancelled {
   background: rgba(193, 0, 0, 0.12);
   border-radius: 2px;
+  border: 1px solid #e00000;
   color: #e00000;
   line-height: 1;
 }
@@ -1027,7 +1036,17 @@ body {
 .label-pending {
   background: rgba(255, 152, 0, 0.12);
   border-radius: 2px;
+  border: 1px solid #ff9800;
   color: #ff9800;
+  line-height: 1;
+}
+
+
+.label-blue {
+  background: rgba(0, 34, 255, 0.12);
+  border-radius: 2px;
+  border: 1px solid #0077ff;
+  color: #0077ff;
   line-height: 1;
 }
 
@@ -2002,23 +2021,23 @@ br {
 .max-list-panel::-webkit-scrollbar,
 .overflow-y-auto::-webkit-scrollbar,
 .max-basket-panel::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .max-list-panel::-webkit-scrollbar-track,
 .overflow-y-auto::-webkit-scrollbar-track,
 .max-basket-panel::-webkit-scrollbar-track {
-  border-radius: 24px;
-  background: rgba(33, 37, 48, 0.1);
+  border-radius: 2px;
+  background: #f3f3f3;
   opacity: 1;
 }
 
 .max-list-panel::-webkit-scrollbar-thumb,
 .overflow-y-auto::-webkit-scrollbar-thumb,
 .max-basket-panel::-webkit-scrollbar-thumb {
-  background: var(--teal-clr) !important;
-  width: 8px;
-  border-radius: 24px;
+  background: #dddddd !important;
+  width: 6px;
+  border-radius: 2px;
 }
 .max-compare-list-panel {
   max-height: 180px;
@@ -2546,6 +2565,8 @@ select {
   background-repeat: no-repeat;
 }
 
+[type='checkbox'][disabled] { border-color: transparent; background-color: gray; background-size: 100% 100%; background-position: center; background-repeat: no-repeat; }
+
 [type='checkbox']:checked {
   background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
 }
@@ -2575,6 +2596,11 @@ select {
 [type='checkbox']:checked:hover,[type='checkbox']:checked:focus,[type='radio']:checked:hover,[type='radio']:checked:focus {
   border-color: transparent;
   background-color: currentColor;
+}
+
+[type='checkbox'][disabled]:checked:hover {
+  border-color: transparent;
+  background-color: gray;
 }
 
 [type='checkbox']:indeterminate {
@@ -17243,7 +17269,7 @@ input[type=time]::-webkit-calendar-picker-indicator {
 .terms-text li > a {
   color: blue;
 }
-.terms-text td, th {
+.terms-text td, .terms-text th {
   border: 1px solid;
   padding: 5px;
 }
@@ -17456,7 +17482,7 @@ body:has(.px-4.pt-16.pb-24.bg-white.sm\:px-6.sm\:pt-24.lg\:px-8.lg\:py-32) {
   }
 }
 .header-space{
-  padding-top: 1.5rem !important;
+  padding-top: 1rem !important;
 }
 body:has(.engage-announcement-bar){
   .header-space {
@@ -17798,7 +17824,7 @@ body:has(.engage-announcement-bar){
 }
 
 .max-demo-list{
-  max-height: 35vh;
+  max-height: 30vh;
   overflow-y: auto;
 }
 .max-demo-list::-webkit-scrollbar {
@@ -17856,4 +17882,230 @@ line-height: 0 !important;
 @media screen and (max-width: 767px) {
   .menu-data {
     width: 400px !important  }
+}
+.border-l-sky-500 {
+    --tw-border-opacity: 1;
+    border-left-color: rgb(14 165 233 / var(--tw-border-opacity)) !important;
+}
+.loading-dots {
+  display: inline-block;
+  font-size: 20px;
+}
+
+.loading-dots .dot {
+  animation: blink 1.4s infinite both;
+}
+
+.loading-dots .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 20%, 50%, 80%, 100% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.3;
+  }
+  60% {
+    opacity: 0.5;
+  }
+}
+.max-line-panel{
+  max-height: 70vh;
+  min-height: 70vh;
+  overflow-y: auto;
+}
+
+.max-line-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.max-line-panel::-webkit-scrollbar-track {
+  background: #fff;
+  opacity: 1;
+}
+
+.max-line-panel::-webkit-scrollbar-thumb {
+  background: #d3d3d36e !important;
+  width: 6px;
+  border-radius: 6px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+.kit-basket {
+  position: fixed;
+  top: 90px;
+  z-index: 9;
+  background: #ffffff;
+  right: 0;
+  width: 24%;
+}
+.kit-basket-height {
+  height: calc(100vh - 90px);
+}
+
+.btn-primary-green {
+    background: #075d2b;
+    color: #FFFFFF;
+    font-size: var(--font-14);
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    min-height: 47px;
+    box-sizing: border-box;
+}
+
+.sprite-flag {
+	background: url(/images/flag-v1.png) no-repeat;
+	background-repeat: no-repeat;
+	position: relative;
+	display: inline-block;
+  top: 4px;
+}
+
+.flag-cyprus,.flag-cy{
+  background-position: -13px -12px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-czech,.flag-cs{
+  background-position: -51px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+
+}
+.flag-danish, .flag-da{
+  background-position: -93px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+
+}
+.flag-dutch, .flag-nl{
+  background-position: -130px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-english,
+.flag-en{
+  background-position: -169px -14px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-finnish, .flag-fi{
+  background-position: -208px -13px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-french, .flag-fr{
+  background-position: -246px -12px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-german, .flag-de{
+  background-position: -14px -61px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-greek, .flag-gr{
+  background-position:-53px -61px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-italian,.flag-it{
+  background-position: -93px -60px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-norwegian,.flag-nn{
+  background-position: -131px -60px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-polish,.flag-pl{
+  background-position: -171px -61px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-portuguese, .flag-pt{
+  background-position: -209px -59px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-romania,.flag-ro{
+  background-position:-249px -60px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-russian, .flag-ru{
+  background-position: -16px -108px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-slovak, .flag-sk{
+  background-position:-57px -109px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-spanish,.flag-es{
+  background-position: -94px -108px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
+}
+.flag-swedish, .flag-sv{
+  background-position:-134px -108px;
+	width: 28px;
+	height: 28px;
+  border-radius: 28px;
+  border: 1px solid #dddddd;
 }

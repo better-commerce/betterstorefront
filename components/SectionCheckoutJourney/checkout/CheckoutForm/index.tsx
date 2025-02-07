@@ -19,8 +19,6 @@ import { useShippingFormConfig, useShippingSchema } from './config'
 import Payments from './Payments'
 import Router from 'next/router'
 import { asyncHandler } from '@components/account/Address/AddressBook'
-import eventDispatcher from '@components/services/analytics/eventDispatcher'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import PaymentWidget from '@components/SectionCheckoutJourney/checkout/PaymentWidget'
 import { AddressType , AlertType } from '@framework/utils/enums'
@@ -36,7 +34,6 @@ import useDataSubmit from '@commerce/utils/use-data-submit'
 import NewAddressModal from './NewAddressModal'
 import { Guid } from '@commerce/types'
 import { Cookie } from '@framework/utils/constants'
-import { DEFAULT_COUNTRY } from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import { useTranslation } from '@commerce/utils/use-translation'
 
 const Spinner = () => {
@@ -259,9 +256,6 @@ export default function CheckoutForm({
   const [countries, setCountries] = useState<any>(null)
   const { createAddress, updateAddress: updateAddressHandler } = asyncHandler()
 
-  const { CheckoutConfirmation } = EVENTS_MAP.EVENT_TYPES
-  const { Order } = EVENTS_MAP.ENTITY_TYPES
-
   const [isNewAddressModalOpen, setIsNewAddressModalOpen] = useState(false)
   const [selectedAddress, setSelectedAddress] = useState()
   const handleOpenNewAddressModal = () => {
@@ -335,7 +329,7 @@ export default function CheckoutForm({
     const newValues = {
       ...values,
       userId: getUserId(),
-      country: data?.country?.split('&')?.[1] || data?.country || DEFAULT_COUNTRY,
+      country: data?.country?.split('&')?.[1] || data?.country,
       countryCode: data?.country?.includes('&') ? data.country.split('&')[0] : data?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY
     }
     if (data?.id == 0) {
@@ -452,7 +446,7 @@ export default function CheckoutForm({
   const paymentData = async () => {
     const response = await axios.post(NEXT_PAYMENT_METHODS, {
       currencyCode: cartItems.baseCurrency,
-      countryCode: state.deliveryMethod.twoLetterIsoCode || 'GB',
+      countryCode: state.deliveryMethod.twoLetterIsoCode || BETTERCOMMERCE_DEFAULT_COUNTRY,
       basketId: basketId,
     })
     return response

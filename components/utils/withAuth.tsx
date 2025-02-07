@@ -10,7 +10,10 @@ const withAuth = (WrappedComponent: any, redirect = true) => {
 
       // If there is no access token we redirect to "/" page.
       if (!accessToken && redirect) {
-        Router.replace('/')
+        let redirectUrl = new URL(location?.origin + '/my-account/login');
+        const referralPath = location?.href;
+        redirectUrl?.searchParams?.set('referral', referralPath)
+        Router?.replace(redirectUrl||'/')
         return null
       }
 
