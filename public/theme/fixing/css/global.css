@@ -1811,6 +1811,8 @@ p {
   }
   .icon-div-menu img{
     filter: invert(0)  !important;
+  }.search-fixed .icon-div-menu img{
+    filter: invert(0)  !important;
   }
   .icon-div-menu svg{
    color:  #000000 !important;
