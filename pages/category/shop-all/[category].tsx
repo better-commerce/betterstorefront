@@ -567,7 +567,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <section className="main-section dark:bg-white">
+      <section className="main-section fixing-main-section dark:bg-white">
         <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
           <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
             <li className='flex items-center text-10-mob sm:text-sm'>

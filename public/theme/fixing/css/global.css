@@ -1906,7 +1906,9 @@ body .ttnc-ButtonPrimary{
   filter: invert(0) brightness(2);
 }
 
-
+.fixing-main-section{
+  padding-top: 1.5rem !important;
+}
 .image-gallery-icon {
 	color: #fff;
 	transition: all .3s ease-out;

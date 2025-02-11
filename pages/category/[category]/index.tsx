@@ -553,7 +553,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <section className="main-section dark:bg-white">
+      <section className="main-section fixing-main-section dark:bg-white">
         <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
           {category?.breadCrumbs && (
             <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />

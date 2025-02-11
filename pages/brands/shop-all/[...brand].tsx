@@ -459,7 +459,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
-      <div className="container pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
+      <div className="container fixing-main-section pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2">
         <div className="max-w-screen-sm">
           <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
             <li className='flex items-center text-10-mob sm:text-sm'>
