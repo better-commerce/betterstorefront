@@ -1897,13 +1897,13 @@ body .ttnc-ButtonPrimary{
   color: #000 !important;
 }
 .checkout-header{
-  background: #5d636c !important;
+  background: #FFFFFF !important;
 }
 .checkout-header h1{
-  color: #fff  !important;
+  color: #000000  !important;
 }
 .checkout-header i{
-  filter: invert(1) brightness(2);
+  filter: invert(0) brightness(2);
 }
 
 
@@ -2843,4 +2843,10 @@ body .round-md-btn, .btn-radius-sm{
 }
 .navigation-ul.nav-ul-li-height li .height-div-nav{
   height: 3rem !important;
+}
+
+@media (min-width: 640px) {
+  .theme-top {
+        padding-top: 7rem !important;
+    }
 }
