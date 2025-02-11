@@ -5,7 +5,8 @@ import {
   ChevronRightIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { motion, MotionConfig } from "framer-motion";
+import { AnimatePresence } from "motion/react"
 import Image from "next/image";
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";

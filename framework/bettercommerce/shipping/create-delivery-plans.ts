@@ -1,6 +1,6 @@
 import { BASKET_ENDPOINT } from '@components/utils/constants'
 import fetcher from '../fetcher'
-import { RequestMethod } from '@better-commerce/bc-payments-sdk/dist/constants'
+import { RequestMethod } from 'bc-payments-sdk/dist/constants'
 import { logError } from '@framework/utils/app-util'
 
 interface Props {

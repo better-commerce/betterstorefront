@@ -14,7 +14,7 @@ import { EmptyString } from '@components/utils/constants'
 import {
   PaymentMethodType,
   PaymentMethodTypeId,
-} from '@better-commerce/bc-payments-sdk'
+} from 'bc-payments-sdk'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { CARD_PAYMENT_3DS_ENABLED } from '@components/SectionCheckoutJourney/checkout/CheckoutForm/PaymentButton/CheckoutPaymentButton'

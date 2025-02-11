@@ -1,4 +1,4 @@
-import { getAllRecentlyViewedProductsOperation } from '@commerce/types/product'
+import type { getAllRecentlyViewedProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import fetcher from '../../fetcher'
 import qs from 'qs'

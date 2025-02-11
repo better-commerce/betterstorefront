@@ -7,7 +7,7 @@ import { LOG_REQUEST_OPTIONS } from '@components/utils/payment-constants'
 import {
   BCEnvironment,
   BetterCommerceOperation,
-} from '@better-commerce/bc-payments-sdk'
+} from 'bc-payments-sdk'
 import { AUTH_URL, BASE_URL, CLIENT_ID, SHARED_SECRET, } from '@framework/utils/constants'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, EmptyString } from '@components/utils/constants'
 
