@@ -79,6 +79,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
+  const [activeTab, setActiveTab] = useState("specialOffers");
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
   let Page_Slug = HOME_PAGE_SLUG;
@@ -175,6 +176,88 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {CURRENT_THEME == 'fixing' &&
+          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
+              {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
+                <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow ${fIdx == 0 ? 'bg-gray-200 text-black' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                  <div className='flex flex-col col-span-7 gap-5'>
+                    <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingoffers_title}</h2>
+                    <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
+                    <Link href={fo?.fixingoffers_buttonlink} legacyBehavior passHref>
+                      <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary'>{fo?.fixingoffers_buttontitle}</a>
+                    </Link>
+                  </div>
+                  <div className='col-span-5'>
+                    <img src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingoffers_title} className='object-cover w-full h-56' />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className='flex flex-col justify-center mb-6 text-center sm:mb-10'>
+              {pageContents?.fixingheading?.length > 0 && pageContents?.fixingheading?.map((heading: any, hIdx: number) => (
+                <div key={`heading-${hIdx}`} className='flex flex-col justify-center gap-4 mt-6 sm:mt-10'>
+                  <h2 className='text-3xl font-semibold text-black uppercase'>{heading?.fixingheading_title}</h2>
+                  <div className='mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12' dangerouslySetInnerHTML={{ __html: heading?.fixingheading_description }}></div>
+                </div>
+              ))}
+            </div>
+            {/* Tabs */}
+            <div className="flex justify-center gap-6">
+              <button
+                className={`px-4 py-2 text-sm uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
+                  }`}
+                onClick={() => setActiveTab("specialOffers")}
+              >
+                Special Offers
+              </button>
+              <button
+                className={`px-4 py-2 text-sm uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
+                  }`}
+                onClick={() => setActiveTab("newProducts")}
+              >
+                New Products
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
+              <SectionSliderProductCard
+                deviceInfo={deviceInfo}
+                data={pageContents?.specialofferproducts}
+                heading="Special Offers"
+                featureToggle={featureToggle}
+                defaultDisplayMembership={defaultDisplayMembership}
+              />
+            )}
+
+            {activeTab === "newProducts" && pageContents?.newproducts?.length > 0 && (
+              <SectionSliderProductCard
+                deviceInfo={deviceInfo}
+                data={pageContents?.newproducts}
+                heading="New Products"
+                featureToggle={featureToggle}
+                defaultDisplayMembership={defaultDisplayMembership}
+              />
+            )}
+            <div className='grid grid-cols-1 gap-6 my-6 sm:grid-cols-1 sm:my-10'>
+              {pageContents?.fixingdelivery?.length > 0 && pageContents?.fixingdelivery?.map((fo: any, fIdx: number) => (
+                <div className={`grid items-center relative justify-center grid-cols-12 gap-10 p-4 rounded shadow ${fIdx == 0 ? 'bg-gray-200 text-white' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                  <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6'>
+                    <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingdelivery_title}</h2>
+                    <p className='text-sm font-normal'>{fo?.fixingdelivery_shortdescription}</p>
+                    <Link href={fo?.fixingdelivery_buttonlink} legacyBehavior passHref>
+                      <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
+                    </Link>
+                  </div>
+                  <div className='absolute top-0 left-0 z-0 col-span-12'>
+                    <img src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingdelivery_title} className='object-cover object-right w-full h-auto invert-1' />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
         {featureToggle?.features?.enableCustomHomeWidget &&
           <>
             {pageContents?.brandlist?.length > 0 && <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />}
