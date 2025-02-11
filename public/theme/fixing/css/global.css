@@ -2852,3 +2852,6 @@ body .round-md-btn, .btn-radius-sm{
         padding-top: 7rem !important;
     }
 }
+.z-index-9-sec{
+  z-index: 9  !important;
+}

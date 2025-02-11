@@ -81,6 +81,7 @@ const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = fa
         </span>
         {isCheckboxChecked && !isCheckboxTickDisabled && (
           <div
+            className='z-index-9-sec'
             style={{
               content: '',
               float: 'left',
