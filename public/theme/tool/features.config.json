@@ -23,7 +23,8 @@
     "enableHorizontalFilter": true,
     "enableCustomHomeWidget":true,
     "enableFullBanner":false,
-    "enableCustomToolWidget": true
+    "enableCustomToolWidget": true,
+    "enableSeprateMenu": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

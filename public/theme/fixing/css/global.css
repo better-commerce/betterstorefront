@@ -84,6 +84,7 @@
   --black-clr: #2A2A2B;
   --light-green: #B1CBC0;
   --deep-green: #5F7970;
+  --deep-gray: #ecedf0;
   /* secondary color variable */
 
   /* button primary variable */
@@ -1789,7 +1790,7 @@ p {
     border-radius: 6px;
   }
   .bg-header-clr{
-    background: var(--brand-white) !important;
+    background: var(--deep-gray) !important;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
     border-bottom: 0px !important;
   
@@ -1798,7 +1799,7 @@ p {
     color: #FFFFFF !important;
   }
   .bg-header-clr .header-nav-font{
-    color: #000000;
+    color: #ffff;
     text-transform: uppercase !important;
   }
   .group:hover .bg-header-clr .header-nav-font{
@@ -1896,7 +1897,7 @@ body .ttnc-ButtonPrimary{
   color: #000 !important;
 }
 .checkout-header{
-  background: #000 !important;
+  background: #5d636c !important;
 }
 .checkout-header h1{
   color: #fff  !important;
@@ -2824,4 +2825,22 @@ body .round-md-btn, .btn-radius-sm{
 }
 .height-full-cls{
   height: 100%;;
+}
+.search-icon-box button .search-icon-div{
+    display: flex;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius:8px !important;
+    justify-content: flex-start;
+}
+.search-icon-box button .search-icon-div img{
+  margin: 0 10px;
+}
+.bg-header-nav-clr{
+  background: #5d636c;
+}
+.navigation-ul.nav-ul-li-height li .height-div-nav{
+  height: 3rem !important;
 }
