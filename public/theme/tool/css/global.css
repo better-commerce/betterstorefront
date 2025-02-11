@@ -1821,8 +1821,15 @@ p {
     filter: invert(0)  !important;
   }
   .LangDropdown span{
-    color: #fff !important;
+    color: #000000 !important;
   }
+  .LangDropdown button span{
+    color: #ffffff !important;
+  }
+
+button.icon-grp .header-dark{
+  color: #000000 !important;
+}
   .header-dark{
    color: #FFFFFF !important;
   }
