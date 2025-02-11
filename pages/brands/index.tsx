@@ -57,27 +57,27 @@ function BrandsPage({ brands }: any) {
     }
 
     const filteredData = data.map((item: any) => {
-      const matchedResults = item.results.filter((brand: any) =>
-        brand.manufacturerName.toLowerCase().includes(value.toLowerCase())
+      const matchedResults = item?.results?.filter((brand: any) =>
+        brand?.manufacturerName?.toLowerCase()?.includes(value?.toLowerCase())
       )
       return {
-        title: item.title,
+        title: item?.title,
         results: matchedResults,
       }
-    }).filter((item: any) => item.results.length > 0)
+    }).filter((item: any) => item?.results?.length > 0)
 
     setNormalizedBrands(filteredData)
   }
 
-  useAnalytics(AnalyticsEventType.ALL_BRANDS_VIEWED, { })
+  useAnalytics(AnalyticsEventType.ALL_BRANDS_VIEWED, {})
 
   function handleScrollView(letter: any) {
     letter?.preventDefault()
-    window.location.href = `#${letter.target.text?.toUpperCase()}`
+    window.location.href = `#${letter?.target?.text?.toUpperCase()}`
     window.scrollBy(0, -100)
   }
 
-  const totalResults = normalizedBrands.map((i: any) => i.results).flat().length
+  const totalResults = normalizedBrands.map((i: any) => i?.results)?.flat()?.length
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -103,22 +103,22 @@ function BrandsPage({ brands }: any) {
               {translate('common.label.brandsText')}
             </h1>
             <div className="flex flex-wrap items-center justify-center w-full py-5">
-              {ALPHABET.split('').map((letter: any, key: number) => {
-                const brandExists = !!normalizedBrands.find((brand: any) => brand.title.toUpperCase() === letter.toUpperCase())
+              {ALPHABET?.split('')?.map((letter: any, key: number) => {
+                const brandExists = normalizedBrands.some((brand: any) => brand?.title.toUpperCase() === letter.toUpperCase() && brand?.results.some((b: any) => b?.isActive));
                 if (brandExists) {
                   return (
                     <div className="flex" key={`brand-letter-${key}`}>
-                      <a onClick={(letter: any) => { handleScrollView(letter) }} className="grid items-center justify-center w-8 h-8 mt-1 mr-1 text-sm font-semibold text-gray-900 border cursor-pointer sm:w-12 sm:h-12 hover:bg-slate-600 rounded-xl bg-slate-50 border-slate-400 hover:text-white sm:mr-3 sm:mt-5 sm:text-lg" >
+                      <a onClick={(letter: any) => { handleScrollView(letter); }} className="grid items-center justify-center w-8 h-8 mt-1 mr-1 text-sm font-semibold text-gray-900 border cursor-pointer sm:w-12 sm:h-12 hover:bg-slate-600 rounded-xl bg-slate-50 border-slate-400 hover:text-white sm:mr-3 sm:mt-5 sm:text-lg" >
                         {letter.toUpperCase()}
                       </a>
                     </div>
-                  )
+                  );
                 }
                 return (
                   <span key={key} className="grid items-center justify-center w-8 h-8 mt-1 mr-1 text-sm font-semibold border cursor-not-allowed sm:w-12 sm:h-12 text-slate-300 hover:bg-slate-100 rounded-xl bg-slate-100 border-slate-200 sm:mr-3 sm:mt-5 sm:text-lg" >
                     {letter.toUpperCase()}
                   </span>
-                )
+                );
               })}
             </div>
             <div className="flex items-center justify-center w-full py-5">
@@ -134,18 +134,17 @@ function BrandsPage({ brands }: any) {
             </div>
           </div>
           <div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
-            {normalizedBrands.map((brand: any, idx: number) => (
+            {normalizedBrands?.filter((brand: any) => brand?.results?.some((b: any) => b?.isActive))?.map((brand: any, idx: number) => (
               <div key={`brands-${idx}`} className="flex flex-col mb-6 sm:mb-6">
-                <h2 id={brand.title.toUpperCase()} className="pb-3 mb-3 text-2xl font-semibold text-gray-900 border-b-2 sm:text-5xl border-sky-700">
-                  {brand.title.toUpperCase()}
+                <h2 id={brand?.title?.toUpperCase()} className="pb-3 mb-3 text-2xl font-semibold text-gray-900 border-b-2 sm:text-5xl border-sky-700" >
+                  {brand?.title?.toUpperCase()}
                 </h2>
                 <div className="flex flex-col gap-3">
-                  {brand.results.map((brands: any, brandIdx: number) => (
-                    brands?.isActive &&
-                    <div key={`brand-list-${brandIdx}`} className="flex w-full text-gray-900 sm:inline-flex" >
-                      <Link passHref href={brands.link}>
+                  {brand?.results?.filter((brands: any) => brands?.isActive)?.map((brands: any, brandIdx: number) => (
+                    <div key={`brand-list-${brandIdx}`} className="flex w-full text-gray-900 sm:inline-flex">
+                      <Link passHref href={brands?.link}>
                         <span className="w-full text-sm capitalize cursor-pointer sm:text-lg hover:text-sky-700 hover:underline hover:font-medium">
-                          {brands?.manufacturerName.toLowerCase()}
+                          {brands?.manufacturerName?.toLowerCase()}
                         </span>
                       </Link>
                     </div>
@@ -160,12 +159,7 @@ function BrandsPage({ brands }: any) {
   )
 }
 
-export async function getStaticProps({
-  params,
-  locale,
-  locales,
-  preview,
-}: GetStaticPropsContext) {
+export async function getStaticProps({ params, locale, locales, preview, }: GetStaticPropsContext) {
   const cachedDataUID = {
     brandsUID: Redis.Key.Brands.Brand,
   }
@@ -174,7 +168,7 @@ export async function getStaticProps({
   ])
   let brandsUIDData: any = parseDataValue(cachedData, cachedDataUID.brandsUID)
   if (!brandsUIDData) {
-    brandsUIDData = await getBrands({},{ [Cookie.Key.LANGUAGE]: locale })
+    brandsUIDData = await getBrands({}, { [Cookie.Key.LANGUAGE]: locale })
     await setData([{ key: cachedDataUID.brandsUID, value: brandsUIDData }])
   }
 
