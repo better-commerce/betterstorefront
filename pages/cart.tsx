@@ -60,6 +60,18 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       )?.value || ''
   )
 
+  let primaryPool = config?.configSettings
+    ?.find((x: any) => x.configType === 'CatalogSettings')
+    ?.configKeys?.find(
+      (x: any) => x.key === "CatalogSettings.PrimaryInventoryPoolCode"
+    )?.value || 'PrimaryInvPool'
+
+  let secInventoryPool = config?.configSettings
+    ?.find((x: any) => x.configType === 'CatalogSettings')
+    ?.configKeys?.find(
+      (x: any) => x.key === "CatalogSettings.SecondaryInventoryPoolCode"
+    )?.value || 'PrimaryInvPool'
+
   const { setCartItems, cartItems, resetKitCart, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar, setOverlayLoaderState } = useUI()
   const { addToCart, getCart } = cartHandler()
   const translate = useTranslation()
@@ -410,8 +422,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       AllowPartialLineDelivery: true,
       PickupStoreId: Guid.empty,
       RefStoreId: null,
-      PrimaryInventoryPool: 'PrimaryInvPool',
-      SecondaryInventoryPool: 'PrimaryInvPool',
+      PrimaryInventoryPool: primaryPool,
+      SecondaryInventoryPool: secInventoryPool,
       IsEditOrder: false,
       OrderNo: null,
       DeliveryCenter: null,
@@ -440,8 +452,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       AllowPartialLineDelivery: false,
       PickupStoreId: Guid.empty,
       RefStoreId: null,
-      PrimaryInventoryPool: 'PrimaryInvPool',
-      SecondaryInventoryPool: 'PrimaryInvPool',
+      PrimaryInventoryPool: primaryPool,
+      SecondaryInventoryPool: secInventoryPool,
       IsEditOrder: false,
       OrderNo: null,
       DeliveryCenter: null,
