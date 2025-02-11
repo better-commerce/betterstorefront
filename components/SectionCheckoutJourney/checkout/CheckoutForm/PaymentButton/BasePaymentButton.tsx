@@ -15,7 +15,7 @@ import {
 import { getOrderId, getOrderInfo, parsePaymentMethods } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
-import { IPaymentInfo, PaymentStatus } from '@better-commerce/bc-payments-sdk'
+import { IPaymentInfo, PaymentStatus } from 'bc-payments-sdk'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export interface IPaymentButtonProps {

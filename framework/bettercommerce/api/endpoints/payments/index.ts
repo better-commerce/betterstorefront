@@ -1,6 +1,6 @@
 // Package Imports
 import store from 'store'
-import { getGatewayName } from '@better-commerce/bc-payments-sdk'
+import { getGatewayName } from 'bc-payments-sdk'
 
 // Payment Hooks
 import useUpdatePaymentResponse from './update-payment-response'

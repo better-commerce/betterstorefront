@@ -6,7 +6,7 @@ import { decipherPayload } from './app-util'
 import {
   PaymentMethodType,
   PaymentMethodTypeId,
-} from '@better-commerce/bc-payments-sdk'
+} from 'bc-payments-sdk'
 import {
   ENABLE_SECURED_PAYMENT_PAYLOAD,
   NEXT_CANCEL_ORDER,

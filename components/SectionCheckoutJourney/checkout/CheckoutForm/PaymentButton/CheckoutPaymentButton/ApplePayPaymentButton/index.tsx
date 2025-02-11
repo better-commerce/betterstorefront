@@ -6,7 +6,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
 import { withTranslation } from 'react-i18next'
-import { CheckoutPaymentSourceType, CheckoutPaymentType, PaymentMethodType, PaymentMethodTypeId } from '@better-commerce/bc-payments-sdk'
+import { CheckoutPaymentSourceType, CheckoutPaymentType, PaymentMethodType, PaymentMethodTypeId } from 'bc-payments-sdk'
 
 // Component Imports
 import { CARD_PAYMENT_3DS_ENABLED } from '..'

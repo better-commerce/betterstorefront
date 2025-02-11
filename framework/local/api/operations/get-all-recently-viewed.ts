@@ -1,4 +1,5 @@
-import { Product, getAllRecentlyViewedProductsOperation } from '@commerce/types/product'
+import { Product } from '@commerce/types/product'
+import type { getAllRecentlyViewedProductsOperation } from '@commerce/types/product'
 import { GetAllProductsOperation } from '@commerce/types/product'
 import type { OperationContext } from '@commerce/api/operations'
 import type { BetterCommerceConfig, Provider } from '../index'

@@ -5,7 +5,7 @@ import React, { useState, useEffect, useReducer, memo } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { PaymentMethodType } from 'bc-payments-sdk'
 
 // Component Imports
 import { LoadingDots, useUI } from '@components/ui'

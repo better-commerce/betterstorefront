@@ -3,7 +3,7 @@ import Router from 'next/router'
 import Script from 'next/script'
 import Cookies from 'js-cookie'
 import { withTranslation } from 'react-i18next'
-import { KlarnaOrderLine } from '@better-commerce/bc-payments-sdk'
+import { KlarnaOrderLine } from 'bc-payments-sdk'
 
 // Component Imports
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
@@ -11,7 +11,7 @@ import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
 import { Cookie } from '@framework/utils/constants'
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { PaymentMethodType } from 'bc-payments-sdk'
 import { Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo, sanitizeAmount, } from '@framework/utils/app-util'
 import { createOneTimePaymentOrder, initPayment, } from '@framework/utils/payment-util'

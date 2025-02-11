@@ -1,4 +1,4 @@
-import { IPaymentInfo } from '@better-commerce/bc-payments-sdk'
+import { IPaymentInfo } from 'bc-payments-sdk'
 
 export interface IGatewayPageProps {
   readonly gateway: string

@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 
 // Package Imports
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { PaymentMethodType } from 'bc-payments-sdk'
 
 // Component Imports
 import CODPaymentButton from './CODPaymentButton'
