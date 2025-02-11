@@ -203,16 +203,16 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               ))}
             </div>
             {/* Tabs */}
-            <div className="flex justify-center gap-6">
+            <div className="flex justify-center gap-6 mb-4 sm:mb-10">
               <button
-                className={`px-4 py-2 text-sm uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
+                className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
                   }`}
                 onClick={() => setActiveTab("specialOffers")}
               >
                 Special Offers
               </button>
               <button
-                className={`px-4 py-2 text-sm uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
+                className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
                   }`}
                 onClick={() => setActiveTab("newProducts")}
               >
@@ -225,7 +225,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               <SectionSliderProductCard
                 deviceInfo={deviceInfo}
                 data={pageContents?.specialofferproducts}
-                heading="Special Offers"
+                heading={pageContents?.offerproductheading}
                 featureToggle={featureToggle}
                 defaultDisplayMembership={defaultDisplayMembership}
               />
@@ -235,7 +235,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               <SectionSliderProductCard
                 deviceInfo={deviceInfo}
                 data={pageContents?.newproducts}
-                heading="New Products"
+                heading={pageContents?.newproductheading}
                 featureToggle={featureToggle}
                 defaultDisplayMembership={defaultDisplayMembership}
               />
