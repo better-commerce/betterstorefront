@@ -18109,3 +18109,16 @@ input[type=number] {
   border-radius: 28px;
   border: 1px solid #dddddd;
 }
+
+.pdp-right-section .price{
+  font-size: 28px !important;
+  color: #000000 !important;
+}
+
+.pdp-right-section .list-price{
+  font-size: 20px !important;
+}
+
+.pdp-right-section .ex-vat-text{
+  font-size: 15px !important;
+}

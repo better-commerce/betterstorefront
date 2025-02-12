@@ -44,7 +44,7 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
             close();
             const newUrl = getLocaleUrl(language)
             window.location.href = newUrl
-          }} className={`flex items-center mb-1 px-2 pb-2 pt-0.5 -m-3 transition border duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${isActiveLocale(language) ? "bg-sky-100 dark:bg-gray-700 border-sky-300" : "bg-transparent border-white"}`}
+          }} className={`flex items-center mb-1 px-2 pb-2 pt-0.5 -m-3 transition border duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:hover:bg-sky-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${isActiveLocale(language) ? "bg-sky-100 dark:bg-sky-100 border-sky-300" : "bg-transparent dark:bg-white border-white"}`}
           >
             <div className="flex items-center justify-start gap-1 text-sm font-medium text-black dark:text-gray-400">
               <span className={`sprite-flag flag-${language?.languageCode?.toLowerCase()}`}></span>
@@ -78,7 +78,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
       <div className="grid grid-cols-2 gap-7">
         {currencies?.map((currency, index) => {
           return (
-            <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 border focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-sky-100 dark:bg-gray-700 border-sky-300 cursor-not-allowed select-none' : 'border-white'} `}>
+            <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:text-black focus:outline-none focus-visible:ring focus-visible:ring-orange-500 border focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-sky-100 dark:bg-sky-100 border-sky-300 dark:border-sky-300 cursor-not-allowed select-none' : 'border-white dark:bg-white'} `}>
               <>
                 <div className="flex items-center justify-start gap-1">
                   <span className='flex items-center justify-center text-[16px] font-semibold text-black'>{currency?.currencySymbol}</span>
@@ -104,8 +104,8 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className={`absolute z-20 w-96 mt-3.5 lang-width right-0 ${panelClassName}`} >
-                <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
-                  <h3 className="text-lg font-semibold text-black mb-7">{translateText('label.navBar.selectCurrencyText')}</h3>
+                <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-white ring-1 ring-black ring-opacity-5">
+                  <h3 className="text-lg font-semibold text-black dark:text-black mb-7">{translateText('label.navBar.selectCurrencyText')}</h3>
                   <Currencies close={close} />
                 </div>
               </Popover.Panel>
@@ -121,7 +121,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className={`absolute z-20 w-[600px] mt-3.5 lang-width right-0 ${panelClassName}`} >
-                <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-neutral-800 ring-1 ring-black ring-opacity-5">
+                <div className="p-3 bg-white shadow-lg sm:p-6 rounded-2xl dark:bg-white ring-1 ring-black ring-opacity-5">
                   <h3 className="mb-6 text-lg font-semibold text-black">{translateText('label.navBar.selectLanguageText')}</h3>
                   <Languages close={close} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} languages={languages} />
                 </div>
