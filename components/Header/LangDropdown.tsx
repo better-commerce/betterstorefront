@@ -42,6 +42,8 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
             Cookies.set(Cookie.Key.LANGUAGE, language?.languageCulture)
             Cookies.set(Cookie.Key.COUNTRY, language?.languageCulture?.substring(3))
             close();
+            const newUrl = getLocaleUrl(language)
+            window.location.href = newUrl
           }} className={`flex items-center mb-1 px-2 pb-2 pt-0.5 -m-3 transition border duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${isActiveLocale(language) ? "bg-sky-100 dark:bg-gray-700 border-sky-300" : "bg-transparent border-white"}`}
           >
             <div className="flex items-center justify-start gap-1 text-sm font-medium text-black dark:text-gray-400">
