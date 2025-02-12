@@ -726,10 +726,16 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           delete deliveryPlans[i].deliveryPlanNo
         }
 
+        // Insert `poolCode` in `deliveryPlans`
+        const updatedDeliveryPlans = deliveryPlans?.map((plan: any) => ({
+          ...plan,
+          poolCode: plan?.items?.[0]?.poolCode,
+        }))
+
         // Update delivery method
         const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
           id: basketId,
-          data: deliveryPlans || [],
+          data: updatedDeliveryPlans || [],
         })
       }
     }
