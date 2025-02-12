@@ -43,6 +43,7 @@ import { round, sortBy } from 'lodash'
 import { groupCartItemsById } from '@components/utils/cart'
 import CartSideBarProductCard from '@components/CartSideBarProductCard'
 import BasketGroupProduct from '@components/cart/BasketGroupProduct'
+import { ProductType } from '@framework/utils/enums'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const router = useRouter()
@@ -816,7 +817,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         soldOutMessage={soldOutMessage}
                         getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                       />
-                      {product.children?.map(
+                      {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                         (child: any, idx: number) => (
                           <CartSideBarProductCard
                             product={child}
@@ -973,7 +974,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 soldOutMessage={soldOutMessage}
                                 getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                               />
-                              {product.children?.map((child: any, idx: number) => (
+                              {product?.itemType !== ProductType.BUNDLE && product.children?.map((child: any, idx: number) => (
                                 <CartSideBarProductCard
                                   product={child}
                                   css={css}
