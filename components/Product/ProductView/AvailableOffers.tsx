@@ -90,11 +90,11 @@ export default function AvailableOffers({ currency, offers, key }: any) {
             const percentagePrice = saving?.additionalInfo1
             //AMOUNT DISCOUNT CALCULATION
             const amountPrice = saving?.additionalInfo1
-            const amountDiscount = currency.raw.withTax - amountPrice
+            const amountDiscount = currency?.raw.withTax - amountPrice
             //PERCENTAGE DISCOUNT CALCULATION
             const percentDiscount =
-              (currency.raw.withTax * percentagePrice) / 100
-            const percentagePay = currency.raw.withTax - percentDiscount
+              (currency?.raw.withTax * percentagePrice) / 100
+            const percentagePay = currency?.raw.withTax - percentDiscount
             return (
               saving?.additionalInfo8 == 'False' && (
                 <SwiperSlide
