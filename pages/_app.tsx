@@ -187,10 +187,18 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') {
-      if (typeof window !== 'undefined' && window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-        for (const key in window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-          // Replace the hook methods with no-op functions
-          window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = () => {}
+      if (typeof window !== 'undefined' && window.document) {
+        // Ensure the React Developer Tools global hook exists
+        if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__) return;
+        const devtoolsHook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+        // Replace all global hook properties with a no-op function or a null value
+        for (const prop in devtoolsHook) {
+          if (prop === 'renderers') {
+            // prevents console error when dev tools try to iterate of renderers
+            devtoolsHook[prop] = new Map();
+            continue;
+          }
+          devtoolsHook[prop] = typeof devtoolsHook[prop] === 'function' ? Function.prototype : null;
         }
       }
     }
