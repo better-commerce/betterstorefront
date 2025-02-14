@@ -503,7 +503,8 @@
             "myReturnsText": "Retururi",
             "noLookbookAvaiableText": "Nu este disponibil niciun lookbook",
             "shopTheLookText": "Cumpără look-ul",
-            "confirmPasswordText": "Confirmă parola"
+            "confirmPasswordText": "Confirmă parola",
+            "addNewUserText": "Adaugă utilizator nou"
         },
         "navBar": {
             "currencyText": "Valută",
@@ -1323,6 +1324,7 @@
             "addressAddedSuccessfullyMsg": "Adresa nouă a fost adăugată cu succes",
             "addressUpdatedSuccessfullyMsg": "Adresa a fost actualizată cu succes",
             "noStoresErrorMsg": "Ne extindem în zona dumneavoastră în curând. Stați aproape!",
+            "userAddedSuccessfullyMsg":"Utilizator adăugat cu succes",
             "address": {
                 "postCodeNotServicableMsg": "Codul poștal nu este deservit",
                 "postCodeNumMsg": "Codul poștal trebuie să conțină doar cifre",

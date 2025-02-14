@@ -503,7 +503,8 @@
             "myReturnsText": "Zwroty",
             "noLookbookAvaiableText": "Brak dostępnego lookbooka",
             "shopTheLookText": "Kup styl",
-            "confirmPasswordText": "Potwierdź hasło"
+            "confirmPasswordText": "Potwierdź hasło",
+            "addNewUserText": "Dodaj nowego użytkownika"
         },
         "navBar": {
             "currencyText": "Waluta",
@@ -1323,6 +1324,7 @@
             "addressAddedSuccessfullyMsg": "Nowy adres został pomyślnie dodany",
             "addressUpdatedSuccessfullyMsg": "Adres został pomyślnie zaktualizowany",
             "noStoresErrorMsg": "Wkrótce rozszerzamy naszą działalność na Twój obszar. Czekaj na więcej informacji!",
+            "userAddedSuccessfullyMsg":"Użytkownik został pomyślnie dodany",
             "address": {
                 "postCodeNotServicableMsg": "Kod pocztowy poza obszarem obsługi",
                 "postCodeNumMsg": "Kod pocztowy powinien zawierać tylko cyfry",

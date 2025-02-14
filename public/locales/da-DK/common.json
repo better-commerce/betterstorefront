@@ -503,7 +503,8 @@
             "myReturnsText": "Returneringer",
             "noLookbookAvaiableText": "Ingen Lookbook tilgængelig",
             "shopTheLookText": "Shop looket",
-            "confirmPasswordText": "Bekræft adgangskode"
+            "confirmPasswordText": "Bekræft adgangskode",
+            "addNewUserText": "Tilføj ny bruger"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -1322,6 +1323,7 @@
             "addressAddedSuccessfullyMsg": "Ny adresse blev tilføjet med succes",
             "addressUpdatedSuccessfullyMsg": "Adresse blev opdateret med succes",
             "noStoresErrorMsg": "Vi udvider snart til dit område. Hold dig opdateret!",
+            "userAddedSuccessfullyMsg":"Bruger tilføjet succesfuldt",
             "address": {
                 "postCodeNotServicableMsg": "Postnummer ikke servicebart",
                 "postCodeNumMsg": "Postnummeret skal kun indeholde cifre",

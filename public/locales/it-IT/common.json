@@ -473,7 +473,8 @@
             "myReturnsText": "Resi",
             "noLookbookAvaiableText": "Nessun Lookbook disponibile",
             "shopTheLookText": "Compra il look",
-            "confirmPasswordText": "Conferma la password"
+            "confirmPasswordText": "Conferma la password",
+            "addNewUserText": "Aggiungi nuovo utente"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -1228,6 +1229,7 @@
             "addressAddedSuccessfullyMsg": "Nuovo indirizzo aggiunto con successo",
             "addressUpdatedSuccessfullyMsg": "Indirizzo aggiornato con successo",
             "noStoresErrorMsg": "Stiamo espandendo la nostra area. Resta sintonizzato!",
+            "userAddedSuccessfullyMsg":"Utente aggiunto con successo",
             "address": {
                 "postCodeNotServicableMsg": "Postcode non servito",
                 "postCodeNumMsg": "Il postcode deve contenere solo numeri",

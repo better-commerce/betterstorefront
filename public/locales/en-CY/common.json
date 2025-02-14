@@ -503,7 +503,8 @@
         "myReturnsText": "Επιστροφές",
         "noLookbookAvaiableText": "Δεν Διαθέτουμε Lookbook",
         "shopTheLookText": "Αγοράστε το look",
-        "confirmPasswordText": "Επιβεβαίωση Κωδικού"
+        "confirmPasswordText": "Επιβεβαίωση Κωδικού",
+        "addNewUserText": "Προσθήκη νέου χρήστη"
     },
     "navBar": {
         "currencyText": "Νόμισμα",
@@ -1263,6 +1264,7 @@
             "addressAddedSuccessfullyMsg": "Η νέα διεύθυνση προστέθηκε με επιτυχία",
             "addressUpdatedSuccessfullyMsg": "Η διεύθυνση ενημερώθηκε με επιτυχία",
             "noStoresErrorMsg": "Θα επεκταθούμε στην περιοχή σας σύντομα. Μείνετε συντονισμένοι!",
+            "userAddedSuccessfullyMsg":"Ο χρήστης προστέθηκε με επιτυχία",
             "address": {
                 "postCodeNotServicableMsg": "Ο ταχυδρομικός κώδικας δεν εξυπηρετείται",
                 "postCodeNumMsg": "Ο ταχυδρομικός κώδικας πρέπει να περιέχει μόνο ψηφία",

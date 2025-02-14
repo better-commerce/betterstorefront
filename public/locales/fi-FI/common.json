@@ -503,7 +503,8 @@
             "myReturnsText": "Palautukset",
             "noLookbookAvaiableText": "Ei Lookbookia saatavilla",
             "shopTheLookText": "Shoppaile tyyli",
-            "confirmPasswordText": "Vahvista salasana"
+            "confirmPasswordText": "Vahvista salasana",
+            "addNewUserText": "Lisää uusi käyttäjä"
         },
         "navBar": {
             "currencyText": "Valuutta",
@@ -1315,6 +1316,7 @@
             "addressAddedSuccessfullyMsg": "Uusi osoite lisätty onnistuneesti",
             "addressUpdatedSuccessfullyMsg": "Osoite päivitetty onnistuneesti",
             "noStoresErrorMsg": "Laajennamme alueellesi pian. Pysy kuulolla!",
+            "userAddedSuccessfullyMsg":"Käyttäjä lisättiin onnistuneesti",
             "address": {
                 "postCodeNotServicableMsg": "Postinumero ei ole palvelualueella",
                 "postCodeNumMsg": "Postinumeron tulee sisältää vain numeroita",

@@ -503,7 +503,8 @@
             "myReturnsText": "Vrátenia",
             "noLookbookAvaiableText": "Žiadny lookbook k dispozícii",
             "shopTheLookText": "Nakúpte vzhľad",
-            "confirmPasswordText": "Potvrdiť heslo"
+            "confirmPasswordText": "Potvrdiť heslo",
+            "addNewUserText": "Pridať nového používateľa"
         },
         "navBar": {
             "currencyText": "Mena",
@@ -1323,6 +1324,7 @@
             "addressAddedSuccessfullyMsg": "Nová adresa bola úspešne pridaná",
             "addressUpdatedSuccessfullyMsg": "Adresa bola úspešne aktualizovaná",
             "noStoresErrorMsg": "Čoskoro sa rozšírime do vašej oblasti. Zostaňte naladení!",
+            "userAddedSuccessfullyMsg":"Používateľ bol úspešne pridaný",
             "address": {
                 "postCodeNotServicableMsg": "PSČ nie je podporované",
                 "postCodeNumMsg": "PSČ by malo obsahovať iba číslice",
