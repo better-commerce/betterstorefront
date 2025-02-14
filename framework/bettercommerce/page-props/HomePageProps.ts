@@ -2,6 +2,7 @@ import { Guid } from '@commerce/types'
 import { EmptyObject } from '@components/utils/constants'
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { stringToNumber } from '@framework/utils/parse-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -18,15 +19,21 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-    const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG, Redis.Key.HomepageWeb, Redis.Key.HomepageMobileWeb,])
-    let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
-    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageWeb) || []
-    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.HomepageMobileWeb) || []
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const cachedDataUID = {
+      infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+      homepageWeb: Redis.Key.HomepageWeb + '_' + locale,
+      homepageMobileWeb: Redis.Key.HomepageMobileWeb + '_' + locale,
+    }
+    const cachedData = await getDataByUID([cachedDataUID.infraUID, cachedDataUID.homepageWeb, cachedDataUID.homepageMobileWeb])
+    let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.homepageWeb) || []
+    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.homepageMobileWeb) || []
 
     if (!infraUIDData) {
       const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
-      await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
 
     const promises = new Array<Promise<any>>()
@@ -57,8 +64,8 @@ export class HomePageProps extends BasePagePropsProvider implements IPagePropsPr
             })
         }
     };
-    fetchData(pageContentWebUIDData, Redis.Key.HomepageWeb, 'Web');
-    fetchData(pageContentMobileWebUIDData, Redis.Key.HomepageMobileWeb, 'MobileWeb');
+    fetchData(pageContentWebUIDData, cachedDataUID.homepageWeb, 'Web');
+    fetchData(pageContentMobileWebUIDData, cachedDataUID.homepageMobileWeb, 'MobileWeb');
 
     await Promise.all(promises)
     const slugsPromise = commerce.getSlugs({ slug, cookies });
