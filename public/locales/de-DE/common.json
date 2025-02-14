@@ -503,7 +503,8 @@
       "myReturnsText": "Rücksendungen",
       "noLookbookAvaiableText": "Kein Lookbook verfügbar",
       "shopTheLookText": "Shoppen Sie den Look",
-      "confirmPasswordText": "Passwort bestätigen"
+      "confirmPasswordText": "Passwort bestätigen",
+      "addNewUserText": "Neuen Benutzer hinzufügen"
     },
     "navBar": {
       "currencyText": "Währung",
@@ -1322,6 +1323,7 @@
       "addressAddedSuccessfullyMsg": "Neue Adresse erfolgreich hinzugefügt",
       "addressUpdatedSuccessfullyMsg": "Adresse erfolgreich aktualisiert",
       "noStoresErrorMsg": "Wir erweitern bald unser Angebot in Ihre Region. Bleiben Sie dran!",
+      "userAddedSuccessfullyMsg":"Benutzer erfolgreich hinzugefügt",
       "address": {
         "postCodeNotServicableMsg": "Postleitzahl nicht servicefähig",
         "postCodeNumMsg": "Die Postleitzahl sollte nur Ziffern enthalten",

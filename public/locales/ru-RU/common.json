@@ -503,7 +503,8 @@
             "myReturnsText": "Возвраты",
             "noLookbookAvaiableText": "Нет доступных lookbook",
             "shopTheLookText": "Купить образ",
-            "confirmPasswordText": "Подтвердите пароль"
+            "confirmPasswordText": "Подтвердите пароль",
+            "addNewUserText": "Добавить нового пользователя"
         },
         "navBar": {
             "currencyText": "Валюта",
@@ -1323,6 +1324,7 @@
             "addressAddedSuccessfullyMsg": "Новый адрес успешно добавлен",
             "addressUpdatedSuccessfullyMsg": "Адрес успешно обновлен",
             "noStoresErrorMsg": "Мы расширяемся в вашем регионе. Следите за новостями!",
+            "userAddedSuccessfullyMsg":"Пользователь успешно добавлен",
             "address": {
                 "postCodeNotServicableMsg": "Почтовый индекс недоступен для обслуживания",
                 "postCodeNumMsg": "Почтовый индекс должен содержать только цифры",
