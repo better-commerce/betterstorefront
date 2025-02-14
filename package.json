@@ -109,6 +109,7 @@
     "react-instantsearch": "7.0.3",
     "react-instantsearch-dom": "^6.40.4",
     "react-merge-refs": "^2.0.2",
+    "react-motion": "^0.5.2",
     "react-paginate": "^8.2.0",
     "react-swipeable": "^7.0.1",
     "react-switch": "^7.0.0",

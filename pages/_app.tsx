@@ -261,7 +261,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         const language = Cookies.get(Cookie.Key.LANGUAGE)
 
         // If any of the required cookies is undefined
-        if (!currency || !country || !language) {
+        if (!currency || !country || !language || pageProps?.locale != language) {
           const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
           Cookies.set(Cookie.Key.CURRENCY, currencyCode)
           const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
@@ -346,7 +346,8 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
                 <OverlayLoader />
                 <CustomerReferral router={router} />
                 <SessionProvider session={pageProps?.session}>
-                  <Component {...{...pageProps, featureToggle}} campaignData={campaignData} location={location} ipAddress={location.Ip} config={appConfig} pluginConfig={pluginConfig} deviceInfo={deviceInfo} />
+                {!isInitialized && <Loader backdropInvisible={true} message={''} />}
+                  {isInitialized && <Component {...{...pageProps, featureToggle}} campaignData={campaignData} location={location} ipAddress={location.Ip} config={appConfig} pluginConfig={pluginConfig} deviceInfo={deviceInfo} />}
                 </SessionProvider>
               </Layout>
             </ErrorBoundary>
