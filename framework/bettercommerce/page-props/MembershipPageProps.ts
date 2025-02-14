@@ -1,5 +1,6 @@
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import commerce from '@lib/api/commerce'
@@ -15,9 +16,9 @@ export class MembershipPageProps extends BasePagePropsProvider implements IPageP
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
     const cachedDataUID = {
-        infraUID: Redis.Key.INFRA_CONFIG,
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
     }
     const cachedData = await getDataByUID([
         cachedDataUID.infraUID,

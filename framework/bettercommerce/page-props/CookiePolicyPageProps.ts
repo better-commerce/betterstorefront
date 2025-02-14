@@ -1,5 +1,6 @@
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { Redis } from '@framework/utils/redis-constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import commerce from '@lib/api/commerce'
@@ -15,16 +16,21 @@ export class CookiePolicyPageProps extends BasePagePropsProvider implements IPag
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
-    const cachedData = await getDataByUID([Redis.Key.CookiepageWeb, Redis.Key.CookiepageMobileWeb,])
-    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.CookiepageWeb) || []
-    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.CookiepageMobileWeb) || []
-    let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const cachedDataUID ={
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+        cookiePageWebUID: Redis.Key.CookiepageWeb + '_' + locale,
+        cookiePageMobileWebUID: Redis.Key.CookiepageMobileWeb + '_' + locale
+    }
+    const cachedData = await getDataByUID([cachedDataUID.cookiePageWebUID, cachedDataUID.cookiePageMobileWebUID,])
+    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.cookiePageWebUID) || []
+    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.cookiePageMobileWebUID) || []
+    let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
 
     if (!infraUIDData) {
         const infraPromise = commerce.getInfra(cookies)
         infraUIDData = await infraPromise
-        await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+        await setData([{ key:  cachedDataUID.infraUID, value: infraUIDData }])
     }
 
     const promises = new Array<Promise<any>>()
@@ -58,8 +64,8 @@ export class CookiePolicyPageProps extends BasePagePropsProvider implements IPag
             )})
         }
     }
-    fetchData(pageContentWebUIDData, Redis.Key.CookiepageWeb, 'Web')
-    fetchData(pageContentMobileWebUIDData, Redis.Key.CookiepageMobileWeb, 'MobileWeb')
+    fetchData(pageContentWebUIDData, cachedDataUID.cookiePageWebUID, 'Web')
+    fetchData(pageContentMobileWebUIDData, cachedDataUID.cookiePageMobileWebUID, 'MobileWeb')
 
     await Promise.all(promises)
     const slugsPromise = commerce.getSlugs({ slug, cookies });
