@@ -162,8 +162,8 @@ export async function getStaticProps({
   const response = await getSingleLookbook(slug[0], cookies)
 
   const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-    infraUID: Redis.Key.INFRA_CONFIG,
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS + '_' + locale,
+    infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.allMembershipsUID,
@@ -174,7 +174,7 @@ export async function getStaticProps({
   if (!infraUIDData) {
     const infraPromise = commerce.getInfra({ [Cookie.Key.LANGUAGE]: locale })
     infraUIDData = await infraPromise
-    await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+    await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
   }
 
   let allMembershipsUIDData: any = parseDataValue(cachedData, cachedDataUID.allMembershipsUID)

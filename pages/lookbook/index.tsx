@@ -111,7 +111,7 @@ export async function getStaticProps({ params, locale, locales, preview, }: GetS
   const lookbookData = await getLookbooks(cookies)
 
   const cachedDataUID = {
-    infraUID: Redis.Key.INFRA_CONFIG,
+    infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.infraUID,

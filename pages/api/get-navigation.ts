@@ -3,10 +3,12 @@ import apiRouteGuard from './base/api-route-guard'
 import useNavTree from '@framework/api/endpoints/nav-tree'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
+import { Cookie } from '@framework/utils/constants'
 
 const getNavTreeApiMiddleware = async (req: any, res: any) => {
   try {
-    const navTreeUID = Redis.Key.NavTree
+    const locale = req?.cookies?.[Cookie.Key.LANGUAGE]
+    const navTreeUID = Redis.Key.NavTree + '_' + locale
     const cachedData = await getDataByUID([ navTreeUID ])
     let navTreeUIDData: any = parseDataValue(cachedData, navTreeUID)
     if (!navTreeUIDData) {
