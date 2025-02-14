@@ -1,5 +1,6 @@
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import commerce from '@lib/api/commerce'
@@ -15,14 +16,18 @@ export class CommonPageProps extends BasePagePropsProvider implements IPageProps
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const cachedDataUID = {
+      infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+    }
     const cachedData = await getDataByUID([
-      Redis.Key.INFRA_CONFIG,
+      cachedDataUID.infraUID,
     ])
-    let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
+    let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
     if (!infraUIDData) {
       const infraPromise = commerce.getInfra(cookies)
       infraUIDData = await infraPromise
-      await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+      await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
 
     const pluginConfig = await this.getPluginConfig({ cookies })
