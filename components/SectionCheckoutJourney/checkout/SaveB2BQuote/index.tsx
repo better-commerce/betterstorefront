@@ -100,7 +100,7 @@ export default function SaveB2BQuote({ basket }: SaveB2BQuoteProps) {
   return (
     <Fragment>
       <form onSubmit={onSaveQuote}>
-        <Button type="submit" className="!rounded-full !bg-slate-900 !capitalize w-full hover:!bg-slate-800 dark:!bg-slate-100 focus:!ring-black focus:!outline-none focus:!ring-2 focus:!ring-offset-2 round-md-btn" loading={isQuoteSaving} disabled={isQuoteSaving}>
+        <Button type="submit" className="!rounded-full !bg-slate-900 dark-btn-bg !capitalize w-full hover:!bg-slate-800 dark:!bg-slate-100 focus:!ring-black focus:!outline-none focus:!ring-2 focus:!ring-offset-2 round-md-btn" loading={isQuoteSaving} disabled={isQuoteSaving}>
           {translate('label.quotes.saveQuote')}
         </Button>
         <Input type="text" name="purchaseOrderNo" value={formValues.purchaseOrderNo} onChange={(value) => onChange('purchaseOrderNo', value)} placeholder={translate('label.quotes.quoteRefNumPlaceholder')} className="rounded-full mt-2" />

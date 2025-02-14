@@ -2858,3 +2858,11 @@ body .round-md-btn, .btn-radius-sm{
 .z-index-9-sec{
   z-index: 9  !important;
 }
+@media (prefers-color-scheme: dark) {
+  body button.dark-btn-bg{
+    background-color:#000 !important;
+  }
+  body .dark-acc-white{
+    background: #fff !important;
+  }
+}

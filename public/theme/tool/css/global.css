@@ -2821,3 +2821,11 @@ body .round-md-btn, .btn-radius-sm{
 .height-full-cls{
   height: 100%;;
 }
+@media (prefers-color-scheme: dark) {
+  body button.dark-btn-bg{
+    background-color:#000 !important;
+  }
+  body .dark-acc-white{
+    background: #fff !important;
+  }
+}
