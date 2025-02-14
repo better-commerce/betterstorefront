@@ -101,7 +101,7 @@ export async function getStaticProps({
 }: GetStaticPropsContext) {
   let categoryUIDData: any
   try {
-    const categoryUID = Redis.Key.Category.AllCategory
+    const categoryUID = Redis.Key.Category.AllCategory + '_' + locale
     const cachedData = await getDataByUID([categoryUID])
     categoryUIDData = parseDataValue(cachedData, categoryUID)
     if (!containsArrayData(categoryUIDData)) {

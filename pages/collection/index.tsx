@@ -92,7 +92,7 @@ export async function getStaticProps({
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
   const cookies = serverSideMicrositeCookies(locale!)
   const pageProps = await props.getPageProps({ cookies })
-  const collectionUID = Redis.Key.Collection
+  const collectionUID = Redis.Key.Collection + '_' + locale
   const cachedData = await getDataByUID([collectionUID])
   let collectionUIDData: any = parseDataValue(cachedData, collectionUID) || []
   try {
