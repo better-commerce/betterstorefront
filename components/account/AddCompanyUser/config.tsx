@@ -15,17 +15,13 @@ export const useAddCompanyUserConfig = () => {
       placeholder: translate('common.label.lastNameText'),
     },
     {
-      key: 'role',
-      label: 'Role',
-      type: 'select',
-      options: [
-        { value: '1', label: 'Admin' },
-        { value: '2', label: 'Sales user' },
-        { value: '3', label: 'User' },
-      ],
-      placeholder: 'Select a role',
+      key: 'email',
+      id: 'email',
+      name: 'email',
+      label: translate('label.addressBook.emailText'),
+      type: 'email',
+      placeholder: translate('common.message.enterYourEmailText'),
     },
-
     {
       key: 'password',
       label: translate('label.myAccount.passwordText'),
@@ -39,12 +35,15 @@ export const useAddCompanyUserConfig = () => {
       placeholder: translate('label.myAccount.confirmPasswordText'),
     },
     {
-      key: 'email',
-      id: 'email',
-      name: 'email',
-      label: translate('label.addressBook.emailText'),
-      type: 'email',
-      placeholder: translate('common.message.enterYourEmailText'),
+      key: 'role',
+      label: 'Role',
+      type: 'select',
+      options: [
+        { value: '1', label: 'Admin' },
+        { value: '2', label: 'Sales user' },
+        { value: '3', label: 'User' },
+      ],
+      placeholder: 'Select a role',
     },
     {
       key: 'mobileNumber',

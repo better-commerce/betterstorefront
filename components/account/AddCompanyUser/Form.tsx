@@ -58,7 +58,11 @@ export default function AddCompanyUserForm({ type = 'addCompanyUser', isLoginSid
                        : !formItem?.show ||
                         (formItem?.show && formItem?.show(values)) ? (
                         <>
-                          <label className="text-neutral-800 dark:text-neutral-200"> {' '} {formItem?.label}{' '} </label>
+                          <label className="text-neutral-800 dark:text-neutral-200">
+                             {' '} {formItem?.label}{' '} {schema.fields[formItem.key]?.exclusiveTests?.required && (
+                              <span className="text-red-500"> *</span>
+                              )}
+                          </label>
                           {formItem?.type === 'select' ? (
                             <Field as="select" name={formItem?.key} onChange={handleChange} value={values[formItem?.key]} className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-neutral-900 disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11" >
                               <option value="" disabled> {formItem?.placeholder} </option>

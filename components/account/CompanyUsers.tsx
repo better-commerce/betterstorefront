@@ -51,9 +51,11 @@ function CompanyUsers({ users }: any) {
                 <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
                 {translate('label.companyUsers.emailText')} {user?.email}
                 </span>
+                {user?.phoneNo &&
                 <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
                 {translate('label.companyUsers.phoneNoText')} {user?.phoneNo}
                 </span>
+                }
               </div>
             </div>
           ))}
