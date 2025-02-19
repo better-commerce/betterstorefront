@@ -92,12 +92,19 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                                                 {navItem?.navItems.sort((a: any, b: any) => a?.caption.localeCompare(b?.caption)).map((item: any, idx: number) => (
                                                   <li key={`navItems-items-${idx}`} className="mt-0 mb-2">
                                                     <Link
-                                                      href={navItem?.navBlockType === 9 ? `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}` : `${sanitizeRelativeUrl(`/${item?.itemLink}`)}`}
+                                                      href={
+                                                        navItem?.navBlockType === 9
+                                                          ? item?.itemLink?.startsWith("/category") || item?.itemLink?.startsWith("category/")
+                                                            ? sanitizeRelativeUrl(`/${item?.itemLink}`)
+                                                            : `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}`
+                                                          : sanitizeRelativeUrl(`/${item?.itemLink}`)
+                                                      }
                                                       className="relative flex items-center h-full font-normal text-gray-700 capitalize hover:underline hover:text-black"
                                                       title={item?.caption}
                                                       onClick={handleLinkClick}
                                                       prefetch={false}
                                                     >
+
                                                       {item?.caption?.toLowerCase()}
                                                     </Link>
                                                   </li>
@@ -142,14 +149,17 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
                                           <Link
                                             href={
                                               navItem?.navBlockType === 9
-                                                ? `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}`
-                                                : `${sanitizeRelativeUrl(`/${item?.itemLink}`)}`
+                                                ? item?.itemLink?.startsWith("/category") || item?.itemLink?.startsWith("category/")
+                                                  ? sanitizeRelativeUrl(`/${item?.itemLink}`)
+                                                  : `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}`
+                                                : sanitizeRelativeUrl(`/${item?.itemLink}`)
                                             }
                                             className="relative flex items-center h-full font-normal text-gray-700 capitalize hover:underline hover:text-black"
                                             title={item?.caption}
                                             onClick={handleLinkClick}
                                             prefetch={false}
                                           >
+
                                             {item?.caption?.toLowerCase()}
                                           </Link>
                                         </li>
