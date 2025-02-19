@@ -2,6 +2,7 @@ import { EmptyObject } from '@components/utils/constants'
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { logError } from '@framework/utils/app-util'
+import { Cookie } from '@framework/utils/constants'
 import { tryParseJson } from '@framework/utils/parse-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -19,11 +20,11 @@ export class PDPPreviewPageProps extends BasePagePropsProvider implements IPageP
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
+    const currentLocale = cookies?.[Cookie.Key.LANGUAGE]
     const cachedDataUID = {
-        infraUID: Redis.Key.INFRA_CONFIG,
-        productPreviewSlugUID: Redis.Key.PDP.ProductsPreview + '_' + slug,
-        productImagesUID: Redis.Key.PDP.ProductImages + '_' + slug,
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + currentLocale,
+        productPreviewSlugUID: Redis.Key.PDP.ProductsPreview + '_' + slug + '_' + currentLocale,
+        productImagesUID: Redis.Key.PDP.ProductImages + '_' + slug + '_' + currentLocale,
     }
     const cachedData = await getDataByUID([
         cachedDataUID.infraUID,

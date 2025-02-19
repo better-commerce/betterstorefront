@@ -161,7 +161,7 @@ function BrandsPage({ brands }: any) {
 
 export async function getStaticProps({ params, locale, locales, preview, }: GetStaticPropsContext) {
   const cachedDataUID = {
-    brandsUID: Redis.Key.Brands.Brand,
+    brandsUID: Redis.Key.Brands.Brand + '_' + locale,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.brandsUID,

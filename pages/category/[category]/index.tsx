@@ -62,10 +62,10 @@ export async function getStaticProps(context: any) {
   const pageProps = await props.getPageProps({ slug, cookies })
 
   const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-    infraUID: Redis.Key.INFRA_CONFIG,
-    categorySlugUID: Redis.Key.Category.Slug + '_' + slug,
-    categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug,
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS + '_' + locale,
+    infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+    categorySlugUID: Redis.Key.Category.Slug + '_' + slug + '_' + locale,
+    categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug + '_' + locale,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.allMembershipsUID,
