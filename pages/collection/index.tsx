@@ -3,7 +3,7 @@ import getCollections from '@framework/api/content/getCollections'
 import Layout from '@components/Layout/Layout'
 import Link from 'next/link'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import { EmptyGuid, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { EmptyGuid, EmptyObject, EmptyString, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -103,7 +103,7 @@ export async function getStaticProps({
     return {
       props: {
         ...pageProps,
-        data: collectionUIDData,
+        data: collectionUIDData || EmptyObject,
       },
       revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
@@ -120,7 +120,7 @@ export async function getStaticProps({
       return {
         props: {
           ...pageProps,
-          data: collectionUIDData,
+          data: collectionUIDData || EmptyObject,
         },
         redirect: {
           destination: errorUrl,
