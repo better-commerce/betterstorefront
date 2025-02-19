@@ -331,7 +331,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       <Head {...appConfig}></Head>
       {showPasswordProtectionLoader && <Loader backdropInvisible={true} message={''} />}
       {<ContentSnippetInjector snippets={snippets} />}
-      {!isInitialized && <Loader backdropInvisible={true} message={''} />}
+      {!isInitialized && <Loader backdropInvisible={true} message={EmptyString} />}
       <ManagedUIContext>
           <CustomCacheBuster buildVersion={packageInfo?.version} />
           <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
@@ -346,8 +346,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
                 <OverlayLoader />
                 <CustomerReferral router={router} />
                 <SessionProvider session={pageProps?.session}>
-                {!isInitialized && <Loader backdropInvisible={true} message={''} />}
-                  {isInitialized && <Component {...{...pageProps, featureToggle}} campaignData={campaignData} location={location} ipAddress={location.Ip} config={appConfig} pluginConfig={pluginConfig} deviceInfo={deviceInfo} />}
+                  <Component {...{...pageProps, featureToggle}} campaignData={campaignData} location={location} ipAddress={location.Ip} config={appConfig} pluginConfig={pluginConfig} deviceInfo={deviceInfo} />
                 </SessionProvider>
               </Layout>
             </ErrorBoundary>
