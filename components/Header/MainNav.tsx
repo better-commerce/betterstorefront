@@ -233,7 +233,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
              </>
             )}
-          <EngagePromoBar />
+          {featureToggle?.features?.enableEngage && <EngagePromoBar />}
         </div>
       </>
     );

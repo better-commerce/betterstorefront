@@ -296,7 +296,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
-    if (featureToggle?.features?.enableOmnilytics) {
+    if (featureToggle?.features?.enableEngage) {
       fetchEngageCampaigns()
     }
   }, [router.asPath])

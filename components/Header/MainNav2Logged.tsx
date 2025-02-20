@@ -161,7 +161,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               }
             </div>
           </div>
-          <EngagePromoBar />
+          {featureToggle?.features?.enableEngage && <EngagePromoBar />}
         </div>
       </>
     );

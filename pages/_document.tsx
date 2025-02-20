@@ -25,7 +25,7 @@ export default class MyDocument extends NextDocument {
           <NextScript />
 
           {/* Fallback for injecting Omnilytics Script */}
-          {!featureToggle?.features?.enableOmnilytics ? null :
+          {!featureToggle?.features?.enableEngage ? null :
             <Script data-bc-name="Omnilytics Script1" src="https://engage-asset.bettercommerce.io/_plugins/min/bc/v1/js/ch.js" strategy="beforeInteractive" />
           }
         </body>
