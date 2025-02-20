@@ -503,7 +503,8 @@
             "myReturnsText": "Returer",
             "noLookbookAvaiableText": "Inget lookbook tillgängligt",
             "shopTheLookText": "Shoppa looken",
-            "confirmPasswordText": "Bekräfta lösenord"
+            "confirmPasswordText": "Bekräfta lösenord",
+            "addNewUserText": "Lägg till ny användare"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -1323,6 +1324,7 @@
             "addressAddedSuccessfullyMsg": "Ny adress tillagd framgångsrikt",
             "addressUpdatedSuccessfullyMsg": "Adress uppdaterad framgångsrikt",
             "noStoresErrorMsg": "Vi expanderar till ditt område snart. Håll utkik!",
+            "userAddedSuccessfullyMsg":"Användare har lagts till framgångsrikt",
             "address": {
                 "postCodeNotServicableMsg": "Postnummer icke-tjänstbart",
                 "postCodeNumMsg": "Postnummer ska endast innehålla siffror",

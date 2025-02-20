@@ -10,6 +10,7 @@ import { tryParseJson } from '@framework/utils/parse-util'
 import { mapObject } from '@framework/utils/translate-util'
 import isEmpty from 'lodash/isEmpty'
 import { getCollectionHeroBannerTransform, getCollectionOfferBannerCollectionTransform, getProductCollectionTransformMap } from '@framework/api/content/getCollectionBySlug'
+import { Cookie } from '@framework/utils/constants'
 
 /**
  * Class {BrandPLPPageProps} inherits and implements the base behavior of {BasePagePropsProvider} and {IPagePropsProvider} respectively to return the PageProp values.
@@ -22,11 +23,12 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
 
     const cachedDataUID = {
-        infraUID: Redis.Key.INFRA_CONFIG,
-        brandSlugUID: Redis.Key.Brands.Slug + '_' + slug,
-        collectionUID: Redis.Key.Brands.Collection + '_' + slug
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+        brandSlugUID: Redis.Key.Brands.Slug + '_' + slug + '_' + locale,
+        collectionUID: Redis.Key.Brands.Collection + '_' + slug + '_' + locale,
       }
       const cachedData = await getDataByUID([
         cachedDataUID.infraUID,

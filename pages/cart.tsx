@@ -43,6 +43,7 @@ import { round, sortBy } from 'lodash'
 import { groupCartItemsById } from '@components/utils/cart'
 import CartSideBarProductCard from '@components/CartSideBarProductCard'
 import BasketGroupProduct from '@components/cart/BasketGroupProduct'
+import { ProductType } from '@framework/utils/enums'
 
 function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const router = useRouter()
@@ -59,6 +60,18 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         (x: any) => x.key === "OrderSettings.EnabledPartialDelivery"
       )?.value || ''
   )
+
+  let primaryPool = config?.configSettings
+    ?.find((x: any) => x.configType === 'CatalogSettings')
+    ?.configKeys?.find(
+      (x: any) => x.key === "CatalogSettings.PrimaryInventoryPoolCode"
+    )?.value || 'PrimaryInvPool'
+
+  let secInventoryPool = config?.configSettings
+    ?.find((x: any) => x.configType === 'CatalogSettings')
+    ?.configKeys?.find(
+      (x: any) => x.key === "CatalogSettings.SecondaryInventoryPoolCode"
+    )?.value || 'PrimaryInvPool'
 
   const { setCartItems, cartItems, resetKitCart, basketId, isGuestUser, user, setIsSplitDelivery, isSplitDelivery, openLoginSideBar, addToWishlist, openWishlist, setSidebarView, closeSidebar, setOverlayLoaderState } = useUI()
   const { addToCart, getCart } = cartHandler()
@@ -410,8 +423,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       AllowPartialLineDelivery: true,
       PickupStoreId: Guid.empty,
       RefStoreId: null,
-      PrimaryInventoryPool: 'PrimaryInvPool',
-      SecondaryInventoryPool: 'PrimaryInvPool',
+      PrimaryInventoryPool: primaryPool,
+      SecondaryInventoryPool: secInventoryPool,
       IsEditOrder: false,
       OrderNo: null,
       DeliveryCenter: null,
@@ -440,8 +453,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
       AllowPartialLineDelivery: false,
       PickupStoreId: Guid.empty,
       RefStoreId: null,
-      PrimaryInventoryPool: 'PrimaryInvPool',
-      SecondaryInventoryPool: 'PrimaryInvPool',
+      PrimaryInventoryPool: primaryPool,
+      SecondaryInventoryPool: secInventoryPool,
       IsEditOrder: false,
       OrderNo: null,
       DeliveryCenter: null,
@@ -804,7 +817,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         soldOutMessage={soldOutMessage}
                         getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                       />
-                      {product.children?.map(
+                      {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                         (child: any, idx: number) => (
                           <CartSideBarProductCard
                             product={child}
@@ -961,7 +974,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 soldOutMessage={soldOutMessage}
                                 getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                               />
-                              {product.children?.map((child: any, idx: number) => (
+                              {product?.itemType !== ProductType.BUNDLE && product.children?.map((child: any, idx: number) => (
                                 <CartSideBarProductCard
                                   product={child}
                                   css={css}
@@ -1044,7 +1057,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
 
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
-                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-slate-800 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
+                    <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-white shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.orderSummary.placeOrderBtnText')}
                     </button>
                   </Link>

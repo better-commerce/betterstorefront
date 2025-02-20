@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@algolia/autocomplete-plugin-query-suggestions": "^1.11.0",
-    "bc-payments-sdk": "0.2.8",
     "@editorjs/checklist": "^1.6.0",
     "@editorjs/code": "^2.9.0",
     "@editorjs/delimiter": "^1.4.0",
@@ -57,6 +56,7 @@
     "algoliasearch": "4.14.3",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
+    "bc-payments-sdk": "0.2.8",
     "body-scroll-lock": "^4.0.0-beta.0",
     "classnames": "^2.3.2",
     "cookie": "^0.5.0",
@@ -70,15 +70,14 @@
     "express": "^4.18.3",
     "file-saver": "^2.0.5",
     "formik": "^2.2.9",
-    "framer-motion": "^11.0.12",
     "frames-react": "1.1.0",
     "html-react-parser": "^5.1.12",
     "i18next": "23.7.13",
     "ioredis": "5.3.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.1",
-    "lodash": "4.17.21",
-    "lodash.random": "3.2.0",
+    "lodash": "^4.17.21",
+    "lodash.random": "^3.2.0",
     "memory-cache": "^0.2.0",
     "moment": "^2.29.4",
     "mrm": "^4.1.14",
@@ -134,8 +133,8 @@
     "@types/cookie": "^0.5.1",
     "@types/js-cookie": "^3.0.3",
     "@types/jsonwebtoken": "^9.0.2",
-    "@types/lodash": "^4.17.5",
-    "@types/lodash.random": "^3.2.7",
+    "@types/lodash": "^4.17.15",
+    "@types/lodash.random": "^3.2.9",
     "@types/memory-cache": "^0.2.2",
     "@types/next-auth": "^3.15.0",
     "@types/node": "^20.1.2",
@@ -150,7 +149,7 @@
     "lint-staged": "^13.2.2",
     "postcss-nesting": "^11.2.2",
     "prettier": "2.8.8",
-    "typescript": "4.5.2"
+    "typescript": "^5.7.3"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,css}": [

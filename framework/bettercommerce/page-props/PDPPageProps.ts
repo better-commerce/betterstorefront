@@ -2,6 +2,7 @@ import { EmptyObject } from '@components/utils/constants'
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { logError } from '@framework/utils/app-util'
+import { Cookie } from '@framework/utils/constants'
 import { Redis } from '@framework/utils/redis-constants'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { mapObject } from '@framework/utils/translate-util'
@@ -21,16 +22,16 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
-    const cachedDataUID = {
-        infraUID: Redis.Key.INFRA_CONFIG,
-        productSlugUID: Redis.Key.PDP.Products + '_' + slug,
-        productReviewUID: Redis.Key.PDP.ProductReviewData + '_' + slug,
-        relatedProductUID: Redis.Key.PDP.RelatedProduct + '_' + slug,
-        pdpLookBookUID: Redis.Key.PDP.PDPLookBook + '_' + slug,
-        pdpCacheImageUID: Redis.Key.PDP.PDPCacheImage + '_' + slug,
-        availablePromoUID: Redis.Key.PDP.AvailablePromo + '_' + slug,
-        productCategoryUID: Redis.Key.PDP.ProductsByCat + '_' + slug,
+    const currentLocale = cookies?.[Cookie.Key.LANGUAGE]
+    const cachedDataUID: any = {
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + currentLocale,
+        productSlugUID: Redis.Key.PDP.Products + '_' + slug + '_' + currentLocale,
+        productReviewUID: Redis.Key.PDP.ProductReviewData + '_' + currentLocale,
+        relatedProductUID: Redis.Key.PDP.RelatedProduct + '_' + currentLocale,
+        pdpLookBookUID: Redis.Key.PDP.PDPLookBook + '_' + currentLocale,
+        pdpCacheImageUID: Redis.Key.PDP.PDPCacheImage + '_' + currentLocale,
+        availablePromoUID: Redis.Key.PDP.AvailablePromo + '_' + currentLocale,
+        productCategoryUID: Redis.Key.PDP.ProductsByCat + '_' + currentLocale,
     }
     const cachedData = await getDataByUID([
         cachedDataUID.infraUID,

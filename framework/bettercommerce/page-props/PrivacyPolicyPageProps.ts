@@ -1,5 +1,6 @@
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { Redis } from '@framework/utils/redis-constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import commerce from '@lib/api/commerce'
@@ -15,16 +16,21 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
-    const cachedData = await getDataByUID([Redis.Key.PrivacypageWeb, Redis.Key.PrivacypageMobileWeb,])
-    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.PrivacypageWeb) || []
-    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.PrivacypageMobileWeb) || []
-    let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const cachedDataUID ={
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+        privacyPageWebUID: Redis.Key.PrivacypageWeb + '_' + locale,
+        privacyPageMobileWebUID: Redis.Key.PrivacypageMobileWeb + '_' + locale
+    }
+    const cachedData = await getDataByUID([cachedDataUID.privacyPageWebUID, cachedDataUID.privacyPageMobileWebUID,])
+    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.privacyPageWebUID) || []
+    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.privacyPageMobileWebUID) || []
+    let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
 
     if (!infraUIDData) {
         const infraPromise = commerce.getInfra(cookies)
         infraUIDData = await infraPromise
-        await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+        await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
 
     const promises = new Array<Promise<any>>()
@@ -65,8 +71,8 @@ export class PrivacyPolicyPageProps extends BasePagePropsProvider implements IPa
             })
         }
     }
-    fetchData(pageContentWebUIDData, Redis.Key.PrivacypageWeb, 'Web')
-    fetchData(pageContentMobileWebUIDData, Redis.Key.PrivacypageMobileWeb, 'MobileWeb')
+    fetchData(pageContentWebUIDData, cachedDataUID.privacyPageWebUID, 'Web')
+    fetchData(pageContentMobileWebUIDData, cachedDataUID.privacyPageMobileWebUID, 'MobileWeb')
 
     await Promise.all(promises)
     const slugsPromise = commerce.getSlugs({ slug, cookies });

@@ -452,7 +452,7 @@ function CollectionPage(props: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
-      <div className='flex flex-col dark:bg-white'>
+      <div className='flex flex-col dark:bg-white fixing-main-section'>
         {props?.customInfo3 == 'vertical' && (
           <>
             <div className="container flex items-center justify-center w-full px-0 mx-auto mt-0 lg:px-4 sm:px-4 2xl:sm:px-0 sm:mt-4">
@@ -521,7 +521,7 @@ function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
+      <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white">
         <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
           <li className='flex items-center text-10-mob sm:text-sm'>
             <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>

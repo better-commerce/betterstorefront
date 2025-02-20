@@ -1,5 +1,6 @@
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { Redis } from '@framework/utils/redis-constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import commerce from '@lib/api/commerce'
@@ -15,16 +16,21 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
    * @returns 
    */
   public async getPageProps({ slug, defaultSlug, cookies }: any) {
-
-    const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG, Redis.Key.TermspageWeb, Redis.Key.TermspageMobileWeb,])
-    let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
-    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.TermspageWeb) || []
-    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, Redis.Key.TermspageMobileWeb) || []
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const cachedDataUID ={
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+        termsPageWebUID: Redis.Key.TermspageWeb + '_' + locale,
+        termsPageMobileWebUID: Redis.Key.TermspageMobileWeb + '_' + locale
+    }
+    const cachedData = await getDataByUID([cachedDataUID.infraUID, cachedDataUID.termsPageWebUID, cachedDataUID.termsPageMobileWebUID,])
+    let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
+    const pageContentWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.termsPageWebUID) || []
+    const pageContentMobileWebUIDData: Array<any> = parseDataValue(cachedData, cachedDataUID.termsPageMobileWebUID) || []
 
     if (!infraUIDData) {
         const infraPromise = commerce.getInfra(cookies)
         infraUIDData = await infraPromise
-        await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+        await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
 
     const promises = new Array<Promise<any>>()
@@ -64,8 +70,8 @@ export class TermsAndConditionsPageProps extends BasePagePropsProvider implement
             })
         }
     }
-    fetchData(pageContentWebUIDData, Redis.Key.TermspageWeb, 'Web')
-    fetchData(pageContentMobileWebUIDData, Redis.Key.TermspageMobileWeb, 'MobileWeb')
+    fetchData(pageContentWebUIDData, cachedDataUID.termsPageWebUID, 'Web')
+    fetchData(pageContentMobileWebUIDData, cachedDataUID.termsPageMobileWebUID, 'MobileWeb')
 
     await Promise.all(promises)
     const slugsPromise = commerce.getSlugs({ slug, cookies });

@@ -187,10 +187,18 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') {
-      if (typeof window !== 'undefined' && window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-        for (const key in window?.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-          // Replace the hook methods with no-op functions
-          window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = () => {}
+      if (typeof window !== 'undefined' && window.document) {
+        // Ensure the React Developer Tools global hook exists
+        if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__) return;
+        const devtoolsHook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+        // Replace all global hook properties with a no-op function or a null value
+        for (const prop in devtoolsHook) {
+          if (prop === 'renderers') {
+            // prevents console error when dev tools try to iterate of renderers
+            devtoolsHook[prop] = new Map();
+            continue;
+          }
+          devtoolsHook[prop] = typeof devtoolsHook[prop] === 'function' ? Function.prototype : null;
         }
       }
     }
@@ -251,9 +259,10 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         const currency = Cookies.get(Cookie.Key.CURRENCY)
         const country = Cookies.get(Cookie.Key.COUNTRY)
         const language = Cookies.get(Cookie.Key.LANGUAGE)
+        const isForceLangChanged = (language && pageProps?.locale != language)
 
         // If any of the required cookies is undefined
-        if (!currency || !country || !language) {
+        if ((!currency || !country || !language) || isForceLangChanged) {
           const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
           Cookies.set(Cookie.Key.CURRENCY, currencyCode)
           const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
@@ -261,6 +270,10 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
           const languageCulture = /*appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture ||*/ pageProps?.locale || EmptyString
           Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
           Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
+
+          if (isForceLangChanged) {
+            router.reload()
+          }
         }
       }
       setTimeout(() => {
@@ -283,7 +296,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
   }
 
   useEffect(() => {
-    if (featureToggle?.features?.enableOmnilytics) {
+    if (featureToggle?.features?.enableEngage) {
       fetchEngageCampaigns()
     }
   }, [router.asPath])
@@ -323,7 +336,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       <Head {...appConfig}></Head>
       {showPasswordProtectionLoader && <Loader backdropInvisible={true} message={''} />}
       {<ContentSnippetInjector snippets={snippets} />}
-      {!isInitialized && <Loader backdropInvisible={true} message={''} />}
+      {!isInitialized && <Loader backdropInvisible={true} message={EmptyString} />}
       <ManagedUIContext>
           <CustomCacheBuster buildVersion={packageInfo?.version} />
           <InitDeviceInfo setDeviceInfo={setDeviceInfo} />

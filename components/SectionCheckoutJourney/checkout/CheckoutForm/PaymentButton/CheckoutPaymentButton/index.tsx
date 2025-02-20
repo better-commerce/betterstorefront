@@ -7,7 +7,7 @@ import {
   CheckoutPaymentRequest,
   PaymentMethodTypeId,
   PaymentMethodType,
-} from '@better-commerce/bc-payments-sdk'
+} from 'bc-payments-sdk'
 import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
 import { withTranslation } from 'react-i18next'
 

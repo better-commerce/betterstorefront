@@ -63,7 +63,7 @@ export abstract class BasePagePropsProvider {
         ...{
           configSettings:
             configSettings?.filter((x: any) =>
-              ['SearchSettings', 'B2BSettings', 'BasketSettings', 'ShippingSettings', 'DomainSettings', 'PasswordProtectionSettings', 'RegionalSettings','OrderSettings', 'OmsSettings', 'FeatureToggleSettings'].includes(
+              ['SearchSettings', 'B2BSettings', 'BasketSettings', 'ShippingSettings','CatalogSettings', 'DomainSettings', 'PasswordProtectionSettings', 'RegionalSettings','OrderSettings', 'OmsSettings', 'FeatureToggleSettings'].includes(
                 x?.configType
               )
             ) || [],
@@ -87,8 +87,9 @@ export abstract class BasePagePropsProvider {
    * Returns the prop values of review summary from Redis cache.
    * @returns 
    */
-  protected async getReviewSummary({ cookies = {} }) {
-    const key = Redis.Key.REVIEW_SUMMARY
+  protected async getReviewSummary({ cookies = {} }: any) {
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const key = Redis.Key.REVIEW_SUMMARY + '_' + locale
     const cachedData = await getDataByUID([
         key,
     ])
@@ -118,8 +119,9 @@ export abstract class BasePagePropsProvider {
    * @returns 
    */
   protected async getPluginConfig({ cookies }: any) {
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
     let pluginConfig = new Array<any>()
-    const key = Redis.Key.PLUGIN_CONFIG
+    const key = Redis.Key.PLUGIN_CONFIG + '_' + locale
     const cachedData = await getDataByUID([
         key,
     ])
@@ -165,7 +167,10 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getMembershipPlans({ cookies }: any) {
-    const key = `${Redis.Key.MEMBERSHIP_PLANS}_${cookies?.Country}_${cookies?.Currency}`
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const country = cookies?.[Cookie.Key.COUNTRY]
+    const currency = cookies?.[Cookie.Key.CURRENCY]
+    const key = `${Redis.Key.MEMBERSHIP_PLANS}_${country}_${currency}_${locale}`
     const cachedData = await getDataByUID([key,])
     let allMembershipsUIDData: any = parseDataValue(cachedData, key)
     if (!allMembershipsUIDData) {
@@ -212,8 +217,9 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getNavTree({ cookies }: any) {
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
     //return EmptyObject
-    const key = Redis.Key.NavTree
+    const key = Redis.Key.NavTree + '_' + locale
     const cachedData = await getDataByUID([
         key,
     ])
@@ -230,7 +236,8 @@ export abstract class BasePagePropsProvider {
   }
 
   protected async getKeywords({ cookies }: any) {
-    const key = Redis.Key.Keywords
+    const locale = cookies?.[Cookie.Key.LANGUAGE]
+    const key = Redis.Key.Keywords + '_' + locale
     const cachedData = await getDataByUID([
         key,
     ])

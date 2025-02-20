@@ -604,7 +604,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         {isEngravingAvailable && (
           <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
         )}
-        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0">
+        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0 pdp-right-section">
           {renderSectionContent()}
         </div>
       </div>

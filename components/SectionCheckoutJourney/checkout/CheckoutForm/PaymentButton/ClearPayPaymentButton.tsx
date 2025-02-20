@@ -1,7 +1,7 @@
 // Package Imports
 import Cookies from 'js-cookie'
 import { withTranslation } from 'react-i18next'
-import { ClearPayPaymentIntent, PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { ClearPayPaymentIntent, PaymentMethodType } from 'bc-payments-sdk'
 
 // Component Imports
 import Script from 'next/script'

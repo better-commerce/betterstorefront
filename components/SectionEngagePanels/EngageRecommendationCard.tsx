@@ -55,7 +55,7 @@ const EngageRecommendationCard: FC<SectionSliderProductCardProps> = ({ type, cam
         if (res?.data?.success) {
           setIsProductRecommended((v: any) => ({
             ...v,
-            [product?._id]: !v[product?._id] ?? false,
+            [product?._id]: !v?.[product?._id] || false,
           }))
         }
       } catch (error) {

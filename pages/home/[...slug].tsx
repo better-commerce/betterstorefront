@@ -6,7 +6,7 @@ import {
   PAGE_PREVIEW_CONTENT_ENDPOINT,
   SITE_ORIGIN_URL,
 } from '@components/utils/constants'
-import { BETTERCMS_BASE_URL } from '@framework/utils/constants'
+import { BETTERCMS_BASE_URL, Cookie } from '@framework/utils/constants'
 import fetcher from '@framework/fetcher'
 import { Layout } from '@components/common'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -111,7 +111,8 @@ function PreviewPage({ pageContents }: any) {
 }
 export async function getServerSideProps(context: any) {
   const slug = context.query.slug
-  const pageContentsUID = `${Redis.Key.HOME_SLUG_CONTENTS}_${slug}`
+  const locale = context?.req?.cookies?.[Cookie.Key.LANGUAGE]
+  const pageContentsUID = `${Redis.Key.HOME_SLUG_CONTENTS}_${slug}_${locale}`
   const cachedData = await getDataByUID([ pageContentsUID ])
   let pageContentsUIDData: any = parseDataValue(cachedData, pageContentsUID)
   if (!pageContentsUIDData) {

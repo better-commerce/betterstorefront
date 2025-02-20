@@ -26,7 +26,7 @@ export default function NotifyUserPopup() {
         `${NEXT_API_NOTIFY_ME_ENDPOINT}?email=${email}&productId=${productId}`
       )
       if (result.data) {
-        setIsPosted(translate('common.label.successText'))
+        setIsPosted("Thank you! You've successfully signed up for restock updates—we'll keep you posted.")
         setTimeout(() => {
           closeNotifyUser()
         }, 1500)
@@ -99,7 +99,7 @@ export default function NotifyUserPopup() {
                       <p className="text-sm text-gray-500">
                         {translate('label.product.notifyDescText')} </p>
                       {isPostedMessage ? (
-                        <div className="font-semibold text-indigo-600">
+                        <div className="mt-6 text-sm font-medium text-center text-black">
                           {isPostedMessage}
                         </div>
                       ) : (
@@ -134,13 +134,13 @@ export default function NotifyUserPopup() {
                         ? { opacity: '75%', pointerEvents: 'none' }
                         : {}
                     }
-                    className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                    className="nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-base font-medium py-2 rounded px-4 ttnc-ButtonBlue disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                     onClick={() => handleModal()}
                   >
                     {translate('label.product.notifyMeText')}</button>
                   <button
                     type="button"
-                    className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm font-medium py-2.5 px-4 sm:px-6  ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-slate-900 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800  border border-slate-300 dark:border-slate-700  dark:focus:ring-offset-0"
+                    className="relative inline-flex items-center justify-center h-auto px-4 py-2 text-sm font-medium transition-colors bg-white border rounded nc-Button ttnc-ButtonSecondary text-slate-700 dark:bg-slate-900 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 border-slate-300 dark:border-slate-700 dark:focus:ring-offset-0"
                     onClick={closeNotifyUser}
                     ref={cancelButtonRef}
                   >

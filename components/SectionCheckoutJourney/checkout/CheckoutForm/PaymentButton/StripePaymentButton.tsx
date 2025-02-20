@@ -15,7 +15,7 @@ import { IPaymentButtonProps } from './BasePaymentButton'
 import { EmptyString, Messages } from '@components/utils/constants'
 import getStripe from '@components/utils/get-stripe'
 import { initPayment } from '@framework/utils/payment-util'
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { PaymentMethodType } from 'bc-payments-sdk'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 

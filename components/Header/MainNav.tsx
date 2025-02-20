@@ -121,54 +121,119 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               </div>
             </div>
           }
-          <div className="container flex justify-between mx-auto mob-container">
+          {featureToggle?.features?.enableSeprateMenu ? (
+            <>
+           <div className="w-full">
+            <div className="container">
+            <div className=" flex justify-between mx-auto mob-container mt-2">
             {isMobile &&
-              <div className="flex items-center flex-1">
-                <MenuBar navItems={config} featureToggle={featureToggle} />
-              </div>
-            }
-            <div className="flex items-center lg:flex-1">
-              <Link href="/" passHref>
-                <Logo className="flex-shrink-0" />
-              </Link>
-            </div>
-            {!isMobile &&
-              <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
-                <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
-              </div>
-            }
-
-            <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
-              {!isMicrosite(locale) && featureToggle?.features?.enableLanguage &&
-                <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
-              }
-              <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                {renderMagnifyingGlassIcon()}
-              </button>
-
-              {featureToggle?.features?.enableHeaderWishlist &&
-                <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
-                  <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
-                    {wishListItems?.length > 0 && delayEffect && (
-                      <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
-                        {wishListItems?.length}
-                      </span>
-                    )}
+                  <div className="flex items-center flex-1">
+                    <MenuBar navItems={config} featureToggle={featureToggle} />
+                  </div>
+                }
+                <div className="flex items-center lg:flex-1">
+                  <Link href="/" passHref>
+                    <Logo className="flex-shrink-0" />
+                  </Link>
+                </div>
+                {!isMobile &&
+                <div className="search-icon-box flex-[2] hidden sm:flex">
+                  <button className="items-center w-full justify-center h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                    {renderMagnifyingGlassIcon()}
                   </button>
                 </div>
-              }
-              <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-              <CartDropdown />
-              {featureToggle?.features?.enableMembership &&
-                <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                  <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
-                </Link>
-              }
+                 }
+                <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
+                  {!isMicrosite(locale) && featureToggle?.features?.enableLanguage &&
+                    <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
+                  }
+                  {isMobile &&
+                  <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                    {renderMagnifyingGlassIcon()}
+                  </button>
+                  }
+                  {featureToggle?.features?.enableHeaderWishlist &&
+                    <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
+                      <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                        <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                        {wishListItems?.length > 0 && delayEffect && (
+                          <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
+                            {wishListItems?.length}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  }
+                  <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
+                  <CartDropdown />
+                  {featureToggle?.features?.enableMembership &&
+                    <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                      <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
+                    </Link>
+                  }
+                </div>
             </div>
-          </div>
+            </div>
+            {!isMobile &&
+                  <div className="bg-header-nav-clr w-full mt-2">
+                    <div className="container flex-[2] justify-center lg:flex custom-padding-nav">
+                    <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                    </div>
+                  </div>
+                }
+            </div>
+            </>
+            ) : (
+             <>
+              <div className="container flex justify-between mx-auto mob-container">
+                {isMobile &&
+                  <div className="flex items-center flex-1">
+                    <MenuBar navItems={config} featureToggle={featureToggle} />
+                  </div>
+                }
+                <div className="flex items-center lg:flex-1">
+                  <Link href="/" passHref>
+                    <Logo className="flex-shrink-0" />
+                  </Link>
+                </div>
+                {!isMobile &&
+                  <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
+                    <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                  </div>
+                }
 
-          <EngagePromoBar />
+                <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
+                  {!isMicrosite(locale) && featureToggle?.features?.enableLanguage &&
+                    <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
+                  }
+                  <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                    {renderMagnifyingGlassIcon()}
+                  </button>
+
+                  {featureToggle?.features?.enableHeaderWishlist &&
+                    <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
+                      <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                        <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+                        {wishListItems?.length > 0 && delayEffect && (
+                          <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
+                            {wishListItems?.length}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  }
+                  <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
+                  <CartDropdown />
+                  {featureToggle?.features?.enableMembership &&
+                    <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                      <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
+                    </Link>
+                  }
+                </div>
+              </div>
+             </>
+            )}
+          {featureToggle?.features?.enableEngage && <EngagePromoBar />}
         </div>
       </>
     );

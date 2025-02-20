@@ -1,5 +1,5 @@
 // Component Imports
-import { PaymentMethodType } from '@better-commerce/bc-payments-sdk'
+import { PaymentMethodType } from 'bc-payments-sdk'
 import { IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'

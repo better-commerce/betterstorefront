@@ -503,7 +503,8 @@
             "myReturnsText": "Retourneren",
             "noLookbookAvaiableText": "Geen lookbook beschikbaar",
             "shopTheLookText": "Shop de look",
-            "confirmPasswordText": "Bevestig wachtwoord"
+            "confirmPasswordText": "Bevestig wachtwoord",
+            "addNewUserText": "Nieuwe gebruiker toevoegen"
         },
         "navBar": {
             "currencyText": "Munteenheid",
@@ -1313,6 +1314,7 @@
             "addressAddedSuccessfullyMsg": "Nieuw adres succesvol toegevoegd",
             "addressUpdatedSuccessfullyMsg": "Adres succesvol bijgewerkt",
             "noStoresErrorMsg": "We breiden binnenkort naar jouw gebied uit. Blijf op de hoogte!",
+            "userAddedSuccessfullyMsg":"Gebruiker succesvol toegevoegd",
             "address": {
                 "postCodeNotServicableMsg": "Postcode niet bedienbaar",
                 "postCodeNumMsg": "Postcode mag alleen cijfers bevatten",

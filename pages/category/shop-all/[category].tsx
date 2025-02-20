@@ -65,10 +65,10 @@ export async function getStaticProps(context: any) {
   const pageProps = await props.getPageProps({ slug, cookies })
 
   const cachedDataUID = {
-    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS,
-    infraUID: Redis.Key.INFRA_CONFIG,
-    categorySlugUID: Redis.Key.Category.Slug + '_' + slug,
-    categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug,
+    allMembershipsUID: Redis.Key.ALL_MEMBERSHIPS + '_' + locale,
+    infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
+    categorySlugUID: Redis.Key.Category.Slug + '_' + slug + '_' + locale,
+    categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug + '_' + locale,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.allMembershipsUID,
@@ -567,7 +567,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:title" content={category?.name} key="ogtitle" />
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
-      <section className="main-section dark:bg-white">
+      <section className="main-section fixing-main-section dark:bg-white">
         <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
           <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
             <li className='flex items-center text-10-mob sm:text-sm'>

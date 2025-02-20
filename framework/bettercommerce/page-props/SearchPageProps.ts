@@ -1,6 +1,7 @@
 import { EmptyObject } from '@components/utils/constants'
 import { BasePagePropsProvider } from '@framework/contracts/page-props/BasePagePropsProvider'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { Cookie } from '@framework/utils/constants'
 import { stringToNumber } from '@framework/utils/parse-util'
 import { Redis } from '@framework/utils/redis-constants'
 import { containsArrayData, getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
@@ -17,15 +18,16 @@ export class SearchPageProps extends BasePagePropsProvider implements IPageProps
    * @returns 
    */
   public async getPageProps({ allProductsDefaultState, cookies }: any) {
-
+    const currentLocale = cookies?.[Cookie.Key.LANGUAGE]
     const allProducts = await commerce.getAllProducts({ ...allProductsDefaultState, cookies })
-    const cachedData = await getDataByUID([Redis.Key.INFRA_CONFIG])
-    let infraUIDData: any = parseDataValue(cachedData, Redis.Key.INFRA_CONFIG)
+    const cachedDataUID = { infraUID: Redis.Key.INFRA_CONFIG + '_' + currentLocale }
+    const cachedData = await getDataByUID([ cachedDataUID.infraUID ])
+    let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
 
     if (!infraUIDData) {
         const infraPromise = commerce.getInfra(cookies)
         infraUIDData = await infraPromise
-        await setData([{ key: Redis.Key.INFRA_CONFIG, value: infraUIDData }])
+        await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
 

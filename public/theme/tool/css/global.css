@@ -1811,6 +1811,9 @@ p {
   .icon-div-menu img{
     filter: invert(1)  !important;
   }
+  .icon-div-menu .search-fixed img{
+    filter: invert(0)  !important;
+  }
   .icon-div-menu svg{
    color:  #fff !important;
   }
@@ -1821,8 +1824,15 @@ p {
     filter: invert(0)  !important;
   }
   .LangDropdown span{
-    color: #fff !important;
+    color: #000000 !important;
   }
+  .LangDropdown button span{
+    color: #ffffff !important;
+  }
+
+button.icon-grp .header-dark{
+  color: #000000 !important;
+}
   .header-dark{
    color: #FFFFFF !important;
   }
@@ -1849,6 +1859,34 @@ p {
     display: inline-block;
     text-align: center;
     background: #075d2b !important;
+    color: #fff !important;
+    font-size: var(--font-14);
+    padding: 12px 10px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 0 !important;
+    min-height: 47px;
+    box-sizing: border-box;
+}
+  .add-green-btn button.ttnc-ButtonBlack {
+    display: inline-block;
+    text-align: center;
+    background: #000000 !important;
+    color: #fff !important;
+    font-size: var(--font-14);
+    padding: 12px 10px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 0 !important;
+    min-height: 47px;
+    box-sizing: border-box;
+}
+  .add-green-btn button.ttnc-ButtonBlue {
+    display: inline-block;
+    text-align: center;
+    background: #13395e !important;
     color: #fff !important;
     font-size: var(--font-14);
     padding: 12px 10px !important;
@@ -2810,4 +2848,12 @@ body .round-md-btn, .btn-radius-sm{
 }
 .height-full-cls{
   height: 100%;;
+}
+@media (prefers-color-scheme: dark) {
+  body button.dark-btn-bg{
+    background-color:#000 !important;
+  }
+  body .dark-acc-white{
+    background: #fff !important;
+  }
 }

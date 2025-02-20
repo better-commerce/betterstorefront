@@ -10,6 +10,7 @@
     "react-hooks/exhaustive-deps": 0,
     "import/no-anonymous-default-export": "off",
     "react-hooks/rules-of-hooks": "off",
-    "@next/next/no-img-element": "off"
+    "@next/next/no-img-element": "off",
+    "@next/next/no-sync-scripts": "off"
   }
 }

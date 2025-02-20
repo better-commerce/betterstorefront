@@ -1,8 +1,8 @@
 {
   "features": {
-    "enableLanguage": false,
+    "enableLanguage": true,
     "enablePriceIncVatToggle": true,
-    "enableQuickOrderPad": false,
+    "enableQuickOrderPad": true,
     "enableCompare": true,
     "enableStoreLocator": true,
     "enableCollectDeliveryOption": false,
@@ -23,7 +23,8 @@
     "enableHorizontalFilter": true,
     "enableCustomHomeWidget":true,
     "enableFullBanner":false,
-    "enableCustomToolWidget": true
+    "enableCustomToolWidget": true,
+    "enableSeprateMenu": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

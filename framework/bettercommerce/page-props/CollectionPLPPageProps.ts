@@ -6,6 +6,7 @@ import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-ut
 import commerce from '@lib/api/commerce'
 import getCollectionBySlug from '@framework/api/content/getCollectionBySlug'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+import { Cookie } from '@framework/utils/constants'
 
 /**
  * Class {CollectionPLPPageProps} inherits and implements the base behavior of {BasePagePropsProvider} and {IPagePropsProvider} respectively to return the PageProp values.
@@ -18,10 +19,10 @@ export class CollectionPLPPageProps extends BasePagePropsProvider implements IPa
    * @returns 
    */
   public async getPageProps({ slug, cookies }: any) {
-
+      const currentLocale = cookies?.[Cookie.Key.LANGUAGE]
     const cachedDataUID = {
-        infraUID: Redis.Key.INFRA_CONFIG,
-        collectionUID: Redis.Key.Collection + '_' + slug,
+        infraUID: Redis.Key.INFRA_CONFIG + '_' + currentLocale,
+        collectionUID: Redis.Key.Collection + '_' + slug + '_' + currentLocale,
       }
       const cachedData = await getDataByUID([
         cachedDataUID.infraUID,

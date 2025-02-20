@@ -42,7 +42,23 @@
                     "urlCode": "pdp-type-simple-product",
                     "name": "Type Simple Product",
                     "url": "https://demotools.bettercommerce.tech/products/milwaukee-milwaukee-as2-250em-ac-25l-m-class-vac-25l-m-class-dust-extractor-293496",
+                    "displayOrder": 10,
+                    "active": 1
+                },
+                {
+                    "group": "PDP",
+                    "urlCode": "pdp-type-pre-order-product",
+                    "name": "Type Pre-Order Product",
+                    "url": "https://demotools.bettercommerce.tech/products/bosch-bosch-2608900326-32-x-152mm-selfcut-speed-spade-wood-drill-bit-235723",
                     "displayOrder": 11,
+                    "active": 1
+                },
+                {
+                    "group": "PDP",
+                    "urlCode": "pdp-type-notify-me-product",
+                    "name": "Type Notify Me Product",
+                    "url": "https://demotools.bettercommerce.tech/products/eclipse-eclipse-j93110-padbolt-medium-duty-bzp-100mm-bright-zinc-plate-228401",
+                    "displayOrder": 12,
                     "active": 1
                 },
                 {
@@ -50,7 +66,7 @@
                     "urlCode": "pdp-type-variant-",
                     "name": "Type Variant",
                     "url": "https://demotools.bettercommerce.tech/products/dewalt-dewalt-dewtitaniumtan9-titanium-tan-s3-safety-boots-uk-9-euro-43-80453",
-                    "displayOrder": 12,
+                    "displayOrder": 14,
                     "active": 1
                 },
                 {
@@ -58,7 +74,7 @@
                     "urlCode": "pdp-type-complex-variant",
                     "name": "Type Complex Variant",
                     "url": "https://demotools.bettercommerce.tech/products/apache-apache-calgary-30w-29l-calgary-4-way-stretch-holster-pocket-trouser-30w-29l-black-285590",
-                    "displayOrder": 13,
+                    "displayOrder": 15,
                     "active": 1
                 },
                 {
@@ -66,7 +82,7 @@
                     "urlCode": "pdp-type-bundle-product",
                     "name": "Type Bundle Product",
                     "url": "https://demotools.bettercommerce.tech/products/dewalt-dewalt-super-saver-bundle-dtb001",
-                    "displayOrder": 14,
+                    "displayOrder": 16,
                     "active": 1
                 },
                 {
@@ -74,7 +90,7 @@
                     "urlCode": "pdp-type-gift-with-products",
                     "name": "Type Gift with Products",
                     "url": "https://demotools.bettercommerce.tech/products/metabo-metabo-dmh-290-set-compressed-air-chipping-hammer-117676",
-                    "displayOrder": 15,
+                    "displayOrder": 17,
                     "active": 1
                 },
                 {
@@ -82,7 +98,7 @@
                     "urlCode": "pdp-type-gift-cards",
                     "name": "Type Gift Cards",
                     "url": "https://demotools.bettercommerce.tech/products/apache-e-gift-cards-voucher-50-gt005",
-                    "displayOrder": 16,
+                    "displayOrder": 18,
                     "active": 1
                 },
                 {
@@ -90,7 +106,7 @@
                     "urlCode": "pdp-check-store-stock",
                     "name": "Check Store Stock",
                     "url": "https://demotools.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
-                    "displayOrder": 17,
+                    "displayOrder": 19,
                     "active": 1
                 },
                 {
@@ -98,7 +114,7 @@
                     "urlCode": "pdp-product-reviews",
                     "name": "Product Reviews",
                     "url": "https://demotools.bettercommerce.tech/products/paslode-paslode-018880-2-1ah-lithium-battery-cell-60791#productReview",
-                    "displayOrder": 18,
+                    "displayOrder": 20,
                     "active": 1
                 },
                 {
@@ -106,7 +122,7 @@
                     "urlCode": "pdp-rich-attributes",
                     "name": "Rich Attributes",
                     "url": "https://demotools.bettercommerce.tech/products/festool-festool-575304-ks120-reb-240v-240v-260mm-kapex-sliding-compound-mitre-saw-235692",
-                    "displayOrder": 19,
+                    "displayOrder": 21,
                     "active": 1
                 },
                 {
@@ -114,7 +130,7 @@
                     "urlCode": "pdp-technical-specs",
                     "name": "Technical Specs",
                     "url": "https://demotools.bettercommerce.tech/products/festool-festool-575304-ks120-reb-240v-240v-260mm-kapex-sliding-compound-mitre-saw-235692",
-                    "displayOrder": 20,
+                    "displayOrder": 22,
                     "active": 1
                 },
                 {
@@ -122,7 +138,7 @@
                     "urlCode": "pdp-compare-product",
                     "name": "Compare Product",
                     "url": "https://demotools.bettercommerce.tech/products/milwaukee-milwaukee-m18fh-0-18v-m18-fuel-4-mode-sds-plus-hammer-drill-bare-unit-285133",
-                    "displayOrder": 21,
+                    "displayOrder": 23,
                     "active": 1
                 },
                 {
@@ -130,7 +146,7 @@
                     "urlCode": "pdp-personalize-product",
                     "name": "Personalize Product",
                     "url": "https://demotools.bettercommerce.tech/products/einhell-einhell-te-cd18-2li-ikit-18v-2x1-5ah-combi-drill-kit-201969?storecode=tool&urlcode=home",
-                    "displayOrder": 22,
+                    "displayOrder": 24,
                     "active": 1
                 },
                 {
@@ -138,7 +154,7 @@
                     "urlCode": "pdp-applicable-promos",
                     "name": "Applicable Promos",
                     "url": "https://demotools.bettercommerce.tech/products/rika-rika-lmsr005x60-line-marker-spray-blue-750ml-60pk-297290",
-                    "displayOrder": 23,
+                    "displayOrder": 25,
                     "active": 1
                 },
                 {
@@ -146,7 +162,7 @@
                     "urlCode": "pdp-quantity-break-pricing",
                     "name": "Quantity Break Pricing",
                     "url": "https://demotools.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
-                    "displayOrder": 24,
+                    "displayOrder": 26,
                     "active": 1
                 },
                 {
@@ -154,7 +170,7 @@
                     "urlCode": "pdp-upsell-and-cross-sell",
                     "name": "Upsell and Cross-sell",
                     "url": "https://demotools.bettercommerce.tech/products/draper-draper-d20cd60-d20-20v-brushless-combi-drill-bare-unit-238828",
-                    "displayOrder": 25,
+                    "displayOrder": 27,
                     "active": 1
                 },
                 {

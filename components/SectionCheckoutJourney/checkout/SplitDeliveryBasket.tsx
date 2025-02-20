@@ -18,7 +18,17 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
   ) && stringToBoolean(
     config?.configSettings?.find((x: any) => x.configType === 'OrderSettings')?.configKeys?.find((x: any) => x.key === "OrderSettings.EnabledPartialDelivery")?.value || ''
   )
+  let primaryPool = config?.configSettings
+    ?.find((x: any) => x.configType === 'CatalogSettings')
+    ?.configKeys?.find(
+      (x: any) => x.key === "CatalogSettings.PrimaryInventoryPoolCode"
+    )?.value || 'PrimaryInvPool'
 
+  let secInventoryPool = config?.configSettings
+    ?.find((x: any) => x.configType === 'CatalogSettings')
+    ?.configKeys?.find(
+      (x: any) => x.key === "CatalogSettings.SecondaryInventoryPoolCode"
+    )?.value || 'PrimaryInvPool'
   const { setCartItems, cartItems, basketId, setIsSplitDelivery, isSplitDelivery, closeSidebar } = useUI()
   const translate = useTranslation()
   const [splitDeliveryItems, setSplitDeliveryItems] = useState<any>(null)
@@ -149,8 +159,8 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
       AllowPartialLineDelivery: true,
       PickupStoreId: Guid.empty,
       RefStoreId: null,
-      PrimaryInventoryPool: 'PrimaryInvPool',
-      SecondaryInventoryPool: 'PrimaryInvPool',
+      PrimaryInventoryPool: primaryPool,
+      SecondaryInventoryPool: secInventoryPool,
       IsEditOrder: false,
       OrderNo: null,
       DeliveryCenter: null,
@@ -179,8 +189,8 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
       AllowPartialLineDelivery: false,
       PickupStoreId: Guid.empty,
       RefStoreId: null,
-      PrimaryInventoryPool: 'PrimaryInvPool',
-      SecondaryInventoryPool: 'PrimaryInvPool',
+      PrimaryInventoryPool: primaryPool,
+      SecondaryInventoryPool: secInventoryPool,
       IsEditOrder: false,
       OrderNo: null,
       DeliveryCenter: null,
@@ -353,7 +363,7 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
               .sort(([dateA], [dateB]) => new Date(dateA).getTime() - new Date(dateB).getTime())
               .map(([deliveryDate, products]: any, index: number) => (
                 <div key={deliveryDate}>
-                  {/* Delivery Header */}                  
+                  {/* Delivery Header */}
                   <h2 className="py-3 text-sm font-semibold">
                     {translate('label.checkout.deliveryText', { index: index + 1 })} {index + 1} of {Object.keys(splitBasketProducts)?.length} - {new Date(deliveryDate).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' })}
                   </h2>

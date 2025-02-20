@@ -338,11 +338,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           <h1 className={`block text-2xl font-semibold dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
             {translate('label.basket.catalogText')}
           </h1>
-          <div className='w-full'>
-            <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-1' : 'text-sm mt-4'}`}>
-              {translate('label.search.stepIntoWorldText')}
-            </span>
-          </div>
         </div>
         <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-1 sm:mb-1 align-center'>
           <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>

@@ -1808,6 +1808,34 @@ p {
     min-height: 47px;
     box-sizing: border-box;
 }
+  .add-green-btn button.ttnc-ButtonBlack {
+    display: inline-block;
+    text-align: center;
+    background: #000000 !important;
+    color: #fff !important;
+    font-size: var(--font-14);
+    padding: 12px 10px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 0 !important;
+    min-height: 47px;
+    box-sizing: border-box;
+}
+  .add-green-btn button.ttnc-ButtonBlue {
+    display: inline-block;
+    text-align: center;
+    background: #13395e !important;
+    color: #fff !important;
+    font-size: var(--font-14);
+    padding: 12px 10px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 0 !important;
+    min-height: 47px;
+    box-sizing: border-box;
+}
 .bg-top-toggle{
   background: #fff !important;
   padding: 5px 0px !important;
