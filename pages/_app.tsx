@@ -259,9 +259,10 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
         const currency = Cookies.get(Cookie.Key.CURRENCY)
         const country = Cookies.get(Cookie.Key.COUNTRY)
         const language = Cookies.get(Cookie.Key.LANGUAGE)
+        const isForceLangChanged = (language && pageProps?.locale != language)
 
         // If any of the required cookies is undefined
-        if (!currency || !country || !language) {
+        if ((!currency || !country || !language) || isForceLangChanged) {
           const currencyCode = /*Cookies.get(Cookie.Key.CURRENCY) ||*/ appConfig?.defaultCurrency || EmptyString
           Cookies.set(Cookie.Key.CURRENCY, currencyCode)
           const currencySymbol = appConfig?.currencies?.find((x: any) => x?.currencyCode === currencyCode)?.currencySymbol || EmptyString
@@ -269,6 +270,10 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
           const languageCulture = /*appConfig?.languages?.find((x: any) => x?.languageCulture === Cookies.get(Cookie.Key.LANGUAGE))?.languageCulture ||*/ pageProps?.locale || EmptyString
           Cookies.set(Cookie.Key.LANGUAGE, languageCulture)
           Cookies.set(Cookie.Key.COUNTRY, languageCulture?.substring(3))
+
+          if (isForceLangChanged) {
+            router.reload()
+          }
         }
       }
       setTimeout(() => {
@@ -331,7 +336,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       <Head {...appConfig}></Head>
       {showPasswordProtectionLoader && <Loader backdropInvisible={true} message={''} />}
       {<ContentSnippetInjector snippets={snippets} />}
-      {!isInitialized && <Loader backdropInvisible={true} message={''} />}
+      {!isInitialized && <Loader backdropInvisible={true} message={EmptyString} />}
       <ManagedUIContext>
           <CustomCacheBuster buildVersion={packageInfo?.version} />
           <InitDeviceInfo setDeviceInfo={setDeviceInfo} />
