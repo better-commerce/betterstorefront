@@ -6,6 +6,7 @@ const path = require('path')
 const CLIENT_ID = process.env.BETTERCOMMERCE_CLIENT_ID
 const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
+const BETTERCMS_BASE_URL = process.env.BETTERCMS_BASE_URL
 const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 const INFRA_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/infra/config`
 const fs = require('fs')
@@ -77,7 +78,7 @@ const getRedirects = async function (token) {
     url: new URL('/api/v2/content/redirects', BASE_URL).href,
     headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
   })
-  return response.data.result.map((item) => {
+  const baseRedirects = response.data.result.map((item) => {
     let pathName = ''
     try {
       pathName = new URL(item.oldUrl).pathname
@@ -93,6 +94,30 @@ const getRedirects = async function (token) {
       }
     }
   })
+
+  const res = await axios({
+    method: 'get',
+    url: new URL('/api/v1/page/redirects', BETTERCMS_BASE_URL).href,
+    headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, Authorization: 'Bearer ' + token, },
+  })
+
+  const cmsRedirects = res.data.result.map((item) => {
+    let pathName = ''
+    try {
+      pathName = new URL(item?.sourceUrl).pathname
+    } catch (e) {
+      // Do nothing
+    }
+
+    if (pathName) {
+      return {
+        source: pathName, //new URL(item.oldUrl).pathname,
+        destination: item?.destinationUrl,
+        permanent: item?.redirectType?.includes('301'),
+      }
+    }
+  })
+  return baseRedirects?.concat(cmsRedirects)?.filter((item) => item?.source !== '/') || []
 }
 
 /**
