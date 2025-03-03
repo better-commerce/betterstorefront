@@ -21,6 +21,7 @@ import { AlertType } from '@framework/utils/enums';
 import Router from 'next/router';
 import { AnalyticsEventType } from './services/analytics';
 import useAnalytics from './services/analytics/useAnalytics';
+import ReviewBadge from './Product/ReviewBadge';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -230,7 +231,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard product-card hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard product-card border-prod-card hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
@@ -241,7 +242,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             <ProductTag product={data} />
           </div>
           <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
-          {!isComparedEnabled && renderGroupButtons()}
+          {!isComparedEnabled && renderGroupButtons()}     
         </div>
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
@@ -260,9 +261,31 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
                 </div>
               }
             </div>
+            {featureToggle?.features?.enableAddButtonBottom ? (
+                <> 
+                <div className="flex flex-col gap-2 plp-hidden-section">
+                  <ReviewBadge reviewCountdata={data?.reviewCount} ratingdata={data?.rating} />
+                </div>
+                </>
+              ) : (
+                <> 
+                  {/* Content to render if false */}
+                </>
+              )}
             <div className="flex items-center justify-between mt-2 product-card-panel">
               <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
+            {featureToggle?.features?.enableAddButtonBottom ? (
+                <> 
+                <div className='add-btn-plp my-3'>
+                <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+                </div>
+                </>
+              ) : (
+                <> 
+                  {/* Content to render if false */}
+                </>
+              )} 
             {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
                 {product?.compared && (

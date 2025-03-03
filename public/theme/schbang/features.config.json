@@ -24,7 +24,9 @@
     "enableCustomHomeWidget":false,
     "enableFullBanner":false,
     "enableCustomToolWidget": false,
-    "enableSeprateMenu": false
+    "enableSeprateMenu": false,
+    "enableRichPdpToggle": false,
+    "enableAddButtonBottom": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

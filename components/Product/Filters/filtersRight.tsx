@@ -24,7 +24,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
   }, []);
 
   return (
-    <div key="new" className={`relative flex-col hidden w-full h-full max-w-xs pr-4 ml-auto overflow-y-auto bg-white dark:bg-transparent sm:flex sm:px-0 2xl:px-0 ${CURRENT_THEME == 'green' ? ' sm:col-span-2 filter-panel-3' : ' sm:col-span-3'}`}>
+    <div key="new" className={`relative flex-col hidden w-full h-full max-w-xs max-w-full-sec pr-4 ml-auto overflow-y-auto bg-white dark:bg-transparent sm:flex sm:px-0 2xl:px-0 ${CURRENT_THEME == 'green' ? ' sm:col-span-2 filter-panel-3' : ' sm:col-span-3'}`}>
       {products.filters?.map((section: any, sectionIdx: number) => {
         if (isBrandPLP && section?.name === "Brand") return null;
 
