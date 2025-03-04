@@ -176,7 +176,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
-        {CURRENT_THEME == 'fixing' &&
+        {(CURRENT_THEME == 'fixing' || CURRENT_THEME == 'arsenalia') &&
           <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
               {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
