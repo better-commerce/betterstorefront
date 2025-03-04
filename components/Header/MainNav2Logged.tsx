@@ -100,7 +100,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
               <div className="container mx-auto">
                 <div className="promotion-banner mob-marquee"></div>
                 <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
-                  {b2bEnabled && featureToggle?.features?.enableQuickOrderPad && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
+                  {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
                   {featureToggle?.features?.enablePriceIncVatToggle &&
                     <>
                       <div className="flex flex-col py-0 text-xs font-medium text-black sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>

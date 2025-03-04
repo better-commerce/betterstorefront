@@ -1919,6 +1919,9 @@ body .ttnc-ButtonPrimary{
 .drop-acc-icon svg{
   color: #000 !important;
 }
+.icon-div-menu .drop-acc-icon img{
+    filter: invert(0) !important;
+}
 .checkout-header{
   background: #000 !important;
 }
@@ -2856,4 +2859,7 @@ body .round-md-btn, .btn-radius-sm{
   body .dark-acc-white{
     background: #fff !important;
   }
+}
+.close-white{
+  color: #FFFFFF !important;
 }

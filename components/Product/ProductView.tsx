@@ -73,7 +73,7 @@ const PLACEMENTS_MAP: any = {
   },
 }
 
-export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership,  selectedFilters = [] }: any) {
+export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership, selectedFilters = [] }: any) {
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const { status } = PRODUCTS[0];
@@ -881,501 +881,509 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </>
     );
   };
+  const renderSellableType = () => {
+    return (
+      <div className='flex justify-start gap-2 divide-x divide-gray-200'>
+        <h4 className='text-lg font-normal text-black'>Sellable Type: {product?.sellableType == "Each" ? 'Each' : product?.sellableType == "Pallet" ? 'Pallet' : product?.sellableType == "Both" ? 'Both' : 'Carton'}</h4>
+        {product?.sellableType == "Pallet" && <h4 className='pl-4 text-lg font-normal text-black'>Pallet of {product?.itemPerCarton}</h4>}
+        {product?.sellableType == "CartonPacks" && <h4 className='pl-4 text-lg font-normal text-black'>Carton of {product?.itemPerCarton}</h4>}
+      </div>
+    )
+  }
   const renderSectionContent = () => {
     return (
-        <>
-         {featureToggle?.features?.enableRichPdpToggle ? (
-           <>
+      <>
+        {featureToggle?.features?.enableRichPdpToggle ? (
+          <>
             <div className='flex gap-6'>
               <div className='w-full lg:w-[60%]'>
-              <div className="space-y-4">
-            <div>
-              <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
-                {product?.name}
-              </h1>
-              <div className="flex flex-col gap-3">
-                <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
-              </div>
-              <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-              </div>
-            </div>
-            {attrGroup['product.relatedproducts']?.length > 0 &&
-              <div className='flex w-full'>
-                <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
-                  {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
-                    <SwiperSlide key={index}>
-                      <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                        <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            }
-            {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
-              <div className='flex flex-col'>
-                {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
-                  <>
-                    <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
-                      <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
-                      <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
-                      <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
+                <div className="space-y-4">
+                  <div>
+                    <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
+                      {product?.name}
+                    </h1>
+                    <div className="flex flex-col gap-3">
+                      <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
                     </div>
-                    <Transition appear show={showDetails} as={Fragment}>
-                      <Dialog
-                        as="div"
-                        className="fixed inset-0 z-50 cart-z-index-9999"
-                        onClose={closeGwpDetails}
-                      >
-                        <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
-                          <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                            <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
-                          </Transition.Child>
-
-                          {/* This element is to trick the browser into centering the modal contents. */}
-                          <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
-                          <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
-                            <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
-                              <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
-                                <span className="absolute z-50 end-3 top-3">
-                                  <ButtonClose onClick={closeGwpDetails} />
-                                </span>
-
-                                <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                                  <div className='flex flex-col justify-center text-center'>
-                                    <div className='mx-auto'>
-                                      <img alt='' src={gwp?.image} className='w-auto h-80' />
-                                    </div>
-                                    <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
-                                    <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
-                                    <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </Transition.Child>
-                        </div>
-                      </Dialog>
-                    </Transition>
-                  </>
-                ))}
-              </div>
-            )}
-            <div className="">{renderVariants()}</div>
-            {product?.quantityBreakRules?.length > 0 &&
-              <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
-            }
-            {/* {promotions?.promotions?.availablePromotions?.length > 0 && (
-              <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
-            )} */}
-            {
-              openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
-            }
-            {featureToggle?.features?.enableStoreLocator &&
-              <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-                <MyLocationIcon className='w-4 h-4' />
-                <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-              </div>
-            }
-            <div className='flex description-product'>
-              <LongDescription data={product?.description} heading="About this item"/>
-            </div>
-            <div className='flex short-descriptionc'>
-              <LongDescription data={product?.shortDescription} heading=""/>
-            </div>
-             </div>
-              </div>
-              <div className='w-full lg:w-[40%]'>
-              <div className="w-full border rounded-lg p-0 shadow-md">
-                {/* New Product Option */}
-                <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
-                  <label className="flex items-center justify-between gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="product"
-                      value="new"
-                      checked={selectedOption === "new"}
-                      onChange={() => setSelectedOption("new")}
-                      className="hidden"
-                    />
-                    <span className="font-semibold">Buy new</span>
-                    <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                      {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                    </span>
-                  </label>
-                  <div className='space-y-3 mt-3'>
-                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                  <p className="text-black font-normal text-sm">FREE next day delivery.</p>
+                    <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
+                      <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    </div>
                   </div>
-                  {selectedOption === "new" && (
-                    <div className="mt-2 space-y-2">
-                       {product?.currentStock > 0 ? (
-                        <p className="text-green-600 font-semibold">In stock</p>
-                        ) : (
-                          <p className="text-red-600 font-semibold text-sm"> Out of Stock</p>
-                        )}
-                        {product?.currentStock > 0 && product?.currentStock <= 5 && (
-                          <p className="text-red-600 font-normal text-sm"> Only {product.currentStock} left in stock.</p>
-                        )}
-                       <div className="mb-3">
-                        <label htmlFor="quantity" className="block text-sm font-medium">
-                          Quantity:
-                        </label>
-                        <select
-                          id="quantity"
-                          className="w-full border rounded-md p-2 mt-1"
-                          value={quantity}
-                          onChange={(e) => setQuantity(Number(e.target.value))}
-                        >
-                          {[...Array(10).keys()].map((num) => (
-                            <option key={num + 1} value={num + 1}>
-                              {num + 1}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                       <div id="add-to-cart-button" className='blue-add-btn'>
-                        {isMobile ? (
-                          <>
-                            {showMobileCaseButton && (
-                              <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                                <div className="container p-4 mx-auto max-w-7xl">
-                                  <div className="flex justify-end">
-                                    <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <div className="flex rtl:space-x-reverse">
-                            {!isEngravingAvailable && (
-                              <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                                <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                              </div>
-                            )}
-
-                            {isEngravingAvailable && (
-                              <>
-                                <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                                  {translate('label.product.engravingText')}
-                                </button>
-                              </>
-                            )}
+                  {attrGroup['product.relatedproducts']?.length > 0 &&
+                    <div className='flex w-full'>
+                      <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
+                        {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
+                          <SwiperSlide key={index}>
+                            <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
+                              <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
+                            </div>
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                    </div>
+                  }
+                  {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
+                    <div className='flex flex-col'>
+                      {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
+                        <>
+                          <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
+                            <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
+                            <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
+                            <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
                           </div>
-                        )}
-                      </div>
-                      <div className='w-full pt-3'>
-                        <div className='sm:grid sm:grid-cols-2 gap-2 flex flex-row'>
-                        <h4 className='text-xs'>Dispatches from</h4>
-                        <p className='text-xs text-black'>London Store</p>
-                        </div>
-                        <div className='sm:grid sm:grid-cols-2 gap-2 flex flex-row'>
-                          <h4 className='text-xs'>Returns</h4>
-                          <p className='text-xs text-color-primary-blue'>Returnable within 30 days of receipt</p>
-                        </div>
-                        <div className='sm:grid sm:grid-cols-2 gap-2 flex flex-row'>
-                          <h4 className='text-xs'>Payment</h4>
-                          <p className='text-xs text-color-primary-blue'>Secure transaction</p>
-                        </div>
-                        <div className='sm:grid sm:grid-cols-2 gap-2 flex flex-row'>
-                          <h4 className='text-xs'>Support</h4>
-                          <p className='text-xs text-color-primary-blue'>Product support included</p>
-                        </div>
-                      </div>
-                      <div className='w-full'>
-                      <>
-                                <button type="button" onClick={handleWishList} className="flex rounded-sm items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                                  {isInWishList(selectedAttrData?.productId) ? (
-                                     <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" /> 
-                                    ) : ( 
-                                     <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)} 
-                                     <span className='text-sm'> {translate('label.product.addToFavoriteText')} </span> </button>
+                          <Transition appear show={showDetails} as={Fragment}>
+                            <Dialog
+                              as="div"
+                              className="fixed inset-0 z-50 cart-z-index-9999"
+                              onClose={closeGwpDetails}
+                            >
+                              <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
+                                <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+                                  <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
+                                <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
+                                  <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
+                                    <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
+                                      <span className="absolute z-50 end-3 top-3">
+                                        <ButtonClose onClick={closeGwpDetails} />
+                                      </span>
+
+                                      <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
+                                        <div className='flex flex-col justify-center text-center'>
+                                          <div className='mx-auto'>
+                                            <img alt='' src={gwp?.image} className='w-auto h-80' />
+                                          </div>
+                                          <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
+                                          <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
+                                          <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Transition.Child>
+                              </div>
+                            </Dialog>
+                          </Transition>
                         </>
-                      </div>
+                      ))}
                     </div>
                   )}
-                </div>
-                {/* Used Product Option */}
-                <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
-                  <label className="flex items-center justify-between gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="product"
-                      value="used"
-                      checked={selectedOption === "used"}
-                      onChange={() => setSelectedOption("used")}
-                      className="hidden"
-                    />
-                    <span className="font-semibold">Save with used - Like New</span>
-                    <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                      {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                    </span>
-                  </label>
-                  <div className='space-y-2 mt-3'>
-                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                  <p className="text-black font-normal text-sm">FREE next day delivery.</p>
+                  <div className="">{renderVariants()}</div>
+                  {product?.quantityBreakRules?.length > 0 &&
+                    <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
+                  }
+                  {
+                    openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
+                  }
+                  {featureToggle?.features?.enableStoreLocator &&
+                    <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+                      <MyLocationIcon className='w-4 h-4' />
+                      <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                    </div>
+                  }
+                  {renderSellableType()}
+                  <div className='flex description-product'>
+                    <LongDescription data={product?.description} heading="About this item" />
                   </div>
-                  {selectedOption === "used" && (
-                    <div className="mt-2">
+                  <div className='flex short-descriptionc'>
+                    <LongDescription data={product?.shortDescription} heading="" />
+                  </div>
+                </div>
+              </div>
+              <div className='w-full lg:w-[40%]'>
+                <div className="w-full p-0 border rounded-lg shadow-md">
+                  {/* New Product Option */}
+                  <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
+                    <label className="flex items-center justify-between gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="product"
+                        value="new"
+                        checked={selectedOption === "new"}
+                        onChange={() => setSelectedOption("new")}
+                        className="hidden"
+                      />
+                      <span className="font-semibold">Buy new</span>
+                      <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                        {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                      </span>
+                    </label>
+                    <div className='mt-3 space-y-3'>
+                      <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                      <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                    </div>
+                    {selectedOption === "new" && (
+                      <div className="mt-2 space-y-2">
+                        {product?.currentStock > 0 ? (
+                          <p className="font-semibold text-green-600">In stock</p>
+                        ) : (
+                          <p className="text-sm font-semibold text-red-600"> Out of Stock</p>
+                        )}
+                        {product?.currentStock > 0 && product?.currentStock <= 5 && (
+                          <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
+                        )}
+                        <div className="mb-3">
+                          <label htmlFor="quantity" className="block text-sm font-medium">
+                            Quantity:
+                          </label>
+                          <select
+                            id="quantity"
+                            className="w-full p-2 mt-1 border rounded-md"
+                            value={quantity}
+                            onChange={(e) => setQuantity(Number(e.target.value))}
+                          >
+                            {[...Array(10).keys()].map((num) => (
+                              <option key={num + 1} value={num + 1}>
+                                {num + 1}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div id="add-to-cart-button" className='blue-add-btn'>
+                          {isMobile ? (
+                            <>
+                              {showMobileCaseButton && (
+                                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                                  <div className="container p-4 mx-auto max-w-7xl">
+                                    <div className="flex justify-end">
+                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="flex rtl:space-x-reverse">
+                              {!isEngravingAvailable && (
+                                <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                </div>
+                              )}
+
+                              {isEngravingAvailable && (
+                                <>
+                                  <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                                    {translate('label.product.engravingText')}
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className='w-full pt-3'>
+                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                            <h4 className='text-xs'>Dispatches from</h4>
+                            <p className='text-xs text-black'>London Store</p>
+                          </div>
+                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                            <h4 className='text-xs'>Returns</h4>
+                            <p className='text-xs text-color-primary-blue'>Returnable within 30 days of receipt</p>
+                          </div>
+                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                            <h4 className='text-xs'>Payment</h4>
+                            <p className='text-xs text-color-primary-blue'>Secure transaction</p>
+                          </div>
+                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                            <h4 className='text-xs'>Support</h4>
+                            <p className='text-xs text-color-primary-blue'>Product support included</p>
+                          </div>
+                        </div>
+                        <div className='w-full'>
+                          <>
+                            <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                              {isInWishList(selectedAttrData?.productId) ? (
+                                <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
+                              ) : (
+                                <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
+                              <span className='text-sm'> {translate('label.product.addToFavoriteText')} </span> </button>
+                          </>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {/* Used Product Option */}
+                  <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
+                    <label className="flex items-center justify-between gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="product"
+                        value="used"
+                        checked={selectedOption === "used"}
+                        onChange={() => setSelectedOption("used")}
+                        className="hidden"
+                      />
+                      <span className="font-semibold">Save with used - Like New</span>
+                      <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                        {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                      </span>
+                    </label>
+                    <div className='mt-3 space-y-2'>
+                      <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                      <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                    </div>
+                    {selectedOption === "used" && (
+                      <div className="mt-2">
                         {product?.preOrder?.isEnabled &&
                           <div className='flex flex-col'>
                             <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
                           </div>
                         }
                         <div id="add-to-cart-button" className='blue-add-btn'>
-                        {isMobile ? (
-                          <>
-                            {showMobileCaseButton && (
-                              <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                                <div className="container p-4 mx-auto max-w-7xl">
-                                  <div className="flex justify-end">
-                                    <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                    <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                                      {isInWishList(selectedAttrData?.productId) ? (
-                                        <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                      ) : (
-                                        <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                                      )}
-                                      <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                    </button>
+                          {isMobile ? (
+                            <>
+                              {showMobileCaseButton && (
+                                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                                  <div className="container p-4 mx-auto max-w-7xl">
+                                    <div className="flex justify-end">
+                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
+                                        {isInWishList(selectedAttrData?.productId) ? (
+                                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                        ) : (
+                                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                                        )}
+                                        <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <div className="flex rtl:space-x-reverse">
-                            {!isEngravingAvailable && (
-                              <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                                <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                                  {isInWishList(selectedAttrData?.productId) ? (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                  ) : (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                                  )}
-                                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                </button>
-                              </div>
-                            )}
+                              )}
+                            </>
+                          ) : (
+                            <div className="flex rtl:space-x-reverse">
+                              {!isEngravingAvailable && (
+                                <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
+                                    {isInWishList(selectedAttrData?.productId) ? (
+                                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                    ) : (
+                                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                                    )}
+                                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                                  </button>
+                                </div>
+                              )}
 
-                            {isEngravingAvailable && (
-                              <>
-                                <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                                  {translate('label.product.engravingText')}
-                                </button>
-                                <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                                  {isInWishList(selectedAttrData?.productId) ? (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                                  ) : (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                                  )}
-                                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                </button>
-                              </>
-                            )}
-                          </div>
-                        )}
+                              {isEngravingAvailable && (
+                                <>
+                                  <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                                    {translate('label.product.engravingText')}
+                                  </button>
+                                  <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                                    {isInWishList(selectedAttrData?.productId) ? (
+                                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
+                                    ) : (
+                                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                                    )}
+                                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-              </div>
             </div>
-           </>
-          ) : (
-           <>
+          </>
+        ) : (
+          <>
             <div className="space-y-8">
-            <div>
-              <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
-                {product?.name}
-              </h1>
-              <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                {reviews?.review?.totalRecord > 0 &&
-                  <>
-                    <div className="flex w-64">
-                      <Link href={`#productReview`} className="flex text-sm font-medium" >
-                        <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
-                        <div className="ms-1.5 flex">
-                          <span className='dark:text-black'>{reviews?.review?.ratingAverage}</span>
-                          <span className="block mx-2 dark:text-black">·</span>
-                          <span className="underline text-slate-600 dark:text-slate-600">
-                            {reviews?.review?.totalRecord} {translate('common.label.reviews')}
-                          </span>
-                        </div>
-                      </Link>
-                    </div>
-                  </>
-                }
-              </div>
-            </div>
-            {attrGroup['product.relatedproducts']?.length > 0 &&
-              <div className='flex w-full'>
-                <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
-                  {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
-                    <SwiperSlide key={index}>
-                      <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                        <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
+              <div>
+                <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
+                  {product?.name}
+                </h1>
+                <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
+                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  {reviews?.review?.totalRecord > 0 &&
+                    <>
+                      <div className="flex w-64">
+                        <Link href={`#productReview`} className="flex text-sm font-medium" >
+                          <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
+                          <div className="ms-1.5 flex">
+                            <span className='dark:text-black'>{reviews?.review?.ratingAverage}</span>
+                            <span className="block mx-2 dark:text-black">·</span>
+                            <span className="underline text-slate-600 dark:text-slate-600">
+                              {reviews?.review?.totalRecord} {translate('common.label.reviews')}
+                            </span>
+                          </div>
+                        </Link>
                       </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                    </>
+                  }
+                </div>
               </div>
-            }
+              {attrGroup['product.relatedproducts']?.length > 0 &&
+                <div className='flex w-full'>
+                  <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
+                    {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
+                      <SwiperSlide key={index}>
+                        <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
+                          <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              }
 
-            {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
-              <div className='flex flex-col'>
-                {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
-                  <>
-                    <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
-                      <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
-                      <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
-                      <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
-                    </div>
-                    <Transition appear show={showDetails} as={Fragment}>
-                      <Dialog
-                        as="div"
-                        className="fixed inset-0 z-50 cart-z-index-9999"
-                        onClose={closeGwpDetails}
-                      >
-                        <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
-                          <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                            <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
-                          </Transition.Child>
+              {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
+                <div className='flex flex-col'>
+                  {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
+                    <>
+                      <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
+                        <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
+                        <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
+                        <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
+                      </div>
+                      <Transition appear show={showDetails} as={Fragment}>
+                        <Dialog
+                          as="div"
+                          className="fixed inset-0 z-50 cart-z-index-9999"
+                          onClose={closeGwpDetails}
+                        >
+                          <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
+                            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+                              <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
+                            </Transition.Child>
 
-                          {/* This element is to trick the browser into centering the modal contents. */}
-                          <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
-                          <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
-                            <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
-                              <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
-                                <span className="absolute z-50 end-3 top-3">
-                                  <ButtonClose onClick={closeGwpDetails} />
-                                </span>
+                            {/* This element is to trick the browser into centering the modal contents. */}
+                            <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
+                            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
+                              <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
+                                <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
+                                  <span className="absolute z-50 end-3 top-3">
+                                    <ButtonClose onClick={closeGwpDetails} />
+                                  </span>
 
-                                <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                                  <div className='flex flex-col justify-center text-center'>
-                                    <div className='mx-auto'>
-                                      <img alt='' src={gwp?.image} className='w-auto h-80' />
+                                  <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
+                                    <div className='flex flex-col justify-center text-center'>
+                                      <div className='mx-auto'>
+                                        <img alt='' src={gwp?.image} className='w-auto h-80' />
+                                      </div>
+                                      <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
+                                      <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
+                                      <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
                                     </div>
-                                    <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
-                                    <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
-                                    <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </Transition.Child>
-                        </div>
-                      </Dialog>
-                    </Transition>
-                  </>
-                ))}
-              </div>
-            )}
-            <div className="">{renderVariants()}</div>
-            {product?.quantityBreakRules?.length > 0 &&
-              <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
-            }
-            {promotions?.promotions?.availablePromotions?.length > 0 && (
-              <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
-            )}
-            {
-              openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
-            }
-            {featureToggle?.features?.enableStoreLocator &&
-              <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-                <MyLocationIcon className='w-4 h-4' />
-                <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-              </div>
-            }
+                            </Transition.Child>
+                          </div>
+                        </Dialog>
+                      </Transition>
+                    </>
+                  ))}
+                </div>
+              )}
+              <div className="">{renderVariants()}</div>
+              {product?.quantityBreakRules?.length > 0 &&
+                <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
+              }
+              {promotions?.promotions?.availablePromotions?.length > 0 && (
+                <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
+              )}
+              {
+                openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
+              }
+              {featureToggle?.features?.enableStoreLocator &&
+                <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+                  <MyLocationIcon className='w-4 h-4' />
+                  <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                </div>
+              }
+              {renderSellableType()}
               {product?.preOrder?.isEnabled &&
                 <div className='flex flex-col'>
                   <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
                 </div>
               }
-            <div id="add-to-cart-button">
-              {isMobile ? (
-                <>
-                  {showMobileCaseButton && (
-                    <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                      <div className="container p-4 mx-auto max-w-7xl">
-                        <div className="flex justify-end">
-                          <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                          <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                            {isInWishList(selectedAttrData?.productId) ? (
-                              <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                            ) : (
-                              <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                            )}
-                            <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                          </button>
+              <div id="add-to-cart-button">
+                {isMobile ? (
+                  <>
+                    {showMobileCaseButton && (
+                      <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                        <div className="container p-4 mx-auto max-w-7xl">
+                          <div className="flex justify-end">
+                            <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                            <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
+                              {isInWishList(selectedAttrData?.productId) ? (
+                                <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                              ) : (
+                                <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                              )}
+                              <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="flex rtl:space-x-reverse">
-                  {!isEngravingAvailable && (
-                    <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                        {isInWishList(selectedAttrData?.productId) ? (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                        ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                        )}
-                        <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                      </button>
-                    </div>
-                  )}
+                    )}
+                  </>
+                ) : (
+                  <div className="flex rtl:space-x-reverse">
+                    {!isEngravingAvailable && (
+                      <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                        <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                        <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
+                          {isInWishList(selectedAttrData?.productId) ? (
+                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                          ) : (
+                            <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                          )}
+                          <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                        </button>
+                      </div>
+                    )}
 
-                  {isEngravingAvailable && (
-                    <>
-                      <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                        {translate('label.product.engravingText')}
-                      </button>
-                      <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                        {isInWishList(selectedAttrData?.productId) ? (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                        ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                        )}
-                        <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-            <hr className=" border-slate-200 dark:border-slate-700"></hr>
+                    {isEngravingAvailable && (
+                      <>
+                        <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                        <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                        <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                          {translate('label.product.engravingText')}
+                        </button>
+                        <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                          {isInWishList(selectedAttrData?.productId) ? (
+                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
+                          ) : (
+                            <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                          )}
+                          <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+              <hr className=" border-slate-200 dark:border-slate-700"></hr>
               {!featureToggle?.features?.enableCustomToolWidget ? (
-                  <>
+                <>
                   {product && <AccordionInfo product={product} data={detailsConfig} />}
                   {renderProductSpecification()}
-                  </>
-                  ) : (
-                  <></>
+                </>
+              ) : (
+                <></>
               )}
-            <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
-              <DeliveryInfo product={product} grpData={attrGroup} config={config} />
+              <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
+                <DeliveryInfo product={product} grpData={attrGroup} config={config} />
+              </div>
             </div>
-             </div>
-           </>
-          )}
-        </>
+          </>
+        )}
+      </>
     );
   };
   return (
@@ -1415,7 +1423,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <>
               {featureToggle?.features?.isImageGallery ? (
-                <div  className={`w-full sticky top-0 product-image-border ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
+                <div className={`w-full sticky top-0 product-image-border ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
                   <ImageGallery
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
@@ -1457,26 +1465,26 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </>
           )}
           <div
-          className={`px-4 sm:px-0 w-full pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[45%]"}`}>
+            className={`px-4 sm:px-0 w-full pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[45%]"}`}>
             {renderSectionContent()}
           </div>
         </div>
-         {featureToggle?.features?.enableCustomToolWidget ? (
-               <>
-                  <div className="flex w-full bg-white product-tab-active">
-                     <div className="lg:mx-auto container-ffx">
-                      <PDPDetails product={product} description={product?.description} />
-                      </div>
-                   </div>
-                   <div className="pb-10 bg-white sm:pb-0">
-                <div className="grid grid-cols-12 px-0 lg:mx-auto container-ffx sm:grid-cols-12 sm:px-4 md:px-0 lg:px-6 2xl:px-0">
-                  <ProductSpecification attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
-                </div>
+        {featureToggle?.features?.enableCustomToolWidget ? (
+          <>
+            <div className="flex w-full bg-white product-tab-active">
+              <div className="lg:mx-auto container-ffx">
+                <PDPDetails product={product} description={product?.description} />
               </div>
-              </>
-              ) : (
-               <></>
-          )}
+            </div>
+            <div className="pb-10 bg-white sm:pb-0">
+              <div className="grid grid-cols-12 px-0 lg:mx-auto container-ffx sm:grid-cols-12 sm:px-4 md:px-0 lg:px-6 2xl:px-0">
+                <ProductSpecification attrGroup={attrGroup} product={product} deviceInfo={deviceInfo} />
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
         {/* {LookBook} */}
         {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />

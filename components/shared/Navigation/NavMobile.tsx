@@ -112,8 +112,8 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
   };
 
   return (
-    <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-white divide-neutral-100 dark:divide-neutral-800">
-      <div className="px-5 pb-2">
+    <div className="w-full h-screen overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-white divide-neutral-100 dark:divide-neutral-800">
+      <div className="px-5 py-2 bg-header-clr">
         <Logo />
         <span className="absolute p-1 right-2 top-4">
           <ButtonClose onClick={onClickClose} />

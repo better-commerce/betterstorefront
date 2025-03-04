@@ -16,7 +16,12 @@ const getProductApiMiddleware = async (req: any, res: any) => {
       query: req.body.slug,
       cookies: req.cookies,
     })
-    res.status(200).json({ ...response, ...mapObject(response, getProductTransformMap)?.data })
+    res
+      .status(200)
+      .json({
+        ...response,
+        ...mapObject(response, getProductTransformMap)?.data,
+      })
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
@@ -49,7 +54,16 @@ export const getProductTransform = (product: any) => ({
   //condition: product?.condition,
   //couponProvider: product?.couponProvider,
   currentStock: product?.currentStock,
-  customAttributes: product?.customAttributes?.length ? product?.customAttributes?.map((attribute: any) => ({ compareAtPDP: attribute?.compareAtPDP, compareAtPLP: attribute?.compareAtPLP, display: attribute?.display, key: attribute?.key, value: attribute?.value, valueText: attribute?.valueText, })) : new Array<any>(),
+  customAttributes: product?.customAttributes?.length
+    ? product?.customAttributes?.map((attribute: any) => ({
+        compareAtPDP: attribute?.compareAtPDP,
+        compareAtPLP: attribute?.compareAtPLP,
+        display: attribute?.display,
+        key: attribute?.key,
+        value: attribute?.value,
+        valueText: attribute?.valueText,
+      }))
+    : new Array<any>(),
   cutOffTime: product?.cutOffTime,
   deliveryETA: product?.deliveryETA,
   //deliveryMessage: product?.deliveryMessage,
@@ -111,19 +125,20 @@ export const getProductTransform = (product: any) => ({
   variantGroupCode: product?.variantGroupCode,
   variantProducts: product?.variantProducts,
   videos: product?.videos,
+  sellableType: product?.sellableType,
+  itemPerCarton: product?.itemPerCarton,
 })
 
 export const getProductTransformMap = {
-
-/**
- * Transforms the API response to include only the necessary product data.
- *
- * @param {Object} response - The API response object containing product details.
- * @returns {Object} - An object with the transformed product data.
- */
+  /**
+   * Transforms the API response to include only the necessary product data.
+   *
+   * @param {Object} response - The API response object containing product details.
+   * @returns {Object} - An object with the transformed product data.
+   */
   data: (response: any) => ({
     product: getProductTransform(response?.product),
-  })
+  }),
 }
 
 export default apiRouteGuard(getProductApiMiddleware)

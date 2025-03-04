@@ -18122,3 +18122,23 @@ input[type=number] {
 .pdp-right-section .ex-vat-text{
   font-size: 15px !important;
 }
+
+.search-icon-box button .search-icon-div{
+    display: flex;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius:8px !important;
+    justify-content: flex-start;
+}
+.search-icon-box button .search-icon-div img{
+  margin: 0 10px;
+}
+
+@media screen and (max-width: 767px) {
+  .search-top{
+    position: relative;
+    top: 4px;
+  }
+}

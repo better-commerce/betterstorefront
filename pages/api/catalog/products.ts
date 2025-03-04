@@ -51,52 +51,63 @@ const getCollectionApiMiddleware = async (req: any, res: any) => {
  * @param {Object} product - The product object to be mapped.
  * @returns {Object} - The mapped product object.
  */
-export const getProductListTransform = (results: any) => results?.map((product: any) => ({
-  recordId: product?.recordId,
-  name: product?.name,
-  slug: product?.slug,
-  stockCode: product?.stockCode,
-  listPrice: product?.listPrice,
-  price: product?.price,
-  images: product?.images?.length ? product?.images?.map((image: any) => ({ name: image?.name, tag: image?.tag, url: image?.url, alt: image?.alt, displayOrder: image?.displayOrder, isActive: image?.isActive })) : new Array<any>(),
-  image: product?.image,
-  itemType: product?.itemType,
-  shortDescription: product?.shortDescription,
-  groupName: product?.groupName,
-  relatedType: product?.relatedType,
-  brand: product?.brand,
-  brandSlug: product?.brandSlug,
-  subBrand: product?.subBrand,
-  sku: product?.sku,
-  classification: product?.classification,
-  currentStock: product?.currentStock,
-  description: product?.description,
-  attributes: product?.attributes,
-  fulfilFromWarehouse: product?.fulfilFromWarehouse,
-  //fulfilFromStore: product?.fulfilFromStore,
-  fulfilFromSupplier: product?.fulfilFromSupplier,
-  trending: product?.trending,
-  bestSeller: product?.bestSeller,
-  onSale: product?.onSale,
-  newLaunch: product?.newLaunch,
-  exclusive: product?.exclusive,
-  variantProductsMinimal: product?.variantProductsMinimal,
-  variantProductsAttributeMinimal: product?.variantProductsAttributeMinimal,
-  promotions: product?.promotions,
-  preOrder: product?.preOrder,
-  rating: product?.rating,
-  reviewCount: product?.reviewCount,
-  groupNameList: product?.groupNameList,
-  variantGroupCode: product?.variantGroupCode,
-  fulfilFromWarehouseDays: product?.fulfilFromWarehouseDays,
-  fulfilFromSupplierDays: product?.fulfilFromSupplierDays,
-  //fulfilFromInstoreDays: product?.fulfilFromInstoreDays,
-  flags: product?.flags,
-  productId: product?.productId || EmptyString,
-}))
+export const getProductListTransform = (results: any) =>
+  results?.map((product: any) => ({
+    recordId: product?.recordId,
+    name: product?.name,
+    slug: product?.slug,
+    stockCode: product?.stockCode,
+    listPrice: product?.listPrice,
+    price: product?.price,
+    images: product?.images?.length
+      ? product?.images?.map((image: any) => ({
+          name: image?.name,
+          tag: image?.tag,
+          url: image?.url,
+          alt: image?.alt,
+          displayOrder: image?.displayOrder,
+          isActive: image?.isActive,
+        }))
+      : new Array<any>(),
+    image: product?.image,
+    itemType: product?.itemType,
+    shortDescription: product?.shortDescription,
+    groupName: product?.groupName,
+    relatedType: product?.relatedType,
+    brand: product?.brand,
+    brandSlug: product?.brandSlug,
+    subBrand: product?.subBrand,
+    sku: product?.sku,
+    classification: product?.classification,
+    currentStock: product?.currentStock,
+    description: product?.description,
+    attributes: product?.attributes,
+    fulfilFromWarehouse: product?.fulfilFromWarehouse,
+    //fulfilFromStore: product?.fulfilFromStore,
+    fulfilFromSupplier: product?.fulfilFromSupplier,
+    trending: product?.trending,
+    bestSeller: product?.bestSeller,
+    onSale: product?.onSale,
+    newLaunch: product?.newLaunch,
+    exclusive: product?.exclusive,
+    variantProductsMinimal: product?.variantProductsMinimal,
+    variantProductsAttributeMinimal: product?.variantProductsAttributeMinimal,
+    promotions: product?.promotions,
+    preOrder: product?.preOrder,
+    rating: product?.rating,
+    reviewCount: product?.reviewCount,
+    groupNameList: product?.groupNameList,
+    variantGroupCode: product?.variantGroupCode,
+    fulfilFromWarehouseDays: product?.fulfilFromWarehouseDays,
+    fulfilFromSupplierDays: product?.fulfilFromSupplierDays,
+    //fulfilFromInstoreDays: product?.fulfilFromInstoreDays,
+    flags: product?.flags,
+    productId: product?.productId || EmptyString,
+    sellableType: product?.sellableType || EmptyString,
+    itemPerCarton: product?.itemPerCarton,
+  }))
 
 const getAllProductsTransformMap = {
-
   /**
    * Transforms the API response to include only the necessary product data.
    *
@@ -107,13 +118,16 @@ const getAllProductsTransformMap = {
     ...response,
     products: {
       ...response?.products,
-      results: response?.products?.results?.length ? getProductListTransform(response?.products?.results) : new Array<any>(),
+      results: response?.products?.results?.length
+        ? getProductListTransform(response?.products?.results)
+        : new Array<any>(),
     },
-  })
+  }),
 }
 
 export const getRelatedProductsTransformMap = {
-  data: (results: any) => results?.length ? getProductListTransform(results) : new Array<any>()
+  data: (results: any) =>
+    results?.length ? getProductListTransform(results) : new Array<any>(),
 }
 
 export default apiRouteGuard(getCollectionApiMiddleware)

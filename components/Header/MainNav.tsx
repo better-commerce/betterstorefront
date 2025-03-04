@@ -35,6 +35,7 @@ interface Props {
 
 const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle, locale }) => {
   const { recordAnalytics } = useAnalytics()
+  const translate = useTranslation()
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
   const searchSetting = configSettings?.find((x: any) => matchStrings(x?.configType, 'SearchSettings', true))?.configKeys || []
@@ -46,6 +47,13 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   let currentPage = getCurrentPage()
   const [scrollPosition, setScrollPosition] = useState(0); // Initialize to 0
   const [delayEffect, setDelayEffect] = useState(false)
+  const showB2BHeader = featureToggle?.features?.enableB2BHeader;
+  const showSeparateMenu = featureToggle?.features?.enableSeparateMenu;
+  const showVatToggle = featureToggle?.features?.enablePriceIncVatToggle;
+  const showWishlist = featureToggle?.features?.enableHeaderWishlist;
+  const showMembership = featureToggle?.features?.enableMembership;
+  const showLanguage = featureToggle?.features?.enableLanguage;
+  const showEngage = featureToggle?.features?.enableEngage;
   useEffect(() => {
     setDelayEffect(true)
   }, [])
@@ -96,152 +104,120 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
     }
   }
 
-  const renderContent = () => {
-    const translate = useTranslation()
-    return (
-      <>
-        <div className={`top-0 td-header bg-header-clr fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>
-          {!isMobile &&
-            <div className="justify-between hidden sm:flex bg-top-toggle">
-              <div className="container mx-auto">
-              <div className="promotion-banner mob-marquee"></div>
-              <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
-                {b2bEnabled && featureToggle?.features?.enableQuickOrderPad && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-                {featureToggle?.features?.enablePriceIncVatToggle &&
-                  <>
-                    <div className="flex flex-col py-0 text-xs font-medium text-black text-invert sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
-                    <div className="flow-root w-10 px-2 sm:w-12">
-                      <div className="flex justify-center flex-1 mx-auto">
-                        <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
-                      </div>
-                    </div>
-                  </>
-                }
-              </div>
-              </div>
-            </div>
-          }
-          {featureToggle?.features?.enableSeprateMenu ? (
-            <>
-           <div className="w-full">
-            <div className="container">
-            <div className=" flex justify-between mx-auto mob-container mt-2">
-            {isMobile &&
-                  <div className="flex items-center flex-1">
-                    <MenuBar navItems={config} featureToggle={featureToggle} />
-                  </div>
-                }
-                <div className="flex items-center lg:flex-1">
-                  <Link href="/" passHref>
-                    <Logo className="flex-shrink-0" />
-                  </Link>
-                </div>
-                {!isMobile &&
-                <div className="search-icon-box flex-[2] hidden sm:flex">
-                  <button className="items-center w-full justify-center h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    {renderMagnifyingGlassIcon()}
-                  </button>
-                </div>
-                 }
-                <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
-                  {!isMicrosite(locale) && featureToggle?.features?.enableLanguage &&
-                    <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
-                  }
-                  {isMobile &&
-                  <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    {renderMagnifyingGlassIcon()}
-                  </button>
-                  }
-                  {featureToggle?.features?.enableHeaderWishlist &&
-                    <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
-                      <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                        <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
-                        {wishListItems?.length > 0 && delayEffect && (
-                          <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
-                            {wishListItems?.length}
-                          </span>
-                        )}
-                      </button>
-                    </div>
-                  }
-                  <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-                  <CartDropdown />
-                  {featureToggle?.features?.enableMembership &&
-                    <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                      <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
-                    </Link>
-                  }
-                </div>
-            </div>
-            </div>
-            {!isMobile &&
-                  <div className="bg-header-nav-clr w-full mt-2">
-                    <div className="container flex-[2] justify-center lg:flex custom-padding-nav">
-                    <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
-                    </div>
-                  </div>
-                }
-            </div>
-            </>
-            ) : (
-             <>
-              <div className="container flex justify-between mx-auto mob-container">
-                {isMobile &&
-                  <div className="flex items-center flex-1">
-                    <MenuBar navItems={config} featureToggle={featureToggle} />
-                  </div>
-                }
-                <div className="flex items-center lg:flex-1">
-                  <Link href="/" passHref>
-                    <Logo className="flex-shrink-0" />
-                  </Link>
-                </div>
-                {!isMobile &&
-                  <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
-                    <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
-                  </div>
-                }
+  const TopNav = ({ showVatToggle }: any) => (
+    <div className="justify-between hidden sm:flex bg-top-toggle">
+      <div className="container mx-auto">
+        {showVatToggle && <VatToggle />}
+      </div>
+    </div>
+  );
 
-                <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
-                  {!isMicrosite(locale) && featureToggle?.features?.enableLanguage &&
-                    <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />
-                  }
-                  <button className="items-center justify-center h-10 rounded-full w-7 lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                    {renderMagnifyingGlassIcon()}
-                  </button>
-
-                  {featureToggle?.features?.enableHeaderWishlist &&
-                    <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
-                      <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                        <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
-                        {wishListItems?.length > 0 && delayEffect && (
-                          <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
-                            {wishListItems?.length}
-                          </span>
-                        )}
-                      </button>
-                    </div>
-                  }
-                  <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-                  <CartDropdown />
-                  {featureToggle?.features?.enableMembership &&
-                    <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                      <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
-                    </Link>
-                  }
-                </div>
-              </div>
-             </>
-            )}
-          {featureToggle?.features?.enableEngage && <EngagePromoBar />}
+  const VatToggle = () => (
+    <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
+      {b2bEnabled && showB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
+      <div className="text-xs font-medium text-black sm:text-xs whitespace-nowrap">
+        {translate('label.navBar.pricesIncludingVatText')}
+      </div>
+      <div className="flow-root w-10 px-2 sm:w-12">
+        <div className="flex justify-center">
+          <ToggleSwitch
+            className="include-vat"
+            height={15}
+            width={40}
+            checked={vatIncluded()}
+            checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>}
+            uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>}
+            onToggleChanged={onIncludeVATChanged}
+          />
         </div>
-      </>
-    );
-  };
+      </div>
+    </div>
+  );
+
+  const SeparateMenu = () => (
+    <div className="w-full">
+      <div className="container flex justify-between mx-auto mob-container">
+        {isMobile && <MenuBar navItems={config} featureToggle={featureToggle} />}
+        <LogoSection />
+        {!isMobile && <SearchButton />}
+        <IconMenu />
+      </div>
+      {!isMobile && <div className="w-full mt-2 bg-header-nav-clr"><NavigationMenu /></div>}
+    </div>
+  );
+
+  const CompactMenu = () => (
+    <div className="container flex justify-between mx-auto mob-container">
+      {isMobile && <MenuBar navItems={config} featureToggle={featureToggle} />}
+      <LogoSection />
+      {!isMobile && <NavigationMenu />}
+      <IconMenu />
+    </div>
+  );
+
+  const LogoSection = () => (
+    <div className="flex items-center lg:flex-1">
+      <Link href="/" passHref>
+        <Logo className="flex-shrink-0" />
+      </Link>
+    </div>
+  );
+
+  const SearchButton = () => (
+    <div className={`${showSeparateMenu ? 'search-icon-box flex-[2] mt-2 hidden sm:flex' : ''}`}>
+      <button className="items-center justify-center w-full h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+        {renderMagnifyingGlassIcon()}
+      </button>
+    </div>
+  );
+
+  const NavigationMenu = () => (
+    <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
+      <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+    </div>
+  );
+
+  const IconMenu = () => (
+    <div className="flex items-center justify-end flex-1 ml-5 text-slate-700 dark:text-slate-100 sm:ml-0 icon-div-menu">
+      {showLanguage && <LangDropdown currencies={currencies} languages={languages} defaultLanguage={defaultLanguage} defaultCountry={defaultCountry} />}
+      {!showSeparateMenu && <SearchButton />}
+      {showWishlist && <WishlistIcon />}
+      <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
+      <CartDropdown />
+      {showMembership && <MembershipIcon />}
+    </div>
+  );
+
+  const WishlistIcon = () => (
+    <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
+      <button onClick={handleWishlist} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+        <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
+        {wishListItems?.length > 0 && delayEffect && (
+          <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
+            {wishListItems?.length}
+          </span>
+        )}
+      </button>
+    </div>
+  );
+
+  const MembershipIcon = () => (
+    <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+      <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
+    </Link>
+  );
+
   return (
     <div className="bg-white border-b nc-MainNav2Logged dark:bg-neutral-900 border-slate-100 dark:border-slate-100">
-      <div className="container ">{renderContent()}</div>
+      <div className="container ">
+        <div className="fixed inset-x-0 top-0 z-20 w-full py-2 border-b td-header bg-header-clr theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white">
+          {!isMobile && <TopNav showVatToggle={showVatToggle} />}
+          {showSeparateMenu ? <SeparateMenu /> : <CompactMenu />}
+          {showEngage && <EngagePromoBar />}
+        </div>
+      </div>
     </div>
   );
 };
+
 export default MainNav;
