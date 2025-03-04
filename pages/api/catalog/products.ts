@@ -104,7 +104,7 @@ export const getProductListTransform = (results: any) =>
     flags: product?.flags,
     productId: product?.productId || EmptyString,
     sellableType: product?.sellableType || EmptyString,
-    itemPerCarton: product?.itemPerCarton,
+    itemPerCarton: product?.itemPerCarton || EmptyString,
   }))
 
 const getAllProductsTransformMap = {
