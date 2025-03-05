@@ -703,16 +703,8 @@
                     "group": "PLP",
                     "urlCode": "plp-compare-products",
                     "name": "Compare Products",
-                    "url": "https://arsenalia.bettercommerce.tech/collection/pumps",
+                    "url": "https://arsenalia.bettercommerce.tech/search",
                     "displayOrder": 8,
-                    "active": 1
-                },
-                {
-                    "group": "PLP",
-                    "urlCode": "plp-badges",
-                    "name": "Badges",
-                    "url": "https://arsenalia.bettercommerce.tech/collection/clearance",
-                    "displayOrder": 9,
                     "active": 1
                 },
                 {
@@ -767,7 +759,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-gift-with-products",
                     "name": "Type Gift with Products",
-                    "url": "https://arsenalia.bettercommerce.tech/products/metabo-metabo-dmh-290-set-compressed-air-chipping-hammer-117676",
+                    "url": "https://arsenalia.bettercommerce.tech/products/kidde-kidde-kid29d-29d-optical-smoke-alarm-battery-powered-237175",
                     "displayOrder": 17,
                     "active": 1
                 },
@@ -775,40 +767,16 @@
                     "group": "PDP",
                     "urlCode": "pdp-type-gift-cards",
                     "name": "Type Gift Cards",
-                    "url": "https://arsenalia.bettercommerce.tech/products/apache-e-gift-cards-voucher-50-gt005",
+                    "url": "https://arsenalia.bettercommerce.tech/products/kidde-kidde-kid29d-29d-optical-smoke-alarm-battery-powered-237175",
                     "displayOrder": 18,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
-                    "urlCode": "pdp-check-store-stock",
-                    "name": "Check Store Stock",
-                    "url": "https://arsenalia.bettercommerce.tech/products/milwaukee-milwaukee-m18fchs35-121-18v-12ah-350mm-m18-chainsaw-281747",
-                    "displayOrder": 19,
                     "active": 1
                 },
                 {
                     "group": "PDP",
                     "urlCode": "pdp-product-reviews",
                     "name": "Product Reviews",
-                    "url": "https://arsenalia.bettercommerce.tech/products/paslode-paslode-018880-2-1ah-lithium-battery-cell-60791#productReview",
+                    "url": "https://arsenalia.bettercommerce.tech/products/link2home-link2home-lthsecsiren-smart-alarm-external-siren-280438#productReview",
                     "displayOrder": 20,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
-                    "urlCode": "pdp-rich-attributes",
-                    "name": "Rich Attributes",
-                    "url": "https://arsenalia.bettercommerce.tech/products/festool-festool-575304-ks120-reb-240v-240v-260mm-kapex-sliding-compound-mitre-saw-235692",
-                    "displayOrder": 21,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
-                    "urlCode": "pdp-technical-specs",
-                    "name": "Technical Specs",
-                    "url": "https://arsenalia.bettercommerce.tech/products/festool-festool-575304-ks120-reb-240v-240v-260mm-kapex-sliding-compound-mitre-saw-235692",
-                    "displayOrder": 22,
                     "active": 1
                 },
                 {
@@ -847,7 +815,7 @@
                     "group": "PDP",
                     "urlCode": "pdp-upsell-and-cross-sell",
                     "name": "Upsell and Cross-sell",
-                    "url": "https://arsenalia.bettercommerce.tech/products/draper-draper-d20cd60-d20-20v-brushless-combi-drill-bare-unit-238828",
+                    "url": "https://arsenalia.bettercommerce.tech/products/arctic-hayes-arctic-hayes-arcphco520-carbon-monoxide-alarm-tester-spray-520ml-206684",
                     "displayOrder": 27,
                     "active": 1
                 },
@@ -863,7 +831,7 @@
                     "group": "Brand",
                     "urlCode": "brand-brand-rich-landing-page",
                     "name": "Brand Rich Landing Page",
-                    "url": "https://arsenalia.bettercommerce.tech/brands/dewalt-15886?brand=DEWALT&ireftp=nav&iref=nav--brands-dewalt-15886",
+                    "url": "https://arsenalia.bettercommerce.tech/brands/kidde-28457?brand=Kidde",
                     "displayOrder": 29,
                     "active": 1
                 },
@@ -871,7 +839,7 @@
                     "group": "Brand",
                     "urlCode": "brand-brand-standard-plp",
                     "name": "Brand Standard PLP",
-                    "url": "https://arsenalia.bettercommerce.tech/brands/yale-15852?brand=Yale",
+                    "url": "https://arsenalia.bettercommerce.tech/brands/draper-28455?brand=Draper",
                     "displayOrder": 30,
                     "active": 1
                 },
@@ -879,7 +847,7 @@
                     "group": "Category",
                     "urlCode": "category-category-rich-landing-page",
                     "name": "Category Rich Landing Page",
-                    "url": "https://arsenalia.bettercommerce.tech/category/clothing-protection",
+                    "url": "https://arsenalia.bettercommerce.tech/category/security",
                     "displayOrder": 31,
                     "active": 1
                 },
@@ -887,24 +855,8 @@
                     "group": "Category",
                     "urlCode": "category-category-plp",
                     "name": "Category PLP",
-                    "url": "https://arsenalia.bettercommerce.tech/category/hardware-consumables",
+                    "url": "https://arsenalia.bettercommerce.tech/category/security",
                     "displayOrder": 32,
-                    "active": 1
-                },
-                {
-                    "group": "Omnichannel",
-                    "urlCode": "omnichannel-store-locator",
-                    "name": "Store Locator",
-                    "url": "https://arsenalia.bettercommerce.tech/store-locator",
-                    "displayOrder": 37,
-                    "active": 1
-                },
-                {
-                    "group": "Omnichannel",
-                    "urlCode": "omnichannel-check-store-stock",
-                    "name": "Check Store Stock",
-                    "url": "https://arsenalia.bettercommerce.tech/products/traffi-traffi-tg3210-tri-polymer-pu-cut-level-b-safety-gloves-size-9-275599",
-                    "displayOrder": 39,
                     "active": 1
                 },
                 {
