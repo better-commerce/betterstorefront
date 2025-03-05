@@ -741,14 +741,6 @@
                 },
                 {
                     "group": "PDP",
-                    "urlCode": "pdp-type-complex-variant",
-                    "name": "Type Complex Variant",
-                    "url": "https://arsenalia.bettercommerce.tech/products/arctic-hayes-arctic-hayes-arcph043a-smoke-alarm-tester-spray-140ml-206683",
-                    "displayOrder": 15,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
                     "urlCode": "pdp-type-bundle-product",
                     "name": "Type Bundle Product",
                     "url": "https://arsenalia.bettercommerce.tech/products/arctic-hayes-smoke-sticks-bundle-206663",
@@ -789,14 +781,6 @@
                 },
                 {
                     "group": "PDP",
-                    "urlCode": "pdp-personalize-product",
-                    "name": "Personalize Product",
-                    "url": "https://arsenalia.bettercommerce.tech/products/einhell-einhell-te-cd18-2li-ikit-18v-2x1-5ah-combi-drill-kit-201969?storecode=tool&urlcode=home",
-                    "displayOrder": 24,
-                    "active": 1
-                },
-                {
-                    "group": "PDP",
                     "urlCode": "pdp-applicable-promos",
                     "name": "Applicable Promos",
                     "url": "https://arsenalia.bettercommerce.tech/products/yale-yale-saa5015-shed-garage-alarm-287597",
@@ -829,34 +813,10 @@
                 },
                 {
                     "group": "Brand",
-                    "urlCode": "brand-brand-rich-landing-page",
-                    "name": "Brand Rich Landing Page",
-                    "url": "https://arsenalia.bettercommerce.tech/brands/kidde-28457?brand=Kidde",
-                    "displayOrder": 29,
-                    "active": 1
-                },
-                {
-                    "group": "Brand",
                     "urlCode": "brand-brand-standard-plp",
                     "name": "Brand Standard PLP",
                     "url": "https://arsenalia.bettercommerce.tech/brands/draper-28455?brand=Draper",
                     "displayOrder": 30,
-                    "active": 1
-                },
-                {
-                    "group": "Category",
-                    "urlCode": "category-category-rich-landing-page",
-                    "name": "Category Rich Landing Page",
-                    "url": "https://arsenalia.bettercommerce.tech/category/security",
-                    "displayOrder": 31,
-                    "active": 1
-                },
-                {
-                    "group": "Category",
-                    "urlCode": "category-category-plp",
-                    "name": "Category PLP",
-                    "url": "https://arsenalia.bettercommerce.tech/category/security",
-                    "displayOrder": 32,
                     "active": 1
                 },
                 {
@@ -901,26 +861,10 @@
                 },
                 {
                     "group": "B2B",
-                    "urlCode": "data-pack",
-                    "name": "Datapack",
-                    "url": "https://arsenalia.bettercommerce.tech/my-account/data-pack",
-                    "displayOrder": 49,
-                    "active": 1
-                },
-                {
-                    "group": "B2B",
                     "urlCode": "quotes",
                     "name": "Quotes",
                     "url": "https://arsenalia.bettercommerce.tech/my-account/my-company/quotes",
                     "displayOrder": 50,
-                    "active": 1
-                },
-                {
-                    "group": "B2B",
-                    "urlCode": "invoice",
-                    "name": "Invoice",
-                    "url": "https://arsenalia.bettercommerce.tech/my-account/my-company/invoices",
-                    "displayOrder": 51,
                     "active": 1
                 },
                 {
@@ -945,22 +889,6 @@
                     "name": "Reorder",
                     "url": "https://arsenalia.bettercommerce.tech/my-account/orders/fdd1a1fe-58d9-ef11-88cf-9810f0c100ac",
                     "displayOrder": 54,
-                    "active": 1
-                },
-                {
-                    "group": "B2B",
-                    "urlCode": "custom-pricing",
-                    "name": "Custom Pricing",
-                    "url": "https://arsenalia.bettercommerce.tech/products/billie-tailored-short-with-pleated-detail-in-apple-ss23594",
-                    "displayOrder": 55,
-                    "active": 1
-                },
-                {
-                    "group": "B2B",
-                    "urlCode": "wishlist",
-                    "name": "Wishlist",
-                    "url": "https://arsenalia.bettercommerce.tech/my-account/wishlist",
-                    "displayOrder": 56,
                     "active": 1
                 }
             ]
