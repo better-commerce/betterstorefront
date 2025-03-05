@@ -884,7 +884,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderSellableType = () => {
     return (
       <div className='flex justify-start gap-2 divide-x divide-gray-200'>
-        <h4 className='text-lg font-normal text-black'>Sellable Type: {product?.sellableType == "Each" ? 'Each' : product?.sellableType == "Pallet" ? 'Pallet' : product?.sellableType == "Both" ? 'Both' : 'Carton'}</h4>
+        {product?.sellableType && <h4 className='text-lg font-normal text-black'>Sellable Type: {product?.sellableType == "Each" ? 'Each' : product?.sellableType == "Pallet" ? 'Pallet' : product?.sellableType == "Both" ? 'Both' : product?.sellableType == "Carton" ? 'Carton' : ''}</h4>}
         {product?.sellableType == "Pallet" && <h4 className='pl-4 text-lg font-normal text-black'>Pallet of {product?.itemPerCarton}</h4>}
         {product?.sellableType == "CartonPacks" && <h4 className='pl-4 text-lg font-normal text-black'>Carton of {product?.itemPerCarton}</h4>}
       </div>
