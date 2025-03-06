@@ -102,6 +102,7 @@ export async function getStaticProps(context: any) {
           destination: errorUrl,
           permanent: false,
         },
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
       }
     }
   }
@@ -141,7 +142,7 @@ export async function getStaticProps(context: any) {
 
   if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     if (categorySlugUIDData?.status === "NotFound") {
-      return notFoundRedirect()
+      return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), };
     }
   }
 
