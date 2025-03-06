@@ -665,7 +665,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
-    return notFoundRedirect()
+    return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), };
   }
 
   if (pageProps?.isRedirect) {
@@ -674,6 +674,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
         destination: pageProps?.redirect,
         permanent: false,
       },
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
     }
   }
 

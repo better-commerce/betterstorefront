@@ -44,10 +44,11 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import Loader from '@components/Loader'
 import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
-import { Cookie } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -744,7 +745,7 @@ export async function getStaticProps({
   const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
-    return notFoundRedirect()
+    return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), }
   }
 
   return {
@@ -753,6 +754,7 @@ export async function getStaticProps({
       query: EmptyObject, //context.query,
       params: params,
     }, // will be passed to the page component as props
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }
 }
 
