@@ -40,7 +40,7 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
   const [shippingPlans, setShippingPlans] = useState<any>([])
 
   useEffect(() => {
-    const cartLineItems = mapSplitDeliveryPlansToItems(shippingPlans, cartItems?.lineItems)
+    const cartLineItems = mapSplitDeliveryPlansToItems(shippingPlans || [], cartItems?.lineItems)
     let splitProducts = groupItemsByDeliveryDate(cartLineItems)
     setSplitBasketProducts(splitProducts)
   }, [cartItems?.lineItems])
