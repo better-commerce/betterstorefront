@@ -27,7 +27,8 @@
     "enableSeparateMenu": false,
     "enableRichPdpToggle": false,
     "enableAddButtonBottom": false,
-    "enableB2BHeader": false
+    "enableB2BHeader": false,
+    "enableToolsHome":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

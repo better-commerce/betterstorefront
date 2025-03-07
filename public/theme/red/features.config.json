@@ -23,7 +23,8 @@
     "enableCustomHomeWidget":false,
     "enableFullBanner":false,
     "enableCustomToolWidget": false,
-    "enableB2BHeader": true
+    "enableB2BHeader": true,
+    "enableToolsHome":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
