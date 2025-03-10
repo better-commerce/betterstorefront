@@ -1,64 +1,241 @@
-import { CurrencyPoundIcon } from "@heroicons/react/24/outline";
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
+import Loader from "@components/Loader";
+import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, TradeInItemCondition } from "@components/utils/constants";
+import Link from 'next/link';
+import { logError } from '@framework/utils/app-util';
 
-export default function GetQuote({ nextStep, currentStep, steps, selectedItems, setCurrentStep }: any) {
+export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false);
+  const [newQuoteDetail, setNewQuoteData] = useState<any>(quoteData);
+  const [itemStatus, setItemStatus] = useState<{ [key: string]: boolean }>({}); // Track item approval/rejection
+  const [rejectReasons, setRejectReasons] = useState<{ [key: string]: number }>({});
+  const [showDropdown, setShowDropdown] = useState<{ [key: string]: boolean }>({});
+  const [isChecked, setIsChecked] = useState(false);
+
+  const rejectionOptions = [
+    { id: 1, value: "Offer too low" },
+    { id: 2, value: "Better offer elsewhere" },
+    { id: 3, value: "Change of mind" },
+    { id: 4, value: "Just getting an idea" }
+  ];
+  let newData = newQuoteDetail
+  const handleCheckboxChange = async (event: any) => {
+    setIsChecked(event.target.checked);
+  };
+  const fetchQuoteDetails = async (quoteId: string) => {
+    setIsLoading(true);
+    try {
+      nextSteps(newQuoteDetail);
+      const shippingResult = await axios.post(NEXT_TRADE_IN_GET_SHIPPING_METHODS)
+      setShippingData(shippingResult?.data)
+      if (isChecked) {
+        const response = await axios.post(NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, { data: { id: quoteData?.value.id } })
+      }
+    } catch (error) {
+      logError(error)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchUpdatedQuoteDetails = async (quoteId: string) => {
+    try {
+      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
+      setNewQuoteData(quoteResult?.data)
+      //nextSteps(quoteDetails);
+    } catch (error) {
+      logError(error)
+    }
+  };
+
+  const handleItemAction = async (itemId: any, status: number) => {
+    if (status === 4 && !rejectReasons[itemId]) {
+      alert("Please select a rejection reason.");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      if (newQuoteDetail?.value?.id) {
+        const requestBody = {
+          id: newQuoteDetail?.value?.id,
+          itemId: itemId,
+          status,
+          rejectionReason: status === 3 ? 0 : 4, // 2 for approval, 3 for rejection, 1 for Submitted
+        };
+
+        const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, { data: requestBody })
+        setNewQuoteData(quoteResult?.data);
+        await fetchUpdatedQuoteDetails(newQuoteDetail?.value?.id);
+        setItemStatus((prev) => ({ ...prev, [itemId]: true }));
+      } else {
+        logError("No quoteId received in response.")
+      }
+    } catch (error) {
+      logError(error)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Check if all items are either approved or rejected
+  const hasApprovedItem = newData?.value?.items?.some((item: any) => item?.status === "Accepted");
+  const allItemsProcessed = newData?.value?.items?.every((item: any) => item?.status === "Accepted" || item?.status === "Rejected");
+
+  const allItemsRejected = newData?.value?.items?.every((item: any) => item?.status === "Rejected");
+
+  useEffect(() => {
+    if (router.query?.quoteId && !quoteData) {
+      fetchUpdatedQuoteDetails(router.query?.quoteId as string)
+    }
+  }, [router.query])
+
+  if (!newQuoteDetail || isLoading) {
+    return <Loader />
+  }
+
   return (
     <>
-      <div className='flex flex-col w-full gap-6 mt-4 sm:mt-5'>
-        <div className='flex flex-col justify-center w-full gap-4 mt-6 text-center sm:mt-8'>
-          <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">Hi Vikram Saxena</h3>
-          <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">Your Quote Reference Number: UQ622273</h3>
+      <div className="flex flex-col w-full gap-6 mt-4 sm:mt-5">
+        <div className="flex flex-col justify-center w-full gap-4 mt-6 text-center sm:mt-8">
+          <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
+            Hi {user?.userId ? `${user?.firstName}` : newQuoteDetail?.value?.customerId}
+          </h3>
+          <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
+            Your Quote Reference Number: {newQuoteDetail?.value?.quoteNo}
+          </h3>
         </div>
       </div>
-      <div className='flex flex-col w-full mb-6 overflow-hidden shadow ring-2 ring-sky-600 sm:rounded'>
-        <table className='min-w-full divide-y divide-gray-300'>
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Description</th>
-              <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quote Value</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {selectedItems?.map((item: any, itemIdx: number) => (
-              <tr key={`item-${itemIdx}`}>
-                <td className="flex gap-10 py-4 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                  <img src={item?.selectedProductImage} className='inline-block w-auto h-10' alt={item?.selectedProduct} />
-                  <div className='flex flex-col w-full gap-1'>
-                    <span>{item?.selectedProduct}</span>
-                    <span className='text-xs text-gray-600'><strong>Condition: </strong>{item?.selectedCondition?.name}</span>
-                    <span className='text-xs text-gray-600'><strong>Accessories: </strong>
-                      {item?.selectedAccessories?.map((acc: any, accId: number) => (
-                        <span key={`accessories-${accId}`} className="pr-2">{acc?.replace("?", " ")}</span>
-                      ))}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-3 py-4 text-sm text-left text-gray-500 whitespace-nowrap">
-                  {item?.selectedProductCurrency === "GBP" && "£"}{item?.selectedProductPrice}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td className="py-4 pl-10 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-              <td className="px-3 py-4 text-xl font-semibold text-left text-black whitespace-nowrap">
-                £{selectedItems?.reduce((total: number, item: any) => total + (item?.selectedProductPrice || 0), 0).toFixed(2)}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div className="flex justify-between gap-4">
-        <button onClick={() => {
-          nextStep();
-          document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }} disabled={currentStep === steps.length - 1} className="w-full px-4 py-3 text-sm text-white bg-red-600 rounded disabled:bg-gray-300" >
-          Reject quote
-        </button>
-        <button onClick={nextStep} disabled={currentStep === steps.length - 1} className="w-full px-4 py-3 text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" >
-          Accept quote
-        </button>
-      </div>
+      {newData?.value?.status != "AwaitingQuotation" ? (
+        <>
+          <div className={`${allItemsRejected ? 'ring-red-400' : 'ring-gray-300'} flex flex-col w-full overflow-hidden shadow ring-1  sm:rounded`}>
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="py-3.5 pl-4 w-6/12 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                    Product
+                  </th>
+                  <th scope="col" className="px-3 py-3.5 w-2/12 text-right text-sm font-semibold text-gray-900">
+                    Price
+                  </th>
+                  <th scope="col" className="px-3 py-3.5w-4/12 text-right text-sm font-semibold text-gray-900">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {newData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                  <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
+                    <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                      <img src={item?.parentProductImageUrl} className="inline-block w-auto h-16" alt={item?.parentProductName} />
+                      <div className="flex flex-col items-start justify-center w-full gap-1 text-left">
+                        <span className="font-semibold text-left text-black">
+                          {item?.parentProductName}{" "}
+                          <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                        </span>
+                        {item?.condition != "" &&
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Condition: </strong>
+                            {item?.condition == 1 ? TradeInItemCondition.WELL_USED : item?.condition == 2 ? TradeInItemCondition.GOOD : item?.condition == 3 ? TradeInItemCondition.LIKE_NEW : item?.condition == 4 ? TradeInItemCondition.VERY_GOOD : item?.condition == 5 ? TradeInItemCondition.EXCELLENT : ""}
+                          </span>
+                        }
+                        {item?.accessories?.length > 0 &&
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Accessories: </strong>
+                            {item?.accessories?.map((acc: any, accId: number) => (
+                              <span key={`accessories-${accId}`} className="pr-2"> {acc?.name} </span>
+                            ))}
+                          </span>
+                        }
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
+                    <td>
+                      {item?.status === "Accepted" || item?.status === "Rejected" ? (
+                        <div className="flex justify-end pr-3">
+                          <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                        </div>
+                      ) : (
+                        <>
+                          {showDropdown[item?.itemId] ? (
+                            <div className="flex justify-end gap-2">
+                              <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
+                                <option value="">Select a reason</option>
+                                {rejectionOptions?.map((reason, idx) => (
+                                  <option key={idx} value={reason?.id}>{reason?.value}</option>
+                                ))}
+                              </select>
+                              <button onClick={() => handleItemAction(item?.itemId, 4)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                            </div>
+                          ) : (
+                            <div className="flex justify-end gap-2 pr-3">
+                              <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
+                <tr>
+                  <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{newData?.value?.grandTotal}</td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          {/* Show Proceed Button only when all items are processed */}
+          {allItemsProcessed && hasApprovedItem && (
+            <div className="flex flex-col justify-center gap-4">
+              <div className='flex items-center justify-start gap-1'>
+                <input
+                  type='checkbox'
+                  name="pre-sign-agreement"
+                  className='w-4 h-4 border border-gray-300 rounded'
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                />
+                <span className='text-sm italic font-normal text-gray-600'>
+                  By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
+                </span>
+              </div>
+
+              <button
+                onClick={() => fetchQuoteDetails(newData?.value?.id)}
+                className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
+                Continue
+              </button>
+            </div>
+          )}
+          {allItemsRejected &&
+            (
+              <div className="flex flex-col mt-4">
+                <button className="px-4 py-3 w-full border bg-[#2d4d9c] border-[#2d4d9c] text-white rounded hover:bg-[#2d4d9c] hover:text-white disabled:bg-gray-300"
+                  onClick={() => {
+                    startNewTrade();
+                    document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}>Start New Trade</button>
+              </div>
+            )}
+        </>
+      ) : (
+        <div className='flex flex-col justify-start w-full gap-4 mt-4 text-left'>
+          <h3 className="px-0 py-0 text-xl font-semibold w-full text-[#2d4d9c]">That's it, all the hard work is done!</h3>
+          <p className='text-sm font-normal text-gray-600'>Thank you for submitting the details of your photographic kit. There are some items that we are going to have to get back to you for a trade-in price.</p>
+          <p className='text-sm font-normal text-gray-600'>We aim to have these prices ready for you within 2 working days.</p>
+          <p className='pt-6 text-sm font-normal text-gray-600'>In a meantime, why not take a look at our extensive range of <Link className='underline text-sky-600' href="/search" passHref>camera gear</Link> or <span className='underline cursor-pointer text-sky-600' onClick={() => {
+            startNewTrade();
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}>start an new trade</span>.</p>
+        </div>
+      )}
     </>
-  )
+  );
 }

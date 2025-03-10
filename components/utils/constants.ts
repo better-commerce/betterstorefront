@@ -5,8 +5,10 @@ import { toNumber } from 'lodash'
 export const HOMEPAGE_SLUG = `/`
 export const KIT_BRAND_PLATFORM = '/api/v1/kit-builder/brand-platform'
 export const KIT_BRAND_CATEGORY = '/api/v1/kit-builder/category'
-export const KIT_BRAND_PRODUCTS = '/api/v1/kit-builder/product/by-brand-platform'
-export const KIT_BRAND_PROD_BY_CAT = '/api/v1/kit-builder/product/by-kit-category'
+export const KIT_BRAND_PRODUCTS =
+  '/api/v1/kit-builder/product/by-brand-platform'
+export const KIT_BRAND_PROD_BY_CAT =
+  '/api/v1/kit-builder/product/by-kit-category'
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
@@ -78,19 +80,22 @@ export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/co
 // Membership API endpoints
 export const MEMBERSHIP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership`
 export const NEXT_MEMBERSHIP_BENEFITS = '/api/membership/benefits'
-export const NEXT_DOWNLOAD_VOUCHERS =   `/api/membership/download-voucher`
+export const NEXT_DOWNLOAD_VOUCHERS = `/api/membership/download-voucher`
 
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
 export const LIVE_CHAT_TIME = '07:30am-5:30pm'
 //LOCAL ENDPOINTS
-export const NEXT_PRODUCT_BY_KIT_CATEGORY = '/api/kitbuilder/product-by-category'
+export const NEXT_PRODUCT_BY_KIT_CATEGORY =
+  '/api/kitbuilder/product-by-category'
 export const NEXT_GET_COUNTRIES = '/api/countries'
 export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
-export const NEXT_UPDATE_CHECKOUT2_ADDRESS = '/api/basket/update-checkout2-address'
-export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY = '/api/delivery/click-collect-store'
+export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
+  '/api/basket/update-checkout2-address'
+export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY =
+  '/api/delivery/click-collect-store'
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -234,6 +239,33 @@ export const GET_ALL_STORES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/store
 export const GET_STORES_DETAILS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
 export const POST_STORE_BY_POSTALCODE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
 
+//TRADE IN JOURNEY NEXT APP ENDPOINTS
+
+export const NEXT_TRADE_IN_GUEST_CHECKOUT = `/api/trade-in/post-quote-as-guest`
+export const NEXT_TRADE_IN_LOGIN_USER = `/api/trade-in/quote-as-user`
+export const NEXT_TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/trade-in/post-quote`
+export const NEXT_TRADE_IN_GET_QUOTE_BY_ID = `/api/trade-in/get-quote-by-id`
+export const NEXT_TRADE_IN_PRE_SIGN_AGREEMENT = `/api/trade-in/set-pre-sign-agreement`
+export const NEXT_TRADE_IN_POST_QUOTE_SAVE_BY_ID = `/api/trade-in/post-quote-save-by-id`
+export const NEXT_TRADE_IN_PRODUCTS = `/api/trade-in/get-products`
+export const NEXT_TRADE_IN_SAVE_ADDRESS= `/api/trade-in/post-quote-address`
+export const NEXT_TRADE_IN_USER_TOKEN = `/api/trade-in/get-user-token`
+export const NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS = `/api/trade-in/set-line-level-status`
+export const NEXT_TRADE_IN_GET_SHIPPING_METHODS = `/api/trade-in/get-shipping-methods`
+export const NEXT_TRADE_IN_GET_STORES = `/api/trade-in/get-stores`
+export const NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD = `/api/trade-in/update-shipping-method`
+export const NEXT_TRADE_IN_UPDATE_STORE_ADDRESS = `/api/trade-in/update-store-address`
+
+//TRADE IN JOURNEY API ENDPOINTS
+
+export const TRADE_IN_GUEST_CHECKOUT = `/api/quotes/guest`
+export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/quotes`
+export const TRADE_IN_GET_QUOTE_BY_ID = `/api/quotes`
+export const TRADE_IN_PRODUCTS = `/api/products`
+export const TRADE_IN_USER_TOKEN = `/api/users/login`
+export const TRADE_IN_GET_SHIPPING_METHODS = `/api/deliveries/shipping-method`
+export const TRADE_IN_GET_STORES = `/api/stores`
+
 //CONSTANTS
 
 export const YOUTUBE_VIDEO_EMBED_PREFIX_URL =
@@ -327,7 +359,6 @@ export module Messages {
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       export const EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-      ///^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       export const FULL_NAME = /^[a-zA-Z 0-9\-]*$/
       export const ADDRESS_LINE = /^[a-zA-Z0-9,\-/.'()&#+_ ]*$/
       export const ADDRESS_LABEL = /^[a-zA-Z 0-9\-]*$/
@@ -348,8 +379,10 @@ export module Messages {
         /^(?:ordered|unordered)[(](.*)[)]$/i
       export const APLHABETS_WITH_SPACES = /^[a-zA-Z ]+$/i
       export const EMPTY_SPACE = /\S/
-      export const REPLACE_ALL_SPECIAL_CHARACTERS = /[&\/\\#, +()$~%.'":*?<>{}]/g
-      export const EXTRACT_SLUG = /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/;
+      export const REPLACE_ALL_SPECIAL_CHARACTERS =
+        /[&\/\\#, +()$~%.'":*?<>{}]/g
+      export const EXTRACT_SLUG =
+        /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/
     }
 
     export const Login: any = {
@@ -543,7 +576,8 @@ export module Messages {
     CART_ITEM_QTY_MAX_ADDED: 'You have added the maximum available quantity.',
     PAYMENT_METHOD_NOT_SUPPORTED:
       'This card is not supported for this transaction. Please retry using a different card.',
-    SHIPPING_OPTIONS_NOT_FOUND: 'Sorry, we could not find suitable shipping method for this order. Please contact customer service for assistance.',
+    SHIPPING_OPTIONS_NOT_FOUND:
+      'Sorry, we could not find suitable shipping method for this order. Please contact customer service for assistance.',
   }
 
   export const ManageUser: any = {
@@ -571,11 +605,11 @@ export module PageActions {
   }
 }
 
-export const RFQStatusStyles:any = {
+export const RFQStatusStyles: any = {
   Cancelled: 'text-red-600',
   Recieved: 'text-gray-600',
-  QuoteCreated: 'text-emerald-600', 
-};
+  QuoteCreated: 'text-emerald-600',
+}
 
 export const ALERT_TIMER = 5000
 
@@ -586,7 +620,33 @@ export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'
 export const CLOTH_COLOUR_ATTRIB_NAME = 'global.colour'
-export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage', 'freeText']
+export const IGNORE_QUERY_KEYS = [
+  'iref',
+  'ireftp',
+  'storecode',
+  'urlcode',
+  'demo',
+  'sortBy',
+  'currentPage',
+  'freeText',
+]
+
+export enum TradeInItemCondition {
+  WELL_USED = 'WellUsed',
+  GOOD = 'Good',
+  VERY_GOOD = 'VeryGood',
+  EXCELLENT = 'Excellent',
+  LIKE_NEW = 'LikeNew',
+}
+
+
+export enum TradeInSteps {
+  ENTER_ITEM = 1,
+  CONFIRM_DETAIL = 2,
+  GET_QUOTE = 3,
+  SHIPPING_DETAILS = 4,
+  FINAL_DETAILS = 5,
+}
 
 export enum OrderStatus {
   PENDING = 'Pending',
@@ -715,7 +775,7 @@ export enum DocumentTypes {
 
 export enum DeleteModalType {
   ENGRAVING = 'engraving',
-  PRODUCT = 'product'
+  PRODUCT = 'product',
 }
 
 export enum EngageEventTypes {
@@ -755,4 +815,3 @@ export enum CartProductType {
 export const BASKET_PROMO_TYPES = {
   KIT: 23,
 }
-

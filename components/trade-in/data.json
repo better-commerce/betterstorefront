@@ -1,10 +1,10 @@
 {
   "steps": [
-    { "step": "1", "name": "Enter your items" },
-    { "step": "2", "name": "Confirm your details" },
-    { "step": "3", "name": "Get your quote" },
-    { "step": "4", "name": "Shipping Options" },
-    { "step": "5", "name": "Postage Details" }
+    { "step": 1, "name": "Enter Your Items" },
+    { "step": 2, "name": "Confirm Your Details" },
+    { "step": 3, "name": "Get Your Quote" },
+    { "step": 4, "name": "Shipping Options" },
+    { "step": 5, "name": "Quote Details" }
   ],
   "conditions": [
     {

@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
-import { EmptyGuid, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_PRODUCTS, NEXT_TRADE_IN_USER_TOKEN, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TRADE_IN_PAGE_SLUG } from '@framework/utils/constants'
-import { getCurrency, getCurrentCurrency, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
+import { getCurrency, getCurrentCurrency, logError, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
@@ -23,13 +23,15 @@ const AddItems = dynamic(() => import('@components/trade-in/AddItems'))
 const ConfirmDetails = dynamic(() => import('@components/trade-in/ConfirmDetail'))
 const GetQuote = dynamic(() => import('@components/trade-in/GetQuote'))
 const ShippingDetail = dynamic(() => import('@components/trade-in/ShippingDetail'))
-const PostgreDetail = dynamic(() => import('@components/trade-in/PostgreDetail'))
+const QuoteDetails = dynamic(() => import('@components/trade-in/QuoteDetails'))
 const SellingGuide = dynamic(() => import('@components/trade-in/SellingGuide'))
 const JourneyVideo = dynamic(() => import('@components/trade-in/JourneyVideo'))
 const Service = dynamic(() => import('@components/trade-in/Service'))
 const Steps = dynamic(() => import('@components/trade-in/Steps'))
 const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 import data from '@components/trade-in/data.json'
+import { useDebounce } from 'hooks/useDebounce'
+import { updateQueryParams } from 'framework/utils/app-util'
 declare const window: any
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
@@ -47,32 +49,9 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
   }
 }
-const accessories = [
-  {
-    name: "Boxed?", icon: () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" className="w-12 h-auto fill-current">
-        <path d="M256 48c0-26.5 21.5-48 48-48H592c26.5 0 48 21.5 48 48V464c0 26.5-21.5 48-48 48H381.3c1.8-5 2.7-10.4 2.7-16V253.3c18.6-6.6 32-24.4 32-45.3V176c0-26.5-21.5-48-48-48H256V48zM571.3 347.3c6.2-6.2 6.2-16.4 0-22.6l-64-64c-6.2-6.2-16.4-6.2-22.6 0l-64 64c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0L480 310.6V432c0 8.8 7.2 16 16 16s16-7.2 16-16V310.6l36.7 36.7c6.2 6.2 16.4 6.2 22.6 0zM0 176c0-8.8 7.2-16 16-16H368c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H16c-8.8 0-16-7.2-16-16V176zm352 80V480c0 17.7-14.3 32-32 32H64c-17.7 0-32-14.3-32-32V256H352zM144 320c-8.8 0-16 7.2-16 16s7.2 16 16 16h96c8.8 0 16-7.2 16-16s-7.2-16-16-16H144z"></path>
-      </svg>
-    ),
-    id: "1"
-  },
-  {
-    name: "Battery?", icon: () => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-12 h-auto fill-current">
-        <path d="M80 96c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32l96 0c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32h16c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V160c0-35.3 28.7-64 64-64l16 0zm304 96c0-8.8-7.2-16-16-16s-16 7.2-16 16v32H320c-8.8 0-16 7.2-16 16s7.2 16 16 16h32v32c0 8.8 7.2 16 16 16s16-7.2 16-16V256h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H384V192zM80 240c0 8.8 7.2 16 16 16h96c8.8 0 16-7.2 16-16s-7.2-16-16-16H96c-8.8 0-16 7.2-16 16z"></path>
-      </svg>
-    ),
-    id: "2"
-  },
-  {
-    name: "Charger?", icon: () => (
-      <svg className="w-12 h-auto fill-current" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24"><path d="M19,0H15a2.5,2.5,0,0,0-2.45,2H11A1.5,1.5,0,0,0,9.59,3H8A.5.5,0,0,0,8,4H9.5V7H8A.5.5,0,0,0,8,8H9.59A1.5,1.5,0,0,0,11,9h1.5v3.5A2.5,2.5,0,0,0,15,15h1.5v5a3,3,0,0,1-6,0V17a3,3,0,0,0-6,0H4a1.5,1.5,0,0,0-1.5,1.5v3A.5.5,0,0,0,3,22h.5v1.5A.5.5,0,0,0,4,24H6a.5.5,0,0,0,.5-.5V22H7a.5.5,0,0,0,.5-.5v-3A1.5,1.5,0,0,0,6,17H5.5a2,2,0,1,1,4,0v3a4,4,0,0,0,8,0V15H19a2.5,2.5,0,0,0,2.5-2.5V2.5A2.5,2.5,0,0,0,19,0ZM12.5,8H11a.5.5,0,0,1-.5-.5v-4A.5.5,0,0,1,11,3h1.5Zm-7,15h-1V22h1ZM6,18a.5.5,0,0,1,.5.5V21h-3V18.5A.5.5,0,0,1,4,18Zm14.5-5.5A1.5,1.5,0,0,1,19,14H15a1.5,1.5,0,0,1-1.5-1.5V2.5A1.5,1.5,0,0,1,15,1h4a1.5,1.5,0,0,1,1.5,1.5ZM17.65,4.15l-2,2a.5.5,0,0,0,.11.79L17,7.62,15.48,9.15a.5.5,0,1,0,.71.71l2-2a.5.5,0,0,0-.11-.79l-1.25-.68,1.53-1.53a.5.5,0,0,0-.71-.71Z"></path></svg>
-    ),
-    id: "3"
-  }]
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, config, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
+function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo }: any) {
   const router = useRouter()
   const { user, isGuestUser } = useUI()
   const { isMobile } = deviceInfo
@@ -88,16 +67,37 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
   const [showDpdStore, setShowDpdStore] = useState<any>(false);
   const [products, setProducts] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [searchText, setSearchText] = useState({})
+  const [quoteData, setQuoteData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [shippingData, setShippingData] = useState<any>([])
+  const fetchData = useCallback(
+    useDebounce(async (searchText: any) => {
+      try {
+        const { data }: any = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText })
+        setProducts(data)
+      } catch (error) {
+        logError(error)
+      }
+    }, 1000),
+    []
+  )
 
-  useEffect(() => {
-    fetch('https://api.mockaroo.com/api/da82c2e0?count=0&key=2d403e40')
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error('Error fetching data:', error));
-  }, []);
-
-
-
+  const onChangeSearch = (e: any, id: number) => {
+    setSearchText((v: any) => ({
+      ...v,
+      [id]: e.target.value,
+    }))
+    if (!e.target.value || e.target.value?.length === 0 || e.target.value?.length >= 2) {
+      fetchData(e.target.value)
+    }
+  }
+  const handleNextStep = (data?: any) => {
+    if (data) {
+      setQuoteData(data);
+    }
+    setCurrentStep((prev) => prev + 1);
+  };
   const handleAccessoryClick = (index: number) => {
     setSelectedAccIndexes(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -159,9 +159,47 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
     )
   }
 
+  const startNewTrade = () => {
+    setQuoteData(null);
+    setSelectedItems([]);
+    setSearchText({});
+    setProducts([]);
+    setCurrentStep(0);
+    updateQueryParams(router, {}, ['quoteId'])
+  };
+
+  const fetchQuoteDetails = async (quoteId: string) => {
+    setIsLoading(true)
+    try {
+      const { data: quoteDetails } = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
+      if (!quoteDetails?.isSuccess) return setCurrentStep(0)
+
+      setQuoteData(quoteDetails)
+
+      if (quoteDetails?.value?.shippingMethod) {
+        setCurrentStep(4)
+      } else if (['QuoteAccepted', 'Quoted'].includes(quoteDetails?.value?.status)) {
+        setCurrentStep(2)
+      } else {
+        setCurrentStep(0)
+      }
+      setIsLoading(false)
+    } catch (error) {
+      console.error("Error fetching quote:", error);
+      setIsLoading(false)
+    }
+  };
+
+  // useEffect(() => {
+  //   if (router.query?.quoteId && !quoteData) {
+  //     fetchQuoteDetails(router.query?.quoteId as string)
+  //   }
+  // }, [router])
+
   const cleanPath = removeQueryString(router.asPath)
   return (
     <>
+      {isLoading && <Loader />}
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
         <NextHead>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -193,14 +231,14 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
 
             {/* Step Content */}
             <div className="flex flex-col justify-start gap-4">
-              {data?.steps[currentStep].step === "1" &&
+              {data?.steps[currentStep]?.step === TradeInSteps.ENTER_ITEM &&
                 <AddItems
+                  searchText={searchText}
+                  onChangeSearch={onChangeSearch}
                   selectedItems={selectedItems}
                   products={products}
                   setSelectedItems={setSelectedItems}
-                  conditions={data?.conditions}
                   images={data?.images}
-                  accessories={accessories}
                   nextStep={nextStep}
                   steps={data?.steps}
                   selectedIndex={selectedIndex}
@@ -209,26 +247,13 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
                   handleAccessoryClick={handleAccessoryClick}
                   currentStep={currentStep} />
               }
-              {data?.steps[currentStep].step === "2" &&
-                <ConfirmDetails
-                  selectedItems={selectedItems}
-                  setCurrentStep={setCurrentStep}
-                  steps={data?.steps}
-                  nextStep={nextStep}
-                  setGuestCheckout={setGuestCheckout}
-                  currentStep={currentStep}
-                  isGuest={isGuest} />
+              {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
+                <ConfirmDetails setCurrentStep={setCurrentStep} selectedItems={selectedItems} steps={data?.steps} nextSteps={handleNextStep} currentStep={currentStep} />
               }
-              {data?.steps[currentStep].step === "3" &&
-                <GetQuote
-                  selectedItems={selectedItems}
-                  setCurrentStep={setCurrentStep}
-                  nextStep={nextStep}
-                  currentStep={currentStep}
-                  steps={data?.steps}
-                />
+              {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
+                <GetQuote setCurrentStep={setCurrentStep} user={user} startNewTrade={startNewTrade} currentStep={currentStep} nextSteps={handleNextStep} steps={data?.steps} quoteData={quoteData} setShippingData={setShippingData} />
               }
-              {data?.steps[currentStep].step === "4" &&
+              {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
                 <ShippingDetail
                   shipping={data?.shipping}
                   isStore={isStore}
@@ -236,17 +261,18 @@ function SellOrPartExchange({ setEntities, recordEvent, ipAddress, pageContentsW
                   showStores={showStores}
                   showDpdStore={showDpdStore}
                   dpd={data?.dpd}
-                  stores={data?.stores}
-                  nextStep={nextStep} />
+                  shippingData={shippingData}
+                  stores={data?.stores} nextSteps={handleNextStep}
+                  setCurrentStep={setCurrentStep} quoteData={quoteData} />
               }
-              {data?.steps[currentStep].step === "5" &&
-                <PostgreDetail data={data?.stores} />
+              {data?.steps[currentStep]?.step === TradeInSteps.FINAL_DETAILS &&
+                <QuoteDetails data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} />
               }
             </div>
           </div>
-          {pageContents?.guide?.length > 0 &&
+          {/* {pageContents?.guide?.length > 0 &&
             <JourneyVideo data={pageContents?.guide} />
-          }
+          } */}
         </div>
 
         {pageContents?.service?.length > 0 &&

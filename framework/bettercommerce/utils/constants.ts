@@ -15,6 +15,7 @@ export const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 export const REVIEW_BASE_URL = process.env.BETTERCOMMERCE_REVIEW_BASE_URL
 export const STATIC_BRANDS_PATH_ENABLED = stringToBoolean( process.env.STATIC_BRANDS_PATH_ENABLED )
 export const OMS_BASE_URL = process.env.OMS_BASE_URL
+export const TRADE_IN_BASE_URL = process.env.TRADE_IN_BASE_URL
 export const ORG_ID = process.env.NEXT_PUBLIC_ORG_ID
 export const CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE = stringToNumber( process.env.CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE )
 export const CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE = stringToNumber( process.env.CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE )

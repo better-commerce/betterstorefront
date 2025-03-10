@@ -8,7 +8,7 @@ import "swiper/css/effect-creative";
 import "swiper/css/autoplay";
 import { EffectCreative, Pagination } from "swiper";
 
-export default function Carousel({ images }: any) {
+export default function Carousel({ images, conditionData }: any) {
   const [selectedCategory, setSelectedCategory] = useState("cameras"); // Default Category
   const [selectedTab, setSelectedTab] = useState("front"); // Default Tab
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,7 +36,7 @@ export default function Carousel({ images }: any) {
     <div className="relative w-full px-4 mx-auto -top-10">
       <div className="flex w-[220px] px-0 pt-2 mx-auto bg-[#f4f5f5] rounded-full">
         <div className="w-11/12 mx-auto bg-white rounded-full shadow">
-          {["cameras", "lenses"].map((category) => (
+          {["cameras","lenses"].map((category) => (
             <button key={category} className={`px-1 py-1 flex-1 capitalize group text-[13px] ${selectedCategory === category ? "font-medium" : "text-gray-500"}`} onClick={() => { setSelectedCategory(category); setCurrentIndex(0); }} >
               <img src={`https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/tab-${category}.svg`} alt={category} className={`inline-block w-8 h-8 p-2 ${selectedCategory === category ? 'bg-sky-300' : 'bg-gray-200'} rounded-full group-hover:bg-sky-300`} /> {category}
             </button>

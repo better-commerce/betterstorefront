@@ -1,16 +1,21 @@
 import { Fetcher } from '@commerce/utils/types'
 import { BASE_URL, AUTH_URL, CLIENT_ID, SHARED_SECRET, Cookie } from './utils/constants'
 import axios from 'axios'
+import https from 'https'
 import store from 'store'
 import { writeFetcherLog } from './utils'
 import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, NEXT_PUBLIC_API_CACHING_LOG_ENABLED, } from '@components/utils/constants'
 import { Guid } from '@commerce/types'
 import { IFetcherProps } from 'framework/contracts/api/IFetcherProps'
 import { decrypt } from './utils/cipher'
+import { stringToBoolean } from './utils/parse-util'
 
 const SingletonFactory = (function () {
   let accessToken = ''
-  const axiosInstance = axios.create({ baseURL: BASE_URL, withCredentials: true, })
+  const agent = new https.Agent({ rejectUnauthorized: false })
+  const axiosInstance = (process.env.NODE_ENV === 'development' && stringToBoolean(process.env.ALLOW_UNAUTHORIZED_REQUESTS!)) ? axios.create({ baseURL: BASE_URL, withCredentials: true, httpsAgent: agent, }) : axios.create({ baseURL: BASE_URL, withCredentials: true, })
+    
+  //const axiosInstance = axios.create({ baseURL: BASE_URL, withCredentials: true, httpsAgent: agent, })
   const getToken = () => accessToken
 
   const setToken = (token: string) => (accessToken = token)
