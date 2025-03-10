@@ -127,7 +127,7 @@ export default function CartDropdown() {
       const newBasketId = generateBasketId(true)
       const { data }: any = await axios.post(NEXT_CREATE_BASKET, { basketId: newBasketId, basketName, userId: user?.userId })
       setLoadingAction(LoadingActionType.NONE)
-      
+
       if (data?.recordId !== EmptyGuid) {
         setBasketId(data?.recordId)
         closeCreateBasketModal()
@@ -136,7 +136,7 @@ export default function CartDropdown() {
           getBaskets(user?.userId)
         }
       } else {
-        setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg')})
+        setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg') })
       }
     }
   }
@@ -151,7 +151,7 @@ export default function CartDropdown() {
     }
     const { data }: any = await axios.post(NEXT_TRANSFER_BASKET, payload)
     setLoadingAction(LoadingActionType.NONE)
-    
+
     if (data?.recordId !== EmptyGuid) {
       closeTransferBasketModal()
       if (basketIdToTransfer == basketId) {
@@ -162,7 +162,7 @@ export default function CartDropdown() {
         getBaskets(user?.userId)
       }
     } else {
-      setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg')})
+      setAlert({ type: AlertType.ERROR, msg: data?.message || translate('common.message.requestCouldNotProcessErrorMsg') })
     }
   }
   const deleteBasket = async (basketId: string) => {
@@ -198,12 +198,12 @@ export default function CartDropdown() {
   }, [user?.userId, isModalOpen])
 
   useEffect(() => {
-    const getBasketCount = async() => {
-      const count = await getCartItemsCount({basketId})
+    const getBasketCount = async () => {
+      const count = await getCartItemsCount({ basketId })
       if (count > 0) {
         setBasketItemsCount(count)
       }
-      else{
+      else {
         setBasketItemsCount(0)
       }
     }
@@ -211,7 +211,7 @@ export default function CartDropdown() {
     if (basketId && basketId !== Guid.empty) {
       getBasketCount()
     }
-  },[basketId, cartItems?.lineItems?.length])
+  }, [basketId, cartItems?.lineItems?.length])
 
   useEffect(() => {
     if (basketIdToDelete !== Guid.empty) {
@@ -223,7 +223,9 @@ export default function CartDropdown() {
     <>
       <Popover className="relative">
         {({ open, close }) => {
-          setIsModalOpen(open)
+          useEffect(() => {
+            setIsModalOpen(open); // ✅ Now it only updates when `open` changes
+          }, [open]);
           return (
             <>
               {b2bUser ? (
@@ -303,7 +305,8 @@ export default function CartDropdown() {
                 </Popover.Button>
               )}
             </>
-          )}
+          )
+        }
         }
       </Popover>
 

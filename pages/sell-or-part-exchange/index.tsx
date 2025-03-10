@@ -32,6 +32,7 @@ const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 import data from '@components/trade-in/data.json'
 import { useDebounce } from 'hooks/useDebounce'
 import { updateQueryParams } from 'framework/utils/app-util'
+import { NoSymbolIcon } from '@heroicons/react/24/outline'
 declare const window: any
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
@@ -51,7 +52,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 }
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo }: any) {
+function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, featureToggle }: any) {
   const router = useRouter()
   const { user, isGuestUser } = useUI()
   const { isMobile } = deviceInfo
@@ -197,6 +198,14 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   // }, [router])
 
   const cleanPath = removeQueryString(router.asPath)
+  if (!featureToggle?.features?.enableTradeIn) {
+    return (
+      <div className='flex flex-col items-center justify-center w-full py-20'>
+        <NoSymbolIcon className='justify-center w-20 h-20 text-red-200'/>
+        <h2 className='text-2xl font-semibold text-center text-gray-400 uppercase'>Trade in disabled for this store. Please contact admin.</h2>
+      </div>
+    )
+  }
   return (
     <>
       {isLoading && <Loader />}

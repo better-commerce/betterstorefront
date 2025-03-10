@@ -55,7 +55,7 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
             <div className="relative flex flex-col w-full">
               <input
                 type='text'
-                value={item?.selectedProduct || item?.searchTerm || searchText?.[index]}  // Display search term first, fallback to selected product
+                value={item?.selectedProduct || item?.searchTerm || searchText?.[index] || ""}  // Display search term first, fallback to selected product
                 onChange={(e) => {
                   onChangeSearch(e, index)
                   updateItem(index, "searchTerm", e.target.value);

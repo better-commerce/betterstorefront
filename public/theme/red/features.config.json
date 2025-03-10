@@ -24,7 +24,8 @@
     "enableFullBanner":false,
     "enableCustomToolWidget": false,
     "enableB2BHeader": true,
-    "enableToolsHome":false
+    "enableToolsHome":false,
+    "enableTradeIn": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
