@@ -289,9 +289,9 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
               }
             </div>
           </div>
-          {/* {pageContents?.guide?.length > 0 &&
+          {pageContents?.guide?.length > 0 &&
             <JourneyVideo data={pageContents?.guide} />
-          } */}
+          }
         </div>
 
         {pageContents?.service?.length > 0 &&
