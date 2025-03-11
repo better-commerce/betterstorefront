@@ -9,7 +9,7 @@ import Loader from "@components/Loader";
 import { updateQueryParams } from "framework/utils/app-util";
 import { logError } from "@framework/utils/app-util";
 
-export default function ConfirmDetails({ setCurrentStep, selectedItems, nextSteps, currentStep, steps }: any) {
+export default function ConfirmDetails({ setCurrentStep, selectedItems, nextSteps, currentStep, steps, handleGuest }: any) {
   const router = useRouter();
   const { user } = useUI();
   const [showGuestForm, setShowGuestForm] = useState(false);
@@ -17,8 +17,26 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, nextStep
   const [isLoading, setIsLoading] = useState(false);
   const [guestData, setGuestData] = useState({ firstName: "", lastName: "", email: "", phone: "" });
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setGuestData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setGuestData((prev) => ({ ...prev, [name]: value }));
+
+    // Remove validation error as user types
+    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validateGuestForm = () => {
+    let errors: { [key: string]: string } = {};
+    if (!guestData.firstName.trim()) errors.firstName = "First name is required";
+    if (!guestData.lastName.trim()) errors.lastName = "Last name is required";
+    if (!guestData.email.trim()) errors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(guestData.email)) errors.email = "Invalid email format";
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const conditionLabels: Record<string, number> = {
     [TradeInItemCondition.WELL_USED]: 1,
@@ -32,6 +50,11 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, nextStep
     try {
       const { data } = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } });
       setQuoteDetails(data);
+
+      // AS DISCUSSED WITH MASOOD SIR ADDED THIS HANDLING TO GET GUEST NAME AND PASS TO NEXT STEP TO SHOW GUEST NAME INSTEAD OF ID 
+      // MASOOD SIR WORKING ON GUEST LOGIN SOLUTION AS THERE IS SECURITY BREACH POSSIBILITY. ONCE DONE WILL ADD GUEST API CALL TO LOGIN AS GUEST.
+      handleGuest(guestData?.firstName)
+
       nextSteps(data);
     } catch (error) {
       logError(error)
@@ -39,6 +62,7 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, nextStep
   };
 
   const submitGuestRequest = async () => {
+    if (!validateGuestForm()) return;
     setIsLoading(true);
     try {
       const items = selectedItems?.map(({ selectedProductData, selectedCondition, selectedAccessories }: any) => ({
@@ -117,17 +141,20 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, nextStep
         ) : (
           <div className="flex justify-start gap-2">
             {["firstName", "lastName", "email", "phone"].map((field) => (
-              <input
-                key={field}
-                type="text"
-                name={field}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                value={guestData[field as keyof typeof guestData]}
-                onChange={handleInputChange}
-                className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
-              />
+              <div key={field} className="flex flex-col">
+                <input
+                  type="text"
+                  name={field}
+                  placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                  value={guestData[field as keyof typeof guestData]}
+                  onChange={handleInputChange}
+                  className={`p-2 text-sm font-normal text-black border rounded ${validationErrors[field] ? "border-red-500" : "border-gray-200"
+                    }`}
+                />
+                {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
+              </div>
             ))}
-            <button onClick={submitGuestRequest} className="py-3 px-6 text-white bg-[#2d4d9c] rounded">
+            <button onClick={submitGuestRequest} className="py-2 px-6 text-white bg-[#2d4d9c] rounded">
               Continue as Guest
             </button>
           </div>

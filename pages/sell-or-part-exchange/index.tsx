@@ -72,6 +72,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [quoteData, setQuoteData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [shippingData, setShippingData] = useState<any>([])
+  const [guestData, setGuestData] = useState("")
   const fetchData = useCallback(
     useDebounce(async (searchText: any) => {
       try {
@@ -93,6 +94,15 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       fetchData(e.target.value)
     }
   }
+
+  // AS DISCUSSED WITH MASOOD SIR ADDED THIS HANDLING TO GET GUEST NAME AND PASS TO NEXT STEP TO SHOW GUEST NAME INSTEAD OF ID 
+  // MASOOD SIR WORKING ON GUEST LOGIN SOLUTION AS THERE IS SECURITY BREACH POSSIBILITY. ONCE DONE WILL ADD GUEST API CALL TO LOGIN AS GUEST.
+  const handleGuest = (data?: any) => {
+    if (data) {
+      setGuestData(data);
+    }
+  };
+
   const handleNextStep = (data?: any) => {
     if (data) {
       setQuoteData(data);
@@ -257,10 +267,10 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   currentStep={currentStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
-                <ConfirmDetails setCurrentStep={setCurrentStep} selectedItems={selectedItems} steps={data?.steps} nextSteps={handleNextStep} currentStep={currentStep} />
+                <ConfirmDetails setCurrentStep={setCurrentStep} selectedItems={selectedItems} steps={data?.steps} handleGuest={handleGuest} nextSteps={handleNextStep} currentStep={currentStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
-                <GetQuote setCurrentStep={setCurrentStep} user={user} startNewTrade={startNewTrade} currentStep={currentStep} nextSteps={handleNextStep} steps={data?.steps} quoteData={quoteData} setShippingData={setShippingData} />
+                <GetQuote setCurrentStep={setCurrentStep} user={user} startNewTrade={startNewTrade} currentStep={currentStep} guestData={guestData} nextSteps={handleNextStep} steps={data?.steps} quoteData={quoteData} setShippingData={setShippingData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
                 <ShippingDetail

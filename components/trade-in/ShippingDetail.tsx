@@ -17,8 +17,25 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
   const [userAddress, setUserAddress] = useState<any>([])
   const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>(null)
   const [selectedUserAddress, setSelectedUserAddress] = useState<any>(null);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAddressData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setAddressData((prev) => ({ ...prev, [name]: value }));
+
+    // Remove validation error as user types
+    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+  const validateAddressForm = () => {
+    let errors: { [key: string]: string } = {};
+    if (!addressData.street.trim()) errors.street = "Street is required";
+    if (!addressData.street2.trim()) errors.street2 = "Street2 is required";
+    if (!addressData.city.trim()) errors.city = "City is required";
+    if (!addressData.state.trim()) errors.state = "State is required";
+    if (!addressData.country.trim()) errors.country = "Country is required";
+    if (!addressData.postcode.trim()) errors.postcode = "Postcode is required";
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const submitStoreDropOff = async () => {
@@ -50,6 +67,8 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
 
 
   const submitRequest = async (isStoreDropOff = false) => {
+    if (!validateAddressForm()) return;
+
     setIsLoading(true);
 
     let requestBody;
@@ -113,8 +132,12 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
     setSelectedShippingMethod(method)
     setStoreOpen(method?.iId)
     if (method?.iId == 2) {
+      setIsLoading(true)
       const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES, { data: { token } })
-      setStoreData(storeResult?.data)
+      if (storeResult.data) {
+        setStoreData(storeResult?.data)
+        setIsLoading(false)
+      }
     }
   }
   const id = user?.userId;
@@ -243,6 +266,7 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
                       onChange={handleInputChange}
                       className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
                     />
+                    {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
                   </div>
                 ))
               )}
@@ -259,6 +283,7 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
                   onChange={handleInputChange}
                   className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
                 />
+                {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
               </div>
             ))
           )}
