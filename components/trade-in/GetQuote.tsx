@@ -14,6 +14,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
   const [rejectReasons, setRejectReasons] = useState<{ [key: string]: number }>({});
   const [showDropdown, setShowDropdown] = useState<{ [key: string]: boolean }>({});
   const [isChecked, setIsChecked] = useState(false);
+  const [message, setMessage] = useState("")
 
   const rejectionOptions = [
     { id: 1, value: "Offer too low" },
@@ -53,7 +54,10 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
 
   const handleItemAction = async (itemId: any, status: number) => {
     if (status === 4 && !rejectReasons[itemId]) {
-      alert("Please select a rejection reason.");
+      setMessage("Please select reject reasons!!");
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
       return;
     }
     setIsLoading(true);
@@ -98,6 +102,9 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
 
   return (
     <>
+      {message != "" && <div className='fixed z-10 top-24 right-4'>
+        <span className='px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full'>{message}</span>
+      </div>}
       <div className="flex flex-col w-full gap-6 mt-4 sm:mt-5">
         <div className="flex flex-col justify-center w-full gap-4 mt-6 text-center sm:mt-8">
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">

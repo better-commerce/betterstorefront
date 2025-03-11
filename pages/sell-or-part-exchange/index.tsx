@@ -73,6 +73,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [isLoading, setIsLoading] = useState(false);
   const [shippingData, setShippingData] = useState<any>([])
   const [guestData, setGuestData] = useState("")
+  const [message, setMessage] = useState("")
   const fetchData = useCallback(
     useDebounce(async (searchText: any) => {
       try {
@@ -102,6 +103,16 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       setGuestData(data);
     }
   };
+
+  const setSuccessMessage = (data?: any) => {
+    if (data) {
+      setMessage(data)
+    }
+    // Automatically clear the message after 10 seconds
+    setTimeout(() => {
+      setMessage("");
+    }, 4000);
+  }
 
   const handleNextStep = (data?: any) => {
     if (data) {
@@ -211,7 +222,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   if (!featureToggle?.features?.enableTradeIn) {
     return (
       <div className='flex flex-col items-center justify-center w-full py-20'>
-        <NoSymbolIcon className='justify-center w-20 h-20 text-red-200'/>
+        <NoSymbolIcon className='justify-center w-20 h-20 text-red-200' />
         <h2 className='text-2xl font-semibold text-center text-gray-400 uppercase'>Trade in disabled for this store. Please contact admin.</h2>
       </div>
     )
@@ -235,6 +246,9 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden bg-[#f8f8f8] nc-PageHome homepage-main dark:bg-white">
+        {message != "" && <div className='fixed z-10 top-24 right-4'>
+          <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-600'>{message}</span>
+        </div>}
         <div className='container flex flex-col justify-center gap-4 mx-auto text-center'>
           {pageContents?.heroheading?.length > 0 && pageContents?.heroheading?.map((heading: any, hIdx: number) => (
             <div className='flex flex-col justify-center w-full mt-6 text-center sm:mt-8' key={`heading-${hIdx}`}>
@@ -267,7 +281,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   currentStep={currentStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
-                <ConfirmDetails setCurrentStep={setCurrentStep} selectedItems={selectedItems} steps={data?.steps} handleGuest={handleGuest} nextSteps={handleNextStep} currentStep={currentStep} />
+                <ConfirmDetails setCurrentStep={setCurrentStep} selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} steps={data?.steps} handleGuest={handleGuest} nextSteps={handleNextStep} currentStep={currentStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
                 <GetQuote setCurrentStep={setCurrentStep} user={user} startNewTrade={startNewTrade} currentStep={currentStep} guestData={guestData} nextSteps={handleNextStep} steps={data?.steps} quoteData={quoteData} setShippingData={setShippingData} />

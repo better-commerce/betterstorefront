@@ -9,7 +9,7 @@ import Loader from "@components/Loader";
 import { updateQueryParams } from "framework/utils/app-util";
 import { logError } from "@framework/utils/app-util";
 
-export default function ConfirmDetails({ setCurrentStep, selectedItems, nextSteps, currentStep, steps, handleGuest }: any) {
+export default function ConfirmDetails({ setCurrentStep, selectedItems, nextSteps, currentStep, steps, handleGuest, setSuccessMessage }: any) {
   const router = useRouter();
   const { user } = useUI();
   const [showGuestForm, setShowGuestForm] = useState(false);
@@ -73,7 +73,11 @@ export default function ConfirmDetails({ setCurrentStep, selectedItems, nextStep
 
       const { data: quoteId } = await axios.post(NEXT_TRADE_IN_GUEST_CHECKOUT, { data: { ...guestData, items } });
       updateQueryParams(router, { quoteId });
+      if (quoteId) {
+        setSuccessMessage("Quote created successfully!!!");
+      }
       await fetchQuoteDetails(quoteId);
+
     } catch (error) {
       logError(error)
     } finally {
