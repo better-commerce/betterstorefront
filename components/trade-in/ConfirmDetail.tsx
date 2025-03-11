@@ -143,7 +143,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, handleGuest, 
         {!showGuestForm ? (
           <TradeInLogin pluginConfig={undefined} selectedItems={selectedItems} nextSteps={nextSteps} />
         ) : (
-          <div className="flex justify-start gap-2">
+          <div className="flex items-center justify-start gap-2">
             {["firstName", "lastName", "email", "phone"].map((field) => (
               <div key={field} className="flex flex-col">
                 <input
@@ -160,6 +160,10 @@ export default function ConfirmDetails({ selectedItems, nextSteps, handleGuest, 
             ))}
             <button onClick={submitGuestRequest} className="py-2 px-6 text-white bg-[#2d4d9c] rounded">
               Continue as Guest
+            </button>
+            <span className="text-sm font-semibold">OR</span>
+            <button onClick={() => setShowGuestForm(false)} className="text-[#2d4d9c] rounded hover:underline underline text-sm disabled:bg-gray-300">
+              Login Here
             </button>
           </div>
         )}

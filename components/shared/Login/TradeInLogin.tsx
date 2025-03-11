@@ -85,7 +85,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
         setUser(userObj)
         setIsGuestUser(false)
         Router.push('/sell-or-part-exchange')
-        submitLoggedInUserRequest()
+        // submitLoggedInUserRequest()
       }
       if (cb) cb();
     }

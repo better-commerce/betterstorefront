@@ -66,7 +66,7 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
 
 
   const submitRequest = async (isStoreDropOff = false) => {
-    if (!validateAddressForm()) return;
+    if (!validateAddressForm() && !user?.userId) return;
 
     setIsLoading(true);
 
