@@ -3,7 +3,7 @@ import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import Carousel from "./Carousal";
 import { TradeInItemCondition } from "@components/utils/constants";
-export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, currentStep, steps, selectedItems }: any) {
+export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, currentStep, steps, selectedItems, isLoading }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProductData: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
   const [isOpen, setOpen] = useState(false)
   const [conditionData, setConditionData] = useState<any>([])
@@ -54,18 +54,25 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
             )}
             <div className="relative flex flex-col w-full">
               <input
-                type='text'
-                value={item?.selectedProduct || item?.searchTerm || searchText?.[index] || ""}  // Display search term first, fallback to selected product
+                type="text"
+                value={item?.selectedProduct || item?.searchTerm || searchText?.[index] || ""}
                 onChange={(e) => {
-                  onChangeSearch(e, index)
+                  onChangeSearch(e, index);
                   updateItem(index, "searchTerm", e.target.value);
                   updateItem(index, "selectedProduct", ""); // Clear selected product if user starts typing again
                 }}
-                className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400'
-                placeholder='Please search and Select Your Model'
+                className="w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400"
+                placeholder="Please search and Select Your Model"
               />
 
-              {products?.length > 0 && item?.searchTerm && (() => {
+              {/* Show loading indicator when fetching products */}
+              {isLoading && item?.searchTerm && (
+                <div className="absolute z-10 w-full p-2 text-center text-gray-500 bg-white border border-gray-300 shadow-lg top-12">
+                  Searching...
+                </div>
+              )}
+
+              {products?.length > 0 && item?.searchTerm && !isLoading && (() => {
                 // Get all selected product IDs
                 const selectedProductIds = items
                   .map((i: any) => i?.selectedProductData?.id)
@@ -98,9 +105,12 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                       </li>
                     ))}
                   </ul>
-                ) : null;
+                ) : (
+                  <div className="absolute z-10 w-full p-2 text-center text-gray-500 bg-white border border-gray-300 shadow-lg top-12">
+                    No matching products found
+                  </div>
+                );
               })()}
-
             </div>
             {item?.selectedProductData?.conditions?.length > 0 &&
               <div className='flex flex-col justify-start w-full gap-2 mt-5 text-left sm:mt-3'>

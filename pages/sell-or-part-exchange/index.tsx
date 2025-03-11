@@ -5,7 +5,7 @@ import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
-import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_PRODUCTS, NEXT_TRADE_IN_USER_TOKEN, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
+import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_PRODUCTS, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TRADE_IN_PAGE_SLUG } from '@framework/utils/constants'
@@ -74,27 +74,37 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [shippingData, setShippingData] = useState<any>([])
   const [guestData, setGuestData] = useState("")
   const [message, setMessage] = useState("")
+
   const fetchData = useCallback(
     useDebounce(async (searchText: any) => {
+      if (!searchText) return; // Prevent unnecessary API calls for empty text
+
+      setIsLoading(true); // Start loading
+
       try {
-        const { data }: any = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText })
-        setProducts(data)
+        const { data }: any = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText });
+        setProducts(data);
       } catch (error) {
-        logError(error)
+        logError(error);
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     }, 1000),
     []
-  )
+  );
 
   const onChangeSearch = (e: any, id: number) => {
+    const value = e.target.value;
+
     setSearchText((v: any) => ({
       ...v,
-      [id]: e.target.value,
-    }))
-    if (!e.target.value || e.target.value?.length === 0 || e.target.value?.length >= 2) {
-      fetchData(e.target.value)
+      [id]: value,
+    }));
+
+    if (!value || value.length === 0 || value.length >= 2) {
+      fetchData(value);
     }
-  }
+  };
 
   // AS DISCUSSED WITH MASOOD SIR ADDED THIS HANDLING TO GET GUEST NAME AND PASS TO NEXT STEP TO SHOW GUEST NAME INSTEAD OF ID 
   // MASOOD SIR WORKING ON GUEST LOGIN SOLUTION AS THERE IS SECURITY BREACH POSSIBILITY. ONCE DONE WILL ADD GUEST API CALL TO LOGIN AS GUEST.
@@ -207,7 +217,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       }
       setIsLoading(false)
     } catch (error) {
-      console.error("Error fetching quote:", error);
+      logError(error)
       setIsLoading(false)
     }
   };
@@ -262,7 +272,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
           <div id='step-component' className="flex flex-col w-full gap-6 p-6 mx-auto bg-white border border-gray-200">
             <Steps data={data?.steps} setCurrentStep={setCurrentStep} currentStep={currentStep} />
 
-            {/* Step Content */}
             <div className="flex flex-col justify-start gap-4">
               {data?.steps[currentStep]?.step === TradeInSteps.ENTER_ITEM &&
                 <AddItems
@@ -278,25 +287,16 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   selectedAccIndexes={selectedAccIndexes}
                   setSelectedIndex={setSelectedIndex}
                   handleAccessoryClick={handleAccessoryClick}
-                  currentStep={currentStep} />
+                  currentStep={currentStep} isLoading={isLoading} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
-                <ConfirmDetails setCurrentStep={setCurrentStep} selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} steps={data?.steps} handleGuest={handleGuest} nextSteps={handleNextStep} currentStep={currentStep} />
+                <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} handleGuest={handleGuest} nextSteps={handleNextStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
-                <GetQuote setCurrentStep={setCurrentStep} user={user} startNewTrade={startNewTrade} currentStep={currentStep} guestData={guestData} nextSteps={handleNextStep} steps={data?.steps} quoteData={quoteData} setShippingData={setShippingData} />
+                <GetQuote user={user} startNewTrade={startNewTrade} guestData={guestData} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
-                <ShippingDetail
-                  shipping={data?.shipping}
-                  isStore={isStore}
-                  setSelectedStore={setSelectedStore}
-                  showStores={showStores}
-                  showDpdStore={showDpdStore}
-                  dpd={data?.dpd}
-                  shippingData={shippingData}
-                  stores={data?.stores} nextSteps={handleNextStep}
-                  setCurrentStep={setCurrentStep} quoteData={quoteData} />
+                <ShippingDetail showStores={showStores} showDpdStore={showDpdStore} dpd={data?.dpd} shippingData={shippingData} nextSteps={handleNextStep} quoteData={quoteData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.FINAL_DETAILS &&
                 <QuoteDetails data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} />
@@ -307,7 +307,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
             <JourneyVideo data={pageContents?.guide} />
           }
         </div>
-
         {pageContents?.service?.length > 0 &&
           <Service services={pageContents?.service} />
         }

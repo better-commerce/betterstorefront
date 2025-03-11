@@ -9,7 +9,7 @@ import Loader from "@components/Loader";
 import { updateQueryParams } from "framework/utils/app-util";
 import { logError } from "@framework/utils/app-util";
 
-export default function ConfirmDetails({ setCurrentStep, selectedItems, nextSteps, currentStep, steps, handleGuest, setSuccessMessage }: any) {
+export default function ConfirmDetails({ selectedItems, nextSteps, handleGuest, setSuccessMessage }: any) {
   const router = useRouter();
   const { user } = useUI();
   const [showGuestForm, setShowGuestForm] = useState(false);

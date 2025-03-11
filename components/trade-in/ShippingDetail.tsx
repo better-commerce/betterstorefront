@@ -1,12 +1,12 @@
 import Loader from "@components/Loader";
 import { useUI } from "@components/ui";
 import { NEXT_ADDRESS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition } from '@components/utils/constants';
-import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS, NEXT_TRADE_IN_USER_TOKEN } from "@components/utils/constants";
+import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
 import axios from 'axios';
 import { ChangeEvent, useEffect, useState } from "react";
 
-export default function ShippingDetail({ shipping, isStore, setSelectedStore, showStores, nextSteps, showDpdStore, dpd, stores, setCurrentStep, quoteData, token, shippingData }: any) {
+export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dpd, quoteData, shippingData }: any) {
   const [selectedCameraStore, setSelectedCameraStore] = useState<any>(0);
   const { isGuestUser, user } = useUI()
   const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +47,13 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
         data: {
           id: quoteData?.value?.id,
           storeid: store?.id,
-          token,
         }
       });
 
       if (response?.data?.isSuccess) {
         // Fetch updated quote only if the response is successful
         const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, {
-          data: { id: quoteData?.value?.id, token }
+          data: { id: quoteData?.value?.id }
         });
         nextSteps(responseNew?.data);
       }
@@ -83,7 +82,6 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
         country: selectedStore?.country || "",
         postcode: selectedStore?.postCode || "",
         id: quoteData?.value?.id,
-        token: token
       };
     } else if (user.userId && selectedUserAddress !== null) {
       const address = userAddress[selectedUserAddress];
@@ -96,14 +94,12 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
         country: address?.country || "",
         postcode: address?.postCode || "",
         id: quoteData?.value?.id,
-        token: token
       };
     } else {
       requestBody = {
         ...addressData,
         addressType: 1, // For DPD collection
         id: quoteData?.value?.id,
-        token: token
       };
     }
 
@@ -113,13 +109,12 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
       const shippingMethodResponse = await axios.post(NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, {
         data: {
           id: quoteData?.value?.id,
-          token,
           shippingMethodId: selectedShippingMethod?.iId,
         }
       })
 
       // Fetch updated quote
-      const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteData?.value?.id, token } });
+      const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteData?.value?.id } });
       nextSteps(responseNew?.data);
     } catch (error) {
       logError(error)
@@ -133,7 +128,7 @@ export default function ShippingDetail({ shipping, isStore, setSelectedStore, sh
     setStoreOpen(method?.iId)
     if (method?.iId == 2) {
       setIsLoading(true)
-      const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES, { data: { token } })
+      const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES)
       if (storeResult.data) {
         setStoreData(storeResult?.data)
         setIsLoading(false)
