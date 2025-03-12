@@ -28,7 +28,7 @@ const SellingGuide = dynamic(() => import('@components/trade-in/SellingGuide'))
 const JourneyVideo = dynamic(() => import('@components/trade-in/JourneyVideo'))
 const Service = dynamic(() => import('@components/trade-in/Service'))
 const Steps = dynamic(() => import('@components/trade-in/Steps'))
-const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+const Loader = dynamic(() => import('@components/Loader'))
 import data from '@components/trade-in/data.json'
 import { useDebounce } from 'hooks/useDebounce'
 import { updateQueryParams } from 'framework/utils/app-util'
@@ -128,7 +128,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     if (data) {
       setQuoteData(data);
     }
-    setCurrentStep((prev) => prev + 1);
+    setCurrentStep(currentStep + 1);
   };
   const handleAccessoryClick = (index: number) => {
     setSelectedAccIndexes(prev =>
@@ -207,8 +207,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       if (!quoteDetails?.isSuccess) return setCurrentStep(0)
 
       setQuoteData(quoteDetails)
-
-      if (quoteDetails?.value?.shippingMethod) {
+      if (quoteDetails?.value?.postCode) {
         setCurrentStep(4)
       } else if (['QuoteAccepted', 'Quoted'].includes(quoteDetails?.value?.status)) {
         setCurrentStep(2)
@@ -222,11 +221,11 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     }
   };
 
-  // useEffect(() => {
-  //   if (router.query?.quoteId && !quoteData) {
-  //     fetchQuoteDetails(router.query?.quoteId as string)
-  //   }
-  // }, [router])
+  useEffect(() => {
+    if (router.query?.quoteId && !quoteData) {
+      fetchQuoteDetails(router.query?.quoteId as string)
+    }
+  }, [router])
 
   const cleanPath = removeQueryString(router.asPath)
   if (!featureToggle?.features?.enableTradeIn) {
