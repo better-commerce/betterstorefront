@@ -42,7 +42,7 @@ export default function QuoteDetails({ data, quoteData, startNewTrade }: any) {
                 <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                   {"£"}{item?.price}
                 </td>
-                <td className={`whitespace-nowrap`}>
+                <td className={`whitespace-nowrap justify-end pr-2`} align="right">
                   <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
                 </td>
               </tr>
