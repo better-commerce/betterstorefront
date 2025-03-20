@@ -19,9 +19,12 @@ import { LocalStorage } from '@components/utils/payment-constants'
 import { AlertType } from '@framework/utils/enums'
 import { saveUserToken } from '@framework/utils/app-util'
 import { useLogin } from '@framework/auth'
-import { UserAuthType } from '@framework/utils/constants'
+import { Cookie, UserAuthType } from '@framework/utils/constants'
 import Loader from '@components/Loader'
 import Layout from '@components/Layout/Layout'
+import { Redis } from '@framework/utils/redis-constants'
+import { setData } from '@framework/utils/redis-util'
+import { encrypt } from '@framework/utils/cipher'
 
 export default function GhostLoginPage({ user }: any) {
   const router = useRouter()
@@ -117,7 +120,7 @@ export default function GhostLoginPage({ user }: any) {
 GhostLoginPage.Layout = Layout
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context
+  const { req, res } = context
   const payload = {
     username: '',
     token: '',
@@ -162,9 +165,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       return notFoundRedirect()
     }
 
+    let newUserSession = { ...userSession }
+    if (userSession?.userId && userSession?.userToken?.access_token) {
+      const key = `${userSession?.userId}_${Redis.Key.User.GHOST_USER_TOKEN}`
+      await setData([{ key, value: encrypt(userSession?.userToken?.access_token) }])
+
+      // Clip userToken information from the actual response that is sent to the UI layer.
+      const { userToken, ...rest } = userSession
+      let existingCookies: any = res.getHeader('Set-Cookie') || [];
+      if (!Array.isArray(existingCookies)) {
+        existingCookies = [existingCookies];
+      }
+      let newCookies = []
+      if (process.env.NODE_ENV === 'production') {
+        newCookies = [ `${Cookie.Key.USER_ID}=${encrypt(userSession?.userId)}; Path=/; HttpOnly; Secure; SameSite=Strict`, `${Cookie.Key.IS_GHOST_LOGIN}=1; Path=/; HttpOnly; Secure; SameSite=Strict`, ]
+      } else {
+        newCookies = [ `${Cookie.Key.USER_ID}=${encrypt(userSession?.userId)}; Path=/;`, `${Cookie.Key.IS_GHOST_LOGIN}=1; Path=/;`, ]
+      }
+      res.setHeader('Set-Cookie', [...existingCookies, ...newCookies]);
+      newUserSession = { ...rest }
+    }
+
     return {
       props: {
-        user: userSession,
+        user: newUserSession,
       },
     }
   } catch (error) {

@@ -1,6 +1,10 @@
 import { useLogin } from '@framework/auth'
 import { apiMiddlewareErrorHandler } from '@framework/utils'
 import apiRouteGuard from '../base/api-route-guard'
+import { setData } from '@framework/utils/redis-util'
+import { Redis } from '@framework/utils/redis-constants'
+import { encrypt } from '@framework/utils/cipher'
+import { Cookie } from '@framework/utils/constants'
 
 async function loginApiMiddleware(req: any, res: any) {
   const { email, password, authType }: any = req.body.data
@@ -11,7 +15,23 @@ async function loginApiMiddleware(req: any, res: any) {
       authType,
       cookies: req.cookies,
     })
-    res.status(200).json(response)
+
+    if (response?.userId && response?.userToken?.access_token) {
+      const key = `${response?.userId}_${Redis.Key.User.USER_TOKEN}`
+      await setData([{ key, value: encrypt(response?.userToken?.access_token) }])
+
+      // Clip userToken information from the actual response that is sent to the UI layer.
+      const { userToken, ...rest } = response
+      const opts = {
+        httpOnly: true, // Cookie is not accessible via client-side JavaScript
+        secure: (process.env.NODE_ENV === 'production'), // Send only over HTTPS in production
+        sameSite: 'lax', // Helps protect against CSRF attacks
+      }
+      res.cookie(Cookie.Key.USER_ID, encrypt(response?.userId), opts);
+      res.status(200).json({ ...rest })
+    } else {
+      res.status(200).json(response)
+    }
   } catch (error: any) {
     apiMiddlewareErrorHandler(req, res, error)
   }

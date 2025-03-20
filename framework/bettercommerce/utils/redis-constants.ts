@@ -56,6 +56,10 @@ export module Redis {
       export const Categories = "Categories"
       export const CategoryProduct = "CategoryProduct"
     }
+    export namespace User {
+      export const USER_TOKEN = 'UserToken'
+      export const GHOST_USER_TOKEN = 'GhostUserToken'
+    }
   }
   // Redis server configs
   export module Server {

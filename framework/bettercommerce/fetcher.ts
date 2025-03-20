@@ -9,6 +9,8 @@ import { Guid } from '@commerce/types'
 import { IFetcherProps } from 'framework/contracts/api/IFetcherProps'
 import { decrypt } from './utils/cipher'
 import { stringToBoolean } from './utils/parse-util'
+import { Redis } from './utils/redis-constants'
+import { getDataByUID, parseDataValue } from './utils/redis-util'
 
 const SingletonFactory = (function () {
   let accessToken = ''
@@ -77,7 +79,26 @@ export const setGeneralParams = (param: any, value: any) => {
 }
 
 const fetcher = async (props: IFetcherProps | any) => {
+  let userToken = null
   const { url = '', method = 'post', data = {}, params = {}, headers = {}, cookies = {}, baseUrl = '', logRequest = false, } = props
+
+  // Check if user is logged-in.
+  if (cookies?.[Cookie.Key.USER_ID]) {
+
+    // Parse userId of the logged-in user from cookies
+    const userId = decrypt(cookies?.[Cookie.Key.USER_ID])
+    let key = `${userId}_${Redis.Key.User.USER_TOKEN}`
+
+    if (cookies?.[Cookie.Key.IS_GHOST_LOGIN] && stringToBoolean(cookies?.[Cookie.Key.IS_GHOST_LOGIN])) {
+      key = `${userId}_${Redis.Key.User.GHOST_USER_TOKEN}`
+    }
+
+    // Get UserToken value from Redis cache
+    const cachedData = await getDataByUID([ key, ])
+    if (parseDataValue(cachedData, key)) {
+      userToken = decrypt(parseDataValue(cachedData, key))
+    }
+  }
   const computedUrl = new URL(url, baseUrl || BASE_URL)
   const newConfig = {
     Currency: headers?.Currency || cookies.Currency || store.get('Currency') || BETTERCOMMERCE_CURRENCY || BETTERCOMMERCE_DEFAULT_CURRENCY || EmptyString,
@@ -87,7 +108,7 @@ const fetcher = async (props: IFetcherProps | any) => {
     SessionId: cookies?.sessionId || EmptyString,
     CompanyId: cookies?.CompanyId && cookies?.CompanyId != Guid.empty ? cookies?.CompanyId : Guid.empty,
     ClientIP: cookies?.ClientIP ?? null,
-    UserToken: cookies[Cookie.Key.USER_TOKEN] ? decrypt(cookies[Cookie.Key.USER_TOKEN]) : null,
+    UserToken: userToken, //cookies[Cookie.Key.USER_TOKEN] ? decrypt(cookies[Cookie.Key.USER_TOKEN]) : null,
     MicrositeId: cookies[Cookie.Key.MICROSITE_ID] || EmptyString,
   }
 

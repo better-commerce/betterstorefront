@@ -70,6 +70,8 @@ export module Cookie {
     export const CLIENT_IP_ADDRESS = 'ClientIP'
     export const IS_PAYMENT_LINK = 'ipl'
     export const API_TOKEN = 'i'
+    export const IS_GHOST_LOGIN = 'igl'
+    export const USER_ID = 'uid'
     export const USER_TOKEN = 'ut'
     export const ANALYTICS = 'analytics'
     export const ADVERTISEMENT = 'advertisement'
