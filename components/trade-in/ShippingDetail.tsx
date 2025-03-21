@@ -195,8 +195,8 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
                     {"£"}{item?.price}
                   </td>
                   <td className={`whitespace-nowrap justify-end pr-2`} align="right">
-                  <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
-                </td>
+                    <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -227,6 +227,26 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
           </div>
         ))}
       </div>
+      {!shippingData &&
+        <>
+          {
+            ["street", "street2", "city", "state", "country", "postcode"].map((field) => (
+              <div className="flex flex-col gap-1" key={`fields-${field}`}>
+                <label className="text-sm font-medium text-left text-black capitalize">{field}</label>
+                <input
+                  type="text"
+                  name={field}
+                  placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
+                  value={addressData[field as keyof typeof addressData]}
+                  onChange={handleInputChange}
+                  className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
+                />
+                {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
+              </div>
+            ))
+          }
+        </>
+      }
       {isStoreOpen == 1 &&
         <div className={`flex flex-col w-full gap-4 ${user?.userId ? ' sm:w-full' : ' sm:w-5/12'}`}>
           <div className='flex flex-col w-full gap-1 mt-4 mb-5'>
