@@ -24,6 +24,7 @@ export default function saveQuoteByItemId(
         method: 'PUT',
         cookies,       
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
+        logRequest:false,
       });
 
       return response;

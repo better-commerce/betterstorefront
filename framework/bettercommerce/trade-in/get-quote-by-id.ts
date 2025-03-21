@@ -11,7 +11,7 @@ export default function getQuoteById(id: string, cookies?: any) {
         method: 'GET',
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
-        logRequest: true
+logRequest: false,
       })
       return response
     } catch (error: any) {

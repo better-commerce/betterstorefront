@@ -147,7 +147,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
         ) : null}
 
         {!showGuestForm ? (
-          <TradeInLogin pluginConfig={undefined} selectedItems={selectedItems} nextSteps={nextSteps} />
+          <TradeInLogin pluginConfig={undefined} selectedItems={selectedItems} nextSteps={nextSteps} setSuccessMessage={setSuccessMessage} />
         ) : (
           <div className="flex items-center justify-start gap-2">
             {["firstName", "lastName", "email", "phone"].map((field) => (

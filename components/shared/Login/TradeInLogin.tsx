@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import axios from 'axios'
 import Router, { useRouter } from 'next/router'
 
 import Form from '@components/customer'
-import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_LOGIN_USER, OTP_LOGIN_ENABLED, TradeInItemCondition } from '@components/utils/constants'
+import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, NEXT_TRADE_IN_CUSTOMERS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GUEST_LOGIN, NEXT_TRADE_IN_LOGIN, NEXT_TRADE_IN_LOGIN_USER, OTP_LOGIN_ENABLED, TradeInItemCondition } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
 import useWishlist from '@components/services/wishlist'
 import cartHandler from '@components/services/cart'
@@ -26,9 +26,10 @@ interface LoginProps {
   selectedItems?: any;
   nextSteps?: any;
   token?: any;
+  setSuccessMessage?: any;
 }
 
-export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], closeSideBar = () => { }, selectedItems, nextSteps }: LoginProps) {
+export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl = false, pluginConfig = [], closeSideBar = () => { }, selectedItems, nextSteps, setSuccessMessage }: LoginProps) {
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
 
@@ -36,11 +37,74 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
   const [noAccount, setNoAccount] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [quoteDetails, setQuoteDetails] = useState<any>(null);
+  const [loginDetail, setLoginDetails] = useState<any>(null)
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
   const { isGuestUser, setIsGuestUser, setUser, user, wishListItems, setAlert, setCartItems, setBasketId, setWishlist, cartItems, basketId, } = useUI()
   const { getWishlist } = useWishlist()
   const { getCartByUser, addToCart } = cartHandler()
   const otpEnabled = OTP_LOGIN_ENABLED
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
+  const conditionLabels: Record<string, number> = {
+    [TradeInItemCondition.WELL_USED]: 1,
+    [TradeInItemCondition.GOOD]: 2,
+    [TradeInItemCondition.VERY_GOOD]: 3,
+    [TradeInItemCondition.EXCELLENT]: 4,
+    [TradeInItemCondition.LIKE_NEW]: 5,
+  };
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData((prev) => ({ ...prev, [name]: value }));
+
+    // Remove validation error as user types
+    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validateLoginForm = () => {
+    let errors: { [key: string]: string } = {};
+    if (!loginData.password.trim()) errors.password = "Password is required";
+    if (!loginData.username.trim()) errors.username = "username is required";
+    else if (!/\S+@\S+\.\S+/.test(loginData.username)) errors.username = "Invalid user name format";
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const submitLoginRequest = async () => {
+    if (!validateLoginForm()) return;
+    setIsLoading(true);
+    try {
+      // Getting User Token API calls
+
+      const { data: loginResult }: any = await axios.post(NEXT_TRADE_IN_LOGIN, { data: { ...loginData } });
+      if (loginResult) {
+        setLoginDetails(loginResult);
+      }
+      const { data: userResult }: any = await axios.get(NEXT_TRADE_IN_CUSTOMERS, { params: { customerId: loginResult?.userId } });
+      // END Getting User Token API calls
+      setUser({ ...loginResult, ...userResult })
+      setIsGuestUser(false)
+      const items = selectedItems?.map(({ selectedProductData, selectedCondition, selectedAccessories }: any) => ({
+        parentStockCode: selectedProductData?.stockCode || "",
+        conditions: conditionLabels[selectedCondition?.conditionName] || 0,
+        accessories: selectedAccessories || [],
+      }));
+
+
+      const { data: quoteId } = await axios.post(NEXT_TRADE_IN_LOGIN_USER, { data: { customerId: loginResult?.userId, items } });
+
+      updateQueryParams(router, { quoteId });
+      if (quoteId) {
+        setSuccessMessage("Quote created successfully!!!");
+      }
+      await fetchQuoteDetails(quoteId);
+    } catch (error) {
+      logError(error)
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   let redirectUrl = EmptyString
   if (redirectToOriginUrl) {
@@ -112,15 +176,8 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     }));
 
     try {
-      const userData = {
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        email: user?.email,
-        phone: user?.mobile, // Assuming 'mobile' field in user data
-      };
-
       const quoteResp = await axios.post(NEXT_TRADE_IN_LOGIN_USER, {
-        data: { ...userData, items: allItems }
+        data: { customerId: user?.userId, items: allItems }
       });
 
       updateQueryParams(router, { quoteId: quoteResp?.data });
@@ -157,6 +214,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
 
   return (
     <>
+      {isLoading && <Loader />}
       <section aria-labelledby="trending-heading" className="bg-gray-50">
         <div className="px-10 pt-10 pb-10 text-left lg:max-w-7xl lg:mx-auto sm:pt-6 sm:pb-6">
           <div className="flex flex-col px-4 mb-4 sm:px-6 lg:px-0 sm:mb-6">
@@ -183,7 +241,31 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
                     <div className="absolute left-0 w-full transform -translate-y-1/2 border top-1/2 border-neutral-100 dark:border-neutral-800"></div>
                   </div>
                 }
-                <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
+                <div className='flex flex-col items-center justify-start gap-3 mb-4'>
+                  {["username", "password"].map((field) => (
+                    <div key={field} className="flex flex-col w-full">
+                      <input
+                        type={field === "password" ? "password" : "text"}
+                        name={field}
+                        placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                        value={loginData[field as keyof typeof loginData]}
+                        onChange={handleInputChange}
+                        className={`p-2 text-sm font-normal w-full text-black border rounded ${validationErrors[field] ? "border-red-500" : "border-gray-200"
+                          }`}
+                      />
+                      {validationErrors[field] && (
+                        <span className="text-xs text-left text-red-500">
+                          {validationErrors[field]}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+
+                  <button onClick={submitLoginRequest} className="py-2 px-6 w-full text-white bg-[#2d4d9c] rounded">
+                    Login
+                  </button>
+                </div>
+                {/* <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} /> */}
                 <div className={`flex flex-col items-start text-left justify-start w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
                   <a href="/my-account/forgot-password" target='_blank'>
                     <span className="block text-sm font-medium underline cursor-pointer text-sky-600 hover:text-sky-800 hover:underline">

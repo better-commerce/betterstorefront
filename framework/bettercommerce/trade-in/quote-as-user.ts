@@ -19,6 +19,7 @@ export default function postQuoteAsUser(
         data,
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
+        logRequest:false,
       })
       return response.value
     } catch (error: any) {
