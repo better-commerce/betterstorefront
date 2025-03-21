@@ -461,7 +461,7 @@
         "assignToRequired": "Le champ Attribué à est requis",
         "productRequired": "Au moins un produit est requis"
       },
-      "myDetailsHeadingText": "Mes Profile",
+      "": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Oups ! Erreur lors de la récupération des retours"

@@ -463,6 +463,7 @@
             "productRequired": "Απαιτείται τουλάχιστον ένα προϊόν"
         },
         "myDetailsHeadingText": "Το Προφίλ Μου",
+        "tradeInText":"Trade In",
         "editYourDetailsText": "Μπορείτε να επεξεργαστείτε οποιοδήποτε από τα παρακάτω στοιχεία για να ενημερώσετε πλήρως τον λογαριασμό σας.",
         "myOrders": {
             "fetchReturnsErrorMsg": "Ωχ! Σφάλμα κατά την ανάκτηση των επιστροφών"

@@ -463,6 +463,7 @@
                 "productRequired": "Minst en produkt är obligatorisk"
             },
             "myDetailsHeadingText": "Min profil",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Känn dig fri att redigera dina uppgifter nedan så att ditt konto är helt uppdaterat.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oj! Fel vid hämtning av returer"

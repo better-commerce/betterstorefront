@@ -433,6 +433,7 @@
                 "productRequired": "Almeno un prodotto è obbligatorio"
             },
             "myDetailsHeadingText": "Il Mio Profilo",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Sentiti libero di modificare i tuoi dettagli qui sotto per tenere il tuo account sempre aggiornato.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ops! Errore nel recupero dei resi"

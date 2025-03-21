@@ -463,6 +463,7 @@
                 "productRequired": "Mindst ét produkt er påkrævet"
             },
             "myDetailsHeadingText": "Min profil",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Du kan frit redigere dine oplysninger nedenfor, så din konto er fuldt opdateret.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Fejl under hentning af returneringer"

@@ -463,6 +463,7 @@
                 "productRequired": "Este necesar cel puțin un produs"
             },
             "myDetailsHeadingText": "Profilul meu",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Simte-te liber să editezi orice detalii pentru a-ți actualiza contul.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Eroare la preluarea retururilor"

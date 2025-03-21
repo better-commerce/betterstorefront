@@ -463,6 +463,7 @@
             "productRequired": "Je vyžadován alespoň jeden produkt"
             },
             "myDetailsHeadingText": "Můj profil",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Neváhejte upravit jakékoli své údaje níže, aby váš účet byl zcela aktuální.",
             "myOrders": {
             "fetchReturnsErrorMsg": "Ups! Chyba při získávání vratek"

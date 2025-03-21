@@ -462,6 +462,7 @@
         "productRequired": "Se requiere al menos un producto"
       },
       "myDetailsHeadingText": "Mis Profile",
+      "tradeInText":"Trade In",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
       "myOrders": {
         "fetchReturnsErrorMsg": "¡Vaya! Error al recuperar devoluciones"

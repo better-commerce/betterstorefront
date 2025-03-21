@@ -463,6 +463,7 @@
                 "productRequired": "Vähintään yksi tuote on pakollinen"
             },
             "myDetailsHeadingText": "Profiilini",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Päivitä tietosi, jotta tilisi on ajan tasalla.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Hups! Virhe palautusten noudossa."

@@ -463,6 +463,7 @@
                 "productRequired": "Minst eitt produkt er påkravd"
             },
             "myDetailsHeadingText": "Min profil",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Følgjeleg til å redigere nokre av detaljane dine nedanfor for at kontoen din skal vere heilt oppdatert.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oisann! Det oppstod ein feil ved henting av returar"

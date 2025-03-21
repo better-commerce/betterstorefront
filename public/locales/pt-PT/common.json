@@ -463,6 +463,7 @@
                 "productRequired": "Pelo menos um produto é obrigatório"
             },
             "myDetailsHeadingText": "Meu Perfil",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Fique à vontade para editar qualquer um dos seus dados abaixo para que sua conta esteja totalmente atualizada.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ops! Erro ao buscar devoluções"

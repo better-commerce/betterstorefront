@@ -463,6 +463,7 @@
                 "productRequired": "Необходимо хотя бы одно товар"
             },
             "myDetailsHeadingText": "Мой профиль",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Не стесняйтесь редактировать любые данные, чтобы ваш аккаунт был актуален.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Упс! Ошибка при получении возвратов"

@@ -463,6 +463,7 @@
                 "productRequired": "Wymagany jest co najmniej jeden produkt"
             },
             "myDetailsHeadingText": "Mój profil",
+            "tradeInText":"Trade In",
             "editYourDetailsText": "Możesz edytować poniższe dane, aby zaktualizować swoje konto.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Wystąpił błąd podczas pobierania zwrotów"

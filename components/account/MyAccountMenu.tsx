@@ -226,6 +226,17 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         })
       }
     }
+    if (featureToggle?.features?.enableTradeIn) {
+      newConfig.push({
+       type: 'tab',
+       text: 'Trade In',
+       mtext: 'Trade In',
+       props: 'tradein',
+       head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+       href: '/my-account/tradein',
+       displayOrder: 14
+     })
+    }
   }
   return (
     <>

@@ -463,6 +463,7 @@
         "productRequired": "Mindestens ein Produkt ist erforderlich"
       },
       "myDetailsHeadingText": "Meine Profile",
+      "tradeInText":"Trade In",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Hoppla! Fehler beim Abrufen von Rücksendungen"
