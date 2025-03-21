@@ -228,7 +228,7 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
         ))}
       </div>
       {!shippingData &&
-        <>
+        <div className={`flex flex-col w-full gap-4`}>
           {
             ["street", "street2", "city", "state", "country", "postcode"].map((field) => (
               <div className="flex flex-col gap-1" key={`fields-${field}`}>
@@ -245,7 +245,13 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
               </div>
             ))
           }
-        </>
+          <button onClick={() => {
+            submitRequest();
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
+            Confirm collection from DPD
+          </button>
+        </div>
       }
       {isStoreOpen == 1 &&
         <div className={`flex flex-col w-full gap-4 ${user?.userId ? ' sm:w-full' : ' sm:w-5/12'}`}>
