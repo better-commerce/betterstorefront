@@ -18,7 +18,6 @@ export default function postQuoteAsGuest(
         method: 'post',
         data,
         cookies,
-        logRequest: true,
       })
       return response.value
     } catch (error: any) {

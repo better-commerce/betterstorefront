@@ -7,7 +7,7 @@ const getQuoteByIdApiMiddleware = async (req: any, res: any) => {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const { id } = req.body?.data || {} // Get ID from request body
+  const { id } = req.body?.data || {}
 
   if (!id) {
     return res.status(400).json({ error: 'Missing quote ID' })
@@ -15,6 +15,7 @@ const getQuoteByIdApiMiddleware = async (req: any, res: any) => {
 
   try {
     const response: any = await getQuoteById(id, req?.cookies)
+    console.log({ response })
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

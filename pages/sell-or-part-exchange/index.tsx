@@ -14,6 +14,7 @@ import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Layout from '@components/Layout/Layout'
 import { useUI } from '@components/ui/context'
+
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 // @ts-ignore
@@ -52,6 +53,7 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 }
 const PAGE_TYPE = PAGE_TYPES.Home
 
+
 function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, deviceInfo, featureToggle }: any) {
   const router = useRouter()
   const { user, isGuestUser } = useUI()
@@ -72,7 +74,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [quoteData, setQuoteData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [shippingData, setShippingData] = useState<any>([])
-  const [guestData, setGuestData] = useState("")
   const [message, setMessage] = useState("")
 
   const fetchData = useCallback(
@@ -103,14 +104,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
 
     if (!value || value.length === 0 || value.length >= 2) {
       fetchData(value);
-    }
-  };
-
-  // AS DISCUSSED WITH MASOOD SIR ADDED THIS HANDLING TO GET GUEST NAME AND PASS TO NEXT STEP TO SHOW GUEST NAME INSTEAD OF ID 
-  // MASOOD SIR WORKING ON GUEST LOGIN SOLUTION AS THERE IS SECURITY BREACH POSSIBILITY. ONCE DONE WILL ADD GUEST API CALL TO LOGIN AS GUEST.
-  const handleGuest = (data?: any) => {
-    if (data) {
-      setGuestData(data);
     }
   };
 
@@ -237,6 +230,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       </div>
     )
   }
+
   return (
     <>
       {isLoading && <Loader />}
@@ -259,7 +253,9 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
         {message != "" && <div className='fixed z-10 top-24 right-4'>
           <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-600'>{message}</span>
         </div>}
+       
         <div className='container flex flex-col justify-center gap-4 mx-auto text-center'>
+
           {pageContents?.heroheading?.length > 0 && pageContents?.heroheading?.map((heading: any, hIdx: number) => (
             <div className='flex flex-col justify-center w-full mt-6 text-center sm:mt-8' key={`heading-${hIdx}`}>
               <h1 className='mb-4 text-xl font-semibold uppercase sm:text-3xl text-[#2d4d9c] sm:mb-6'>{heading?.heroheading_title}</h1>
@@ -290,10 +286,10 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   currentStep={currentStep} isLoading={isLoading} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
-                <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} handleGuest={handleGuest} nextSteps={handleNextStep} />
+                <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} nextSteps={handleNextStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
-                <GetQuote user={user} startNewTrade={startNewTrade} guestData={guestData} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
+                <GetQuote user={user} startNewTrade={startNewTrade} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
                 <ShippingDetail showStores={showStores} showDpdStore={showDpdStore} dpd={data?.dpd} shippingData={shippingData} nextSteps={handleNextStep} quoteData={quoteData} />

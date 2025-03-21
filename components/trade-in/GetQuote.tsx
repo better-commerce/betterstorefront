@@ -6,7 +6,7 @@ import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT
 import Link from 'next/link';
 import { logError } from '@framework/utils/app-util';
 
-export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade, guestData }: any) {
+export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
   const [newQuoteDetail, setNewQuoteData] = useState<any>(quoteData);
@@ -108,7 +108,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
       <div className="flex flex-col w-full gap-6 mt-4 sm:mt-5">
         <div className="flex flex-col justify-center w-full gap-4 mt-6 text-center sm:mt-8">
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-            Hi {user?.userId ? `${user?.firstName}` : guestData}
+            Hi {user?.userId ? `${user?.firstName}` : newData?.value?.firstName}
           </h3>
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
             Your Quote Reference Number: {newQuoteDetail?.value?.quoteNo}

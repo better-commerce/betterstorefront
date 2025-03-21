@@ -242,6 +242,7 @@ export const POST_STORE_BY_POSTALCODE = `/api/${process.env.NEXT_PUBLIC_API_VERS
 //TRADE IN JOURNEY NEXT APP ENDPOINTS
 
 export const NEXT_TRADE_IN_GUEST_CHECKOUT = `/api/trade-in/post-quote-as-guest`
+export const NEXT_TRADE_IN_GUEST_LOGIN = `/api/trade-in/post-guest-login`
 export const NEXT_TRADE_IN_LOGIN_USER = `/api/trade-in/quote-as-user`
 export const NEXT_TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/trade-in/post-quote`
 export const NEXT_TRADE_IN_GET_QUOTE_BY_ID = `/api/trade-in/get-quote-by-id`
@@ -259,6 +260,7 @@ export const NEXT_TRADE_IN_UPDATE_STORE_ADDRESS = `/api/trade-in/update-store-ad
 //TRADE IN JOURNEY API ENDPOINTS
 
 export const TRADE_IN_GUEST_CHECKOUT = `/api/quotes/guest`
+export const TRADE_IN_GUEST_LOGIN = `/api/customers/guest`
 export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/quotes`
 export const TRADE_IN_GET_QUOTE_BY_ID = `/api/quotes`
 export const TRADE_IN_PRODUCTS = `/api/products`

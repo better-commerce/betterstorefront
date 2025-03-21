@@ -12,6 +12,7 @@ export default function getShippingMethods(cookies?: any) {
         method: 'GET',
         cookies,       
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
+        logRequest:true,
       })
       return response
     } catch (error: any) {
