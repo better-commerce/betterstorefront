@@ -258,6 +258,7 @@ export const NEXT_TRADE_IN_GET_STORES = `/api/trade-in/get-stores`
 export const NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD = `/api/trade-in/update-shipping-method`
 export const NEXT_TRADE_IN_UPDATE_STORE_ADDRESS = `/api/trade-in/update-store-address`
 export const NEXT_TRADE_IN_CUSTOMERS = `/api/trade-in/customers`
+export const NEXT_TRADE_IN_CUSTOMER_TRADES = `/api/trade-in/customer-trades`
 
 //TRADE IN JOURNEY API ENDPOINTS
 
@@ -266,6 +267,7 @@ export const TRADE_IN_GUEST_LOGIN = `/api/customers/guest`
 export const TRADE_IN_LOGIN = `/api/customers/autheticate`
 export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/quotes`
 export const TRADE_IN_GET_QUOTE_BY_ID = `/api/quotes`
+export const TRADE_IN_GET_QUOTES = `/api/quotes`
 export const TRADE_IN_PRODUCTS = `/api/products`
 export const TRADE_IN_USER_TOKEN = `/api/users/login`
 export const TRADE_IN_GET_SHIPPING_METHODS = `/api/deliveries/shipping-method`

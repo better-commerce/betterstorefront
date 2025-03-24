@@ -15,6 +15,7 @@ export default function getTradeInProducts(searchText: any, cookies: any) {
         baseUrl: TRADE_IN_BASE_URL,
         url: url.href,
         method: 'GET',
+        cookies,
       })
       return response?.value
     } catch (error: any) {

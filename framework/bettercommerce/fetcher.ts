@@ -111,6 +111,9 @@ const fetcher = async (props: IFetcherProps | any) => {
     }
     return response.data
   } catch (error: any) {
+    if (logRequest) {
+      writeFetcherLog(config, error)
+    }
     const errorStatusCode = error.status
     let errorBody = error.data
 

@@ -168,7 +168,6 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
   };
   const submitLoggedInUserRequest = async () => {
     setIsLoading(true);
-
     const allItems = selectedItems?.map((item: any) => ({
       parentStockCode: item?.selectedProductData?.stockCode || "",
       conditions: getConditionValue(item?.selectedCondition?.conditionName),
