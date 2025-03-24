@@ -12,7 +12,6 @@ export default function getCustomerTrades(cookies?: any) {
         method: 'get',
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
-        logRequest: (process.env.NODE_ENV === 'development'),
       })
       return response.value
     } catch (error: any) {

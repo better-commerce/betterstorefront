@@ -18,7 +18,6 @@ export default function postGuestLogin(
         method: 'post',
         data,
         cookies,
-        logRequest:false,
       })
       return response
     } catch (error: any) {
