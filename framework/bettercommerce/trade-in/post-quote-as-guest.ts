@@ -1,5 +1,4 @@
 import { TRADE_IN_GUEST_CHECKOUT } from '@components/utils/constants'
-import logRequest from '@framework/api/operations/log-payment'
 import fetcher from '@framework/fetcher'
 import { logError } from '@framework/utils/app-util'
 import { TRADE_IN_BASE_URL } from '@framework/utils/constants'
