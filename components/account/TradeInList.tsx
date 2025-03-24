@@ -1,25 +1,11 @@
 'use client';
 
+import Loader from "@components/Loader";
 import { NEXT_TRADE_IN_CUSTOMER_TRADES } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
-import { getCurrencySymbol } from "@framework/utils/translate-util";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-type TradeInItem = {
-  date: string;
-  quoteRef: string;
-  status: string;
-  total: string;
-};
-
-const mockData: TradeInItem[] = [
-  { date: '18/03/2025', quoteRef: 'UQ703146', status: 'Awaiting Collection', total: '£488.00' },
-  { date: '18/03/2025', quoteRef: 'UQ703144', status: 'Awaiting Collection', total: '£488.00' },
-  { date: '18/03/2025', quoteRef: 'UQ703142', status: 'Awaiting Collection', total: '£734.00' },
-  { date: '18/02/2025', quoteRef: 'UQ655910', status: 'Quote Cancelled', total: 'Cancelled' },
-];
 
 export default function TradeInTable() {
   const [isLoading, setIsLoading] = useState(false)
@@ -41,6 +27,7 @@ export default function TradeInTable() {
   }, []);
   return (
     <div className="w-full px-6">
+      {isLoading && <Loader />}
       <h2 className="text-xl font-normal sm:text-2xl dark:text-black">My Trade In</h2>
       <div className="mt-4 overflow-x-auto">
         {tradeList?.items?.length > 0 ? (
@@ -69,7 +56,7 @@ export default function TradeInTable() {
                           item.status == "QuoteRejected" ? 'bg-red-200 border-red-500 text-red-500' : 'bg-gray-200 border-gray-500 text-gray-500'
                       }`}>{item.status}</span>
                   </td>
-                  <td className="px-4 py-2 text-sm text-right border">{item.grandTotal || '-'}</td>
+                  <td className="px-4 py-2 text-sm text-right border">£{item.grandTotal || '-'}</td>
                   <td className="px-4 py-2 text-sm text-right border">
                     {new Date(item.created).toLocaleDateString()}
                   </td>

@@ -6,14 +6,14 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { useUI } from '@components/ui/context'
 import React from 'react'
-import TradeInList from '@components/account/TradeInList'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
+import TradeInDetail from '@components/account/TradeDetail'
 
-function TradeIn() {
+function TradeInDetailPage() {
   const [isShow, setShow] = useState(true)
   const { user, isGuestUser, changeMyAccountTab } = useUI()
   const router = useRouter()
@@ -39,18 +39,13 @@ function TradeIn() {
   
   useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
-  const handleToggleShowState = () => {
-    setShow(!isShow)
-  }
-
-
   return ( 
     <div className={'bg-white dark:bg-transparent'}>
-     <TradeInList/>
+     <TradeInDetail/>
     </div> )
   }
 
-TradeIn.LayoutAccount = LayoutAccount
+TradeInDetailPage.LayoutAccount = LayoutAccount
 
 const PAGE_TYPE = PAGE_TYPES.MyAccount
 
@@ -66,4 +61,4 @@ export async function getServerSideProps(context: any) {
   }
 }
 
-export default withDataLayer(withAuth(TradeIn), PAGE_TYPE, true, LayoutAccount)
+export default withDataLayer(withAuth(TradeInDetailPage), PAGE_TYPE, true, LayoutAccount)
