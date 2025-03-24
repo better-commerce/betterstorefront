@@ -17,7 +17,6 @@ export default function postLogin(
         method: 'post',
         data,
         cookies,
-        logRequest:true,
       })
       return response
     } catch (error: any) {

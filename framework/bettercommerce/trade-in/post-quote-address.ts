@@ -19,7 +19,6 @@ export default async function postQuoteAddress(
       data,
       cookies,
       headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
-      //logRequest: true,
     })
 
     return response
