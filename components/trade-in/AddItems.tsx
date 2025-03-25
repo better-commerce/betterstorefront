@@ -186,9 +186,11 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
       ))}
       {/* Navigation Buttons */}
       <div className="flex flex-col gap-5 mt-2">
-        <button onClick={addNewItem} className="w-full px-4 py-3 text-[#2d4d9c] text-sm border border-[#2d4d9c] bg-white rounded disabled:bg-gray-300">
-          [+] Add another item
-        </button>
+        {items[0]?.selectedProductData != "" &&
+          <button onClick={addNewItem} className="w-full px-4 py-3 text-[#2d4d9c] text-sm border border-[#2d4d9c] bg-white rounded disabled:bg-gray-300">
+            [+] Add another item
+          </button>
+        }
         <div className='flex flex-col w-full gap-1'>
           <button
             onClick={() => {
