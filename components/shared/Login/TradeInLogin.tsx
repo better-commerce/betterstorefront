@@ -81,7 +81,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       if (loginResult) {
         setLoginDetails(loginResult);
       }
-      const { data: userResult }: any = await axios.get(NEXT_TRADE_IN_CUSTOMERS, { params: { customerId: loginResult?.userId } });
+      const { data: userResult }: any = await axios.get(NEXT_TRADE_IN_CUSTOMERS);
       // END Getting User Token API calls
       setUser({ ...loginResult, ...userResult })
       setIsGuestUser(false)
