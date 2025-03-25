@@ -10,6 +10,37 @@ import { useEffect, useState } from "react";
 export default function TradeInTable() {
   const [isLoading, setIsLoading] = useState(false)
   const [tradeList, setTradeList] = useState<any>([])
+  const statusClasses: Record<string, string> = {
+    AwaitingQuotation: "bg-gray-200 border-gray-500 text-gray-500", // Waiting for quotation
+    Quoted: "bg-sky-200 border-sky-500 text-sky-500", // Quotation provided
+    QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Quote accepted by customer
+    QuoteRejected: "bg-red-200 border-red-500 text-red-500", // Quote rejected
+    QuoteExpired: "bg-yellow-200 border-yellow-500 text-yellow-500", // Expired quote
+    CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500", // Collection scheduled
+    ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500", // Parcel received
+    Assessment: "bg-orange-200 border-orange-500 text-orange-500", // Under assessment
+    FurtherAssessment: "bg-orange-300 border-orange-600 text-orange-600", // Needs further review
+    Assessed: "bg-lime-100 border-lime-500 text-lime-600", // Assessment complete
+    AssessmentApproved: "bg-emerald-200 border-emerald-500 text-emerald-500", // Approved assessment
+    AssessedFullReject: "bg-red-300 border-red-600 text-red-600", // Fully rejected after assessment
+    AssessedPartialReject: "bg-yellow-300 border-yellow-600 text-yellow-600", // Partially rejected
+    TradeInComplete: "bg-emerald-300 border-emerald-600 text-emerald-600", // Trade-in completed
+    TradeInFullReject: "bg-red-400 border-red-700 text-red-700", // Full rejection
+    TradeInPartialReject: "bg-yellow-400 border-yellow-700 text-yellow-700", // Partial rejection
+    CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500", // Stocked after trade-in
+    FullReturn: "bg-red-500 border-red-700 text-white", // Full return processed
+    CompleteBookedIntoStockPartialReturn: "bg-yellow-500 border-yellow-700 text-white", // Partial return processed
+    QuoteCancelled: "bg-gray-400 border-gray-600 text-gray-600", // Quote was canceled
+    Submitted: "bg-sky-300 border-sky-600 text-sky-600", // Submitted request
+    PriceNeeded: "bg-orange-400 border-orange-700 text-orange-700", // Price not available yet
+    Accepted: "bg-emerald-400 border-emerald-700 text-emerald-700", // Offer accepted
+    Rejected: "bg-red-500 border-red-700 text-white", // Offer rejected
+    Expired: "bg-yellow-500 border-yellow-700 text-white", // Expired status
+    AssessmentInProgress: "bg-orange-500 border-orange-700 text-white", // Still being assessed
+    RejectedByBusiness: "bg-red-600 border-red-800 text-white", // Rejected by company
+    AssessmentRejectedByCustomer: "bg-purple-300 border-purple-600 text-purple-600", // Rejected by customer
+    Completed: "bg-emerald-500 border-emerald-700 text-white", // Fully completed
+  };
   const fetchAllTrades = async () => {
     setIsLoading(true)
     try {
@@ -50,13 +81,11 @@ export default function TradeInTable() {
                     </Link>
                   </td>
                   <td className="px-4 py-2 text-sm text-right border">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${item.status == "QuoteAccepted" ? 'bg-emerald-200 border-emerald-500 text-emerald-500' :
-                      item.status == "Assessment" ? 'bg-sky-200 border-sky-500 text-sky-500' :
-                        item.status == "Quoted" ? 'bg-yellow-200 border-yellow-500 text-yellow-500' :
-                          item.status == "QuoteRejected" ? 'bg-red-200 border-red-500 text-red-500' : 'bg-gray-200 border-gray-500 text-gray-500'
-                      }`}>{item.status}</span>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
+                      {item?.status ?? "Unknown"}
+                    </span>
                   </td>
-                  <td className="px-4 py-2 text-sm text-right border">£{item.grandTotal || '-'}</td>
+                  <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
                   <td className="px-4 py-2 text-sm text-right border">
                     {new Date(item.created).toLocaleDateString()}
                   </td>

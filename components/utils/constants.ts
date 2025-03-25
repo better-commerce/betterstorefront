@@ -247,6 +247,7 @@ export const NEXT_TRADE_IN_LOGIN = `/api/trade-in/post-login`
 export const NEXT_TRADE_IN_LOGIN_USER = `/api/trade-in/quote-as-user`
 export const NEXT_TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/trade-in/post-quote`
 export const NEXT_TRADE_IN_GET_QUOTE_BY_ID = `/api/trade-in/get-quote-by-id`
+export const NEXT_TRADE_IN_GET_ASSESSMENT_STATUS = `/api/trade-in/get-assessment-status`
 export const NEXT_TRADE_IN_PRE_SIGN_AGREEMENT = `/api/trade-in/set-pre-sign-agreement`
 export const NEXT_TRADE_IN_POST_QUOTE_SAVE_BY_ID = `/api/trade-in/post-quote-save-by-id`
 export const NEXT_TRADE_IN_PRODUCTS = `/api/trade-in/get-products`
@@ -273,6 +274,7 @@ export const TRADE_IN_USER_TOKEN = `/api/users/login`
 export const TRADE_IN_GET_SHIPPING_METHODS = `/api/deliveries/shipping-method`
 export const TRADE_IN_GET_STORES = `/api/stores`
 export const TRADE_IN_GET_CUSTOMER = `/api/customers`
+export const TRADE_IN_GET_ASSESSMENT_STATUS = `/api/assessments`
 
 //CONSTANTS
 
