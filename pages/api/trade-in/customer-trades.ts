@@ -7,7 +7,7 @@ const getCustomerTradesApiMiddleware = async (req: any, res: any) => {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
   try {
-    const response = await getCustomerTrades(req?.cookies)
+    const response = await getCustomerTrades(req?.cookies, req.query)
     res.status(200).json(response);
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error);

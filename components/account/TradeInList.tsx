@@ -1,11 +1,13 @@
 'use client';
 
-import Loader from "@components/Loader";
-import { NEXT_TRADE_IN_CUSTOMER_TRADES } from "@components/utils/constants";
-import { logError } from "@framework/utils/app-util";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+const Pagination = dynamic(() => import('@components/Product/Pagination'))
+import Loader from "@components/Loader";
+import { NEXT_TRADE_IN_CUSTOMER_TRADES } from "@components/utils/constants";
+import { logError } from "@framework/utils/app-util";
 
 export default function TradeInTable() {
   const [isLoading, setIsLoading] = useState(false)
@@ -41,10 +43,14 @@ export default function TradeInTable() {
     AssessmentRejectedByCustomer: "bg-purple-300 border-purple-600 text-purple-600", // Rejected by customer
     Completed: "bg-emerald-500 border-emerald-700 text-white", // Fully completed
   };
-  const fetchAllTrades = async () => {
+  const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 10, sortBy: 'created_on', sortDescending: true, pageCount: 1  })
+  const fetchAllTrades = async (page = 1) => {
     setIsLoading(true)
     try {
-      const { data: allTrades } = await axios.get(NEXT_TRADE_IN_CUSTOMER_TRADES)
+      const { pageCount, ...rest } = paginationState
+      const params = { ...rest, pageNumber: page }
+      const { data: allTrades } = await axios.get(NEXT_TRADE_IN_CUSTOMER_TRADES, { params })
+      setPaginationState((prev: any) => ({ ...prev, pageNumber: allTrades?.page, pageCount: allTrades?.totalPages, pageSize: allTrades?.pageSize }))
       setTradeList(allTrades)
       setIsLoading(false)
     } catch (error) {
@@ -62,42 +68,45 @@ export default function TradeInTable() {
       <h2 className="text-xl font-normal sm:text-2xl dark:text-black">My Trade In</h2>
       <div className="mt-4 overflow-x-auto">
         {tradeList?.items?.length > 0 ? (
-          <table className="min-w-full border border-gray-200">
-            <thead>
-              <tr className="text-left bg-gray-100">
-                <th className="px-4 py-2 text-sm font-semibold text-gray-700 border">Quote</th>
-                <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Status</th>
-                <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Total</th>
-                <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Created</th>
-                <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {tradeList?.items.map((item: any, index: number) => (
-                <tr key={index} className="text-left border">
-                  <td className="px-4 py-2 text-sm font-semibold text-black border">
-                    <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm text-sky-600">
-                      {item.quoteNo || '-'}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-2 text-sm text-right border">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
-                      {item?.status ?? "Unknown"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
-                  <td className="px-4 py-2 text-sm text-right border">
-                    {new Date(item.created).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-2 text-right border">
-                    <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">
-                      View Details
-                    </Link>
-                  </td>
+          <>
+            <table className="min-w-full border border-gray-200">
+              <thead>
+                <tr className="text-left bg-gray-100">
+                  <th className="px-4 py-2 text-sm font-semibold text-gray-700 border">Quote</th>
+                  <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Status</th>
+                  <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Total</th>
+                  <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Created</th>
+                  <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tradeList?.items.map((item: any, index: number) => (
+                  <tr key={index} className="text-left border">
+                    <td className="px-4 py-2 text-sm font-semibold text-black border">
+                      <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm text-sky-600">
+                        {item.quoteNo || '-'}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-2 text-sm text-right border">
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
+                        {item?.status ?? "Unknown"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
+                    <td className="px-4 py-2 text-sm text-right border">
+                      {new Date(item.created).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-2 text-right border">
+                      <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">
+                        View Details
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected+1 || 1)} pageCount={paginationState.pageCount}/>
+           </>
         ) : (
           <p className="py-4 text-center text-gray-600">No trade-in records found.</p>
         )}
