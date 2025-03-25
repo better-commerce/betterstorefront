@@ -1,6 +1,6 @@
 'use client';
 
-import { NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, TradeInItemCondition } from "@components/utils/constants";
+import { NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, TradeInItemCondition } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -13,38 +13,48 @@ export default function TradeInDetail() {
   const [tradeDetail, setTradeDetail] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lineAssessment, setLineAssessment] = useState(null)
+  const [showDropdown, setShowDropdown] = useState<{ [key: string]: boolean }>({});
+  const [rejectReasons, setRejectReasons] = useState<{ [key: string]: number }>({});
   const [message, setMessage] = useState("")
   const tradeinId = router.query?.tradeinId[0]
+
+  const rejectionOptions = [
+    { id: 1, value: "Offer too low" },
+    { id: 2, value: "Better offer elsewhere" },
+    { id: 3, value: "Change of mind" },
+    { id: 4, value: "Just getting an idea" }
+  ];
+
   const statusClasses: Record<string, string> = {
-    AwaitingQuotation: "bg-gray-200 border-gray-500 text-gray-500", // Waiting for quotation
+    AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500", // Waiting for quotation
     Quoted: "bg-sky-200 border-sky-500 text-sky-500", // Quotation provided
     QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Quote accepted by customer
     QuoteRejected: "bg-red-200 border-red-500 text-red-500", // Quote rejected
-    QuoteExpired: "bg-yellow-200 border-yellow-500 text-yellow-500", // Expired quote
+    QuoteExpired: "bg-orange-200 border-orange-500 text-orange-500", // Expired quote
     CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500", // Collection scheduled
     ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500", // Parcel received
-    Assessment: "bg-orange-200 border-orange-500 text-orange-500", // Under assessment
-    FurtherAssessment: "bg-orange-300 border-orange-600 text-orange-600", // Needs further review
-    Assessed: "bg-lime-100 border-lime-500 text-lime-600", // Assessment complete
-    AssessmentApproved: "bg-emerald-200 border-emerald-500 text-emerald-500", // Approved assessment
+    Assessment: "bg-yellow-100 border-yellow-300 text-yellow-500", // Under assessment
+    FurtherAssessment: "bg-yellow-200 border-yellow-400 text-yellow-600", // Needs further review
+    Assessed: "bg-emerald-600 border-emerald-700 text-emerald-100", // Assessment complete
+    AssessmentApproved: "bg-emerald-100 border-emerald-300 text-emerald-500", // Approved assessment
     AssessedFullReject: "bg-red-300 border-red-600 text-red-600", // Fully rejected after assessment
-    AssessedPartialReject: "bg-yellow-300 border-yellow-600 text-yellow-600", // Partially rejected
+    AssessedPartialReject: "bg-orange-300 border-orange-600 text-orange-600", // Partially rejected
     TradeInComplete: "bg-emerald-300 border-emerald-600 text-emerald-600", // Trade-in completed
     TradeInFullReject: "bg-red-400 border-red-700 text-red-700", // Full rejection
-    TradeInPartialReject: "bg-yellow-400 border-yellow-700 text-yellow-700", // Partial rejection
+    TradeInPartialReject: "bg-orange-400 border-orange-700 text-orange-700", // Partial rejection
     CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500", // Stocked after trade-in
     FullReturn: "bg-red-500 border-red-700 text-white", // Full return processed
-    CompleteBookedIntoStockPartialReturn: "bg-yellow-500 border-yellow-700 text-white", // Partial return processed
+    CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white", // Partial return processed
     QuoteCancelled: "bg-gray-400 border-gray-600 text-gray-600", // Quote was canceled
     Submitted: "bg-sky-300 border-sky-600 text-sky-600", // Submitted request
-    PriceNeeded: "bg-orange-400 border-orange-700 text-orange-700", // Price not available yet
-    Accepted: "bg-emerald-400 border-emerald-700 text-emerald-700", // Offer accepted
+    PriceNeeded: "bg-yellow-400 border-yellow-700 text-yellow-700", // Price not available yet
+    Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Offer accepted
     Rejected: "bg-red-500 border-red-700 text-white", // Offer rejected
-    Expired: "bg-yellow-500 border-yellow-700 text-white", // Expired status
-    AssessmentInProgress: "bg-orange-500 border-orange-700 text-white", // Still being assessed
+    Expired: "bg-orange-500 border-orange-700 text-white", // Expired status
+    AssessmentInProgress: "bg-yellow-200 border-yellow-500 text-yellow-500", // Still being assessed
     RejectedByBusiness: "bg-red-600 border-red-800 text-white", // Rejected by company
-    AssessmentRejectedByCustomer: "bg-purple-300 border-purple-600 text-purple-600", // Rejected by customer
-    Completed: "bg-emerald-500 border-emerald-700 text-white", // Fully completed
+    AssessmentRejectedByCustomer: "bg-red-300 border-red-600 text-red-600", // Rejected by customer
+    Completed: "bg-emerald-800 border-emerald-800 text-white", // Fully completed
   };
 
   useEffect(() => {
@@ -88,7 +98,39 @@ export default function TradeInDetail() {
       setSuccessMessage("Something went wrong!!!");
       logError(error);
     } finally {
-      setIsLoading(false);
+      //setIsLoading(false);
+    }
+  };
+
+  const handleItemAction = async (itemId: any, status: number) => {
+    if (status === 4 && !rejectReasons[itemId]) {
+      setMessage("Please select reject reasons!!");
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+      return;
+    }
+    setIsLoading(true);
+    try {
+      if (tradeDetail?.value?.id) {
+        const requestBody = {
+          id: tradeDetail?.value?.id,
+          itemId: itemId,
+          status,
+          rejectionReason: status === 3 ? 0 : 4, // 2 for approval, 3 for rejection, 1 for Submitted
+        };
+
+        const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, { data: requestBody })
+        setTradeDetail(quoteResult?.data);
+        fetchTradeDetail(tradeinId);
+        await setTradeDetail(tradeDetail?.value?.id);
+      } else {
+        logError("No quoteId received in response.")
+      }
+    } catch (error) {
+      logError(error)
+    } finally {
+      //setIsLoading(false);
     }
   };
 
@@ -139,7 +181,7 @@ export default function TradeInDetail() {
                   <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Price</th>
                   {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Assessment Price</th>}
                   <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
-                  {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"></th>}
+                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"></th>}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -166,17 +208,39 @@ export default function TradeInDetail() {
                       {"£"}{item?.assessmentPrice}
                     </td>}
                     <td className={`whitespace-nowrap justify-end pr-2`} align="right">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${statusClasses[item.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
+                      <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
                         {item.status ?? "Unknown"}
                       </span>
                     </td>
-                    {tradeDetail?.value?.status == "Assessed" &&
+                    {tradeDetail?.value?.status == "Assessed" ?
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                         <div className="flex justify-end gap-2 pr-3">
-                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject11</button>
+                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept11</button>
                         </div>
-                      </td>
+                      </td> :
+                      tradeDetail?.value?.status == "Quoted" ?
+                        <td>
+                          {showDropdown[item?.itemId] ? (
+                            item?.status != "Accepted" && item?.status != "Rejected" &&
+                            <div className="flex justify-end gap-2 pr-3">
+                              <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
+                                <option value="">Select a reason</option>
+                                {rejectionOptions?.map((reason, idx) => (
+                                  <option key={idx} value={reason?.id}>{reason?.value}</option>
+                                ))}
+                              </select>
+                              <button onClick={() => handleItemAction(item?.itemId, 4)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                            </div>
+                          ) : (
+                            item?.status != "Accepted" && item?.status != "Rejected" &&
+                            <div className="flex justify-end gap-2 pr-3">
+                              <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                            </div>
+                          )}
+                        </td> : ''
                     }
                   </tr>
                 ))}
@@ -189,7 +253,7 @@ export default function TradeInDetail() {
                   </td>
                   {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</th>}
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
-                  {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></th>}
+                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></th>}
                 </tr>
               </tfoot>
             </table>

@@ -6,12 +6,12 @@ import fetcher from '@framework/fetcher'
 import { logError } from '@framework/utils/app-util'
 import { TRADE_IN_BASE_URL } from '@framework/utils/constants'
 
-export default function saveAssessmentStatus(
+export default function updateAssessmentStatus(
   id: string,
   status: number,
   cookies: any
 ) {
-  async function saveAssessmentStatusAsync() {
+  async function updateAssessmentStatusAsync() {
     const url = new URL(
       `${TRADE_IN_GET_ASSESSMENT_STATUS}/${id}/review`,
       TRADE_IN_BASE_URL
@@ -32,5 +32,5 @@ export default function saveAssessmentStatus(
       logError(error)
     }
   }
-  return saveAssessmentStatusAsync()
+  return updateAssessmentStatusAsync()
 }
