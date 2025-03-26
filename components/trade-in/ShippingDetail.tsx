@@ -1,4 +1,5 @@
 import Loader from "@components/Loader";
+import TradeNewAddress from "@components/account/Address/TradeNewAddress";
 import { useUI } from "@components/ui";
 import { NEXT_ADDRESS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition } from '@components/utils/constants';
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
@@ -128,6 +129,7 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
     setStoreOpen(method?.iId)
     if (method?.iId == 2) {
       setIsLoading(true)
+      getAddress()
       const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES)
       if (storeResult.data) {
         setStoreData(storeResult?.data)
@@ -269,8 +271,9 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
       }
       {isStoreOpen == 1 &&
         <div className={`flex flex-col w-full gap-4 ${user?.userId ? ' sm:w-full' : ' sm:w-5/12'}`}>
-          <div className='flex flex-col w-full gap-1 mt-4 mb-5'>
+          <div className='flex items-center justify-between w-full gap-1 mt-4'>
             <h4 className='text-xl font-medium text-left text-black'>Your Address</h4>
+            {userAddress?.length > 0 && <TradeNewAddress getAddressNew={getAddress} />}
           </div>
           {user?.userId ? (
             <div className="grid grid-cols-3 gap-4 text-left">
@@ -290,20 +293,7 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
                   </div>
                 );
               }) : (
-                ["street", "street2", "city", "state", "country", "postcode"].map((field) => (
-                  <div className="flex flex-col gap-1" key={`fields-${field}`}>
-                    <label className="text-sm font-medium text-left text-black capitalize">{field}</label>
-                    <input
-                      type="text"
-                      name={field}
-                      placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
-                      value={addressData[field as keyof typeof addressData]}
-                      onChange={handleInputChange}
-                      className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
-                    />
-                    {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
-                  </div>
-                ))
+                <TradeNewAddress getAddressNew={getAddress} />
               )}
             </div>
           ) : (

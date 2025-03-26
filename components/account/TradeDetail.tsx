@@ -264,9 +264,28 @@ export default function TradeInDetail() {
               </tfoot>
             </table>
           </div>
+          {tradeDetail?.value?.street != "" &&
+            <div className={`p-4 text-left border rounded shadow-lg cursor-pointer bg-white mt-6`}>
+              <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
+                <h2 className="w-full text-xl font-semibold text-gray-700 uppercase">
+                  Collection Address
+                </h2>
+              </div>
+              <div className="grid grid-cols-12 gap-4">
+                <div className='sm:col-span-5'>
+                  {tradeDetail?.value?.street != "-" && <p>{tradeDetail?.value?.street}</p>}
+                  {tradeDetail?.value?.street2 != "-" && <p>{tradeDetail?.value?.street2}</p>}
+                  {tradeDetail?.value?.city != "-" && <p>{tradeDetail?.value?.city}</p>}
+                  {tradeDetail?.value?.state != "-" && <p>{tradeDetail?.value?.state}</p>}
+                  {tradeDetail?.value?.postCode != "-" && <p>{tradeDetail?.value?.postCode}</p>}
+                  {tradeDetail?.value?.country != "-" && <p>{tradeDetail?.value?.country}</p>}
+                </div>
+              </div>
+            </div>
+          }
           <div className="flex flex-col justify-start w-full gap-4 mt-6 text-left">
-            <p className="text-sm font-normal text-gray-600">If in the meantime you decide that you would rather a collections be organized please call us on 01444 237070 or email us at sales@parkcameras.com and someone will be willing to help you change the shipping method.</p>
-            <p className="text-sm font-normal text-gray-600">Before coming into store, why not check out our extensive range of camera gear.</p>
+            <p className="text-sm font-normal text-gray-600">If in the meantime you decide that you would rather a collections be organized please call us on 01444 237070 or email us at  <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a> and someone will be willing to help you change the shipping method.</p>
+            <p className="text-sm font-normal text-gray-600">Before coming into store, why not check out our extensive range of <Link href={`/search`} passHref className="underline text-sky-500">camera gears</Link>.</p>
           </div>
         </div>
       }
