@@ -40,11 +40,11 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
   };
 
   const conditionLabels: Record<string, number> = {
-    [TradeInItemCondition.WELL_USED]: 5,
-    [TradeInItemCondition.GOOD]: 4,
-    [TradeInItemCondition.VERY_GOOD]: 3,
-    [TradeInItemCondition.EXCELLENT]: 2,
     [TradeInItemCondition.LIKE_NEW]: 1,
+    [TradeInItemCondition.EXCELLENT]: 2,
+    [TradeInItemCondition.VERY_GOOD]: 3,
+    [TradeInItemCondition.GOOD]: 4,
+    [TradeInItemCondition.WELL_USED]: 5,
   };
 
   const fetchQuoteDetails = async (quoteId: string) => {
@@ -122,7 +122,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                   {item?.selectedAccessories?.length ? (
                     [...item.selectedAccessories]
                       // Map selected IDs to accessory objects
-                      .map((acc) => item?.selectedProductData?.accessories?.find((a:any) => a.accessoryId === acc))
+                      .map((acc) => item?.selectedProductData?.accessories?.find((a: any) => a.accessoryId === acc))
                       // Filter out any null/undefined values
                       .filter((accessory) => accessory)
                       // Sort alphabetically by accessoryName

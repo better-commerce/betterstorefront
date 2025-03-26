@@ -5,11 +5,11 @@ import Carousel from "./Carousal";
 import { TradeInItemCondition } from "@components/utils/constants";
 // Define the desired order matching your TradeInItemCondition values
 const conditionOrder = [
-  TradeInItemCondition.WELL_USED,
-  TradeInItemCondition.GOOD,
-  TradeInItemCondition.VERY_GOOD,
-  TradeInItemCondition.EXCELLENT,
   TradeInItemCondition.LIKE_NEW,
+  TradeInItemCondition.EXCELLENT,
+  TradeInItemCondition.VERY_GOOD,
+  TradeInItemCondition.GOOD,
+  TradeInItemCondition.WELL_USED,
 ];
 export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, currentStep, steps, selectedItems, isLoading }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProductData: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);

@@ -642,13 +642,12 @@ export const IGNORE_QUERY_KEYS = [
 ]
 
 export enum TradeInItemCondition {
-  WELL_USED = 'WellUsed',
-  GOOD = 'Good',
-  VERY_GOOD = 'VeryGood',
-  EXCELLENT = 'Excellent',
   LIKE_NEW = 'LikeNew',
+  EXCELLENT = 'Excellent',
+  VERY_GOOD = 'VeryGood',
+  GOOD = 'Good',
+  WELL_USED = 'WellUsed',
 }
-
 
 export enum TradeInSteps {
   ENTER_ITEM = 1,
