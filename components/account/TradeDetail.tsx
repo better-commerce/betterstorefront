@@ -179,7 +179,7 @@ export default function TradeInDetail() {
                 <tr>
                   <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
                   <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Price</th>
-                  {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Assessment Price</th>}
+                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "AssessmentApproved") && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Assessment Price</th>}
                   <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
                   {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"></th>}
                 </tr>
@@ -202,7 +202,7 @@ export default function TradeInDetail() {
                       </div>
                     </td>
                     <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
-                    {tradeDetail?.value?.status == "Assessed" && <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                    {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "AssessmentApproved") && <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                       {"£"}{item?.assessmentPrice}
                     </td>}
                     <td className={`whitespace-nowrap justify-end pr-2`} align="right">
@@ -247,7 +247,7 @@ export default function TradeInDetail() {
                 <tr>
                   <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.grandTotal}</td>
-                  {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</th>}
+                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "AssessmentApproved") && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</th>}
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
                   {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></th>}
                 </tr>

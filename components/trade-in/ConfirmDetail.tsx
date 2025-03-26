@@ -2,7 +2,7 @@ import { useEffect, useState, ChangeEvent } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import TradeInLogin from "@components/shared/Login/TradeInLogin";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GUEST_CHECKOUT, NEXT_TRADE_IN_GUEST_LOGIN, NEXT_TRADE_IN_LOGIN_USER, TradeInItemCondition } from "@components/utils/constants";
 import Loader from "@components/Loader";
@@ -128,7 +128,9 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                   }
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500">
-                  <CheckIcon className="w-6 h-6 text-emerald-600" />
+                  {item?.selectedAccessories?.length > 0 ?
+                    <CheckIcon className="w-6 h-6 text-emerald-600" />:<XMarkIcon className="w-6 h-6 text-red-600" />
+                  }
                 </td>
               </tr>
             ))}

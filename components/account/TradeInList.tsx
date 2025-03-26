@@ -107,19 +107,29 @@ export default function TradeInTable() {
               </table>
             </div>
             <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />
+            {/* Footer Text */}
+            <p className="mt-6 text-xs text-left text-gray-600">
+              We hope you like our new Trade In section of our website. We're still working on improvements,
+              but if you spot something that’s not working as expected, please send us an email with
+              screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
+              If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
+            </p>
           </>
         ) : (
-          <p className="py-4 text-center text-gray-600">No trade-in records found.</p>
+          <div className="flex flex-col justify-center gap-4 text-center">
+            <h3 className="py-4 text-2xl font-semibold text-center text-gray-600">No Trade Available.</h3>
+            {/* Footer Text */}
+            <p className="mt-6 text-xs text-left text-gray-600">
+              We hope you like our new Trade In section of our website. We're still working on improvements,
+              but if you spot something that’s not working as expected, please send us an email with
+              screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
+              If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
+            </p>
+          </div>
         )}
       </div>
 
-      {/* Footer Text */}
-      <p className="mt-6 text-xs text-left text-gray-600">
-        We hope you like our new Trade In section of our website. We're still working on improvements,
-        but if you spot something that’s not working as expected, please send us an email with
-        screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
-        If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
-      </p>
+
     </div>
   );
 }
