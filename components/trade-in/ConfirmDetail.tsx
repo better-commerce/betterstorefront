@@ -119,17 +119,28 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                   item?.selectedCondition?.conditionName == TradeInItemCondition.GOOD ? 'Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.selectedCondition?.conditionName == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
                 }</td>
                 <td className="px-3 py-4 text-sm text-left text-gray-500">
-                  {item?.selectedAccessories?.length
-                    ? item?.selectedAccessories?.map((acc: any, accId: number) => {
-                      const accessory = item?.selectedProductData?.accessories?.find((a: any) => a.accessoryId === acc);
-                      return <span key={`acc-${accId}`} className="pr-2">{accessory?.accessoryName || "-"}</span>;
-                    })
-                    : <span className="pr-2">N/A</span>
-                  }
+                  {item?.selectedAccessories?.length ? (
+                    [...item.selectedAccessories]
+                      // Map selected IDs to accessory objects
+                      .map((acc) => item?.selectedProductData?.accessories?.find((a:any) => a.accessoryId === acc))
+                      // Filter out any null/undefined values
+                      .filter((accessory) => accessory)
+                      // Sort alphabetically by accessoryName
+                      .sort((a, b) => a.accessoryName.localeCompare(b.accessoryName))
+                      // Map sorted accessories to elements
+                      .map((accessory, accId) => (
+                        <span key={`acc-${accId}`} className="pr-2">
+                          {accessory?.accessoryName || "-"}
+                        </span>
+                      ))
+                  ) : (
+                    <span className="pr-2">N/A</span>
+                  )}
+
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500">
                   {item?.selectedAccessories?.length > 0 ?
-                    <CheckIcon className="w-6 h-6 text-emerald-600" />:<XMarkIcon className="w-6 h-6 text-red-600" />
+                    <CheckIcon className="w-6 h-6 text-emerald-600" /> : <XMarkIcon className="w-6 h-6 text-red-600" />
                   }
                 </td>
               </tr>

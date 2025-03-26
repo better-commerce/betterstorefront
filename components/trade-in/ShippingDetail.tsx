@@ -181,12 +181,26 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
                     <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
                     <div className='flex flex-col justify-center w-full gap-1 text-left'>
                       <span className="font-semibold text-left text-black">{item?.parentProductName} <span className="text-xs font-medium text-black">({item?.parentStockCode})</span></span>
-                      {item?.condition != "" && <span className='text-xs text-left text-gray-600'><strong>Condition: </strong>{item?.condition == 1 ? TradeInItemCondition.WELL_USED : item?.condition == 2 ? TradeInItemCondition.GOOD : item?.condition == 3 ? TradeInItemCondition.LIKE_NEW : item?.condition == 4 ? TradeInItemCondition.VERY_GOOD : item?.condition == 5 ? TradeInItemCondition.EXCELLENT : ''}</span>}
+                      {item?.condition != "" &&
+                        <span className="text-xs text-left text-gray-600">
+                          <strong>Condition: </strong>
+                          {item?.condition == 1 ? "Well Used" : item?.condition == 2 ? "Good" : item?.condition == 3 ? "Like New" : item?.condition == 4 ? "Very Good" : item?.condition == 5 ? "Excellent" : ""}
+                        </span>
+                      }
                       {item?.accessories?.length > 0 &&
                         <span className='text-xs text-left text-gray-600'><strong>Accessories: </strong>
-                          {item?.accessories?.map((acc: any, accId: number) => (
-                            <span key={`accessories-${accId}`} className="pr-2">{acc?.name}</span>
-                          ))}
+                          {item?.accessories?.length > 0 &&
+                            <span className="text-xs text-left text-gray-600">
+                              <strong>Accessories: </strong>
+                              {[...item?.accessories]
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((acc: any, accId: number) => (
+                                  <span key={`accessories-${accId}`} className="pr-2">
+                                    {acc?.name}
+                                  </span>
+                                ))}
+                            </span>
+                          }
                         </span>
                       }
                     </div>

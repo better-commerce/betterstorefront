@@ -145,15 +145,19 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                         {item?.condition != "" &&
                           <span className="text-xs text-left text-gray-600">
                             <strong>Condition: </strong>
-                            {item?.condition == 1 ? TradeInItemCondition.WELL_USED : item?.condition == 2 ? TradeInItemCondition.GOOD : item?.condition == 3 ? TradeInItemCondition.LIKE_NEW : item?.condition == 4 ? TradeInItemCondition.VERY_GOOD : item?.condition == 5 ? TradeInItemCondition.EXCELLENT : ""}
+                            {item?.condition == 1 ? "Well Used" : item?.condition == 2 ? "Good" : item?.condition == 3 ? "Like New" : item?.condition == 4 ? "Very Good" : item?.condition == 5 ? "Excellent" : ""}
                           </span>
                         }
                         {item?.accessories?.length > 0 &&
                           <span className="text-xs text-left text-gray-600">
                             <strong>Accessories: </strong>
-                            {item?.accessories?.map((acc: any, accId: number) => (
-                              <span key={`accessories-${accId}`} className="pr-2"> {acc?.name} </span>
-                            ))}
+                            {[...item?.accessories]
+                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .map((acc: any, accId: number) => (
+                                <span key={`accessories-${accId}`} className="pr-2">
+                                  {acc?.name}
+                                </span>
+                              ))}
                           </span>
                         }
                       </div>
