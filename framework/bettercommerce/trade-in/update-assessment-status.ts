@@ -25,7 +25,6 @@ export default function updateAssessmentStatus(
         method: 'POST', // Changed from GET to POST to properly send a JSON payload
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
-        logRequest: true,
       })
       return response
     } catch (error) {

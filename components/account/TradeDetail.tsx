@@ -141,19 +141,19 @@ export default function TradeInDetail() {
           {message != "" && <div className='fixed z-10 top-24 right-4'>
             <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-600'>{message}</span>
           </div>}
-          <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+          <ol role="list" className="flex items-center space-x-0 sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0">
             <li className='flex items-center text-10-mob sm:text-sm'>
               <Link href="/my-account/tradein" passHref>
-                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" >Trade In</span>
+                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Trade In</span>
               </Link>
             </li>
             <li className='flex items-center text-10-mob sm:text-sm'>
-              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
                 <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
               </span>
             </li>
             <li className="flex items-center text-10-mob sm:text-sm" >
-              <span className={`font-semibold hover:text-gray-900 capitalize dark:text-black`} >
+              <span className={`font-semibold hover:text-gray-900 capitalize dark:text-black`}>
                 {tradeDetail?.value?.quoteNo}
               </span>
             </li>
@@ -201,9 +201,7 @@ export default function TradeInDetail() {
                         }
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                      {"£"}{item?.price}
-                    </td>
+                    <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
                     {tradeDetail?.value?.status == "Assessed" && <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                       {"£"}{item?.assessmentPrice}
                     </td>}
@@ -248,9 +246,7 @@ export default function TradeInDetail() {
               <tfoot className="bg-gray-100">
                 <tr>
                   <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">
-                    £{tradeDetail?.value?.grandTotal}
-                  </td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.grandTotal}</td>
                   {tradeDetail?.value?.status == "Assessed" && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</th>}
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
                   {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></th>}
@@ -258,10 +254,9 @@ export default function TradeInDetail() {
               </tfoot>
             </table>
           </div>
-
-          <div className='flex flex-col justify-start w-full gap-4 mt-6 text-left'>
-            <p className='text-sm font-normal text-gray-600'>If in the meantime you decide that you would rather a collections be organized please call us on 01444 237070 or email us at sales@parkcameras.com and someone will be willing to help you change the shipping method.</p>
-            <p className='text-sm font-normal text-gray-600'>Before coming into store, why not check out our extensive range of camera gear.</p>
+          <div className="flex flex-col justify-start w-full gap-4 mt-6 text-left">
+            <p className="text-sm font-normal text-gray-600">If in the meantime you decide that you would rather a collections be organized please call us on 01444 237070 or email us at sales@parkcameras.com and someone will be willing to help you change the shipping method.</p>
+            <p className="text-sm font-normal text-gray-600">Before coming into store, why not check out our extensive range of camera gear.</p>
           </div>
         </div>
       }
