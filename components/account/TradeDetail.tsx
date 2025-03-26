@@ -133,6 +133,21 @@ export default function TradeInDetail() {
       //setIsLoading(false);
     }
   };
+  // At the top of your component (or within the render), define helper variables:
+  const status = tradeDetail?.value?.status;
+  const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject";
+  const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject";
+
+  const conditionMapping: { [key: number]: string } = {
+    1: "Well Used",
+    2: "Good",
+    3: "Like New",
+    4: "Very Good",
+    5: "Excellent",
+  };
+
+  const canChangeStatus = (itemStatus: string) =>
+    !["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer"].includes(itemStatus);
 
   return (
     <>
@@ -174,97 +189,118 @@ export default function TradeInDetail() {
             </div>
           </div>
           <div className='flex flex-col w-full overflow-hidden shadow ring-1 ring-gray-300 sm:rounded'>
-            <table className='min-w-full divide-y divide-gray-300'>
+            <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-100">
                 <tr>
-                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
-                  <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Price</th>
-                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "AssessmentApproved") && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Assessment Price</th>}
-                  <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
-                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"></th>}
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6" > Product </th>
+                  <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900" > Price </th>
+                  {showAssessmentPrice && (
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900" > Assessment Price </th>
+                  )}
+                  <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900" > Status </th>
+                  {showActionColumn && (
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900" ></th>
+                  )}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {tradeDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
-                  <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
-                    <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                      <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
-                      <div className='flex flex-col justify-center w-full gap-1 text-left'>
-                        <span className="font-semibold text-left text-black">{item?.parentProductName} <span className="text-xs font-medium text-black">({item?.parentStockCode})</span></span>
-                        {item?.condition != "" &&
-                          <span className="text-xs text-left text-gray-600">
-                            <strong>Condition: </strong>
-                            {item?.condition == 1 ? "Well Used" : item?.condition == 2 ? "Good" : item?.condition == 3 ? "Like New" : item?.condition == 4 ? "Very Good" : item?.condition == 5 ? "Excellent" : ""}
+                {tradeDetail?.value?.items
+                  ?.sort((a: any, b: any) =>
+                    a?.parentProductName?.localeCompare(b?.parentProductName)
+                  )
+                  .map((item: any, itemIdx: number) => (
+                    <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
+                      <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6">
+                        <img src={item?.parentProductImageUrl} className="inline-block w-auto h-16" alt={item?.parentProductName} />
+                        <div className="flex flex-col justify-center w-full gap-1 text-left">
+                          <span className="font-semibold text-black text-wrap">
+                            {item?.parentProductName}{" "}
+                            <span className="text-xs font-medium text-black">
+                              ({item?.parentStockCode})
+                            </span>
                           </span>
-                        }
-                        {item?.accessories?.length > 0 &&
-                          <span className="text-xs text-left text-gray-600">
-                            <strong>Accessories: </strong>
-                            {[...item?.accessories]
-                              .sort((a, b) => a.name.localeCompare(b.name))
-                              .map((acc: any, accId: number) => (
-                                <span key={`accessories-${accId}`} className="pr-2">
-                                  {acc?.name}
-                                </span>
-                              ))}
-                          </span>
-                        }
-                      </div>
-                    </td>
-                    <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
-                    {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "AssessmentApproved") && <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                      {"£"}{item?.assessmentPrice}
-                    </td>}
-                    <td className={`whitespace-nowrap justify-end pr-2`} align="right">
-                      <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
-                        {item.status ?? "Unknown"}
-                      </span>
-                    </td>
-                    {tradeDetail?.value?.status == "Assessed" ?
-                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                        {item?.status != "Rejected" && item?.status != "AssessmentApproved" && item?.status != "AssessedPartialReject" && <div className="flex justify-end gap-2 pr-3">
-                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                        </div>}
-                      </td> :
-                      tradeDetail?.value?.status == "Quoted" ?
-                        <td>
-                          {showDropdown[item?.itemId] ? (
-                            item?.status != "Accepted" && item?.status != "Rejected" && item?.status != "AssessmentApproved" && item?.status != "AssessedPartialReject" &&
-                            <div className="flex justify-end gap-2 pr-3">
-                              <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
-                                <option value="">Select a reason</option>
-                                {rejectionOptions?.map((reason, idx) => (
-                                  <option key={idx} value={reason?.id}>{reason?.value}</option>
-                                ))}
-                              </select>
-                              <button onClick={() => handleItemAction(item?.itemId, 4)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
-                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
-                            </div>
-                          ) : (
-                            item?.status != "Accepted" && item?.status != "Rejected" && item?.status != "AssessmentApproved" && item?.status != "AssessedPartialReject" &&
-                            <div className="flex justify-end gap-2 pr-3">
-                              <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                            </div>
+                          {item?.condition && (
+                            <span className="text-xs text-gray-600">
+                              <strong>Condition: </strong>
+                              {conditionMapping[item?.condition] || ""}
+                            </span>
                           )}
-                        </td> : ''
-                    }
-                  </tr>
-                ))}
+                          {item?.accessories?.length > 0 && (
+                            <span className="text-xs text-gray-600">
+                              <strong>Accessories: </strong>
+                              {[...item?.accessories]
+                                .sort((a, b) => a.name.localeCompare(b.name))
+                                .map((acc: any, accId: number) => (
+                                  <span key={`accessories-${accId}`} className="pr-2">
+                                    {acc?.name}
+                                  </span>
+                                ))}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap"> £{item?.price} </td>
+                      {showAssessmentPrice && (
+                        <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap"> £{item?.assessmentPrice} </td>
+                      )}
+                      <td className="pr-2 whitespace-nowrap" align="right">
+                        <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || "bg-gray-200 border-gray-500 text-gray-500"}`} >
+                          {item.status ?? "Unknown"}
+                        </span>
+                      </td>
+                      {showActionColumn && (
+                        <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                          {status === "Assessed" || status === "AssessedPartialReject" ? (
+                            canChangeStatus(item?.status) && (
+                              <div className="flex justify-end gap-2 pr-3">
+                                <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded" >Reject</button>
+                                <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                              </div>
+                            )
+                          ) : status === "Quoted" ? (
+                            showDropdown[item?.itemId] ? (
+                              canChangeStatus(item?.status) && (
+                                <div className="flex justify-end gap-2 pr-3">
+                                  <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value), })} >
+                                    <option value="">Select a reason</option>
+                                    {rejectionOptions?.map((reason, idx) => (
+                                      <option key={idx} value={reason?.id}> {reason?.value} </option>
+                                    ))}
+                                  </select>
+                                  <button onClick={() => handleItemAction(item?.itemId, 4)} className="px-2 py-1 text-xs text-white bg-red-600 rounded" > Confirm Reject </button>
+                                  <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" > Accept </button>
+                                </div>
+                              )
+                            ) : (
+                              canChangeStatus(item?.status) && (
+                                <div className="flex justify-end gap-2 pr-3">
+                                  <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true, })} className="px-2 py-1 text-xs text-white bg-red-600 rounded" > Reject </button>
+                                  <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" > Accept </button>
+                                </div>
+                              )
+                            )
+                          ) : null}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
               </tbody>
               <tfoot className="bg-gray-100">
                 <tr>
-                  <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.grandTotal}</td>
-                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "AssessmentApproved") && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</th>}
+                  <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap"> Total </td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"> £{tradeDetail?.value?.grandTotal} </td>
+                  {showAssessmentPrice && (
+                    <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"> £{tradeDetail?.value?.assessmentTotal} </td>
+                  )}
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
-                  {(tradeDetail?.value?.status == "Assessed" || tradeDetail?.value?.status == "Quoted") && <th scope="col" className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></th>}
+                  {showActionColumn && (
+                    <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                  )}
                 </tr>
               </tfoot>
             </table>
           </div>
-          {tradeDetail?.value?.street != "" &&
+          {tradeDetail?.value?.street != "" && tradeDetail?.value?.street != null &&
             <div className={`p-4 text-left border rounded shadow-lg cursor-pointer bg-white mt-6`}>
               <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
                 <h2 className="w-full text-xl font-semibold text-gray-700 uppercase">
