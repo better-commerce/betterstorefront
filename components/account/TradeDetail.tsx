@@ -213,8 +213,8 @@ export default function TradeInDetail() {
                     {tradeDetail?.value?.status == "Assessed" ?
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                         <div className="flex justify-end gap-2 pr-3">
-                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject11</button>
-                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept11</button>
+                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                          <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
                         </div>
                       </td> :
                       tradeDetail?.value?.status == "Quoted" ?
