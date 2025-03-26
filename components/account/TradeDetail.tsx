@@ -234,7 +234,7 @@ export default function TradeInDetail() {
                         {item?.assessment?.assessmentId !== EmptyGuid ? (
                           <div className="flex flex-col w-full gap-1">
                             <span className="text-xs font-semibold text-orange-600 uppercase">Selected Product:</span>
-                            <div className="flex flex-col w-full">
+                            <div className="flex flex-col w-full mb-3">
                               {renderProductInfo(item, null, null)}
                             </div>
                             <span className="text-xs font-semibold text-[#2d4d9c] uppercase">Updated product during assessment: </span>
