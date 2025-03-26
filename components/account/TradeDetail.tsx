@@ -29,7 +29,7 @@ export default function TradeInDetail() {
     AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500", // Waiting for quotation
     Quoted: "bg-sky-200 border-sky-500 text-sky-500", // Quotation provided
     QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Quote accepted by customer
-    QuoteRejected: "bg-red-200 border-red-500 text-red-500", // Quote rejected
+    QuoteRejected: "bg-red-100 border-red-300 text-red-600", // Quote rejected
     QuoteExpired: "bg-orange-200 border-orange-500 text-orange-500", // Expired quote
     CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500", // Collection scheduled
     ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500", // Parcel received
@@ -37,11 +37,11 @@ export default function TradeInDetail() {
     FurtherAssessment: "bg-yellow-200 border-yellow-400 text-yellow-600", // Needs further review
     Assessed: "bg-emerald-600 border-emerald-700 text-emerald-100", // Assessment complete
     AssessmentApproved: "bg-emerald-100 border-emerald-300 text-emerald-500", // Approved assessment
-    AssessedFullReject: "bg-red-300 border-red-600 text-red-600", // Fully rejected after assessment
-    AssessedPartialReject: "bg-orange-300 border-orange-600 text-orange-600", // Partially rejected
+    AssessedFullReject: "bg-red-100 border-red-300 text-red-600", // Fully rejected after assessment
+    AssessedPartialReject: "bg-orange-100 border-orange-300 text-orange-600", // Partially rejected
     TradeInComplete: "bg-emerald-300 border-emerald-600 text-emerald-600", // Trade-in completed
-    TradeInFullReject: "bg-red-400 border-red-700 text-red-700", // Full rejection
-    TradeInPartialReject: "bg-orange-400 border-orange-700 text-orange-700", // Partial rejection
+    TradeInFullReject: "bg-red-100 border-red-300 text-red-600", // Full rejection
+    TradeInPartialReject: "bg-orange-200 border-orange-400 text-orange-600", // Partial rejection
     CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500", // Stocked after trade-in
     FullReturn: "bg-red-500 border-red-700 text-white", // Full return processed
     CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white", // Partial return processed
@@ -49,11 +49,11 @@ export default function TradeInDetail() {
     Submitted: "bg-sky-300 border-sky-600 text-sky-600", // Submitted request
     PriceNeeded: "bg-yellow-400 border-yellow-700 text-yellow-700", // Price not available yet
     Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Offer accepted
-    Rejected: "bg-red-500 border-red-700 text-white", // Offer rejected
+    Rejected: "bg-red-100 border-red-300 text-red-600", // Offer rejected
     Expired: "bg-orange-500 border-orange-700 text-white", // Expired status
     AssessmentInProgress: "bg-yellow-200 border-yellow-500 text-yellow-500", // Still being assessed
-    RejectedByBusiness: "bg-red-600 border-red-800 text-white", // Rejected by company
-    AssessmentRejectedByCustomer: "bg-red-300 border-red-600 text-red-600", // Rejected by customer
+    RejectedByBusiness: "bg-red-100 border-red-300 text-red-600", // Rejected by company
+    AssessmentRejectedByCustomer: "bg-red-100 border-red-300 text-red-600", // Rejected by customer
     Completed: "bg-emerald-800 border-emerald-800 text-white", // Fully completed
   };
 
@@ -222,15 +222,15 @@ export default function TradeInDetail() {
                     </td>
                     {tradeDetail?.value?.status == "Assessed" ?
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                        <div className="flex justify-end gap-2 pr-3">
+                        {item?.status != "Rejected" && item?.status != "AssessmentApproved" && item?.status != "AssessedPartialReject" && <div className="flex justify-end gap-2 pr-3">
                           <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 8)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
                           <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, 7)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                        </div>
+                        </div>}
                       </td> :
                       tradeDetail?.value?.status == "Quoted" ?
                         <td>
                           {showDropdown[item?.itemId] ? (
-                            item?.status != "Accepted" && item?.status != "Rejected" &&
+                            item?.status != "Accepted" && item?.status != "Rejected" && item?.status != "AssessmentApproved" && item?.status != "AssessedPartialReject" &&
                             <div className="flex justify-end gap-2 pr-3">
                               <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
                                 <option value="">Select a reason</option>
@@ -242,7 +242,7 @@ export default function TradeInDetail() {
                               <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
                             </div>
                           ) : (
-                            item?.status != "Accepted" && item?.status != "Rejected" &&
+                            item?.status != "Accepted" && item?.status != "Rejected" && item?.status != "AssessmentApproved" && item?.status != "AssessedPartialReject" &&
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
                               <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
