@@ -45,11 +45,11 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
   const otpEnabled = OTP_LOGIN_ENABLED
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const conditionLabels: Record<string, number> = {
-    [TradeInItemCondition.WELL_USED]: 1,
-    [TradeInItemCondition.GOOD]: 2,
+    [TradeInItemCondition.WELL_USED]: 5,
+    [TradeInItemCondition.GOOD]: 4,
     [TradeInItemCondition.VERY_GOOD]: 3,
-    [TradeInItemCondition.EXCELLENT]: 4,
-    [TradeInItemCondition.LIKE_NEW]: 5,
+    [TradeInItemCondition.EXCELLENT]: 2,
+    [TradeInItemCondition.LIKE_NEW]: 1,
   };
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
@@ -158,11 +158,11 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
 
   const getConditionValue = (conditionName: string) => {
     const conditionMap: Record<string, number> = {
-      [TradeInItemCondition.WELL_USED]: 1,
-      [TradeInItemCondition.GOOD]: 2,
-      [TradeInItemCondition.LIKE_NEW]: 3,
-      [TradeInItemCondition.VERY_GOOD]: 4,
-      [TradeInItemCondition.EXCELLENT]: 5,
+      [TradeInItemCondition.WELL_USED]: 5,
+    [TradeInItemCondition.GOOD]: 4,
+    [TradeInItemCondition.VERY_GOOD]: 3,
+    [TradeInItemCondition.EXCELLENT]: 2,
+    [TradeInItemCondition.LIKE_NEW]: 1,
     };
     return conditionMap[conditionName] || 0;
   };

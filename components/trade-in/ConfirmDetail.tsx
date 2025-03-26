@@ -40,11 +40,11 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
   };
 
   const conditionLabels: Record<string, number> = {
-    [TradeInItemCondition.WELL_USED]: 1,
-    [TradeInItemCondition.GOOD]: 2,
+    [TradeInItemCondition.WELL_USED]: 5,
+    [TradeInItemCondition.GOOD]: 4,
     [TradeInItemCondition.VERY_GOOD]: 3,
-    [TradeInItemCondition.EXCELLENT]: 4,
-    [TradeInItemCondition.LIKE_NEW]: 5,
+    [TradeInItemCondition.EXCELLENT]: 2,
+    [TradeInItemCondition.LIKE_NEW]: 1,
   };
 
   const fetchQuoteDetails = async (quoteId: string) => {

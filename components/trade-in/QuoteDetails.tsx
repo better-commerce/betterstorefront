@@ -32,7 +32,7 @@ export default function QuoteDetails({ data, quoteData, startNewTrade }: any) {
                     {item?.condition != "" &&
                       <span className="text-xs text-left text-gray-600">
                         <strong>Condition: </strong>
-                        {item?.condition == 1 ? "Well Used" : item?.condition == 2 ? "Good" : item?.condition == 3 ? "Like New" : item?.condition == 4 ? "Very Good" : item?.condition == 5 ? "Excellent" : ""}
+                        {item?.condition == 1 ? "Like New" : item?.condition == 2 ? "Excellent" : item?.condition == 3 ? "Very Good" : item?.condition == 4 ? "Good" : item?.condition == 5 ? "Well Used" : ""}
                       </span>
                     }
                     {item?.accessories?.length > 0 &&

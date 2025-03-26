@@ -139,11 +139,11 @@ export default function TradeInDetail() {
   const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject";
 
   const conditionMapping: { [key: number]: string } = {
-    1: "Well Used",
-    2: "Good",
-    3: "Like New",
-    4: "Very Good",
-    5: "Excellent",
+    1: "Like New",
+    2: "Excellent",
+    3: "Very Good",
+    4: "Good",
+    5: "Well Used",
   };
 
   const canChangeStatus = (itemStatus: string) => !["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer"].includes(itemStatus);
