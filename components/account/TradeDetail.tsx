@@ -26,36 +26,51 @@ export default function TradeInDetail() {
   ];
 
   const statusClasses: Record<string, string> = {
-    AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500", // Waiting for quotation
-    Quoted: "bg-sky-200 border-sky-500 text-sky-500", // Quotation provided
-    QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Quote accepted by customer
-    QuoteRejected: "bg-red-100 border-red-300 text-red-600", // Quote rejected
-    QuoteExpired: "bg-orange-200 border-orange-500 text-orange-500", // Expired quote
-    CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500", // Collection scheduled
-    ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500", // Parcel received
-    Assessment: "bg-yellow-100 border-yellow-300 text-yellow-500", // Under assessment
-    FurtherAssessment: "bg-yellow-200 border-yellow-400 text-yellow-600", // Needs further review
-    Assessed: "bg-emerald-600 border-emerald-700 text-emerald-100", // Assessment complete
-    AssessmentApproved: "bg-emerald-100 border-emerald-300 text-emerald-500", // Approved assessment
-    AssessedFullReject: "bg-red-100 border-red-300 text-red-600", // Fully rejected after assessment
-    AssessedPartialReject: "bg-orange-100 border-orange-300 text-orange-600", // Partially rejected
-    TradeInComplete: "bg-emerald-300 border-emerald-600 text-emerald-600", // Trade-in completed
-    TradeInFullReject: "bg-red-100 border-red-300 text-red-600", // Full rejection
-    TradeInPartialReject: "bg-orange-200 border-orange-400 text-orange-600", // Partial rejection
-    CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500", // Stocked after trade-in
-    FullReturn: "bg-red-500 border-red-700 text-white", // Full return processed
-    CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white", // Partial return processed
-    QuoteCancelled: "bg-gray-400 border-gray-600 text-gray-600", // Quote was canceled
-    Submitted: "bg-sky-300 border-sky-600 text-sky-600", // Submitted request
-    PriceNeeded: "bg-yellow-400 border-yellow-700 text-yellow-700", // Price not available yet
-    Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500", // Offer accepted
-    Rejected: "bg-red-100 border-red-300 text-red-600", // Offer rejected
-    Expired: "bg-orange-500 border-orange-700 text-white", // Expired status
-    AssessmentInProgress: "bg-yellow-200 border-yellow-500 text-yellow-500", // Still being assessed
-    RejectedByBusiness: "bg-red-100 border-red-300 text-red-600", // Rejected by company
-    AssessmentRejectedByCustomer: "bg-red-100 border-red-300 text-red-600", // Rejected by customer
-    Completed: "bg-emerald-800 border-emerald-800 text-white", // Fully completed
+    // QuoteStatus
+    AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500",
+    Quoted: "bg-sky-200 border-sky-500 text-sky-500",
+    QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
+    QuoteRejected: "bg-red-100 border-red-300 text-red-600",
+    QuoteExpired: "bg-orange-200 border-orange-500 text-orange-500",
+    CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500",
+    ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500",
+    Assessment: "bg-yellow-100 border-yellow-300 text-yellow-500",
+    FurtherAssessment: "bg-yellow-200 border-yellow-400 text-yellow-600",
+    Assessed: "bg-emerald-600 border-emerald-700 text-emerald-100",
+    TradeInComplete: "bg-emerald-900 border-emerald-900 text-emerald-100",
+    AssessedFullReject: "bg-red-100 border-red-300 text-red-600",
+    AssessedPartialReject: "bg-orange-100 border-orange-300 text-orange-600",
+    TradeInFullReject: "bg-red-100 border-red-300 text-red-600",
+    TradeInCompletePartialReject: "bg-orange-200 border-orange-400 text-orange-600",
+    CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500",
+    CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white",
+    FullReturn: "bg-red-500 border-red-700 text-white",
+    CancelledByCustomer: "bg-red-100 border-red-400 text-red-600",
+    CancelledByBusiness: "bg-red-100 border-red-400 text-red-700",
+
+    // QuoteItemStatus
+    Submitted: "bg-sky-300 border-sky-600 text-sky-600",
+    PriceNeeded: "bg-yellow-200 border-yellow-500 text-yellow-700",
+    Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
+    Rejected: "bg-red-100 border-red-300 text-red-600",
+    Expired: "bg-orange-500 border-orange-700 text-white",
+    AssessmentInProgress: "bg-yellow-200 border-yellow-500 text-yellow-500",
+    AssessedRejectedByBusiness: "bg-red-100 border-red-300 text-red-600",
+    AssessedRejectedByCustomer: "bg-red-100 border-red-300 text-red-600",
+    AssessmentAccepted: "bg-emerald-100 border-emerald-300 text-emerald-500",
+    StockBookedIn: "bg-purple-300 border-purple-600 text-purple-600",
+
+    // AssessmentStatuses
+    Pending: "bg-gray-100 border-gray-400 text-gray-500",
+    InProgress: "bg-blue-300 border-blue-500 text-blue-500",
+    AccessoriesChecked: "bg-teal-300 border-teal-500 text-teal-500",
+    ItemChecked: "bg-indigo-300 border-indigo-500 text-indigo-500",
+    ImagesUploaded: "bg-orange-300 border-orange-500 text-orange-500",
+    Approved: "bg-green-300 border-green-500 text-green-500",
+    RejectedByCustomer: "bg-red-100 border-red-500 text-red-500",
+    RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
   };
+
 
   useEffect(() => {
     fetchTradeDetail(tradeinId);
