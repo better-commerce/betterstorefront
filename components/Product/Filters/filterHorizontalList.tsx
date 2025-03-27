@@ -74,7 +74,7 @@ const FilterItem = ({
       key={`option-right-value-${option?.value}-${optionIdx}`}
       className={`${
         isCheckboxChecked && !isCheckboxTickDisabled
-          ? 'bg-teal'
+          ? 'bg-yellow'
           : 'sm:bg-white bg-gray-100'
       } flex items-center w-full px-2 py-3 mb-2 rounded`}
     >
