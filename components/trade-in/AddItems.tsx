@@ -43,6 +43,18 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
     setItems(newItems);
   };
 
+  const noProduct = [
+    {
+      "id": "07f97731-1b50-ef11-86d2-9f981e7a10df",
+      "stockCode": "7240741N",
+      "name": "Sony FE 24-50mm f/2.8 G Lens",
+      "categoryId": "d6a77d88-3f64-42eb-9ff3-7b9b6f80338b",
+      "image": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/no-image.svg",
+      "accessories": [],
+      "conditions": [],
+      "checklist": []
+    }
+  ]
   return (
     <>
       <div className='flex flex-col w-full gap-6 mt-4 sm:mt-5'>
@@ -80,20 +92,29 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                 </div>
               )}
 
-              {products?.length > 0 && item?.searchTerm && !isLoading && (() => {
+              {item?.searchTerm && !isLoading && (() => {
                 // Get all selected product IDs
                 const selectedProductIds = items
                   .map((i: any) => i?.selectedProductData?.id)
                   .filter(Boolean);
 
                 // Filter products that are NOT already selected
-                const filteredProducts = products.filter(
+                let filteredProducts = (products || []).filter(
                   (p: any) =>
                     p?.name?.toLowerCase().includes(item?.searchTerm?.toLowerCase()) &&
                     !selectedProductIds.includes(p.id) // Exclude already selected products
                 );
 
-                return filteredProducts.length > 0 ? (
+                // If products are undefined, null, or empty, use the dummy product
+                if (!products || filteredProducts.length === 0) {
+                  filteredProducts = noProduct.map((dummy) => ({
+                    ...dummy,
+                    id: `dummy-${Date.now()}`, // Generate a unique ID
+                    name: item?.searchTerm, // Replace name with searched text
+                  }));
+                }
+
+                return (
                   <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-300 divide-y divide-gray-200 shadow-lg top-12 max-h-60">
                     {filteredProducts.map((product: any) => (
                       <li
@@ -113,10 +134,6 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <div className="absolute z-10 w-full p-2 text-center text-gray-500 bg-white border border-gray-300 shadow-lg top-12">
-                    No matching products found
-                  </div>
                 );
               })()}
             </div>
