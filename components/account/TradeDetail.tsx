@@ -153,9 +153,10 @@ export default function TradeInDetail() {
       <div className="flex flex-col">
         <span className="font-semibold text-black text-wrap">
           {product?.parentProductName}{" "}
-          <span className="text-xs font-medium text-black">({product?.parentStockCode})</span>
+          <span className="text-xs font-medium text-black">{product?.parentStockCode != "DP000001" && <span>({product?.parentStockCode})</span>}</span>
+
         </span>
-        {condition && (
+        {condition != 0 && (
           <span className="text-xs text-gray-600">
             <strong>Condition: </strong>
             {conditionMapping[condition] || ""}
@@ -243,7 +244,7 @@ export default function TradeInDetail() {
                               <div className="flex flex-col">
                                 <span className="font-semibold text-black text-wrap">
                                   {item?.assessment?.parentProductName}{" "}
-                                  <span className="text-xs font-medium text-black">({item?.assessment?.parentStockCode})</span>
+                                  <span className="text-xs font-medium text-black">{item?.assessment?.parentStockCode != "DP000001" && <span>({item?.assessment?.parentStockCode})</span>}</span>
                                 </span>
                                 {item?.condition && (
                                   <span className="text-xs text-gray-600">

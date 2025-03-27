@@ -45,9 +45,9 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
 
   const noProduct = [
     {
-      "id": "07f97731-1b50-ef11-86d2-9f981e7a10df",
-      "stockCode": "7240741N",
-      "name": "Sony FE 24-50mm f/2.8 G Lens",
+      "id": "5129609e-11c4-4ee8-adc8-0b5f8c68ebbe",
+      "stockCode": "DP000001",
+      "name": "Place Holder Product",
       "categoryId": "d6a77d88-3f64-42eb-9ff3-7b9b6f80338b",
       "image": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/no-image.svg",
       "accessories": [],

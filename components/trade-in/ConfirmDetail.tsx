@@ -72,6 +72,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
 
       const items = selectedItems?.map(({ selectedProductData, selectedCondition, selectedAccessories }: any) => ({
         parentStockCode: selectedProductData?.stockCode || "",
+        productName: selectedProductData?.name || "",
         conditions: conditionLabels[selectedCondition?.conditionName] || 0,
         accessories: selectedAccessories || [],
       }));

@@ -87,6 +87,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       setIsGuestUser(false)
       const items = selectedItems?.map(({ selectedProductData, selectedCondition, selectedAccessories }: any) => ({
         parentStockCode: selectedProductData?.stockCode || "",
+        productName: selectedProductData?.name || "",
         conditions: conditionLabels[selectedCondition?.conditionName] || 0,
         accessories: selectedAccessories || [],
       }));
@@ -170,6 +171,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     setIsLoading(true);
     const allItems = selectedItems?.map((item: any) => ({
       parentStockCode: item?.selectedProductData?.stockCode || "",
+      productName: item?.selectedProductData?.name || "",
       conditions: getConditionValue(item?.selectedCondition?.conditionName),
       accessories: item.selectedAccessories || [],
     }));
