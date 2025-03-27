@@ -32,7 +32,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
   }
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRowMed - 1, }, 1024: { gap: 20, perView: dataPerRowMed - 1, }, 768: { gap: 20, perView: dataPerRowMed - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRowMed - 1, }, 1024: { gap: 20, perView: dataPerRowMed - 1, }, 768: { gap: 20, perView: dataPerRowMed - 2, }, 640: { gap: 20, perView: 1, }, 500: { gap: 20, perView: 1, }, },
     };
     if (!sliderRef.current) return;
     let slider = new Glide(sliderRef.current, OPTIONS);
@@ -48,7 +48,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {CURRENT_THEME != 'green' ? (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
+            <Heading key={iIdx} className="mb-4 sm:mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
               {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title}
             </Heading>
           ))}

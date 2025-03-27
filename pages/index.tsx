@@ -180,7 +180,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
               {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
-                <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow ${fIdx == 0 ? 'bg-gray-200 text-black' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx == 0 ? 'bg-gray-200 text-black' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
                   <div className='flex flex-col col-span-7 gap-5'>
                     <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingoffers_title}</h2>
                     <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
@@ -242,15 +242,15 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             )}
             <div className='grid grid-cols-1 gap-6 my-6 sm:grid-cols-1 sm:my-10'>
               {pageContents?.fixingdelivery?.length > 0 && pageContents?.fixingdelivery?.map((fo: any, fIdx: number) => (
-                <div className={`grid items-center relative justify-center grid-cols-12 gap-10 p-4 rounded shadow ${fIdx == 0 ? 'bg-gray-200 text-white' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
-                  <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6'>
+                <div className={`grid items-center relative justify-center grid-cols-12 gap-10 p-4 rounded mobile-flex shadow ${fIdx == 0 ? 'bg-gray-200 text-white' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                  <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6 text-black-clr-sec'>
                     <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingdelivery_title}</h2>
                     <p className='text-sm font-normal'>{fo?.fixingdelivery_shortdescription}</p>
                     <Link href={fo?.fixingdelivery_buttonlink} legacyBehavior passHref>
                       <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
                     </Link>
                   </div>
-                  <div className='absolute top-0 left-0 z-0 col-span-12'>
+                  <div className='absolute top-0 left-0 z-0 col-span-12 mob-static'>
                     <img src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingdelivery_title} className='object-cover object-right w-full h-auto invert-1' />
                   </div>
                 </div>

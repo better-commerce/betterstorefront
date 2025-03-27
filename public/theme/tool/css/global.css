@@ -2863,3 +2863,18 @@ body .round-md-btn, .btn-radius-sm{
 .close-white{
   color: #FFFFFF !important;
 }
+@media screen and (max-width: 767px) {
+  .mobile-flex{
+   display: flex !important;
+   flex-direction: column-reverse;
+  }
+  .search-top {
+   top: 0 !important;
+ }
+ .mob-static{
+   position: static !important;
+ }
+ .text-black-clr-sec h2, .text-black-clr-sec p{
+   color:#000 !important
+ }
+ }

@@ -2865,3 +2865,25 @@ body .round-md-btn, .btn-radius-sm{
 .footer-margin-top{
   margin-top:30px  !important
 }
+@media screen and (max-width: 767px) {
+ .mobile-flex{
+  display: flex !important;
+  flex-direction: column-reverse;
+ }
+ .search-top {
+  top: 0 !important;
+}
+.mob-static{
+  position: static !important;
+}
+.text-black-clr-sec h2, .text-black-clr-sec p{
+  color:#000 !important
+}
+}
+.bg-orange-500{
+background-color: #ffb400 !important;
+}
+.text-orange-400{
+  color:#ffb400  !important
+}
+
