@@ -119,7 +119,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                 <td className="px-3 py-4 text-sm text-left text-gray-500">{item?.selectedCondition?.conditionName == TradeInItemCondition.WELL_USED ? 'Well Used' :
                   item?.selectedCondition?.conditionName == TradeInItemCondition.GOOD ? 'Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.selectedCondition?.conditionName == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
                 }</td>
-                <td className="px-3 py-4 text-sm text-left text-gray-500">
+                <td className="flex justify-start gap-2 px-3 py-4 text-sm text-left text-gray-500 divide-x divide-gray-300">
                   {item?.selectedAccessories?.length ? (
                     [...item.selectedAccessories]
                       // Map selected IDs to accessory objects
@@ -130,7 +130,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                       .sort((a, b) => a.accessoryName.localeCompare(b.accessoryName))
                       // Map sorted accessories to elements
                       .map((accessory, accId) => (
-                        <span key={`acc-${accId}`} className="pr-2">
+                        <span key={`acc-${accId}`}>
                           {accessory?.accessoryName || "-"}
                         </span>
                       ))

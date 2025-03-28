@@ -153,7 +153,7 @@ export default function TradeInDetail() {
   }
   // At the top of your component (or within the render), define helper variables:
   const status = tradeDetail?.value?.status;
-  const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject";
+  const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject" || status === "AssessmentAccepted";
   const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject";
 
   const conditionMapping: { [key: number]: string } = {
