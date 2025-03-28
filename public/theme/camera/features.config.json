@@ -29,7 +29,8 @@
     "enableAddButtonBottom": true,
     "enableB2BHeader": false,
     "enableToolsHome":false,
-    "enableTradeIn": true
+    "enableTradeIn": true,
+    "enableBottomTabsSection":true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

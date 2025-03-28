@@ -47,6 +47,7 @@ const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/prod
 const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
+const ProductTabs = dynamic(() => import('@components/Product/ProductTabs'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
 const Prices = dynamic(() => import('@components/Prices'))
 const AttributesHandler = dynamic(() => import('@components/Product/AttributesHandler'))
@@ -946,7 +947,70 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </>
     )
   }
-
+  const productTabs = [
+    {
+      id: 'overview',
+      label: 'Overview',
+      content: (
+        <div className="space-y-4">
+     <div
+        className="text-sm text-gray-800 description-html"
+        dangerouslySetInnerHTML={{ __html: product?.shortDescription }}
+      />
+      <div className="flex flex-col">
+      {product?.videos.map((video:any, index:any) => {
+        // Ensure URL is in embeddable format
+        let videoUrl = video?.url?.includes("youtu.be")
+          ? video?.url.replace("youtu.be/", "www.youtube.com/embed/")
+          : video?.url.startsWith("www.")
+          ? `https://${video?.url}`
+          : video?.url;
+        return (
+          <div key={index} className="border rounded-lg overflow-hidden mb-4">
+            <iframe
+              src={videoUrl}
+              width="100%"
+              height="400"
+              allowFullScreen
+              className="w-full aspect-video"
+            ></iframe>
+          </div>
+        );
+      })}
+       </div>
+     </div>
+      )
+    },
+    {
+      id: 'specs',
+      label: 'Specs',
+      content: (
+        <>
+            <div className="overflow-x-auto p-4">
+              <table className="w-full border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200 text-left">
+                    <th className="p-3 border border-gray-300">Specification</th>
+                    <th className="p-3 border border-gray-300">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {product?.customAttributes.map((attr:any, index:any) => (
+                    <tr key={index} className="border border-gray-300">
+                      <td className="p-3 border border-gray-300">{attr?.display}</td>
+                      <td
+                        className="p-3 border border-gray-300"
+                        dangerouslySetInnerHTML={{ __html: attr?.value }}
+                      />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+           </div>
+        </>
+      )
+    }
+  ];
   const renderSectionContent = () => {
     return (
       <>
@@ -1066,7 +1130,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                               )}
                             </>
                           ) : (
-                            <div className="flex rtl:space-x-reverse">
+                            <div className="flex rtl:space-x-reverse w-full">
                               {!isEngravingAvailable && (
                                 <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
                                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
@@ -1075,11 +1139,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
                               {isEngravingAvailable && (
                                 <>
-                                  <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                <div className='flex flex-col gap-y-2 w-full add-green-btn'>
+                                  <Button className="block py-3 sm:hidden add-green-btn nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                                   <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
                                     {translate('label.product.engravingText')}
                                   </button>
+                                </div>
                                 </>
                               )}
                             </div>
@@ -1183,9 +1249,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
                               {isEngravingAvailable && (
                                 <>
-                                  <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                                  <div className='flex flex-col gap-y-2 w-full add-green-btn'>
+                                  <Button className="block py-3 sm:hidden nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <Button className="hidden sm:block nc-button " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
                                     {translate('label.product.engravingText')}
                                   </button>
                                   <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
@@ -1196,6 +1263,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                                     )}
                                     <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                                   </button>
+                                  </div>
                                 </>
                               )}
                             </div>
@@ -1485,9 +1553,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
+              <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
                 <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3>
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                <RelatedProductWithGroup products={relatedProducts?.relatedProducts}   productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4}  deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
               </div>
             </>
           )}
@@ -1516,6 +1584,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </div>
           </div>
         </div>
+        {featureToggle?.features?.enableBottomTabsSection ? (
+          <>
+           <ProductTabs  tabs={productTabs} defaultActiveTab="overview"/>
+          </>
+        ) : (
+          <></>
+        )}
       </main>
     </>
   )

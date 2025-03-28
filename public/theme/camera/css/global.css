@@ -2169,3 +2169,34 @@ display: none;
 .max-w-full-sec{
   max-width: 100% !important;
 }
+.container-tabs{
+  max-width: 830px;
+  width: 100%;
+  margin: 0 auto;
+}
+.slider-btn-css .swiper-button-next, .slider-btn-css .swiper-rtl .swiper-button-prev{
+  height: 75px !important;
+  border-radius: 0 !important;
+  width: auto !important;
+  padding: 0 4px;
+}
+.slider-btn-css  .swiper-button-prev, .slider-btn-css  .swiper-rtl .swiper-button-next{
+  height: 75px !important;
+  border-radius: 0 !important;
+  width: auto !important;
+  padding: 0 4px;
+}
+.slider-btn-css .swiper-button-next:after, .slider-btn-css .swiper-rtl .swiper-button-prev:after{
+ font-size: 30px !important;
+ color: #294384 !important;
+}
+.slider-btn-css .swiper-button-prev:after, .slider-btn-css .swiper-rtl .swiper-button-next:after{
+  font-size: 30px !important;
+  color: #294384 !important;
+}
+.slider-btn-css  .h-slider-full{
+  height: 100%  !important;
+}
+.slider-btn-css .product-card__brand{
+ min-height: 72px !important;
+}

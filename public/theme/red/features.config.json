@@ -25,7 +25,8 @@
     "enableCustomToolWidget": false,
     "enableB2BHeader": true,
     "enableToolsHome":false,
-    "enableTradeIn": false
+    "enableTradeIn": false,
+    "enableBottomTabsSection":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
