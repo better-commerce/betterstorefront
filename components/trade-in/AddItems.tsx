@@ -149,15 +149,15 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                     // If no condition is selected, set the first one as default
                     const isSelected = item?.selectedCondition?.conditionId ? item?.selectedCondition?.conditionId === cn?.conditionId : cnIdx === 0; // Default to first item if nothing is selected
                     return (
-                      <label key={cnIdx} className={`flex flex-col items-center justify-center w-full gap-4 p-4 text-center border rounded cursor-pointer transition ${isSelected ? 'bg-[#2d4d9c] text-white shadow-lg' : 'bg-white border-gray-200 hover:shadow-md'}`}>
-                        <input type='radio' name='condition' value={cn.conditionId} checked={isSelected} onChange={() => updateItem(index, 'selectedCondition', cn)} className='hidden' />
-                        <h3 className={`font-semibold text-xl ${isSelected ? 'text-white' : 'text-black group-hover:text-[#2d4d9c]'}`}>
+                      <label key={cnIdx} className={`flex flex-col items-center justify-center w-full gap-4 p-4 text-center border rounded cursor-pointer transition ${item?.selectedCondition?.conditionId === cn?.conditionId ? 'bg-[#2d4d9c] text-white shadow-lg' : 'bg-white border-gray-200 hover:shadow-md'}`}>
+                        <input type='radio' name='condition' value={cn.conditionId} onChange={() => updateItem(index, 'selectedCondition', cn)} className='hidden' />
+                        <h3 className={`font-semibold text-xl ${item?.selectedCondition?.conditionId === cn?.conditionId ? 'text-white' : 'text-black group-hover:text-[#2d4d9c]'}`}>
                           {cn?.conditionName === TradeInItemCondition.WELL_USED ? 'Well Used' : cn?.conditionName === TradeInItemCondition.GOOD ? 'Good' : cn?.conditionName === TradeInItemCondition.VERY_GOOD ? 'Very Good' : cn?.conditionName === TradeInItemCondition.EXCELLENT ? 'Excellent' : cn?.conditionName === TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'}
                         </h3>
-                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' className={`w-12 h-auto transition ${isSelected ? 'fill-white' : 'fill-black group-hover:fill-[#2d4d9c]'}`}>
+                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' className={`w-12 h-auto transition ${item?.selectedCondition?.conditionId === cn?.conditionId ? 'fill-white' : 'fill-black group-hover:fill-[#2d4d9c]'}`}>
                           <path d='M220.6 121.2L271.1 96 448 96v96H333.2c-21.9-15.1-48.5-24-77.2-24s-55.2 8.9-77.2 24H64V128H192c9.9 0 19.7-2.3 28.6-6.8zM0 128V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H271.1c-9.9 0-19.7 2.3-28.6 6.8L192 64H160V48c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16l0 16C28.7 64 0 92.7 0 128zM168 304a88 88 0 1 1 176 0 88 88 0 1 1 -176 0z'></path>
                         </svg>
-                        <p className={`font-normal text-[10px] leading-3 ${isSelected ? 'text-white' : 'text-black group-hover:text-[#2d4d9c]'}`}>
+                        <p className={`font-normal text-[10px] leading-3 ${item?.selectedCondition?.conditionId === cn?.conditionId ? 'text-white' : 'text-black group-hover:text-[#2d4d9c]'}`}>
                           {cn?.conditionName === TradeInItemCondition.WELL_USED ? 'Your equipment will be showing significant signs of wear.' : cn?.conditionName === TradeInItemCondition.GOOD ? 'Equipment is showing more obvious signs of cosmetic wear.' : cn?.conditionName === TradeInItemCondition.VERY_GOOD ? 'Your item may have some cosmetic wear to the paintwork.' : cn?.conditionName === TradeInItemCondition.EXCELLENT ? 'The item may have some small cosmetic blemishes that lower its grade.' : cn?.conditionName === TradeInItemCondition.LIKE_NEW ? 'Your equipment is in the condition as if you have just bought it.' : 'N/A'}
                         </p>
                       </label>

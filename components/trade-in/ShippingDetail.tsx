@@ -189,22 +189,16 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
                           {item?.condition == 1 ? "Like New" : item?.condition == 2 ? "Excellent" : item?.condition == 3 ? "Very Good" : item?.condition == 4 ? "Good" : item?.condition == 5 ? "Well Used" : ""}
                         </span>
                       }
-                      {item?.accessories?.length > 0 &&
-                        <span className='text-xs text-left text-gray-600'><strong>Accessories: </strong>
-                          {item?.accessories?.length > 0 &&
-                            <span className="text-xs text-left text-gray-600">
-                              <strong>Accessories: </strong>
-                              {[...item?.accessories]
-                                .sort((a, b) => a.name.localeCompare(b.name))
-                                .map((acc: any, accId: number) => (
-                                  <span key={`accessories-${accId}`} className="pr-2">
-                                    {acc?.name}
-                                  </span>
-                                ))}
-                            </span>
+                      {item?.accessories?.length > 0 && (
+                        <span className="text-xs text-left text-gray-600">
+                          <strong>Accessories: </strong>
+                          {item.accessories
+                            .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                            .map((acc: any) => acc?.name) // Extract names
+                            .join(", ") // Join with commas
                           }
                         </span>
-                      }
+                      )}
                     </div>
                   </td>
                   <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
