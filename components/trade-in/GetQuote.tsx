@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 import Loader from "@components/Loader";
-import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, TradeInItemCondition } from "@components/utils/constants";
+import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, TradeInItemCondition } from "@components/utils/constants";
 import Link from 'next/link';
 import { logError } from '@framework/utils/app-util';
 
@@ -53,7 +53,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
   };
 
   const handleItemAction = async (itemId: any, status: number) => {
-    if (status === 4 && !rejectReasons[itemId]) {
+    if (status === QuoteItemStatusType.REJECTED && !rejectReasons[itemId]) {
       setMessage("Please select reject reasons!!");
       setTimeout(() => {
         setMessage("");
@@ -67,7 +67,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
           id: newQuoteDetail?.value?.id,
           itemId: itemId,
           status,
-          rejectionReason: status === 3 ? 0 : 4, // 2 for approval, 3 for rejection, 1 for Submitted
+          rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : QuoteItemStatusType.REJECTED,
         };
 
         const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, { data: requestBody })
@@ -178,13 +178,13 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                                   <option key={idx} value={reason?.id}>{reason?.value}</option>
                                 ))}
                               </select>
-                              <button onClick={() => handleItemAction(item?.itemId, 4)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
-                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
                             </div>
                           ) : (
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                              <button onClick={() => handleItemAction(item?.itemId, 3)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
                             </div>
                           )}
                         </>

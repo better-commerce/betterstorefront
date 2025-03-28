@@ -251,7 +251,7 @@ export const NEXT_TRADE_IN_GET_ASSESSMENT_STATUS = `/api/trade-in/update-assessm
 export const NEXT_TRADE_IN_PRE_SIGN_AGREEMENT = `/api/trade-in/set-pre-sign-agreement`
 export const NEXT_TRADE_IN_POST_QUOTE_SAVE_BY_ID = `/api/trade-in/post-quote-save-by-id`
 export const NEXT_TRADE_IN_PRODUCTS = `/api/trade-in/get-products`
-export const NEXT_TRADE_IN_SAVE_ADDRESS= `/api/trade-in/post-quote-address`
+export const NEXT_TRADE_IN_SAVE_ADDRESS = `/api/trade-in/post-quote-address`
 export const NEXT_TRADE_IN_USER_TOKEN = `/api/trade-in/get-user-token`
 export const NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS = `/api/trade-in/set-line-level-status`
 export const NEXT_TRADE_IN_GET_SHIPPING_METHODS = `/api/trade-in/get-shipping-methods`
@@ -260,6 +260,7 @@ export const NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD = `/api/trade-in/update-shippi
 export const NEXT_TRADE_IN_UPDATE_STORE_ADDRESS = `/api/trade-in/update-store-address`
 export const NEXT_TRADE_IN_CUSTOMERS = `/api/trade-in/customers`
 export const NEXT_TRADE_IN_CUSTOMER_TRADES = `/api/trade-in/customer-trades`
+export const NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER = `/api/trade-in/cancel-quote-by-customer`
 
 //TRADE IN JOURNEY API ENDPOINTS
 
@@ -275,6 +276,7 @@ export const TRADE_IN_GET_SHIPPING_METHODS = `/api/deliveries/shipping-method`
 export const TRADE_IN_GET_STORES = `/api/stores`
 export const TRADE_IN_GET_CUSTOMER = `/api/customers`
 export const TRADE_IN_GET_ASSESSMENT_STATUS = `/api/assessments`
+
 
 //CONSTANTS
 
@@ -352,7 +354,6 @@ export const PAYMENT_METHODS_API_RESULT_UI_SECURED_SETTING_KEYS =
 
 export const OTP_LOGIN_ENABLED = stringToBoolean(process.env.OTP_LOGIN_ENABLED)
 export const CURRENT_THEME = process.env.CURRENT_THEME
-
 
 export const OMNILYTICS_ASSETS_DATA = `${process.env.OMNILYTICS_BASE_URL}/data`
 export const OMNILYTICS_IP_INFO = `${process.env.OMNILYTICS_BASE_URL}/api/v1/IpInfo`
@@ -824,4 +825,57 @@ export enum CartProductType {
 
 export const BASKET_PROMO_TYPES = {
   KIT: 23,
+}
+
+export enum AssessmentStatusType {
+  PENDING = 1,
+  IN_PROGRESS = 2,
+  ACCESSORIES_CHECKED = 3,
+  ITEM_CHECKED = 4,
+  IMAGES_UPLOADED = 5,
+  SUBMITTED = 6,
+  APPROVED = 7,
+  REJECTED_BY_CUSTOMER = 8,
+  REJECTED_BY_BUSINESS = 9,
+}
+
+export enum QuoteStatusType {
+  AWAITING_QUOTATION = 0,
+  QUOTED = 1,
+  QUOTE_ACCEPTED = 2,
+  QUOTE_REJECTED = 3,
+  QUOTE_EXPIRED = 4,
+  COLLECTION_ARRANGED = 5,
+  PARCEL_ARRIVED = 6,
+  ASSESSMENT = 7,
+  FURTHER_ASSESSMENT = 8,
+  ASSESSED = 9,
+  TRADE_IN_COMPLETE = 10,
+  ASSESSED_FULL_REJECT = 11,
+  ASSESSED_PARTIAL_REJECT = 12,
+  TRADE_IN_COMPLETE_PARTIAL_REJECT = 13,
+  TRADE_IN_FULL_REJECT = 14,
+  COMPLETE_BOOKED_INTO_STOCK = 15,
+  COMPLETE_BOOKED_INTO_STOCK_PARTIAL_RETURN = 16,
+  TRADE_IN_COMPLETE_FULL_RETURN = 17,
+  CANCELLED_BY_CUSTOMER = 18,
+  CANCELLED_BY_BUSINESS = 19,
+}
+
+export enum QuoteItemStatusType {
+  SUBMITTED = 0,
+  PRICE_NEEDED = 1,
+  QUOTED = 2,
+  ACCEPTED = 3,
+  REJECTED = 4,
+  EXPIRED = 5,
+  ASSESSMENT_IN_PROGRESS = 6,
+  FURTHER_ASSESSMENT = 7,
+  ASSESSED = 8,
+  ASSESSED_REJECTED_BY_BUSINESS = 9,
+  ASSESSED_REJECTED_BY_CUSTOMER = 10,
+  ASSESSMENT_ACCEPTED = 11,
+  STOCK_BOOKED_IN = 12,
+  CANCELLED_BY_CUSTOMER = 13,
+  CANCELLED_BY_BUSINESS = 14,
 }

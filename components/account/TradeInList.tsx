@@ -1,12 +1,13 @@
 'use client';
+
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-const Pagination = dynamic(() => import('@components/Product/Pagination'))
 import Loader from "@components/Loader";
 import { NEXT_TRADE_IN_CUSTOMER_TRADES } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
+const Pagination = dynamic(() => import('@components/Product/Pagination'))
 
 export default function TradeInTable() {
   const [isLoading, setIsLoading] = useState(false)
@@ -31,12 +32,13 @@ export default function TradeInTable() {
     CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500",
     CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white",
     FullReturn: "bg-red-500 border-red-700 text-white",
-    CancelledByCustomer: "bg-gray-400 border-gray-600 text-gray-600",
-    CancelledByBusiness: "bg-gray-500 border-gray-700 text-gray-700",
+    TradeInCompleteFullReturn: "bg-fuchsia-200 border-fuchsia-400 text-fuchsia-600",
+    CancelledByCustomer: "bg-red-100 border-red-400 text-red-600",
+    CancelledByBusiness: "bg-red-100 border-red-400 text-red-700",
 
     // QuoteItemStatus
     Submitted: "bg-sky-300 border-sky-600 text-sky-600",
-    PriceNeeded: "bg-yellow-400 border-yellow-700 text-yellow-700",
+    PriceNeeded: "bg-yellow-200 border-yellow-500 text-yellow-700",
     Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
     Rejected: "bg-red-100 border-red-300 text-red-600",
     Expired: "bg-orange-500 border-orange-700 text-white",
@@ -47,15 +49,16 @@ export default function TradeInTable() {
     StockBookedIn: "bg-purple-300 border-purple-600 text-purple-600",
 
     // AssessmentStatuses
-    Pending: "bg-gray-200 border-gray-400 text-gray-500",
+    Pending: "bg-gray-100 border-gray-400 text-gray-500",
     InProgress: "bg-blue-300 border-blue-500 text-blue-500",
     AccessoriesChecked: "bg-teal-300 border-teal-500 text-teal-500",
     ItemChecked: "bg-indigo-300 border-indigo-500 text-indigo-500",
     ImagesUploaded: "bg-orange-300 border-orange-500 text-orange-500",
     Approved: "bg-green-300 border-green-500 text-green-500",
-    RejectedByCustomer: "bg-red-300 border-red-500 text-red-500",
-    RejectedByBusiness: "bg-red-400 border-red-600 text-red-600",
+    RejectedByCustomer: "bg-red-100 border-red-500 text-red-500",
+    RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
   };
+
   const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 10, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
   const fetchAllTrades = async (page = 1) => {
     setIsLoading(true)
@@ -97,9 +100,7 @@ export default function TradeInTable() {
                   {tradeList?.items.map((item: any, index: number) => (
                     <tr key={index} className="text-xs bg-white border-b shadow-none border-slate-200 hover:shadow hover:bg-gray-100">
                       <td className="px-4 py-2 text-sm font-semibold text-black border">
-                        <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm text-sky-600">
-                          {item.quoteNo || '-'}
-                        </Link>
+                        <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm text-sky-600">{item.quoteNo || '-'}</Link>
                       </td>
                       <td className="px-4 py-2 text-sm text-right border">
                         <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
@@ -107,13 +108,9 @@ export default function TradeInTable() {
                         </span>
                       </td>
                       <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
-                      <td className="px-4 py-2 text-sm text-right border">
-                        {new Date(item.created).toLocaleDateString()}
-                      </td>
+                      <td className="px-4 py-2 text-sm text-right border">{new Date(item.created).toLocaleDateString()}</td>
                       <td className="px-4 py-2 text-right border">
-                        <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">
-                          View Details
-                        </Link>
+                        <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">View Details</Link>
                       </td>
                     </tr>
                   ))}
@@ -121,29 +118,21 @@ export default function TradeInTable() {
               </table>
             </div>
             <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />
-            {/* Footer Text */}
             <p className="mt-6 text-xs text-left text-gray-600">
-              We hope you like our new Trade In section of our website. We're still working on improvements,
-              but if you spot something that’s not working as expected, please send us an email with
-              screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
+              We hope you like our new Trade In section of our website. We're still working on improvements, but if you spot something that's not working as expected, please send us an email with screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
               If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
             </p>
           </>
         ) : (
           <div className="flex flex-col justify-center gap-4 text-center">
             <h3 className="py-4 text-2xl font-semibold text-center text-gray-600">No Trade Available.</h3>
-            {/* Footer Text */}
             <p className="mt-6 text-xs text-left text-gray-600">
-              We hope you like our new Trade In section of our website. We're still working on improvements,
-              but if you spot something that’s not working as expected, please send us an email with
-              screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
+              We hope you like our new Trade In section of our website. We're still working on improvements, but if you spot something that’s not working as expected, please send us an email with screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
               If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
             </p>
           </div>
         )}
       </div>
-
-
     </div>
   );
 }
