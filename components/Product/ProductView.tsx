@@ -953,32 +953,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Overview',
       content: (
         <div className="space-y-4">
-     <div
-        className="text-sm text-gray-800 description-html"
-        dangerouslySetInnerHTML={{ __html: product?.shortDescription }}
-      />
-      <div className="flex flex-col">
-      {product?.videos.map((video:any, index:any) => {
-        // Ensure URL is in embeddable format
-        let videoUrl = video?.url?.includes("youtu.be")
-          ? video?.url.replace("youtu.be/", "www.youtube.com/embed/")
-          : video?.url.startsWith("www.")
-          ? `https://${video?.url}`
-          : video?.url;
-        return (
-          <div key={index} className="border rounded-lg overflow-hidden mb-4">
-            <iframe
-              src={videoUrl}
-              width="100%"
-              height="400"
-              allowFullScreen
-              className="w-full aspect-video"
-            ></iframe>
+          <div className="text-sm text-gray-800 description-html" dangerouslySetInnerHTML={{ __html: product?.shortDescription }} />
+          <div className="flex flex-col">
+            {product && product?.videos?.length > 0 && product?.videos?.map((video: any, index: any) => {
+              // Ensure URL is in embeddable format
+              let videoUrl = video?.url?.includes("youtu.be")
+                ? video?.url?.replace("youtu.be/", "www.youtube.com/embed/")
+                : video?.url?.startsWith("www.")
+                  ? `https://${video?.url}`
+                  : video?.url;
+              return (
+                <div key={index} className="mb-4 overflow-hidden border rounded-lg">
+                  <iframe src={videoUrl} width="100%" height="400" allowFullScreen className="w-full aspect-video" ></iframe>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-       </div>
-     </div>
+        </div>
       )
     },
     {
@@ -986,27 +977,27 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Specs',
       content: (
         <>
-            <div className="overflow-x-auto p-4">
-              <table className="w-full border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-200 text-left">
-                    <th className="p-3 border border-gray-300">Specification</th>
-                    <th className="p-3 border border-gray-300">Value</th>
+          <div className="p-4 overflow-x-auto">
+            <table className="w-full border border-gray-300">
+              <thead>
+                <tr className="text-left bg-gray-200">
+                  <th className="p-3 border border-gray-300">Specification</th>
+                  <th className="p-3 border border-gray-300">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product && product?.customAttributes?.length > 0 && product?.customAttributes?.map((attr: any, index: any) => (
+                  <tr key={index} className="border border-gray-300">
+                    <td className="p-3 border border-gray-300">{attr?.display}</td>
+                    <td
+                      className="p-3 border border-gray-300"
+                      dangerouslySetInnerHTML={{ __html: attr?.value }}
+                    />
                   </tr>
-                </thead>
-                <tbody>
-                  {product?.customAttributes.map((attr:any, index:any) => (
-                    <tr key={index} className="border border-gray-300">
-                      <td className="p-3 border border-gray-300">{attr?.display}</td>
-                      <td
-                        className="p-3 border border-gray-300"
-                        dangerouslySetInnerHTML={{ __html: attr?.value }}
-                      />
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-           </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )
     }
@@ -1015,226 +1006,180 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <>
         {featureToggle?.features?.enableRichPdpToggle ? (
-          <>
-            <div className='flex gap-6'>
-              <div className='w-full lg:w-[60%]'>
-                <div className="space-y-4">
-                  <div>
-                    <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
-                      {product?.name}
-                    </h1>
-                    <div className="flex flex-col gap-3">
-                      <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
-                    </div>
-                    <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                      <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </div>
+          <div className='flex gap-6'>
+            <div className='w-full lg:w-[60%]'>
+              <div className="space-y-4">
+                <div>
+                  <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
+                    {product?.name}
+                  </h1>
+                  <div className="flex flex-col gap-3">
+                    <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
                   </div>
-                  {attrGroup['product.relatedproducts']?.length > 0 &&
-                    <div className='flex w-full'>
-                      <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
-                        {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
-                          <SwiperSlide key={index}>
-                            <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                              <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
-                            </div>
-                          </SwiperSlide>
-                        ))}
-                      </Swiper>
-                    </div>
-                  }
-                  {renderRelatedProducts()}
-                  <div className="">{renderVariants()}</div>
-                  {product?.quantityBreakRules?.length > 0 &&
-                    <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
-                  }
-                  {
-                    openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
-                  }
-                  {featureToggle?.features?.enableStoreLocator &&
-                    <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-                      <MyLocationIcon className='w-4 h-4' />
-                      <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-                    </div>
-                  }
-                  {renderSellableType()}
-                  <div className='flex description-product'>
-                    <LongDescription data={product?.description} heading="About this item" />
-                  </div>
-                  <div className='flex short-descriptionc'>
-                    <LongDescription data={product?.shortDescription} heading="" />
+                  <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
+                    <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
                 </div>
+                {attrGroup['product.relatedproducts']?.length > 0 &&
+                  <div className='flex w-full'>
+                    <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
+                      {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
+                        <SwiperSlide key={index}>
+                          <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
+                            <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </div>
+                }
+                {renderRelatedProducts()}
+                <div className="">{renderVariants()}</div>
+                {product?.quantityBreakRules?.length > 0 &&
+                  <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
+                }
+                {
+                  openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
+                }
+                {featureToggle?.features?.enableStoreLocator &&
+                  <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+                    <MyLocationIcon className='w-4 h-4' />
+                    <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                  </div>
+                }
+                {renderSellableType()}
+                <div className='flex description-product'>
+                  <LongDescription data={product?.description} heading="About this item" />
+                </div>
+                <div className='flex short-descriptionc'>
+                  <LongDescription data={product?.shortDescription} heading="" />
+                </div>
               </div>
-              <div className='w-full lg:w-[40%]'>
-                <div className="w-full p-0 border rounded-lg shadow-md">
-                  {/* New Product Option */}
-                  <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
-                    <label className="flex items-center justify-between gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="product"
-                        value="new"
-                        checked={selectedOption === "new"}
-                        onChange={() => setSelectedOption("new")}
-                        className="hidden"
-                      />
-                      <span className="font-semibold">Buy new</span>
-                      <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                        {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                      </span>
-                    </label>
-                    <div className='mt-3 space-y-3'>
-                      <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                      <p className="text-sm font-normal text-black">FREE next day delivery.</p>
-                    </div>
-                    {selectedOption === "new" && (
-                      <div className="mt-2 space-y-2">
-                        {product?.currentStock > 0 ? (
-                          <p className="font-semibold text-green-600">In stock</p>
-                        ) : (
-                          <p className="text-sm font-semibold text-red-600"> Out of Stock</p>
-                        )}
-                        {product?.currentStock > 0 && product?.currentStock <= 5 && (
-                          <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
-                        )}
-                        <div className="mb-3">
-                          <label htmlFor="quantity" className="block text-sm font-medium">
-                            Quantity:
-                          </label>
-                          <select
-                            id="quantity"
-                            className="w-full p-2 mt-1 border rounded-md"
-                            value={quantity}
-                            onChange={(e) => setQuantity(Number(e.target.value))}
-                          >
-                            {[...Array(10).keys()].map((num) => (
-                              <option key={num + 1} value={num + 1}>
-                                {num + 1}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div id="add-to-cart-button" className='blue-add-btn'>
-                          {isMobile ? (
-                            <>
-                              {showMobileCaseButton && (
-                                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                                  <div className="container p-4 mx-auto max-w-7xl">
-                                    <div className="flex justify-end">
-                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <div className="flex rtl:space-x-reverse w-full">
-                              {!isEngravingAvailable && (
-                                <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+            </div>
+            <div className='w-full lg:w-[40%]'>
+              <div className="w-full p-0 border rounded-lg shadow-md">
+                {/* New Product Option */}
+                <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
+                  <label className="flex items-center justify-between gap-2 cursor-pointer">
+                    <input type="radio" name="product" value="new" checked={selectedOption === "new"} onChange={() => setSelectedOption("new")} className="hidden" />
+                    <span className="font-semibold">Buy new</span>
+                    <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                      {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                    </span>
+                  </label>
+                  <div className='mt-3 space-y-3'>
+                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                    <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                  </div>
+                  {selectedOption === "new" && (
+                    <div className="mt-2 space-y-2">
+                      {product?.currentStock > 0 ? (
+                        <p className="font-semibold text-green-600">In stock</p>
+                      ) : (
+                        <p className="text-sm font-semibold text-red-600"> Out of Stock</p>
+                      )}
+                      {product?.currentStock > 0 && product?.currentStock <= 5 && (
+                        <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
+                      )}
+                      <div className="mb-3">
+                        <label htmlFor="quantity" className="block text-sm font-medium"> Quantity: </label>
+                        <select id="quantity" className="w-full p-2 mt-1 border rounded-md" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
+                          {[...Array(10).keys()].map((num) => (
+                            <option key={num + 1} value={num + 1}> {num + 1} </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div id="add-to-cart-button" className='blue-add-btn'>
+                        {isMobile ? (
+                          showMobileCaseButton && (
+                            <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                              <div className="container p-4 mx-auto max-w-7xl">
+                                <div className="flex justify-end">
                                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                                 </div>
-                              )}
+                              </div>
+                            </div>
+                          )
+                        ) : (
+                          <div className="flex w-full rtl:space-x-reverse">
+                            {!isEngravingAvailable && (
+                              <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                                <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                              </div>
+                            )}
 
-                              {isEngravingAvailable && (
-                                <>
-                                <div className='flex flex-col gap-y-2 w-full add-green-btn'>
+                            {isEngravingAvailable && (
+                              <>
+                                <div className='flex flex-col w-full gap-y-2 add-green-btn'>
                                   <Button className="block py-3 sm:hidden add-green-btn nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                                   <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                                   <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
                                     {translate('label.product.engravingText')}
                                   </button>
                                 </div>
-                                </>
-                              )}
-                            </div>
-                          )}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className='w-full pt-3'>
+                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                          <h4 className='text-xs'>Dispatches from</h4>
+                          <p className='text-xs text-black'>London Store</p>
                         </div>
-                        <div className='w-full pt-3'>
-                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                            <h4 className='text-xs'>Dispatches from</h4>
-                            <p className='text-xs text-black'>London Store</p>
-                          </div>
-                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                            <h4 className='text-xs'>Returns</h4>
-                            <p className='text-xs text-color-primary-blue'>Returnable within 30 days of receipt</p>
-                          </div>
-                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                            <h4 className='text-xs'>Payment</h4>
-                            <p className='text-xs text-color-primary-blue'>Secure transaction</p>
-                          </div>
-                          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                            <h4 className='text-xs'>Support</h4>
-                            <p className='text-xs text-color-primary-blue'>Product support included</p>
-                          </div>
+                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                          <h4 className='text-xs'>Returns</h4>
+                          <p className='text-xs text-color-primary-blue'>Returnable within 30 days of receipt</p>
                         </div>
-                        <div className='w-full'>
-                          <>
-                            <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                              {isInWishList(selectedAttrData?.productId) ? (
-                                <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
-                              ) : (
-                                <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
-                              <span className='text-sm'> {translate('label.product.addToFavoriteText')} </span> </button>
-                          </>
+                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                          <h4 className='text-xs'>Payment</h4>
+                          <p className='text-xs text-color-primary-blue'>Secure transaction</p>
+                        </div>
+                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+                          <h4 className='text-xs'>Support</h4>
+                          <p className='text-xs text-color-primary-blue'>Product support included</p>
                         </div>
                       </div>
-                    )}
-                  </div>
-                  {/* Used Product Option */}
-                  <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
-                    <label className="flex items-center justify-between gap-2 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="product"
-                        value="used"
-                        checked={selectedOption === "used"}
-                        onChange={() => setSelectedOption("used")}
-                        className="hidden"
-                      />
-                      <span className="font-semibold">Save with used - Like New</span>
-                      <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                        {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                      </span>
-                    </label>
-                    <div className='mt-3 space-y-2'>
-                      <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                      <p className="text-sm font-normal text-black">FREE next day delivery.</p>
-                    </div>
-                    {selectedOption === "used" && (
-                      <div className="mt-2">
-                        {product?.preOrder?.isEnabled &&
-                          <div className='flex flex-col'>
-                            <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
-                          </div>
-                        }
-                        <div id="add-to-cart-button" className='blue-add-btn'>
-                          {isMobile ? (
-                            <>
-                              {showMobileCaseButton && (
-                                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                                  <div className="container p-4 mx-auto max-w-7xl">
-                                    <div className="flex justify-end">
-                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                                        {isInWishList(selectedAttrData?.productId) ? (
-                                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                        ) : (
-                                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                                        )}
-                                        <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </>
+                      <div className='w-full'>
+                        <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                          {isInWishList(selectedAttrData?.productId) ? (
+                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
                           ) : (
-                            <div className="flex rtl:space-x-reverse">
-                              {!isEngravingAvailable && (
-                                <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
+                          <span className='text-sm'> {translate('label.product.addToFavoriteText')} </span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Used Product Option */}
+                <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
+                  <label className="flex items-center justify-between gap-2 cursor-pointer">
+                    <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
+                    <span className="font-semibold">Save with used - Like New</span>
+                    <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                      {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                    </span>
+                  </label>
+                  <div className='mt-3 space-y-2'>
+                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                    <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                  </div>
+                  {selectedOption === "used" && (
+                    <div className="mt-2">
+                      {product?.preOrder?.isEnabled &&
+                        <div className='flex flex-col'>
+                          <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
+                        </div>
+                      }
+                      <div id="add-to-cart-button" className='blue-add-btn'>
+                        {isMobile ? (
+                          showMobileCaseButton && (
+                            <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                              <div className="container p-4 mx-auto max-w-7xl">
+                                <div className="flex justify-end">
                                   <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                                   <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
                                     {isInWishList(selectedAttrData?.productId) ? (
@@ -1245,37 +1190,51 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                                     <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
                                   </button>
                                 </div>
-                              )}
-
-                              {isEngravingAvailable && (
-                                <>
-                                  <div className='flex flex-col gap-y-2 w-full add-green-btn'>
-                                  <Button className="block py-3 sm:hidden nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <Button className="hidden sm:block nc-button " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                                    {translate('label.product.engravingText')}
-                                  </button>
-                                  <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                                    {isInWishList(selectedAttrData?.productId) ? (
-                                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                                    ) : (
-                                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                                    )}
-                                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                  </button>
-                                  </div>
-                                </>
-                              )}
+                              </div>
                             </div>
-                          )}
-                        </div>
+                          )
+                        ) : (
+                          <div className="flex rtl:space-x-reverse">
+                            {!isEngravingAvailable && (
+                              <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                                <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
+                                  {isInWishList(selectedAttrData?.productId) ? (
+                                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
+                                  ) : (
+                                    <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
+                                  )}
+                                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                                </button>
+                              </div>
+                            )}
+
+                            {isEngravingAvailable && (
+                              <div className='flex flex-col w-full gap-y-2 add-green-btn'>
+                                <Button className="block py-3 sm:hidden nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                <Button className="hidden sm:block nc-button " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                                  {translate('label.product.engravingText')}
+                                </button>
+                                <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                                  {isInWishList(selectedAttrData?.productId) ? (
+                                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
+                                  ) : (
+                                    <HeartIcon className="flex-shrink-0 w-6 h-6" />
+                                  )}
+                                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-          </>
+          </div>
         ) : (
           <>
             <div className="space-y-8">
@@ -1555,7 +1514,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <hr className="border-slate-200 dark:border-slate-700" />
               <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
                 <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3>
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts}   productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4}  deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
               </div>
             </>
           )}
@@ -1584,12 +1543,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             </div>
           </div>
         </div>
-        {featureToggle?.features?.enableBottomTabsSection ? (
-          <>
-           <ProductTabs  tabs={productTabs} defaultActiveTab="overview"/>
-          </>
-        ) : (
-          <></>
+        {featureToggle?.features?.enableBottomTabsSection && (
+          <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
         )}
       </main>
     </>
