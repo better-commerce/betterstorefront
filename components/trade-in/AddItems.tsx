@@ -14,11 +14,15 @@ const conditionOrder = [
 export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, selectedItems, isLoading }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProductData: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
   const [isOpen, setOpen] = useState(false)
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
+
+
+
+
   const [conditionData, setConditionData] = useState<any>([])
   const setModalClose = () => {
     setOpen(false)
   }
-
   const setRightCondition = (data: any) => {
     setConditionData(data)
     setOpen(true)
@@ -55,6 +59,23 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
       "checklist": []
     }
   ]
+
+  useEffect(() => {
+    const valid = items.length > 0 && items.every((item: any) => {
+      // Check that a product is selected
+      if (!item.selectedProductData) return false;
+
+      // If the product has conditions, ensure the user has explicitly selected one.
+      if (item.selectedProductData.conditions && item.selectedProductData.conditions.length > 0) {
+        // Check that selectedCondition is set and has a valid identifier.
+        return item.selectedCondition && item.selectedCondition.conditionId;
+      }
+      // If no conditions are available, consider it valid.
+      return true;
+    });
+    setIsNextDisabled(!valid);
+  }, [items]);
+
   return (
     <>
       <div className='flex flex-col w-full gap-6 mt-4 sm:mt-5'>
@@ -147,7 +168,6 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                 <div className='grid grid-cols-5 gap-3'>
                   {[...item?.selectedProductData?.conditions]?.sort((a, b) => conditionOrder.indexOf(a?.conditionName) - conditionOrder.indexOf(b?.conditionName))?.map((cn: any, cnIdx: number) => {
                     // If no condition is selected, set the first one as default
-                    const isSelected = item?.selectedCondition?.conditionId ? item?.selectedCondition?.conditionId === cn?.conditionId : cnIdx === 0; // Default to first item if nothing is selected
                     return (
                       <label key={cnIdx} className={`flex flex-col items-center justify-center w-full gap-4 p-4 text-center border rounded cursor-pointer transition ${item?.selectedCondition?.conditionId === cn?.conditionId ? 'bg-[#2d4d9c] text-white shadow-lg' : 'bg-white border-gray-200 hover:shadow-md'}`}>
                         <input type='radio' name='condition' value={cn.conditionId} onChange={() => updateItem(index, 'selectedCondition', cn)} className='hidden' />
@@ -211,11 +231,17 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
         <div className='flex flex-col w-full gap-1'>
           <button
             onClick={() => {
-              setSelectedItems(items);
-              nextStep();
-              document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              if (!isNextDisabled) {
+                setSelectedItems(items);
+                nextStep();
+                document
+                  .getElementById("step-component")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              } else {
+                alert("Please select a product and its condition (if required) before proceeding.");
+              }
             }}
-            disabled={items[0]?.selectedProductData == ""}
+            disabled={isNextDisabled}
             className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300"
           >
             Next add your details

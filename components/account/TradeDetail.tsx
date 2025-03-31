@@ -153,7 +153,7 @@ export default function TradeInDetail() {
   }
   // At the top of your component (or within the render), define helper variables:
   const status = tradeDetail?.value?.status;
-  const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject" || status === "AssessmentAccepted";
+  const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject" || status === "AssessmentAccepted" || status === "TradeInComplete" || status === "TradeInFullReject" || status === "TradeInCompletePartialReject" || status === "AssessedFullReject";
   const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject";
 
   const conditionMapping: { [key: number]: string } = {
@@ -180,9 +180,9 @@ export default function TradeInDetail() {
         {accessories?.length > 0 && (
           <span className="text-xs text-gray-600">
             <strong>Accessories: </strong>
-            {[...accessories].sort((a, b) => a?.name.localeCompare(b?.name)).map((acc, idx) => (
-              <span key={`accessories-${idx}`} className="pr-2">{acc?.name}</span>
-            ))}
+            {[...accessories].sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+              .map((acc: any) => acc?.name) // Extract names
+              .join(", ")}
           </span>
         )}
       </div>
@@ -251,31 +251,37 @@ export default function TradeInDetail() {
                       <div className="flex flex-col justify-center w-full gap-1 text-left">
                         {item?.assessment?.assessmentId !== EmptyGuid ? (
                           <div className="flex flex-col w-full gap-1">
-                            <span className="text-xs font-semibold text-orange-600 uppercase">Selected Product:</span>
+                            {item?.parentStockCode != item?.assessment?.parentStockCode && <span className="text-xs font-semibold text-orange-600 uppercase">Selected Product:</span>}
                             <div className="flex flex-col w-full mb-3">
-                              {renderProductInfo(item, null, null)}
+                              {renderProductInfo(item, item?.accessories, item?.condition)}
                             </div>
-                            <span className="text-xs font-semibold text-[#2d4d9c] uppercase">Updated product during assessment: </span>
-                            <div className="flex items-center justify-start gap-2 p-2 bg-white border border-gray-200 rounded-md">
-                              <img src={item?.assessment?.parentProductImageUrl} className="inline-block w-auto h-12" alt={item?.assessment?.parentProductName} />
-                              <div className="flex flex-col">
-                                <span className="font-semibold text-black text-wrap">
-                                  {item?.assessment?.parentProductName}{" "}
-                                  <span className="text-xs font-medium text-black">{item?.assessment?.parentStockCode != "DP000001" && <span>({item?.assessment?.parentStockCode})</span>}</span>
-                                </span>
-                                {item?.condition && (
-                                  <span className="text-xs text-gray-600"> <strong>Condition: </strong> {conditionMapping[item?.condition] || ""} </span>
-                                )}
-                                {item?.accessories?.length > 0 && (
-                                  <span className="text-xs text-gray-600">
-                                    <strong>Accessories: </strong>
-                                    {[...item?.accessories]?.sort((a, b) => a?.name.localeCompare(b?.name))?.map((acc, idx) => (
-                                      <span key={`accessories-${idx}`} className="pr-2"> {acc?.name} </span>
-                                    ))}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
+                            {item?.parentStockCode != item?.assessment?.parentStockCode &&
+                              <>
+                                <span className="text-xs font-semibold text-[#2d4d9c] uppercase">Updated product during assessment: </span>
+                                <div className="flex items-center justify-start gap-2 p-2 bg-white border border-gray-200 rounded-md">
+                                  <img src={item?.assessment?.parentProductImageUrl} className="inline-block w-auto h-12" alt={item?.assessment?.parentProductName} />
+                                  <div className="flex flex-col">
+                                    <span className="font-semibold text-black text-wrap">
+                                      {item?.assessment?.parentProductName}{" "}
+                                      <span className="text-xs font-medium text-black">{item?.assessment?.parentStockCode != "DP000001" && <span>({item?.assessment?.parentStockCode})</span>}</span>
+                                    </span>
+                                    {item?.condition && (
+                                      <span className="text-xs text-gray-600"> <strong>Condition: </strong> {conditionMapping[item?.condition] || ""} </span>
+                                    )}
+                                    {item?.accessories?.length > 0 && (
+                                      <span className="text-xs text-left text-gray-600">
+                                        <strong>Accessories: </strong>
+                                        {item.accessories
+                                          .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                          .map((acc: any) => acc?.name) // Extract names
+                                          .join(", ") // Join with commas
+                                        }
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </>
+                            }
                           </div>
                         ) : (
                           <div className="flex flex-col w-full gap-1">

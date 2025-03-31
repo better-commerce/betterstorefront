@@ -15,7 +15,7 @@ const getQuoteByIdApiMiddleware = async (req: any, res: any) => {
 
   try {
     const response: any = await getQuoteById(id, req?.cookies)
-    console.log({ response })
+    //console.log({ response })
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
