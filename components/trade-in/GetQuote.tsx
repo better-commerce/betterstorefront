@@ -153,7 +153,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                           <span className="text-xs text-left text-gray-600">
                             <strong>Accessories: </strong>
                             {item.accessories
-                              .sort((a:any, b:any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                              .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
                               .map((acc: any) => acc?.name) // Extract names
                               .join(", ") // Join with commas
                             }
@@ -168,25 +168,23 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                           <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
                         </div>
                       ) : (
-                        <>
-                          {showDropdown[item?.itemId] ? (
-                            <div className="flex justify-end gap-2">
-                              <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
-                                <option value="">Select a reason</option>
-                                {rejectionOptions?.map((reason, idx) => (
-                                  <option key={idx} value={reason?.id}>{reason?.value}</option>
-                                ))}
-                              </select>
-                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
-                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
-                            </div>
-                          ) : (
-                            <div className="flex justify-end gap-2 pr-3">
-                              <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                            </div>
-                          )}
-                        </>
+                        showDropdown[item?.itemId] ? (
+                          <div className="flex justify-end gap-2">
+                            <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
+                              <option value="">Select a reason</option>
+                              {rejectionOptions?.map((reason, idx) => (
+                                <option key={idx} value={reason?.id}>{reason?.value}</option>
+                              ))}
+                            </select>
+                            <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                            <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                          </div>
+                        ) : (
+                          <div className="flex justify-end gap-2 pr-3">
+                            <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                            <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                          </div>
+                        )
                       )}
                     </td>
                   </tr>
