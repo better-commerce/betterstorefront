@@ -39,6 +39,7 @@ import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { CURRENT_THEME } from "@components/utils/constants";
 import ReviewBadge from './ReviewBadge'
 import LongDescription from './LongDescription'
 import PricesWithDiscount from '@components/PricesWithDiscount'
@@ -953,22 +954,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Overview',
       content: (
         <div className="space-y-4">
-          <div className="text-sm text-gray-800 description-html" dangerouslySetInnerHTML={{ __html: product?.shortDescription }} />
-          <div className="flex flex-col">
-            {product && product?.videos?.length > 0 && product?.videos?.map((video: any, index: any) => {
-              // Ensure URL is in embeddable format
-              let videoUrl = video?.url?.includes("youtu.be")
-                ? video?.url?.replace("youtu.be/", "www.youtube.com/embed/")
-                : video?.url?.startsWith("www.")
-                  ? `https://${video?.url}`
-                  : video?.url;
-              return (
-                <div key={index} className="mb-4 overflow-hidden border rounded-lg">
-                  <iframe src={videoUrl} width="100%" height="400" allowFullScreen className="w-full aspect-video" ></iframe>
-                </div>
-              );
-            })}
-          </div>
+          <div className="text-sm text-gray-800 description-html description-p-long" dangerouslySetInnerHTML={{ __html: product?.description }} />
         </div>
       )
     },
@@ -1000,7 +986,30 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </>
       )
-    }
+    },
+    {
+      id: 'Videos',
+      label: 'Videos',
+      content: (
+        <div className="space-y-4">
+          <div className="flex flex-col">
+            {product && product?.videos?.length > 0 && product?.videos?.map((video: any, index: any) => {
+              // Ensure URL is in embeddable format
+              let videoUrl = video?.url?.includes("youtu.be")
+                ? video?.url?.replace("youtu.be/", "www.youtube.com/embed/")
+                : video?.url?.startsWith("www.")
+                  ? `https://${video?.url}`
+                  : video?.url;
+              return (
+                <div key={index} className="mb-4 overflow-hidden border rounded-lg">
+                  <iframe src={videoUrl} width="100%" height="400" allowFullScreen className="w-full aspect-video" ></iframe>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )
+    },
   ];
   const renderSectionContent = () => {
     return (
@@ -1048,9 +1057,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   </div>
                 }
                 {renderSellableType()}
-                <div className='flex description-product'>
-                  <LongDescription data={product?.description} heading="About this item" />
-                </div>
                 <div className='flex short-descriptionc'>
                   <LongDescription data={product?.shortDescription} heading="" />
                 </div>
@@ -1513,7 +1519,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
               <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
-                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3>
+                {CURRENT_THEME === "camera" ? 
+                  <>
+                     <h3 className="text-2xl mb-1 font-semibold md:text-3xl  dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                     <p className='text-black pb-6 sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                  </>
+                : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}   
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
               </div>
             </>
