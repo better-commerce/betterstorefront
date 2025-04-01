@@ -150,31 +150,40 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                       </div>
                     </td>
                     <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
-                    <td>
-                      {item?.status === "Accepted" || item?.status === "Rejected" ? (
+                    {newData?.value?.status != "Quoted" && newData?.value?.status != "QuoteAccepted" && newData?.value?.status != "QuoteRejected" && newData?.value?.status != "QuoteExpired" ? (
+                      <td>
                         <div className="flex justify-end pr-3">
-                          <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                          <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{newData?.value?.status}</span>
                         </div>
-                      ) : (
-                        showDropdown[item?.itemId] ? (
-                          <div className="flex justify-end gap-2">
-                            <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
-                              <option value="">Select a reason</option>
-                              {rejectionOptions?.map((reason, idx) => (
-                                <option key={idx} value={reason?.id}>{reason?.value}</option>
-                              ))}
-                            </select>
-                            <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
-                            <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                      </td>
+                    ) : (
+                      <td>
+                        {item?.status === "Accepted" || item?.status === "Rejected" ? (
+                          <div className="flex justify-end pr-3">
+                            <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
                           </div>
                         ) : (
-                          <div className="flex justify-end gap-2 pr-3">
-                            <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                            <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                          </div>
-                        )
-                      )}
-                    </td>
+                          showDropdown[item?.itemId] ? (
+                            <div className="flex justify-end gap-2">
+                              <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
+                                <option value="">Select a reason</option>
+                                {rejectionOptions?.map((reason, idx) => (
+                                  <option key={idx} value={reason?.id}>{reason?.value}</option>
+                                ))}
+                              </select>
+                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                            </div>
+                          ) : (
+                            <div className="flex justify-end gap-2 pr-3">
+                              <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                              <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                            </div>
+                          )
+                        )}
+                      </td>
+                    )}
+
                   </tr>
                 ))}
               </tbody>
@@ -210,6 +219,15 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
               </button>
             </div>
           )}
+          {newData?.value?.status != "Quoted" && newData?.value?.status != "QuoteAccepted" && newData?.value?.status != "QuoteRejected" && newData?.value?.status != "QuoteExpired" &&
+            <div className="flex flex-col mt-4">
+              <button className="px-4 py-3 w-full border bg-[#2d4d9c] border-[#2d4d9c] text-white rounded hover:bg-[#2d4d9c] hover:text-white disabled:bg-gray-300"
+                onClick={() => {
+                  startNewTrade();
+                  document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}>Start New Trade</button>
+            </div>
+          }
           {allItemsRejected &&
             (
               <div className="flex flex-col mt-4">
