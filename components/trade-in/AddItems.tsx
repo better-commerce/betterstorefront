@@ -3,6 +3,7 @@ import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import Carousel from "./Carousal";
 import { TradeInItemCondition } from "@components/utils/constants";
+import { LoadingDots } from "@components/ui";
 // Define the desired order matching your TradeInItemCondition values
 const conditionOrder = [
   TradeInItemCondition.LIKE_NEW,
@@ -11,13 +12,10 @@ const conditionOrder = [
   TradeInItemCondition.GOOD,
   TradeInItemCondition.WELL_USED,
 ];
-export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, selectedItems, isLoading }: any) {
+export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, selectedItems, isLoadingDots }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProductData: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
   const [isOpen, setOpen] = useState(false)
   const [isNextDisabled, setIsNextDisabled] = useState(true);
-
-
-
 
   const [conditionData, setConditionData] = useState<any>([])
   const setModalClose = () => {
@@ -107,13 +105,13 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
               />
 
               {/* Show loading indicator when fetching products */}
-              {isLoading && item?.searchTerm && (
+              {isLoadingDots && item?.searchTerm && (
                 <div className="absolute z-10 w-full p-2 text-center text-gray-500 bg-white border border-gray-300 shadow-lg top-12">
-                  Searching...
+                  <LoadingDots />
                 </div>
               )}
 
-              {item?.searchTerm && !isLoading && (() => {
+              {item?.searchTerm && !isLoadingDots && (() => {
                 // Get all selected product IDs
                 const selectedProductIds = items
                   .map((i: any) => i?.selectedProductData?.id)

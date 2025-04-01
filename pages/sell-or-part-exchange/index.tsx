@@ -29,11 +29,11 @@ const SellingGuide = dynamic(() => import('@components/trade-in/SellingGuide'))
 const JourneyVideo = dynamic(() => import('@components/trade-in/JourneyVideo'))
 const Service = dynamic(() => import('@components/trade-in/Service'))
 const Steps = dynamic(() => import('@components/trade-in/Steps'))
-const Loader = dynamic(() => import('@components/ui/LoadingDots'))
 import data from '@components/trade-in/data.json'
 import { useDebounce } from 'hooks/useDebounce'
 import { updateQueryParams } from 'framework/utils/app-util'
 import { NoSymbolIcon } from '@heroicons/react/24/outline'
+import Loader from '@components/Loader'
 declare const window: any
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
@@ -65,14 +65,13 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedAccIndexes, setSelectedAccIndexes] = useState<number[]>([]);
-  const [isStore, setStore] = useState<any>("0");
-  const [isGuest, setIsGuest] = useState<any>(false);
   const [showDpdStore, setShowDpdStore] = useState<any>(false);
   const [products, setProducts] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [searchText, setSearchText] = useState({})
   const [quoteData, setQuoteData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDots, setIsLoadingDots] = useState(false);
   const [shippingData, setShippingData] = useState<any>([])
   const [message, setMessage] = useState("")
 
@@ -80,7 +79,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     useDebounce(async (searchText: any) => {
       if (!searchText) return; // Prevent unnecessary API calls for empty text
 
-      setIsLoading(true); // Start loading
+      setIsLoadingDots(true); // Start loading
 
       try {
         const { data }: any = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText });
@@ -88,7 +87,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       } catch (error) {
         logError(error);
       } finally {
-        setIsLoading(false); // Stop loading
+        setIsLoadingDots(false); // Stop loading
       }
     }, 1000),
     []
@@ -134,21 +133,8 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     }
   };
 
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const setSelectedStore = (id: any) => {
-    setStore(id)
-  }
-
   const showStores = () => {
     setShowDpdStore(true)
-  }
-  const setGuestCheckout = () => {
-    setIsGuest(true)
   }
 
   useEffect(() => {
@@ -193,33 +179,28 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     updateQueryParams(router, {}, ['quoteId'])
   };
 
-  const fetchQuoteDetails = async (quoteId: string) => {
-    setIsLoading(true)
+  const fetchUpdatedQuoteDetails = async (quoteId: string) => {
     try {
-      const { data: quoteDetails } = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
-      if (!quoteDetails?.isSuccess) return setCurrentStep(0)
-
-      setQuoteData(quoteDetails)
-
-      if (quoteDetails?.value?.shippingMethod) {
-        setCurrentStep(4)
-      } else if (['QuoteAccepted', 'Quoted'].includes(quoteDetails?.value?.status)) {
-        setCurrentStep(2)
+      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
+      setQuoteData(quoteResult?.data)
+      if (quoteResult?.data?.value?.street != null) {
+        setCurrentStep(4);
       } else {
-        setCurrentStep(0)
+        setCurrentStep(2);
       }
       setIsLoading(false)
+      //nextSteps(quoteDetails);
     } catch (error) {
       logError(error)
-      setIsLoading(false)
     }
   };
 
-  // useEffect(() => {
-  //   if (router.query?.quoteId && !quoteData) {
-  //     fetchQuoteDetails(router.query?.quoteId as string)
-  //   }
-  // }, [router])
+  useEffect(() => {
+    if (router.query?.quoteId) {
+      setIsLoading(true)
+      fetchUpdatedQuoteDetails(router.query?.quoteId as string);
+    }
+  }, [router.query?.quoteId]);
 
   const cleanPath = removeQueryString(router.asPath)
   if (!featureToggle?.features?.enableTradeIn) {
@@ -253,7 +234,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
         {message != "" && <div className='fixed z-10 top-24 right-4'>
           <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-600'>{message}</span>
         </div>}
-       
+
         <div className='container flex flex-col justify-center gap-4 mx-auto text-center'>
 
           {pageContents?.heroheading?.length > 0 && pageContents?.heroheading?.map((heading: any, hIdx: number) => (
@@ -283,7 +264,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   selectedAccIndexes={selectedAccIndexes}
                   setSelectedIndex={setSelectedIndex}
                   handleAccessoryClick={handleAccessoryClick}
-                  currentStep={currentStep} isLoading={isLoading} />
+                  currentStep={currentStep} isLoadingDots={isLoadingDots} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
                 <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} nextSteps={handleNextStep} />
