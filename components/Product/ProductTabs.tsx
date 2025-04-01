@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import  cn  from 'classnames';
+import cn from 'classnames';
 
 type TabItem = {
   id: string;
@@ -21,9 +21,9 @@ const TabComponent = ({ tabs, defaultActiveTab }: TabComponentProps) => {
 
   return (
     <div className="w-full py-4">
-      <div className="border bg-gray-100 border-gray-400">
+      <div className="bg-gray-100 border border-gray-400">
         <div className="flex overflow-x-auto no-scrollbar">
-          {tabs?.map((tab:any) => (
+          {tabs?.map((tab: any) => (
             <button
               key={tab?.id}
               onClick={() => handleTabClick(tab?.id)}
@@ -39,10 +39,8 @@ const TabComponent = ({ tabs, defaultActiveTab }: TabComponentProps) => {
           ))}
         </div>
       </div>
-      <div className="px-4 py-8">
-        <div className='container-tabs'>
-         {tabs?.find((tab) => tab?.id === activeTab)?.content}
-        </div>
+      <div className="px-0 py-8">
+        {tabs?.find((tab) => tab?.id === activeTab)?.content}
       </div>
     </div>
   );

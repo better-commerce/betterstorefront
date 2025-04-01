@@ -954,7 +954,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       id: 'overview',
       label: 'Overview',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 container-tabs">
           <div className="text-sm text-gray-800 description-html description-p-long" dangerouslySetInnerHTML={{ __html: product?.description }} />
         </div>
       )
@@ -964,7 +964,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Specs',
       content: (
         <>
-          <div className="p-4 overflow-x-auto">
+          <div className="p-4 overflow-x-auto container-tabs">
             <table className="w-full border border-gray-300">
               <thead>
                 <tr className="text-left bg-gray-200">
@@ -992,7 +992,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       id: 'Videos',
       label: 'Videos',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 container-tabs">
           <div className="flex flex-col">
             {product && product?.videos?.length > 0 && product?.videos?.map((video: any, index: any) => {
               // Ensure URL is in embeddable format
@@ -1531,8 +1531,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
                 {CURRENT_THEME === "camera" ? 
                   <>
-                     <h3 className="text-2xl mb-1 font-semibold md:text-3xl  dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                     <p className='text-black pb-6 sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                     <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                     <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
                   </>
                 : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}   
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
