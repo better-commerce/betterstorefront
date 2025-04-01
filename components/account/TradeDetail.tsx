@@ -255,7 +255,7 @@ export default function TradeInDetail() {
                       <div className="flex flex-col justify-center w-full gap-1 text-left">
                         {item?.assessment?.assessmentId !== EmptyGuid ? (
                           <div className="flex flex-col w-full gap-1">
-                            {item?.parentStockCode != item?.assessment?.parentStockCode && <span className="text-xs font-semibold text-orange-600 uppercase">Selected Product:</span>}
+                            {item?.parentStockCode != item?.assessment?.parentStockCode && item?.assessment?.parentStockCode != null && item?.assessment?.status === "Submitted" && <span className="text-xs font-semibold text-orange-600 uppercase">Selected Product:</span>}
                             <div className="flex flex-col w-full mb-3">
                               {renderProductInfo(item, item?.accessories, item?.condition)}
                             </div>
