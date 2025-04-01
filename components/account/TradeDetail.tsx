@@ -269,10 +269,10 @@ export default function TradeInDetail() {
                                       {item?.assessment?.parentProductName}{" "}
                                       <span className="text-xs font-medium text-black">{item?.assessment?.parentStockCode != "DP000001" && <span>({item?.assessment?.parentStockCode})</span>}</span>
                                     </span>
-                                    {item?.assessment?.condition && (
+                                    {item?.assessment?.assessmentCondition && (
                                       <span className="text-xs text-gray-600"> <strong>Condition: </strong>
-                                        {item?.assessment?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
-                                          item?.assessment?.condition == TradeInItemCondition.GOOD ? 'Good' : item?.assessment?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.assessment?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.assessment?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
+                                        {item?.assessment?.assessmentCondition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                                          item?.assessment?.assessmentCondition == TradeInItemCondition.GOOD ? 'Good' : item?.assessment?.assessmentCondition == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.assessment?.assessmentCondition == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.assessment?.assessmentCondition == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
                                         }
                                       </span>
                                     )}
