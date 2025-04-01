@@ -1,16 +1,13 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loader from "@components/Loader";
-import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, TradeInItemCondition } from "@components/utils/constants";
+import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType } from "@components/utils/constants";
 import Link from 'next/link';
 import { logError } from '@framework/utils/app-util';
 
 export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
   const [newQuoteDetail, setNewQuoteData] = useState<any>(quoteData);
-  const [itemStatus, setItemStatus] = useState<{ [key: string]: boolean }>({}); // Track item approval/rejection
   const [rejectReasons, setRejectReasons] = useState<{ [key: string]: number }>({});
   const [showDropdown, setShowDropdown] = useState<{ [key: string]: boolean }>({});
   const [isChecked, setIsChecked] = useState(false);
@@ -46,7 +43,6 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
     try {
       const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
       setNewQuoteData(quoteResult?.data)
-      //nextSteps(quoteDetails);
     } catch (error) {
       logError(error)
     }
@@ -73,7 +69,6 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
         const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, { data: requestBody })
         setNewQuoteData(quoteResult?.data);
         await fetchUpdatedQuoteDetails(newQuoteDetail?.value?.id);
-        setItemStatus((prev) => ({ ...prev, [itemId]: true }));
       } else {
         logError("No quoteId received in response.")
       }
@@ -89,13 +84,6 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
   const allItemsProcessed = newData?.value?.items?.every((item: any) => item?.status === "Accepted" || item?.status === "Rejected");
 
   const allItemsRejected = newData?.value?.items?.every((item: any) => item?.status === "Rejected");
-
-  useEffect(() => {
-    if (router.query?.quoteId && !quoteData) {
-      fetchUpdatedQuoteDetails(router.query?.quoteId as string)
-    }
-  }, [router.query])
-
   if (!newQuoteDetail || isLoading) {
     return <Loader />
   }

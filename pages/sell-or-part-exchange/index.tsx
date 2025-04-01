@@ -183,10 +183,9 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     try {
       const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
       setQuoteData(quoteResult?.data)
+      setCurrentStep(2);
       if (quoteResult?.data?.value?.street != null) {
         setCurrentStep(4);
-      } else {
-        setCurrentStep(2);
       }
       setIsLoading(false)
       //nextSteps(quoteDetails);
