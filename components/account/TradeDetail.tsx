@@ -7,7 +7,7 @@ import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType } from "@components/utils/constants";
+import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition } from "@components/utils/constants";
 
 export default function TradeInDetail() {
   const router: any = useRouter();
@@ -174,8 +174,12 @@ export default function TradeInDetail() {
           {product?.parentProductName}{" "}
           <span className="text-xs font-medium text-black">{product?.parentStockCode != "DP000001" && <span>({product?.parentStockCode})</span>}</span>
         </span>
-        {condition != 0 && (
-          <span className="text-xs text-gray-600"> <strong>Condition: </strong>{conditionMapping[condition] || ""} </span>
+        {condition != "" && (
+          <span className="text-xs text-gray-600"> <strong>Condition: </strong>
+            {condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+              condition == TradeInItemCondition.GOOD ? 'Good' : condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' : condition == TradeInItemCondition.EXCELLENT ? 'Excellent' : condition == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
+            }
+          </span>
         )}
         {accessories?.length > 0 && (
           <span className="text-xs text-gray-600">
@@ -265,8 +269,12 @@ export default function TradeInDetail() {
                                       {item?.assessment?.parentProductName}{" "}
                                       <span className="text-xs font-medium text-black">{item?.assessment?.parentStockCode != "DP000001" && <span>({item?.assessment?.parentStockCode})</span>}</span>
                                     </span>
-                                    {item?.condition && (
-                                      <span className="text-xs text-gray-600"> <strong>Condition: </strong> {conditionMapping[item?.condition] || ""} </span>
+                                    {item?.assessment?.condition && (
+                                      <span className="text-xs text-gray-600"> <strong>Condition: </strong>
+                                        {item?.assessment?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                                          item?.assessment?.condition == TradeInItemCondition.GOOD ? 'Good' : item?.assessment?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.assessment?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.assessment?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
+                                        }
+                                      </span>
                                     )}
                                     {item?.accessories?.length > 0 && (
                                       <span className="text-xs text-left text-gray-600">
