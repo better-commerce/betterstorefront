@@ -49,6 +49,7 @@ const ProductSpecification = dynamic(() => import('@components/Product/ProductDe
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const ProductTabs = dynamic(() => import('@components/Product/ProductTabs'))
+const TabProductCard = dynamic(() => import('@components/Product/TabProductCard'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
 const Prices = dynamic(() => import('@components/Prices'))
 const AttributesHandler = dynamic(() => import('@components/Product/AttributesHandler'))
@@ -644,7 +645,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
   const css = { maxWidth: '100%', height: 'auto' }
   const attrGroup = groupBy(product?.customAttributes, 'key')
-
+  const tabProducts = groupBy(relatedProducts?.relatedProducts || [], (item) => item?.groupNameList?.[0]?.relatedTypeCode);
   if (!product) {
     return null
   }
@@ -1010,7 +1011,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-  ];
+    tabProducts?.ACCESSORIES && {
+      id: 'Accessories',
+      label: 'Accessories',
+      content: (
+        <div className="space-y-4">
+          <TabProductCard products={tabProducts?.ACCESSORIES} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+        </div>
+      )
+    }
+  ].filter(Boolean);
   const renderSectionContent = () => {
     return (
       <>
