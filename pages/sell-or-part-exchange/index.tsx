@@ -194,12 +194,12 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     }
   };
 
-  // useEffect(() => {
-  //   if (router.query?.quoteId) {
-  //     setIsLoading(true)
-  //     fetchUpdatedQuoteDetails(router.query?.quoteId as string);
-  //   }
-  // }, [router.query?.quoteId]);
+  useEffect(() => {
+    if (router.query?.quoteId) {
+      setIsLoading(true)
+      fetchUpdatedQuoteDetails(router.query?.quoteId as string);
+    }
+  }, [router.query?.quoteId]);
 
   const cleanPath = removeQueryString(router.asPath)
   if (!featureToggle?.features?.enableTradeIn) {
