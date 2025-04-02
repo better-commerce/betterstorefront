@@ -695,6 +695,55 @@ export enum OrderStatus {
   CANCELLED_BY_STORE = 'CancelledByStore',
 }
 
+export enum QuoteStatus {
+  AwaitingQuotation = "Awaiting Quotation",
+  Quoted = "Quoted",
+  QuoteAccepted = "Quote Accepted",
+  QuoteRejected = "Quote Rejected",
+  QuoteExpired = "Quote Expired",
+  CollectionArranged = "Collection Arranged",
+  ParcelArrived = "Parcel Arrived",
+  Assessment = "Assessment",
+  FurtherAssessment = "Further Assessment",
+  Assessed = "Assessed",
+  TradeInComplete = "Trade-In Complete",
+  AssessedFullReject = "Assessed Full Reject",
+  AssessedPartialReject = "Assessed Partial Reject",
+  TradeInFullReject = "Trade-In Full Reject",
+  TradeInCompletePartialReject = "Trade-In Complete Partial Reject",
+  CompleteBookedIntoStock = "Complete Booked Into Stock",
+  CompleteBookedIntoStockPartialReturn = "Complete Booked Into Stock Partial Return",
+  FullReturn = "Full Return",
+  TradeInCompleteFullReturn = "Trade-In Complete Full Return",
+  CancelledByCustomer = "Cancelled By Customer",
+  CancelledByBusiness = "Cancelled By Business",
+}
+
+export enum QuoteItemStatus {
+  Submitted = "Submitted",
+  PriceNeeded = "Price Needed",
+  Accepted = "Accepted",
+  Rejected = "Rejected",
+  Expired = "Expired",
+  AssessmentInProgress = "Assessment In Progress",
+  AssessedRejectedByBusiness = "Assessed Rejected By Business",
+  AssessedRejectedByCustomer = "Assessed Rejected By Customer",
+  AssessmentAccepted = "Assessment Accepted",
+  StockBookedIn = "Stock Booked In",
+}
+
+export enum AssessmentStatus {
+  Pending = "Pending",
+  InProgress = "In Progress",
+  AccessoriesChecked = "Accessories Checked",
+  ItemChecked = "Item Checked",
+  ImagesUploaded = "Images Uploaded",
+  Approved = "Approved",
+  RejectedByCustomer = "Rejected By Customer",
+  RejectedByBusiness = "Rejected By Business",
+}
+
+
 export const PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES =
   process.env.PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES
 export const PDP_REVIEW_NO_OF_IMAGES_ALLOWED = toNumber(

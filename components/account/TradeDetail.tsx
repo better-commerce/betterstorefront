@@ -163,7 +163,13 @@ export default function TradeInDetail() {
     4: "Good",
     5: "Well Used",
   };
-
+  // Function to convert status to a user-friendly format
+  const getStatusLabel = (status: string): string => {
+    return status
+      ?.replace(/([a-z])([A-Z])/g, "$1 $2") // Add space between camelCase words
+      .replace(/_/g, " ") // Replace underscores with spaces (if any)
+      .trim();
+  };
   const canChangeStatus = (itemStatus: string) => !["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness"].includes(itemStatus);
   const canCancelTradeIn = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted", "QuoteRejected"].includes(itemStatus);
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
@@ -219,7 +225,7 @@ export default function TradeInDetail() {
           <div className="flex justify-between w-full pb-1 mb-1">
             <h3 className="px-0 py-0 text-xl font-semibold flex gap-1 items-center text-[#2d4d9c]">Trade-in Quote: {tradeDetail?.value?.quoteNo}
               <span className={`px-2 py-1 text-xs font-semibold rounded-full border ${statusClasses[tradeDetail?.value?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
-                {tradeDetail?.value?.status ?? "Unknown"}
+                {getStatusLabel(tradeDetail?.value?.status ?? "Unknown")}
               </span>
             </h3>
             {canCancelTradeIn(tradeDetail?.value?.status) && <button onClick={() => handleCancelQuote(tradeDetail?.value?.id, QuoteStatusType.CANCELLED_BY_CUSTOMER)} className="px-4 py-1 text-xs font-semibold text-red-600 border border-red-500 rounded-full bg-red-50 hover:text-white hover:bg-red-600">Cancel Quote</button>}
@@ -304,7 +310,7 @@ export default function TradeInDetail() {
                     )}
                     <td className="pr-2 whitespace-nowrap" align="right">
                       <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || "bg-gray-200 border-gray-500 text-gray-500"}`} >
-                        {item.status ?? "Unknown"}
+                        {getStatusLabel(item.status ?? "Unknown")}
                       </span>
                     </td>
                     {showActionColumn && (

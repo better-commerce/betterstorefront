@@ -5,7 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Loader from "@components/Loader";
-import { NEXT_TRADE_IN_CUSTOMER_TRADES } from "@components/utils/constants";
+import { AssessmentStatus, NEXT_TRADE_IN_CUSTOMER_TRADES, QuoteItemStatus, QuoteStatus } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
 
@@ -78,6 +78,13 @@ export default function TradeInTable() {
   useEffect(() => {
     fetchAllTrades();
   }, []);
+  // Function to convert status to a user-friendly format
+  const getStatusLabel = (status: string): string => {
+    return status
+      ?.replace(/([a-z])([A-Z])/g, "$1 $2") // Add space between camelCase words
+      .replace(/_/g, " ") // Replace underscores with spaces (if any)
+      .trim();
+  };
   return (
     <div className="w-full px-6">
       {isLoading && <Loader />}
@@ -104,7 +111,7 @@ export default function TradeInTable() {
                       </td>
                       <td className="px-4 py-2 text-sm text-right border">
                         <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
-                          {item?.status ?? "Unknown"}
+                          {getStatusLabel(item?.status ?? "Unknown")}
                         </span>
                       </td>
                       <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
