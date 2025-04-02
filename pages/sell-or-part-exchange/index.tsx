@@ -181,18 +181,19 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
 
   const fetchUpdatedQuoteDetails = async (quoteId: string) => {
     try {
-      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
-      setQuoteData(quoteResult?.data)
-      setCurrentStep(2);
-      if (quoteResult?.data?.value?.street != null) {
-        setCurrentStep(4);
-      }
-      setIsLoading(false)
-      //nextSteps(quoteDetails);
+      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } });
+      setQuoteData(quoteResult?.data);
+
+      // Determine the correct step in a single state update
+      const hasStreet = quoteResult?.data?.value?.street != null;
+      setCurrentStep(hasStreet ? 4 : 2);
+
+      setIsLoading(false);
     } catch (error) {
-      logError(error)
+      logError(error);
     }
   };
+
 
   useEffect(() => {
     if (router.query?.quoteId) {

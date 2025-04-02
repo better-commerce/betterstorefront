@@ -1,15 +1,10 @@
 import { ChangeEvent, useState } from 'react'
 import axios from 'axios'
-import Router, { useRouter } from 'next/router'
-
-import Form from '@components/customer'
-import { EmptyString, NEXT_AUTHENTICATE, NEXT_GET_CUSTOMER_DETAILS, NEXT_TRADE_IN_CUSTOMERS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GUEST_LOGIN, NEXT_TRADE_IN_LOGIN, NEXT_TRADE_IN_LOGIN_USER, OTP_LOGIN_ENABLED, TradeInItemCondition } from '@components/utils/constants'
+import { useRouter } from 'next/router'
+import { EmptyString, NEXT_TRADE_IN_CUSTOMERS, NEXT_TRADE_IN_LOGIN, NEXT_TRADE_IN_LOGIN_USER, OTP_LOGIN_ENABLED, TradeInItemCondition } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
-import useWishlist from '@components/services/wishlist'
-import cartHandler from '@components/services/cart'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-
-import { getEnabledSocialLogins, logError, saveUserToken } from '@framework/utils/app-util'
+import { getEnabledSocialLogins, logError } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LoginOTPComp from '@components/account/login-otp'
 import SocialSignInLinks from './SocialSignInLinks'
@@ -34,14 +29,10 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
   const translate = useTranslation()
 
   const router = useRouter()
-  const [noAccount, setNoAccount] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
-  const [quoteDetails, setQuoteDetails] = useState<any>(null);
   const [loginDetail, setLoginDetails] = useState<any>(null)
   const [loginData, setLoginData] = useState({ username: "", password: "" });
-  const { isGuestUser, setIsGuestUser, setUser, user, wishListItems, setAlert, setCartItems, setBasketId, setWishlist, cartItems, basketId, } = useUI()
-  const { getWishlist } = useWishlist()
-  const { getCartByUser, addToCart } = cartHandler()
+  const { isGuestUser, setIsGuestUser, setUser, user } = useUI()
   const otpEnabled = OTP_LOGIN_ENABLED
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
   const conditionLabels: Record<string, number> = {
@@ -99,7 +90,6 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       if (quoteId) {
         setSuccessMessage("Quote created successfully!!!");
       }
-      await fetchQuoteDetails(quoteId);
     } catch (error) {
       logError(error)
     } finally {
@@ -113,49 +103,6 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     redirectUrl = `${url?.origin}${url?.pathname}${url?.search}`
   }
   recordAnalytics(AnalyticsEventType.PAGE_VIEWED, { entityName: PAGE_TYPES.Login, })
-
-  const handleUserLogin = (values: any, cb?: any) => {
-    const asyncLoginUser = async () => {
-      const result: any = await axios.post(NEXT_AUTHENTICATE, { data: values })
-      if (!result.data) {
-        setNoAccount(true)
-        setAlert({ type: 'error', msg: translate('common.message.invalidAccountMsg') })
-      } else if (result.data) {
-        setNoAccount(false)
-        closeSideBar()
-        setAlert({ type: 'success', msg: translate('common.message.loginSuccessMsg') })
-        let userObj = { ...result.data }
-        if (userObj?.userToken) saveUserToken(userObj?.userToken)
-        // get user updated details
-        const updatedUserObj = await axios.post(
-          `${NEXT_GET_CUSTOMER_DETAILS}?customerId=${userObj?.userId}`
-        )
-        if (updatedUserObj?.data) userObj = { ...updatedUserObj?.data }
-
-        const wishlist = await getWishlist(result.data.userId, wishListItems)
-        setWishlist(wishlist)
-        getWishlist(result.data.userId, wishListItems)
-        const cart: any = await getCartByUser({
-          userId: result.data.userId,
-          cart: cartItems,
-          basketId,
-        })
-        if (cart && cart.id) {
-          setCartItems(cart)
-          setBasketId(cart.id)
-          userObj.isAssociated = true
-        } else {
-          userObj.isAssociated = false
-        }
-        setUser(userObj)
-        setIsGuestUser(false)
-        Router.push('/sell-or-part-exchange')
-        // submitLoggedInUserRequest()
-      }
-      if (cb) cb();
-    }
-    asyncLoginUser()
-  }
 
   const getConditionValue = (conditionName: string) => {
     const conditionMap: Record<string, number> = {
@@ -182,20 +129,10 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       });
 
       updateQueryParams(router, { quoteId: quoteResp?.data });
-      await fetchQuoteDetails(quoteResp?.data);
     } catch (error) {
       logError(error)
     } finally {
       setIsLoading(false);
-    }
-  };
-  const fetchQuoteDetails = async (quoteId: string) => {
-    try {
-      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
-      setQuoteDetails(quoteResult?.data);
-      nextSteps(quoteResult?.data);
-    } catch (error) {
-      logError(error)
     }
   };
   if (!isGuestUser && user.userId) {
@@ -266,7 +203,6 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
                     Login
                   </button>
                 </div>
-                {/* <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} /> */}
                 <div className={`flex flex-col items-start text-left justify-start w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
                   <a href="/my-account/forgot-password" target='_blank'>
                     <span className="block text-sm font-medium underline cursor-pointer text-sky-600 hover:text-sky-800 hover:underline">

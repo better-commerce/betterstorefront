@@ -23,15 +23,15 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
   const handleCheckboxChange = async (event: any) => {
     setIsChecked(event.target.checked);
   };
-  const fetchQuoteDetails = async (quoteId: string) => {
+  const fetchShippingMethods = async () => {
     setIsLoading(true);
     try {
-      nextSteps(newQuoteDetail);
+      if (isChecked) {
+        await axios.post(NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, { data: { id: quoteData?.value.id } })
+      }
       const shippingResult = await axios.post(NEXT_TRADE_IN_GET_SHIPPING_METHODS)
       setShippingData(shippingResult?.data)
-      if (isChecked) {
-        const response = await axios.post(NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, { data: { id: quoteData?.value.id } })
-      }
+      nextSteps(newQuoteDetail);
     } catch (error) {
       logError(error)
     } finally {
@@ -213,7 +213,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
               </div>
 
               <button
-                onClick={() => fetchQuoteDetails(newData?.value?.id)}
+                onClick={() => fetchShippingMethods()}
                 className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
                 Continue
               </button>

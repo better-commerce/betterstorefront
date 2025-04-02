@@ -71,91 +71,105 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
 
     setIsLoading(true);
 
-    let requestBody;
-    if (isStoreDropOff && selectedCameraStore !== null) {
-      const selectedStore = storeData?.value?.[selectedCameraStore];
-      requestBody = {
-        addressType: 2, // For store drop-off
-        street: selectedStore?.street || "-",
-        street2: selectedStore?.street2 || "-",
-        city: selectedStore?.city || "-",
-        state: "-", // Assuming state info isn't provided
-        country: selectedStore?.country || "",
-        postcode: selectedStore?.postCode || "",
-        id: quoteData?.value?.id,
-      };
-    } else if (user.userId && selectedUserAddress !== null) {
-      const address = userAddress[selectedUserAddress];
-      requestBody = {
-        addressType: 1,
-        street: address?.address1 || "-",
-        street2: address?.address2 || "-",
-        city: address?.city || "-",
-        state: address?.state || "-",
-        country: address?.country || "",
-        postcode: address?.postCode || "",
-        id: quoteData?.value?.id,
-      };
-    } else {
-      requestBody = {
-        ...addressData,
-        addressType: 1, // For DPD collection
-        id: quoteData?.value?.id,
-      };
-    }
+    const getAddressPayload = () => {
+      if (isStoreDropOff && selectedCameraStore !== null) {
+        const selectedStore = storeData?.value?.[selectedCameraStore];
+        return {
+          addressType: 2, // Store drop-off
+          street: selectedStore?.street || "-",
+          street2: selectedStore?.street2 || "-",
+          city: selectedStore?.city || "-",
+          state: "-",
+          country: selectedStore?.country || "",
+          postcode: selectedStore?.postCode || "",
+        };
+      }
+
+      if (user?.userId && selectedUserAddress !== null) {
+        const address = userAddress[selectedUserAddress];
+        return {
+          addressType: 1, // User's saved address
+          street: address?.address1 || "-",
+          street2: address?.address2 || "-",
+          city: address?.city || "-",
+          state: address?.state || "-",
+          country: address?.country || "",
+          postcode: address?.postCode || "",
+        };
+      }
+
+      return { ...addressData, addressType: 1 }; // DPD collection
+    };
+
+    const requestBody = { ...getAddressPayload(), id: quoteData?.value?.id };
 
     try {
-      // SAVE ADDRESS API CALL
-      const response = await axios.post(NEXT_TRADE_IN_SAVE_ADDRESS, { data: requestBody })
-      const shippingMethodResponse = await axios.post(NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, {
-        data: {
-          id: quoteData?.value?.id,
-          shippingMethodId: selectedShippingMethod?.iId,
-        }
-      })
+      // Execute API calls concurrently
+      await Promise.all([
+        axios.post(NEXT_TRADE_IN_SAVE_ADDRESS, { data: requestBody }),
+        axios.post(NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, {
+          data: {
+            id: quoteData?.value?.id,
+            shippingMethodId: selectedShippingMethod?.iId,
+          }
+        })
+      ]);
 
       // Fetch updated quote
-      const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteData?.value?.id } });
+      const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, {
+        data: { id: quoteData?.value?.id }
+      });
+
       nextSteps(responseNew?.data);
     } catch (error) {
-      logError(error)
+      logError(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const selectShipping = async (method: any) => {
-    setSelectedShippingMethod(method)
-    setStoreOpen(method?.iId)
-    if (method?.iId == 2) {
-      setIsLoading(true)
-      getAddress()
-      const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES)
-      if (storeResult.data) {
-        setStoreData(storeResult?.data)
-        setIsLoading(false)
-      }
-    }
-  }
-  const id = user?.userId;
-  const getAddress = async () => {
-    setIsLoading(true)
-    const response = await axios.post(NEXT_ADDRESS, {
-      id,
-    })
-    if (response.data) {
-      setIsLoading(false)
-    }
-    if (response) {
-      setIsLoading(false)
-    }
-    setUserAddress(response.data)
-    return response.data
-  }
 
-  useEffect(() => {
-    getAddress()
-  }, [])
+  const selectShipping = async (method: any) => {
+    setSelectedShippingMethod(method);
+    setStoreOpen(method?.iId);
+
+    if (!method?.iId) return;
+
+    setIsLoading(true);
+
+    try {
+      if (method.iId === 2) {
+        // Fetch store data only if not already available
+        if (!storeData || Object.keys(storeData).length === 0) {
+          const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES);
+          setStoreData(storeResult?.data || {});
+        }
+      } else if (method.iId === 1) {
+        // Fetch address only if not already available
+        if (!userAddress || Object.keys(userAddress).length === 0) {
+          await getAddress();
+        }
+      }
+    } catch (error) {
+      logError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getAddress = async () => {
+    if (!user?.userId || (userAddress && Object.keys(userAddress).length > 0)) return; // Avoid refetching
+
+    try {
+      const response = await axios.post(NEXT_ADDRESS, { id: user.userId });
+      setUserAddress(response.data || {});
+      return response.data;
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+
 
   return (
     <>
