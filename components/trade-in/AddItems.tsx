@@ -12,6 +12,7 @@ const conditionOrder = [
   TradeInItemCondition.GOOD,
   TradeInItemCondition.WELL_USED,
 ];
+
 export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, selectedItems, isLoadingDots }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProductData: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
   const [isOpen, setOpen] = useState(false)
@@ -21,10 +22,12 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
   const setModalClose = () => {
     setOpen(false)
   }
+
   const setRightCondition = (data: any) => {
     setConditionData(data)
     setOpen(true)
   }
+
   useEffect(() => {
     if (selectedItems?.length > 0) {
       setItems(selectedItems);
@@ -40,6 +43,7 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
     newItems[index][key] = value;
     setItems(newItems);
   };
+
   const removeItem = (index: number) => {
     const newItems = items?.filter((_: any, i: number) => i !== index);
     setItems(newItems);
@@ -94,24 +98,26 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
             <div className="relative flex flex-col w-full">
               <input
                 type="text"
-                value={item?.selectedProduct || item?.searchTerm || searchText?.[index] || ""}
+                value={item?.selectedProduct || item?.searchTerm || ""}
                 onChange={(e) => {
+                  const value = e.target.value;
                   onChangeSearch(e, index);
-                  updateItem(index, "searchTerm", e.target.value);
+                  updateItem(index, "searchTerm", value);
                   updateItem(index, "selectedProduct", ""); // Clear selected product if user starts typing again
                 }}
                 className="w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400"
                 placeholder="Please search and Select Your Model"
               />
 
-              {/* Show loading indicator when fetching products */}
-              {isLoadingDots && item?.searchTerm && (
+              {/* Show loading indicator when fetching products (after 2 characters) */}
+              {item?.searchTerm?.length > 2 && isLoadingDots && (
                 <div className="absolute z-10 w-full p-2 text-center text-gray-500 bg-white border border-gray-300 shadow-lg top-12">
                   <LoadingDots />
                 </div>
               )}
 
-              {item?.searchTerm && !isLoadingDots && (() => {
+              {/* Show search results only when searchTerm > 2 characters & loading is done */}
+              {item?.searchTerm?.length > 2 && !isLoadingDots && (() => {
                 // Get all selected product IDs
                 const selectedProductIds = items
                   .map((i: any) => i?.selectedProductData?.id)
@@ -124,7 +130,7 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                     !selectedProductIds.includes(p.id) // Exclude already selected products
                 );
 
-                // If products are undefined, null, or empty, use the dummy product
+                // If no products are found, use the dummy product with searched text
                 if (!products || filteredProducts.length === 0) {
                   filteredProducts = noProduct.map((dummy) => ({
                     ...dummy,
@@ -134,27 +140,28 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
 
                 return (
                   <ul className="absolute z-10 w-full overflow-y-auto bg-white border border-gray-300 divide-y divide-gray-200 shadow-lg top-12 max-h-60">
-                    {filteredProducts.map((product: any) => (
+                    {filteredProducts?.map((product: any) => (
                       <li
                         key={product.id}
                         onClick={() => {
                           updateItem(index, "selectedProductData", product);
-                          updateItem(index, "selectedProduct", product.name);
-                          updateItem(index, "selectedProductImage", product.image);
-                          updateItem(index, "selectedProductPrice", product.stockCode);
-                          updateItem(index, "selectedProductCurrency", product.categoryId);
+                          updateItem(index, "selectedProduct", product?.name);
+                          updateItem(index, "selectedProductImage", product?.image);
+                          updateItem(index, "selectedProductPrice", product?.stockCode);
+                          updateItem(index, "selectedProductCurrency", product?.categoryId);
                           updateItem(index, "searchTerm", ""); // Clear the search term
                         }}
                         className="flex items-center gap-2 px-2 py-1 text-sm cursor-pointer hover:bg-gray-100 justify-normal"
                       >
-                        <img src={product.image} className="w-auto h-7" alt={product.name} />
-                        <span>{product.name}</span>
+                        <img src={product?.image} className="w-auto h-7" alt={product?.name} />
+                        <span>{product?.name}</span>
                       </li>
                     ))}
                   </ul>
                 );
               })()}
             </div>
+
             {item?.selectedProductData?.conditions?.length > 0 && (
               <div className='flex flex-col justify-start w-full gap-2 mt-5 text-left sm:mt-3'>
                 <label className='text-lg font-semibold text-[#2d4d9c]'>

@@ -89,7 +89,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       } finally {
         setIsLoadingDots(false); // Stop loading
       }
-    }, 1000),
+    }, 300),
     []
   );
 
