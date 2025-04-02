@@ -99,7 +99,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
             Hi {user?.userId ? `${user?.firstName}` : updatedQuoteDetail?.value?.firstName}
           </h3>
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-            Your Quote Reference Number: {getUpdatedQuoteDetails?.value?.quoteNo}
+            Your Quote Reference Number: {updatedQuoteDetail?.value?.quoteNo}
           </h3>
         </div>
       </div>
