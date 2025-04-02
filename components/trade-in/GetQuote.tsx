@@ -19,7 +19,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
     { id: 3, value: "Change of mind" },
     { id: 4, value: "Just getting an idea" }
   ];
-  let newData = newQuoteDetail
+  let updatedQuoteDetail = newQuoteDetail
   const handleCheckboxChange = async (event: any) => {
     setIsChecked(event.target.checked);
   };
@@ -80,30 +80,30 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
   };
 
   // Check if all items are either approved or rejected
-  const hasApprovedItem = newData?.value?.items?.some((item: any) => item?.status === "Accepted");
-  const allItemsProcessed = newData?.value?.items?.every((item: any) => item?.status === "Accepted" || item?.status === "Rejected");
+  const hasApprovedItem = updatedQuoteDetail?.value?.items?.some((item: any) => item?.status === "Accepted");
+  const allItemsProcessed = updatedQuoteDetail?.value?.items?.every((item: any) => item?.status === "Accepted" || item?.status === "Rejected");
 
-  const allItemsRejected = newData?.value?.items?.every((item: any) => item?.status === "Rejected");
-  if (!newQuoteDetail || isLoading) {
-    return <Loader />
-  }
+  const allItemsRejected = updatedQuoteDetail?.value?.items?.every((item: any) => item?.status === "Rejected");
 
   return (
     <>
+      {!newQuoteDetail || isLoading &&
+        <Loader />
+      }
       {message != "" && <div className='fixed z-10 top-24 right-4'>
         <span className='px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full'>{message}</span>
       </div>}
       <div className="flex flex-col w-full gap-6 mt-4 sm:mt-5">
         <div className="flex flex-col justify-center w-full gap-4 mt-6 text-center sm:mt-8">
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-            Hi {user?.userId ? `${user?.firstName}` : newData?.value?.firstName}
+            Hi {user?.userId ? `${user?.firstName}` : updatedQuoteDetail?.value?.firstName}
           </h3>
           <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
             Your Quote Reference Number: {newQuoteDetail?.value?.quoteNo}
           </h3>
         </div>
       </div>
-      {newData?.value?.status != "AwaitingQuotation" ? (
+      {updatedQuoteDetail?.value?.status != "AwaitingQuotation" ? (
         <>
           <div className={`${allItemsRejected ? 'ring-red-400' : 'ring-gray-300'} flex flex-col w-full overflow-hidden shadow ring-1  sm:rounded`}>
             <table className="min-w-full divide-y divide-gray-300">
@@ -121,7 +121,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {newData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                {updatedQuoteDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
                   <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
                     <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
                       <img src={item?.parentProductImageUrl} className="inline-block w-auto h-16" alt={item?.parentProductName} />
@@ -150,10 +150,10 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                       </div>
                     </td>
                     <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
-                    {newData?.value?.status != "Quoted" && newData?.value?.status != "QuoteAccepted" && newData?.value?.status != "QuoteRejected" && newData?.value?.status != "QuoteExpired" ? (
+                    {updatedQuoteDetail?.value?.status != "Quoted" && updatedQuoteDetail?.value?.status != "QuoteAccepted" && updatedQuoteDetail?.value?.status != "QuoteRejected" && updatedQuoteDetail?.value?.status != "QuoteExpired" ? (
                       <td>
                         <div className="flex justify-end pr-3">
-                          <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{newData?.value?.status}</span>
+                          <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{updatedQuoteDetail?.value?.status}</span>
                         </div>
                       </td>
                     ) : (
@@ -190,7 +190,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
               <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
                 <tr>
                   <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{newData?.value?.grandTotal}</td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
                 </tr>
               </tfoot>
@@ -219,7 +219,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
               </button>
             </div>
           )}
-          {newData?.value?.status != "Quoted" && newData?.value?.status != "QuoteAccepted" && newData?.value?.status != "QuoteRejected" && newData?.value?.status != "QuoteExpired" &&
+          {updatedQuoteDetail?.value?.status != "Quoted" && updatedQuoteDetail?.value?.status != "QuoteAccepted" && updatedQuoteDetail?.value?.status != "QuoteRejected" && updatedQuoteDetail?.value?.status != "QuoteExpired" &&
             <div className="flex flex-col mt-4">
               <button className="px-4 py-3 w-full border bg-[#2d4d9c] border-[#2d4d9c] text-white rounded hover:bg-[#2d4d9c] hover:text-white disabled:bg-gray-300"
                 onClick={() => {

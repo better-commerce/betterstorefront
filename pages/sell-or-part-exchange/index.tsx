@@ -77,97 +77,96 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
 
   const fetchData = useCallback(
     useDebounce(async (searchText: any) => {
-      if (!searchText) return; // Prevent unnecessary API calls for empty text
-
-      setIsLoadingDots(true); // Start loading
+      if (!searchText) return;
+      setIsLoadingDots(true);
 
       try {
-        const { data }: any = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText });
+        const { data } = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText });
         setProducts(data);
       } catch (error) {
         logError(error);
       } finally {
-        setIsLoadingDots(false); // Stop loading
+        setIsLoadingDots(false);
       }
     }, 300),
     []
   );
 
-  const onChangeSearch = (e: any, id: number) => {
+  const onChangeSearch = (e: any, id: any) => {
     const value = e.target.value;
 
-    setSearchText((v: any) => ({
-      ...v,
+    setSearchText((prev) => ({
+      ...prev,
       [id]: value,
     }));
 
-    if (!value || value.length === 0 || value.length >= 2) {
+    if (!value || value.length >= 2) {
       fetchData(value);
     }
   };
 
-  const setSuccessMessage = (data?: any) => {
-    if (data) {
-      setMessage(data)
-    }
-    // Automatically clear the message after 10 seconds
-    setTimeout(() => {
-      setMessage("");
-    }, 4000);
-  }
+  const setSuccessMessage = (data = "") => {
+    setMessage(data);
+    setTimeout(() => setMessage(""), 4000);
+  };
 
-  const handleNextStep = (data?: any) => {
-    if (data) {
-      setQuoteData(data);
-    }
+  const handleNextStep = (data: any) => {
+    if (data) setQuoteData(data);
     setCurrentStep((prev) => prev + 1);
   };
+
   const handleAccessoryClick = (index: number) => {
-    setSelectedAccIndexes(prev =>
-      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    setSelectedAccIndexes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
+
   const nextStep = () => {
     if (currentStep < data?.steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
-  const showStores = () => {
-    setShowDpdStore(true)
-  }
+  const showStores = () => setShowDpdStore(true);
 
   useEffect(() => {
-    const currentCurrency = getCurrentCurrency()
+    const currentCurrency = getCurrentCurrency();
     if (!matchStrings(currencyCode, currentCurrency, true)) {
       axios
-        .post('/api/page-preview-content', {
-          id: '',
+        .post("/api/page-preview-content", {
+          id: "",
           slug: TRADE_IN_PAGE_SLUG,
-          workingVersion: process.env.NODE_ENV === 'production' ? true : true,
-          channel: isMobile ? 'MobileWeb' : 'Web',
+          workingVersion: process.env.NODE_ENV === "production",
+          channel: isMobile ? "MobileWeb" : "Web",
           cachedCopy: true,
           currencyCode,
         })
-        .then((res: any) => {
-          if (res?.data) setPageContents(res?.data)
-        })
-      setCurrentCurrency(currencyCode)
+        .then((res) => res?.data && setPageContents(res.data));
+
+      setCurrentCurrency(currencyCode);
     }
-  }, [currencyCode, isMobile])
+  }, [currencyCode, isMobile]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window?.ch_session) {
-      window.ch_index_page_view_before({ item_id: "index", bc_user_id: user?.userId || EmptyGuid })
+      window.ch_index_page_view_before({
+        item_id: "index",
+        bc_user_id: user?.userId || EmptyGuid,
+      });
     }
-  }, [])
+  }, []);
 
-  useAnalytics(AnalyticsEventType.PAGE_VIEWED, { ...pageContents, entityName: PAGE_TYPES.Home, })
+  useAnalytics(AnalyticsEventType.PAGE_VIEWED, {
+    ...pageContents,
+    entityName: PAGE_TYPES.Home,
+  });
 
   if (!pageContents) {
     return (
-      <div className="flex w-full text-center flex-con"> <Loader /> </div>
-    )
+      <div className="flex w-full text-center flex-con">
+        <Loader />
+      </div>
+    );
   }
 
   const startNewTrade = () => {
@@ -176,29 +175,27 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     setSearchText({});
     setProducts([]);
     setCurrentStep(0);
-    updateQueryParams(router, {}, ['quoteId'])
+    updateQueryParams(router, {}, ["quoteId"]);
   };
 
-  const fetchUpdatedQuoteDetails = async (quoteId: string) => {
+  const fetchUpdatedQuoteDetails = async (quoteId: any) => {
+    setIsLoading(true);
     try {
-      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } });
-      setQuoteData(quoteResult?.data);
-
-      // Determine the correct step in a single state update
-      const hasStreet = quoteResult?.data?.value?.street != null;
-      setCurrentStep(hasStreet ? 4 : 2);
-
-      setIsLoading(false);
+      const { data } = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, {
+        data: { id: quoteId },
+      });
+      setQuoteData(data);
+      setCurrentStep(data?.value?.street ? 4 : 2);
     } catch (error) {
       logError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-
   useEffect(() => {
     if (router.query?.quoteId) {
-      setIsLoading(true)
-      fetchUpdatedQuoteDetails(router.query?.quoteId as string);
+      fetchUpdatedQuoteDetails(router.query?.quoteId);
     }
   }, [router.query?.quoteId]);
 
