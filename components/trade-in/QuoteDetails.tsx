@@ -1,4 +1,3 @@
-import { TradeInItemCondition } from "@components/utils/constants";
 export default function QuoteDetails({ data, quoteData, startNewTrade }: any) {
   return (
     <>

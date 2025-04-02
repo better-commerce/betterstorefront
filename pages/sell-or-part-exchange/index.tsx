@@ -100,7 +100,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       [id]: value,
     }));
 
-    if (!value || value.length >= 2) {
+    if (!value || value.length > 2) {
       fetchData(value);
     }
   };
@@ -249,7 +249,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
             <div className="flex flex-col justify-start gap-4">
               {data?.steps[currentStep]?.step === TradeInSteps.ENTER_ITEM &&
                 <AddItems
-                  searchText={searchText}
                   onChangeSearch={onChangeSearch}
                   selectedItems={selectedItems}
                   products={products}

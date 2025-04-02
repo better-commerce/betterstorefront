@@ -1,10 +1,10 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import TradeInLogin from "@components/shared/Login/TradeInLogin";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
-import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GUEST_CHECKOUT, NEXT_TRADE_IN_GUEST_LOGIN, NEXT_TRADE_IN_LOGIN_USER, TradeInItemCondition } from "@components/utils/constants";
+import { NEXT_TRADE_IN_GUEST_LOGIN, NEXT_TRADE_IN_LOGIN_USER, TradeInItemCondition } from "@components/utils/constants";
 import Loader from "@components/Loader";
 import { updateQueryParams } from "framework/utils/app-util";
 import { logError } from "@framework/utils/app-util";
@@ -13,11 +13,8 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
   const router = useRouter();
   const { user } = useUI();
   const [showGuestForm, setShowGuestForm] = useState(false);
-  const [quoteDetails, setQuoteDetails] = useState<any>(null);
-  const [guestDetail, setGuestDetails] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false);
   const [guestData, setGuestData] = useState({ firstName: "", lastName: "", email: "", phone: "" });
-
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,28 +43,12 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
     [TradeInItemCondition.GOOD]: 4,
     [TradeInItemCondition.WELL_USED]: 5,
   };
-
-  const fetchQuoteDetails = async (quoteId: string) => {
-    try {
-      const { data } = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } });
-      setQuoteDetails(data);
-      nextSteps(data);
-    } catch (error) {
-      logError(error)
-    }
-  };
-
   const submitGuestRequest = async () => {
     if (!validateGuestForm()) return;
     setIsLoading(true);
     try {
-
       // Getting User Token API calls
-
       const { data: guestLoginResult }: any = await axios.post(NEXT_TRADE_IN_GUEST_LOGIN, { data: { ...guestData } });
-      if (guestLoginResult) {
-        setGuestDetails(guestLoginResult);
-      }
       // END Getting User Token API calls
 
       const items = selectedItems?.map(({ selectedProductData, selectedCondition, selectedAccessories }: any) => ({
@@ -76,15 +57,11 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
         conditions: conditionLabels[selectedCondition?.conditionName] || 0,
         accessories: selectedAccessories || [],
       }));
-
-
       const { data: quoteId } = await axios.post(NEXT_TRADE_IN_LOGIN_USER, { data: { customerId: guestLoginResult?.userId, items } });
-
       updateQueryParams(router, { quoteId });
       if (quoteId) {
         setSuccessMessage("Quote created successfully!!!");
       }
-      await fetchQuoteDetails(quoteId);
     } catch (error) {
       logError(error)
     } finally {

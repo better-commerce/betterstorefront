@@ -13,7 +13,7 @@ const conditionOrder = [
   TradeInItemCondition.WELL_USED,
 ];
 
-export default function AddItems({ products, images, onChangeSearch, searchText, nextStep, setSelectedItems, selectedItems, isLoadingDots }: any) {
+export default function AddItems({ products, images, onChangeSearch, nextStep, setSelectedItems, selectedItems, isLoadingDots }: any) {
   const [items, setItems] = useState<any>([{ searchTerm: "", selectedProductData: "", selectedProduct: "", selectedProductImage: "", selectedProductPrice: "", selectedProductCurrency: "", selectedCondition: null, selectedAccessories: [] }]);
   const [isOpen, setOpen] = useState(false)
   const [isNextDisabled, setIsNextDisabled] = useState(true);
@@ -49,18 +49,7 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
     setItems(newItems);
   };
 
-  const noProduct = [
-    {
-      "id": "5129609e-11c4-4ee8-adc8-0b5f8c68ebbe",
-      "stockCode": "DP000001",
-      "name": "Place Holder Product",
-      "categoryId": "d6a77d88-3f64-42eb-9ff3-7b9b6f80338b",
-      "image": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/no-image.svg",
-      "accessories": [],
-      "conditions": [],
-      "checklist": []
-    }
-  ]
+  const noProduct = [{ id: "5129609e-11c4-4ee8-adc8-0b5f8c68ebbe", stockCode: "DP000001", name: "Place Holder Product", categoryId: "d6a77d88-3f64-42eb-9ff3-7b9b6f80338b", image: "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/no-image.svg", accessories: [], conditions: [], checklist: [] }]
 
   useEffect(() => {
     const valid = items.length > 0 && items.every((item: any) => {
@@ -109,7 +98,6 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
                 placeholder="Please search and Select Your Model"
               />
 
-              {/* Show loading indicator when fetching products (after 2 characters) */}
               {item?.searchTerm?.length > 2 && isLoadingDots && (
                 <div className="absolute z-10 w-full p-2 text-center text-gray-500 bg-white border border-gray-300 shadow-lg top-12">
                   <LoadingDots />
@@ -119,22 +107,16 @@ export default function AddItems({ products, images, onChangeSearch, searchText,
               {/* Show search results only when searchTerm > 2 characters & loading is done */}
               {item?.searchTerm?.length > 2 && !isLoadingDots && (() => {
                 // Get all selected product IDs
-                const selectedProductIds = items
-                  .map((i: any) => i?.selectedProductData?.id)
-                  .filter(Boolean);
+                const selectedProductIds = items.map((i: any) => i?.selectedProductData?.id).filter(Boolean);
 
                 // Filter products that are NOT already selected
-                let filteredProducts = (products || []).filter(
-                  (p: any) =>
-                    p?.name?.toLowerCase().includes(item?.searchTerm?.toLowerCase()) &&
-                    !selectedProductIds.includes(p.id) // Exclude already selected products
-                );
+                let filteredProducts = (products || []).filter((p: any) => p?.name?.toLowerCase().includes(item?.searchTerm?.toLowerCase()) && !selectedProductIds.includes(p.id));
 
                 // If no products are found, use the dummy product with searched text
                 if (!products || filteredProducts.length === 0) {
                   filteredProducts = noProduct.map((dummy) => ({
                     ...dummy,
-                    name: item?.searchTerm, // Replace name with searched text
+                    name: item?.searchTerm,
                   }));
                 }
 
