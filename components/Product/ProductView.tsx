@@ -43,6 +43,7 @@ import { CURRENT_THEME } from "@components/utils/constants";
 import ReviewBadge from './ReviewBadge'
 import LongDescription from './LongDescription'
 import PricesWithDiscount from '@components/PricesWithDiscount'
+import TabProductCompare from './TabProductCompare'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/productDetails'))
 const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
@@ -1008,6 +1009,24 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               );
             })}
           </div>
+        </div>
+      )
+    },
+    tabProducts?.COMPARE && {
+      id: 'Compare',
+      label: 'Compare',
+      content: (
+        <div className="space-y-4">
+          <TabProductCompare products={tabProducts?.COMPARE} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} />
+        </div>
+      )
+    },
+    tabProducts?.["KITS AND BUNDLES"] && {
+      id: 'Kits and bundles',
+      label: 'Kits and bundles',
+      content: (
+        <div className="space-y-4">
+          <TabProductCard products={tabProducts?.["KITS AND BUNDLES"]} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
         </div>
       )
     },
