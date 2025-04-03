@@ -49,7 +49,7 @@ export default function AddItems({ products, images, onChangeSearch, nextStep, s
     setItems(newItems);
   };
 
-  const noProduct = [{ id: "5129609e-11c4-4ee8-adc8-0b5f8c68ebbe", stockCode: "DP000001", name: "Place Holder Product", categoryId: "d6a77d88-3f64-42eb-9ff3-7b9b6f80338b", image: "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/no-image.svg", accessories: [], conditions: [], checklist: [] }]
+  const noProduct = [{ id: "455857b8-1b04-4961-b2ad-90125da7522c", stockCode: "DP000001", name: "Place Holder Product", categoryId: "c1d81a2c-dbbd-4f29-9af0-79a15bc8b791", image: "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/no-image.svg", accessories: [], conditions: [], checklist: [] }]
 
   useEffect(() => {
     const valid = items.length > 0 && items.every((item: any) => {
