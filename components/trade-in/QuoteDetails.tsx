@@ -1,3 +1,5 @@
+import { TradeInItemCondition } from "@components/utils/constants";
+
 export default function QuoteDetails({ data, quoteData, startNewTrade }: any) {
   return (
     <>
@@ -31,7 +33,13 @@ export default function QuoteDetails({ data, quoteData, startNewTrade }: any) {
                     {item?.condition != "" &&
                       <span className="text-xs text-left text-gray-600">
                         <strong>Condition: </strong>
-                        {item?.condition == 1 ? "Like New" : item?.condition == 2 ? "Excellent" : item?.condition == 3 ? "Very Good" : item?.condition == 4 ? "Good" : item?.condition == 5 ? "Well Used" : ""}
+                        {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                          item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                            item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                              item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                  'N/A'
+                        }
                       </span>
                     }
                     {item?.accessories?.length > 0 && (

@@ -196,13 +196,20 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
                   <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
                     <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
                     <div className='flex flex-col justify-center w-full gap-1 text-left'>
-                      <span className="font-semibold text-left text-black">{item?.parentProductName} <span className="text-xs font-medium text-black">({item?.parentStockCode})</span></span>
-                      {item?.condition != "" &&
-                        <span className="text-xs text-left text-gray-600">
-                          <strong>Condition: </strong>
-                          {item?.condition == 1 ? "Like New" : item?.condition == 2 ? "Excellent" : item?.condition == 3 ? "Very Good" : item?.condition == 4 ? "Good" : item?.condition == 5 ? "Well Used" : ""}
-                        </span>
-                      }
+                      <span className="font-semibold text-left text-black">
+                        {item?.parentProductName}{" "}
+                        <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                      </span>
+                      <span className="text-xs text-left text-gray-600">
+                        <strong>Condition: </strong>
+                        {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                          item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                            item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                              item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                  'N/A'
+                        }
+                      </span>
                       {item?.accessories?.length > 0 && (
                         <span className="text-xs text-left text-gray-600">
                           <strong>Accessories: </strong>

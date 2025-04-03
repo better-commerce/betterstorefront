@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from "react";
 import Loader from "@components/Loader";
-import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType } from "@components/utils/constants";
+import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, TradeInItemCondition } from "@components/utils/constants";
 import Link from 'next/link';
 import { logError } from '@framework/utils/app-util';
 import { LoadingDots } from '@components/ui';
@@ -129,7 +129,13 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                             {item?.condition != "" &&
                               <span className="text-xs text-left text-gray-600">
                                 <strong>Condition: </strong>
-                                {item?.condition == 1 ? "Like New" : item?.condition == 2 ? "Excellent" : item?.condition == 3 ? "Very Good" : item?.condition == 4 ? "Good" : item?.condition == 5 ? "Well Used" : ""}
+                                {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                                  item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                    item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                      item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                        item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                          'N/A'
+                                }
                               </span>
                             }
 
