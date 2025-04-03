@@ -2,7 +2,7 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
-import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon } from '@heroicons/react/24/outline'
+import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon, WalletIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
 import { ArrowPathRoundedSquareIcon, BookOpenIcon, ClipboardDocumentListIcon, HeartIcon, ListBulletIcon, QueueListIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
@@ -228,14 +228,25 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
     }
     if (featureToggle?.features?.enableTradeIn) {
       newConfig.push({
-       type: 'tab',
-       text: 'Trade In',
-       mtext: 'Trade In',
-       props: 'tradein',
-       head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
-       href: '/my-account/tradein',
-       displayOrder: 14
-     })
+        type: 'tab',
+        text: 'Trade In',
+        mtext: 'Trade In',
+        props: 'tradein',
+        head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        href: '/my-account/tradein',
+        displayOrder: 14
+      })
+    }
+    if (featureToggle?.features?.enableWallet) {
+      newConfig.push({
+        type: 'tab',
+        text: 'My Wallet',
+        mtext: 'My Wallet',
+        props: 'wallet',
+        head: <WalletIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        href: '/my-account/wallet',
+        displayOrder: 15
+      })
     }
   }
   return (

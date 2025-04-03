@@ -16,7 +16,7 @@ module.exports = withCommerceConfig({
     instrumentationHook: true,
   },
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech','cdn.shopify.com'],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech', 'cdn.shopify.com'],
     cacheDuration: 31536000,
   },
   //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',  
@@ -102,6 +102,7 @@ module.exports = withCommerceConfig({
     PRODUCT_IMAGE_CDN_URL: process.env.PRODUCT_IMAGE_CDN_URL,
     OMNILYTICS_BASE_URL: process.env.OMNILYTICS_BASE_URL,
     TRADE_IN_BASE_URL: process.env.TRADE_IN_BASE_URL,
+    DIGITAL_WALLET_BASE_URL: process.env.DIGITAL_WALLET_BASE_URL,
     ENABLE_ELASTIC_SEARCH: process.env.ENABLE_ELASTIC_SEARCH,
     SEARCH_ENGINE_CONFIG: process.env.SEARCH_ENGINE_CONFIG,
     SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,

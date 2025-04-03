@@ -30,6 +30,7 @@
     "enableB2BHeader": false,
     "enableToolsHome":false,
     "enableTradeIn": true,
+    "enableWallet": true,
     "enableBottomTabsSection":true
   },
   "social":[
