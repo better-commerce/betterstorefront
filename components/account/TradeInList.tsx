@@ -60,7 +60,7 @@ export default function TradeInTable() {
     RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
   };
 
-  const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 10, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
+  const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 20, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
   const fetchAllTrades = async (page = 1) => {
     setIsLoading(true)
     try {
