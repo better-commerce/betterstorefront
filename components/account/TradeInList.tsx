@@ -5,8 +5,9 @@ import axios from "axios";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Loader from "@components/Loader";
-import { AssessmentStatus, NEXT_TRADE_IN_CUSTOMER_TRADES, QuoteItemStatus, QuoteStatus } from "@components/utils/constants";
+import { AssessmentStatus, DATE_FORMAT, NEXT_TRADE_IN_CUSTOMER_TRADES, QuoteItemStatus, QuoteStatus } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
+import moment from "moment";
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
 
 export default function TradeInTable() {
@@ -115,7 +116,8 @@ export default function TradeInTable() {
                         </span>
                       </td>
                       <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
-                      <td className="px-4 py-2 text-sm text-right border">{new Date(item.created).toLocaleDateString()}</td>
+                      <td className="px-4 py-2 text-sm text-right border">
+                        {moment(new Date(item.created)).format(DATE_FORMAT)}</td>
                       <td className="px-4 py-2 text-right border">
                         <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">View Details</Link>
                       </td>
@@ -124,7 +126,7 @@ export default function TradeInTable() {
                 </tbody>
               </table>
             </div>
-            <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />
+            {paginationState.pageCount > 1 && <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />}
             <p className="mt-6 text-xs text-left text-gray-600">
               We hope you like our new Trade In section of our website. We're still working on improvements, but if you spot something that's not working as expected, please send us an email with screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
               If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
