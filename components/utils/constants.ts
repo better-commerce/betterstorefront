@@ -277,6 +277,16 @@ export const TRADE_IN_GET_STORES = `/api/stores`
 export const TRADE_IN_GET_CUSTOMER = `/api/customers`
 export const TRADE_IN_GET_ASSESSMENT_STATUS = `/api/assessments`
 
+// WALLET NEXT APP ENDPOINTS 
+
+export const NEXT_WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable-customer-wallet`
+export const NEXT_WALLET_GET_CUSTOMER_WALLET = `/api/wallet/get-customer-wallet`
+export const NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS = `/api/wallet/get-customer-wallet-transaction`
+
+//TRADE IN JOURNEY API ENDPOINTS
+export const WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable`
+export const WALLET_GET_CUSTOMER_WALLET = `/api/wallet`
+
 
 //CONSTANTS
 

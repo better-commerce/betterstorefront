@@ -11,7 +11,7 @@ import LayoutAccount from '@components/Layout/LayoutAccount'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
-import WalletTable from '@components/account/WalletList'
+import WalletDetail from '@components/account/WalletDetail'
 
 function Wallet() {
   const [isShow, setShow] = useState(true)
@@ -45,7 +45,7 @@ function Wallet() {
 
   return (
     <div className={'bg-white dark:bg-transparent'}>
-      <WalletTable />
+      <WalletDetail />
     </div>)
 }
 
