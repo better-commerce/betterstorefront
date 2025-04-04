@@ -163,7 +163,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                       {featureToggle?.features?.enableTradeIn &&
                         <div className="relative flex flex-col items-center justify-center px-1 text-left group mob-line-height-none sm:pr-10">
                           <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
-                            <img src="/theme/camera/image/trade-in-icon.svg" className="w-8 !fill-white trade-icon h-auto mx-auto" alt="Trade In"/>
+                            <img src="/theme/camera/image/trade-in-icon.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Trade In"/>
                             <span className="text-xs font-light">Discover Trade-In</span>
                           </Link>
                         </div>
