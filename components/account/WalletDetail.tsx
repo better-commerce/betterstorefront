@@ -2,10 +2,11 @@
 import Loader from '@components/Loader';
 import { LoadingDots } from '@components/ui';
 import { useUI } from '@components/ui/context'
-import { NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, NEXT_WALLET_ENABLE_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS } from "@components/utils/constants";
+import { DATE_FORMAT, NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, NEXT_WALLET_ENABLE_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
 import { WalletIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
+import moment from 'moment';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from "react";
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
@@ -18,7 +19,7 @@ export default function WalletDetail() {
   const [walletDetail, setWalletDetail] = useState<any>({})
   const [walletTransactions, setWalletTransaction] = useState<any>({})
   const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 1, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
-  const { user } = useUI()
+  const { user, setUser } = useUI()
   const handleEnableWallet = async () => {
     setIsLoading(true);
     try {
@@ -27,8 +28,9 @@ export default function WalletDetail() {
         await axios.post(NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, { id: user.userId, walletId: walletResult?.value });
         setWalletEnabled(true);
         setSuccessMessage("Your Wallet enabled successfully!!!");
-        if (user?.userId && user.walletId) {
-          const walletId = user.walletId;
+        setUser({ ...user, walletId: walletResult?.value })
+        if (walletResult?.value) {
+          const walletId = walletResult?.value;
           getWallet(walletId);
         }
         setTimeout(() => {
@@ -129,7 +131,7 @@ export default function WalletDetail() {
               <div className="w-full mx-auto bg-white">
                 <div className="p-4 mb-6 text-center bg-gray-100 rounded-lg">
                   <h3 className="text-lg font-medium">Wallet Current Balance</h3>
-                  <p className="text-3xl font-bold text-sky-500">{walletDetail?.currency == "GBP" ? '£' : '$'}{walletDetail?.balance}</p>
+                  <p className="text-3xl font-bold text-sky-500">{walletDetail?.currency == "GBP" ? '£' : ''}{walletDetail?.balance}</p>
                 </div>
                 <h3 className="mb-3 text-lg font-medium">Transaction History</h3>
                 {isLoadingTransactions && <Loader />}
@@ -139,7 +141,7 @@ export default function WalletDetail() {
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">
-                            <th className="p-2 font-semibold text-left border font-sm">Event</th>
+                            <th className="p-2 font-semibold text-left border font-sm">Date</th>
                             <th className="p-2 font-semibold text-left border font-sm">Type</th>
                             <th className="p-2 font-semibold text-left border font-sm">Reference</th>
                             <th className="p-2 font-semibold text-right border font-sm">Amount</th>
@@ -148,7 +150,7 @@ export default function WalletDetail() {
                         <tbody className='bg-white divide-y divide-gray-200'>
                           {walletTransactions?.items.map((txn: any, index: number) => (
                             <tr key={index} className="text-sm bg-white border-b shadow-none border-slate-200 hover:shadow hover:bg-gray-100">
-                              <td className="p-2 border">{txn.eventCode}</td>
+                              <td className="p-2 border">{moment(new Date(txn.createdOn)).format(DATE_FORMAT)}</td>
                               <td className="p-2 border">{txn.transactionType}</td>
                               <td className="p-2 border">{txn.transactionRef}</td>
                               <td className={`border p-2 text-right font-semibold ${txn.transactionType === "Credit" ? "text-green-600" : "text-red-600"}`} >
