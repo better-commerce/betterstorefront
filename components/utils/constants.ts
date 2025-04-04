@@ -282,11 +282,12 @@ export const TRADE_IN_GET_ASSESSMENT_STATUS = `/api/assessments`
 export const NEXT_WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable-customer-wallet`
 export const NEXT_WALLET_GET_CUSTOMER_WALLET = `/api/wallet/get-customer-wallet`
 export const NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS = `/api/wallet/get-customer-wallet-transaction`
+export const NEXT_WALLET_ASSOCIATE_TO_CUSTOMER = `/api/wallet/associate-customer-wallet`
 
 //TRADE IN JOURNEY API ENDPOINTS
 export const WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable`
 export const WALLET_GET_CUSTOMER_WALLET = `/api/wallet`
-
+export const WALLET_WALLET_ASSOCIATE_TO_CUSTOMER = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer`
 
 //CONSTANTS
 

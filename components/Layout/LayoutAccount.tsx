@@ -202,7 +202,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
             <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-32">
               <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
                 <div className='sticky z-10 top-7 sm:top-12 sm:col-span-3'>
-                  <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                  <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} config={config} />
                 </div>
                 <div className='pt-0 sm:col-span-9 sm:pt-5 z-1'> {children} </div>
               </div>

@@ -2,23 +2,31 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
+import { stringToBoolean } from '@framework/utils/parse-util'
 import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon, WalletIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
 import { ArrowPathRoundedSquareIcon, BookOpenIcon, ClipboardDocumentListIcon, HeartIcon, ListBulletIcon, QueueListIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
 
-function SideMenu({ deviceInfo, featureToggle }: any) {
-  const config = useConfig();
+function SideMenu({ deviceInfo, featureToggle, config }: any) {
+  const configNew = useConfig();
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, referralProgramActive, myAccountActiveTab } = useUI()
   let isB2B = user?.companyId !== Guid.empty
+  const allowEnableWallet =
+    stringToBoolean(
+      config?.configSettings
+        ?.find((x: any) => x.configType === 'DomainSettings')
+        ?.configKeys?.find((x: any) => x.key === 'DomainSettings.EnableWallet')
+        ?.value || ''
+    )
   let newConfig: any = []
-  if (config && typeof window !== 'undefined') {
-    const hasMyCompany = config.some(
+  if (configNew && typeof window !== 'undefined') {
+    const hasMyCompany = configNew.some(
       (item: any) => item?.props === 'my-company'
     )
-    const hasReferral = config.some(
+    const hasReferral = configNew.some(
       (item: any) => item?.props === 'refer-a-friend'
     )
     newConfig = [
@@ -104,7 +112,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
     if (!isB2B) {
       if (referralProgramActive) {
         if (!hasReferral) {
-          newConfig = [...config]
+          newConfig = [...configNew]
           newConfig.push({
             type: 'tab',
             text: translate('label.myAccount.referAFriendText'),
@@ -116,7 +124,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           })
         }
       } else {
-        newConfig = [...config]
+        newConfig = [...configNew]
       }
     } else if (!hasMyCompany) {
       newConfig.push(
@@ -237,7 +245,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         displayOrder: 14
       })
     }
-    if (featureToggle?.features?.enableWallet) {
+    if (allowEnableWallet) {
       newConfig.push({
         type: 'tab',
         text: 'My Wallet',
