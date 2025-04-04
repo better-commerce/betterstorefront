@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { AnalyticsEventType } from "@components/services/analytics";
 import useAnalytics from "@components/services/analytics/useAnalytics";
 import { isMicrosite } from "@commerce/utils/uri-util";
+import { CameraIcon } from "@heroicons/react/24/outline";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -162,6 +163,14 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                               </span>
                             )}
                           </button>
+                        </div>
+                      }
+                      {featureToggle?.features?.enableTradeIn &&
+                        <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none">
+                          <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
+                            <img src="/theme/camera/image/trade-in-icon.svg" className="w-8 !fill-white trade-icon h-auto mx-auto" alt="Trade In" />
+                            <span className="text-xs font-light">Discover Trade-In</span>
+                          </Link>
                         </div>
                       }
                       <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />

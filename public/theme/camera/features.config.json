@@ -24,7 +24,7 @@
     "enableCustomHomeWidget":false,
     "enableFullBanner":true,
     "enableCustomToolWidget": false,
-    "enableSeparateMenu": false,
+    "enableSeparateMenu": true,
     "enableRichPdpToggle": true,
     "enableAddButtonBottom": true,
     "enableB2BHeader": false,
