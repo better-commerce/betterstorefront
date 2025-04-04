@@ -102,7 +102,7 @@ export default function WalletDetail() {
       isLoadingWallet ? <Loader /> :
         <>
           {successMessage &&
-            <div className='fixed z-10 top-24 right-4'>
+            <div className='fixed z-10 top-32 right-4'>
               <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-500'>{successMessage}</span>
             </div>
           }
