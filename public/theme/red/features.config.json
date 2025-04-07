@@ -28,7 +28,8 @@
     "enableTradeIn": false,
     "enableWallet": false,
     "enableBottomTabsSection":false,
-    "enablePCHome":false
+    "enablePCHome":false,
+    "enablePCTopHeader":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

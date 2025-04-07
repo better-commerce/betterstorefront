@@ -9,11 +9,12 @@ import { matchStrings, stringToBoolean } from "@framework/utils/parse-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { IExtraProps } from "@components/Layout/Layout";
 import EngagePromoBar from '@components/SectionEngagePanels/EngagePromoBar';
-import { CameraIcon, HeartIcon, StarIcon } from "@heroicons/react/24/outline";
+import { CameraIcon, ChevronDownIcon, HeartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { AnalyticsEventType } from "@components/services/analytics";
 import useAnalytics from "@components/services/analytics/useAnalytics";
 import { isMicrosite } from "@commerce/utils/uri-util";
+import NavigationRows from "@components/shared/Navigation/NavigationRows";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -98,24 +99,61 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
       <>
         <div className={`top-0 td-header bg-header-clr fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>
           {!isMobile &&
-            <div className="justify-between hidden sm:flex bg-top-toggle">
-              <div className="container mx-auto">
-                <div className="promotion-banner mob-marquee"></div>
-                <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
-                  {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
-                  {featureToggle?.features?.enablePriceIncVatToggle &&
-                    <>
-                      <div className="flex flex-col py-0 text-xs font-medium text-black text-invert sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
-                      <div className="flow-root w-10 px-2 sm:w-12">
-                        <div className="flex justify-center flex-1 mx-auto">
-                          <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
-                        </div>
+            <>
+              {featureToggle?.features?.enablePCTopHeader ? <>
+                <div className="justify-between hidden sm:flex bg-top-toggle">
+                  <div className="container mx-auto">
+                    <div className="flex justify-between w-full">
+                      <div className="flex items-center justify-start">
+                        <span className="flex items-center text-xs font-light text-white">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
+                        <span className="pl-4 text-xs font-light text-white">Call us 01444 237070</span>
                       </div>
-                    </>
-                  }
+                      <div className="flex items-center justify-end gap-4">
+                        {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
+                        {featureToggle?.features?.enablePriceIncVatToggle &&
+                          <>
+                            <div className="flex flex-col py-0 text-xs font-light text-white text-invert sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
+                            <div className="flow-root w-10 px-2 sm:w-12">
+                              <div className="flex justify-center flex-1 mx-auto">
+                                <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
+                              </div>
+                            </div>
+                          </>
+                        }
+                        <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
+                        <span className="relative flex items-center gap-1 pl-4 text-xs font-light text-white cursor-pointer hover:underline" onClick={() => { handleWishlist(); }}>Wishlist <HeartIcon className="w-4 h-4" aria-hidden="true" aria-label="Wishlist" />
+                          {wishListItems?.length > 0 && delayEffect && (
+                            <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
+                              {wishListItems?.length}
+                            </span>
+                          )}
+                        </span>
+                        <CartDropdown featureToggle={featureToggle} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </> :
+                <div className="justify-between hidden sm:flex bg-top-toggle">
+                  <div className="container mx-auto">
+                    <div className="promotion-banner mob-marquee"></div>
+                    <div className="container flex justify-end w-full px-1 pt-1 mx-auto">
+                      {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
+                      {featureToggle?.features?.enablePriceIncVatToggle &&
+                        <>
+                          <div className="flex flex-col py-0 text-xs font-medium text-black text-invert sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
+                          <div className="flow-root w-10 px-2 sm:w-12">
+                            <div className="flex justify-center flex-1 mx-auto">
+                              <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
+                            </div>
+                          </div>
+                        </>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </>
           }
           {featureToggle?.features?.enableSeparateMenu ? (
             <>
@@ -163,7 +201,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                       {featureToggle?.features?.enableTradeIn &&
                         <div className="relative flex flex-col items-center justify-center px-1 text-left group mob-line-height-none sm:pr-10">
                           <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
-                            <img src="/theme/camera/image/trade-in-icon.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Trade In"/>
+                            <img src="/theme/camera/image/trade-in-icon.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Trade In" />
                             <span className="text-xs font-light">Discover Trade-In</span>
                           </Link>
                         </div>
@@ -181,7 +219,11 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                 {!isMobile &&
                   <div className="w-full mt-2 bg-header-nav-clr">
                     <div className="container flex-[2] justify-center lg:flex custom-padding-nav">
-                      <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                      {featureToggle?.features?.enablePCHome ? (<>
+                        <NavigationRows subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                      </>) : (<>
+                        <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                      </>)}
                     </div>
                   </div>
                 }
@@ -202,7 +244,11 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                 </div>
                 {!isMobile &&
                   <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
-                    <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                    {featureToggle?.features?.enablePCHome ? (<>
+                      <NavigationRows subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                    </>) : (<>
+                      <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
+                    </>)}
                   </div>
                 }
 
