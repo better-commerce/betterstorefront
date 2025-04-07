@@ -32,7 +32,9 @@
     "enableTradeIn": true,
     "enableWallet": true,
     "enableBottomTabsSection":true,
-    "enablePCHome":true
+    "enablePCHome":true,
+    "enableBannerLogin":true,
+    "enableInputLabel":true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

@@ -248,8 +248,13 @@ const ShippingAddressForm: React.FC<any> = ({
               onSubmit={handleGuestWithAddressSubmit}
               className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
             >
-              <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">
+              <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12 form-container-bg">
                 <div className="relative mt-1 sm:col-span-12 custom-select">
+                 {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="country" className="text-sm">
+                      {translate('label.addressBook.selectCountryText')}
+                   </label>
+                 )}
                   <select
                     name="country"
                     value={formik.values.country}
@@ -270,6 +275,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-6">
+                {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="firstName" className="text-sm">
+                   {translate('common.label.firstNameText')}
+                   </label>
+                  )}
                   <input
                     name="firstName"
                     type="text"
@@ -285,6 +295,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-6">
+                {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="lastName" className="text-sm">
+                      {translate('common.label.lastNameText')}
+                   </label>
+                  )}
                   <input
                     name="lastName"
                     type="text"
@@ -301,6 +316,11 @@ const ShippingAddressForm: React.FC<any> = ({
                 </div>
 
                 <div className="sm:col-span-12">
+                 {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="phoneNo" className="text-sm">
+                      {translate('common.label.mobileNumText')}
+                   </label>
+                  )}
                   <input
                     name="phoneNo"
                     type="text"
@@ -351,6 +371,11 @@ const ShippingAddressForm: React.FC<any> = ({
                 </div>
 
                 <div className="sm:col-span-12">
+                 {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="companyName" className="text-sm">
+                        {translate('common.label.companyNameAndVATNumText')}
+                   </label>
+                  )}
                   <input
                     name="companyName"
                     type="text"
@@ -366,6 +391,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-12">
+                {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="address1" className="text-sm">
+                    {translate('common.label.addressLine1Text')}
+                   </label>
+                  )}
                   <input
                     name="address1"
                     type="text"
@@ -381,6 +411,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-12">
+                 {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="address2" className="text-sm">
+                     {translate('common.label.addressLine2Text')}
+                   </label>
+                  )}
                   <input
                     name="address2"
                     type="text"
@@ -396,6 +431,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-12">
+                 {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="address3" className="text-sm">
+                   {translate('common.label.addressLine3Text')}
+                   </label>
+                  )}
                   <input
                     name="address3"
                     type="text"
@@ -411,6 +451,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-6">
+                {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="city" className="text-sm">
+                     {translate('common.label.cityText')}
+                   </label>
+                  )}
                   <input
                     name="city"
                     type="text"
@@ -424,6 +469,11 @@ const ShippingAddressForm: React.FC<any> = ({
                   )}
                 </div>
                 <div className="sm:col-span-6">
+                 {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="postCode" className="text-sm">
+                     {translate('common.label.postcodeText')}
+                   </label>
+                  )}
                   <input
                     name="postCode"
                     type="text"
@@ -440,6 +490,11 @@ const ShippingAddressForm: React.FC<any> = ({
                 </div>
 
                 <div className="sm:col-span-12">
+                {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="state" className="text-sm">
+                    {translate('common.label.countyStateEtcText')}
+                   </label>
+                  )}
                   <input
                     name="state"
                     type="text"
@@ -454,9 +509,7 @@ const ShippingAddressForm: React.FC<any> = ({
                     </span>
                   )}
                 </div>
-              </div>
-
-              <div>
+                <div className='sm:col-span-12'>
                 <input
                   id="useSameForBilling"
                   name="useSameForBilling"
@@ -474,7 +527,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   {translate('label.checkout.useSameAddressForBillingText')}
                 </label>
               </div>
-
+              </div>
               <div className="grid flex-col w-full gap-2 mt-4 sm:justify-end sm:gap-2 sm:flex-row sm:flex sm:w-auto">
                 {onEditAddressToggleView && (
                   <button
@@ -486,7 +539,7 @@ const ShippingAddressForm: React.FC<any> = ({
                   </button>
                 )}
                 <button
-                  className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
+                  className="border border-black btn-full-width park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1"
                   type="submit"
                   disabled={formik.isSubmitting}
                 >

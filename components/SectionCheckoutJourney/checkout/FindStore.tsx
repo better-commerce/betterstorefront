@@ -100,7 +100,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                   <div className="check-panel">
                     <span
                       className={`rounded-check rounded-full check-address ${selectedStore?.Id === store?.Id
-                        ? 'bg-black border border-black'
+                        ? 'bg-black border border-black p-check-inpt'
                         : 'bg-white border border-gray-600'
                         }`}
                     ></span>

@@ -164,7 +164,8 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
         )
         : (
           <div className="h-auto card-summary right-panel-basket">
-            <h3 className="mb-4 font-semibold text-black">Order Summary</h3>
+            <h3 className="mb-2 font-semibold font-text-normal text-black text-bg-white">Order Summary</h3>
+            <div className='inner-card-cart'>
             {/* product list start */}
             <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
               <Disclosure defaultOpen={true}>
@@ -189,6 +190,7 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
               </h3>
             )}
             <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} promotionsUpdate={promotionsUpdate} onUpdatePromoCode={onUpdatePromoCode} />
+            </div>
           </div>
         )
       }

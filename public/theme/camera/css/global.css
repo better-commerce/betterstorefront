@@ -1148,12 +1148,12 @@ p {
   }
 
   .checkout-container {
-    width: 60% !important;
+    width: 65% !important;
     padding-right: 5rem;
   }
 
   .basket-container {
-    width: 40%;
+    width: 35% !important;
     padding-left: 3rem;
   }
 }
@@ -2310,4 +2310,88 @@ button.icon-grp .header-dark{
 }
 .icon-div-menu img.trade-icon {
   filter: invert(0) !important;
+}
+.park-bg-clr{
+  background: #2c2151;
+}
+.park-primary-bg-clr{
+  background: #294384 !important;
+}
+.park-seconday-bg-clr{
+  background: #2D4D9C !important;
+}
+.inner-card-cart{
+  background: #EAEDF5;
+  padding:10px;
+  border-radius: 5px;
+}
+.text-bg-white{
+  color: #fff !important;
+}
+.font-text-normal{
+  font-weight: 400 !important;
+}
+.container-storefront{
+  max-width: 1536px !important;
+  width: 100%;
+}
+.no-padding-container{
+  padding:0 !important;
+}
+.padding-left-20{
+  padding-left:20px !important
+}
+.btn.btn-primary.park-bg-secondary,.btn-c.btn-primary.park-bg-secondary{
+  background-color: #ACD4FF !important;
+  color: #000 !important;
+}
+.btn-start-sec{
+  justify-content: start  !important;
+}
+.filter-inver-text{
+  filter:invert(1) !important;
+}
+.btn-sm-cls{
+  width: auto  !important;
+  min-width: 120px !important;
+}
+.btn-width-auto{
+  width: auto !important;
+  min-width: 200px;
+}
+.btn-full-width{
+  width: 100% !important;
+}
+.form-container-bg{
+  background: #D9D9D9;
+  padding: 20px;
+  border-radius: 5px;
+}
+.chk-payment-btn {
+  background-color: transparent !important;
+  border: none;
+  padding: 0 !important;
+}
+.chk-payment-btn button{
+  background-color: #ACD4FF !important;
+  color: #000 !important;
+  border-radius: 5px;
+  box-shadow: none;
+}
+.custom-radio input:checked + .radio-btn.orange-border{
+  border: 2px solid #37437f !important;
+  background: #fff !important;
+}
+.p-border-clr{
+  border: 1px solid #37437f !important;
+}
+.p-bg-clr{
+  background:  #37437f !important;
+}
+.p-none{
+  display: none !important;
+}
+.p-check-inpt{
+  background:  #37437f !important;
+  border: 1px solid #37437f !important;
 }
