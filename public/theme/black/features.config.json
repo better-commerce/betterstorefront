@@ -35,7 +35,8 @@
     "enablePCHome":false,
     "enableBannerLogin":false,
     "enableInputLabel":false,
-    "enablePCTopHeader":false
+    "enablePCTopHeader":false,
+    "enableShortThankYouPage":false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
