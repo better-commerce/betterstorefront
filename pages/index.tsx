@@ -30,6 +30,8 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import DealProduct from '@components/home/DealProduct'
 import BrandList from '@components/home/BrandList'
 import BestSellerProduct from '@components/home/Bestseller'
+import { ArrowRight } from '@components/icons'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -125,25 +127,29 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
     )
   }
   const sliderRef = useRef(null);
+  const sliderRefCmp = useRef(null);
   const [isShow, setIsShow] = useState(false);
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: 6, gap: 16, bound: true,
+      perView: featureToggle?.features?.enablePCHome ? 3 : 6, gap: 16, bound: true,
       breakpoints: {
-        1280: { gap: 16, perView: 6, },
-        1279: { gap: 16, perView: 6, },
-        1023: { gap: 16, perView: 5, },
-        768: { gap: 16, perView: 4, },
+        1280: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
+        1279: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
+        1023: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
+        768: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
         500: { gap: 16, perView: 1.5, },
       },
     };
     if (!sliderRef.current) return;
 
     let slider = new Glide(sliderRef.current, OPTIONS);
+    let sliderCmf = new Glide(sliderRefCmp.current, OPTIONS);
     slider.mount();
+    sliderCmf.mount();
     setIsShow(true);
     return () => {
       slider.destroy();
+      sliderCmf.destroy();
     };
   }, [sliderRef]);
   const cleanPath = removeQueryString(router.asPath)
@@ -175,389 +181,570 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
-        {featureToggle?.features?.enableToolsHome &&
-          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
-            <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
-              {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
-                <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx == 0 ? 'bg-gray-200 text-black' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
-                  <div className='flex flex-col col-span-7 gap-5'>
-                    <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingoffers_title}</h2>
-                    <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
-                    <Link href={fo?.fixingoffers_buttonlink} legacyBehavior passHref>
-                      <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary'>{fo?.fixingoffers_buttontitle}</a>
-                    </Link>
-                  </div>
-                  <div className='col-span-5'>
-                    <img src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingoffers_title} className='object-cover w-full h-56' />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className='flex flex-col justify-center mb-6 text-center sm:mb-10'>
-              {pageContents?.fixingheading?.length > 0 && pageContents?.fixingheading?.map((heading: any, hIdx: number) => (
-                <div key={`heading-${hIdx}`} className='flex flex-col justify-center gap-4 mt-6 sm:mt-10'>
-                  <h2 className='text-3xl font-semibold text-black uppercase'>{heading?.fixingheading_title}</h2>
-                  <div className='mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12' dangerouslySetInnerHTML={{ __html: heading?.fixingheading_description }}></div>
-                </div>
-              ))}
-            </div>
-            {/* Tabs */}
-            <div className="flex justify-center gap-6 mb-4 sm:mb-10">
-              <button
-                className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
-                  }`}
-                onClick={() => setActiveTab("specialOffers")}
-              >
-                Special Offers
-              </button>
-              <button
-                className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
-                  }`}
-                onClick={() => setActiveTab("newProducts")}
-              >
-                New Products
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
-              <SectionSliderProductCard
-                deviceInfo={deviceInfo}
-                data={pageContents?.specialofferproducts}
-                heading={pageContents?.offerproductheading}
-                featureToggle={featureToggle}
-                defaultDisplayMembership={defaultDisplayMembership}
-              />
-            )}
-
-            {activeTab === "newProducts" && pageContents?.newproducts?.length > 0 && (
-              <SectionSliderProductCard
-                deviceInfo={deviceInfo}
-                data={pageContents?.newproducts}
-                heading={pageContents?.newproductheading}
-                featureToggle={featureToggle}
-                defaultDisplayMembership={defaultDisplayMembership}
-              />
-            )}
-            <div className='grid grid-cols-1 gap-6 my-6 sm:grid-cols-1 sm:my-10'>
-              {pageContents?.fixingdelivery?.length > 0 && pageContents?.fixingdelivery?.map((fo: any, fIdx: number) => (
-                <div className={`grid items-center relative justify-center grid-cols-12 gap-10 p-4 rounded mobile-flex shadow ${fIdx == 0 ? 'bg-gray-200 text-white' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
-                  <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6 text-black-clr-sec'>
-                    <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingdelivery_title}</h2>
-                    <p className='text-sm font-normal'>{fo?.fixingdelivery_shortdescription}</p>
-                    <Link href={fo?.fixingdelivery_buttonlink} legacyBehavior passHref>
-                      <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
-                    </Link>
-                  </div>
-                  <div className='absolute top-0 left-0 z-0 col-span-12 mob-static'>
-                    <img src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingdelivery_title} className='object-cover object-right w-full h-auto invert-1' />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        }
-        {featureToggle?.features?.enableCustomHomeWidget &&
+        {featureToggle?.features?.enablePCHome ?
           <>
-            {pageContents?.brandlist?.length > 0 && <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />}
-            {pageContents?.category?.length > 0 && <CategoryList data={pageContents?.category} deviceInfo={deviceInfo} />}
-            {pageContents?.featureproduct?.length > 0 &&
-              <section className="relative py-6 z-index-neg">
-                <div className="product-border-square"></div>
-                <div className="container">
-                  {pageContents?.featureheading?.map((heading: any, cdhId: number) => (
-                    <h4 className="block font-semibold uppercase text-brand-red sm:hidden" key={cdhId}>{heading?.featureheading_title}</h4>
-                  ))}
-                  <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
-                </div>
-                <div className="dot-div">
-                  <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
-                </div>
-              </section>
-            }
-            <BestSellerProduct config={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
-            {pageContents?.imagelist?.length > 0 && <ImageBanner data={pageContents?.imagelist} deviceInfo={deviceInfo} />}
-          </>
-        }
-        {pageContents?.chooselist?.length > 0 && <ChooseList info={pageContents?.whychoose} data={pageContents?.chooselist} />}
-        {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
-          <div key={dataIdx} className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
-            <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-30'>
-              <div className='flex flex-col justify-center gap-6 text-center sm:gap-10'>
-                <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
-                <div className='text-2xl font-normal text-black cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
-                <div>
-                  <Link href={redirectHref} className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
-                </div>
+            <div className='grid gap-2 sm:grid-cols-12'>
+              <div className='col-span-12 sm:col-span-8'>
+                <Hero banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} />
               </div>
-              <div className='flex flex-col sm:p-20'>
-                <img alt={data?.about_title} src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
-              </div>
-            </div>
-          </div>
-        ))}
-        {pageContents?.allcategories?.length > 0 &&
-          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
-            <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6'>
-              {pageContents?.allcategories?.map((data: any, dataIdx: number) => (
-                <div className='flex flex-col justify-center p-4 text-center rounded-lg shadow-md hover:bg-white hover:shadow-xl bg-slate-50' key={`data-${dataIdx}`}>
-                  <div className='h-60'>
-                    <img alt={data?.allcategories_name} src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-60 rounded-xl' />
-                  </div>
-                  <Link href={data?.allcategories_link} className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        }
-        {pageContents?.brandheading?.length > 0 &&
-          <div className={`container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}>
-            <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
-              {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
-                <h4 key={dataIdx} className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
-              ))}
-            </div>
-          </div>
-        }
-        {pageContents?.allbrands?.length > 0 &&
-          <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
-            <div className='grid grid-cols-2 gap-4 sm:grid-cols-6 sm:gap-6'>
-              {pageContents?.allbrands?.map((data: any, dataIdx: number) => (
-                <div className='flex flex-col justify-center p-4 text-center bg-white rounded-lg shadow-md hover:shadow-xl' key={`data-${dataIdx}`}>
-                  <div className='h-32'>
-                    <img alt={data?.allbrands_name} src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-32 rounded-xl' />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        }
-        {pageContents?.promotionbanner != "" && CURRENT_THEME == 'etag' &&
-          <div className='flex flex-col pt-10 mt-0'>
-            <img alt="Banner" src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-full' />
-          </div>
-        }
-        {CURRENT_THEME === 'etag' &&
-          <div className='flex flex-col w-full mt-10 bg-orange-600 sm:mt-20'>
-            <div className='container relative flex items-center justify-between py-4'>
-              <span className='text-sm font-normal text-white sm:text-xl'>Ready to take your order now</span>
-              <Link href="tel:02086915794" className='text-xl font-semibold text-white sm:text-5xl'>020 869 15794</Link>
-            </div>
-          </div>
-        }
-        {pageContents?.shopbygender?.length > 0 &&
-          <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
-            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-              {pageContents?.shopbygender?.map((item: any, itemIdx: number) => (
-                <div key={`banner-${itemIdx}`}>
-                  <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
-                    <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
-                      <img alt={item?.title} src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
-                      <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
-                        <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
-                        <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
+              <div className='col-span-12 sm:col-span-4'>
+                {pageContents?.usedproduct?.length > 0 && pageContents?.usedproduct?.map((usd: any, uIdx: number) => (
+                  <div className='relative flex flex-col items-center justify-center w-full gap-2 sm:min-h-[480px] py-4 overflow-hidden' key={`used-product-${uIdx}`}>
+                    <img src={generateUri(usd?.usedproduct_bgpattern, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='absolute top-0 left-0 w-full h-full z-1' />
+                    <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
+                      <h2 className='text-2xl font-bold text-gray-600 uppercase'>{usd?.usedproduct_title}</h2>
+                      <div className='mx-auto text-sm font-normal !leading-relaxed text-gray-600 text-center sm:w-10/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
+                      <div className='col-span-12'>
+                        <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-56' />
                       </div>
-                    </a>
-                  </Link>
+                      <Link href={usd?.usedproduct_primarybuttonlink} className='flex items-center justify-center gap-1 px-4 py-2 text-sm font-semibold bg-transparent border rounded border-[#294384] text-[#294384]'>{usd?.usedproduct_primarybutton} <ArrowRightIcon className='w-4 h-4' /></Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+              {pageContents?.about?.length > 0 && pageContents?.about?.map((ab: any, aIdx: number) => (
+                <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12' key={`about-${aIdx}`}>
+                  <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
+                    <div className='col-span-12'>
+                      <img src={generateUri(ab?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={ab?.about_title} className='object-cover w-full h-full' />
+                    </div>
+                  </div>
+                  <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
+                    <div className='flex flex-col justify-start w-full gap-4'>
+                      <h2 className='text-2xl font-semibold text-black'>{ab?.about_title}</h2>
+                      <div className='text-sm font-normal !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: ab?.about_description }}></div>
+                    </div>
+                  </div>
                 </div>
               ))}
-            </div>
-          </div>
-        }
-
-        {pageContents?.shopbycategory?.length > 0 &&
-          <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
-            <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
-              {pageContents?.shopbycategoryheading?.map((h: any, iIdx: number) => (
-                <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
-                  {h?.shopbycategoryheading_title}
-                </Heading>
+              {pageContents?.shopwithus?.length > 0 && pageContents?.shopwithus?.map((swu: any, sIdx: number) => (
+                <div className='grid items-center gap-4 border-b border-gray-200 sm:gap-12 sm:grid-cols-12' key={`swu-${sIdx}`}>
+                  <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
+                    <div className='flex flex-col justify-center w-full gap-4'>
+                      <h2 className='text-2xl font-semibold text-center text-black'>{swu?.shopwithus_title}</h2>
+                      <div className='text-sm mx-auto  font-normal text-center !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
+                    </div>
+                  </div>
+                  <div className='order-2 col-span-12 sm:col-span-4 sm:order-2'>
+                    <div className='col-span-12'>
+                      <img src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={swu?.shopwithus_title} className='object-cover w-full h-full' />
+                    </div>
+                  </div>
+                </div>
               ))}
-              <div className="glide__track" data-glide-el="track">
-                <ul className="glide__slides">
-                  {pageContents?.shopbycategory?.map((item: any, index: number) => (
-                    <li key={index} className={`glide__slide product-card-item home-product-card`}>
-                      <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
-                        <div className='relative flex flex-col rounded-lg'>
-                          <img alt={item?.title} src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full rounded-lg h-96' />
-                          <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/80 bottom-2 left-2 image-name-overlay'>
-                            <span className='text-lg font-semibold sm:text-xl'>{item?.title}</span>
-                            <span className='text-2xl font-semibold sm:text-3xl'>{item?.description}</span>
-                            <span>Shop Now</span>
-                          </span>
+              {pageContents?.relateditems?.length > 0 &&
+                <div className='container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10'>
+                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.relateditems} heading={pageContents?.relateditemheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              }
+              {pageContents?.featureddeal?.length > 0 &&
+                <div className='container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10'>
+                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.featureddeal} heading={pageContents?.featureditemheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              }
+              {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
+                <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
+                  {/* Background image */}
+                  <img
+                    src={generateUri(trade?.tradeinbanner_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                    className='absolute top-0 left-0 w-full h-[480px] object-cover z-0'
+                  />
+
+                  {/* Sky-blue overlay with 50% opacity */}
+                  <div className='absolute top-0 left-0 w-full h-[480px] bg-[#294384] opacity-50 z-1'></div>
+
+                  {/* Foreground content */}
+                  <div className='relative flex flex-col items-start justify-start w-full gap-10 pl-6 bg-transparent z-2 sm:pl-20'>
+                    <div className='flex flex-col justify-start w-full gap-1'>
+                      <img src="/theme/camera/image/trade-in-icon.svg" className="w-10 !fill-white trade-icon h-auto" alt="Trade In" />
+                      <h2 className='text-2xl font-semibold text-white uppercase sm:w-10/12'>{trade?.tradeinbanner_title}</h2>
+                    </div>
+                    <div
+                      className='text-sm font-normal !leading-relaxed text-white sm:w-8/12'
+                      dangerouslySetInnerHTML={{ __html: trade?.tradeinbanner_description }}
+                    ></div>
+                    <Link
+                      href={trade?.tradeinbanner_buttonlink}
+                      className='px-4 py-2 text-sm font-semibold text-[#294384] bg-white border border-[#294384] rounded'
+                    >
+                      {trade?.tradeinbanner_buttontext}
+                    </Link>
+                  </div>
+                </div>
+              ))}
+              {pageContents?.beinspiredheading?.length > 0 && pageContents?.beinspiredheading?.map((bih: any, bIdx: number) => (
+                <div className='flex flex-col justify-start w-full' key={`heading-inspired-${bIdx}`}>
+                  <h2 className='text-2xl font-semibold text-white uppercase sm:w-10/12'>{bih?.beinspiredheading_title}</h2>
+                </div>
+              ))}
+              {pageContents?.tocategoryinspired?.length > 0 &&
+                <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
+                  <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                    {pageContents?.beinspiredheading?.map((h: any, iIdx: number) => (
+                      <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.beinspiredheading_subtitle} hasNextPrev >
+                        {h?.beinspiredheading_title}
+                      </Heading>
+                    ))}
+                    <div className="glide__track" data-glide-el="track">
+                      <ul className="glide__slides">
+                        {pageContents?.tocategoryinspired?.map((item: any, index: number) => (
+                          <li key={index} className={`glide__slide product-card-item home-product-card`}>
+                            <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
+                              <div className='relative flex flex-col rounded-lg'>
+                                <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
+                                <span className='flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded'>
+                                  {item?.tocategoryinspired_title != "" && <span className='text-lg font-semibold sm:text-xl'>{item?.tocategoryinspired_title}</span>}
+                                  {item?.tocategoryinspired_description != "" &&
+                                    <div
+                                      className='text-sm font-normal !leading-relaxed text-black uppercase sm:w-10/12'
+                                      dangerouslySetInnerHTML={{ __html: item?.tocategoryinspired_description }}
+                                    ></div>}
+                                  <span>Shop Now</span>
+                                </span>
+                              </div>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              }
+              {pageContents?.tocategoryinspired?.length > 0 &&
+                <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 relative`}>
+                  <div ref={sliderRefCmp} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                    {pageContents?.competitionheading?.map((h: any, iIdx: number) => (
+                      <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.competitionheading_subtitle} hasNextPrev >
+                        {h?.competitionheading_title}
+                      </Heading>
+                    ))}
+                    <div className="glide__track" data-glide-el="track">
+                      <ul className="glide__slides">
+                        {pageContents?.competitioncard?.map((item: any, index: number) => (
+                          <li key={index} className={`glide__slide product-card-item home-product-card`}>
+                            <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
+                              <div className='relative flex flex-col rounded-lg'>
+                                <img alt={item?.competitioncard_title} src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
+                                <span className='flex flex-col w-full py-2 text-black'>
+                                  {item?.competitioncard_description != "" && <div className='w-full !text-xs pt-2 font-medium text-left text-gray-800 uppercase' dangerouslySetInnerHTML={{ __html: item?.competitioncard_description }} ></div>}
+                                </span>
+                              </div>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              }
+              {pageContents?.brands?.length > 0 &&
+                <div className='flex flex-col w-full pt-4 mt-2 border-t border-gray-200 sm:mt-4'>
+                  <div className='container flex flex-col gap-4 mx-auto'>
+                    {pageContents?.brandheading?.map((h: any, iIdx: number) => (
+                      <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
+                        <h2 className='text-3xl font-semibold md:text-4xl dark:text-black'>{h?.brandheading_title}</h2>
+                      </div>
+                    ))}
+                    <div className='grid items-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
+                      {pageContents?.brands?.map((item: any, itemIdx: number) => (
+                        <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
+                          <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-2' />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </>
+          : <>
+            {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+            {featureToggle?.features?.enableToolsHome &&
+              <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+                <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
+                  {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
+                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx == 0 ? 'bg-gray-200 text-black' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                      <div className='flex flex-col col-span-7 gap-5'>
+                        <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingoffers_title}</h2>
+                        <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
+                        <Link href={fo?.fixingoffers_buttonlink} legacyBehavior passHref>
+                          <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary'>{fo?.fixingoffers_buttontitle}</a>
+                        </Link>
+                      </div>
+                      <div className='col-span-5'>
+                        <img src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingoffers_title} className='object-cover w-full h-56' />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className='flex flex-col justify-center mb-6 text-center sm:mb-10'>
+                  {pageContents?.fixingheading?.length > 0 && pageContents?.fixingheading?.map((heading: any, hIdx: number) => (
+                    <div key={`heading-${hIdx}`} className='flex flex-col justify-center gap-4 mt-6 sm:mt-10'>
+                      <h2 className='text-3xl font-semibold text-black uppercase'>{heading?.fixingheading_title}</h2>
+                      <div className='mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12' dangerouslySetInnerHTML={{ __html: heading?.fixingheading_description }}></div>
+                    </div>
+                  ))}
+                </div>
+                {/* Tabs */}
+                <div className="flex justify-center gap-6 mb-4 sm:mb-10">
+                  <button
+                    className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
+                      }`}
+                    onClick={() => setActiveTab("specialOffers")}
+                  >
+                    Special Offers
+                  </button>
+                  <button
+                    className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
+                      }`}
+                    onClick={() => setActiveTab("newProducts")}
+                  >
+                    New Products
+                  </button>
+                </div>
+
+                {/* Tab Content */}
+                {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
+                  <SectionSliderProductCard
+                    deviceInfo={deviceInfo}
+                    data={pageContents?.specialofferproducts}
+                    heading={pageContents?.offerproductheading}
+                    featureToggle={featureToggle}
+                    defaultDisplayMembership={defaultDisplayMembership}
+                  />
+                )}
+
+                {activeTab === "newProducts" && pageContents?.newproducts?.length > 0 && (
+                  <SectionSliderProductCard
+                    deviceInfo={deviceInfo}
+                    data={pageContents?.newproducts}
+                    heading={pageContents?.newproductheading}
+                    featureToggle={featureToggle}
+                    defaultDisplayMembership={defaultDisplayMembership}
+                  />
+                )}
+                <div className='grid grid-cols-1 gap-6 my-6 sm:grid-cols-1 sm:my-10'>
+                  {pageContents?.fixingdelivery?.length > 0 && pageContents?.fixingdelivery?.map((fo: any, fIdx: number) => (
+                    <div className={`grid items-center relative justify-center grid-cols-12 gap-10 p-4 rounded mobile-flex shadow ${fIdx == 0 ? 'bg-gray-200 text-white' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                      <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6 text-black-clr-sec'>
+                        <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingdelivery_title}</h2>
+                        <p className='text-sm font-normal'>{fo?.fixingdelivery_shortdescription}</p>
+                        <Link href={fo?.fixingdelivery_buttonlink} legacyBehavior passHref>
+                          <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
+                        </Link>
+                      </div>
+                      <div className='absolute top-0 left-0 z-0 col-span-12 mob-static'>
+                        <img src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingdelivery_title} className='object-cover object-right w-full h-auto invert-1' />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            }
+            {featureToggle?.features?.enableCustomHomeWidget &&
+              <>
+                {pageContents?.brandlist?.length > 0 && <BrandList info={pageContents?.brandheading} data={pageContents?.brandlist} />}
+                {pageContents?.category?.length > 0 && <CategoryList data={pageContents?.category} deviceInfo={deviceInfo} />}
+                {pageContents?.featureproduct?.length > 0 &&
+                  <section className="relative py-6 z-index-neg">
+                    <div className="product-border-square"></div>
+                    <div className="container">
+                      {pageContents?.featureheading?.map((heading: any, cdhId: number) => (
+                        <h4 className="block font-semibold uppercase text-brand-red sm:hidden" key={cdhId}>{heading?.featureheading_title}</h4>
+                      ))}
+                      <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
+                    </div>
+                    <div className="dot-div">
+                      <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
+                    </div>
+                  </section>
+                }
+                <BestSellerProduct config={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} />
+                {pageContents?.imagelist?.length > 0 && <ImageBanner data={pageContents?.imagelist} deviceInfo={deviceInfo} />}
+              </>
+            }
+            {pageContents?.chooselist?.length > 0 && <ChooseList info={pageContents?.whychoose} data={pageContents?.chooselist} />}
+            {pageContents?.about?.length > 0 && pageContents?.about?.map((data: any, dataIdx: number) => (
+              <div key={dataIdx} className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+                <div className='grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-30'>
+                  <div className='flex flex-col justify-center gap-6 text-center sm:gap-10'>
+                    <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
+                    <div className='text-2xl font-normal text-black cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
+                    <div>
+                      <Link href={redirectHref} className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
+                    </div>
+                  </div>
+                  <div className='flex flex-col sm:p-20'>
+                    <img alt={data?.about_title} src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+                  </div>
+                </div>
+              </div>
+            ))}
+            {pageContents?.allcategories?.length > 0 &&
+              <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+                <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6'>
+                  {pageContents?.allcategories?.map((data: any, dataIdx: number) => (
+                    <div className='flex flex-col justify-center p-4 text-center rounded-lg shadow-md hover:bg-white hover:shadow-xl bg-slate-50' key={`data-${dataIdx}`}>
+                      <div className='h-60'>
+                        <img alt={data?.allcategories_name} src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-60 rounded-xl' />
+                      </div>
+                      <Link href={data?.allcategories_link} className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            }
+            {pageContents?.brandheading?.length > 0 &&
+              <div className={`container relative flex flex-col pt-10 mt-0 mb-1 sm:mb-1 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}>
+                <div className='grid justify-center grid-cols-1 sm:grid-cols-1'>
+                  {pageContents?.brandheading?.map((data: any, dataIdx: number) => (
+                    <h4 key={dataIdx} className='text-3xl font-semibold text-center text-black'>{data?.brandheading_title}</h4>
+                  ))}
+                </div>
+              </div>
+            }
+            {pageContents?.allbrands?.length > 0 &&
+              <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+                <div className='grid grid-cols-2 gap-4 sm:grid-cols-6 sm:gap-6'>
+                  {pageContents?.allbrands?.map((data: any, dataIdx: number) => (
+                    <div className='flex flex-col justify-center p-4 text-center bg-white rounded-lg shadow-md hover:shadow-xl' key={`data-${dataIdx}`}>
+                      <div className='h-32'>
+                        <img alt={data?.allbrands_name} src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-32 rounded-xl' />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            }
+            {pageContents?.promotionbanner != "" && CURRENT_THEME == 'etag' &&
+              <div className='flex flex-col pt-10 mt-0'>
+                <img alt="Banner" src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-full' />
+              </div>
+            }
+            {CURRENT_THEME === 'etag' &&
+              <div className='flex flex-col w-full mt-10 bg-orange-600 sm:mt-20'>
+                <div className='container relative flex items-center justify-between py-4'>
+                  <span className='text-sm font-normal text-white sm:text-xl'>Ready to take your order now</span>
+                  <Link href="tel:02086915794" className='text-xl font-semibold text-white sm:text-5xl'>020 869 15794</Link>
+                </div>
+              </div>
+            }
+            {pageContents?.shopbygender?.length > 0 &&
+              <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
+                <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+                  {pageContents?.shopbygender?.map((item: any, itemIdx: number) => (
+                    <div key={`banner-${itemIdx}`}>
+                      <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
+                        <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
+                          <img alt={item?.title} src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+                          <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
+                            <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
+                            <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
+                          </div>
+                        </a>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            }
+
+            {pageContents?.shopbycategory?.length > 0 &&
+              <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
+                <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
+                  {pageContents?.shopbycategoryheading?.map((h: any, iIdx: number) => (
+                    <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.shopbycategoryheading_subtitle} hasNextPrev >
+                      {h?.shopbycategoryheading_title}
+                    </Heading>
+                  ))}
+                  <div className="glide__track" data-glide-el="track">
+                    <ul className="glide__slides">
+                      {pageContents?.shopbycategory?.map((item: any, index: number) => (
+                        <li key={index} className={`glide__slide product-card-item home-product-card`}>
+                          <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
+                            <div className='relative flex flex-col rounded-lg'>
+                              <img alt={item?.title} src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full rounded-lg h-96' />
+                              <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/80 bottom-2 left-2 image-name-overlay'>
+                                <span className='text-lg font-semibold sm:text-xl'>{item?.title}</span>
+                                <span className='text-2xl font-semibold sm:text-3xl'>{item?.description}</span>
+                                <span>Shop Now</span>
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            }
+            {featureToggle?.features?.enableCategory && pageContents?.category?.length > 0 &&
+              <div className='flex flex-col justify-center gap-4 py-6 text-center bg-white sm:py-10'>
+                <div className='container flex flex-col justify-center gap-4 mx-auto text-center'>
+                  {pageContents?.categoryheading?.length > 0 && pageContents?.categoryheading?.map((heading: any, hIdx: number) => (
+                    <h3 className='mb-4 text-xl font-semibold sm:text-3xl text-sky-700 sm:mb-6' key={`heading-${hIdx}`}>{heading?.categoryheading_title}</h3>
+                  ))}
+                  <div className='grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-6'>
+                    {pageContents?.category?.map((item: any, itemIdx: number) => (
+                      <Link href={item?.category_link} passHref
+                        className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section'
+                        key={`category-${itemIdx}`}
+                      >
+                        <div className='flex flex-col w-full'>
+                          <img src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.category_title} className='w-full h-full' />
+                        </div>
+                        <div className='flex flex-col gap-5'>
+                          <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded sm:h-auto sm:p-2 sm:text-sm'>
+                            {item?.category_title}
+                          </h3>
+                          <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>
+                            {item?.category_subtitle}
+                          </p>
+                        </div>
+                        <div className='items-end justify-center flex-1'>
+                          <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
+                            {item?.category_buttontext}
+                          </div>
                         </div>
                       </Link>
-                    </li>
-                  ))}
-                </ul>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        }
-        {featureToggle?.features?.enableCategory && pageContents?.category?.length > 0 &&
-          <div className='flex flex-col justify-center gap-4 py-6 text-center bg-white sm:py-10'>
-            <div className='container flex flex-col justify-center gap-4 mx-auto text-center'>
-              {pageContents?.categoryheading?.length > 0 && pageContents?.categoryheading?.map((heading: any, hIdx: number) => (
-                <h3 className='mb-4 text-xl font-semibold sm:text-3xl text-sky-700 sm:mb-6' key={`heading-${hIdx}`}>{heading?.categoryheading_title}</h3>
-              ))}
-              <div className='grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-6'>
-                {pageContents?.category?.map((item: any, itemIdx: number) => (
-                  <Link href={item?.category_link} passHref
-                    className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section'
-                    key={`category-${itemIdx}`}
-                  >
-                    <div className='flex flex-col w-full'>
-                      <img src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.category_title} className='w-full h-full' />
-                    </div>
-                    <div className='flex flex-col gap-5'>
-                      <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded sm:h-auto sm:p-2 sm:text-sm'>
-                        {item?.category_title}
-                      </h3>
-                      <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>
-                        {item?.category_subtitle}
-                      </p>
-                    </div>
-                    <div className='items-end justify-center flex-1'>
-                      <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
-                        {item?.category_buttontext}
+            }
+            {pageContents?.bannerimage && pageContents?.bannerimage != "" &&
+              <div className='flex flex-col w-full'>
+                <img src={pageContents?.bannerimage} className='w-full h-full' alt='Promotion' />
+              </div>
+            }
+
+            {pageContents?.brandcategory?.length > 0 &&
+              <div className='flex flex-col justify-center gap-4 py-6 text-center bg-gray-50 sm:py-10'>
+                <div className='container grid grid-cols-2 gap-2 mx-auto sm:grid-cols-4 sm:gap-6'>
+                  {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
+                    <Link href={item?.brandcategory_link} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
+                      <div className='flex flex-col w-full'>
+                        <img src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.brandcategory_title} className='w-full h-full' />
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                      <div className='flex flex-col gap-5'>
+                        <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded'>{item?.brandcategory_title}</h3>
+                        <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>{item?.brandcategory_subtitle}</p>
+                      </div>
+                      <div className='items-end justify-center flex-1'>
+                        <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
+                          {item?.brandcategory_buttontext}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
-        }
-        {pageContents?.bannerimage && pageContents?.bannerimage != "" &&
-          <div className='flex flex-col w-full'>
-            <img src={pageContents?.bannerimage} className='w-full h-full' alt='Promotion' />
-          </div>
-        }
+            }
+            {pageContents?.promobanner && pageContents?.promobanner != "" &&
+              <div className='flex flex-col w-full'>
+                <img src={pageContents?.promobanner} className='w-full h-full' alt='Promotion' />
+              </div>
+            }
 
-        {pageContents?.brandcategory?.length > 0 &&
-          <div className='flex flex-col justify-center gap-4 py-6 text-center bg-gray-50 sm:py-10'>
-            <div className='container grid grid-cols-2 gap-2 mx-auto sm:grid-cols-4 sm:gap-6'>
-              {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
-                <Link href={item?.brandcategory_link} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
-                  <div className='flex flex-col w-full'>
-                    <img src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.brandcategory_title} className='w-full h-full' />
+            {pageContents?.brands?.length > 0 &&
+              <div className='flex flex-col w-full py-6 bg-gray-50 sm:py-10'>
+                <div className='container flex flex-col gap-4 mx-auto'>
+                  {pageContents?.brandheading?.length > 0 && pageContents?.brandheading?.map((heading: any, hIdx: number) => (
+                    <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6' key={hIdx}>{heading?.brandheading_title}</h3>
+                  ))}
+                  <div className='grid items-center grid-cols-4 gap-4 text-center'>
+                    {pageContents?.brands?.map((item: any, itemIdx: number) => (
+                      <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
+                        <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-10' />
+                      </Link>
+                    ))}
                   </div>
-                  <div className='flex flex-col gap-5'>
-                    <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded'>{item?.brandcategory_title}</h3>
-                    <p className='text-xs font-normal text-black sm:text-sm sm:min-h-16 min-h-16'>{item?.brandcategory_subtitle}</p>
+                </div>
+              </div>
+            }
+            {featureToggle?.features?.enableTrendingCategory &&
+              <div className={`mt-14 sm:mt-24 lg:mt-32 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}
+              >
+                <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
+              </div>
+            }
+
+            {pageContents?.newarrivals?.length > 0 &&
+              <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
+                <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              </div>
+            }
+
+            {pageContents?.shoprange?.length > 0 && pageContents?.range?.map((heading: any, hIdx: number) => (
+              <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
+                <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
+                {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
+                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                }
+              </div>
+            ))}
+            {pageContents?.branddescription && pageContents?.branddescription != "" &&
+              <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
+                <div className='flex flex-col w-full'>
+                  <div className='pt-4 text-xs font-normal text-gray-500 border-t border-gray-200 sm:pt-6 cms-para' dangerouslySetInnerHTML={{ __html: pageContents?.branddescription }}></div>
+                </div>
+              </div>
+            }
+            {(CURRENT_THEME != 'etag' && !featureToggle?.features?.enableCustomHomeWidget) &&
+              <div className={`${(CURRENT_THEME != 'green' && CURRENT_THEME != 'robots') ? 'space-y-16 sm:space-y-24 lg:space-y-32 my-16 sm:my-24 lg:my-32' : ' my-0 sm:my-5 lg:my-8'} ${CURRENT_THEME === 'cam' && 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0'} container relative product-collections`}>
+                {pageContents?.brand?.length > 0 &&
+                  <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
+                    {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
+                      <div key={`brands-${bIdx}`}>
+                        <SectionBrandCard data={b} />
+                      </div>
+                    ))}
                   </div>
-                  <div className='items-end justify-center flex-1'>
-                    <div className='px-6 py-2 text-xs font-medium text-white uppercase rounded sm:py-3 sm:text-sm bg-[#2d4d9c] group-hover:bg-[#223f8b]'>
-                      {item?.brandcategory_buttontext}
-                    </div>
+                }
+                {pageContents?.departments?.length > 0 &&
+                  <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
+                    <BackgroundSection />
+                    <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
                   </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        }
-        {pageContents?.promobanner && pageContents?.promobanner != "" &&
-          <div className='flex flex-col w-full'>
-            <img src={pageContents?.promobanner} className='w-full h-full' alt='Promotion' />
-          </div>
-        }
-
-        {pageContents?.brands?.length > 0 &&
-          <div className='flex flex-col w-full py-6 bg-gray-50 sm:py-10'>
-            <div className='container flex flex-col gap-4 mx-auto'>
-              {pageContents?.brandheading?.length > 0 && pageContents?.brandheading?.map((heading: any, hIdx: number) => (
-                <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6' key={hIdx}>{heading?.brandheading_title}</h3>
-              ))}
-              <div className='grid items-center grid-cols-4 gap-4 text-center'>
-                {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                  <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
-                    <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-10' />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        }
-        {featureToggle?.features?.enableTrendingCategory &&
-          <div className={`mt-14 sm:mt-24 lg:mt-32 ${featureToggle?.features?.enableCustomHomeWidget ? 'hidden' : ''}`}
-          >
-            <DiscoverMoreSlider heading={pageContents?.categoryheading} data={pageContents?.category} />
-          </div>
-        }
-
-        {pageContents?.newarrivals?.length > 0 &&
-          <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
-            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-          </div>
-        }
-
-        {pageContents?.shoprange?.length > 0 && pageContents?.range?.map((heading: any, hIdx: number) => (
-          <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
-            <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
-            {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
-              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            }
-          </div>
-        ))}
-        {pageContents?.branddescription && pageContents?.branddescription != "" &&
-          <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
-            <div className='flex flex-col w-full'>
-              <div className='pt-4 text-xs font-normal text-gray-500 border-t border-gray-200 sm:pt-6 cms-para' dangerouslySetInnerHTML={{ __html: pageContents?.branddescription }}></div>
-            </div>
-          </div>
-        }
-        {(CURRENT_THEME != 'etag' && !featureToggle?.features?.enableCustomHomeWidget) &&
-          <div className={`${(CURRENT_THEME != 'green' && CURRENT_THEME != 'robots') ? 'space-y-16 sm:space-y-24 lg:space-y-32 my-16 sm:my-24 lg:my-32' : ' my-0 sm:my-5 lg:my-8'} ${CURRENT_THEME === 'cam' && 'space-y-0 sm:space-y-0 lg:space-y-0 my-0 sm:my-0 lg:my-0'} container relative product-collections`}>
-            {pageContents?.brand?.length > 0 &&
-              <div className='flex flex-col w-full p-8 bg-emerald-100 nc-brandCard'>
-                {pageContents?.brand?.slice(0, 1).map((b: any, bIdx: number) => (
-                  <div key={`brands-${bIdx}`}>
-                    <SectionBrandCard data={b} />
+                }
+                {pageContents?.newlookbook?.length > 0 &&
+                  <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
+                }
+                {pageContents?.brand?.length > 0 &&
+                  <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
+                    {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
+                      <SectionBrandCard data={b} key={bIdx} />
+                    ))}
                   </div>
-                ))}
-              </div>
-            }
-            {pageContents?.departments?.length > 0 &&
-              <div className="relative py-10 sm:py-16 lg:py-20 bg-section-hide">
-                <BackgroundSection />
-                <SectionSliderCategories data={pageContents?.departments} heading={pageContents?.departmentheading} />
-              </div>
-            }
-            {pageContents?.newlookbook?.length > 0 &&
-              <SectionSliderLargeProduct data={pageContents?.newlookbook} heading={pageContents?.lookbookheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} cardStyle="style2" />
-            }
-            {pageContents?.brand?.length > 0 &&
-              <div className='flex flex-col w-full p-8 bg-yellow-100 nc-brandCard'>
-                {pageContents?.brand?.slice(1, 2).map((b: any, bIdx: number) => (
-                  <SectionBrandCard data={b} key={bIdx} />
-                ))}
-              </div>
-            }
-            {pageContents?.nevermisssale?.length > 0 &&
-              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            }
-            {pageContents?.brand?.length > 0 &&
-              <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
-                {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
-                  <SectionBrandCard data={b} key={bIdx} />
-                ))}
-              </div>
-            }
-            {pageContents?.popular?.length > 0 &&
-              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            }
+                }
+                {pageContents?.nevermisssale?.length > 0 &&
+                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                }
+                {pageContents?.brand?.length > 0 &&
+                  <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
+                    {pageContents?.brand?.slice(2, 3).map((b: any, bIdx: number) => (
+                      <SectionBrandCard data={b} key={bIdx} />
+                    ))}
+                  </div>
+                }
+                {pageContents?.popular?.length > 0 &&
+                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                }
 
-            {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
-            <div className='flex flex-col w-full engage-product-card-section'>
-              <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-              <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-              <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-              <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-              <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-              <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-            </div>
-          </div>
+                {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
+                <div className='flex flex-col w-full engage-product-card-section'>
+                  <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                </div>
+              </div>
+            }
+          </>
         }
       </div>
     </>

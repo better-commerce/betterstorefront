@@ -40,7 +40,7 @@ export interface ProductCardProps {
   readonly defaultDisplayMembership: any;
 }
 
-const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
+const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
   const { recordAnalytics } = useAnalytics()
   const { deleteWishlistItem, isInWishList: isInWishlistItem, addToWishlist: addToWishlistItem } = wishlistHandler()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
@@ -231,70 +231,26 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard product-card border-prod-card hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
-        <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group rounded-green product-card__image-container">
+      <div key={key} className={cn(`nc-ProductCard bg-gray-200 product-card border-prod-card hover-nc-product-card rounded-3xl relative flex flex-col sm:group mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+        <div className="relative flex-shrink-0 overflow-hidden rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
-            <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
-              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={data?.name} />
+            <div className="flex w-full h-0 bg-white !rounded aspect-w-11 aspect-h-12 product-card__image">
+              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-top w-full h-full p-3 rounded-3xl" alt={data?.name} />
             </div>
           </ButtonLink>
           <div className={CLASSES}>
             <ProductTag product={data} />
           </div>
           <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
-          {!isComparedEnabled && renderGroupButtons()}     
+          {!isComparedEnabled && renderGroupButtons()}
         </div>
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
-          <div className="px-2.5 pt-5 pb-2.5 product-card__information">
-            <div className='mt-4'>
-              <h2 className="text-base text-left font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
-            </div>
-            <div className='flex justify-between mt-1'>
-              <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.category}</p>
-              {data?.reviewCount > 0 &&
-                <div className="flex items-center mb-0.5 w-40 justify-end">
-                  <StarIcon className="w-4 h-4 pb-[1px] text-amber-400" />
-                  <span className="font-12 ms-1 text-slate-500 dark:text-slate-400">
-                    {data?.rating || ""} <span className='font-10'>({data?.reviewCount || 0} {translate('common.label.reviews')})</span>
-                  </span>
-                </div>
-              }
-            </div>
-            {featureToggle?.features?.enableAddButtonBottom ? (
-                <> 
-                <div className="flex flex-col gap-2 plp-hidden-section">
-                  <ReviewBadge reviewCountdata={data?.reviewCount} ratingdata={data?.rating} />
-                </div>
-                </>
-              ) : (
-                <> 
-                  {/* Content to render if false */}
-                </>
-              )}
+          <div className="px-2.5 pt-2 pb-2.5 product-card__information">
+            <h2 className="dark:text-black min-h-[60px] text-sm font-semibold text-black">{data?.name}</h2>
             <div className="flex items-center justify-between mt-2 product-card-panel">
               <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
-            {featureToggle?.features?.enableAddButtonBottom ? (
-                <> 
-                <div className='my-3 add-btn-plp'>
-                <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
-                </div>
-                </>
-              ) : (
-                <> 
-                  {/* Content to render if false */}
-                </>
-              )} 
-            {isComparedEnabled && product?.compared && (
-              <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
-                {product?.compared && (
-                  <button className="w-full py-2 font-semibold text-red-600 uppercase border-t border-red-600 bg-red-50 rounded-b-2xl hover:bg-red-100 font-14">
-                    Remove
-                  </button>
-                )}
-              </div>
-            )}
           </div>
         </ButtonLink>
       </div>
@@ -318,4 +274,4 @@ const ButtonLink = (props: any) => {
   )
 }
 
-export default ProductCard;
+export default HomeProductCardMin;

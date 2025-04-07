@@ -7,6 +7,7 @@ import Heading from "@components/Heading/Heading";
 import Glide from "@glidejs/glide/dist/glide.esm";
 import { CURRENT_THEME } from "./utils/constants";
 import GliderNextPrev from "./Heading/GliderNextPrev";
+import HomeProductCardMin from "./HomeProductCardMin";
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 export interface SectionSliderProductCardProps {
   readonly className?: string;
@@ -22,8 +23,8 @@ export interface SectionSliderProductCardProps {
 const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership, deviceInfo }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
-  let dataPerRow = 4
-  let dataPerRowMed = 4
+  let dataPerRow = featureToggle?.features?.enablePCHome ? 5 : 4
+  let dataPerRowMed = featureToggle?.features?.enablePCHome ? 5 : 4
   let dataGap = 32
   if (CURRENT_THEME == "green") {
     dataPerRow = 6
@@ -48,23 +49,27 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {CURRENT_THEME != 'green' ? (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <Heading key={iIdx} className="mb-4 sm:mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
-              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title}
+            <Heading key={iIdx} className={`text-neutral-900 dark:text-neutral-50 heading-px-4 ${featureToggle?.features?.enablePCHome ? 'mb-4 sm:mb-6 lg:mb-6' : 'mb-4 sm:mb-12 lg:mb-14'}`} desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
             </Heading>
           ))}
         </>) : (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
-              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title  || h?.offerproductheading_title || h?.newproductheading_title}
+            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
             </GliderNextPrev>
           ))}
         </>)}
 
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {data?.length> 0 && data?.map((item: any, index: number) => (
+            {data?.length > 0 && data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide product-card-item home-product-card ${itemClassName}`}>
-                <ProductCard deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                {featureToggle?.features?.enablePCHome ? (
+                  <HomeProductCardMin deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                ) : (
+                  <ProductCard deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                )}
               </li>
             ))}
           </ul>

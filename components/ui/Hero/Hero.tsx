@@ -9,6 +9,7 @@ import { IDeviceInfo } from '@components/ui/context'
 interface HeroProps {
   banners?: []
   readonly deviceInfo: IDeviceInfo
+  featureToggle: any
 }
 
 interface BannerProps {
@@ -25,7 +26,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 
 // install Swiper modules
 SwiperCore.use([Navigation])
-const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
+const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo, featureToggle }: HeroProps) => {
   const { isOnlyMobile } = deviceInfo
   const css = { maxWidth: '100%', height: 'auto' }
   const translate = useTranslation()
@@ -40,13 +41,13 @@ const Hero: React.FC<HeroProps> = ({ banners = [], deviceInfo }: HeroProps) => {
                 {isOnlyMobile ? (
                   <>
                     {banner?.mobileUrl != '' ? (
-                      <img src={generateUri(banner?.mobileUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-center w-full" alt={banner?.alt} width={690} height={500} />
+                      <img src={generateUri(banner?.mobileUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className={`object-cover object-center w-full ${featureToggle?.features?.enablePCHome ? '' : ''}`} alt={banner?.alt} width={690} height={500} />
                     ) : (
                       <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image mobile-banner" />
                     )}
                   </>
                 ) : (
-                  <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className="sm:max-h-screen image banner-Image" />
+                  <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className={`${featureToggle?.features?.enablePCHome ? '!object-cover sm:min-h-[480px]' : 'sm:max-h-screen image banner-Image'}`} />
                 )}
                 <div className="sr-only">{translate('common.label.bannerImageText')}</div>
                 <h2 className='absolute left-0 right-auto z-10 flex-col hidden w-full gap-6 text-center sm:flex sm:w-1/2 sm:text-left sm:left-auto sm:right-20 sm:top-1/3 top-2'>

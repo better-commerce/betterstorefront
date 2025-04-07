@@ -31,7 +31,8 @@
     "enableToolsHome":false,
     "enableTradeIn": true,
     "enableWallet": true,
-    "enableBottomTabsSection":true
+    "enableBottomTabsSection":true,
+    "enablePCHome":true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
