@@ -351,7 +351,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         ) : (
           <>
             {!!productDataToPass?.results?.length ? (
-              <div className={`sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 gap-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+              <div className={`${featureToggle?.features?.enablePCHome ? 'gap-1' : 'gap-1'} sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
                 {isMobile ? (
                   <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                 ) : (
@@ -365,7 +365,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                     )}
                   </>
                 )}
-                <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                   <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                 </div>
@@ -374,8 +374,6 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
               : <NoProductFound />}
           </>
         )}
-
-
         <div className='flex flex-col w-full'>
           <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
