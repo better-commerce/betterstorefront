@@ -77,7 +77,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
         </NextHead>
       )}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
         {pageContents?.shopbygender?.length > 0 &&
           <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
