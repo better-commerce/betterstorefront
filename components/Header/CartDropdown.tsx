@@ -294,7 +294,7 @@ export default function CartDropdown({ featureToggle }: any) {
                     {featureToggle?.features?.enablePCTopHeader ?
                       <span className="relative flex items-center text-xs font-light text-white hover:underline">Basket <ShoppingCartIcon className="w-4 h-4" />
                         {basketItemsCount > 0 && (
-                          <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
+                          <div className="w-3.5 h-3.5 flex items-center justify-center bg-red-500 absolute top-0 -right-2.5 rounded-full text-[10px] leading-none text-white font-medium">
                             {basketItemsCount}
                           </div>
                         )}

@@ -128,7 +128,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                         <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
                         <span className="relative flex items-center gap-1 pl-4 text-xs font-light text-white cursor-pointer hover:underline" onClick={() => { handleWishlist(); }}>Wishlist <HeartIcon className="w-4 h-4" aria-hidden="true" aria-label="Wishlist" />
                           {wishListItems?.length > 0 && delayEffect && (
-                            <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
+                            <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 sm:block -right-2">
                               {wishListItems?.length}
                             </span>
                           )}
