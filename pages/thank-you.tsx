@@ -487,7 +487,7 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
                 <p className="font-medium text-black dark:text-black">
                   {order?.deliveryPlans?.length >= 1
                     ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget)
-                    : eddDateFormat(order?.shipping?.expectedDeliveryDate)}
+                    : eddDateFormat(order?.dueDate)}
                 </p>
               </div>
             </div>
@@ -514,7 +514,7 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
                   :
                 </p>
                 <div className="flex gap-8">
-                  <p className="text-gray-700">6 items</p>
+                 <p className="text-gray-700">{order?.items.length} {order?.items.length === 1 ? 'item' : 'items'}</p>
                   <p>
                     {isIncludeVAT
                       ? order?.subTotal?.formatted?.withTax
@@ -550,11 +550,10 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
               <div className="flex justify-between">
                 <p className="text-gray-700">Delivery:</p>
                 <div className="flex gap-8">
-                  <p className="text-gray-700">26-28 April with Evri</p>
                   <p className="text-black dark:text-black">
                     {order?.deliveryPlans?.length >= 1
                       ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget)
-                      : eddDateFormat(order?.shipping?.expectedDeliveryDate)}
+                      : eddDateFormat(order?.dueDate)}
                   </p>
                 </div>
               </div>
