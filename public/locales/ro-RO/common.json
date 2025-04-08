@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "Plata UPI nu este acceptată.",
                 "paymentAlreadyCompletedErrorMsg": "Plata pentru coșul tău a fost deja completată.",
                 "notEnoughCreditErrorMsg": "Nu sunt suficiente fonduri disponibile.",
+                "walletNotFoundErrorMsg": "Portofelul nu a fost găsit.",
+                "notEnoughBalanceErrorMsg": "Sold insuficient disponibil.",
                 "paymentMethodNotSupportedErrorMsg": "Metoda de plată nu este acceptată."
             },
             "password": {

@@ -1374,6 +1374,8 @@
                 "upiNotSupportedErrorMsg": "UPI-betaling understøttes ikke.",
                 "paymentAlreadyCompletedErrorMsg": "Betalingen for din kurv er allerede gennemført.",
                 "notEnoughCreditErrorMsg": "Ikke nok kredit tilgængelig.",
+                "walletNotFoundErrorMsg": "Pung ikke fundet.",
+                "notEnoughBalanceErrorMsg": "Ikke nok saldo tilgængelig.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke."
             },
             "password": {

@@ -1280,6 +1280,8 @@
                 "upiNotSupportedErrorMsg": "Il pagamento UPI non è supportato.",
                 "paymentAlreadyCompletedErrorMsg": "Il pagamento per il tuo carrello è già stato completato.",
                 "notEnoughCreditErrorMsg": "Credito insufficiente.",
+                "walletNotFoundErrorMsg": "Portafoglio non trovato.",
+                "notEnoughBalanceErrorMsg": "Saldo insufficiente disponibile.",
                 "paymentMethodNotSupportedErrorMsg": "Metodo di pagamento non supportato."
             },
             "password": {

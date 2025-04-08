@@ -283,6 +283,7 @@ export const NEXT_WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable-customer-w
 export const NEXT_WALLET_GET_CUSTOMER_WALLET = `/api/wallet/get-customer-wallet`
 export const NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS = `/api/wallet/get-customer-wallet-transaction`
 export const NEXT_WALLET_ASSOCIATE_TO_CUSTOMER = `/api/wallet/associate-customer-wallet`
+export const NEXT_WALLET_GET_BALANCE = `/api/wallet/get-balance`
 
 //TRADE IN JOURNEY API ENDPOINTS
 export const WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable`

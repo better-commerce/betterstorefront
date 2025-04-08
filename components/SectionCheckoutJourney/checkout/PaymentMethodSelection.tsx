@@ -197,6 +197,8 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
         return 'sprite-paypal-xsm'
       } else if (matchStrings(systemName, PaymentMethodType.COD, true)) {
         return 'sprite-cod'
+      } else if (matchStrings(systemName, PaymentMethodType.WALLET, true)) {
+        return 'sprite-wallet'
       } else if (matchStrings(systemName, PaymentMethodType.KLARNA, true)) {
         return 'sprite-klarna'
       } else if (matchStrings(systemName, PaymentMethodType.STRIPE, true)) {

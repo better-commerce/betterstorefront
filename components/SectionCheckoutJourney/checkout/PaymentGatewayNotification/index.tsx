@@ -24,43 +24,21 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
   const orderInfo = getOrderInfo()
   const { associateCart } = cartHandler()
   const { gateway, params, isCancelled, isCOD = false, config } = props
-  const {
-    user,
-    setCartItems,
-    basketId,
-    cartItems,
-    setOrderId,
-    orderId: uiOrderId,
-    setBasketId,
-  } = useUI()
+  const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
 
   /**
    * Update order status.
    */
-  const asyncHandler = async (
-    gateway: string,
-    params: any,
-    isCancelled: boolean
-  ) => {
+  const asyncHandler = async (gateway: string, params: any, isCancelled: boolean) => {
     /**
      * For future use,
      * For implementation of bank offers.
      */
     let bankOfferDetails:
-      | {
-          voucherCode: string
-          offerCode: string
-          value: string
-          status: string
-          discountedTotal: number
-        }
+      | { voucherCode: string; offerCode: string; value: string; status: string; discountedTotal: number; }
       | undefined
-    const extras = {
-      ...params,
-      gateway: gateway,
-      isCancelled: isCancelled,
-    }
+    const extras = { ...params, gateway: gateway, isCancelled: isCancelled, }
 
     const paymentResponseRequest: any /*IPaymentProcessingData*/ = {
       isCOD: isCOD,
@@ -70,14 +48,8 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
       extras,
     }
 
-    const paymentResponseResult: any = await processPaymentResponse(
-      gateway,
-      paymentResponseRequest
-    )
-    if (
-      paymentResponseResult === PaymentStatus.PAID ||
-      paymentResponseResult === PaymentStatus.AUTHORIZED
-    ) {
+    const paymentResponseResult: any = await processPaymentResponse(gateway, paymentResponseRequest)
+    if (paymentResponseResult === PaymentStatus.PAID || paymentResponseResult === PaymentStatus.AUTHORIZED) {
       Cookies.remove(Cookie.Key.SESSION_ID)
       setSessionIdCookie()
       Cookies.remove(Cookie.Key.BASKET_ID)

@@ -16,9 +16,11 @@ import ClearPayPaymentButton from './ClearPayPaymentButton'
 import AccountPaymentButton from './AccountPaymentButton'
 import ChequePaymentButton from './ChequePaymentButton'
 import CheckoutApplePayPaymentButton from './CheckoutPaymentButton/ApplePayPaymentButton'
+import { WalletPaymentButton } from './WalletPaymentButton'
 
 // Other Imports
 import { matchStrings } from '@framework/utils/parse-util'
+import { Guid } from '@commerce/types'
 
 /**
  * Factory helper/renderer component for <PaymentButton>
@@ -26,54 +28,31 @@ import { matchStrings } from '@framework/utils/parse-util'
  * @returns
  */
 const PaymentButton = (props: IPaymentButtonProps & IDispatchState & IApplePaymentProps) => {
-  const { paymentMethod, scrollToBottomEnabled = true, onScrollToSection } = props
+  const { paymentMethod, scrollToBottomEnabled = true, onScrollToSection, uiContext } = props
+  const { user } = uiContext
 
   let Component: any
   if (matchStrings(paymentMethod?.systemName, PaymentMethodType.PAYPAL, true)) {
     Component = PayPalPaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.CHECKOUT, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.CHECKOUT, true)) {
     Component = CheckoutPaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.MASTER_CARD, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.MASTER_CARD, true)) {
     Component = MasterCardPaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.STRIPE, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.STRIPE, true)) {
     Component = StripePaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.KLARNA, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.KLARNA, true)) {
     Component = KlarnaPaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.CLEAR_PAY, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.CLEAR_PAY, true)) {
     Component = ClearPayPaymentButton
-  } else if (
-    matchStrings(
-      paymentMethod?.systemName,
-      PaymentMethodType.ACCOUNT_CREDIT,
-      true
-    )
-  ) {
+  } else if (matchStrings( paymentMethod?.systemName, PaymentMethodType.ACCOUNT_CREDIT, true)) {
     Component = AccountPaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.CHEQUE, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.CHEQUE, true)) {
     Component = ChequePaymentButton
-  } else if (
-    matchStrings(
-      paymentMethod?.systemName,
-      PaymentMethodType.CHECKOUT_APPLE_PAY,
-      true
-    )
-  ) {
+  } else if (matchStrings( paymentMethod?.systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)) {
     Component = CheckoutApplePayPaymentButton
-  } else if (
-    matchStrings(paymentMethod?.systemName, PaymentMethodType.COD, true)
-  ) {
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.WALLET, true) && user?.walletId && user?.walletId !== Guid.empty) {
+    Component = WalletPaymentButton
+  } else if (matchStrings(paymentMethod?.systemName, PaymentMethodType.COD, true)) {
     Component = CODPaymentButton
   } else {
     Component = <></>

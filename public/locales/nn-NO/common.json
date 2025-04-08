@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "UPI-betaling støttes ikke.",
                 "paymentAlreadyCompletedErrorMsg": "Betalingen for din handlekurv er allerede fullført.",
                 "notEnoughCreditErrorMsg": "Ikke nok kreditt tilgjengelig.",
+                "walletNotFoundErrorMsg": "Lommebok ikkje funnen.",
+                "notEnoughBalanceErrorMsg": "Ikkje nok saldo tilgjengeleg.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden støttes ikke."
             },
             "password": {

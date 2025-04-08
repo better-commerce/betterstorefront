@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "Płatności UPI są nieobsługiwane.",
                 "paymentAlreadyCompletedErrorMsg": "Płatność za Twój koszyk została już zakończona.",
                 "notEnoughCreditErrorMsg": "Brak wystarczającego kredytu.",
+                "walletNotFoundErrorMsg": "Portfel nie został znaleziony.",
+                "notEnoughBalanceErrorMsg": "Niewystarczające środki.",
                 "paymentMethodNotSupportedErrorMsg": "Metoda płatności nie jest obsługiwana."
             },
             "password": {

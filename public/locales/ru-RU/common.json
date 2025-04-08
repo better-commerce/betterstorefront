@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "UPI оплата не поддерживается.",
                 "paymentAlreadyCompletedErrorMsg": "Оплата за вашу корзину уже завершена.",
                 "notEnoughCreditErrorMsg": "Недостаточно доступного кредита.",
+                "walletNotFoundErrorMsg": "Кошелёк не найден.",
+                "notEnoughBalanceErrorMsg": "Недостаточно средств.",
                 "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается."
             },
             "password": {
