@@ -19,7 +19,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { PagePropType, getPagePropType } from '@framework/page-props'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
-const ProductGrid = dynamic(() => import('@components/Product/Grid'))
+const GridList = dynamic(() => import('@components/Product/Grid/GridList'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
@@ -372,20 +372,17 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                 <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                   {featureToggle.features?.enableForPCSite &&
                     <>
-                      <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:my-4'>
-                        <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                      <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-2 sm:my-2'>
+                        <div className='flex flex-col w-full gap-2 sm:col-span-12'>
                           <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
-                            {translate('label.basket.catalogText')}
+                            Results
                           </h1>
-                          <p className='text-sm font-normal text-gray-800'>Welcome to the Digital SLR Store at Park Cameras, your one-stop destination for <span className='font-semibold text-blue-light'>DSLR cameras, Accessories, Bags, Lenses</span> and <span className='font-semibold text-blue-light'>Tripods</span>. Whether you’re a beginner looking for your first DSLR or a professional seeking an upgrade, we offer a wide range of cameras, lenses, tripods, bags, and accessories from top brands like <span className='font-semibold text-blue-light'>Canon, Nikon, Pentax, Leica,</span> and <span className='font-semibold text-blue-light'>Sony.</span></p>
+                          <p className='text-xs font-normal text-black'>Check each product page for other buying options.</p>
                         </div>
-                        <div className='sm:col-span-3'>
-                          <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
-                        </div>
-                        <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                        <div className='flex justify-start w-full gap-3 p-2 mt-2 border border-[#D9D9D9] rounded sm:col-span-12'>
                           <div className='flex items-center justify-between w-full gap-0'>
                             <div className='flex justify-start gap-3'>
-                              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} items in {translate('label.basket.catalogText')}</span>
+                              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} results for <span className='font-semibold text-black'>"{adaptedQuery?.freeText || "Search Result"}"</span></span>
                             </div>
                             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                           </div>
@@ -394,7 +391,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                     </>
                   }
                   {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
-                  {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                  {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <GridList products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                 </div>
                 <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
               </div>)
