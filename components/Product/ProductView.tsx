@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, Fragment } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { GiftIcon, HeartIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { GiftIcon, HeartIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
@@ -51,6 +51,7 @@ const ProductSpecifications = dynamic(() => import('@components/Product/Specific
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const ProductTabs = dynamic(() => import('@components/Product/ProductTabs'))
 const TabProductCard = dynamic(() => import('@components/Product/TabProductCard'))
+const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
 const Prices = dynamic(() => import('@components/Prices'))
 const AttributesHandler = dynamic(() => import('@components/Product/AttributesHandler'))
@@ -58,6 +59,7 @@ const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@components/Product/Bundles'))
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
+const BuyButton = dynamic(() => import('@components/ui/BuyNowButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
 const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
@@ -887,7 +889,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   };
   const renderSellableType = () => {
     return (
-      <div className='flex justify-start gap-2 divide-x divide-gray-200'>
+      <div className='flex justify-start gap-2 divide-x divide-gray-200 p-none'>
         {product?.sellableType && <h4 className='text-lg font-normal text-black'>Sellable Type: {product?.sellableType == "Each" ? 'Each' : product?.sellableType == "Pallet" ? 'Pallet' : product?.sellableType == "Both" ? 'Both' : product?.sellableType == "Carton" ? 'Carton' : ''}</h4>}
         {product?.sellableType == "Pallet" && <h4 className='pl-4 text-lg font-normal text-black'>Pallet of {product?.itemPerCarton}</h4>}
         {product?.sellableType == "CartonPacks" && <h4 className='pl-4 text-lg font-normal text-black'>Carton of {product?.itemPerCarton}</h4>}
@@ -989,6 +991,17 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </>
       )
     },
+   {
+      id: 'Reviewss',
+      label: 'Reviews',
+      content: (
+        <div className="space-y-4 review-none-section container-tabs">
+        {reviews?.review?.productReviews?.length > 0
+          ? renderReviews()
+          : <p className="text-gray-500 italic font-semibold">This product hasn't been reviewed yet. Be the first to share your thoughts!</p>}
+        </div>
+        )
+    },
     {
       id: 'Videos',
       label: 'Videos',
@@ -1057,6 +1070,30 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
                     <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
+                     <div className="w-full max-w-3xl rounded-xl border bg-background shadow-sm my-4">
+                        <div className="flex items-center  px-3 py-2  bg-gray-100 gap-3">
+                          <div className="rounded-full bg-gray-100">
+                            <CreditCardIcon className="h-4 w-4 text-black" />
+                          </div>
+                          <h2 className="text-sm font-semibold text-gray-800">OM-System Cashback</h2>
+                        </div>
+                        
+                        <div className="mt-2 space-y-1  px-3 py-2 pb-4 ">
+                          <div className="flex items-baseline">
+                            <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
+                            <span className="text-sm font-bold text-red-700 ml-2">£1,749.00</span>
+                          </div>
+                          
+                          <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
+                          
+                          <div className="mt-8 pt-2">
+                            <p className="text-sm text-gray-800">
+                              Cashback applies if product ordered within the offer period, even if out of stock.{" "}
+                              <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                 </div>
                 {attrGroup['product.relatedproducts']?.length > 0 &&
                   <div className='flex w-full'>
@@ -1157,6 +1194,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                             )}
                           </div>
                         )}
+                        {!isGuestUser && user?.userId &&
+                         <>
+                          <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
+                            <BuyButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'}/>
+                          </div>
+                         </>
+                        }
                       </div>
                       <div className='w-full pt-3'>
                         <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
@@ -1182,13 +1226,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                             <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
                           ) : (
                             <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
-                          <span className='text-sm'> {translate('label.product.addToFavoriteText')} </span>
+                          <span className='text-sm'> Add to Wishlist </span>
                         </button>
                       </div>
                     </div>
                   )}
                 </div>
                 {/* Used Product Option */}
+                {tabProducts?.USED?.length > 0 && (
                 <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
                   <label className="flex items-center justify-between gap-2 cursor-pointer">
                     <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
@@ -1197,76 +1242,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
                     </span>
                   </label>
-                  <div className='mt-3 space-y-2'>
-                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                   <div className='mt-3 space-y-2'>
+                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
                     <p className="text-sm font-normal text-black">FREE next day delivery.</p>
-                  </div>
+                  </div> 
                   {selectedOption === "used" && (
-                    <div className="mt-2">
-                      {product?.preOrder?.isEnabled &&
-                        <div className='flex flex-col'>
-                          <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
-                        </div>
-                      }
-                      <div id="add-to-cart-button" className='blue-add-btn'>
-                        {isMobile ? (
-                          showMobileCaseButton && (
-                            <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                              <div className="container p-4 mx-auto max-w-7xl">
-                                <div className="flex justify-end">
-                                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                                    {isInWishList(selectedAttrData?.productId) ? (
-                                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                    ) : (
-                                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                                    )}
-                                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        ) : (
-                          <div className="flex rtl:space-x-reverse">
-                            {!isEngravingAvailable && (
-                              <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                                <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                                  {isInWishList(selectedAttrData?.productId) ? (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                                  ) : (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                                  )}
-                                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                </button>
-                              </div>
-                            )}
-
-                            {isEngravingAvailable && (
-                              <div className='flex flex-col w-full gap-y-2 add-green-btn'>
-                                <Button className="block py-3 sm:hidden nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <Button className="hidden sm:block nc-button " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                                  {translate('label.product.engravingText')}
-                                </button>
-                                <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                                  {isInWishList(selectedAttrData?.productId) ? (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                                  ) : (
-                                    <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                                  )}
-                                  <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                    <><UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} /></>
                   )}
                 </div>
+                )}
               </div>
             </div>
           </div>
@@ -1461,6 +1446,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     renderItem={customRenderItem}
                     renderThumbInner={customRenderThumbInner}
                   />
+                {featureToggle?.features?.enableRichPdpToggle && (
+                  <p className='text-gray-500'>Product Code: {product?.productCode}</p>
+                )}
                 </div>
               ) : (
                 <div className={`w-full lg:w-[55%] sticky top-0 ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
@@ -1558,6 +1546,24 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </>
           )}
+            {CURRENT_THEME === "camera" && (
+              <>
+                    {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true))?.length > 0 && (
+            <>
+                    <hr className="border-slate-200 dark:border-slate-700" />
+                    <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
+                      {CURRENT_THEME === "camera" ? 
+                        <>
+                          <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                          <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                        </>
+                      : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}   
+                      <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           {featureToggle?.features?.enableEngage &&
             <>
               <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
@@ -1574,9 +1580,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
+        {!featureToggle?.features?.enableBottomTabsSection && (
+          <>
           {reviews?.review?.productReviews?.length > 0 &&
             renderReviews()
           }
+          </>
+        )}
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6 pdp-description-section">
               <ProductDescription seoInfo={attrGroup} />

@@ -2144,7 +2144,8 @@ body .pdp-right-section .price{
   font-size: 22px !important;
 }
 .blue-add-btn .add-green-btn .nc-Button{
-  background-color: #294384 !important;
+  background-color: #ACD4FF !important;
+  color: #000 !important;
 }
 .product-card.border-prod-card{
  border:1px solid #efefef !important;
@@ -2444,4 +2445,19 @@ display: none !important;
 .dynamic-html-data strong{
   color: #536DAE !important;
   font-weight: 600 !important;
+}
+.review-none-section hr{
+  display: none !important;
+}
+.blue-add-btn .buy-btn  .nc-Button{
+  background-color: #2D4D9C !important;
+}
+.blue-add-btn .buy-btn svg{
+display: none !important;
+}
+.link-clr{
+  color:#536DAE;
+}
+html {
+  scroll-behavior: smooth;
 }
