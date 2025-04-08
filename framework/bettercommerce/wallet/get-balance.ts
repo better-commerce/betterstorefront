@@ -12,7 +12,6 @@ export default function getCustomerWalletBalanceById(walletId: string, cookies?:
         method: 'GET',
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
-        logRequest: true
       });
       return response;
     } catch (error: any) {
