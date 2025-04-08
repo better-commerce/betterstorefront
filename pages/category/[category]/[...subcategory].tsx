@@ -11,7 +11,6 @@ import getAllCategoriesStaticPath from '@framework/category/get-all-categories-s
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
-import { getCategoryProducts } from '@framework/api/operations'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, } from 'framework/utils/app-util'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
@@ -149,7 +148,7 @@ export async function getStaticProps(context: any) {
   }
   if (categorySlugUIDData && categorySlugUIDData?.id) {
     if (!categoryProductUIDData) {
-      categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id, { [Cookie.Key.LANGUAGE]: locale })
+      categoryProductUIDData = await commerce.getCategoryProducts(categorySlugUIDData?.id, { [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
         props: {

@@ -23,6 +23,7 @@ export const OPERATIONS = [
   'getCustomerWishlist',
   'getAllProductPaths',
   'getAllProducts',
+  'getCategoryProducts',
   'getAllRecentlyViewedProducts',
   'getProduct',
   'getProductPreview',
@@ -210,6 +211,7 @@ export type Operations<P extends APIProvider> = {
       } & OperationOptions
     ): Promise<T['data']>
   }
+  getCategoryProducts: {}
 
   getAllRecentlyViewedProducts: {
     <T extends getAllRecentlyViewedProductsOperation>(opts: {
