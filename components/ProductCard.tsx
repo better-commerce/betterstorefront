@@ -231,7 +231,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-gray-200 p-2 rounded' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-gray-200 p-2 rounded' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? featureToggle?.features?.enableForPCSite ? '!border !border-sky-600' : '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className={`${featureToggle?.features?.enableForPCSite ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
@@ -280,7 +280,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         {featureToggle.features?.enableForPCSite && <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
           <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {data?.price?.currencySymbol}2.35</span> with voucher
         </div>}
-        {featureToggle?.features?.enableAddButtonBottom && (
+        {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && (
           <div className='my-3 add-btn-plp'>
             <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
           </div>
@@ -288,7 +288,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         {isComparedEnabled && product?.compared && (
           <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
             {product?.compared && (
-              <button className="w-full py-2 font-semibold text-red-600 uppercase border-t border-red-600 bg-red-50 rounded-b-2xl hover:bg-red-100 font-14">
+              <button className={`${featureToggle?.features?.enableAddButtonBottom ? 'rounded-b border-t border-sky-600' : 'rounded-b-2xl border-t border-red-600'} w-full py-2 font-semibold text-red-600 uppercase  bg-red-50 hover:bg-red-100 font-14`}>
                 Remove
               </button>
             )}
