@@ -87,6 +87,7 @@ export const getProductListTransform = (results: any) =>
     fulfilFromSupplier: product?.fulfilFromSupplier,
     trending: product?.trending,
     bestSeller: product?.bestSeller,
+    displayOrder: product?.displayOrder,
     onSale: product?.onSale,
     newLaunch: product?.newLaunch,
     exclusive: product?.exclusive,

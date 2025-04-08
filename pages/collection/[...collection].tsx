@@ -47,6 +47,7 @@ import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection }
 import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
+import Prices from '@components/Prices'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -436,6 +437,8 @@ function CollectionPage(props: any) {
     setProductCompare(false)
   }
   const cleanPath = removeQueryString(router.asPath)
+  const topFeaturedProduct = productDataToPass?.results?.filter((p: any) => [1, 2, 3].includes(p.displayOrder));
+
   return (
     <>
       <NextHead>
@@ -621,6 +624,29 @@ function CollectionPage(props: any) {
                             <div className='sm:col-span-3'>
                               <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
                             </div>
+                            {topFeaturedProduct?.length > 0 &&
+                              <div className='flex flex-col w-full gap-4 p-2 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
+                                <div className='flex flex-col justify-end w-full text-right'>
+                                  <h4 className='text-xs font-normal primary-text-blue'>Featured Products</h4>
+                                </div>
+                                <div className='grid grid-cols-3 gap-3 p-2'>
+                                  {topFeaturedProduct?.map((product: any, pIdx: number) => (
+                                    <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
+                                      <div className='col-span-4'>
+                                        <img src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={product?.name} />
+                                      </div>
+                                      <div className='flex flex-col col-span-8 gap-3'>
+                                        <h4 className='text-sm font-normal text-black'>{product?.name}</h4>
+                                        <div className='flex justify-start gap-1 text-xs'>
+                                          <span>{product?.price?.formatted?.withTax}</span>
+                                          <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            }
                             <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
