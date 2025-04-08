@@ -693,7 +693,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                       <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                         {featureToggle.features?.enableForPCSite &&
                           <>
-                            <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                            <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
                               <div className='flex flex-col w-full gap-4 sm:col-span-9'>
                                 <div className="bg-transparent fixing-main-section dark:bg-white">
                                   <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
@@ -721,8 +721,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </div>
                                 }
                               </div>
-                              <div className='sm:col-span-3'>
-                                <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
+                              <div className='justify-center sm:col-span-3'>
+                                {brandDetails?.logoImageName != "" && <img src={brandDetails?.logoImageName} className='object-cover object-top w-full h-auto rounded-lg' />}
                               </div>
                               <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                                 <div className='flex items-center justify-between w-full gap-0'>

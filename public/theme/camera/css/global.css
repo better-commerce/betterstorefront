@@ -2441,3 +2441,7 @@ display: none !important;
   padding-right:0 !important;
 }
 }
+.dynamic-html-data strong{
+  color: #536DAE !important;
+  font-weight: 600 !important;
+}
