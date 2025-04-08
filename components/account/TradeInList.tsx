@@ -60,14 +60,14 @@ export default function TradeInTable() {
     RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
   };
 
-  const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 20, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
+  const [paginationState, setPaginationState] = useState<any>({ page: 1, pageSize: 20, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
   const fetchAllTrades = async (page = 1) => {
     setIsLoading(true)
     try {
       const { pageCount, ...rest } = paginationState
-      const params = { ...rest, pageNumber: page }
+      const params = { ...rest, page: page }
       const { data: allTrades } = await axios.get(NEXT_TRADE_IN_CUSTOMER_TRADES, { params })
-      setPaginationState((prev: any) => ({ ...prev, pageNumber: allTrades?.page, pageCount: allTrades?.totalPages, pageSize: allTrades?.pageSize }))
+      setPaginationState((prev: any) => ({ ...prev, page: allTrades?.page, pageCount: allTrades?.totalPages, pageSize: allTrades?.pageSize }))
       setTradeList(allTrades)
       setIsLoading(false)
     } catch (error) {
