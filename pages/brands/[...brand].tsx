@@ -694,7 +694,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                         {featureToggle.features?.enableForPCSite &&
                           <>
                             <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
-                              <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                              <div className='flex flex-col w-full gap-4 sm:col-span-12'>
                                 <div className="bg-transparent fixing-main-section dark:bg-white">
                                   <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
                                     <li className='flex items-center text-10-mob sm:text-sm'>
@@ -712,6 +712,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                     </li>
                                   </ol>
                                 </div>
+                                {brandDetails?.premiumBrandLogo != "" && <div className='flex flex-col justify-center w-full bg-gray-100 sm:col-span-12'>
+                                  <img src={brandDetails?.premiumBrandLogo} className='object-cover object-center w-full h-[220px]' />
+                                </div>}
                                 <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
                                   {brandDetails?.name}
                                 </h1>
@@ -721,9 +724,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </div>
                                 }
                               </div>
-                              <div className='justify-center sm:col-span-3'>
-                                {brandDetails?.logoImageName != "" && <img src={brandDetails?.logoImageName} className='object-cover object-top w-full h-auto rounded-lg' />}
-                              </div>
+
                               <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                                 <div className='flex items-center justify-between w-full gap-0'>
                                   <div className='flex justify-start gap-3'>
@@ -752,7 +753,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                       {featureToggle.features?.enableForPCSite &&
                         <>
                           <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
-                            <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                            <div className='flex flex-col w-full gap-4 sm:col-span-12'>
                               <div className="bg-transparent fixing-main-section dark:bg-white">
                                 <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
                                   <li className='flex items-center text-10-mob sm:text-sm'>
@@ -770,6 +771,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </li>
                                 </ol>
                               </div>
+                              {brandDetails?.premiumBrandLogo != "" && <div className='flex flex-col justify-center w-full bg-gray-100 sm:col-span-12'>
+                                <img src={brandDetails?.premiumBrandLogo} className='object-cover object-center w-full h-[220px]' />
+                              </div>}
                               <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
                                 {brandDetails?.name}
                               </h1>
@@ -778,9 +782,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
                                 </div>
                               }
-                            </div>
-                            <div className='justify-center sm:col-span-3'>
-                              {brandDetails?.logoImageName != "" && <img src={brandDetails?.logoImageName} className='object-cover object-top w-full h-auto rounded-lg' />}
                             </div>
                             <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>

@@ -71,7 +71,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   }
   const renderMagnifyingGlassIcon = () => {
     return (
-      <SearchBar onClick={setShowSearchBar} keywords={keywords} searchDefaultSortBy={searchDefaultSortBy} />
+      <SearchBar onClick={setShowSearchBar} featureToggle={featureToggle} keywords={keywords} searchDefaultSortBy={searchDefaultSortBy} />
     );
   };
   function handleWishlist() {
@@ -177,8 +177,8 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                     </div>
                     {!isMobile &&
                       <div className="search-icon-box flex-[2] hidden sm:flex">
-                        <button className="items-center justify-center w-full h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                          {renderMagnifyingGlassIcon()}
+                        <button className="relative items-center justify-center w-full h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                          {renderMagnifyingGlassIcon()}                          
                         </button>
                       </div>
                     }
