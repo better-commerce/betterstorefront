@@ -277,9 +277,16 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>
-        {featureToggle.features?.enableForPCSite && <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
-          <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {data?.price?.currencySymbol}2.35</span> with voucher
-        </div>}
+        {featureToggle.features?.enableForPCSite &&
+          <>
+            <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
+              <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {data?.price?.currencySymbol}2.35</span> with voucher
+            </div>
+            <div className='flex items-center justify-start gap-1 mt-2 text-xs font-normal text-gray-600'>
+              <span className='px-1 py-0.5 rounded text-xs text-gray-700'>FREE Next day delivery</span>
+            </div>
+          </>
+        }
         {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && (
           <div className='my-3 add-btn-plp'>
             <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
@@ -295,8 +302,6 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </div>
         )}
       </div>
-
-
       {/* QUICKVIEW */}
       < ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
     </>
