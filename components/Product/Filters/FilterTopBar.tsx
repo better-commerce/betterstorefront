@@ -31,7 +31,7 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleSor
   return (
     <section aria-labelledby="filter-heading" className={`${featureToggle.features?.enableForPCSite ? 'sm:pr-2 lg:pr-2 py-0' : 'sm:pr-2 lg:pr-6 py-4'} items-center justify-between flex-1 hidden w-full text-center sm:mb-0 sm:flex flex-end mob-filter`} >
       {appliedFilters?.length > 0 ? (
-        <div className={`relative col-start-1 row-start-1 py-2 pl-4 ${isBrandPLP ? 'brand-plp-filter-show' : ''}`}>
+        <div className={`relative col-start-1 row-start-1 ${featureToggle.features?.enableForPCSite ? ' py-0 pl-2' : ' py-2 pl-4'} ${isBrandPLP ? 'brand-plp-filter-show' : ''}`}>
           <div className="flex px-0 mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-0 lg:px-0">
             <button onClick={clearAll} type="button" className={`text-gray-500 ${appliedFilters?.length === 1 && isBrandPLP ? 'hide-clear-all-plp' : ''}`}> {translate('label.filters.clearAllText')} </button>
             <div className={`flex flex-wrap filter-wrap-section ${isBrandPLP ? 'brand-filter-wrap' : ''}`}>
