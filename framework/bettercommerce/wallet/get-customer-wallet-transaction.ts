@@ -9,12 +9,13 @@ export default function getCustomerWalletTransactionById(
   cookies?: any
 ) {
   async function getCustomerWalletTransactionByIdAsync() {
+    const url = `${WALLET_GET_CUSTOMER_WALLET}/${walletId}/transactions`
     try {
       const response: any = await fetcher({
         baseUrl: DIGITAL_WALLET_BASE_URL,
-        url: `${WALLET_GET_CUSTOMER_WALLET}/${walletId}/transactions`, // Wallet ID in URL
-        method: 'POST', // ✅ Ensure it's a POST request
-        data, // ✅ Send pagination & filters in the request body
+        url,
+        method: 'GET',
+        params: data,
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
       });

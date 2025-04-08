@@ -56,7 +56,7 @@ export default function WalletDetail() {
       setIsLoadingWallet(false);
     }
   };
-  const getWalletTransactions = async ({ walletId, page = 1 }: any) => {
+  const getWalletTransactions = async ({ walletId, page = 1, sortBy = "created_on", sortDescending = true, filters = {} }: any) => {
     setIsLoadingTransactions(true);
     try {
       const { pageCount, ...rest } = paginationState;
@@ -64,9 +64,9 @@ export default function WalletDetail() {
         walletId,
         page,
         pageSize: 10,
-        sortBy: "date",
-        sortDescending: true,
-        filters: {},
+        sortBy,
+        sortDescending,
+        filters,
       });
       setWalletTransaction(transactionsResult?.value);
       setPaginationState((prev: any) => ({
@@ -163,7 +163,7 @@ export default function WalletDetail() {
                     </div>
                     {paginationState.pageCount > 1 && <Pagination
                       currentPage={paginationState.pageNumber}
-                      onPageChange={({ selected }: any) => getWalletTransactions(selected + 1)} // ✅ Pass correct page number
+                      onPageChange={({ selected }: any) => getWalletTransactions({ walletId: user.walletId, page: selected + 1 })}
                       pageCount={paginationState.pageCount}
                     />}
                   </>
