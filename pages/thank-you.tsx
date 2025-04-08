@@ -426,8 +426,8 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {featureToggle?.features?.enableShortThankYouPage ? (
-        <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
-        <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
+        <main className="px-4 pt-6 pb-10 sm:pb-24 bg-white sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+        <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
           {/* Box Icon */}
           {order?.orderNo ? (
           <div className="flex flex-col items-center">

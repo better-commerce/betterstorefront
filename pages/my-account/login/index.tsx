@@ -65,6 +65,7 @@ function LoginPage({ appConfig, pluginConfig = [], featureToggle }: any) {
         <meta property="og:title" content={translate('label.checkout.loginRegistrationText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.checkout.loginRegistrationText')} key="ogdesc" />
       </NextHead>
+      
       {featureToggle?.features?.enableBannerLogin ? (
           <LoginWithBanner pluginConfig={pluginConfig} />
         ) : (

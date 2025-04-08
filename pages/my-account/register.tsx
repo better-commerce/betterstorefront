@@ -22,6 +22,7 @@ import { AlertType } from '@framework/utils/enums'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
+import LoginSideBanner from '@components/account/LoginWithBanner/LoginSideBanner'
 
 const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, pluginSettings = [] }: any) => {
   const [error, setError] = useState(apiError)
@@ -65,7 +66,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
       </div> */}
 
       <div className="flex flex-col items-center justify-center w-full">
-        <div className="w-full px-10 font-semibold sm:px-0">
+        <div className="w-full px-10 mob-padding-none font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-800">{translate('label.addressBook.emailText')}</label>
           <input
             className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black"
@@ -76,7 +77,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
           />
         </div>
         {error ? <span className="text-red-500 capitalize">{error}</span> : null}
-        <div className="flex items-center justify-center w-full my-5 px-10 sm:px-0">
+        <div className="flex items-center justify-center w-full my-5 mob-padding-none  px-10 sm:px-0">
           <Button
             className="w-full border border-black btn btn-c btn-primary rounded-2xl"
             buttonType="default"
@@ -89,7 +90,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
   )
 }
 
-function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
+function RegisterPage({ recordEvent, setEntities, config, pluginConfig, featureToggle }: any) {
   let b2bSettings = []
   const { recordAnalytics } = useAnalytics()
   const SOCIAL_LOGINS_ENABLED = getEnabledSocialLogins(pluginConfig)
@@ -249,6 +250,16 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
       console.log(error)
     }
   }
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      setGreeting('Good Morning!');
+    } else {
+      setGreeting('Good Evening!');
+    }
+  }, []);
   return (
     <>
       <NextHead>
@@ -262,45 +273,99 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig }: any) {
         <meta property="og:title" content={translate('label.checkout.loginRegistrationText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.checkout.loginRegistrationText')} key="ogdesc" />
       </NextHead>
-      <section aria-labelledby="trending-heading" className="bg-white">
-        <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
-          <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-            <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
-              {translate('label.register.freeRegisterText')}
-            </h1>
-          </div>
-          <div className="max-w-md mx-auto space-y-6">
-            {!successMessage && (
-              <>
-                {!hasPassedEmailValidation ? (
-                  <EmailInput
-                    value={userEmail}
-                    onChange={(e: any) => setUserEmail(e.target.value)}
-                    submit={handleEmailSubmit}
-                    apiError={error}
-                    pluginSettings={pluginConfig}
-                    socialLogins={SOCIAL_LOGINS_ENABLED}
-                  />
-                ) : (
-                  <Form
-                    type="register"
-                    b2bSettings={b2bSettings}
-                    email={userEmail}
-                    onSubmit={handleUserRegister}
-                  />
-                )}
-              </>
-            )}
-
-            <span className="block text-center text-neutral-700 dark:text-neutral-700">
-              {translate('label.myAccount.alreadyAccountText')} {` `}
-              <Link passHref className="text-green-600" href="/my-account/login">
-                {translate('label.login.loginBtnText')}
-              </Link>
-            </span>
-          </div>
-        </div>
-      </section>
+           {featureToggle?.features?.enableBannerLogin ? (
+            <>
+            <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr form-input-label">
+            <div className="w-full md:w-1/2 h-full">
+            <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
+            <div className='w-full'>
+              <img src="/theme/camera/image/pc-blue-logo.png" alt="pc-logo"/>
+            </div>
+                  <div className="flex flex-col items-start justify-center px-0 sm:px-6 lg:px-0">
+                    <h1 className="mt-10 mb-10 flex flex-col items-start text-xl leading-[115%] md:text-4xl md:leading-[115%] font-normal text-neutral-900 dark:text-neutral-900 justify-center">
+                    {greeting}
+                    <span className='block font-semibold'>Create a new account.</span>
+                    </h1>
+                  </div>
+                  <div className="max-w-md">
+                    {!successMessage && (
+                      <>
+                        {!hasPassedEmailValidation ? (
+                          <EmailInput
+                            value={userEmail}
+                            onChange={(e: any) => setUserEmail(e.target.value)}
+                            submit={handleEmailSubmit}
+                            apiError={error}
+                            pluginSettings={pluginConfig}
+                            socialLogins={SOCIAL_LOGINS_ENABLED}
+                          />
+                        ) : (
+                          <Form
+                            type="register"
+                            b2bSettings={b2bSettings}
+                            email={userEmail}
+                            onSubmit={handleUserRegister}
+                          />
+                        )}
+                      </>
+                    )}
+        
+                    <span className="block text-left mt-2 text-neutral-700 dark:text-neutral-700">
+                      {translate('label.myAccount.alreadyAccountText')} {` `}
+                      <Link passHref className="text-black underline" href="/my-account/login">
+                        {translate('label.login.loginBtnText')}
+                      </Link>
+                    </span>
+                  </div>
+                </div>
+            </div>
+              {/* Sidebar Banner Section */}
+                <div className="w-full md:w-1/2 h-screen mob-p-d-none">
+                 <LoginSideBanner />
+              </div>
+            </div>
+             </>
+              ) : (
+            <section aria-labelledby="trending-heading" className="bg-white">
+                <div className="pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
+                  <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+                    <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
+                      {translate('label.register.freeRegisterText')}
+                    </h1>
+                  </div>
+                  <div className="max-w-md mx-auto space-y-6">
+                    {!successMessage && (
+                      <>
+                        {!hasPassedEmailValidation ? (
+                          <EmailInput
+                            value={userEmail}
+                            onChange={(e: any) => setUserEmail(e.target.value)}
+                            submit={handleEmailSubmit}
+                            apiError={error}
+                            pluginSettings={pluginConfig}
+                            socialLogins={SOCIAL_LOGINS_ENABLED}
+                          />
+                        ) : (
+                          <Form
+                            type="register"
+                            b2bSettings={b2bSettings}
+                            email={userEmail}
+                            onSubmit={handleUserRegister}
+                          />
+                        )}
+                      </>
+                    )}
+        
+                    <span className="block text-center text-neutral-700 dark:text-neutral-700">
+                      {translate('label.myAccount.alreadyAccountText')} {` `}
+                      <Link passHref className="text-green-600" href="/my-account/login">
+                        {translate('label.login.loginBtnText')}
+                      </Link>
+                    </span>
+                  </div>
+                </div>
+            </section>
+        )}
     </>
   )
 }
