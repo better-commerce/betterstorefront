@@ -607,7 +607,12 @@ p {
 .primary-text-color {
   color: #000;
 }
-
+.primary-text-blue {
+  color: var(--btn-bg-primary) !important;
+}
+.text-blue-light{
+  color: #536DAE !important;
+}
 .bg-header-color {
   background: var(--bg-header-color);
 }
@@ -1902,7 +1907,7 @@ p {
 }
 
 .theme-top{
-  padding-top: 8.4rem !important;
+  padding-top: 8.5rem !important;
 }
 
 .step-indicator {

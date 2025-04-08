@@ -23,8 +23,8 @@ export interface SectionSliderProductCardProps {
 const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership, deviceInfo }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
-  let dataPerRow = featureToggle?.features?.enablePCHome ? 5 : 4
-  let dataPerRowMed = featureToggle?.features?.enablePCHome ? 5 : 4
+  let dataPerRow = featureToggle?.features?.enableForPCSite ? 5 : 4
+  let dataPerRowMed = featureToggle?.features?.enableForPCSite ? 5 : 4
   let dataGap = 32
   if (CURRENT_THEME == "green") {
     dataPerRow = 6
@@ -49,7 +49,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {CURRENT_THEME != 'green' ? (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <Heading key={iIdx} className={`text-neutral-900 dark:text-neutral-50 heading-px-4 ${featureToggle?.features?.enablePCHome ? 'mb-4 sm:mb-6 lg:mb-6' : 'mb-4 sm:mb-12 lg:mb-14'}`} desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
+            <Heading key={iIdx} className={`text-neutral-900 dark:text-neutral-50 heading-px-4 ${featureToggle?.features?.enableForPCSite ? 'mb-4 sm:mb-6 lg:mb-6' : 'mb-4 sm:mb-12 lg:mb-14'}`} desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
               {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
             </Heading>
           ))}
@@ -65,7 +65,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
           <ul className="glide__slides">
             {data?.length > 0 && data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide product-card-item home-product-card ${itemClassName}`}>
-                {featureToggle?.features?.enablePCHome ? (
+                {featureToggle?.features?.enableForPCSite ? (
                   <HomeProductCardMin deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 ) : (
                   <ProductCard deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />

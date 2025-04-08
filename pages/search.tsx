@@ -333,25 +333,29 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
         <meta property="og:title" content={translate('label.basket.catalogText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.basket.catalogText')} key="ogdesc" />
       </NextHead>
-      <div className="container pt-10 pb-24 mx-auto dark:bg-white">
-        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-          <h1 className={`block text-2xl font-semibold dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
-            {translate('label.basket.catalogText')}
-          </h1>
-        </div>
-        <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-1 sm:mb-1 align-center'>
-          <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
-          <div className="flex justify-end align-bottom">
-            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-          </div>
-        </div>
-        <hr className="border-slate-200 dark:border-slate-200" />
+      <div className={`container mx-auto dark:bg-white ${featureToggle?.features?.enableForPCSite ? 'pb-24 pt-0' : ' pt-10 pb-24'}`}>
+        {!featureToggle?.features?.enableForPCSite &&
+          <>
+            <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+              <h1 className={`block text-2xl font-semibold dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl' : 'sm:text-3xl lg:text-4xl'}`}>
+                {translate('label.basket.catalogText')}
+              </h1>
+            </div>
+            <div className='flex justify-between w-full pb-2 mt-1 mb-2 sm:pb-1 sm:mb-1 align-center'>
+              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
+              <div className="flex justify-end align-bottom">
+                <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+              </div>
+            </div>
+            <hr className="border-slate-200 dark:border-slate-200" />
+          </>
+        }
         {isValidating ? (
           <Loader />
         ) : (
           <>
             {!!productDataToPass?.results?.length ? (
-              <div className={`${featureToggle?.features?.enablePCHome ? 'gap-1' : 'gap-1'} sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 px-0 mx-auto mt-1.5 sm:mt-3 overflow-hidden sm:px-0 lg:px-0`}>
+              <div className={`${featureToggle?.features?.enableForPCSite ? 'gap-1 mt-0' : 'gap-1 mt-1.5 sm:mt-3'} sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 px-0 mx-auto overflow-hidden sm:px-0 lg:px-0`}>
                 {isMobile ? (
                   <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                 ) : (
@@ -366,7 +370,31 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                   </>
                 )}
                 <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
-                  <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  {featureToggle.features?.enableForPCSite &&
+                    <>
+                      <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:my-4'>
+                        <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                          <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                            {translate('label.basket.catalogText')}
+                          </h1>
+                          <p className='text-sm font-normal text-gray-800'>Welcome to the Digital SLR Store at Park Cameras, your one-stop destination for <span className='font-semibold text-blue-light'>DSLR cameras, Accessories, Bags, Lenses</span> and <span className='font-semibold text-blue-light'>Tripods</span>. Whether you’re a beginner looking for your first DSLR or a professional seeking an upgrade, we offer a wide range of cameras, lenses, tripods, bags, and accessories from top brands like <span className='font-semibold text-blue-light'>Canon, Nikon, Pentax, Leica,</span> and <span className='font-semibold text-blue-light'>Sony.</span></p>
+                        </div>
+                        <div className='sm:col-span-3'>
+                          <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
+                        </div>
+                        <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                          <div className='flex items-center justify-between w-full gap-0'>
+                            <div className='flex justify-start gap-3'>
+                              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
+                              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                            </div>
+                            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  }
+                  {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
                   {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                 </div>
                 <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />

@@ -131,12 +131,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const [isShow, setIsShow] = useState(false);
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: featureToggle?.features?.enablePCHome ? 3 : 6, gap: 16, bound: true,
+      perView: featureToggle?.features?.enableForPCSite ? 3 : 6, gap: 16, bound: true,
       breakpoints: {
-        1280: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
-        1279: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
-        1023: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
-        768: { gap: 16, perView: featureToggle?.features?.enablePCHome ? 3 : 6, },
+        1280: { gap: 16, perView: featureToggle?.features?.enableForPCSite ? 3 : 6, },
+        1279: { gap: 16, perView: featureToggle?.features?.enableForPCSite ? 3 : 6, },
+        1023: { gap: 16, perView: featureToggle?.features?.enableForPCSite ? 3 : 6, },
+        768: { gap: 16, perView: featureToggle?.features?.enableForPCSite ? 3 : 6, },
         500: { gap: 16, perView: 1.5, },
       },
     };
@@ -181,7 +181,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {featureToggle?.features?.enablePCHome ?
+        {featureToggle?.features?.enableForPCSite ?
           <>
             <div className='grid gap-2 sm:grid-cols-12'>
               <div className='col-span-12 sm:col-span-8'>

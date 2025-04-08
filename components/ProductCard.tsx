@@ -231,11 +231,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`${featureToggle?.features?.enablePCHome ? 'border border-gray-200 p-2 rounded' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
-        <div className={`${featureToggle?.features?.enablePCHome ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
+      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-gray-200 p-2 rounded' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+        <div className={`${featureToggle?.features?.enableForPCSite ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
-              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enablePCHome ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={data?.name} />
+              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={data?.name} />
             </div>
           </ButtonLink>
           <div className={CLASSES}>
@@ -246,7 +246,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         </div>
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
-          <div className="px-2.5 pt-5 pb-2.5 product-card__information">
+          <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-5 pb-2.5 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
             <div className='mt-4'>
               <h2 className="text-base text-left font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
             </div>

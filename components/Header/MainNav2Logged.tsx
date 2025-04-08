@@ -219,7 +219,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                 {!isMobile &&
                   <div className="w-full mt-2 bg-header-nav-clr">
                     <div className="container flex-[2] justify-center lg:flex custom-padding-nav">
-                      {featureToggle?.features?.enablePCHome ? (<>
+                      {featureToggle?.features?.enableForPCSite ? (<>
                         <NavigationRows subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
                       </>) : (<>
                         <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
@@ -244,7 +244,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                 </div>
                 {!isMobile &&
                   <div className="flex-[2] justify-center mx-4 lg:flex custom-padding-nav">
-                    {featureToggle?.features?.enablePCHome ? (<>
+                    {featureToggle?.features?.enableForPCSite ? (<>
                       <NavigationRows subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />
                     </>) : (<>
                       <Navigation subMenuPosition={classTop} navItems={config} featureToggle={featureToggle} />

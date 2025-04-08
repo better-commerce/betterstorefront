@@ -32,7 +32,7 @@
     "enableTradeIn": false,
     "enableWallet": false,
     "enableBottomTabsSection":false,
-    "enablePCHome":false,
+    "enableForPCSite":false,
     "enableBannerLogin":false,
     "enableInputLabel":false,
     "enablePCTopHeader":false,
