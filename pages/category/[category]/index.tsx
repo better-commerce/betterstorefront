@@ -554,25 +554,29 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section fixing-main-section dark:bg-white">
-        <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
-          {category?.breadCrumbs && (
-            <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
-          )}
-        </div>
-        <div className="container">
-          <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-            <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
-              {category?.name.toLowerCase()}
-            </h1>
-            {category?.description &&
-              <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
-                  <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
-                </span>
+        {!featureToggle.features?.enableForPCSite &&
+          <>
+            <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
+              {category?.breadCrumbs && (
+                <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
+              )}
+            </div>
+            <div className="container">
+              <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+                <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+                  {category?.name.toLowerCase()}
+                </h1>
+                {category?.description &&
+                  <div className='w-full'>
+                    <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
+                      <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                    </span>
+                  </div>
+                }
               </div>
-            }
-          </div>
-        </div>
+            </div>
+          </>
+        }
         {category?.linkGroups?.length > 0 ?
           (
             <div className='container mx-auto category-container'>
@@ -664,9 +668,39 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                               )}
                             </>
                           )}
-                          <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' :'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
+                          <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
+                            {featureToggle.features?.enableForPCSite &&
+                              <>
+                                <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                                  <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                                    {category?.breadCrumbs && (
+                                      <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
+                                    )}
+                                    <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                                      {category?.name}
+                                    </h1>
+                                    {category?.description &&
+                                      <div className='flex w-full'>
+                                        <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
+                                      </div>
+                                    }
+                                  </div>
+                                  <div className='justify-center sm:col-span-3'>
+                                    {category?.image != "" && <img src={category?.image} className='object-cover object-top w-full h-auto rounded-lg' />}
+                                  </div>
+                                  <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                                    <div className='flex items-center justify-between w-full gap-0'>
+                                      <div className='flex justify-start gap-3'>
+                                        <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${category?.name}`}</span>
+                                      </div>
+                                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            }
                             {isMobile ? null : (
-                              <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             )}
                             <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </div>

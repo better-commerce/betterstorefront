@@ -15,23 +15,34 @@ import useUpdatePaymentWebHook from './update-payment-webhook'
 
 // Other Imports
 import { BCPaymentEndpoint } from './constants'
-import { encrypt } from '@framework/utils/cipher'
+import { decrypt, encrypt } from '@framework/utils/cipher'
 import { getPaymentMethods } from '@framework/payment'
-import {
-  BETTERCOMMERCE_COUNTRY,
-  BETTERCOMMERCE_CURRENCY,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_CURRENCY,
-} from '@components/utils/constants'
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_CURRENCY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_CURRENCY, } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
+import { Cookie } from '@framework/utils/constants'
 
-const PaymentsApiMiddleware = async function useBCPayments({
-  data = {},
-  params = {},
-  headers,
-  cookies,
-  origin,
-}: any) {
+/**
+ * PaymentsApiMiddleware
+ * @param {Object} data - The data to be processed
+ * @param {Object} params - The parameters for the middleware
+ * @param {Object} headers - The HTTP headers
+ * @param {Object} cookies - The cookies
+ * @param {string} origin - The origin of the request
+ * @returns {Promise<Object | string>}
+ * @description
+ * This middleware handles the payment requests and returns the response accordingly.
+ * It supports the following endpoints:
+ * - B2B company details
+ * - Checkout order conversion
+ * - Payment response
+ * - Init payment
+ * - Request payment
+ * - Create one time payment order
+ * - Validate payment session
+ * - Request payment token
+ * - Webhook payment
+ */
+const PaymentsApiMiddleware = async function useBCPayments({ data = {}, params = {}, headers, cookies, origin, }: any) {
   const { t: type, s: isSecured, gid: gatewayId } = params
   let response = undefined
   let paymentConfig: any
@@ -47,36 +58,25 @@ const PaymentsApiMiddleware = async function useBCPayments({
 
   try {
     if (gatewayId) {
-      paymentConfig = await getPaymentConfig({
-        paymentGateway: getGatewayName(gatewayId ? parseInt(gatewayId) : -1),
-        cookies,
-        origin,
-        isSecured,
-      })
+      paymentConfig = await getPaymentConfig({ paymentGateway: getGatewayName(gatewayId ? parseInt(gatewayId) : -1), cookies, origin, isSecured, })
     }
+
+    const newCookies = { ...cookies, ut: cookies?.[Cookie.Key.USER_TOKEN] ? decrypt(cookies?.[Cookie.Key.USER_TOKEN]) : null }
 
     switch (type) {
       // ------------------ B2B ------------------
       case BCPaymentEndpoint.B2B_COMPANY_DETAILS:
-        response = await b2bCompanyDetails({
-          data,
-          config: paymentConfig,
-          cookies,
-        })
+        response = await b2bCompanyDetails({ data, config: paymentConfig, cookies: newCookies, })
         break
 
       // ------------------ Checkout ------------------
       case BCPaymentEndpoint.CONVERT_ORDER:
-        response = await convertOrder({ data, config: paymentConfig, cookies })
+        response = await convertOrder({ data, config: paymentConfig, cookies: newCookies })
         break
 
       case BCPaymentEndpoint.PAYMENT_RESPONSE:
         if (paymentConfig) {
-          response = await updatePaymentResponse({
-            data,
-            config: paymentConfig,
-            cookies,
-          })
+          response = await updatePaymentResponse({ data, config: paymentConfig, cookies: newCookies, })
         }
         break
 
@@ -89,52 +89,32 @@ const PaymentsApiMiddleware = async function useBCPayments({
 
       case BCPaymentEndpoint.REQUEST_PAYMENT:
         if (paymentConfig) {
-          response = await requestPayment({
-            data,
-            config: paymentConfig,
-            cookies,
-          })
+          response = await requestPayment({ data, config: paymentConfig, cookies, })
         }
         break
 
       case BCPaymentEndpoint.CREATE_ONE_TIME_PAY_ORDER:
         if (paymentConfig) {
-          response = await oneTimePaymentOrder({
-            data,
-            config: paymentConfig,
-            cookies,
-          })
+          response = await oneTimePaymentOrder({ data, config: paymentConfig, cookies, })
         }
         break
 
       case BCPaymentEndpoint.VALIDATE_PAYMENT_SESSION:
         if (paymentConfig) {
-          response = await validatePaymentSession({
-            data,
-            config: paymentConfig,
-            cookies,
-          })
+          response = await validatePaymentSession({ data, config: paymentConfig, cookies, })
         }
         break
 
       case BCPaymentEndpoint.REQUEST_TOKEN:
         if (paymentConfig) {
-          response = await requestToken({
-            data,
-            config: paymentConfig,
-            cookies,
-          })
+          response = await requestToken({ data, config: paymentConfig, cookies, })
         }
         break
 
       // ------------------ Webhook ------------------
       case BCPaymentEndpoint.PAYMENT_WEBHOOK:
         if (paymentConfig) {
-          response = await updatePaymentWebHook({
-            data,
-            config: paymentConfig,
-            cookies,
-          })
+          response = await updatePaymentWebHook({ data, config: paymentConfig, cookies: newCookies, })
         }
         break
     }
@@ -144,38 +124,19 @@ const PaymentsApiMiddleware = async function useBCPayments({
   }
 
   //if (response) {
-  return isSecured
-    ? encrypt(JSON.stringify(response))
-    : JSON.stringify(response)
+  return isSecured ? encrypt(JSON.stringify(response)) : JSON.stringify(response)
   //}
 }
 
-const getPaymentConfig = async ({
-  paymentGateway,
-  cookies,
-  origin,
-  isSecured,
-}: any) => {
+const getPaymentConfig = async ({ paymentGateway, cookies, origin, isSecured, }: any) => {
   const response: Array<any> = await getPaymentMethods()({
-    countryCode:
-      cookies?.Country ||
-      store?.get('Country') ||
-      BETTERCOMMERCE_COUNTRY ||
-      BETTERCOMMERCE_DEFAULT_COUNTRY,
-    currencyCode:
-      cookies?.Currency ||
-      store?.get('Currency') ||
-      BETTERCOMMERCE_CURRENCY ||
-      BETTERCOMMERCE_DEFAULT_CURRENCY,
+    countryCode: cookies?.Country || store?.get('Country') || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
+    currencyCode: cookies?.Currency || store?.get('Currency') || BETTERCOMMERCE_CURRENCY || BETTERCOMMERCE_DEFAULT_CURRENCY,
     basketId: cookies?.basketId,
     cookies,
     secureFieldValuesExplicitlyDisabled: true,
   })
-  const paymentConfig = response?.length
-    ? response?.find(
-      (x) => x?.systemName?.toLowerCase() === paymentGateway?.toLowerCase()
-    )
-    : undefined
+  const paymentConfig = response?.length ? response?.find((x) => x?.systemName?.toLowerCase() === paymentGateway?.toLowerCase()) : undefined
   /*const paymentConfig = response?.length ? response?.find(x => matchStrings(x.systemName, PAYPAL_PAY_METHOD_SYSTEM_NAME || "", true)) : undefined;
     if (paymentConfig?.settings?.length) {
         const config = parsePaymentMethodConfig(paymentConfig?.settings, isSecured);
@@ -191,18 +152,8 @@ const getPaymentConfig = async ({
 }
 
 export function bcPaymentsHandler() {
-  return async function handler({
-    data = {},
-    params = {},
-    cookies,
-    origin,
-  }: any) {
-    return await PaymentsApiMiddleware({
-      data,
-      params,
-      cookies,
-      origin,
-    })
+  return async function handler({ data = {}, params = {}, cookies, origin, }: any) {
+    return await PaymentsApiMiddleware({ data, params, cookies, origin, })
   }
 }
 

@@ -47,6 +47,7 @@ import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection }
 import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
+import Prices from '@components/Prices'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -436,6 +437,8 @@ function CollectionPage(props: any) {
     setProductCompare(false)
   }
   const cleanPath = removeQueryString(router.asPath)
+  const topFeaturedProduct = productDataToPass?.results?.filter((p: any) => [1, 2, 3].includes(p.displayOrder));
+
   return (
     <>
       <NextHead>
@@ -521,44 +524,50 @@ function CollectionPage(props: any) {
           </Swiper>
         ))}
       </div>
-      <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white">
-        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-          <li className='flex items-center text-10-mob sm:text-sm'>
-            <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
-              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
-            </Link>
-          </li>
-          <li className='flex items-center text-10-mob sm:text-sm'>
-            <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-              <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-            </span>
-          </li>
-          <li className='flex items-center text-10-mob sm:text-sm'>
-            <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
-          </li>
-        </ol>
-      </div>
-      <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space dark:bg-white">
-        {props?.breadCrumbs && (
-          <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
-        )}
-        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
-            {props?.name?.toLowerCase()}
-          </h1>
-          {props?.description &&
-            <div className='flex justify-between w-full align-bottom'>
-              <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
+      {!featureToggle.features?.enableForPCSite &&
+        <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white">
+          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+            </li>
+          </ol>
+        </div>
+      }
+      <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0' : ' pt-5 header-space'} container mx-auto bg-transparent sm:pb-24 dark:bg-white`}>
+        {!featureToggle.features?.enableForPCSite &&
+          <>
+            {props?.breadCrumbs && (
+              <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
+            )}
+            <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+              <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
+                {props?.name?.toLowerCase()}
+              </h1>
+              {props?.description &&
+                <div className='flex justify-between w-full align-bottom'>
+                  <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
+                </div>
+              }
             </div>
-          }
-        </div>
-        <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
-          <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
-          <div className="flex justify-end align-bottom">
-            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-          </div>
-        </div>
-        <hr className='border-slate-200 dark:border-slate-200' />
+            <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
+              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
+              <div className="flex justify-end align-bottom">
+                <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+              </div>
+            </div>
+            <hr className='border-slate-200 dark:border-slate-200' />
+          </>
+        }
         {
           <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
             {isValidating ? (
@@ -578,16 +587,133 @@ function CollectionPage(props: any) {
                         )}
                       </>
                     )}
-                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12' : 'sm:col-span-9'}`}>
+                    <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
+                      {featureToggle.features?.enableForPCSite &&
+                        <>
+                          <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                            <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                              {props?.breadCrumbs && (
+                                <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
+                              )}
+                              <div className="bg-transparent fixing-main-section dark:bg-white">
+                                <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                                  <li className='flex items-center text-10-mob sm:text-sm'>
+                                    <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                                      <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                                    </Link>
+                                  </li>
+                                  <li className='flex items-center text-10-mob sm:text-sm'>
+                                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                                      <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                    </span>
+                                  </li>
+                                  <li className='flex items-center text-10-mob sm:text-sm'>
+                                    <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                                  </li>
+                                </ol>
+                              </div>
+                              <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                                {props?.name}
+                              </h1>
+                              {props?.customInfo1 &&
+                                <div className='flex w-full'>
+                                  <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
+                                </div>
+                              }
+                            </div>
+                            <div className='sm:col-span-3'>
+                              <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
+                            </div>
+                            {topFeaturedProduct?.length > 0 &&
+                              <div className='flex flex-col w-full gap-4 p-2 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
+                                <div className='flex flex-col justify-end w-full text-right'>
+                                  <h4 className='text-xs font-normal primary-text-blue'>Featured Products</h4>
+                                </div>
+                                <div className='grid grid-cols-3 gap-3 p-2'>
+                                  {topFeaturedProduct?.map((product: any, pIdx: number) => (
+                                    <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
+                                      <div className='col-span-4'>
+                                        <img src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={product?.name} />
+                                      </div>
+                                      <div className='flex flex-col col-span-8 gap-3'>
+                                        <h4 className='text-sm font-normal text-black'>{product?.name}</h4>
+                                        <div className='flex justify-start gap-1 text-xs'>
+                                          <span>{product?.price?.formatted?.withTax}</span>
+                                          <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            }
+                            <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                              <div className='flex items-center justify-between w-full gap-0'>
+                                <div className='flex justify-start gap-3'>
+                                  <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
+                                </div>
+                                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      }
                       {isMobile ? null : (
-                        <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                        !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
                       {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                     </div>
                   </>
                 ) : (
                   <div className="col-span-12">
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    {featureToggle.features?.enableForPCSite &&
+                      <>
+                        <div className='grid mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                          <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                            {props?.breadCrumbs && (
+                              <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
+                            )}
+                            <div className="bg-transparent fixing-main-section dark:bg-white">
+                              <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                                <li className='flex items-center text-10-mob sm:text-sm'>
+                                  <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                                    <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                                  </Link>
+                                </li>
+                                <li className='flex items-center text-10-mob sm:text-sm'>
+                                  <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                                    <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                  </span>
+                                </li>
+                                <li className='flex items-center text-10-mob sm:text-sm'>
+                                  <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                                </li>
+                              </ol>
+                            </div>
+                            <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                              {props?.name}
+                            </h1>
+                            {props?.customInfo1 &&
+                              <div className='flex w-full'>
+                                <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
+                              </div>
+                            }
+                          </div>
+                          <div className='sm:col-span-3'>
+                            <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
+                          </div>
+                          <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex items-center justify-between w-full gap-0'>
+                              <div className='flex justify-start gap-3'>
+                                <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
+                              </div>
+                              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    }
+                    {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
                     {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                   </div>
                 )}
@@ -620,7 +746,7 @@ function CollectionPage(props: any) {
           <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         </div>
         <div className={`w-full text-left py-3 border-t`}>
-          {props?.customInfo1 &&
+          {!featureToggle.features?.enableForPCSite && props?.customInfo1 &&
             <div className='flex w-full'>
               <div className="block mt-4 text-xs text-neutral-500 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
             </div>

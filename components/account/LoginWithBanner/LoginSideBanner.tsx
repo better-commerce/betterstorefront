@@ -3,7 +3,7 @@ import { Logo } from "@components/ui";
 export default function LoginSideBanner() {
   return (
     <>
-   <div className="relative h-full park-bg-clr overflow-hidden flex flex-col justify-center items-center">
+   <div className="relative h-full park-bg-clr login-side-banner-img overflow-hidden flex flex-col justify-center items-center">
       {/* Background dot pattern */}
       <div className="absolute bottom-0 left-0 right-0 w-full grid grid-cols-12 gap-4 gap-y-8">
         {Array(72)?.fill(0)?.map((_, i) => (
@@ -12,7 +12,7 @@ export default function LoginSideBanner() {
       </div>
           
       {/* Content */}
-      <div className="relative z-10 text-white text-center px-10">
+      <div className="relative z-10 text-white text-center px-10 text-none-d">
         <div className="font-bold mb-16 flex justify-center">
         <Link href="/" passHref>
           <Logo className="flex-shrink-0" />

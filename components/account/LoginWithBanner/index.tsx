@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Router from 'next/router'
 import Link from 'next/link'
@@ -103,19 +103,33 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
     return <LoginOtp />
   }
   const [showPassword, setShowPassword] = useState(false);
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      setGreeting('Good Morning!');
+    } else {
+      setGreeting('Good Evening!');
+    }
+  }, []);
   return (
 
     <>
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr form-input-label">
       {/* Login Form Section */}
       <div className="w-full md:w-1/2 h-full">
       <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
-        <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-          <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
-            {translate('label.login.loginBtnText')} 
+        <div className='w-full'>
+          <img src="/theme/camera/image/pc-blue-logo.png" alt="pc-logo"/>
+        </div>
+        <div className="flex flex-col items-start justify-center px-0 sm:px-6 lg:px-0">
+          <h1 className="mt-10 mb-10 flex flex-col items-start text-xl leading-[115%] md:text-4xl md:leading-[115%] font-normal text-neutral-900 dark:text-neutral-900 justify-center">
+            {greeting}
+            <span className='block font-semibold'>Welcome back.</span>
           </h1>
         </div>
-        <div className="max-w-md mx-auto space-y-6">
+        <div className="max-w-md">
           <div className="grid gap-3">
             {SOCIAL_LOGINS_ENABLED && (
               <>
@@ -131,16 +145,16 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
           </div>
 
           <Form btnText={translate('label.login.loginBtnText')} type="login" onSubmit={handleUserLogin} apiError={noAccount ? translate('common.message.invalidAccountMsg') : ''} isLoginSidebarOpen={isLoginSidebarOpen} />
-          <div className={`flex flex-col items-center justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
+          <div className={`flex flex-col items-end justify-center w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >
             <Link passHref href="/my-account/forgot-password">
-              <span className="block font-medium text-green-600 underline cursor-pointer hover:text-green-800 hover:underline">
+              <span className="block text-sm mt-1 text-black underline cursor-pointerhover:underline">
                 {translate('label.login.forgotPasswordBtnText')}
               </span>
             </Link>
           </div>
-          <span className="block text-center text-neutral-700 dark:text-neutral-700">
+          <span className="block text-left mt-4 text-neutral-700 dark:text-neutral-700">
             {translate('label.login.newUserText')}{` `}
-            <Link passHref className="text-green-600" href="/my-account/register">
+            <Link passHref className="text-black underline" href="/my-account/register">
               {translate('label.login.createAccountText')}
             </Link>
           </span>
@@ -149,7 +163,7 @@ export default function Login({ isLoginSidebarOpen, redirectToOriginUrl = false,
       </div>
       
       {/* Sidebar Banner Section */}
-      <div className="w-full md:w-1/2 h-screen">
+      <div className="w-full md:w-1/2 h-screen mob-p-d-none">
         <LoginSideBanner />
       </div>
     </div>

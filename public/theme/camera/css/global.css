@@ -607,7 +607,12 @@ p {
 .primary-text-color {
   color: #000;
 }
-
+.primary-text-blue {
+  color: var(--btn-bg-primary) !important;
+}
+.text-blue-light{
+  color: #536DAE !important;
+}
 .bg-header-color {
   background: var(--bg-header-color);
 }
@@ -1902,7 +1907,7 @@ p {
 }
 
 .theme-top{
-  padding-top: 8.8rem !important;
+  padding-top: 8.5rem !important;
 }
 
 .step-indicator {
@@ -2394,4 +2399,49 @@ button.icon-grp .header-dark{
 .p-check-inpt{
   background:  #37437f !important;
   border: 1px solid #37437f !important;
+}
+.login-side-banner-img{
+  background: #37437f url('../../camera/image/login-bg-image.png') no-repeat -31px -111px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.text-display-none .text-none-d{
+display: none !important;
+}
+.btn-primary-clr .btn-c.btn-primary {
+    background: #ACD4FF!important;
+    color: #000 !important;
+    border: 0 !important;
+}
+.form-input-label label{
+  border-color:  rgba(33, 37, 48, 0.7);
+  font-weight: 400;
+}
+.form-input-label input{
+ border-radius: 4px !important;
+ border-color:  rgba(33, 37, 48, 0.5);
+}
+.form-input-label .no-margin-btn{
+  margin-bottom: 0 !important;
+}
+.form-input-label form{
+  padding-left:0  !important;
+  padding-right:0 !important;
+}
+@media screen and (max-width:767px) {
+.theme-top {
+  padding-top: 4.22rem !important;
+}
+.mob-p-d-none{
+  display: none !important;
+}
+.mob-padding-none{
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+}
+.dynamic-html-data strong{
+  color: #536DAE !important;
+  font-weight: 600 !important;
 }
