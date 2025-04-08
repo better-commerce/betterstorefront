@@ -385,8 +385,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                         <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                           <div className='flex items-center justify-between w-full gap-0'>
                             <div className='flex justify-start gap-3'>
-                              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} {translate('common.label.resultsText')}</span>
-                              <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">{productDataToPass?.total ?? 0} items in {translate('label.basket.catalogText')}</span>
                             </div>
                             <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                           </div>
