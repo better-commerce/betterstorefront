@@ -3,10 +3,7 @@ import axios from 'axios'
 
 // Other Imports
 import { decipherPayload } from './app-util'
-import {
-  PaymentMethodType,
-  PaymentMethodTypeId,
-} from 'bc-payments-sdk'
+import { getGatewayId, } from 'bc-payments-sdk'
 import {
   ENABLE_SECURED_PAYMENT_PAYLOAD,
   NEXT_CANCEL_ORDER,
@@ -48,58 +45,6 @@ export const cancelStorefrontOrder = async (orderId: string) => {
     id: orderId,
   })
   return orderResponse
-}
-
-export const getGatewayId = (gatewayName: string) => {
-  if (matchStrings(gatewayName, PaymentMethodType.PAYPAL, true)) {
-    return PaymentMethodTypeId.PAYPAL
-  } else if (matchStrings(gatewayName, PaymentMethodType.CHECKOUT, true)) {
-    return PaymentMethodTypeId.CHECKOUT
-  } else if (matchStrings(gatewayName, PaymentMethodType.KLARNA, true)) {
-    return PaymentMethodTypeId.KLARNA
-  } else if (matchStrings(gatewayName, PaymentMethodType.CLEAR_PAY, true)) {
-    return PaymentMethodTypeId.CLEAR_PAY
-  } else if (matchStrings(gatewayName, PaymentMethodType.MASTER_CARD, true)) {
-    return PaymentMethodTypeId.MASTER_CARD
-  } else if (matchStrings(gatewayName, PaymentMethodType.JUSPAY, true)) {
-    return PaymentMethodTypeId.JUSPAY
-  } else if (matchStrings(gatewayName, PaymentMethodType.STRIPE, true)) {
-    return PaymentMethodTypeId.STRIPE
-  } else if (matchStrings(gatewayName, PaymentMethodType.COD, true)) {
-    return PaymentMethodTypeId.COD
-  } else if (
-    matchStrings(gatewayName, PaymentMethodType.ACCOUNT_CREDIT, true)
-  ) {
-    return PaymentMethodTypeId.ACCOUNT_CREDIT
-  } else if (matchStrings(gatewayName, PaymentMethodType.CHEQUE, true)) {
-    return PaymentMethodTypeId.CHEQUE
-  }
-  return -1
-}
-
-export const getGatewayName = (id: number) => {
-  if (id === PaymentMethodTypeId.PAYPAL) {
-    return PaymentMethodType.PAYPAL
-  } else if (id === PaymentMethodTypeId.CHECKOUT) {
-    return PaymentMethodType.CHECKOUT
-  } else if (id === PaymentMethodTypeId.KLARNA) {
-    return PaymentMethodType.KLARNA
-  } else if (id === PaymentMethodTypeId.CLEAR_PAY) {
-    return PaymentMethodType.CLEAR_PAY
-  } else if (id === PaymentMethodTypeId.MASTER_CARD) {
-    return PaymentMethodType.MASTER_CARD
-  } else if (id === PaymentMethodTypeId.JUSPAY) {
-    return PaymentMethodType.JUSPAY
-  } else if (id === PaymentMethodTypeId.STRIPE) {
-    return PaymentMethodType.STRIPE
-  } else if (id === PaymentMethodTypeId.COD) {
-    return PaymentMethodType.COD
-  } else if (id === PaymentMethodTypeId.ACCOUNT_CREDIT) {
-    return PaymentMethodType.ACCOUNT_CREDIT
-  } else if (id === PaymentMethodTypeId.CHEQUE) {
-    return PaymentMethodType.CHEQUE
-  }
-  return -1
 }
 
 export const getB2BCompanyDetails = async (gatewayName: string, data: any) => {
@@ -268,23 +213,14 @@ export const requestToken = async (
     : tryParseJson(orderDetailResult)
 }
 
-export const processPaymentResponse = async (
-  gatewayName: string,
-  data: any
-) => {
-  const gid = getGatewayId(gatewayName)
+export const processPaymentResponse = async (gatewayName: string, data: any) => {
+  const gid = getGatewayId(gatewayName?.toLocaleLowerCase())
   const { data: paymentResponseResult } = await axios.post(
     PAYMENTS_API, // Endpoint url
-    ENABLE_SECURED_PAYMENT_PAYLOAD
-      ? encrypt(JSON.stringify(data))
-      : JSON.stringify(data), // Data
-    {
-      params: { ...Payments.RequestParams.PROCESS_PAYMENT_RESPONSE, gid },
-    }
+    ENABLE_SECURED_PAYMENT_PAYLOAD ? encrypt(JSON.stringify(data)) : JSON.stringify(data), // Data
+    { params: { ...Payments.RequestParams.PROCESS_PAYMENT_RESPONSE, gid }, }
   ) // Params
-  return ENABLE_SECURED_PAYMENT_PAYLOAD
-    ? decipherPayload(paymentResponseResult)
-    : tryParseJson(paymentResponseResult)
+  return ENABLE_SECURED_PAYMENT_PAYLOAD ? decipherPayload(paymentResponseResult) : tryParseJson(paymentResponseResult)
 }
 
 export const processPaymentWebHook = async (

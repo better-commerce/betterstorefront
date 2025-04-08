@@ -1373,6 +1373,8 @@
         "upiNotSupportedErrorMsg": "UPI-Zahlung wird nicht unterstützt.",
         "paymentAlreadyCompletedErrorMsg": "Die Zahlung für Ihren Warenkorb wurde bereits abgeschlossen.",
         "notEnoughCreditErrorMsg": "Nicht genügend Guthaben verfügbar.",
+        "walletNotFoundErrorMsg": "Brieftasche nicht gefunden.",
+        "notEnoughBalanceErrorMsg": "Nicht genügend Guthaben verfügbar.",
         "paymentMethodNotSupportedErrorMsg": "Zahlungsmethode wird nicht unterstützt."
       },
       "password": {

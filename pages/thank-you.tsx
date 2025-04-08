@@ -31,7 +31,7 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 
-export default function OrderConfirmation({ config }: any) {
+export default function OrderConfirmation({ config, featureToggle }: any) {
   const { recordAnalytics } = useAnalytics()
   const [order, setOrderData] = useState<any>()
   const [isSnippetLoaded, setIsSnippetLoaded] = useState(false)
@@ -425,228 +425,415 @@ export default function OrderConfirmation({ config }: any) {
         <meta property="og:site_name" content={SITE_NAME} key="ogsitename" />
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
-      <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
-        <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
-          <div className="max-w-xl">
-            <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
-              {order?.orderNo ? translate('label.thankyou.thankyouText') : null}
-            </p>
-            <h1 className="mt-2 font-bold tracking-tight text-black uppercase">
-              {order?.orderNo ? translate('label.thankyou.itsOnTheWayText') : translate('label.thankyou.noOrderProvidedText')}
-            </h1>
-            {order?.orderNo ? (
-              <p className="mt-2 text-black">
-                {translate('label.checkout.yourOrderText')}{' '}
-                <span className="font-bold text-black">{order?.orderNo}</span>{' '}
-                {translate('label.thankyou.willBeWithYouSoonText')}
-              </p>
-            ) : null}
-          </div>
+      {featureToggle?.features?.enableShortThankYouPage ? (
+        <main className="px-4 pt-6 pb-10 sm:pb-24 bg-white sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+        <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
+          {/* Box Icon */}
           {order?.orderNo ? (
-            <section aria-labelledby="order-heading" className="mt-10 border-t border-gray-200" >
-              <h2 id="order-heading" className="sr-only"> {translate('label.checkout.yourOrderText')} </h2>
-              <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
-              {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
-                <>
-                  <div key={product.id} className="flex py-10 space-x-6 border-b border-gray-200" >
-                    <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                      <img style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
-                    </div>
-                    <div className="flex flex-col flex-auto">
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          <Link href={`/${product.slug}`}>{product.name}</Link>
-                        </h4>
-                        <p className="mr-1 text-sm font-medium text-gray-700">
-                          {translate('label.thankyou.sizeText')}:{' '}
-                          <span className="uppercase">{product.size}</span>
-                        </p>
-                      </div>
-                      <div className="flex items-end mt-2">
-                        <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
-                          <div className="flex">
-                            <dt className="font-medium text-gray-900">
-                              {translate('common.label.quantityText')}
-                            </dt>
-                            <dd className="ml-2 text-gray-700">
-                              {product.qty}
-                            </dd>
-                          </div>
-                          <div className="flex pl-4 sm:pl-6">
-                            <dt className="font-medium text-gray-900">
-                              {translate('common.label.priceText')}
-                            </dt>
-                            <dd className="ml-2 text-gray-700">
-                              {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
-                            </dd>
-                          </div>
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )) : (
-                <SplitDeliveryOrderItems order={order} />
-              )}
-              <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
-                <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
-
-                <h4 className="sr-only">{translate('label.checkout.addressesText')}</h4>
-                <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
-                  <div>
-                    <dt className="font-bold text-gray-900">
-                      {translate('label.orderDetails.deliveryAddressHeadingText')}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName ? order?.shippingAddress?.lastName : ""}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.shippingAddress?.city} ${order?.shippingAddress?.countryCode} ${order?.shippingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-bold text-gray-900">
-                      {translate('label.addressBook.BillingAddressHeadingText')}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <address className="not-italic">
-                        <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName ? order?.billingAddress?.lastName : ""}`}</span>
-                        <span className="block">{`${order?.billingAddress?.phoneNo}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address1}`}</span>
-                        <span className="block">{`${order?.billingAddress?.address2}`}</span>
-                        <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
-                      </address>
-                    </dd>
-                  </div>
-                </dl>
-
-                <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
-                <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
-                  {order?.payments && (
-                    <div>
-                      <dt className="font-bold text-gray-900">
-                        {translate('label.checkout.paymentMethodText')}
-                      </dt>
-                      <dd className="mt-2 text-gray-700">
-                        <p>{getPaymentMethodName(order?.payments)}</p>
-                      </dd>
-                    </div>
-                  )}
-                  <div>
-                    <dt className="font-bold text-gray-900">
-                      {translate('label.checkout.shippingMethodText')}
-                    </dt>
-                    <dd className="mt-2 text-gray-700">
-                      <p>{order?.shipping?.displayName}</p>
-                      <p>
-                        {translate('label.thankyou.deliverdText')}:{' '}
-                        {order?.deliveryPlans?.length >= 1 ? (
-                          <p className="font-semibold uppercase font-14 dark:text-black">
-                            {eddDateFormat(
-                              order?.deliveryPlans[0].deliveryDateTarget
-                            )}
-                          </p>
-                        ) : (
-                          <p className="font-semibold uppercase font-14 dark:text-black">
-                            {eddDateFormat(
-                              order?.shipping?.expectedDeliveryDate
-                            )}
-                          </p>
-                        )}
-                      </p>
-                    </dd>
-                  </div>
-                </dl>
-                {isNextorderPromo && nextOrderPromo?.firstOrderSetting && !isFirstOrderValid && (
-                  <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
-                    <p className="">
-                      {translate('label.thankyou.congratilationDiscountText')}{' '}
-                      <span className="font-bold text-indigo-600">
-                        {nextOrderPromo?.nextOrderPromoName}
-                      </span>
-                    </p>
-                    <p>
-                      {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
-                        days: nextOrderPromo?.nextOrderPromoValidity,
-                      })}
-                    </p>
-                  </div>
-                )}
-                {isNextorderPromo && nextOrderPromo?.everyOrderSetting && !isFirstOrderValid && (
-                  <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
-                    <p className="">
-                      {translate('label.thankyou.congratilationDiscountText')}{' '}
-                      <span className="font-bold text-indigo-600">
-                        {nextOrderPromo?.nextOrderPromoName}
-                      </span>
-                    </p>
-                    <p>
-                      {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
-                        days: nextOrderPromo?.nextOrderPromoValidity,
-                      })}
-                    </p>
-                  </div>
-                )}
-                <h3 className="sr-only">{translate('label.thankyou.summaryText')}</h3>
-                <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
-                  <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">
-                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
-                    </dt>
-                    <dd className="text-gray-700">
-                      {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax}
-                    </dd>
-                  </div>
-                  {order?.discount.raw?.withTax > 0 &&
-                    <div className="flex justify-between">
-                      <dt className="font-medium text-gray-900">
-                        {translate('label.orderSummary.discountText')}
-                      </dt>
-                      <dd className="text-gray-700">
-                        {isIncludeVAT ? order?.discount.formatted?.withTax : order?.discount.formatted?.withoutTax}
-                      </dd>
-                    </div>
-                  }
-                  <div className="flex justify-between">
-                    <dt className="font-medium text-gray-900">
-                      {translate('label.orderSummary.shippingText')}
-                    </dt>
-                    <dd className="text-gray-700">
-                      {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax}
-                    </dd>
-                  </div>
-                  {!isIncludeVAT && order?.grandTotal.raw?.tax > 0 &&
-                    <div className="flex justify-between">
-                      <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
-                      <dd className="text-gray-700">
-                        {order?.grandTotal.formatted?.tax}
-                      </dd>
-                    </div>
-                  }
-                  <div className="flex justify-between">
-                    <dt className="text-lg font-bold text-gray-900">
-                      {translate('label.orderSummary.totalText')}
-                    </dt>
-                    <dd className="text-lg font-bold text-gray-900">
-                      {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
-            </section>
+          <div className="flex flex-col items-center">
+            <img src="theme/camera/image/order-box-icon.png" alt="order-icon" />
+            <h1 className="text-2xl font-bold mt-4">Thank you for your order!</h1>
+            <p className="mt-2 text-center">
+              We've sent confirmation to <span className="font-medium">{order?.createdBy}</span>.
+            </p>
+          </div>
           ) : null}
-          <div className="max-w-xl mt-5 text-center">
-            <Link href={`/`} passHref>
-              <span className="btn-primary btn">
-                {translate('common.label.backToHomeText')}
-              </span>
-            </Link>
+      
+          {/* Navigation Cards */}
+          
+ {/* Navigation Cards */}
+ {order?.orderNo ? (
+ <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
+          <img src="theme/camera/image/truck-icon.png" alt="order-icon"/>
+            <span className="mt-2 text-sm font-medium">Track Order</span>
+          </div>
+          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
+          <img src="theme/camera/image/pencil-icon.png" alt="order-icon"/>
+            <span className="mt-2 text-sm font-medium">Manage Order</span>
+          </div>
+          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
+          <img src="theme/camera/image/return-icon.png" alt="order-icon"/>
+            <span className="mt-2 text-sm font-medium">Returns Policy</span>
+          </div>
+          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
+          <img src="theme/camera/image/user-icon.png" alt="order-icon"/>
+            <span className="mt-2 text-sm font-medium">My Account</span>
           </div>
         </div>
-      </main>
+     ) : null}
+          {/* Order Status Card */}
+          {order?.orderNo ? (
+          <div className="bg-[#EAEDF5] rounded p-6 mt-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-left border-b border-gray-50 pb-3">
+                <p className="text-gray-700">Order status:</p>
+              </div>
+              <div className="text-left border-b border-gray-50 pb-3">
+                <p className="font-medium">{order?.orderStatus}</p>
+              </div>
+      
+              <div className="text-left border-b border-gray-50 pb-3">
+                <p className="text-gray-700">Order reference:</p>
+              </div>
+              <div className="text-left border-b border-gray-50 pb-3">
+                <p className="font-medium">{order?.orderNo}</p>
+              </div>
+      
+              <div className="text-left">
+                <p className="text-gray-700">Estimated delivery:</p>
+              </div>
+              <div className="text-left">
+                <p className="font-medium text-black dark:text-black">
+                  {order?.deliveryPlans?.length >= 1
+                    ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget)
+                    : eddDateFormat(order?.dueDate)}
+                </p>
+              </div>
+            </div>
+          </div>
+           ) : null}
+          {/* Order Summary */}
+          {order?.orderNo ? (
+          <div className="border rounded mt-4 p-6 bg-gray-100">
+            <div className="flex justify-between items-center">
+              <h2 className="font-bold text-lg">Order Summary</h2>
+              <div className="text-right">
+                <p className="font-bold">
+                  Total: {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax}
+                </p>
+              </div>
+            </div>
+      
+            <div className="mt-4 space-y-2">
+              <div className="flex justify-between">
+                <p className="text-gray-700">
+                  {isIncludeVAT
+                    ? translate('label.orderSummary.subTotalVATIncText')
+                    : translate('label.orderSummary.subTotalVATExText')}
+                  :
+                </p>
+                <div className="flex gap-8">
+                 <p className="text-gray-700">{order?.items.length} {order?.items.length === 1 ? 'item' : 'items'}</p>
+                  <p>
+                    {isIncludeVAT
+                      ? order?.subTotal?.formatted?.withTax
+                      : order?.subTotal?.formatted?.withoutTax}
+                  </p>
+                </div>
+              </div>
+      
+              {order?.discount.raw?.withTax > 0 && (
+                <div className="flex justify-between">
+                  <p className="text-gray-700">{translate('label.orderSummary.discountText')}:</p>
+                  <div className="flex gap-8">
+                    <p>
+                      {isIncludeVAT
+                        ? order?.discount.formatted?.withTax
+                        : order?.discount.formatted?.withoutTax}
+                    </p>
+                  </div>
+                </div>
+              )}
+      
+              <div className="flex justify-between">
+                <p className="text-gray-700">{translate('label.orderSummary.shippingText')}</p>
+                <div className="text-right">
+                  <p className="font-bold">
+                    {isIncludeVAT
+                      ? order?.shippingCharge.formatted?.withTax
+                      : order?.shippingCharge.formatted?.withoutTax}
+                  </p>
+                </div>
+              </div>
+      
+              <div className="flex justify-between">
+                <p className="text-gray-700">Delivery:</p>
+                <div className="flex gap-8">
+                  <p className="text-black dark:text-black">
+                    {order?.deliveryPlans?.length >= 1
+                      ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget)
+                      : eddDateFormat(order?.dueDate)}
+                  </p>
+                </div>
+              </div>
+            </div>
+      
+            {/* Product Items */}
+            {order?.orderNo && (
+              <div className="mt-4">
+                {order?.deliveryPlans?.length < 1 ? (
+                  order?.items?.map((product: any) => (
+                    <div
+                      key={product.id}
+                      className="border-t border-gray-200 pt-4 mb-2 bg-white p-3"
+                    >
+                      <div className="flex">
+                        <div className="w-20">
+                          <img
+                            style={css}
+                            src={
+                              generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER
+                            }
+                            width={200}
+                            height={200}
+                            alt={product.name || 'thank you'}
+                            className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <p className="font-medium">
+                            <Link className="text-black" href={`/${product.slug}`}>
+                              {product.name}
+                            </Link>
+                          </p>
+                          <p className="text-gray-600 text-sm">Quantity: {product.qty}</p>
+                          <p className="font-medium mt-1">
+                            {product?.price?.raw?.withTax > 0 ? (
+                              product.price.formatted.withTax
+                            ) : (
+                              <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600">
+                                {translate('label.orderSummary.freeText')}
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <SplitDeliveryOrderItems order={order} />
+                )}
+              </div>
+            )}
+          </div>
+          ) : null}
+        </div>
+        </main>
+        ) : (
+          <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+          <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
+            <div className="max-w-xl">
+              <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
+                {order?.orderNo ? translate('label.thankyou.thankyouText') : null}
+              </p>
+              <h1 className="mt-2 font-bold tracking-tight text-black uppercase">
+                {order?.orderNo ? translate('label.thankyou.itsOnTheWayText') : translate('label.thankyou.noOrderProvidedText')}
+              </h1>
+              {order?.orderNo ? (
+                <p className="mt-2 text-black">
+                  {translate('label.checkout.yourOrderText')}{' '}
+                  <span className="font-bold text-black">{order?.orderNo}</span>{' '}
+                  {translate('label.thankyou.willBeWithYouSoonText')}
+                </p>
+              ) : null}
+            </div>
+            {order?.orderNo ? (
+              <section aria-labelledby="order-heading" className="mt-10 border-t border-gray-200" >
+                <h2 id="order-heading" className="sr-only"> {translate('label.checkout.yourOrderText')} </h2>
+                <h3 className="sr-only">{translate('common.label.itemPluralText')}</h3>
+                {order?.deliveryPlans?.length < 1 ? order?.items?.map((product: any) => (
+                  <>
+                    <div key={product.id} className="flex py-10 space-x-6 border-b border-gray-200" >
+                      <div className="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
+                        <img style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
+                      </div>
+                      <div className="flex flex-col flex-auto">
+                        <div>
+                          <h4 className="font-medium text-gray-900">
+                            <Link href={`/${product.slug}`}>{product.name}</Link>
+                          </h4>
+                          <p className="mr-1 text-sm font-medium text-gray-700">
+                            {translate('label.thankyou.sizeText')}:{' '}
+                            <span className="uppercase">{product.size}</span>
+                          </p>
+                        </div>
+                        <div className="flex items-end mt-2">
+                          <dl className="flex space-x-4 text-sm divide-x divide-gray-200 sm:space-x-6">
+                            <div className="flex">
+                              <dt className="font-medium text-gray-900">
+                                {translate('common.label.quantityText')}
+                              </dt>
+                              <dd className="ml-2 text-gray-700">
+                                {product.qty}
+                              </dd>
+                            </div>
+                            <div className="flex pl-4 sm:pl-6">
+                              <dt className="font-medium text-gray-900">
+                                {translate('common.label.priceText')}
+                              </dt>
+                              <dd className="ml-2 text-gray-700">
+                                {product?.price?.raw?.withTax > 0 ? product.price.formatted.withTax : <span className='font-medium uppercase text-14 xs-text-14 text-emerald-600'>{translate('label.orderSummary.freeText')}</span>}
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )) : (
+                  <SplitDeliveryOrderItems order={order} />
+                )}
+                <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
+                  <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
+  
+                  <h4 className="sr-only">{translate('label.checkout.addressesText')}</h4>
+                  <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
+                    <div>
+                      <dt className="font-bold text-gray-900">
+                        {translate('label.orderDetails.deliveryAddressHeadingText')}
+                      </dt>
+                      <dd className="mt-2 text-gray-700">
+                        <address className="not-italic">
+                          <span className="block">{`${order?.shippingAddress?.firstName} ${order?.shippingAddress?.lastName ? order?.shippingAddress?.lastName : ""}`}</span>
+                          <span className="block">{`${order?.shippingAddress?.phoneNo}`}</span>
+                          <span className="block">{`${order?.shippingAddress?.address1}`}</span>
+                          <span className="block">{`${order?.shippingAddress?.address2}`}</span>
+                          <span className="block">{`${order?.shippingAddress?.city} ${order?.shippingAddress?.countryCode} ${order?.shippingAddress?.postCode}`}</span>
+                        </address>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-bold text-gray-900">
+                        {translate('label.addressBook.BillingAddressHeadingText')}
+                      </dt>
+                      <dd className="mt-2 text-gray-700">
+                        <address className="not-italic">
+                          <span className="block">{`${order?.billingAddress?.firstName} ${order?.billingAddress?.lastName ? order?.billingAddress?.lastName : ""}`}</span>
+                          <span className="block">{`${order?.billingAddress?.phoneNo}`}</span>
+                          <span className="block">{`${order?.billingAddress?.address1}`}</span>
+                          <span className="block">{`${order?.billingAddress?.address2}`}</span>
+                          <span className="block">{`${order?.billingAddress?.city} ${order?.billingAddress?.countryCode} ${order?.billingAddress?.postCode}`}</span>
+                        </address>
+                      </dd>
+                    </div>
+                  </dl>
+  
+                  <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
+                  <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
+                    {order?.payments && (
+                      <div>
+                        <dt className="font-bold text-gray-900">
+                          {translate('label.checkout.paymentMethodText')}
+                        </dt>
+                        <dd className="mt-2 text-gray-700">
+                          <p>{getPaymentMethodName(order?.payments)}</p>
+                        </dd>
+                      </div>
+                    )}
+                    <div>
+                      <dt className="font-bold text-gray-900">
+                        {translate('label.checkout.shippingMethodText')}
+                      </dt>
+                      <dd className="mt-2 text-gray-700">
+                        <p>{order?.shipping?.displayName}</p>
+                        <p>
+                          {translate('label.thankyou.deliverdText')}:{' '}
+                          {order?.deliveryPlans?.length >= 1 ? (
+                            <p className="font-semibold uppercase font-14 dark:text-black">
+                              {eddDateFormat(
+                                order?.deliveryPlans[0].deliveryDateTarget
+                              )}
+                            </p>
+                          ) : (
+                            <p className="font-semibold uppercase font-14 dark:text-black">
+                              {eddDateFormat(
+                                order?.shipping?.expectedDeliveryDate
+                              )}
+                            </p>
+                          )}
+                        </p>
+                      </dd>
+                    </div>
+                  </dl>
+                  {isNextorderPromo && nextOrderPromo?.firstOrderSetting && !isFirstOrderValid && (
+                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
+                      <p className="">
+                        {translate('label.thankyou.congratilationDiscountText')}{' '}
+                        <span className="font-bold text-indigo-600">
+                          {nextOrderPromo?.nextOrderPromoName}
+                        </span>
+                      </p>
+                      <p>
+                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
+                          days: nextOrderPromo?.nextOrderPromoValidity,
+                        })}
+                      </p>
+                    </div>
+                  )}
+                  {isNextorderPromo && nextOrderPromo?.everyOrderSetting && !isFirstOrderValid && (
+                    <div className="py-2 my-2 text-sm font-semibold text-center bg-lime-100">
+                      <p className="">
+                        {translate('label.thankyou.congratilationDiscountText')}{' '}
+                        <span className="font-bold text-indigo-600">
+                          {nextOrderPromo?.nextOrderPromoName}
+                        </span>
+                      </p>
+                      <p>
+                        {stringFormat(translate('label.thankyou.yourOfferIsValidText'), {
+                          days: nextOrderPromo?.nextOrderPromoValidity,
+                        })}
+                      </p>
+                    </div>
+                  )}
+                  <h3 className="sr-only">{translate('label.thankyou.summaryText')}</h3>
+                  <dl className="pt-10 space-y-6 text-sm border-t border-gray-200">
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-900">
+                        {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
+                      </dt>
+                      <dd className="text-gray-700">
+                        {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax}
+                      </dd>
+                    </div>
+                    {order?.discount.raw?.withTax > 0 &&
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-900">
+                          {translate('label.orderSummary.discountText')}
+                        </dt>
+                        <dd className="text-gray-700">
+                          {isIncludeVAT ? order?.discount.formatted?.withTax : order?.discount.formatted?.withoutTax}
+                        </dd>
+                      </div>
+                    }
+                    <div className="flex justify-between">
+                      <dt className="font-medium text-gray-900">
+                        {translate('label.orderSummary.shippingText')}
+                      </dt>
+                      <dd className="text-gray-700">
+                        {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax}
+                      </dd>
+                    </div>
+                    {!isIncludeVAT && order?.grandTotal.raw?.tax > 0 &&
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-900">{translate('label.orderSummary.taxText')}</dt>
+                        <dd className="text-gray-700">
+                          {order?.grandTotal.formatted?.tax}
+                        </dd>
+                      </div>
+                    }
+                    <div className="flex justify-between">
+                      <dt className="text-lg font-bold text-gray-900">
+                        {translate('label.orderSummary.totalText')}
+                      </dt>
+                      <dd className="text-lg font-bold text-gray-900">
+                        {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </section>
+            ) : null}
+            <div className="max-w-xl mt-5 text-center">
+              <Link href={`/`} passHref>
+                <span className="btn-primary btn">
+                  {translate('common.label.backToHomeText')}
+                </span>
+              </Link>
+            </div>
+          </div>
+        </main>
+        )}
 
       {/* Placeholder for order confirmation after progress bar snippet */}
       <div

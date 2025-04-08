@@ -185,7 +185,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                               <span
                                 className={`rounded-check rounded-full check-address ${
                                   address?.id === selectedAddressId
-                                    ? 'bg-black border border-black'
+                                    ? 'bg-black border border-black p-check-inpt'
                                     : 'bg-white border border-gray-600'
                                 }`}
                               ></span>
@@ -248,7 +248,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                             <span
                               className={`rounded-check rounded-full check-address ${
                                 address?.id === selectedAddressId
-                                  ? 'bg-black border border-black'
+                                  ? 'bg-black border border-black p-check-inpt'
                                   : 'bg-white border border-gray-600'
                               }`}
                             ></span>
@@ -350,7 +350,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
                     <div className="flex w-full">
                       <div className="check-panel">
                         <span
-                          className={`rounded-check rounded-full check-address ${ (address?.isBilling || isBillingAddress(address)) ? 'bg-black border border-black' : 'bg-white border border-gray-600' }`}
+                          className={`rounded-check rounded-full check-address ${ (address?.isBilling || isBillingAddress(address)) ? 'bg-black border border-black p-check-inpt' : 'bg-white border border-gray-600' }`}
                         ></span>
                       </div>
                       <div className="flex justify-between w-full gap-2 info-panel">
@@ -393,7 +393,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
           {useSameForBilling && (
             <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
               <button
-                className="mb-4 border border-black btn-primary lg:py-2 py-3 sm:px-4 px-1 btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn"
+                className="mb-4 border border-black btn-full-width btn-primary lg:py-2 py-3 sm:px-4 px-1 btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn"
                 onClick={handleContinue}
               >
                 {translate('label.checkout.continueToDeliveryText')}
@@ -404,7 +404,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
       ) : (
         <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
           <button
-            className="mb-4 border border-black btn-primary lg:py-2 py-3 sm:px-4 px-1 btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn"
+            className="mb-4 border border-black btn-full-width btn-primary lg:py-2 py-3 sm:px-4 px-1 btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn"
             onClick={onContinueToSelectDeliveryType}
           >
             {translate('label.checkout.continueToDeliveryText')}

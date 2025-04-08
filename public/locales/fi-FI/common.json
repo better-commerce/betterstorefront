@@ -1367,6 +1367,8 @@
                 "upiNotSupportedErrorMsg": "UPI-maksua ei tueta.",
                 "paymentAlreadyCompletedErrorMsg": "Maksu ostoskorillesi on jo suoritettu.",
                 "notEnoughCreditErrorMsg": "Ei tarpeeksi luottoa käytettävissä.",
+                "walletNotFoundErrorMsg": "Lompakkoa ei löytynyt.",
+                "notEnoughBalanceErrorMsg": "Riittämätön saldo käytettävissä.",
                 "paymentMethodNotSupportedErrorMsg": "Maksutapaa ei tueta."
             },
             "password": {

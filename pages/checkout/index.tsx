@@ -1180,15 +1180,15 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <link rel="icon" type="image/png" sizes="16x16" href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 border-b border-gray-300 sm:py-4 checkout-header">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 park-seconday-bg-clr border-b border-gray-300 sm:py-4 checkout-header">
         <div className="flex justify-between container-storefront gap-x-5 small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88 logo-link-chk">
             <Logo />
           </Link>
-          <h1 className="flex items-center justify-center text-lg font-semibold sm:text-2xl mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
+          <h1 className="flex items-center justify-center text-lg font-semibold text-bg-white sm:text-2xl mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
             {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
-              <i className="ml-4 sprite-icons sprite-secure"></i>
+              <i className="ml-4 sprite-icons sprite-secure filter-inver-text"></i>
             </span>
           </h1>
         </div>
@@ -1201,8 +1201,8 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       ) : (
         <></>
       )}
-      <div className="flex justify-between w-full gap-0 container-storefront small-screen">
-        <div className="justify-start w-full pr-0 bg-white dark:bg-white checkout-container">
+      <div className="flex justify-between w-full gap-0 container-storefront small-screen no-padding-container">
+        <div className="justify-start w-full pr-0 bg-white dark:bg-white checkout-container padding-left-20">
           <div className="flex justify-start w-full pt-5 pb-2">
             <div className="flex items-center justify-between gap-2">
               <Link href={`/cart`} passHref legacyBehavior>
@@ -1229,7 +1229,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         {isMobile || isIPadorTablet ? (
           <></>
         ) : (
-          <div className="justify-start min-h-screen p-8 bg-gray-100 border-gray-300 border-x basket-container top-14">
+          <div className="justify-start min-h-screen p-6 bg-gray-100 park-primary-bg-clr border-gray-300 border-x basket-container top-14">
             <BasketDetails  { ...basketDetailsProps } />
           </div>
         )}

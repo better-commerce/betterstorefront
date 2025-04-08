@@ -15,8 +15,9 @@ import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { useEffect, useState } from 'react'
+import LoginWithBanner from '@components/account/LoginWithBanner'
 
-function LoginPage({ appConfig, pluginConfig = [] }: any) {
+function LoginPage({ appConfig, pluginConfig = [], featureToggle }: any) {
   const { recordAnalytics } = useAnalytics()
   const router = useRouter()
   const translate = useTranslation()
@@ -64,7 +65,12 @@ function LoginPage({ appConfig, pluginConfig = [] }: any) {
         <meta property="og:title" content={translate('label.checkout.loginRegistrationText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.checkout.loginRegistrationText')} key="ogdesc" />
       </NextHead>
-      <Login pluginConfig={pluginConfig} />
+      
+      {featureToggle?.features?.enableBannerLogin ? (
+          <LoginWithBanner pluginConfig={pluginConfig} />
+        ) : (
+          <Login pluginConfig={pluginConfig} />
+        )}
     </>
   )
 }

@@ -607,7 +607,12 @@ p {
 .primary-text-color {
   color: #000;
 }
-
+.primary-text-blue {
+  color: var(--btn-bg-primary) !important;
+}
+.text-blue-light{
+  color: #536DAE !important;
+}
 .bg-header-color {
   background: var(--bg-header-color);
 }
@@ -1148,12 +1153,12 @@ p {
   }
 
   .checkout-container {
-    width: 60% !important;
+    width: 65% !important;
     padding-right: 5rem;
   }
 
   .basket-container {
-    width: 40%;
+    width: 35% !important;
     padding-left: 3rem;
   }
 }
@@ -1902,7 +1907,7 @@ p {
 }
 
 .theme-top{
-  padding-top: 7rem !important;
+  padding-top: 8.5rem !important;
 }
 
 .step-indicator {
@@ -2310,4 +2315,133 @@ button.icon-grp .header-dark{
 }
 .icon-div-menu img.trade-icon {
   filter: invert(0) !important;
+}
+.park-bg-clr{
+  background: #2c2151;
+}
+.park-primary-bg-clr{
+  background: #294384 !important;
+}
+.park-seconday-bg-clr{
+  background: #2D4D9C !important;
+}
+.inner-card-cart{
+  background: #EAEDF5;
+  padding:10px;
+  border-radius: 5px;
+}
+.text-bg-white{
+  color: #fff !important;
+}
+.font-text-normal{
+  font-weight: 400 !important;
+}
+.container-storefront{
+  max-width: 1536px !important;
+  width: 100%;
+}
+.no-padding-container{
+  padding:0 !important;
+}
+.padding-left-20{
+  padding-left:20px !important
+}
+.btn.btn-primary.park-bg-secondary,.btn-c.btn-primary.park-bg-secondary{
+  background-color: #ACD4FF !important;
+  color: #000 !important;
+}
+.btn-start-sec{
+  justify-content: start  !important;
+}
+.filter-inver-text{
+  filter:invert(1) !important;
+}
+.btn-sm-cls{
+  width: auto  !important;
+  min-width: 120px !important;
+}
+.btn-width-auto{
+  width: auto !important;
+  min-width: 200px;
+}
+.btn-full-width{
+  width: 100% !important;
+}
+.form-container-bg{
+  background: #D9D9D9;
+  padding: 20px;
+  border-radius: 5px;
+}
+.chk-payment-btn {
+  background-color: transparent !important;
+  border: none;
+  padding: 0 !important;
+}
+.chk-payment-btn button{
+  background-color: #ACD4FF !important;
+  color: #000 !important;
+  border-radius: 5px;
+  box-shadow: none;
+}
+.custom-radio input:checked + .radio-btn.orange-border{
+  border: 2px solid #37437f !important;
+  background: #fff !important;
+}
+.p-border-clr{
+  border: 1px solid #37437f !important;
+}
+.p-bg-clr{
+  background:  #37437f !important;
+}
+.p-none{
+  display: none !important;
+}
+.p-check-inpt{
+  background:  #37437f !important;
+  border: 1px solid #37437f !important;
+}
+.login-side-banner-img{
+  background: #37437f url('../../camera/image/login-bg-image.png') no-repeat -31px -111px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.text-display-none .text-none-d{
+display: none !important;
+}
+.btn-primary-clr .btn-c.btn-primary {
+    background: #ACD4FF!important;
+    color: #000 !important;
+    border: 0 !important;
+}
+.form-input-label label{
+  border-color:  rgba(33, 37, 48, 0.7);
+  font-weight: 400;
+}
+.form-input-label input{
+ border-radius: 4px !important;
+ border-color:  rgba(33, 37, 48, 0.5);
+}
+.form-input-label .no-margin-btn{
+  margin-bottom: 0 !important;
+}
+.form-input-label form{
+  padding-left:0  !important;
+  padding-right:0 !important;
+}
+@media screen and (max-width:767px) {
+.theme-top {
+  padding-top: 4.22rem !important;
+}
+.mob-p-d-none{
+  display: none !important;
+}
+.mob-padding-none{
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+}
+.dynamic-html-data strong{
+  color: #536DAE !important;
+  font-weight: 600 !important;
 }

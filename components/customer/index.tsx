@@ -169,7 +169,7 @@ export default function CustomerForm({
     <Formik validationSchema={extendedSchema} initialValues={extendedInitialValues} onSubmit={(values, actions) => { onSubmit(values, () => { actions.setSubmitting(false) }) }} >
       {({ errors, touched, handleSubmit, values, handleChange, isSubmitting, }: any) => {
         return (
-          <div className={`flex flex-col items-center justify-center w-full lg:px-0 px-5 ${!isLoginSidebarOpen && `px-5`}`} >
+          <div className={`flex flex-col items-center justify-center w-full lg:px-0 px-5 mob-padding-none ${!isLoginSidebarOpen && `px-5`}`} >
             <Form className={`w-full font-semibold ${!isLoginSidebarOpen && `sm:w-full`}`} >
               {extendedConfig?.map((formItem: any, idx: number) => {
                 return (
@@ -190,7 +190,7 @@ export default function CustomerForm({
                   </div>
                 )
               })}
-              <div className={`flex items-center justify-center !w-full my-5 ${!isLoginSidebarOpen && `md:w-1/2`}`} >
+              <div className={`flex items-center justify-center !w-full my-5 no-margin-btn ${!isLoginSidebarOpen && `md:w-1/2`}`} >
                 <Button type="submit" className="w-full border border-black btn btn-c btn-primary rounded-2xl" loading={isSubmitting} disabled={isSubmitting} >
                   {!isSubmitting && btnText}
                 </Button>

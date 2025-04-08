@@ -142,7 +142,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
                 <div key={method?.id} className={`${selectedShippingMethodId === method?.id ? 'bg-gray-200' : 'bg-white border-gray-200'} border flex sm:flex-row flex-col items-center sm:justify-between justify-start sm:p-4 p-2 cursor-pointer rounded`} onClick={() => handleMethodSelection(method)}>
                   <div className="flex justify-start w-full gap-0 sm:gap-3">
                     <div className="check-panel">
-                      <span className={`rounded-check rounded-full check-address ${selectedShippingMethodId === method.id ? 'bg-black border border-black' : 'bg-white border border-gray-600'}`}></span>
+                      <span className={`rounded-check rounded-full check-address ${selectedShippingMethodId === method.id ? 'bg-black p-check-inpt border border-black' : 'bg-white border border-gray-600'}`}></span>
                     </div>
                     <div className="flex justify-between info-panel">
                       <span className="font-medium text-black">
@@ -186,7 +186,7 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
           )}
           <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
             <button
-              className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-55 btn-primary btn-c btn-primary btn"
+              className="px-1 py-3 mb-4 border btn-full-width border-black btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-55 btn-primary btn-c btn-primary btn"
               onClick={handleContinue}
               disabled={shouldContinueBtnEnabled}
             >

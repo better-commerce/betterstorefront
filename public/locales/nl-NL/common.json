@@ -1364,6 +1364,8 @@
                 "upiNotSupportedErrorMsg": "UPI-betaling wordt niet ondersteund.",
                 "paymentAlreadyCompletedErrorMsg": "Betaling voor je winkelwagentje is al voltooid.",
                 "notEnoughCreditErrorMsg": "Niet genoeg tegoed beschikbaar.",
+                "walletNotFoundErrorMsg": "Portemonnee niet gevonden.",
+                "notEnoughBalanceErrorMsg": "Onvoldoende saldo beschikbaar.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmethode wordt niet ondersteund."
             },
             "password": {

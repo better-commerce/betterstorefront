@@ -87,7 +87,7 @@ const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = fa
               float: 'left',
               left: '6px',
               top: '0px',
-              zIndex: 99999,
+              zIndex: 9,
               position: 'absolute',
               width: '10px',
               height: '14px',

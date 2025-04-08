@@ -1315,6 +1315,8 @@
                 "upiNotSupportedErrorMsg": "Η πληρωμή μέσω UPI δεν υποστηρίζεται.",
                 "paymentAlreadyCompletedErrorMsg": "Η πληρωμή για το καλάθι σας έχει ήδη ολοκληρωθεί.",
                 "notEnoughCreditErrorMsg": "Δεν υπάρχει αρκετή πίστωση.",
+                "walletNotFoundErrorMsg": "Το πορτοφόλι δεν βρέθηκε.",
+                "notEnoughBalanceErrorMsg": "Μη διαθέσιμο επαρκές υπόλοιπο.",
                 "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται."
             },
             "password": {

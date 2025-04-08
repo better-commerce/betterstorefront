@@ -89,7 +89,7 @@ export default function Search(props: any) {
             </div>
           </div>
         </div>
-        <div className="w-full mt-10 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10">
+        <div className={`${featureToggle?.features?.enableForPCSite ? 'grid grid-cols-1 sm:mx-0 md:grid-cols-1 px-3 sm:px-4 lg:grid-cols-1 mt-2' : 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-10'} w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10`}>
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
@@ -101,46 +101,101 @@ export default function Search(props: any) {
                 </div>
               </div>
             ))}
-          {products?.map((product: any, idx: number) => {
-            return (
-              <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
-                <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-                  <Link href={`/${product.slug}`} className="block">
-                    <div className="flex w-full h-0 aspect-w-11 aspect-h-12"
-                      onClick={() => {
-                        if (inputValue) {
-                          const location = window.location
-                          pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
-                        }
-                      }}>
-                      <img src={generateUri(product?.image, 'h=270&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
-                    </div>
-                  </Link>
-                  <div className={CLASSES}>
-                    <ProductTag product={product} />
-                  </div>
-                </div>
-
-                <div className="space-y-4 px-2.5 pt-5 pb-2.5">
-                  <div>
-                    <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] dark:text-black nc-ProductCard__title">{product?.name}</h2>
-                    <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
-                  </div>
-                  <div className="flex items-end justify-between product-card-panel">
-                    <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    {product?.reviewCount > 0 &&
-                      <div className="flex items-center mb-0.5">
-                        <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
-                        <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                          {product?.rating || ""} ({product?.reviewCount || 0} reviews)
-                        </span>
+          {featureToggle?.features?.enableForPCSite ? (
+            <>
+              {products?.map((product: any, idx: number) => {
+                return (
+                  <div className={`grid grid-cols-12 border border-gray-200`} key={`search-${idx}`}>
+                    <div className='items-center justify-center col-span-4'>
+                      <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden group">
+                        <Link href={`/${product.slug}`} className="block">
+                          <div className="flex w-full"
+                            onClick={() => {
+                              if (inputValue) {
+                                const location = window.location
+                                pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
+                              }
+                            }}>
+                            <img src={generateUri(product?.image, 'h=170&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-top w-auto h-[180px] mx-auto" alt={product?.name} />
+                          </div>
+                        </Link>
+                        <div className={CLASSES}>
+                          <ProductTag product={product} />
+                        </div>
                       </div>
-                    }
+                    </div>
+                    <div className='col-span-8 border-l border-gray-200'>
+                      <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+                        <div>
+                          <h2 className="text-sm text-base font-semibold text-left">{product?.brand}</h2>
+                          <h2 className="text-base font-semibold text-left transition-colors dark:text-black nc-ProductCard__title">{product?.name}</h2>
+                          <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
+                        </div>
+                        <div className="flex items-end justify-between product-card-panel">
+                          <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          {product?.reviewCount > 0 &&
+                            <div className="flex items-center mb-0.5">
+                              <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+                              <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+                                {product?.rating || ""} ({product?.reviewCount || 0} reviews)
+                              </span>
+                            </div>
+                          }
+                        </div>
+                        <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
+                          <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {product?.price?.currencySymbol}2.35</span> with voucher
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )
-          })}
+                )
+              })}
+            </>
+          ) : (
+            <>
+              {products?.map((product: any, idx: number) => {
+                return (
+                  <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
+                    <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
+                      <Link href={`/${product.slug}`} className="block">
+                        <div className="flex w-full h-0 aspect-w-11 aspect-h-12"
+                          onClick={() => {
+                            if (inputValue) {
+                              const location = window.location
+                              pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
+                            }
+                          }}>
+                          <img src={generateUri(product?.image, 'h=270&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
+                        </div>
+                      </Link>
+                      <div className={CLASSES}>
+                        <ProductTag product={product} />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+                      <div>
+                        <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] dark:text-black nc-ProductCard__title">{product?.name}</h2>
+                        <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
+                      </div>
+                      <div className="flex items-end justify-between product-card-panel">
+                        <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        {product?.reviewCount > 0 &&
+                          <div className="flex items-center mb-0.5">
+                            <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+                            <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+                              {product?.rating || ""} ({product?.reviewCount || 0} reviews)
+                            </span>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </>
+          )}
+
         </div>
       </div>
     </div>

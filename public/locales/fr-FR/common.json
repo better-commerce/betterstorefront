@@ -1371,6 +1371,8 @@
         "upiNotSupportedErrorMsg": "Le paiement UPI n'est pas pris en charge.",
         "paymentAlreadyCompletedErrorMsg": "Le paiement de votre panier est déjà terminé.",
         "notEnoughCreditErrorMsg": "Crédit insuffisant disponible.",
+        "walletNotFoundErrorMsg": "Portefeuille introuvable.",
+        "notEnoughBalanceErrorMsg": "Solde insuffisant disponible.",
         "paymentMethodNotSupportedErrorMsg": "Le mode de paiement n'est pas pris en charge."
       },
       "password": {

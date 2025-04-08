@@ -1373,6 +1373,8 @@
         "upiNotSupportedErrorMsg": "El pago UPI no es compatible.",
         "paymentAlreadyCompletedErrorMsg": "El pago de tu carrito ya se ha completado.",
         "notEnoughCreditErrorMsg": "No hay suficiente crédito disponible.",
+        "walletNotFoundErrorMsg": "Cartera no encontrada.",
+        "notEnoughBalanceErrorMsg": "Saldo insuficiente disponible.",
         "paymentMethodNotSupportedErrorMsg": "El método de pago no es compatible."
       },
       "password": {

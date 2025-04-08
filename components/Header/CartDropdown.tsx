@@ -13,7 +13,7 @@ import axios from "axios";
 import { Guid } from "@commerce/types";
 import { AlertType } from '@framework/utils/enums';
 import { AddBasketIcon, TransferIcon } from '@components/shared/icons';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ShoppingCartIcon, TrashIcon } from '@heroicons/react/24/outline';
 import TransferBasket from "@components/TransferBasket";
 import { AnalyticsEventType } from "@components/services/analytics";
 import Router from "next/router";
@@ -24,7 +24,7 @@ const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
-export default function CartDropdown() {
+export default function CartDropdown({ featureToggle }: any) {
   const { recordAnalytics } = useAnalytics()
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
@@ -230,16 +230,11 @@ export default function CartDropdown() {
             <>
               {b2bUser ? (
                 <>
-                  <Popover.Button className={`w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`} >
-                    <>
-                      {/*{cartItems?.lineItems?.length > 0 && (
-                      <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                        {cartItems?.lineItems?.length}
-                      </div>
-                    )}*/}
+                  <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 hover:bg-slate-100 dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
+                    {featureToggle?.features?.enablePCTopHeader ?
+                      <span className="flex items-center text-xs font-light text-white hover:underline">Basket <ShoppingCartIcon className="w-4 h-4" /></span> :
                       <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
-                    </>
-
+                    }
                   </Popover.Button>
                   <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
                     <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
@@ -294,15 +289,30 @@ export default function CartDropdown() {
                   </Transition>
                 </>
               ) : (
-                <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} group w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
-                  {basketItemsCount > 0 && (
-                    <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
-                      {basketItemsCount}
-                    </div>
-                  )}
-                  <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
-                  <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
-                </Popover.Button>
+                <>
+                  <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} ${featureToggle?.features?.enablePCTopHeader ? '' : 'w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 '} group rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
+                    {featureToggle?.features?.enablePCTopHeader ?
+                      <span className="relative flex items-center text-xs font-light text-white hover:underline">Basket <ShoppingCartIcon className="w-4 h-4" />
+                        {basketItemsCount > 0 && (
+                          <div className="w-3.5 h-3.5 flex items-center justify-center bg-red-500 absolute top-0 -right-2.5 rounded-full text-[10px] leading-none text-white font-medium">
+                            {basketItemsCount}
+                          </div>
+                        )}
+                        <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
+                      </span> :
+                      <>
+                        {basketItemsCount > 0 && (
+                          <div className="w-3.5 h-3.5 flex items-center justify-center bg-primary-500 absolute top-1.5 right-1.5 rounded-full text-[10px] leading-none text-white font-medium">
+                            {basketItemsCount}
+                          </div>
+                        )}
+                        <span className="sr-only">{translate('label.basket.itemsCartViewBagText')}</span>
+
+                        <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
+                      </>
+                    }
+                  </Popover.Button>              
+                </>
               )}
             </>
           )

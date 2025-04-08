@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "UPI payment is unsupported.",
                 "paymentAlreadyCompletedErrorMsg": "Payment for your basket is already completed.",
                 "notEnoughCreditErrorMsg": "Not enough credit available.",
+                "walletNotFoundErrorMsg": "Wallet not found.",
+                "notEnoughBalanceErrorMsg": "Not enough balance available.",
                 "paymentMethodNotSupportedErrorMsg": "Payment method is not supported."
             },
             "password": {

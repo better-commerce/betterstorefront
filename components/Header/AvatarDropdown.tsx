@@ -12,7 +12,7 @@ import Router from 'next/router'
 import { signOut } from "next-auth/react";
 import { EmptyString, SocialMediaType } from "@components/utils/constants";
 import { useTranslation } from "@commerce/utils/use-translation";
-import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline";
+import { ClipboardDocumentListIcon, HeartIcon, UserIcon, ArrowLeftEndOnRectangleIcon, BuildingStorefrontIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import DataLayerInstance from '@components/utils/dataLayer';
 import { AlertType } from "@framework/utils/enums";
 import { AnalyticsEventType } from "@components/services/analytics";
@@ -81,7 +81,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
         if (currentPage) {
           if (typeof window !== 'undefined') {
             //debugger
-            recordAnalytics(AnalyticsEventType.LOGIN_ATTEMPT, { browser: getBrowserName(), currentPage, deviceCheck: isDesktop? 'Desktop': 'Mobile', })
+            recordAnalytics(AnalyticsEventType.LOGIN_ATTEMPT, { browser: getBrowserName(), currentPage, deviceCheck: isDesktop ? 'Desktop' : 'Mobile', })
           }
         }
       },
@@ -147,7 +147,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
       title: translate('label.wishlist.myStore'),
       className: 'text-left p-2 cursor-pointer',
       head: (
-        <BuildingStorefrontIcon className="w-6 h-6 text-gray-500"/>
+        <BuildingStorefrontIcon className="w-6 h-6 text-gray-500" />
       ),
       isEnable: featureToggle?.features?.enableMyStoreFeature
     },
@@ -156,7 +156,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
       title: translate('common.label.logOutText'),
       className: 'text-left p-2 cursor-pointer text-red-600',
       head: (
-        <ArrowLeftEndOnRectangleIcon className="w-6 h-6 text-gray-500"/>
+        <ArrowLeftEndOnRectangleIcon className="w-6 h-6 text-gray-500" />
       ),
       onClick: async () => {
         DataLayerInstance.setItemInDataLayer('visitorId', EmptyString)
@@ -179,8 +179,10 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
       <Popover className="relative">
         {({ open, close }) => (
           <>
-            <Popover.Button className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full group text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none flex items-center justify-center`} >
-              <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto group-hover:text-black" />
+            <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
+              {featureToggle?.features?.enablePCTopHeader ? <span className="flex items-center text-xs font-light text-white hover:underline">{!isGuestUser && user?.userId ? title : 'Sign in.  Account & Orders'} <ChevronDownIcon className="w-3 h-3" /></span> :
+                <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto group-hover:text-black" />
+              }
             </Popover.Button>
             <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
               <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">

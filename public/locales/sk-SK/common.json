@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "Platba cez UPI nie je podporovaná.",
                 "paymentAlreadyCompletedErrorMsg": "Platba za váš košík bola už dokončená.",
                 "notEnoughCreditErrorMsg": "Nedostatočný kredit.",
+                "walletNotFoundErrorMsg": "Peňaženka nebola nájdená.",
+                "notEnoughBalanceErrorMsg": "Nedostatočný zostatok.",
                 "paymentMethodNotSupportedErrorMsg": "Platobná metóda nie je podporovaná."
             },
             "password": {

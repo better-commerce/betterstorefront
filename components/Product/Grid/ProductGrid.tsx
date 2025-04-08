@@ -36,7 +36,7 @@ export default function CategoryGrid({ products, currentPage, handlePageChange =
       {IS_INFINITE_SCROLL && (
         <InfiniteScroll fetchData={handleInfiniteScroll} className="w-full mx-auto overflow-hidden sm:px-8" total={products.total} currentNumber={products?.results?.length}
           component={
-            <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
+            <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? `lg:grid-cols-4` : featureToggle?.features?.enableForPCSite ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`} >
               {!products?.results?.length && rangeMap(12, (i) => (
                 <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                   <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -55,7 +55,7 @@ export default function CategoryGrid({ products, currentPage, handlePageChange =
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 5 ? `lg:grid-cols-4` : 'lg:grid-cols-4'}`} >
+          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 5 ? `lg:grid-cols-4` : featureToggle?.features?.enableForPCSite ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`} >
             {!products?.results?.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">

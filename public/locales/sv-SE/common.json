@@ -1375,6 +1375,8 @@
                 "upiNotSupportedErrorMsg": "UPI-betalning stöds inte.",
                 "paymentAlreadyCompletedErrorMsg": "Betalningen för din kundvagn är redan genomförd.",
                 "notEnoughCreditErrorMsg": "Inte tillräckligt med kredit.",
+                "walletNotFoundErrorMsg": "Plånbok hittades inte.",
+                "notEnoughBalanceErrorMsg": "Inte tillräckligt med saldo tillgängligt.",
                 "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte."
             },
             "password": {
