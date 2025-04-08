@@ -127,7 +127,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: translate('label.basket.addToBagText'),
+      title: featureToggle.features?.enableForPCSite ? 'Add to basket' : translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o?.productId, data?.recordId, true) || matchStrings(o?.productId, data?.productId, true)) {
@@ -277,16 +277,13 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>
-        {featureToggle?.features?.enableAddButtonBottom ? (
-          <>
-            <div className='my-3 add-btn-plp'>
-              <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Content to render if false */}
-          </>
+        {featureToggle.features?.enableForPCSite && <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
+          <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {data?.price?.currencySymbol}2.35</span> with voucher
+        </div>}
+        {featureToggle?.features?.enableAddButtonBottom && (
+          <div className='my-3 add-btn-plp'>
+            <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+          </div>
         )}
         {isComparedEnabled && product?.compared && (
           <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">

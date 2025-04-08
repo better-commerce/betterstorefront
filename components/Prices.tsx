@@ -65,9 +65,15 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                     );
                   })()}
                   {isIncludeVAT ? (
-                    listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (<span className="pl-3 pr-1 text-sm font-normal text-gray-400 line-through list-price"> {listPrice?.formatted?.withTax} </span>)
+                    listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax &&
+                    (
+                      <span className="pl-3 pr-1 text-sm font-normal text-gray-400 line-through list-price"> {listPrice?.formatted?.withTax} </span>
+                    )
                   ) : (
-                    listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (<span className="pl-3 pr-1 text-xs font-normal text-gray-400 line-through list-price"> {listPrice?.formatted?.withoutTax} </span>)
+                    listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax &&
+                    (
+                      <span className="pl-3 pr-1 text-xs font-normal text-gray-400 line-through list-price"> {listPrice?.formatted?.withoutTax} </span>
+                    )
                   )}
                 </span>
                 <span className="text-xs font-normal text-gray-400"> {featureToggle?.features?.enableMembership && `${translate('label.membership.nonMemberPriceText')}`} </span>

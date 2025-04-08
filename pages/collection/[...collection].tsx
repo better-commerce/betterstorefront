@@ -624,7 +624,7 @@ function CollectionPage(props: any) {
                             <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
-                                  <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>                                  
+                                  <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
                                 </div>
                                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                               </div>
@@ -640,7 +640,54 @@ function CollectionPage(props: any) {
                   </>
                 ) : (
                   <div className="col-span-12">
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                    {featureToggle.features?.enableForPCSite &&
+                      <>
+                        <div className='grid mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                          <div className='flex flex-col w-full gap-4 sm:col-span-9'>
+                            {props?.breadCrumbs && (
+                              <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
+                            )}
+                            <div className="bg-transparent fixing-main-section dark:bg-white">
+                              <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                                <li className='flex items-center text-10-mob sm:text-sm'>
+                                  <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                                    <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                                  </Link>
+                                </li>
+                                <li className='flex items-center text-10-mob sm:text-sm'>
+                                  <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                                    <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                  </span>
+                                </li>
+                                <li className='flex items-center text-10-mob sm:text-sm'>
+                                  <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                                </li>
+                              </ol>
+                            </div>
+                            <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                              {props?.name}
+                            </h1>
+                            {props?.customInfo1 &&
+                              <div className='flex w-full'>
+                                <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
+                              </div>
+                            }
+                          </div>
+                          <div className='sm:col-span-3'>
+                            <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
+                          </div>
+                          <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex items-center justify-between w-full gap-0'>
+                              <div className='flex justify-start gap-3'>
+                                <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
+                              </div>
+                              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    }
+                    {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
                     {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                   </div>
                 )}
