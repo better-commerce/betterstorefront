@@ -79,7 +79,7 @@ const SocialLoginPage = (props: ISocialLoginPageProps) => {
         case SocialMediaType.GOOGLE:
         case SocialMediaType.FACEBOOK:
         case SocialMediaType.APPLE:
-          console.log('userData', userData)
+          //console.log('userData', userData)
           const fullName = parseFullName(userData?.user?.name)
           data = {
             ...data,

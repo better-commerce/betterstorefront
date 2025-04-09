@@ -112,7 +112,7 @@ function CollectionPage(props: any) {
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
-    console.log('collection', JSON.stringify(props))
+    //console.log('collection', JSON.stringify(props))
     //return <></>
   }
 

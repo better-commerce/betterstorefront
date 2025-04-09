@@ -501,7 +501,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
     if (res?.data) {
       generateDocPDF(res?.data?.base64Pdf, res?.data?.fileName);
     } else {
-      console.log('PDF not found')
+      //console.log('PDF not found')
     }
     hideOverlayLoaderState()
   }

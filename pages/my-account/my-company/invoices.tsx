@@ -73,7 +73,7 @@ function MyInvoices({ deviceInfo }: any) {
     if (res?.data) {
       generatePDF(res?.data?.base64Pdf, order);
     } else {
-      console.log('invoice Details not found')
+      //console.log('invoice Details not found')
     }
     hideOverlayLoaderState()
   }
