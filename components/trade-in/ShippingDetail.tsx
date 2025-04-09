@@ -3,8 +3,10 @@ import TradeNewAddress from "@components/account/Address/TradeNewAddress";
 import { useUI } from "@components/ui";
 import { NEXT_ADDRESS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition } from '@components/utils/constants';
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
+import { callApi } from "@framework/utils/api-util";
 import { logError } from "@framework/utils/app-util";
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dpd, quoteData, shippingData }: any) {
@@ -44,18 +46,14 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
     const store = storeData?.value?.[selectedCameraStore];
 
     try {
-      const response = await axios.post(NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, {
-        data: {
-          id: quoteData?.value?.id,
-          storeid: store?.id,
-        }
-      });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id, storeid: store?.id, } } };
+      const response = await callApi(config);
 
       if (response?.data?.isSuccess) {
+
         // Fetch updated quote only if the response is successful
-        const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, {
-          data: { id: quoteData?.value?.id }
-        });
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id } } };
+        const responseNew = await callApi(config);
         nextSteps(responseNew?.data);
       }
     } catch (error) {
@@ -106,19 +104,13 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
     try {
       // Execute API calls concurrently
       await Promise.all([
-        axios.post(NEXT_TRADE_IN_SAVE_ADDRESS, { data: requestBody }),
-        axios.post(NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, {
-          data: {
-            id: quoteData?.value?.id,
-            shippingMethodId: selectedShippingMethod?.iId,
-          }
-        })
+        callApi({ url: NEXT_TRADE_IN_SAVE_ADDRESS, method: RequestMethod.POST, data: { data: requestBody }}),
+        callApi({ url: NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id, shippingMethodId: selectedShippingMethod?.iId, } }})
       ]);
 
       // Fetch updated quote
-      const responseNew = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, {
-        data: { id: quoteData?.value?.id }
-      });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id } } };
+      const responseNew = await callApi(config);
 
       nextSteps(responseNew?.data);
     } catch (error) {
@@ -141,7 +133,8 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
       if (method.iId === 2) {
         // Fetch store data only if not already available
         if (!storeData || Object.keys(storeData).length === 0) {
-          const storeResult = await axios.post(NEXT_TRADE_IN_GET_STORES);
+          const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_STORES, method: RequestMethod.POST };
+          const storeResult = await callApi(config);
           setStoreData(storeResult?.data || {});
         }
       } else if (method.iId === 1) {

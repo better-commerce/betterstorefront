@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_PRODUCTS, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
@@ -34,6 +34,8 @@ import { useDebounce } from 'hooks/useDebounce'
 import { updateQueryParams } from 'framework/utils/app-util'
 import { NoSymbolIcon } from '@heroicons/react/24/outline'
 import Loader from '@components/Loader'
+import { RequestMethod } from 'bc-payments-sdk/dist/constants'
+import { callApi } from '@framework/utils/api-util'
 declare const window: any
 
 export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
@@ -81,7 +83,8 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       setIsLoadingDots(true);
 
       try {
-        const { data } = await axios.post(NEXT_TRADE_IN_PRODUCTS, { searchText });
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRODUCTS, method: RequestMethod.POST, data: { searchText } };
+        const { data } = await callApi(config);
         setProducts(data);
       } catch (error) {
         logError(error);
@@ -181,9 +184,8 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const fetchUpdatedQuoteDetails = async (quoteId: any) => {
     setIsLoading(true);
     try {
-      const { data } = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, {
-        data: { id: quoteId },
-      });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteId } } };
+      const { data } = await callApi(config);
       setQuoteData(data);
       setCurrentStep(data?.value?.street ? 4 : 2);
     } catch (error) {

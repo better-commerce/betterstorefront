@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition } from "@components/utils/constants";
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
+import { callApi } from "@framework/utils/api-util";
 
 export default function TradeInDetail() {
   const router: any = useRouter();
@@ -79,7 +81,8 @@ export default function TradeInDetail() {
   const fetchTradeDetail = async (tradeinId: string) => {
     setIsLoading(true);
     try {
-      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: tradeinId } })
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: tradeinId } } }; 
+      const quoteResult = await callApi(config)
       setTradeDetail(quoteResult?.data);
     } catch (error) {
       logError(error);
@@ -96,7 +99,8 @@ export default function TradeInDetail() {
   const updateAssessmentStatus = async (id: string, status: number) => {
     setIsLoading(true);
     try {
-      const statusResult = await axios.post(NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, { id: id, status: status });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, method: RequestMethod.POST, data: { id: id, status: status } };
+      const statusResult = await callApi(config);
       if (statusResult.data) {
         setSuccessMessage("Status update successfully!!!");
         fetchTradeDetail(tradeinId);
@@ -125,7 +129,8 @@ export default function TradeInDetail() {
           rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : QuoteItemStatusType.REJECTED,
         };
 
-        const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, { data: requestBody })
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: { data: requestBody } };
+        const quoteResult = await callApi(config)
         setTradeDetail(quoteResult?.data);
         await fetchTradeDetail(tradeDetail?.value?.id);
       } else {
@@ -141,7 +146,8 @@ export default function TradeInDetail() {
   const handleCancelQuote = async (quoteId: any, status: number) => {
     setIsLoading(true)
     try {
-      const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, { id: quoteId, status: status })
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, method: RequestMethod.POST, data: { id: quoteId, status: status } };
+      const quoteResult = await callApi(config)
       setTradeDetail(quoteResult?.data);
       await fetchTradeDetail(tradeDetail?.value?.id);
     }

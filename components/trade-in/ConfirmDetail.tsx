@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/router";
 import TradeInLogin from "@components/shared/Login/TradeInLogin";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -8,6 +8,8 @@ import { NEXT_TRADE_IN_GUEST_LOGIN, NEXT_TRADE_IN_LOGIN_USER, TradeInItemConditi
 import Loader from "@components/Loader";
 import { updateQueryParams } from "framework/utils/app-util";
 import { logError } from "@framework/utils/app-util";
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
+import { callApi } from "@framework/utils/api-util";
 
 export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMessage }: any) {
   const router = useRouter();
@@ -57,7 +59,8 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
         conditions: conditionLabels[selectedCondition?.conditionName] || 0,
         accessories: selectedAccessories || [],
       }));
-      const { data: quoteId } = await axios.post(NEXT_TRADE_IN_LOGIN_USER, { data: { customerId: guestLoginResult?.userId, items } });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { data: { customerId: guestLoginResult?.userId, items } } };
+      const { data: quoteId } = await callApi(config);
       updateQueryParams(router, { quoteId });
       if (quoteId) {
         setSuccessMessage("Quote created successfully!!!");

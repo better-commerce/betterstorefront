@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { useRouter } from 'next/router'
 import { EmptyString, NEXT_TRADE_IN_CUSTOMERS, NEXT_TRADE_IN_LOGIN, NEXT_TRADE_IN_LOGIN_USER, OTP_LOGIN_ENABLED, TradeInItemCondition } from '@components/utils/constants'
 import { useUI } from '@components/ui/context'
@@ -12,6 +12,8 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import { PAGE_TYPES } from '@components/withDataLayer'
 import { updateQueryParams } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
+import { RequestMethod } from 'bc-payments-sdk/dist/constants'
+import { callApi } from '@framework/utils/api-util'
 
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
@@ -72,7 +74,8 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       if (loginResult) {
         setLoginDetails(loginResult);
       }
-      const { data: userResult }: any = await axios.get(NEXT_TRADE_IN_CUSTOMERS);
+      const config1: AxiosRequestConfig = { url: NEXT_TRADE_IN_CUSTOMERS, method: RequestMethod.GET };
+      const { data: userResult }: any = await callApi(config1);
       // END Getting User Token API calls
       setUser({ ...loginResult, ...userResult })
       setIsGuestUser(false)
@@ -83,8 +86,8 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
         accessories: selectedAccessories || [],
       }));
 
-
-      const { data: quoteId } = await axios.post(NEXT_TRADE_IN_LOGIN_USER, { data: { customerId: loginResult?.userId, items } });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { data: { customerId: loginResult?.userId, items } } };
+      const { data: quoteId } = await callApi(config);
 
       updateQueryParams(router, { quoteId });
       if (quoteId) {
@@ -124,9 +127,8 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     }));
 
     try {
-      const quoteResp = await axios.post(NEXT_TRADE_IN_LOGIN_USER, {
-        data: { customerId: user?.userId, items: allItems }
-      });
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { data: { customerId: user?.userId, items: allItems } } };
+      const quoteResp = await callApi(config);
 
       updateQueryParams(router, { quoteId: quoteResp?.data });
     } catch (error) {

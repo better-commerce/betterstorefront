@@ -158,7 +158,6 @@ export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
     errorInfo.description = error?.response?.data || ''
   }
 
-  console.log({error, errorInfo})
   // send response
   if (errorInfo?.statusCode === HttpStatusCode.Unauthorized) {
     res.status(HttpStatusCode.Ok).json({ redirect: '/my-account/login' })

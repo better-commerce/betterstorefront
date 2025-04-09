@@ -1,10 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useState } from "react";
 import Loader from "@components/Loader";
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, TradeInItemCondition } from "@components/utils/constants";
 import Link from 'next/link';
 import { logError } from '@framework/utils/app-util';
 import { LoadingDots } from '@components/ui';
+import { RequestMethod } from 'bc-payments-sdk/dist/constants';
+import { callApi } from '@framework/utils/api-util';
 
 export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,9 +30,11 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
     setIsLoading(true);
     try {
       if (isChecked) {
-        await axios.post(NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, { data: { id: quoteData?.value.id } })
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { data: { id: quoteData?.value.id } } };
+        await callApi(config)
       }
-      const shippingResult = await axios.post(NEXT_TRADE_IN_GET_SHIPPING_METHODS)
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_SHIPPING_METHODS, method: RequestMethod.POST };
+      const shippingResult = await callApi(config)
       setShippingData(shippingResult?.data)
       nextSteps(getUpdatedQuoteDetails);
     } catch (error) {
@@ -42,7 +46,8 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
 
   const fetchUpdatedQuoteDetails = async (quoteId: string) => {
     try {
-      const quoteResult = await axios.post(NEXT_TRADE_IN_GET_QUOTE_BY_ID, { data: { id: quoteId } })
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteId } } };
+      const quoteResult = await callApi(config)
       setUpdatedQuoteDetails(quoteResult?.data)
     } catch (error) {
       logError(error)
@@ -67,7 +72,8 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
           rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : QuoteItemStatusType.REJECTED,
         };
 
-        const quoteResult = await axios.post(NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, { data: requestBody })
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: { data: requestBody } };
+        const quoteResult = await callApi(config)
         setUpdatedQuoteDetails(quoteResult?.data);
         await fetchUpdatedQuoteDetails(getUpdatedQuoteDetails?.value?.id);
       } else {

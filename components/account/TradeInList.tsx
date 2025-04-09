@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Loader from "@components/Loader";
 import { AssessmentStatus, DATE_FORMAT, NEXT_TRADE_IN_CUSTOMER_TRADES, QuoteItemStatus, QuoteStatus } from "@components/utils/constants";
 import { logError } from "@framework/utils/app-util";
 import moment from "moment";
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
+import { callApi } from "@framework/utils/api-util";
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
 
 export default function TradeInTable() {
@@ -66,7 +68,8 @@ export default function TradeInTable() {
     try {
       const { pageCount, ...rest } = paginationState
       const params = { ...rest, page: page }
-      const { data: allTrades } = await axios.get(NEXT_TRADE_IN_CUSTOMER_TRADES, { params })
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_CUSTOMER_TRADES, method: RequestMethod.GET, data: { params } };
+      const { data: allTrades } = await callApi(config)
       setPaginationState((prev: any) => ({ ...prev, page: allTrades?.page, pageCount: allTrades?.totalPages, pageSize: allTrades?.pageSize }))
       setTradeList(allTrades)
       setIsLoading(false)
