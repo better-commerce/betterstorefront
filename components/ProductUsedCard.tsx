@@ -17,9 +17,8 @@ import { AlertType } from '@framework/utils/enums';
 import Router from 'next/router';
 import { AnalyticsEventType } from './services/analytics';
 import useAnalytics from './services/analytics/useAnalytics';
-const BuyButton = dynamic(() => import('@components/ui/BuyNowButton'))
-import LongDescription from './Product/LongDescription';
-const LikeButton = dynamic(() => import('@components/LikeButton'))
+const BuyNowButton = dynamic(() => import('@components/ui/BuyNowButton'))
+const LongDescription = dynamic(() => import('@components/Product/LongDescription'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 export interface ProductCardProps {
@@ -120,7 +119,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
 
   const buttonTitle = () => {
     let buttonConfig: any = {
-      title: featureToggle?.features?.enableForPCSite ? 'Add to basket' : translate('label.basket.addToBagText'),
+      title: featureToggle?.features?.enableForPCSite ? 'Add to bag' : translate('label.basket.addToBagText'),
       validateAction: async () => {
         const cartLineItem: any = cartItems?.lineItems?.find((o: any) => {
           if (matchStrings(o?.productId, data?.recordId, true) || matchStrings(o?.productId, data?.productId, true)) {
@@ -196,41 +195,41 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
     <>
       <div key={key} className="w-full blue-add-btn">
         <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-5 pb-2.5 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
-            <div className='flex short-descriptionc'>
-                 <LongDescription data={data?.description} heading="" />
-             </div>
-       </div >
+          <div className='flex short-descriptionc'>
+            <LongDescription data={data?.description} heading="" />
+          </div>
+        </div >
         {featureToggle?.features?.enableAddButtonBottom && (
           <div className='my-3 add-green-btn'>
-            <Button size="small" className="w-full bg-black hover:bg-gray-900 focus:ring-black  `ttnc-ButtonPrimary` text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90  dark:bg-slate-100  text-slate-50 dark:text-white shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+            <Button className="w-full bg-black hover:bg-gray-900 focus:ring-black  `ttnc-ButtonPrimary` text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90  dark:bg-slate-100  text-slate-50 dark:text-white shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
           </div>
         )}
-                {!isGuestUser && user?.userId &&
-                         <>
-                          <div className="flex mt-6 mb-6 sm:mt-4 !text-sm w-full buy-btn">
-                            <BuyButton title="Buy Now" action={buttonConfig?.action}  buttonType={buttonConfig.type || 'cart'}/>
-                          </div>
-                         </>
-                        }
-                             <div className='w-full pt-3 mb-6'>
-                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                          <h4 className='text-xs'>Dispatches from</h4>
-                          <p className='text-xs text-black'>London Store</p>
-                        </div>
-                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                          <h4 className='text-xs'>Warranty</h4>
-                          <p className='text-xs text-color-primary-blue'>6 Months</p>
-                        </div>
-                      </div>
-                <div className='w-full'>
-                        <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                          {isInWishList? (
-                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
-                          ) : (
-                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
-                          <span className='text-sm'> Add to Wishlist </span>
-                        </button>
-                </div>
+        {!isGuestUser && user?.userId &&
+          <>
+            <div className="flex mt-6 mb-6 sm:mt-4 !text-sm w-full buy-btn">
+              <BuyNowButton title="Buy Now" action={buttonConfig?.action} buttonType={buttonConfig.type || 'cart'} />
+            </div>
+          </>
+        }
+        <div className='w-full pt-3 mb-6'>
+          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+            <h4 className='text-xs'>Dispatches from</h4>
+            <p className='text-xs text-black'>London Store</p>
+          </div>
+          <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
+            <h4 className='text-xs'>Warranty</h4>
+            <p className='text-xs text-color-primary-blue'>6 Months</p>
+          </div>
+        </div>
+        <div className='w-full'>
+          <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+            {isInWishList ? (
+              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
+            ) : (
+              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
+            <span className='text-sm'> Add to Wishlist </span>
+          </button>
+        </div>
       </div>
     </>
   );

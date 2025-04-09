@@ -631,24 +631,29 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             </div>
           ) : (
             <div className="container mx-auto">
-              <FeaturedBanner category={category} />
-              {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                <FeaturedCategory featuredCategory={category?.subCategories} />
-              }
-              {category?.featuredBrand?.length > 0 &&
-                <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-              }
-              {productDataToPass?.results?.length > 0 &&
+              {featureToggle.features?.enableForPCSite &&
                 <>
-                  <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                    <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
-                    <div className="flex justify-end align-bottom">
-                      <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                    </div>
-                  </div>
-                  <hr className='border-slate-200 dark:border-slate-200' />
+                  <FeaturedBanner category={category} />
+                  {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+                    <FeaturedCategory featuredCategory={category?.subCategories} />
+                  }
+                  {category?.featuredBrand?.length > 0 &&
+                    <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                  }
+                  {productDataToPass?.results?.length > 0 &&
+                    <>
+                      <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
+                        <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
+                        <div className="flex justify-end align-bottom">
+                          <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                        </div>
+                      </div>
+                      <hr className='border-slate-200 dark:border-slate-200' />
+                    </>
+                  }
                 </>
               }
+
               {isValidating ? (
                 <Loader />
               ) : (
@@ -688,6 +693,13 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                                   <div className='justify-center sm:col-span-3'>
                                     {category?.image != "" && <img src={category?.image} className='object-cover object-top w-full h-auto rounded-lg' />}
                                   </div>
+                                  <FeaturedBanner category={category} />
+                                  {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
+                                    <FeaturedCategory featuredCategory={category?.subCategories} />
+                                  }
+                                  {category?.featuredBrand?.length > 0 &&
+                                    <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                  }
                                   <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                                     <div className='flex items-center justify-between w-full gap-0'>
                                       <div className='flex justify-start gap-3'>
