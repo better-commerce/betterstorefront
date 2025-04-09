@@ -59,7 +59,7 @@ const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@components/Product/Bundles'))
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const BuyButton = dynamic(() => import('@components/ui/BuyNowButton'))
+const BuyNowButton = dynamic(() => import('@components/ui/BuyNowButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
 const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
 const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
@@ -968,7 +968,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       content: (
         <>
           <div className="p-4 overflow-x-auto container-tabs">
-            <table className="w-full border border-gray-300">
+            {product && product?.customAttributes?.length > 0 ? <table className="w-full border border-gray-300">
               <thead>
                 <tr className="text-left bg-gray-200">
                   <th className="p-3 border border-gray-300">Specification</th>
@@ -976,7 +976,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </tr>
               </thead>
               <tbody>
-                {product && product?.customAttributes?.length > 0 && product?.customAttributes?.map((attr: any, index: any) => (
+                {product?.customAttributes?.map((attr: any, index: any) => (
                   <tr key={index} className="border border-gray-300">
                     <td className="p-3 border border-gray-300">{attr?.display}</td>
                     <td
@@ -986,30 +986,29 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table> : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>No product specifications available.</div>}
           </div>
         </>
       )
     },
-   {
+    {
       id: 'Reviewss',
       label: 'Reviews',
       content: (
         <div className="space-y-4 review-none-section container-tabs">
-        {reviews?.review?.productReviews?.length > 0
-          ? renderReviews()
-          : <p className="text-gray-500 italic font-semibold">This product hasn't been reviewed yet. Be the first to share your thoughts!</p>}
+          {reviews?.review?.productReviews?.length > 0
+            ? renderReviews()
+            : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>This product hasn't been reviewed yet. Be the first to share your thoughts!</div>}
         </div>
-        )
+      )
     },
     {
       id: 'Videos',
       label: 'Videos',
       content: (
         <div className="space-y-4 container-tabs">
-          <div className="flex flex-col">
-            {product && product?.videos?.length > 0 && product?.videos?.map((video: any, index: any) => {
-              // Ensure URL is in embeddable format
+          {product && product?.videos?.length > 0 ? <div className="flex flex-col">
+            {product?.videos?.map((video: any, index: any) => {
               let videoUrl = video?.url?.includes("youtu.be")
                 ? video?.url?.replace("youtu.be/", "www.youtube.com/embed/")
                 : video?.url?.startsWith("www.")
@@ -1021,7 +1020,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </div>
               );
             })}
-          </div>
+          </div>: <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>This product hasn't any video!</div>}
         </div>
       )
     },
@@ -1070,30 +1069,30 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
                     <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
-                     <div className="w-full max-w-3xl rounded-xl border bg-background shadow-sm my-4">
-                        <div className="flex items-center  px-3 py-2  bg-gray-100 gap-3">
-                          <div className="rounded-full bg-gray-100">
-                            <CreditCardIcon className="h-4 w-4 text-black" />
-                          </div>
-                          <h2 className="text-sm font-semibold text-gray-800">OM-System Cashback</h2>
-                        </div>
-                        
-                        <div className="mt-2 space-y-1  px-3 py-2 pb-4 ">
-                          <div className="flex items-baseline">
-                            <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
-                            <span className="text-sm font-bold text-red-700 ml-2">£1,749.00</span>
-                          </div>
-                          
-                          <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
-                          
-                          <div className="mt-8 pt-2">
-                            <p className="text-sm text-gray-800">
-                              Cashback applies if product ordered within the offer period, even if out of stock.{" "}
-                              <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
-                            </p>
-                          </div>
-                        </div>
+                  <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
+                    <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
+                      <div className="bg-gray-100 rounded-full">
+                        <CreditCardIcon className="w-4 h-4 text-black" />
                       </div>
+                      <h2 className="text-sm font-semibold text-gray-800">{product?.brand} Cashback</h2>
+                    </div>
+
+                    <div className="px-3 py-2 pb-4 mt-2 space-y-1 ">
+                      <div className="flex items-baseline">
+                        <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
+                        <span className="ml-2 text-sm font-bold text-red-700">£1,749.00</span>
+                      </div>
+
+                      <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
+
+                      <div className="pt-2 mt-8">
+                        <p className="text-sm text-gray-800">
+                          Cashback applies if product ordered within the offer period, even if out of stock.{" "}
+                          <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 {attrGroup['product.relatedproducts']?.length > 0 &&
                   <div className='flex w-full'>
@@ -1195,11 +1194,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                           </div>
                         )}
                         {!isGuestUser && user?.userId &&
-                         <>
-                          <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
-                            <BuyButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'}/>
-                          </div>
-                         </>
+                          <>
+                            <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
+                              <BuyNowButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                            </div>
+                          </>
                         }
                       </div>
                       <div className='w-full pt-3'>
@@ -1234,23 +1233,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </div>
                 {/* Used Product Option */}
                 {tabProducts?.USED?.length > 0 && (
-                <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
-                  <label className="flex items-center justify-between gap-2 cursor-pointer">
-                    <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
-                    <span className="font-semibold">Save with used - Like New</span>
-                    <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                      {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                    </span>
-                  </label>
-                   <div className='mt-3 space-y-2'>
-                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                    <p className="text-sm font-normal text-black">FREE next day delivery.</p>
-                  </div> 
-                  {selectedOption === "used" && (
-                    <><UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} /></>
-                  )}
-                </div>
+                  <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
+                    <label className="flex items-center justify-between gap-2 cursor-pointer">
+                      <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
+                      <span className="font-semibold">Save with used - Like New</span>
+                      <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                        {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                      </span>
+                    </label>
+                    <div className='mt-3 space-y-2'>
+                      <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                      <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                    </div>
+                    {selectedOption === "used" && (
+                      <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -1446,9 +1445,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     renderItem={customRenderItem}
                     renderThumbInner={customRenderThumbInner}
                   />
-                {featureToggle?.features?.enableRichPdpToggle && (
-                  <p className='text-gray-500'>Product Code: {product?.productCode}</p>
-                )}
+                  {featureToggle?.features?.enableRichPdpToggle && (
+                    <p className='text-gray-500'>Product Code: {product?.productCode}</p>
+                  )}
                 </div>
               ) : (
                 <div className={`w-full lg:w-[55%] sticky top-0 ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
@@ -1536,34 +1535,34 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
               <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
-                {CURRENT_THEME === "camera" ? 
+                {CURRENT_THEME === "camera" ?
                   <>
-                     <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                     <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                    <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                    <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
                   </>
-                : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}   
+                  : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
               </div>
             </>
           )}
-            {CURRENT_THEME === "camera" && (
-              <>
-                    {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true))?.length > 0 && (
+          {CURRENT_THEME === "camera" && (
             <>
-                    <hr className="border-slate-200 dark:border-slate-700" />
-                    <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
-                      {CURRENT_THEME === "camera" ? 
-                        <>
-                          <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                          <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
-                        </>
-                      : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}   
-                      <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
-                    </div>
-                  </>
-                )}
-              </>
-            )}
+              {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true))?.length > 0 && (
+                <>
+                  <hr className="border-slate-200 dark:border-slate-700" />
+                  <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
+                    {CURRENT_THEME === "camera" ?
+                      <>
+                        <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                        <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                      </>
+                      : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
+                    <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+                  </div>
+                </>
+              )}
+            </>
+          )}
           {featureToggle?.features?.enableEngage &&
             <>
               <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
@@ -1580,13 +1579,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
-        {!featureToggle?.features?.enableBottomTabsSection && (
-          <>
-          {reviews?.review?.productReviews?.length > 0 &&
-            renderReviews()
-          }
-          </>
-        )}
+          {!featureToggle?.features?.enableBottomTabsSection && (
+            <>
+              {reviews?.review?.productReviews?.length > 0 &&
+                renderReviews()
+              }
+            </>
+          )}
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6 pdp-description-section">
               <ProductDescription seoInfo={attrGroup} />

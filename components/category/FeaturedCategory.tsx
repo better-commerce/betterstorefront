@@ -4,7 +4,7 @@ import 'swiper/css/navigation'
 import Link from "next/link";
 export default function FeaturedCategory({ featuredCategory }: any) {
   return (
-    <div className="pt-6 pb-3">
+    <div className="flex w-full pt-6 pb-3 sm:col-span-12">
       <Swiper spaceBetween={10} slidesPerView={2.3} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 3, }, 768: { slidesPerView: 5 }, 1024: { slidesPerView: 6.8 }, 1400: { slidesPerView: 8.4 }, }} className="px-20 mySwiper center-content swiper-center" >
         {featuredCategory?.map((featured: any, featuredIdx: number) => (featured?.isFeatured == true && (
           <SwiperSlide key={featuredIdx}>

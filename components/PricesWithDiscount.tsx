@@ -76,57 +76,78 @@ const Prices: FC<PricesProps> = ({
             </span>
           </div>
         )}
-         
+
         {/* Non-member Price Display */}
         {/** Only show "Limited time deal" if discount is present */}
         {nonMemberDiscountPercentage > 0 && (
           <div className="flex mb-3">
-            <span className="inline-block rounded bg-red-600 px-2 py-1 text-xs font-semibold text-white">
+            <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded">
               Limited time deal
             </span>
           </div>
         )}
-        
+
         {price?.raw?.withTax !== 0 ? (
           <div className={`flex ${nonMemberDiscountPercentage > 0 ? "flex-col" : "flex-row"} items-start text-sm font-semibold text-gray-400 price`}>
-            <div className="flex gap-x-1 items-center">
-            {/* Discount Percentage */}
-            {nonMemberDiscountPercentage > 0 && (
-              <span className="mr-2 text-red-600 text-lg font-normal">
-                -{nonMemberDiscountPercentage}%
-              </span>
-            )}
-            {isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax}
+            <div className="flex items-center gap-x-1">
+              {/* Discount Percentage */}
+              {nonMemberDiscountPercentage > 0 && (
+                <span className="mr-2 text-lg font-normal text-red-600">
+                  -{nonMemberDiscountPercentage}%
+                </span>
+              )}
+              {featureToggle?.features?.enableForPCSite ? (
+                <>
+                  {(() => {
+                    const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
+                    // Match: currency symbol, digits with commas, optional decimal
+                    const match = rawPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
+                    const symbol = match?.[1] || '';
+                    const main = match?.[2] || ''; // keep commas here
+                    const decimal = match?.[3] || '';
+
+                    return (
+                      <span className="relative inline-flex items-start mr-2">
+                        <span className="text-sm mr-0.5">{symbol}</span>
+                        <span className="text-3xl font-semibold">{main}</span>
+                        {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
+                      </span>
+                    );
+                  })()}
+                </>
+              ) : (
+                isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax
+              )}
             </div>
             <div className="flex items-center">
-            <span className="flex items-center">
-              {/* Strike-through list price if there's a discount */}
-              {isIncludeVAT ? (
-                listPrice?.raw?.withTax > 0 &&
-                listPrice?.raw?.withTax > price?.raw?.withTax && (
-                  <span className="px-1 text-sm font-normal text-gray-400 line-through">
-                    {listPrice?.formatted?.withTax}
-                  </span>
-                )
-              ) : (
-                listPrice?.raw?.withoutTax > 0 &&
-                listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
-                  <span className="px-1 text-sm font-normal text-gray-400 line-through">
-                    {listPrice?.formatted?.withoutTax}
-                  </span>
-                )
-              )}
-            </span>
-            <span className="text-xs font-normal text-gray-400 ml-1">
-              {featureToggle?.features?.enableMembership &&
-                `${translate("label.membership.nonMemberPriceText")}`}
-            </span>
-            <span className="pl-1 font-light text-right text-gray-400 text-sm">
-              {isIncludeVAT
-                ? translate("label.orderSummary.incVATText")
-                : translate("label.orderSummary.excVATText")}
-            </span>
-          </div>
+              <span className="flex items-center">
+                {/* Strike-through list price if there's a discount */}
+                {isIncludeVAT ? (
+                  listPrice?.raw?.withTax > 0 &&
+                  listPrice?.raw?.withTax > price?.raw?.withTax && (
+                    <span className="px-1 text-sm font-normal text-gray-400 line-through">
+                      {listPrice?.formatted?.withTax}
+                    </span>
+                  )
+                ) : (
+                  listPrice?.raw?.withoutTax > 0 &&
+                  listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
+                    <span className="px-1 text-sm font-normal text-gray-400 line-through">
+                      {listPrice?.formatted?.withoutTax}
+                    </span>
+                  )
+                )}
+              </span>
+              <span className="ml-1 text-xs font-normal text-gray-400">
+                {featureToggle?.features?.enableMembership &&
+                  `${translate("label.membership.nonMemberPriceText")}`}
+              </span>
+              <span className="pl-1 text-sm font-light text-right text-gray-400">
+                {isIncludeVAT
+                  ? translate("label.orderSummary.incVATText")
+                  : translate("label.orderSummary.excVATText")}
+              </span>
+            </div>
           </div>
         ) : (
           <div className="font-semibold text-green">
