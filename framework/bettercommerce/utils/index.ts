@@ -13,6 +13,7 @@ import {
   HTTP_MESSAGES,
 } from './constants'
 import { Guid } from '@commerce/types'
+import { HttpStatusCode } from 'axios'
 export const setCookie = (
   name: string,
   token?: string,
@@ -157,8 +158,13 @@ export const apiMiddlewareErrorHandler = (req: any, res: any, error: any) => {
     errorInfo.description = error?.response?.data || ''
   }
 
+  console.log({error, errorInfo})
   // send response
-  res.status(errorInfo?.statusCode).json(errorInfo)
+  if (errorInfo?.statusCode === HttpStatusCode.Unauthorized) {
+    res.status(HttpStatusCode.Ok).json({ redirect: '/my-account/login' })
+  } else {
+    res.status(errorInfo?.statusCode).json(errorInfo)
+  }
 }
 
 export const checkIfFalsyUserId = (userId: any) => {

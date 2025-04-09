@@ -16,6 +16,7 @@ export default function getCustomerWalletBalanceById(walletId: string, cookies?:
       return response;
     } catch (error: any) {
       logError(error);
+      throw error
     }
   }
   return getCustomerWalletByIdAsync();

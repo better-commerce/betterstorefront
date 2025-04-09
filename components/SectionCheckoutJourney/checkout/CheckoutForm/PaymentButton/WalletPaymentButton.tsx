@@ -7,7 +7,9 @@ import PaymentGatewayNotification from '@components/SectionCheckoutJourney/check
 import { EmptyString, Messages, NEXT_WALLET_GET_BALANCE, } from '@components/utils/constants'
 import { matchStrings } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
-import axios from 'axios'
+import { AxiosRequestConfig } from 'axios'
+import { RequestMethod } from 'bc-payments-sdk/dist/constants'
+import { callApi } from '@framework/utils/api-util'
 
 export class WalletPaymentButton extends BasePaymentButton {
   /**
@@ -33,7 +35,8 @@ export class WalletPaymentButton extends BasePaymentButton {
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.validatingAccountText'), })
       const walletId = uiContext?.user?.walletId
       if (walletId && walletId !== Guid.empty) {
-        const { data, error }: any = await axios.post(NEXT_WALLET_GET_BALANCE, { walletId })
+        const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
+        const { data, error }: any = await callApi(config)
         const walletBalance = data?.value?.balance
 
         if (basketOrderInfo?.basket?.grandTotal?.raw?.withTax <= walletBalance) {
@@ -76,7 +79,8 @@ export class WalletPaymentButton extends BasePaymentButton {
     const walletId = uiContext?.user?.walletId
     if (walletId && walletId !== Guid.empty) {
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
-      axios.post(NEXT_WALLET_GET_BALANCE, { walletId }).then(({ data, error }: any) => {
+      const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
+      callApi(config).then(({ data, error }: any) => {
         if (data?.value?.balance) {
           this.setState({ walletBalance: data?.value?.balance })
         }

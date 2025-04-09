@@ -16,6 +16,7 @@ export default function getCustomerWalletById(walletId: string, cookies?: any) {
       return response;
     } catch (error: any) {
       logError(error);
+      throw error
     }
   }
   return getCustomerWalletByIdAsync();

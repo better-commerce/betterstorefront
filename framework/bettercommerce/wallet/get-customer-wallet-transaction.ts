@@ -22,6 +22,7 @@ export default function getCustomerWalletTransactionById(
       return response;
     } catch (error: any) {
       logError(error);
+      throw error
     }
   }
   return getCustomerWalletTransactionByIdAsync();

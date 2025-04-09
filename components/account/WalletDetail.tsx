@@ -3,9 +3,11 @@ import Loader from '@components/Loader';
 import { LoadingDots } from '@components/ui';
 import { useUI } from '@components/ui/context'
 import { DATE_FORMAT, NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, NEXT_WALLET_ENABLE_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS } from "@components/utils/constants";
+import { callApi } from '@framework/utils/api-util';
 import { logError } from "@framework/utils/app-util";
 import { WalletIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
+import { AxiosRequestConfig } from "axios";
+import { RequestMethod } from 'bc-payments-sdk/dist/constants';
 import moment from 'moment';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from "react";
@@ -23,9 +25,11 @@ export default function WalletDetail() {
   const handleEnableWallet = async () => {
     setIsLoading(true);
     try {
-      const { data: walletResult }: any = await axios.post(NEXT_WALLET_ENABLE_CUSTOMER_WALLET, { customerId: user.userId });
+      const config: AxiosRequestConfig = { url: NEXT_WALLET_ENABLE_CUSTOMER_WALLET, method: RequestMethod.POST, data: { customerId: user.userId } }
+      const { data: walletResult }: any = await callApi(config);
       if (walletResult?.value) {
-        await axios.post(NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, { id: user.userId, walletId: walletResult?.value });
+        const config: AxiosRequestConfig = { url: NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, method: RequestMethod.POST, data: { id: user.userId, walletId: walletResult?.value }, }
+        await callApi(config);
         setWalletEnabled(true);
         setSuccessMessage("Your Wallet enabled successfully!!!");
         setUser({ ...user, walletId: walletResult?.value })
@@ -47,8 +51,8 @@ export default function WalletDetail() {
   const getWallet = async (walletId: any) => {
     setIsLoadingWallet(true);
     try {
-
-      const { data: walletData }: any = await axios.post(NEXT_WALLET_GET_CUSTOMER_WALLET, { walletId });
+      const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_WALLET, method: RequestMethod.POST, data: { walletId }, }
+      const { data: walletData }: any = await callApi(config);
       setWalletDetail(walletData?.value);
     } catch (error) {
       logError(error);
@@ -60,14 +64,8 @@ export default function WalletDetail() {
     setIsLoadingTransactions(true);
     try {
       const { pageCount, ...rest } = paginationState;
-      const { data: transactionsResult }: any = await axios.post(NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS, {
-        walletId,
-        page,
-        pageSize: 10,
-        sortBy,
-        sortDescending,
-        filters,
-      });
+      const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
+      const { data: transactionsResult }: any = await callApi(config)
       setWalletTransaction(transactionsResult?.value);
       setPaginationState((prev: any) => ({
         ...prev,
