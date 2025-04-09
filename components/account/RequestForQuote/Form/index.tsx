@@ -16,6 +16,7 @@ import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTex
 import Spinner from "@components/ui/Spinner";
 import Link from "next/link";
 import { AlertType } from "@framework/utils/enums";
+import { Guid } from "@commerce/types";
 interface ITargetPrices {
   [productId: string]: number;
 }
@@ -41,6 +42,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   useEffect(() => { if (isClient && cartItems?.lineItems) setLines(restructureProductLines(cartItems?.lineItems, null)) }, [isIncludeVAT, isClient, cartItems]);
 
   const fetchB2BUsers = async () => {
+    if (!user?.companyId || (user?.companyId && user?.companyId === Guid.empty)) return [];
     let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, {
       companyId: user?.companyId,
     });
