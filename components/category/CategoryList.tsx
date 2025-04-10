@@ -16,6 +16,8 @@ import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 import dynamic from "next/dynamic";
 import { useTranslation } from "@commerce/utils/use-translation";
 import CompareSelectionBar from "@components/Product/ProductCompare/compareSelectionBar";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 export default function CategoryList(
   { featureToggle,
@@ -42,7 +44,7 @@ export default function CategoryList(
     isProductCompare,
     showCompareProducts,
     handlePageChange,
-    campaignData }: any) {
+    campaignData, shopAll }: any) {
   const translate = useTranslation()
   return (
     <>
@@ -93,9 +95,42 @@ export default function CategoryList(
                         <>
                           <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
                             <div className='flex flex-col w-full gap-4 sm:col-span-9'>
-                              {category?.breadCrumbs && (
-                                <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
-                              )}
+                              {shopAll ? (<>
+                                <div className="mt-2 bg-transparent dark:bg-white">
+                                  <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                                    <li className='flex items-center text-10-mob sm:text-sm'>
+                                      <Link href="/category" passHref>
+                                        <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Category</span>
+                                      </Link>
+                                    </li>
+                                    <li className='flex items-center text-10-mob sm:text-sm'>
+                                      <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                                        <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                      </span>
+                                    </li>
+                                    <li className='flex items-center text-10-mob sm:text-sm'>
+                                      <Link href={`/${category?.link}`} passHref>
+                                        <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {category?.name}</span>
+                                      </Link>
+                                    </li>
+                                    <li className='flex items-center text-10-mob sm:text-sm'>
+                                      <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                                        <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                      </span>
+                                    </li>
+                                    <li className='flex items-center text-10-mob sm:text-sm'>
+                                      <Link href="#" passHref>
+                                        <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {category?.name}</span>
+                                      </Link>
+                                    </li>
+                                  </ol>
+                                </div>
+                              </>) : (<>
+                                {category?.breadCrumbs && (
+                                  <BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />
+                                )}
+                              </>)}
+
                               <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
                                 {category?.name}
                               </h1>

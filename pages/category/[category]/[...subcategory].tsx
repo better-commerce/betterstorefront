@@ -568,7 +568,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
               )}
             </>
           ) : (
-            <CategoryList featureToggle={featureToggle} category={category} handleFilters={handleFilters} productDataToPass={productDataToPass} state={state} data={data} excludeOOSProduct={excludeOOSProduct} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} isCompared={isCompared} defaultDisplayMembership={defaultDisplayMembership} closeCompareProducts={closeCompareProducts} onEnableOutOfStockItems={onEnableOutOfStockItems} isValidating={isValidating} isMobile={isMobile} products={products} handleSortBy={handleSortBy} clearAll={clearAll} removeFilter={removeFilter} isProductCompare={isProductCompare} showCompareProducts={showCompareProducts} handlePageChange={handlePageChange} campaignData={campaignData} />
+            <CategoryList shopAll={false} featureToggle={featureToggle} category={category} handleFilters={handleFilters} productDataToPass={productDataToPass} state={state} data={data} excludeOOSProduct={excludeOOSProduct} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} isCompared={isCompared} defaultDisplayMembership={defaultDisplayMembership} closeCompareProducts={closeCompareProducts} onEnableOutOfStockItems={onEnableOutOfStockItems} isValidating={isValidating} isMobile={isMobile} products={products} handleSortBy={handleSortBy} clearAll={clearAll} removeFilter={removeFilter} isProductCompare={isProductCompare} showCompareProducts={showCompareProducts} handlePageChange={handlePageChange} campaignData={campaignData} />
           )}
       </section>
     </>
