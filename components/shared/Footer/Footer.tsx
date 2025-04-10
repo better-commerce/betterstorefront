@@ -6,12 +6,34 @@ import { sanitizeHtmlContent } from "framework/utils/app-util";
 import Newsletter from "../Newsletter";
 import { Guid } from "@commerce/types";
 import Router from "next/router";
+import { NEXT_GET_ALL_STORES } from "@components/utils/constants";
+import axios from "axios";
 
 
 const Footer = ({ navItems = [], featureToggle }: any) => {
   const [domLoaded, setDOMLoaded] = useState<boolean>(false)
   const { user, isGuestUser, openLoginSideBar } = useUI();
-
+  const [stores, setStores] = useState([])
+  const [filteredStores, setFilteredStores]: any = useState([])
+  useEffect(() => {
+    getAllStores()
+  }, [])
+  const getAllStores = async () => {
+    try {
+      const { data }: any = await axios.get(NEXT_GET_ALL_STORES)
+      let stores = data?.map((store: any) => {
+        return {
+          ...store,
+          lat: Number(store?.latitude),
+          lng: Number(store?.longitude),
+        }
+      })
+      setFilteredStores(stores)
+      setStores(stores)
+    } catch (error) {
+      console.error('err in fetching stores', error)
+    }
+  }
   const manageMyAccountLinks = useCallback(() => {
     const selector = "li.text-footer-clr a[href*='/my-account']";
     const lnkMyAccountLinks: NodeListOf<HTMLAnchorElement> = document.querySelectorAll(selector);
@@ -100,7 +122,23 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                 {domLoaded && navItems?.map(renderWidgetMenuItem)}
               </div>
             </div>
-            <div className="flex flex-col col-span-12 sm:col-span-3"></div>
+            <div className="flex flex-col col-span-12 gap-6 sm:col-span-3">
+              {filteredStores?.map((store: any, storeIdx: number) => (
+                <div className="flex flex-col gap-2" key={`stores-${storeIdx}`}>
+                  <div className="grid items-center grid-cols-12 gap-4">
+                    <div className="col-span-4">
+                      <img src={store?.image} className="object-cover w-auto h-20 border-2 border-white rounded-md shadow" alt={store?.name} />
+                    </div>
+                    <div className="flex flex-col w-full col-span-8">
+                      <h4 className="mb-2 text-sm font-semibold text-white">{store?.name}</h4>
+                      <div dangerouslySetInnerHTML={{ __html: `${store?.address1}, ${store?.address2}` }} className="text-xs text-white sm:block" />
+                      {store?.phoneNo != null && <span className="text-xs text-white sm:block dark:text-black">Tel: {store?.phoneNo}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+            </div>
           </div>
           <div className="container flex flex-col w-full pt-6 mt-6">
             <p className="text-xs font-normal text-gray-400">Technical specifications are for guidance only and cannot be guaranteed accurate. All offers subject to availability and while stocks last. Errors and omissions excepted. Registered Company No. 1449928. Park Cameras Limited is a credit broker, not a lender and is authorised and regulated by the Financial Conduct Authority (FRN 680161). We do not charge you for credit broking services. We will introduce you exclusively to Omni Capital finance products provided by Omni Capital Retail Finance Ltd.</p>

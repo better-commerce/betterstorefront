@@ -5,6 +5,7 @@
     "enableQuickOrderPad": false,
     "enableCompare": false,
     "enableStoreLocator": false,
+    "enableStoreStockCheck": false,
     "enableCollectDeliveryOption": false,
     "enableEngage":true,
     "enableMyStoreFeature": false,

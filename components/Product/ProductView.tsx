@@ -1115,7 +1115,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 {
                   openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
                 }
-                {featureToggle?.features?.enableStoreLocator &&
+                {featureToggle?.features?.enableStoreStockCheck &&
                   <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
                     <MyLocationIcon className='w-4 h-4' />
                     <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
@@ -1306,7 +1306,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               {
                 openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
               }
-              {featureToggle?.features?.enableStoreLocator &&
+              {featureToggle?.features?.enableStoreStockCheck &&
                 <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
                   <MyLocationIcon className='w-4 h-4' />
                   <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>

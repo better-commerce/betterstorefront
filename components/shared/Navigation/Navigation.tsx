@@ -4,6 +4,7 @@ import { removePrecedingSlash, sanitizeRelativeUrl } from "@framework/utils/app-
 import { groupBy, isEmpty } from "lodash";
 import { CURRENT_THEME } from "@components/utils/constants";
 import { removeTitleTags } from "framework/utils/app-util";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 
 function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
   const [hoveredItemIndex, setHoveredItemIndex] = useState<number | null>(null);
@@ -187,7 +188,7 @@ function Navigation({ navItems = [], featureToggle, subMenuPosition }: any) {
             <div className="flex items-center flex-shrink-0 h-16 height-div-nav">
               <Link className="inline-flex items-center capitalize text-sm lg:text-[12px] 2xl:text-[14px] menu-font-size font-semibold text-slate-700 dark:text-slate-700 py-2.5 px-4 xl:px-4 rounded-full hover:text-slate-900 hover:bg-slate-100 dark:hover:bg-slate-100 dark:hover:text-slate-900 group-hover:bg-slate-100 group-hover:text-black menu-custom-padding header-nav-font"
                 href={`/store-locator`}>
-                Stores
+                {featureToggle?.features?.enableForPCSite && <MapPinIcon className="inline-block w-5 h-5" />}  Stores
               </Link>
             </div>
           </li>
