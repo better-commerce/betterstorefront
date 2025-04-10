@@ -199,15 +199,23 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                         </div>
                       }
                       {featureToggle?.features?.enableTradeIn &&
-                        <div className="relative flex flex-col items-center justify-center px-1 text-left group mob-line-height-none sm:pr-10">
-                          <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
-                            <img src="/theme/camera/image/trade-in-icon.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Trade In" />
-                            <span className="text-xs font-light">Discover Trade-In</span>
-                          </Link>
-                        </div>
+                        <>
+                          <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-10">
+                            <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
+                              <img src="/theme/camera/image/trade-in-icon.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Trade In" />
+                              <span className="text-xs font-light">Discover Trade-In</span>
+                            </Link>
+                          </div>
+                          <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-10">
+                            <Link href="/" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
+                              <img src="/theme/camera/image/expert.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Ask an Expert" />
+                              <span className="text-xs font-light">Ask an Expert</span>
+                            </Link>
+                          </div>
+                        </>
                       }
-                      <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-                      <CartDropdown />
+                      {!featureToggle?.features?.enablePCTopHeader && <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />}
+                      {!featureToggle?.features?.enablePCTopHeader && <CartDropdown featureToggle={featureToggle} />}
                       {featureToggle?.features?.enableMembership &&
                         <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                           <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
@@ -272,8 +280,8 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                       </button>
                     </div>
                   }
-                  <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-                  <CartDropdown />
+                  {!featureToggle?.features?.enablePCTopHeader && <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />}
+                  {!featureToggle?.features?.enablePCTopHeader && <CartDropdown featureToggle={featureToggle} />}
                   {featureToggle?.features?.enableMembership &&
                     <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                       <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
