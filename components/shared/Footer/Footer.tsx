@@ -123,7 +123,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
               </div>
             </div>
             <div className="flex flex-col col-span-12 gap-6 sm:col-span-3">
-              {filteredStores?.map((store: any, storeIdx: number) => (
+              {filteredStores?.length > 0 && filteredStores?.map((store: any, storeIdx: number) => (
                 <div className="flex flex-col gap-2" key={`stores-${storeIdx}`}>
                   <div className="grid items-center grid-cols-12 gap-4">
                     <div className="col-span-4">
