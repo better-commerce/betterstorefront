@@ -1,17 +1,37 @@
 import Loader from "@components/Loader";
 import TradeNewAddress from "@components/account/Address/TradeNewAddress";
 import { useUI } from "@components/ui";
-import { NEXT_ADDRESS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition } from '@components/utils/constants';
+import { NEXT_ADDRESS, TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition, EmptyString } from '@components/utils/constants';
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
 import { callApi } from "@framework/utils/api-util";
 import { logError } from "@framework/utils/app-util";
+import toast from "react-hot-toast";
+import { useTranslation } from '@commerce/utils/use-translation'
 import axios, { AxiosRequestConfig } from 'axios';
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
-export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dpd, quoteData, shippingData }: any) {
+interface ShippingDetailProps {
+  nextSteps: any;
+  quoteData: any;
+  shippingData: any;
+}
+
+interface DPDAddress {
+  organisation: string;
+  property: string;
+  street: string;
+  locality: string;
+  town: string;
+  county: string;
+  postCode: string;
+  countryCode: string;
+}
+
+export default function ShippingDetail({ nextSteps, quoteData, shippingData }: ShippingDetailProps) {
   const [selectedCameraStore, setSelectedCameraStore] = useState<any>(0);
-  const { isGuestUser, user } = useUI()
+  const { user } = useUI()
+  const translate = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isSummary, setShowSummary] = useState(false);
   const [storeData, setStoreData] = useState<any>([])
@@ -21,6 +41,10 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
   const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>(null)
   const [selectedUserAddress, setSelectedUserAddress] = useState<any>(null);
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [postCode, setPostCode] = useState<string>('')
+  const [isStoreAvailable, setIsStoreAvailable] = useState<boolean>(false);
+  const [storeList, setStoreList] = useState([])
+  const [isValidPostCode, setIsValidPostCode] = useState(true);
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAddressData((prev) => ({ ...prev, [name]: value }));
@@ -70,6 +94,10 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
     setIsLoading(true);
 
     const getAddressPayload = () => {
+      if(addressData?.addressType === 3){
+        return addressData
+      }
+
       if (isStoreDropOff && selectedCameraStore !== null) {
         const selectedStore = storeData?.value?.[selectedCameraStore];
         return {
@@ -154,7 +182,8 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
     if (!user?.userId || (userAddress && Object.keys(userAddress).length > 0)) return; // Avoid refetching
 
     try {
-      const response = await axios.post(NEXT_ADDRESS, { id: user.userId });
+      const config: AxiosRequestConfig = { url: NEXT_ADDRESS, method: RequestMethod.POST, data: { id: user?.userId } }; 
+      const response = await callApi(config)
       setUserAddress(response.data || {});
       return response.data;
     } catch (error) {
@@ -162,8 +191,47 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
     }
   };
 
+  const fetchDPDStoreList = async () => {
+    if(!postCode || !validatePostCode(postCode)) return
+    setIsLoading(true);
+    try {
+      const config: AxiosRequestConfig = { url: TRADE_IN_DPD_PICKUP_LOCATIONS, method: RequestMethod.POST, data: { currentPage : 1, pageSize : 20, postCode } }; 
+      const { data } = await callApi(config)
+      if(data?.length){
+        setStoreList(data)
+        setIsStoreAvailable(true)
+      } else {
+        toast.error(translate('common.message.noAddressFoundErrorMsg'), { position: "top-right" })
+      }
+    } catch (error) {
+      logError(error)
+      setStoreList([])
+      setIsStoreAvailable(false)
+      toast.error(translate('label.addressBook.updateFailedText'), { position: "top-right" })
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
+  const validatePostCode = (postCode: string) =>{
+    const trimmed = postCode?.trim()?.toUpperCase();
+    const isValid = /^([A-Z]{1,2}\d{1,2}[A-Z]?)\s?(\d[A-Z]{2})$/i.test(trimmed);
+    setIsValidPostCode(isValid)
+    return isValid
+  }
 
+  const handleStoreSelect = (storeDetails: DPDAddress) => {
+    setAddressData({
+      addressType: 3,
+      street: storeDetails?.street || EmptyString,
+      street2: storeDetails?.locality || storeDetails?.organisation || EmptyString,
+      city: storeDetails?.town || EmptyString,
+      state: storeDetails?.county || storeDetails?.town || EmptyString,
+      country: storeDetails?.countryCode || EmptyString,
+      postcode: storeDetails?.postCode || EmptyString,
+    });
+  }
+  
   return (
     <>
       {isLoading && <Loader />}
@@ -378,37 +446,80 @@ export default function ShippingDetail({ showStores, nextSteps, showDpdStore, dp
             <h4 className='text-xl font-medium text-left text-black'>DPD Store</h4>
             <p className='text-sm font-normal text-left text-gray-600'>You can drop your parcel off to any DPD store nationwide, please update below to find the most convenient one to you:</p>
             <div className='flex justify-start flex-1 w-full mt-2 sm:w-5/12'>
-              <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Postcode' />
-              <button className="px-10 py-3 text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" onClick={() => showStores()}>
-                Find
-              </button>
+              <input
+                type="text"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostCode(e.target.value) }
+                maxLength={8}
+                value={postCode}
+                className={`w-full rounded-md px-2 py-3 text-sm font-normal text-black bg-white border ${
+                  isValidPostCode ? 'border-gray-200' : 'border-red-500'
+                } placeholder:text-gray-400`}
+                placeholder="Postcode"
+              />
+              <button className={`px-10 py-3 mx-1 text-sm text-white ${!postCode ? 'bg-[#39a029a4]' : 'bg-[#39a029]'} rounded disabled:bg-gray-300`} onClick={fetchDPDStoreList} > Find </button>
             </div>
+            {!isValidPostCode && postCode && (
+              <p className="flex mt-1 text-sm text-red-500">Please enter a valid postcode</p>
+            )}
           </div>
-          {showDpdStore &&
+          {isStoreAvailable &&
             <>
               <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-3">
-                {dpd.map((store: any, index: number) => (
-                  <div key={index} className="p-4 text-left bg-white border rounded shadow-lg">
-                    <h2 className="pb-1 mb-4 text-xl font-semibold text-gray-700 uppercase border-b border-gray-200">{store.name}</h2>
-                    <h2 className="mb-2 text-sm font-semibold text-gray-700 uppercase">Store Detail:</h2>
-                    <p className="text-gray-600">Distance: {store.distance}</p>
-                    <p className="text-gray-600">Info: {store.info.join(", ")}</p>
-                    <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
-                    <p>{store.address.store}</p>
-                    <p>{store.address.street}</p>
-                    {store.address.area && <p>{store.address.area}</p>}
-                    <p>{store.address.city}, {store.address.postcode}</p>
-                    <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
-                    <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">
-                      {Object.entries(store.opening_hours).map(([day, hours]: any) => (
-                        <li className='grid grid-cols-2 px-3 pt-2' key={day}><span className='text-sm font-semibold text-black uppercase'>{day}</span> <span>{hours}</span></li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+                {storeList?.map((store: any, index: number) => {
+                  const openingHours: Record<string, string> = {
+                    Monday: '',
+                    Tuesday: '',
+                    Wednesday: '',
+                    Thursday: '',
+                    Friday: '',
+                    Saturday: '',
+                    Sunday: '',
+                  };
+                  const dayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                  store?.pickupLocation?.pickupLocationDriverWindow?.forEach((window: any) => {
+                    const day = dayMap[window?.pickupLocationDriverWindowDay % 7];
+                    const timeRange = `${window?.pickupLocationDriverWindowStartTime} - ${window?.pickupLocationDriverWindowEndTime}`;
+                    openingHours[day] = openingHours[day]
+                      ? `${openingHours[day]}, ${timeRange}`
+                      : timeRange;
+                  });
+                  const info = [
+                    store?.pickupLocation?.parkingAvailable ? "Parking" : "No Parking",
+                    store?.pickupLocation?.disabledAccess ? "Disabled Access" : "Access"
+                  ];
+                  const address: DPDAddress = store?.pickupLocation?.address;
+                  const isSelected = `${address?.postCode}-${address?.street}` === `${addressData?.postcode}-${addressData?.street}`;
+
+                  return (
+                    <div key={index} className={`p-4 text-left bg-white border rounded shadow-lg ${isSelected && 'border border-black'}`} onClick={() => handleStoreSelect(address)}>
+                      <h2 className="pb-1 mb-4 text-xl font-semibold text-gray-700 uppercase">{store?.pickupLocation?.shortName}</h2>
+
+                      <h2 className="mb-2 text-sm font-semibold text-gray-700 uppercase">Store Detail:</h2>
+                      <p className="text-gray-600">Distance: {store?.distance?.toFixed(2)} miles</p>
+                      <p className="text-gray-600">Info: {info?.join(', ')}</p>
+
+                      <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
+                      <p>{address?.organisation}</p>
+                      {address?.property && <p>{address?.property}</p>}
+                      <p>{address?.street}</p>
+                      {address?.locality && <p>{address?.locality}</p>}
+                      <p>{address?.town}, {address?.postCode}</p>
+
+                      <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
+                      <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">
+                        {Object.entries(openingHours)?.map(([day, hours]) => (
+                          <li className="grid grid-cols-2 px-3 pt-2" key={day}>
+                            <span className="text-sm font-semibold text-black uppercase">{day}</span>
+                            <span>{hours || 'Closed'}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
               <button onClick={() => {
-                nextSteps();
+                submitRequest();
                 document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
               }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
                 Confirm Drop off at DPD Store

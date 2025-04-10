@@ -276,6 +276,7 @@ export const TRADE_IN_GET_SHIPPING_METHODS = `/api/deliveries/shipping-method`
 export const TRADE_IN_GET_STORES = `/api/stores`
 export const TRADE_IN_GET_CUSTOMER = `/api/customers`
 export const TRADE_IN_GET_ASSESSMENT_STATUS = `/api/assessments`
+export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/api/deliveries/pickup-locations`
 
 // WALLET NEXT APP ENDPOINTS 
 

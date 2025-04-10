@@ -67,7 +67,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedAccIndexes, setSelectedAccIndexes] = useState<number[]>([]);
-  const [showDpdStore, setShowDpdStore] = useState<any>(false);
   const [products, setProducts] = useState<any[]>([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [searchText, setSearchText] = useState({})
@@ -129,8 +128,6 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       setCurrentStep((prev) => prev + 1);
     }
   };
-
-  const showStores = () => setShowDpdStore(true);
 
   useEffect(() => {
     const currentCurrency = getCurrentCurrency();
@@ -271,7 +268,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                 <GetQuote user={user} startNewTrade={startNewTrade} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
-                <ShippingDetail showStores={showStores} showDpdStore={showDpdStore} dpd={data?.dpd} shippingData={shippingData} nextSteps={handleNextStep} quoteData={quoteData} />
+                <ShippingDetail shippingData={shippingData} nextSteps={handleNextStep} quoteData={quoteData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.FINAL_DETAILS &&
                 <QuoteDetails data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} />
