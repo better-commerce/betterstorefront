@@ -68,7 +68,7 @@ export default function TradeInTable() {
     try {
       const { pageCount, ...rest } = paginationState
       const params = { ...rest, page: page }
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_CUSTOMER_TRADES, method: RequestMethod.GET, data: { params } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_CUSTOMER_TRADES, method: RequestMethod.GET, params };
       const { data: allTrades } = await callApi(config)
       setPaginationState((prev: any) => ({ ...prev, page: allTrades?.page, pageCount: allTrades?.totalPages, pageSize: allTrades?.pageSize }))
       setTradeList(allTrades)
