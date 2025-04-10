@@ -52,7 +52,8 @@ function Slug({
     <h1>{translate('common.message.loaderLoadingText')}</h1>
   ) : (
     data && (
-      <ProductView
+      <>
+        {/* <ProductView
         recordEvent={recordEvent}
         setEntities={setEntities}
         data={data.product}
@@ -62,7 +63,8 @@ function Slug({
         pdpCachedImages={pdpCachedImages}
         deviceInfo={deviceInfo}
         maxBasketItemsCount={maxBasketItemsCount(config)}
-      />
+      /> */}
+      </>
     )
   )
 }

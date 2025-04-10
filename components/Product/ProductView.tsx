@@ -832,7 +832,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   };
   const renderProductSpecification = () => {
     return (
-      product.customAttributes.length > 0 &&
+      product?.customAttributes?.length > 0 &&
       !product.customAttributes.some((attr: { key: string }) => attr.key === 'clothing.size' || attr.key === 'global.colour') && (
         <div className="w-full rounded-2xl sm:space-y-2.5">
           <Disclosure>
