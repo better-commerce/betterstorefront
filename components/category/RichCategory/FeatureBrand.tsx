@@ -15,7 +15,7 @@ export default function LinkGroup({ featuredBrand, filterBrandData, categoryname
         {featuredBrand?.map((feature: any, fdx: number) => (
             <Link key={fdx} href={feature?.slug} className="flex flex-col items-start justify-start w-full text-left">
             {feature?.logoImageName != '' ? (
-                <img src={CURRENT_THEME === 'tool' ? (generateUri(`https://www.imagedelivery.space/bettertools/${feature?.logoImageName}`, 'h=80&fm=webp') || IMG_PLACEHOLDER) : CURRENT_THEME === 'green' ? (generateUri(`https://www.imagedelivery.space/tagdeal/${feature?.logoImageName}`, 'h=80&fm=webp') || IMG_PLACEHOLDER) : (generateUri(`https://www.imagedelivery.space/fashion/${feature?.logoImageName}`, 'h=80&fm=webp') || IMG_PLACEHOLDER)} title={feature?.manufacturerName} className="w-full h-auto p-0 sm:p-2" alt={feature?.manufacturerName} />
+                <img src={generateUri(feature?.logoImageName, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="w-full h-auto p-0 sm:p-2" alt={feature?.manufacturerName} />
               ) : (
                 <img src={IMG_PLACEHOLDER} className="w-full h-auto p-0 sm:p-2" alt={feature?.manufacturerName} title={feature?.manufacturerName} width={100} height={50} />
               )}
