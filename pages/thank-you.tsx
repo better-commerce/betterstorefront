@@ -609,6 +609,13 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
           </div>
           ) : null}
         </div>
+        <div className="max-w-xl mt-5 text-center">
+              <Link href={`/`} passHref>
+                <span className="btn-primary btn">
+                  {translate('common.label.backToHomeText')}
+                </span>
+              </Link>
+            </div>
         </main>
         ) : (
           <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">

@@ -17,7 +17,7 @@ export default function LinkGroup({ data }: any) {
         {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
             <Link key={cdx} href={item?.link != null ? sanitizeRelativeUrl(`/${item?.link}`) : `#`}  className="group">
               <div className="relative overflow-hidden rounded-md">
-                <div className="flex flex-col items-center w-full">
+                <div className="flex flex-col items-center w-full img-container-category">
                 {item?.imageUrl != '' ? (
                     <img src={generateUri(item?.imageUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="w-full object-cover rounded-full" alt="Image" width={240} height={160} />
                     ) : (

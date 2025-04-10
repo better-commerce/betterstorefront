@@ -2461,3 +2461,8 @@ display: none !important;
 html {
   scroll-behavior: smooth;
 }
+.img-container-category img{
+  width: 200px !important;
+  height: 200px !important;
+  border-radius: 100% !important;
+}
