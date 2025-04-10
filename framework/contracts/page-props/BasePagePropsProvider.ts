@@ -63,7 +63,7 @@ export abstract class BasePagePropsProvider {
         ...{
           configSettings:
             configSettings?.filter((x: any) =>
-              ['SearchSettings', 'B2BSettings', 'BasketSettings', 'ShippingSettings','CatalogSettings', 'DomainSettings', 'PasswordProtectionSettings', 'RegionalSettings','OrderSettings', 'OmsSettings', 'FeatureToggleSettings', 'DomainSettings'].includes(
+              ['SearchSettings', 'B2BSettings', 'BasketSettings', 'ShippingSettings','CatalogSettings', 'DomainSettings', 'PasswordProtectionSettings', 'RegionalSettings','OrderSettings', 'OmsSettings', 'FeatureToggleSettings'].includes(
                 x?.configType
               )
             ) || [],

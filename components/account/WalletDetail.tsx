@@ -53,7 +53,7 @@ export default function WalletDetail() {
     try {
       const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_WALLET, method: RequestMethod.POST, data: { walletId }, }
       const { data: walletData }: any = await callApi(config);
-      setWalletDetail(walletData?.value);
+      setWalletDetail(walletData?.data);
     } catch (error) {
       logError(error);
     } finally {
