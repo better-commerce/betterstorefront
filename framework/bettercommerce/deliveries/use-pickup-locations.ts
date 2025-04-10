@@ -25,7 +25,7 @@ export default function usePickupLocations() {
             return response?.value || []
         } catch (error: any) {
             logError(error)
-            return { hasError: true, error : error?.message}
+            throw error // Let it propagate to the middleware handler
         }
     }
 }

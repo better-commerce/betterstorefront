@@ -16,6 +16,7 @@ export default function updateStoreAddress(id: string, storeid:string, cookies?:
       return response
     } catch (error: any) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
   return updateStoreAddressAsync()

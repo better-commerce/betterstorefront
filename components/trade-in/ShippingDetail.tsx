@@ -5,11 +5,11 @@ import { NEXT_ADDRESS, TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPP
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
 import { callApi } from "@framework/utils/api-util";
 import { logError } from "@framework/utils/app-util";
-import toast from "react-hot-toast";
 import { useTranslation } from '@commerce/utils/use-translation'
-import axios, { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { ChangeEvent, useState } from "react";
+import { AlertType } from "@framework/utils/enums";
 
 interface ShippingDetailProps {
   nextSteps: any;
@@ -30,7 +30,7 @@ interface DPDAddress {
 
 export default function ShippingDetail({ nextSteps, quoteData, shippingData }: ShippingDetailProps) {
   const [selectedCameraStore, setSelectedCameraStore] = useState<any>(0);
-  const { user } = useUI()
+  const { setAlert, user } = useUI()
   const translate = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isSummary, setShowSummary] = useState(false);
@@ -201,13 +201,13 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
         setStoreList(data)
         setIsStoreAvailable(true)
       } else {
-        toast.error(translate('common.message.noAddressFoundErrorMsg'), { position: "top-right" })
+        setAlert({ type: AlertType.ERROR, msg: translate('common.message.noAddressFoundErrorMsg') });
       }
     } catch (error) {
       logError(error)
       setStoreList([])
       setIsStoreAvailable(false)
-      toast.error(translate('label.addressBook.updateFailedText'), { position: "top-right" })
+      setAlert({ type: AlertType.ERROR, msg: translate('label.addressBook.updateFailedText') });
     } finally {
       setIsLoading(false);
     }

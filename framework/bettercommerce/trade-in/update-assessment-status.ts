@@ -29,6 +29,7 @@ export default function updateAssessmentStatus(
       return response
     } catch (error) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
   return updateAssessmentStatusAsync()

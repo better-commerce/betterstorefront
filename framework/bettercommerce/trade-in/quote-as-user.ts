@@ -17,6 +17,7 @@ export default function postQuoteAsUser(data: any, cookies?: any) {
       return response.value
     } catch (error: any) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
 

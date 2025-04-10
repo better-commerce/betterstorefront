@@ -15,6 +15,7 @@ export default function getQuoteById(id: string, cookies?: any) {
       return response
     } catch (error: any) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
   return getQuoteByIdAsync()

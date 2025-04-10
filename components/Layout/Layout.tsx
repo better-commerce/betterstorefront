@@ -28,7 +28,6 @@ import { CartSidebarView } from '@components/SectionCheckoutJourney/cart'
 import ProgressBar from '@components/ui/ProgressBar'
 import ProductMembershipOfferModal from '@components/membership/ProductMembershipOfferModal'
 import InteractiveDemoSideBar from '@components/InteractiveDemo'
-import { Toaster } from 'react-hot-toast';
 
 const Loading = () => (
   <div className="fixed z-50 flex items-center justify-center p-3 text-center w-80 h-80">
@@ -227,7 +226,6 @@ const Layout: FC<Props & IExtraProps> = ({ children, config, pageProps: { catego
           </div>
         </div>
       </CommerceProvider >
-      <Toaster />
     </>
   );
 }

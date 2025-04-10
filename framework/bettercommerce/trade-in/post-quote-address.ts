@@ -1,5 +1,6 @@
 import { TRADE_IN_GET_QUOTE_BY_ID } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'
+import { logError } from '@framework/utils/app-util'
 import { TRADE_IN_BASE_URL } from '@framework/utils/constants'
 
 export default async function postQuoteAddress(
@@ -23,7 +24,7 @@ export default async function postQuoteAddress(
 
     return response
   } catch (error: any) {
-    console.error('Error in postQuoteAddress API:', error)
-    throw new Error(`Failed to save address: ${error.message}`)
+    logError(error)
+    throw error // Let it propagate to the middleware handler
   }
 }

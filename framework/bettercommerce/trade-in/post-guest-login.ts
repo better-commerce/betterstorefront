@@ -21,6 +21,7 @@ export default function postGuestLogin(
       return response
     } catch (error: any) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
 

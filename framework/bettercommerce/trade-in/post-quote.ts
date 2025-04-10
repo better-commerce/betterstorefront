@@ -14,6 +14,7 @@ export default function postQuote(data: string, cookies?: any) {
       return response.result
     } catch (error: any) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
   return postQuoteAsync()

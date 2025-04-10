@@ -26,6 +26,7 @@ export default function cancelQuoteByCustomerStatus(
       return response
     } catch (error) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
   return cancelQuoteByCustomerStatusAsync()

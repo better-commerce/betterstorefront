@@ -21,6 +21,7 @@ export default function postQuoteAsGuest(
       return response.value
     } catch (error: any) {
       logError(error)
+      throw error // Let it propagate to the middleware handler
     }
   }
 

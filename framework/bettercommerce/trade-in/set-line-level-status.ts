@@ -29,7 +29,7 @@ export default function saveQuoteByItemId(
       return response;
     } catch (error: any) {
       logError(error);
-      throw new Error(`Error saving quote by item ID: ${error.message}`);
+      throw error // Let it propagate to the middleware handler
     }
   }
 
