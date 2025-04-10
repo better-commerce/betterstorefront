@@ -66,12 +66,12 @@ export default function WalletDetail() {
       const { pageCount, ...rest } = paginationState;
       const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
       const { data: transactionsResult }: any = await callApi(config)
-      setWalletTransaction(transactionsResult?.value);
+      setWalletTransaction(transactionsResult?.data);
       setPaginationState((prev: any) => ({
         ...prev,
-        pageNumber: transactionsResult?.value?.page || page, // ✅ Set current page from API response
-        pageCount: transactionsResult?.value?.totalPages || prev.pageCount,
-        pageSize: transactionsResult?.value?.pageSize || prev.pageSize,
+        pageNumber: transactionsResult?.data?.page || page, // ✅ Set current page from API response
+        pageCount: transactionsResult?.data?.totalPages || prev.pageCount,
+        pageSize: transactionsResult?.data?.pageSize || prev.pageSize,
       }));
     } catch (error) {
       logError(error);
