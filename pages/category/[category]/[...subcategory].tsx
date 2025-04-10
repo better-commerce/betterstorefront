@@ -558,7 +558,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
             </div>
           </>
         }
-        {category?.isFeatured ?
+        {category?.isFeatured && category?.linkGroups?.length > 0 ?
           (
             <>
               {featureToggle?.features?.enableForPCSite ? (

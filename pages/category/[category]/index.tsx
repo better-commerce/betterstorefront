@@ -563,15 +563,15 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
             </div>
           </>
         }
-        {category?.isFeatured ?
+        {category?.isFeatured && category?.linkGroups?.length > 0 ?
           (
             <>
-            {featureToggle?.features?.enableForPCSite ? (
-              <RichLandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
+              {featureToggle?.features?.enableForPCSite ? (
+                <RichLandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
               ) : (
                 <LandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
               )}
-            </>       
+            </>
           ) : (
             <CategoryList featureToggle={featureToggle} category={category} handleFilters={handleFilters} productDataToPass={productDataToPass} state={state} data={data} excludeOOSProduct={excludeOOSProduct} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} isCompared={isCompared} defaultDisplayMembership={defaultDisplayMembership} closeCompareProducts={closeCompareProducts} onEnableOutOfStockItems={onEnableOutOfStockItems} isValidating={isValidating} isMobile={isMobile} products={products} handleSortBy={handleSortBy} clearAll={clearAll} removeFilter={removeFilter} isProductCompare={isProductCompare} showCompareProducts={showCompareProducts} handlePageChange={handlePageChange} campaignData={campaignData} />
           )}
