@@ -47,7 +47,7 @@ export default function CategoryList(
   return (
     <>
       <div className="container mx-auto">
-        {featureToggle.features?.enableForPCSite &&
+        {!featureToggle.features?.enableForPCSite &&
           <>
             <FeaturedBanner category={category} />
             {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
