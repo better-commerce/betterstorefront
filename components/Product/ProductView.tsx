@@ -1069,7 +1069,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
                     <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
-                  <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
+                  {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
                     <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
                       <div className="bg-gray-100 rounded-full">
                         <CreditCardIcon className="w-4 h-4 text-black" />
@@ -1092,7 +1092,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 {attrGroup['product.relatedproducts']?.length > 0 &&
                   <div className='flex w-full'>
@@ -1140,8 +1140,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   </label>
                   <div className='mt-3 space-y-3'>
                     <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                    <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                    {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                    <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
                   </div>
                   {selectedOption === "new" && (
                     <div className="mt-2 space-y-2">
@@ -1201,7 +1201,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                           </>
                         }
                       </div>
-                      <div className='w-full pt-3'>
+                      {/* <div className='w-full pt-3'>
                         <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
                           <h4 className='text-xs'>Dispatches from</h4>
                           <p className='text-xs text-black'>London Store</p>
@@ -1218,7 +1218,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                           <h4 className='text-xs'>Support</h4>
                           <p className='text-xs text-color-primary-blue'>Product support included</p>
                         </div>
-                      </div>
+                      </div> */}
                       <div className='w-full'>
                         <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
                           {isInWishList(selectedAttrData?.productId) ? (
@@ -1243,8 +1243,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     </label>
                     <div className='mt-3 space-y-2'>
                       <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                      <p className="text-sm font-normal text-black">FREE next day delivery.</p>
+                      {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                      <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
                     </div>
                     {selectedOption === "used" && (
                       <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
@@ -1534,8 +1534,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
             <>
               <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
-                {CURRENT_THEME === "camera" ?
+              <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:px-0 lg:px-0 2xl:px-0 md:px-0 pdp-related-product-list slider-btn-css">
+                {featureToggle.features?.enableForPCSite ?
                   <>
                     <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
                     <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
@@ -1545,13 +1545,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </>
           )}
-          {CURRENT_THEME === "camera" && (
+          {featureToggle.features?.enableForPCSite && (
             <>
               {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true))?.length > 0 && (
                 <>
                   <hr className="border-slate-200 dark:border-slate-700" />
-                  <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list slider-btn-css">
-                    {CURRENT_THEME === "camera" ?
+                  <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css">
+                    {featureToggle.features?.enableForPCSite ?
                       <>
                         <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
                         <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>

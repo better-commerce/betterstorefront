@@ -39,10 +39,7 @@ const Prices: FC<PricesProps> = ({
   // Calculate discount percentage for the non-member price
   const originalPrice = isIncludeVAT ? listPrice?.raw?.withTax : listPrice?.raw?.withoutTax;
   const currentPrice = isIncludeVAT ? price?.raw?.withTax : price?.raw?.withoutTax;
-  const nonMemberDiscountPercentage =
-    originalPrice > currentPrice
-      ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100)
-      : 0;
+  const nonMemberDiscountPercentage = originalPrice > currentPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : 0;
 
   return (
     <>

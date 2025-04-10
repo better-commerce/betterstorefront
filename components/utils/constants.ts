@@ -287,8 +287,8 @@ export const NEXT_WALLET_ASSOCIATE_TO_CUSTOMER = `/api/wallet/associate-customer
 export const NEXT_WALLET_GET_BALANCE = `/api/wallet/get-balance`
 
 //TRADE IN JOURNEY API ENDPOINTS
-export const WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable`
-export const WALLET_GET_CUSTOMER_WALLET = `/api/wallet`
+export const WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallets/enable`
+export const WALLET_GET_CUSTOMER_WALLET = `/api/wallets`
 export const WALLET_WALLET_ASSOCIATE_TO_CUSTOMER = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer`
 
 //CONSTANTS

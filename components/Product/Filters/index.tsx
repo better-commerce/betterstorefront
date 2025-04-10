@@ -95,7 +95,7 @@ export default function Filters({
         </Dialog>
       </Transition.Root>
 
-      <section aria-labelledby="filter-heading-filter" className="flex items-center justify-start w-screen gap-2 px-0 py-2 text-center justify-between mob-w-screen sm:px-4 lg:max-w-7xl pr-12 pl-4" >
+      <section aria-labelledby="filter-heading-filter" className="flex items-center justify-between w-screen gap-2 px-0 py-2 pl-4 pr-12 text-center mob-w-screen sm:px-4 lg:max-w-7xl" >
         <h2 id="filter-heading-filter" className="sr-only"> {translate('label.filters.filtersText')} </h2>
         <div className="relative col-start-1 row-start-1 py-2 sm:py-3">
           <div className="flex mx-auto space-x-6 text-sm divide-x divide-gray-200 max-w-7xl sm:px-6 lg:px-8">
@@ -117,7 +117,7 @@ export default function Filters({
           <div className="flex flex-wrap">
             <div className={`flex flex-wrap filter-wrap-section ${isBrandPLP ? 'brand-filter-wrap' : ''}`}>
               {appliedFilters?.map((appliedFilter: any, idx: number) => (
-                <div key={`applied-filter-${idx}`} className="flex filter-label-applied w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 bg-gray-50 rounded-2xl" >
+                <div key={`applied-filter-${idx}`} className="flex w-auto px-2 py-1 m-1 text-sm font-medium text-gray-600 border border-gray-400 filter-label-applied bg-gray-50 rounded-2xl" >
                   {appliedFilter?.name && (
                     <div className="flex">
                       <span className="font-medium"> {appliedFilter?.name}:{' '} </span>
