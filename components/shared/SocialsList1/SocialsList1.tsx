@@ -1,19 +1,22 @@
 import React, { FC } from "react";
-import { CURRENT_THEME } from "@components/utils/constants";
-const featureToggle = require(`../../../public/theme/${CURRENT_THEME}/features.config.json`);
 export interface SocialsList1Props {
   className?: string;
+  featureToggle?: any
 }
 
-const SocialsList1: FC<SocialsList1Props> = ({ className = "space-y-3" }) => {
+const SocialsList1: FC<SocialsList1Props> = ({ className = "space-y-3", featureToggle }: any) => {
   const renderItem = (item: any, index: number) => {
     return (
-      item?.enable && item?.href != "" &&
-      <a href={item?.href} className="flex items-center space-x-2 text-2xl leading-none text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white group" key={index} >
-        <div className="flex-shrink-0 w-5 ">
-          <img src={item?.icon} alt="" />
+      item?.enable &&
+      <a href={item?.href} target="_blank" className="flex items-center space-x-2 text-2xl leading-none text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white group" key={index} >
+        <div className="flex-shrink-0 w-8">
+          <img src={item?.icon} alt={item?.name} className={`${featureToggle?.features?.enableForPCSite ? 'w-8 h-8' : ''}`} />
         </div>
-        <span className="hidden text-sm lg:block">{item?.name}</span>
+        {featureToggle?.features?.enableForPCSite ? (
+          <></>
+        ) : (
+          <span className="hidden text-sm lg:block">{item?.name}</span>
+        )}
       </a>
     );
   };

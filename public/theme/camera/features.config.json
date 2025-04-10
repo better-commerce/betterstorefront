@@ -39,9 +39,10 @@
     "enableShortThankYouPage":true
   },
   "social":[
-    { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
-    { "name": "Youtube", "icon": "images/socials/twitter.svg", "href": "", "enable":false },
+    { "name": "Facebook", "icon": "images/socials/facebook-new.svg", "href": "https://www.facebook.com/ParkCameras", "enable":true },
+    { "name": "Twitter", "icon": "images/socials/twitter-new.svg", "href": "https://twitter.com/parktweets", "enable":true },
     { "name": "Telegram", "icon": "images/socials/telegram.svg", "href": "", "enable":false },
-    { "name": "Twitter", "icon": "images/socials/youtube.svg", "href": "", "enable":true }
+    { "name": "YouTube", "icon": "images/socials/youtube-new.svg", "href": "https://www.youtube.com/user/parkcameras", "enable":true },
+    { "name": "Instagram", "icon": "images/socials/instagram-new.svg", "href": "https://www.instagram.com/parkcameras/", "enable":true }
   ]
 }

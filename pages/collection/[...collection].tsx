@@ -21,7 +21,7 @@ import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString, serverSideMicrositeCookies, } from '@commerce/utils/uri-util'
 import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, sanitizeRelativeUrl, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -438,7 +438,39 @@ function CollectionPage(props: any) {
   }
   const cleanPath = removeQueryString(router.asPath)
   const topFeaturedProduct = productDataToPass?.results?.filter((p: any) => [1, 2, 3].includes(p.displayOrder));
-
+  const renderFeaturedProduct = () => {
+    return (
+      <>
+        {topFeaturedProduct?.length > 0 &&
+          <div className='flex flex-col w-full gap-4 p-2 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
+            <div className='flex flex-col justify-end w-full text-right'>
+              <h4 className='text-xs font-normal primary-text-blue'>Featured Products</h4>
+            </div>
+            <div className='grid grid-cols-3 gap-3 p-2'>
+              {topFeaturedProduct?.map((product: any, pIdx: number) => (
+                <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
+                  <div className='col-span-4'>
+                    <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
+                      <img src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={product?.name} />
+                    </Link>
+                  </div>
+                  <div className='flex flex-col col-span-8 gap-3'>
+                    <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
+                      <h4 className='text-sm font-normal text-black hover:underline hover:primary-text-blue'>{product?.name}</h4>
+                    </Link>
+                    <div className='flex items-center justify-start gap-1 text-xs'>
+                      <span className='text-lg font-semibold text-black'>{product?.price?.formatted?.withTax}</span>
+                      <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+      </>
+    );
+  };
   return (
     <>
       <NextHead>
@@ -624,29 +656,7 @@ function CollectionPage(props: any) {
                             <div className='sm:col-span-3'>
                               <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
                             </div>
-                            {topFeaturedProduct?.length > 0 &&
-                              <div className='flex flex-col w-full gap-4 p-2 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
-                                <div className='flex flex-col justify-end w-full text-right'>
-                                  <h4 className='text-xs font-normal primary-text-blue'>Featured Products</h4>
-                                </div>
-                                <div className='grid grid-cols-3 gap-3 p-2'>
-                                  {topFeaturedProduct?.map((product: any, pIdx: number) => (
-                                    <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
-                                      <div className='col-span-4'>
-                                        <img src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={product?.name} />
-                                      </div>
-                                      <div className='flex flex-col col-span-8 gap-3'>
-                                        <h4 className='text-sm font-normal text-black'>{product?.name}</h4>
-                                        <div className='flex justify-start gap-1 text-xs'>
-                                          <span>{product?.price?.formatted?.withTax}</span>
-                                          <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            }
+                            {renderFeaturedProduct()}
                             <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
@@ -702,6 +712,7 @@ function CollectionPage(props: any) {
                           <div className='sm:col-span-3'>
                             <img src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp' className='object-cover object-top w-full h-auto rounded-lg' />
                           </div>
+                          {renderFeaturedProduct()}
                           <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                             <div className='flex items-center justify-between w-full gap-0'>
                               <div className='flex justify-start gap-3'>

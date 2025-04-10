@@ -2300,7 +2300,7 @@ button.icon-grp .header-dark{
   background-color: var(--btn-bg-hover-primary) !important;
 }
 .main-footer-section{
-  background: var(--btn-bg-secondary) !important;
+  background: #212B3B !important;
 }
 .main-footer-section a{
   color: #FFFFFF !important;

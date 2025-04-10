@@ -203,7 +203,7 @@ const LayoutError: FC<Props & IExtraProps> = ({ children, config, pageProps: { c
           <MainNav onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={getDefaultLanguage} defaultCountry={getDefaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} featureToggle={featureToggle} locale={locale} />
           {displayAlert && <AlertRibbon />}
           {children}
-          <Footer navItems={navTree?.footer} />
+          <Footer navItems={navTree?.footer} featureToggle={featureToggle} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} />
           <div className="cookie-bannner">

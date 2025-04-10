@@ -208,7 +208,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
               </div>
             </section>
           </>
-          <Footer navItems={navTree?.footer} />
+          <Footer navItems={navTree?.footer} featureToggle={featureToggle} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
           <div className="cookie-bannner">
