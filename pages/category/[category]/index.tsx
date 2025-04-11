@@ -20,7 +20,7 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import { useUI } from '@components/ui'
-import { CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BLOG_COLS, BLOG_PAGE_ID, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 import { Guid } from '@commerce/types'
@@ -51,6 +51,7 @@ export async function getStaticProps(context: any) {
     infraUID: Redis.Key.INFRA_CONFIG + '_' + locale,
     categorySlugUID: Redis.Key.Category.Slug + '_' + slug + '_' + locale,
     categoryProductUID: Redis.Key.Category.CategoryProduct + '_' + slug + '_' + locale,
+    blogListUID: Redis.Key.Blog.blogList + '_' + locale,
   }
   const cachedData = await getDataByUID([
     cachedDataUID.allMembershipsUID,
@@ -62,6 +63,7 @@ export async function getStaticProps(context: any) {
   let infraUIDData: any = parseDataValue(cachedData, cachedDataUID.infraUID)
   let categorySlugUIDData: any = parseDataValue(cachedData, cachedDataUID.categorySlugUID)
   let categoryProductUIDData: any = parseDataValue(cachedData, cachedDataUID.categoryProductUID)
+  let blogListUIDData: any = parseDataValue(cachedData, cachedDataUID.blogListUID)
 
   try {
     if (!categorySlugUIDData) {
@@ -73,6 +75,22 @@ export async function getStaticProps(context: any) {
       infraUIDData = await infraPromise
       await setData([{ key: cachedDataUID.infraUID, value: infraUIDData }])
     }
+
+    if (!blogListUIDData) {
+      const BlogContentsPromise = commerce.getBlogList({
+        pagetypeId: BLOG_PAGE_ID, //Constant pageId,
+        skip: 0, //skip,
+        pagesize: 100, //pagesize,s
+        sortby: 3, //sortby,
+        sortorder: 1, //sortorder,
+        cols: BLOG_COLS, //"blogheader.blogheader_mainimage",
+      })
+      blogListUIDData = await BlogContentsPromise
+      await setData([{ key: cachedDataUID.blogListUID, value: blogListUIDData }])
+    }
+
+
+
   } catch (error: any) {
     logError(error)
 
@@ -145,6 +163,7 @@ export async function getStaticProps(context: any) {
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
           defaultDisplayMembership,
+          blogList : blogListUIDData?.pages ?? []
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -158,6 +177,7 @@ export async function getStaticProps(context: any) {
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
           defaultDisplayMembership,
+          blogList : blogListUIDData?.pages ?? []
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -172,6 +192,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infraUIDData?.snippets ?? [],
         snippets: categorySlugUIDData?.snippets ?? [],
         defaultDisplayMembership,
+        blogList : blogListUIDData?.pages ?? []
       },
       revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
@@ -279,7 +300,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
+function CategoryLandingPage({ category, slug, products, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, blogList }: any) {
   const { isMobile } = deviceInfo
   const router = useRouter()
   const qsFilters = router.asPath
@@ -567,7 +588,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           (
             <>
               {featureToggle?.features?.enableForPCSite ? (
-                <RichLandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
+                <RichLandingCategory blogList={blogList} category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
               ) : (
                 <LandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
               )}

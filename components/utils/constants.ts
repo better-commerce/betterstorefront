@@ -3,6 +3,8 @@ import { toNumber } from 'lodash'
 
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
+export const BLOG_PAGE_ID = 'e05bbda5-32fd-418e-87df-adda1bb3ce1d'
+export const BLOG_COLS = 'hero.hero_title,hero.hero_description,hero.hero_image'
 export const KIT_BRAND_PLATFORM = '/api/v1/kit-builder/brand-platform'
 export const KIT_BRAND_CATEGORY = '/api/v1/kit-builder/category'
 export const KIT_BRAND_PRODUCTS =
@@ -11,6 +13,7 @@ export const KIT_BRAND_PROD_BY_CAT =
   '/api/v1/kit-builder/product/by-kit-category'
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
+export const BLOG_LIST_ENDPOINT = `/api/${process.env.BETTERCMS_API_VERSION}/page/list`
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`

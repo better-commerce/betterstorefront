@@ -56,6 +56,9 @@ export module Redis {
       export const Categories = "Categories"
       export const CategoryProduct = "CategoryProduct"
     }
+    export module Blog {
+      export const blogList = "blogList"
+    }
   }
   // Redis server configs
   export module Server {

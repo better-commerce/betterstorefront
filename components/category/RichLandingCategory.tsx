@@ -10,8 +10,9 @@ import Link from "next/link";
 import CategoryBanner from "./RichCategory/CategoryBanner";
 import LinkGroup from "./RichCategory/LinkGroup";
 import BuyingGuide from "./RichCategory/BuyingGuide";
+import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 
-export default function RichLandingCategory({ category, deviceInfo, filterBrandData, productDataToPass, onToggleBrandListPage, maxBasketItemsCount, config, featureToggle, defaultDisplayMembership, campaignData }: any) {
+export default function RichLandingCategory({ category, deviceInfo, filterBrandData, productDataToPass, onToggleBrandListPage, maxBasketItemsCount, config, featureToggle, defaultDisplayMembership, campaignData, blogList }: any) {
   return (
     <>
     <CategoryBanner data={category}/>
@@ -52,6 +53,31 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
                <img src={category?.additionalInfo2} alt="Banner Image" className="block w-full"/>
             </div>
             )}
+            {blogList?.length > 0 &&
+            <div className="container mx-auto px-4 py-8 border-b">
+             <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black mb-4">Our {category?.name} buying guides</h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-8">
+              {blogList?.map((post:any, idx:number) => (
+                <div
+                  key={idx}
+                  className="flex flex-col h-full"
+                >
+                   <Link
+                        href={`/${post?.slug}`}
+                        className="inline-flex items-center link-clr font-medium hover:text-teal-800  relative  w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden"
+                      >
+                    <img
+                      src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
+                      alt={post?.title}
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  </Link>
+                </div>
+              ))}
+            </div>
+            </div>
+            }
         <div className='flex flex-col w-full col-span-12 overflow-hidden'>
           <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
           <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

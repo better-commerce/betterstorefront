@@ -22,6 +22,9 @@ export const EVENTS_MAP = {
   //   PasswordProtection: 'PasswordProtection',
   //   Wishlist: 'Wishlist',
   // },
+  EVENT_TYPES: {
+    PageViewed: 'PageViewed',
+  },
   ENTITY_TYPES: {
     Basket: 'Basket',
     Blog: 'Blog',
