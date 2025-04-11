@@ -72,7 +72,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => (
         <div key={index} className="text-sm footer-menu-links">
-          <h2 className={`${featureToggle?.features?.enableForPCSite ? 'font-semibold text-[16px] text-white dark:text-white' : 'font-bold text-[16px] text-black dark:text-black'}`}> {menu?.boxTitle} </h2>
+          <h2 className={`${featureToggle?.features?.enableForPCSite ? 'font-semibold text-body-small text-white dark:text-white' : 'font-bold text-[16px] text-black dark:text-black'}`}> {menu?.boxTitle} </h2>
           <ul role="list" className={`${featureToggle?.features?.enableForPCSite ? 'mt-0 space-y-2' : 'mt-0 space-y-6'}`}>
             <>
               {menu?.contentBody != '' && (
@@ -81,7 +81,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
               {menu?.navItems != '' && (
                 <>
                   {menu?.navItems?.map((navItem: any, navItemIdx: number) => (
-                    <li key={navItemIdx + 'navItem'} className={`${featureToggle?.features?.enableForPCSite ? 'text-sm font-normal text-white mb-1' : 'mb-4 text-xs font-medium text-gray-900 text-footer-clr f-footer-weight'}`} >
+                    <li key={navItemIdx + 'navItem'} className={`${featureToggle?.features?.enableForPCSite ? 'text-body-small font-normal text-white mb-1' : 'mb-4 text-xs font-medium text-gray-900 text-footer-clr f-footer-weight'}`} >
                       <Link legacyBehavior passHref href={`/men/${navItem?.itemLink}`} >
                         <a href={`/men/${navItem?.itemLink}`} className=" dark:text-white" >
                           {navItem?.caption}
@@ -130,9 +130,9 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                       <img src={store?.image} className="object-cover w-auto h-20 border-2 border-white rounded-md shadow" alt={store?.name} />
                     </div>
                     <div className="flex flex-col w-full col-span-8">
-                      <h4 className="mb-2 text-sm font-semibold text-white">{store?.name}</h4>
+                      <h4 className="mb-2 text-body-small font-semibold text-white">{store?.name}</h4>
                       <div dangerouslySetInnerHTML={{ __html: `${store?.address1}, ${store?.address2}` }} className="text-xs text-white sm:block" />
-                      {store?.phoneNo != null && <span className="text-xs text-white sm:block dark:text-black">Tel: {store?.phoneNo}</span>}
+                      {store?.phoneNo != null && <span className="text-x-small text-white sm:block dark:text-black">Tel: {store?.phoneNo}</span>}
                     </div>
                   </div>
                 </div>
@@ -141,10 +141,10 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
             </div>
           </div>
           <div className="container flex flex-col w-full pt-6 mt-6">
-            <p className="text-xs font-normal text-gray-400">Technical specifications are for guidance only and cannot be guaranteed accurate. All offers subject to availability and while stocks last. Errors and omissions excepted. Registered Company No. 1449928. Park Cameras Limited is a credit broker, not a lender and is authorised and regulated by the Financial Conduct Authority (FRN 680161). We do not charge you for credit broking services. We will introduce you exclusively to Omni Capital finance products provided by Omni Capital Retail Finance Ltd.</p>
+            <p className="text-x-small text-[#B3B3B3]">Technical specifications are for guidance only and cannot be guaranteed accurate. All offers subject to availability and while stocks last. Errors and omissions excepted. Registered Company No. 1449928. Park Cameras Limited is a credit broker, not a lender and is authorised and regulated by the Financial Conduct Authority (FRN 680161). We do not charge you for credit broking services. We will introduce you exclusively to Omni Capital finance products provided by Omni Capital Retail Finance Ltd.</p>
           </div>
           <div className="container flex flex-col w-full pt-6 mt-6 border-t border-gray-700">
-            <p className="text-xs font-normal text-gray-400">&copy; 2025 Park Cameras, York Road, Burgess Hill, West Sussex, RH15 9TT | VAT No. GB 315 9441 58 | Registered Company No. 1449928</p>
+            <p className="text-x-small text-[#B3B3B3]">&copy; 2025 Park Cameras, York Road, Burgess Hill, West Sussex, RH15 9TT | VAT No. GB 315 9441 58 | Registered Company No. 1449928</p>
           </div>
         </div>
       ) : (

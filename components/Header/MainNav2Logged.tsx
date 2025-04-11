@@ -105,8 +105,8 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                   <div className="container mx-auto">
                     <div className="flex justify-between w-full">
                       <div className="flex items-center justify-start">
-                        <span className="flex items-center text-xs font-light text-white">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
-                        <span className="pl-4 text-xs font-light text-white">Call us <span className="font-semibold">01444 237070</span></span>
+                        <span className="flex items-center text-regular font-light text-white">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
+                        <span className="pl-4 text-regular text-white">Call us <span className="font-semibold">01444 237070</span></span>
                       </div>
                       <div className="flex items-center justify-end gap-4">
                         {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}

@@ -247,7 +247,7 @@ const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLike
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
           <div className="px-2.5 pt-2 pb-2.5 product-card__information">
-            <h2 className="dark:text-black min-h-[60px] text-sm font-semibold text-black">{data?.name}</h2>
+            <h2 className="dark:text-black min-h-[60px] text-x-small font-semibold text-black">{data?.name}</h2>
             <div className="flex items-center justify-between mt-2 product-card-panel">
               <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>

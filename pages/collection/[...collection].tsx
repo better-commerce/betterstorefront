@@ -644,7 +644,7 @@ function CollectionPage(props: any) {
                                   </li>
                                 </ol>
                               </div>
-                              <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                              <h1 className={`block title-page font-bold dark:text-black primary-text-blue`}>
                                 {props?.name}
                               </h1>
                               {props?.customInfo1 &&
@@ -700,7 +700,7 @@ function CollectionPage(props: any) {
                                 </li>
                               </ol>
                             </div>
-                            <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                            <h1 className={`block title-page font-bold dark:text-black primary-text-blue`}>
                               {props?.name}
                             </h1>
                             {props?.customInfo1 &&

@@ -32,6 +32,7 @@ import BrandList from '@components/home/BrandList'
 import BestSellerProduct from '@components/home/Bestseller'
 import { ArrowRight } from '@components/icons'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import HeroLeft from '@components/ui/Hero/HeroLeft'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -185,15 +186,15 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
           <>
             <div className='grid gap-2 sm:grid-cols-12'>
               <div className='col-span-12 sm:col-span-8'>
-                <Hero banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} />
+                <HeroLeft banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} />
               </div>
               <div className='col-span-12 sm:col-span-4'>
                 {pageContents?.usedproduct?.length > 0 && pageContents?.usedproduct?.map((usd: any, uIdx: number) => (
                   <div className='relative flex flex-col items-center justify-center w-full gap-2 sm:min-h-[480px] py-4 overflow-hidden' key={`used-product-${uIdx}`}>
                     <img src={generateUri(usd?.usedproduct_bgpattern, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='absolute top-0 left-0 w-full h-full z-1' />
                     <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
-                      <h2 className='text-2xl font-bold text-gray-600 uppercase'>{usd?.usedproduct_title}</h2>
-                      <div className='mx-auto text-sm font-normal !leading-relaxed text-gray-600 text-center sm:w-10/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
+                      <h2 className='primary-text-blue title-page font-bold uppercase'>{usd?.usedproduct_title}</h2>
+                      <div className='mx-auto text-[14px] font-semibold primary-text-blue text-center sm:w-8/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
                       <div className='col-span-12'>
                         <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-56' />
                       </div>
@@ -213,8 +214,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </div>
                   <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
                     <div className='flex flex-col justify-start w-full gap-4'>
-                      <h2 className='text-2xl font-semibold text-black'>{ab?.about_title}</h2>
-                      <div className='text-sm font-normal !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: ab?.about_description }}></div>
+                      <h2 className='heading font-semibold text-black'>{ab?.about_title}</h2>
+                      <div className='font-normal text-black sm:w-full text-body-small' dangerouslySetInnerHTML={{ __html: ab?.about_description }}></div>
                     </div>
                   </div>
                 </div>
@@ -223,8 +224,9 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 <div className='grid items-center gap-4 border-b border-gray-200 sm:gap-12 sm:grid-cols-12' key={`swu-${sIdx}`}>
                   <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
                     <div className='flex flex-col justify-center w-full gap-4'>
-                      <h2 className='text-2xl font-semibold text-center text-black'>{swu?.shopwithus_title}</h2>
-                      <div className='text-sm mx-auto  font-normal text-center !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
+                      <span className='w-[100px] h-1 bg-black mx-auto'></span>
+                      <h2 className='sub-heading font-semibold text-center text-black'>{swu?.shopwithus_title}</h2>
+                      <div className='mx-auto  font-normal text-center !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
                     </div>
                   </div>
                   <div className='order-2 col-span-12 sm:col-span-4 sm:order-2'>
@@ -259,10 +261,10 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   <div className='relative flex flex-col items-start justify-start w-full gap-10 pl-6 bg-transparent z-2 sm:pl-20'>
                     <div className='flex flex-col justify-start w-full gap-1'>
                       <img src="/theme/camera/image/trade-in-icon.svg" className="w-10 !fill-white trade-icon h-auto" alt="Trade In" />
-                      <h2 className='text-2xl font-semibold text-white uppercase sm:w-10/12'>{trade?.tradeinbanner_title}</h2>
+                      <h2 className='title-page font-semibold mt-4 text-white uppercase sm:w-10/12'>{trade?.tradeinbanner_title}</h2>
                     </div>
                     <div
-                      className='text-sm font-normal !leading-relaxed text-white sm:w-8/12'
+                      className='font-medium heading !leading-relaxed text-white sm:w-8/12'
                       dangerouslySetInnerHTML={{ __html: trade?.tradeinbanner_description }}
                     ></div>
                     <Link
@@ -276,7 +278,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               ))}
               {pageContents?.beinspiredheading?.length > 0 && pageContents?.beinspiredheading?.map((bih: any, bIdx: number) => (
                 <div className='flex flex-col justify-start w-full' key={`heading-inspired-${bIdx}`}>
-                  <h2 className='text-2xl font-semibold text-white uppercase sm:w-10/12'>{bih?.beinspiredheading_title}</h2>
+                  <h2 className='title-page  font-semibold text-white uppercase sm:w-10/12'>{bih?.beinspiredheading_title}</h2>
                 </div>
               ))}
               {pageContents?.tocategoryinspired?.length > 0 &&
@@ -344,7 +346,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   <div className='container flex flex-col gap-4 mx-auto'>
                     {pageContents?.brandheading?.map((h: any, iIdx: number) => (
                       <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
-                        <h2 className='text-3xl font-semibold md:text-4xl dark:text-black'>{h?.brandheading_title}</h2>
+                        <h2 className='title-page  font-semibold dark:text-black'>{h?.brandheading_title}</h2>
                       </div>
                     ))}
                     <div className='grid items-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>

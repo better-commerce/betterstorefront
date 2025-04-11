@@ -96,10 +96,10 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                                 </ol>
                               </div>
                             ) : (category?.breadCrumbs && (<BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />))}
-                            <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>{category?.name}</h1>
+                            <h1 className={`block title-page font-bold dark:text-black primary-text-blue `}>{category?.name}</h1>
                             {category?.description &&
                               <div className='flex w-full'>
-                                <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
+                                <div className="block text-sm font-normal text-x-small text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
                               </div>
                             }
                           </div>

@@ -248,7 +248,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
           <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-5 pb-2.5 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
             <div className='mt-4'>
-              <h2 className="text-base text-left font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
+              <h2 className="text-base text-left product-card-title font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
             </div>
             <div className='flex justify-between mt-1'>
               <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.category}</p>
