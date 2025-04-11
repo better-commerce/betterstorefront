@@ -82,8 +82,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
       setIsLoadingDots(true);
 
       try {
-        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRODUCTS, method: RequestMethod.POST, data: { searchText } };
-        const { data } = await callApi(config);
+        const {data} = await axios.post(NEXT_TRADE_IN_PRODUCTS, {searchText});
         setProducts(data);
       } catch (error) {
         logError(error);
