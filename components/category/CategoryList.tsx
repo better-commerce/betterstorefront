@@ -142,14 +142,7 @@ export default function CategoryList(
                             </div>
                             <div className='justify-center sm:col-span-3'>
                               {category?.image != "" && <img src={category?.image} className='object-cover object-top w-full h-auto rounded-lg' />}
-                            </div>
-                            <FeaturedBanner category={category} />
-                            {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-                              <FeaturedCategory featuredCategory={category?.subCategories} />
-                            }
-                            {category?.featuredBrand?.length > 0 &&
-                              <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                            }
+                            </div>                            
                             <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
