@@ -76,7 +76,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
       if (response?.data?.isSuccess) {
 
         // Fetch updated quote only if the response is successful
-        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id } } };
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
         const responseNew = await callApi(config);
         nextSteps(responseNew?.data);
       }
@@ -132,12 +132,12 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
     try {
       // Execute API calls concurrently
       await Promise.all([
-        callApi({ url: NEXT_TRADE_IN_SAVE_ADDRESS, method: RequestMethod.POST, data: { data: requestBody }}),
-        callApi({ url: NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id, shippingMethodId: selectedShippingMethod?.iId, } }})
+        callApi({ url: NEXT_TRADE_IN_SAVE_ADDRESS, method: RequestMethod.POST, data: requestBody }),
+        callApi({ url: NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, method: RequestMethod.POST, data: { id: quoteData?.value?.id, shippingMethodId: selectedShippingMethod?.iId } })
       ]);
 
       // Fetch updated quote
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id } } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
       const responseNew = await callApi(config);
 
       nextSteps(responseNew?.data);

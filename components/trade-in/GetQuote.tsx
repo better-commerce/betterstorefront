@@ -46,7 +46,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
 
   const fetchUpdatedQuoteDetails = async (quoteId: string) => {
     try {
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteId } } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteId } };
       const quoteResult = await callApi(config)
       setUpdatedQuoteDetails(quoteResult?.data)
     } catch (error) {

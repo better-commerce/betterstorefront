@@ -8,7 +8,7 @@ const postQuoteAddressApiMiddleware = async (req: any, res: any) => {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const { id, ...addressData } = req.body?.data
+  const { id, ...addressData } = req.body
 
   if (!id) {
     console.error('Error: Missing quote ID in request body')

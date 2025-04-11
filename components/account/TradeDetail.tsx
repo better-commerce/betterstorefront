@@ -81,7 +81,7 @@ export default function TradeInDetail() {
   const fetchTradeDetail = async (tradeinId: string) => {
     setIsLoading(true);
     try {
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: tradeinId } } }; 
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: tradeinId } }; 
       const quoteResult = await callApi(config)
       setTradeDetail(quoteResult?.data);
     } catch (error) {

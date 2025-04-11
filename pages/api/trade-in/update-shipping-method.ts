@@ -8,7 +8,7 @@ const updateShippingMethodApiMiddleware = async (req: any, res: any) => {
   }
 
   try {
-    const response: any = await updateShippingMethod(req.body?.data, req?.cookies)
+    const response: any = await updateShippingMethod(req.body, req?.cookies)
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

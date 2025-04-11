@@ -181,7 +181,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const fetchUpdatedQuoteDetails = async (quoteId: any) => {
     setIsLoading(true);
     try {
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { data: { id: quoteId } } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteId } };
       const { data } = await callApi(config);
       setQuoteData(data);
       setCurrentStep(data?.value?.street ? 4 : 2);
