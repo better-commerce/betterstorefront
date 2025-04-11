@@ -4,7 +4,8 @@ import { NEXT_SUBSCRIBE, Messages } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { Guid } from '@commerce/types'
-export default function Newsletter() {
+import Link from 'next/link'
+export default function Newsletter({ featureToggle }: any) {
   const translate = useTranslation()
   const [value, setValue] = useState('')
   const [err, setErr] = useState<any>(null)
@@ -20,7 +21,7 @@ export default function Newsletter() {
         notifyByEmail: true,
       })
       // if loggedIn user
-      if(!isGuestUser && user?.userId && user?.id != Guid.empty){
+      if (!isGuestUser && user?.userId && user?.id != Guid.empty) {
         setUser({ ...user, notifyByEmail: true })
       }
       setValue('')
@@ -37,24 +38,44 @@ export default function Newsletter() {
 
   return (
     <>
-      <div className='flex w-full py-4 bg-white border-t border-gray-400 sm:py-6 footer-top-bg-clr footer-margin-top'>
+      {featureToggle?.features?.enableForPCSite &&
+        <div className='flex flex-col justify-center text-center gap-4 pb-20 pt-6'>
+          <h3 className='heading text-black font-semibold'>See personalised recommendation</h3>
+          <div className='flex-1 mx-auto btn-primary-clr'>
+            <Link href="/my-account/register" passHref legacyBehavior>
+              <a className='px-10 py-2 rounded-full btn-c btn-primary'>Sign in</a>
+            </Link>
+          </div>
+          <p className='text-x-small'>Haven't got an account?
+            <Link href="/my-account/login" passHref legacyBehavior><a className='primary-text-blue pl-1 hover:underline'>Start here</a></Link>.</p>
+        </div>
+      }
+      <div className={`${featureToggle?.features?.enableForPCSite ? 'flex w-full py-8 bg-white border-t border-gray-400 sm:py-14 footer-top-bg-clr footer-margin-top' : 'flex w-full py-4 bg-white border-t border-gray-400 sm:py-6 footer-top-bg-clr footer-margin-top'} `}>
         <div className='container mx-auto'>
           <div className='flex flex-col justify-between sm:flex-row sm:items-center'>
-            <div className='flex flex-col'>
-              <h4 className="my-4 text-xl font-semibold text-black uppercase sm:text-2xl sm:my-0 text-footer-clr ">
-                {translate('label.newsLetter.signupText')}
-              </h4>
-              <p className="text-sm text-gray-600 sm:mt-1 text-footer-clr ">
-                {translate('label.newsLetter.signupTitle')}
-              </p>
-            </div>
+            {featureToggle?.features?.enableForPCSite ? (
+              <div className='flex flex-col gap-4'>
+                <h4 className="my-4 title-page !text-[#EAEDF5] font-semibold sm:my-0">Subscribe to Newsletter</h4>
+                <p className="sub-heading font-light !text-[#EAEDF5] sm:mt-1 max-w-[70%]">Get News, Helpful Tips, Photography News Events and Offers directly to your inbox.</p>
+              </div>
+            ) : (
+              <div className='flex flex-col'>
+                <h4 className="my-4 text-xl font-semibold text-black uppercase sm:text-2xl sm:my-0 text-footer-clr ">
+                  {translate('label.newsLetter.signupText')}
+                </h4>
+                <p className="text-sm text-gray-600 sm:mt-1 text-footer-clr ">
+                  {translate('label.newsLetter.signupTitle')}
+                </p>
+              </div>
+            )}
+
             <div className='sm:min-w-[50%] min-w-full mt-5 sm:mt-0'>
               <form className="flex sm:w-full" onSubmit={(e) => { e.preventDefault(); submitSubscription(value); }} >
                 <label htmlFor="email-address" className="sr-only"> {translate('label.newsLetter.emailLabelText')} </label>
                 <input id="email-address" type="text" name={'email-address'} placeholder={translate('common.message.enterEmailText')} value={value} onChange={handleChange} className="w-full min-w-0 px-4 py-2 text-gray-900 placeholder-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none dark:border-gray-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-gray-700" />
                 <div className="flex-shrink-0 ml-4">
                   <button type="submit" className="flex items-center justify-center w-full h-full btn btn-secondary border-footer-btn" >
-                    {translate('label.newsLetter.signupBtnTitle')}
+                    {featureToggle?.features?.enableForPCSite ? 'Subscribe' : <span>{translate('label.newsLetter.signupBtnTitle')}</span>}
                   </button>
                 </div>
               </form>

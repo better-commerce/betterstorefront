@@ -198,13 +198,22 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                       <div className='col-span-12'>
                         <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-56' />
                       </div>
-                      <Link href={usd?.usedproduct_primarybuttonlink} className='flex items-center justify-center gap-1 px-4 py-2 text-sm font-semibold bg-transparent border rounded border-[#294384] text-[#294384]'>{usd?.usedproduct_primarybutton} <ArrowRightIcon className='w-4 h-4' /></Link>
                     </div>
+                    <Link href={usd?.usedproduct_primarybuttonlink} className='flex absolute bottom-4 items-center justify-center gap-1 px-4 py-2 text-sm font-semibold bg-transparent border rounded border-[#294384] text-[#294384]'>{usd?.usedproduct_primarybutton} <ArrowRightIcon className='w-4 h-4' /></Link>
                   </div>
                 ))}
               </div>
             </div>
-            <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='flex flex-col w-full bg-[#EAEDF5] sm:py-10 py-6 px-4 justify-center text-center gap-2'>
+              <h3 className='heading text-black font-semibold'>Get an instant quote for your camera kit.</h3>
+              <p className='text-x-small text-black font-normal'>Find out how much your equipment is worth.</p>
+              <div className='flex-1 mx-auto mt-4'>
+                <Link href="/sell-or-part-exchange" passHref legacyBehavior>
+                  <a className='px-10 py-2 rounded-full btn-c btn-primary'>Check out here now</a>
+                </Link>
+              </div>
+            </div>
+            <div className='container relative flex flex-col pt-20 mt-0 mb-7 sm:mb-8 lg:mb-12'>
               {pageContents?.about?.length > 0 && pageContents?.about?.map((ab: any, aIdx: number) => (
                 <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12' key={`about-${aIdx}`}>
                   <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
@@ -282,7 +291,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               ))}
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
+                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
                   <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
                     {pageContents?.beinspiredheading?.map((h: any, iIdx: number) => (
                       <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.beinspiredheading_subtitle} hasNextPrev >
@@ -315,7 +324,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               }
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className={`nc-SectionSliderProductCard product-card-slider container pl-4 sm:pl-0 relative`}>
+                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 relative`}>
                   <div ref={sliderRefCmp} className={`flow-root ${isShow ? "" : "invisible"}`}>
                     {pageContents?.competitionheading?.map((h: any, iIdx: number) => (
                       <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.competitionheading_subtitle} hasNextPrev >
@@ -342,8 +351,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               }
               {pageContents?.brands?.length > 0 &&
-                <div className='flex flex-col w-full pt-4 mt-2 border-t border-gray-200 sm:mt-4'>
-                  <div className='container flex flex-col gap-4 mx-auto'>
+                <div className='flex flex-col w-full mt-2 border-t border-gray-200 sm:mt-4 pt-10'>
+                  <div className='container !px-0 flex flex-col gap-4 mx-auto'>
                     {pageContents?.brandheading?.map((h: any, iIdx: number) => (
                       <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
                         <h2 className='title-page  font-semibold dark:text-black'>{h?.brandheading_title}</h2>

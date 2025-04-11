@@ -104,7 +104,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
 
   return (
     <>
-      <Newsletter />
+      <Newsletter featureToggle={featureToggle} />
 
       {featureToggle?.features?.enableForPCSite ? (
         <div className="relative pt-16 pb-6 bg-neutral-50 nc-Footer lg:pt-16 lg:pb-6 dark:border-neutral-200 main-footer-section dark:bg-white">

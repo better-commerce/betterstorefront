@@ -1464,6 +1464,8 @@ h6 {
 
 .border-footer-btn {
   border: 1px solid #fff;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
 }
 
 @media screen and (max-width:1620px) {
@@ -2350,9 +2352,7 @@ button.icon-grp .header-dark{
 .footer-top-bg-clr.bg-white{
   background: var(--btn-bg-secondary)!important;
 }
-.footer-top-bg-clr h4,  .footer-top-bg-clr p{
-  color: #fff !important;
-}
+
 .icon-div-menu img.trade-icon {
   filter: invert(0) !important;
 }
@@ -2504,4 +2504,15 @@ html {
   width: 200px !important;
   height: 200px !important;
   border-radius: 100% !important;
+}
+.swiper-pagination{
+  text-align: left !important;
+  left: 4rem !important;
+}
+.swiper-pagination-bullet {
+  background: #000000 !important;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #FFFFFF !important;
 }
