@@ -69,7 +69,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
           id: getUpdatedQuoteDetails?.value?.id,
           itemId: itemId,
           status,
-          rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : QuoteItemStatusType.REJECTED,
+          rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : rejectReasons[itemId],
         };
 
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: { data: requestBody } };
