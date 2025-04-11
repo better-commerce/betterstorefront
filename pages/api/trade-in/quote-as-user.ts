@@ -4,7 +4,7 @@ import postQuoteAsUser from '@framework/trade-in/quote-as-user'
 
 const postQuoteAsUserApiMiddleware = async (req: any, res: any) => {
   try {
-    const response = await postQuoteAsUser(req.body?.data, req?.cookies)
+    const response = await postQuoteAsUser(req.body, req?.cookies)
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

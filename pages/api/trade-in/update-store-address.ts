@@ -7,7 +7,7 @@ const updateStoreAddressApiMiddleware = async (req: any, res: any) => {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const { id, storeid } = req.body?.data || {} // Get ID from request body
+  const { id, storeId } = req.body || {} // Get ID from request body
 
   if (!id) {
     return res.status(400).json({ error: 'Missing quote ID' })
@@ -16,7 +16,7 @@ const updateStoreAddressApiMiddleware = async (req: any, res: any) => {
   try {
     const response: any = await updateStoreAddress(
       id,
-      storeid,
+      storeId,
       req?.cookies
     )
     res.status(200).json(response)

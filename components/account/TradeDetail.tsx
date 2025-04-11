@@ -129,7 +129,7 @@ export default function TradeInDetail() {
           rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : QuoteItemStatusType.REJECTED,
         };
 
-        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: { data: requestBody } };
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: requestBody };
         const quoteResult = await callApi(config)
         setTradeDetail(quoteResult?.data);
         await fetchTradeDetail(tradeDetail?.value?.id);

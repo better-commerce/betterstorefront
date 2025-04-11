@@ -70,7 +70,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
     const store = storeData?.value?.[selectedCameraStore];
 
     try {
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, method: RequestMethod.POST, data: { data: { id: quoteData?.value?.id, storeid: store?.id, } } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, method: RequestMethod.POST, data: { id: quoteData?.value?.id, storeId: store?.id, } };
       const response = await callApi(config);
 
       if (response?.data?.isSuccess) {

@@ -30,7 +30,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
     setIsLoading(true);
     try {
       if (isChecked) {
-        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { data: { id: quoteData?.value.id } } };
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
         await callApi(config)
       }
       const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_SHIPPING_METHODS, method: RequestMethod.POST };
@@ -72,7 +72,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
           rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : rejectReasons[itemId],
         };
 
-        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: { data: requestBody } };
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: requestBody };
         const quoteResult = await callApi(config)
         setUpdatedQuoteDetails(quoteResult?.data);
         await fetchUpdatedQuoteDetails(getUpdatedQuoteDetails?.value?.id);
