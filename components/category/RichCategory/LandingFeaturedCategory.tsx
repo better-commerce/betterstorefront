@@ -16,8 +16,8 @@ export default function LandingFeaturedCategory({ featuredCategory, categoryname
                   href={`/${featured?.link}`}
                   className="group"
                 >
-                  <div className="bg-[#B8B8B8] p-4 py-8 rounded-xl flex flex-col items-center transition-all hover:shadow-md">
-                    <div className="h-28 w-28 flex items-center justify-center mb-2">
+                  <div className="bg-white border-[#B8B8B8] border p-3 rounded-xl flex flex-col items-center transition-all hover:shadow-md">
+                    <div className="w-9/12 flex items-center justify-center mb-2">
                       {featured?.image ? (
                         <img
                           src={generateUri(featured?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER}

@@ -15,7 +15,7 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
   return (
     <>
     <CategoryBanner data={category}/>
-      <div className='container mx-auto category-container !px-0'>
+      <div className='w-full !px-0'>
         {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
           <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo} categoryname={category?.name}  />
         }
@@ -38,7 +38,7 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
               </>
             }
             {category?.additionalInfo1 && (
-            <div className="container mx-auto !px-0 py-8">
+            <div className="w-full !px-0 py-8">
               <Link href="/sell-or-part-exchange" className="flex flex-col items-start justify-start w-full text-left">
               <img src={category?.additionalInfo1} alt="Banner Image" className="block w-full"/>
               </Link>
