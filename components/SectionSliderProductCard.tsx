@@ -18,9 +18,10 @@ export interface SectionSliderProductCardProps {
   readonly featureToggle: any;
   readonly defaultDisplayMembership: any;
   readonly deviceInfo: any;
+  readonly onlyImage: boolean;
 }
 
-const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership, deviceInfo }) => {
+const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership, deviceInfo, onlyImage }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
   let dataPerRow = featureToggle?.features?.enableForPCSite ? 5 : 4
@@ -66,7 +67,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
             {data?.length > 0 && data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide product-card-item home-product-card ${itemClassName}`}>
                 {featureToggle?.features?.enableForPCSite ? (
-                  <HomeProductCardMin deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  <HomeProductCardMin onlyImage={onlyImage} deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 ) : (
                   <ProductCard deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 )}

@@ -12,7 +12,7 @@ import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
 import { matchStrings, stringFormat, stringToBoolean } from "@framework/utils/parse-util";
-import { cartItemsValidateAddToCart, getFeaturesConfig, sanitizeRelativeUrl } from "@framework/utils/app-util";
+import { cartItemsValidateAddToCart, getFeaturesConfig, sanitizeRelativeUrl, vatIncluded } from "@framework/utils/app-util";
 import { useTranslation } from "@commerce/utils/use-translation";
 import uniqBy from 'lodash/uniqBy';
 import { isMobile } from 'react-device-detect';
@@ -24,7 +24,7 @@ import useAnalytics from './services/analytics/useAnalytics';
 import ReviewBadge from './Product/ReviewBadge';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
-const Prices = dynamic(() => import('@components/Prices'))
+const PricesWithDiscount = dynamic(() => import('@components/PricesWithDiscount'))
 const ModalQuickView = dynamic(() => import('@components/ModalQuickView'))
 const ButtonSecondary = dynamic(() => import('@components/shared/Button/ButtonSecondary'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
@@ -38,9 +38,10 @@ export interface ProductCardProps {
   readonly key?: any;
   readonly featureToggle: any;
   readonly defaultDisplayMembership: any;
+  readonly onlyImage: boolean;
 }
 
-const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
+const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership, onlyImage }) => {
   const { recordAnalytics } = useAnalytics()
   const { deleteWishlistItem, isInWishList: isInWishlistItem, addToWishlist: addToWishlistItem } = wishlistHandler()
   const [showModalQuickView, setShowModalQuickView] = useState(false);
@@ -51,6 +52,7 @@ const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLike
   const [compareAttributes, setCompareAttributes] = useState<any>([])
   const translate = useTranslation()
   const [quantity, setQuantity] = useState(1)
+  const isIncludeVAT = vatIncluded();
   const handleQuickViewData = (data: any) => {
     //debugger
     const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
@@ -197,6 +199,10 @@ const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLike
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
   }, [isCompared])
+  const originalPrice = isIncludeVAT ? data?.listPrice?.raw?.withTax : data?.listPrice?.raw?.withoutTax;
+  const currentPrice = isIncludeVAT ? data?.price?.raw?.withTax : data?.price?.raw?.withoutTax;
+  const nonMemberDiscountPercentage = originalPrice > currentPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : 0;
+
   const renderGroupButtons = () => {
     return (
       <>
@@ -218,10 +224,6 @@ const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLike
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
               }
-              <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
-                <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
-                <span className="ms-1">{translate('common.label.quickViewText')}</span>
-              </ButtonSecondary>
             </div>
           </>
         )}
@@ -231,28 +233,39 @@ const HomeProductCardMin: FC<ProductCardProps> = ({ className = "", data, isLike
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`nc-ProductCard bg-gray-200 product-card border-prod-card hover-nc-product-card rounded-3xl relative flex flex-col sm:group mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`nc-ProductCard bg-white product-card hover-nc-product-card rounded-3xl relative flex flex-col sm:group mb-6 ${product?.compared ? '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className="relative flex-shrink-0 overflow-hidden rounded-3xl z-1 group rounded-green product-card__image-container">
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
-            <div className="flex w-full h-0 bg-white !rounded aspect-w-11 aspect-h-12 product-card__image">
-              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-top w-full h-full p-3 rounded-3xl" alt={data?.name} />
+            <div className="flex w-full h-auto bg-[#F5F5F5] !rounded product-card__image p-3">
+              <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className="object-contain bg-white object-top w-full h-full p-3 rounded-3xl" alt={data?.name} />
             </div>
           </ButtonLink>
           <div className={CLASSES}>
             <ProductTag product={data} />
           </div>
-          <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
           {!isComparedEnabled && renderGroupButtons()}
         </div>
-
-        <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
-          <div className="px-2.5 pt-2 pb-2.5 product-card__information">
-            <h2 className="dark:text-black min-h-[60px] text-x-small font-semibold text-black">{data?.name}</h2>
-            <div className="flex items-center justify-between mt-2 product-card-panel">
-              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+        {!onlyImage &&
+          <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
+            <div className="px-2.5 pt-2 pb-2.5 product-card__information">
+              <h2 className="dark:text-black min-h-[50px] text-x-small font-semibold text-black">{data?.name}</h2>
+              <div className="flex items-center justify-start gap-4 mb-2 product-card-panel">
+                {data?.price?.raw?.withTax !== 0 && (
+                  nonMemberDiscountPercentage > 0 && (
+                    <>
+                      <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded">
+                        {nonMemberDiscountPercentage}% off
+                      </span>
+                      <span className="inline-block text-xs font-semibold text-red-600">
+                        Limited time deal
+                      </span>
+                    </>
+                  )
+                )}
+              </div>
             </div>
-          </div>
-        </ButtonLink>
+          </ButtonLink>
+        }
       </div>
       {/* QUICKVIEW */}
       <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />

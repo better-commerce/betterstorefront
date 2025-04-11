@@ -33,6 +33,7 @@ import BestSellerProduct from '@components/home/Bestseller'
 import { ArrowRight } from '@components/icons'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import HeroLeft from '@components/ui/Hero/HeroLeft'
+import SectionHomeProductCardNew from '@components/SectionHomeProductCardNew'
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
 const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
 const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
@@ -246,13 +247,21 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               ))}
               {pageContents?.relateditems?.length > 0 &&
-                <div className='container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10'>
-                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.relateditems} heading={pageContents?.relateditemheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                </div>
+                <>
+                  <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
+                    {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
+                      <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
+                    ))}
+                    <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                  </div>
+                </>
               }
               {pageContents?.featureddeal?.length > 0 &&
-                <div className='container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10'>
-                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.featureddeal} heading={pageContents?.featureditemheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
+                  {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
+                    <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
+                  ))}
+                  <SectionHomeProductCardNew onlyImage={false} products={pageContents?.featureddeal} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
               }
               {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
@@ -291,7 +300,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               ))}
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 sm:mt-8 sm:pt-8 pt-4 relative`}>
+                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 sm:pt-8 pt-4 relative`}>
                   <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
                     {pageContents?.beinspiredheading?.map((h: any, iIdx: number) => (
                       <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.beinspiredheading_subtitle} hasNextPrev >
@@ -304,16 +313,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                           <li key={index} className={`glide__slide product-card-item home-product-card`}>
                             <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
                               <div className='relative flex flex-col rounded-lg'>
-                                <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
-                                <span className='flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded'>
-                                  {item?.tocategoryinspired_title != "" && <span className='text-lg font-semibold sm:text-xl'>{item?.tocategoryinspired_title}</span>}
-                                  {item?.tocategoryinspired_description != "" &&
-                                    <div
-                                      className='text-sm font-normal !leading-relaxed text-black uppercase sm:w-10/12'
-                                      dangerouslySetInnerHTML={{ __html: item?.tocategoryinspired_description }}
-                                    ></div>}
-                                  <span>Shop Now</span>
-                                </span>
+                                <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />                                
                               </div>
                             </Link>
                           </li>
@@ -324,7 +324,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               }
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 relative`}>
+                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 sm:pt-10 pt-6 relative`}>
                   <div ref={sliderRefCmp} className={`flow-root ${isShow ? "" : "invisible"}`}>
                     {pageContents?.competitionheading?.map((h: any, iIdx: number) => (
                       <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.competitionheading_subtitle} hasNextPrev >
@@ -419,7 +419,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 {/* Tab Content */}
                 {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
                   <SectionSliderProductCard
-                    deviceInfo={deviceInfo}
+                    deviceInfo={deviceInfo} onlyImage={false}
                     data={pageContents?.specialofferproducts}
                     heading={pageContents?.offerproductheading}
                     featureToggle={featureToggle}
@@ -429,7 +429,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
                 {activeTab === "newProducts" && pageContents?.newproducts?.length > 0 && (
                   <SectionSliderProductCard
-                    deviceInfo={deviceInfo}
+                    deviceInfo={deviceInfo} onlyImage={false}
                     data={pageContents?.newproducts}
                     heading={pageContents?.newproductheading}
                     featureToggle={featureToggle}
@@ -684,7 +684,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
             {pageContents?.newarrivals?.length > 0 &&
               <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10'>
-                <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.newarrivals} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
               </div>
             }
 
@@ -692,7 +692,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
                 <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
                 {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
-                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 }
               </div>
             ))}
@@ -731,7 +731,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </div>
                 }
                 {pageContents?.nevermisssale?.length > 0 &&
-                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 }
                 {pageContents?.brand?.length > 0 &&
                   <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
@@ -741,7 +741,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </div>
                 }
                 {pageContents?.popular?.length > 0 &&
-                  <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 }
 
                 {pageContents?.ContentEditor && pageContents?.ContentEditor != "" && <ContentEditorJS value={JSON.parse(pageContents?.ContentEditor)} />}
