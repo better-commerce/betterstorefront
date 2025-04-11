@@ -391,7 +391,7 @@ export default function TradeInDetail() {
             </div>
           }
           <div className="flex flex-col justify-start w-full gap-4 mt-6 text-left">
-            <p className="text-sm font-normal text-gray-600">If in the meantime you decide that you would rather a collections be organized please call us on 01444 237070 or email us at  <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a> and someone will be willing to help you change the shipping method.</p>
+            <p className="text-sm font-normal text-gray-600">If in the meantime you decide that you would rather a collections be organized please call us on <span className="font-semibold">01444 237070</span> or email us at  <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a> and someone will be willing to help you change the shipping method.</p>
             <p className="text-sm font-normal text-gray-600">Before coming into store, why not check out our extensive range of <Link href={`/search`} passHref className="underline text-sky-500">camera gears</Link>.</p>
           </div>
         </div>
