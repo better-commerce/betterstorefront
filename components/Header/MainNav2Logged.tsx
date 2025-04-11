@@ -67,7 +67,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   }
   const renderMagnifyingGlassIcon = () => {
     return (
-      <SearchBar onClick={setShowSearchBar} keywords={keywords} />
+      <SearchBar featureToggle={featureToggle} onClick={setShowSearchBar} keywords={keywords} />
     );
   };
   function handleWishlist() {
