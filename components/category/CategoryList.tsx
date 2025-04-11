@@ -45,9 +45,7 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
           }
         </>
       }
-      {isValidating ? (
-        <Loader />
-      ) : (
+      {isValidating ? (<Loader />) : (
         <>
           {productDataToPass?.results?.length > 0 ? (
             <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
