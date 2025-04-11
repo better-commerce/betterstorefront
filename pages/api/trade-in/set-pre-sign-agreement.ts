@@ -7,14 +7,12 @@ const setPreSignAgreementByIdApiMiddleware = async (req: any, res: any) => {
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const { id } = req.body?.data || {} // Get ID from request body
-
-  if (!id) {
+  if (!req.body?.id) {
     return res.status(400).json({ error: 'Missing quote ID' })
   }
 
   try {
-    const response: any = await setPreSignAgreementById(id, req?.cookies)
+    const response: any = await setPreSignAgreementById(req.body.id, req?.cookies)
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

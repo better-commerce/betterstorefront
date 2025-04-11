@@ -86,7 +86,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
         accessories: selectedAccessories || [],
       }));
 
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { data: { customerId: loginResult?.userId, items } } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { customerId: loginResult?.userId, items } };
       const { data: quoteId } = await callApi(config);
 
       updateQueryParams(router, { quoteId });
@@ -127,7 +127,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     }));
 
     try {
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { data: { customerId: user?.userId, items: allItems } } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { customerId: user?.userId, items: allItems } };
       const quoteResp = await callApi(config);
 
       updateQueryParams(router, { quoteId: quoteResp?.data });
