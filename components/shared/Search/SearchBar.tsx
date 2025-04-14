@@ -42,11 +42,12 @@ interface ISearchBarProps {
 
 const SearchBar: FC<React.PropsWithChildren<ISearchBarProps>> = ({ id = 'search', onClick, keywords, maxBasketItemsCount, featureToggle, deviceInfo, searchDefaultSortBy }) => {
   const { showSearchBar, setShowSearchBar } = useUI()
+  const { isMobile, isIPadorTablet } = deviceInfo
   const defaultSearch = (
     <>
       <div className="relative items-center justify-center w-10 h-10 rounded-full search-icon-div group theme-search-bar theme-search-bar-icon lg:top-0 top-header-search lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none" onClick={onClick}>
         <img alt='' src="/images/searchIcon.svg" className="w-6 h-6 group-hover:text-black" />
-        {featureToggle.features?.enableForPCSite && <span className="absolute text-sm font-normal text-gray-600 left-12 top-3.5">Search products, guides, or stores…</span>}
+        {featureToggle.features?.enableForPCSite && !isMobile && <span className="absolute text-sm font-normal text-gray-600 left-12 top-3.5">Search products, guides, or stores…</span>}
       </div>
       {showSearchBar && (
         <SearchWrapper featureToggle={featureToggle} searchDefaultSortBy={searchDefaultSortBy} keywords={keywords} closeWrapper={() => setShowSearchBar(false)} />

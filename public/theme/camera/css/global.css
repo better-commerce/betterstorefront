@@ -591,11 +591,6 @@ h6 {
   font-size: 56px !important;
 }
 
-@media screen and (max-width:767px) {
-  .mob-font-16 {
-    font-size: 16px !important;
-  }
-}
 
 .title-hero{
   font-size: 48px !important;
@@ -639,6 +634,27 @@ h6 {
   background: var(--barnd-blue);
 }
 
+@media screen and (max-width:767px) {
+  .mob-font-16 {
+    font-size: 16px !important;
+  }
+  
+  .title-hero{
+    font-size: 28px !important;
+    line-height: 32px !important;
+  }
+
+  .heading{
+    font-size: 20px !important;
+    line-height: 24px !important;
+  }
+  .sub-heading{
+    font-size: 16px !important;
+  }
+  .title-page{
+    font-size: 22px !important;
+  }
+}
 
 /* bg color css */
 .primary-text-color {
@@ -2515,4 +2531,18 @@ html {
 .swiper-pagination-bullet-active {
   opacity: 1;
   background-color: #FFFFFF !important;
+}
+
+@media screen and (max-width:767px) {
+.swiper-pagination{
+  text-align: center !important;
+  left: auto !important;
+}
+.swiper-pagination-bullet {
+  background: #000000 !important;
+}
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  background-color: #FFFFFF !important;
+}
 }

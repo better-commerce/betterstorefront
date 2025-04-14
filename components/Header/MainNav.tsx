@@ -71,7 +71,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
   }
   const renderMagnifyingGlassIcon = () => {
     return (
-      <SearchBar onClick={setShowSearchBar} featureToggle={featureToggle} keywords={keywords} searchDefaultSortBy={searchDefaultSortBy} />
+      <SearchBar onClick={setShowSearchBar} featureToggle={featureToggle} keywords={keywords} deviceInfo={deviceInfo} searchDefaultSortBy={searchDefaultSortBy} />
     );
   };
   function handleWishlist() {
@@ -110,8 +110,8 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                   <div className="container mx-auto">
                     <div className="flex justify-between w-full">
                       <div className="flex items-center justify-start">
-                        <span className="flex items-center text-regular text-white">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
-                        <span className="pl-4 text-regular text-white">Call us <span className="font-semibold">01444 237070</span></span>
+                        <span className="flex items-center text-white text-regular">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
+                        <span className="pl-4 text-white text-regular">Call us <span className="font-semibold">01444 237070</span></span>
                       </div>
                       <div className="flex items-center justify-end gap-4">
                         {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
@@ -126,7 +126,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                           </>
                         }
                         <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-                        <span className="relative flex items-center pl-4 text-xs font-light text-white cursor-pointer hover:underline gap-1" onClick={() => { handleWishlist(); }}>Wishlist <HeartIcon className="w-3 h-3" aria-hidden="true" aria-label="Wishlist" />
+                        <span className="relative flex items-center gap-1 pl-4 text-xs font-light text-white cursor-pointer hover:underline" onClick={() => { handleWishlist(); }}>Wishlist <HeartIcon className="w-3 h-3" aria-hidden="true" aria-label="Wishlist" />
                           {wishListItems?.length > 0 && delayEffect && (
                             <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 sm:block -right-2">
                               {wishListItems?.length}
@@ -178,7 +178,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                     {!isMobile &&
                       <div className="search-icon-box flex-[2] hidden sm:flex">
                         <button className="relative items-center justify-center w-full h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
-                          {renderMagnifyingGlassIcon()}                          
+                          {renderMagnifyingGlassIcon()}
                         </button>
                       </div>
                     }
@@ -203,7 +203,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
                           </button>
                         </div>
                       }
-                      {featureToggle?.features?.enableTradeIn &&
+                      {featureToggle?.features?.enableTradeIn && !isMobile &&
                         <>
                           <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-10">
                             <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">

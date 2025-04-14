@@ -67,7 +67,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   }
   const renderMagnifyingGlassIcon = () => {
     return (
-      <SearchBar featureToggle={featureToggle} onClick={setShowSearchBar} keywords={keywords} />
+      <SearchBar deviceInfo={deviceInfo} featureToggle={featureToggle} onClick={setShowSearchBar} keywords={keywords} />
     );
   };
   function handleWishlist() {
@@ -105,8 +105,8 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                   <div className="container mx-auto">
                     <div className="flex justify-between w-full">
                       <div className="flex items-center justify-start">
-                        <span className="flex items-center text-regular font-light text-white">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
-                        <span className="pl-4 text-regular text-white">Call us <span className="font-semibold">01444 237070</span></span>
+                        <span className="flex items-center font-light text-white text-regular">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
+                        <span className="pl-4 text-white text-regular">Call us <span className="font-semibold">01444 237070</span></span>
                       </div>
                       <div className="flex items-center justify-end gap-4">
                         {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
@@ -121,7 +121,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                           </>
                         }
                         <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
-                        <span className="relative flex items-center pl-4 text-xs font-light text-white cursor-pointer hover:underline gap-1" onClick={() => { handleWishlist(); }}>Wishlist <HeartIcon className="w-3 h-3" aria-hidden="true" aria-label="Wishlist" />
+                        <span className="relative flex items-center gap-1 pl-4 text-xs font-light text-white cursor-pointer hover:underline" onClick={() => { handleWishlist(); }}>Wishlist <HeartIcon className="w-3 h-3" aria-hidden="true" aria-label="Wishlist" />
                           {wishListItems?.length > 0 && delayEffect && (
                             <span className="absolute hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 top-2 sm:block right-2">
                               {wishListItems?.length}

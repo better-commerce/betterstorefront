@@ -188,7 +188,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
         {featureToggle?.features?.enableForPCSite ?
           <>
-            <div className='grid gap-2 sm:grid-cols-12'>
+            <div className='grid grid-cols-2 gap-2 sm:grid-cols-12'>
               <div className='col-span-12 sm:col-span-8'>
                 <HeroLeft banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} />
               </div>
@@ -199,8 +199,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
                       <h2 className='font-bold uppercase primary-text-blue title-page'>{usd?.usedproduct_title}</h2>
                       <div className='mx-auto text-[14px] font-semibold primary-text-blue text-center sm:w-8/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
-                      <div className='col-span-12'>
-                        <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-56' />
+                      <div className='h-48 col-span-12 sm:h-56'>
+                        <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-40 sm:h-56' />
                       </div>
                     </div>
                     <Link href={usd?.usedproduct_primarybuttonlink} className='flex absolute bottom-4 items-center justify-center gap-1 px-4 py-2 text-sm font-semibold bg-transparent border rounded border-[#294384] text-[#294384]'>{usd?.usedproduct_primarybutton} <ArrowRightIcon className='w-4 h-4' /></Link>
@@ -217,7 +217,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </Link>
               </div>
             </div>
-            <div className='container relative flex flex-col pt-20 mt-0 mb-7 sm:mb-8 lg:mb-12'>
+            <div className='container relative flex flex-col pt-6 mt-0 sm:pt-20 mb-7 sm:mb-8 lg:mb-12'>
               {pageContents?.about?.length > 0 && pageContents?.about?.map((ab: any, aIdx: number) => (
                 <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12' key={`about-${aIdx}`}>
                   <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
@@ -234,15 +234,16 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               ))}
               {pageContents?.shopwithus?.length > 0 && pageContents?.shopwithus?.map((swu: any, sIdx: number) => (
-                <div className='grid items-center gap-4 border-b border-gray-200 sm:gap-12 sm:grid-cols-12' key={`swu-${sIdx}`}>
-                  <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
-                    <div className='flex flex-col justify-center w-full gap-4'>
-                      <span className='w-[100px] h-1 bg-black mx-auto'></span>
-                      <h2 className='font-semibold text-center text-black sub-heading'>{swu?.shopwithus_title}</h2>
-                      <div className='mx-auto  font-normal text-center !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
+                <div className='grid items-end grid-cols-12 gap-1 pt-6 border-b border-gray-200 sm:items-center sm:pt-0 sm:gap-12 sm:grid-cols-12' key={`swu-${sIdx}`}>
+                  <span className='w-[100px] sm:h-0 sm:mb-0 mb-4 h-[2px] col-span-12 bg-black mx-auto'></span>
+                  <div className='order-1 col-span-7 sm:col-span-8 sm:order-1'>
+                    <div className='flex flex-col justify-center w-full gap-1 sm:gap-4'>
+                      <span className='w-[100px] sm:h-1 h-0 bg-black mx-auto'></span>
+                      <h2 className='font-semibold text-left text-black sm:text-center sub-heading'>{swu?.shopwithus_title}</h2>
+                      <div className='mx-auto font-normal sm:text-center text-left !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
                     </div>
                   </div>
-                  <div className='order-2 col-span-12 sm:col-span-4 sm:order-2'>
+                  <div className='order-2 col-span-5 sm:col-span-4 sm:order-2'>
                     <div className='col-span-12'>
                       <img src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={swu?.shopwithus_title} className='object-cover w-full h-full' />
                     </div>
@@ -250,7 +251,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               ))}
               {pageContents?.relateditems?.length > 0 &&
-                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
+                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
                   ))}
@@ -258,7 +259,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               }
               {pageContents?.featureddeal?.length > 0 &&
-                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
+                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
                   ))}
@@ -284,14 +285,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             ))}
             <div className='container relative flex flex-col mt-0 mb-7 sm:mb-8 lg:mb-12'>
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 slider-btn-css slider-btn-css">
+                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.beinspiredheading?.length > 0 && pageContents?.beinspiredheading?.map((heading: any, hIdx: number) => (
-                    <div className='flex items-center justify-start gap-6 pb-4 sm:pb-8' key={`be-inspired-${hIdx}`}>
+                    <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8' key={`be-inspired-${hIdx}`}>
                       <h3 className="font-semibold text-black title-page">{heading?.beinspiredheading_title}</h3>
-                      <Link href={heading?.beinspiredheading_buttonlink} className='text-xs font-normal text-black underline' passHref>See more</Link>
+                      <Link href={heading?.beinspiredheading_buttonlink} className='justify-end w-24 text-xs font-normal text-right text-black underline' passHref>See more</Link>
                     </div>
                   ))}
-                  <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
                     {pageContents?.tocategoryinspired?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
                         <div key={pId} className={`product-card-item home-product-card`}>
@@ -307,14 +308,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               }
               {pageContents?.competitioncard?.length > 0 &&
-                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 slider-btn-css slider-btn-css">
+                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.competitionheading?.length > 0 && pageContents?.competitionheading?.map((heading: any, hIdx: number) => (
-                    <div className='flex items-center justify-start gap-6 pb-4 sm:pb-8' key={`be-inspired-${hIdx}`}>
+                    <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8' key={`be-inspired-${hIdx}`}>
                       <h3 className="font-semibold text-black title-page">{heading?.competitionheading_title}</h3>
-                      <Link href={heading?.competitionheading_buttonlink} className='text-xs font-normal text-black underline' passHref>See more</Link>
+                      <Link href={heading?.competitionheading_buttonlink} className='justify-end w-24 text-xs font-normal text-right text-black underline' passHref>See more</Link>
                     </div>
                   ))}
-                  <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
                     {pageContents?.competitioncard?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
                         <div key={pId} className={`product-card-item home-product-card`}>

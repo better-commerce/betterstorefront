@@ -42,9 +42,9 @@ export default function Newsletter({ featureToggle }: any) {
         <div className='container mx-auto'>
           <div className='flex flex-col justify-between sm:flex-row sm:items-center'>
             {featureToggle?.features?.enableForPCSite ? (
-              <div className='flex flex-col gap-4'>
-                <h4 className="my-4 title-page !text-[#EAEDF5] font-semibold sm:my-0">Subscribe to Newsletter</h4>
-                <p className="sub-heading font-light !text-[#EAEDF5] sm:mt-1 max-w-[70%]">Get News, Helpful Tips, Photography News Events and Offers directly to your inbox.</p>
+              <div className='flex flex-col gap-2 sm:gap-4'>
+                <h4 className="my-1 title-page !text-[#EAEDF5] font-semibold sm:my-0">Subscribe to Newsletter</h4>
+                <p className="sub-heading font-light !text-[#EAEDF5] sm:mt-1 sm:max-w-[70%] max-w-full">Get News, Helpful Tips, Photography News Events and Offers directly to your inbox.</p>
               </div>
             ) : (
               <div className='flex flex-col'>

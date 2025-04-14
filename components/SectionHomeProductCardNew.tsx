@@ -6,18 +6,18 @@ export default function SectionHomeProductCardNew({ products, productPerColumn, 
   return (
     <>
       <Swiper
-        slidesPerView={1}
-        spaceBetween={20}
-        navigation={true}
+        slidesPerView={2.2}
+        spaceBetween={10}
+        navigation={false}
         loop={true}
         breakpoints={{
-          640: { slidesPerView: 1.5 },
-          768: { slidesPerView: productPerColumn },
-          1024: { slidesPerView: productPerColumn },
+          640: { slidesPerView: 2.2 },
+          768: { slidesPerView: 2.2 },
+          1024: { slidesPerView: productPerColumn, navigation: true, spaceBetween:20 },
         }}
       >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 text-left cursor-pointer height-auto-slide group lg:w-auto h-auto">
+          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
            <HomeProductCardMin onlyImage={onlyImage} deviceInfo={deviceInfo} data={product} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </SwiperSlide>
         ))}
