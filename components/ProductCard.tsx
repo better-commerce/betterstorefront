@@ -301,17 +301,17 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             )}
           </div>
         )}
+        {isComparedEnabled && !product?.compared && featureToggle?.features?.enableForPCSite && <div className='absolute top-0 left-0 w-full h-full rounded cursor-pointer z-8 bg-black/60' onClick={handleSetCompareProduct}></div>}
         {isComparedEnabled && featureToggle?.features?.enableForPCSite && (
-          <div className="absolute z-10 top-2 left-2">
+          <div className="absolute z-9 top-2 left-2">
             <input
               type="checkbox"
               checked={!!product?.compared}
               onChange={handleSetCompareProduct}
-              className="w-4 h-4 border-gray-300 rounded text-[#2D4D9C]"
+              className="w-4 h-4 border-gray-300 rounded bg-white text-[#2D4D9C]"
             />
           </div>
         )}
-        {isComparedEnabled && !product?.compared && featureToggle?.features?.enableForPCSite && <div className='absolute top-0 left-0 w-full h-full rounded cursor-pointer z-9 bg-black/60' onClick={handleSetCompareProduct}></div>}
       </div>
       {/* QUICKVIEW */}
       <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
