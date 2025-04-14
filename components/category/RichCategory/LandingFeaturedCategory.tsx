@@ -4,9 +4,9 @@ import Link from "next/link";
 
 export default function LandingFeaturedCategory({ featuredCategory, categoryname, deviceInfo }: any) {
   return (
-    <section className="py-8 border-b border-gray-200">
+    <section className="pt-8">
       <div className="container mx-auto px-4">
-        <h2 className="text-xl font-bold text-gray-800 mb-6">Shop {categoryname} by Category</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-6 heading-border-top">Shop {categoryname} by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {featuredCategory
             ?.filter((featured: any) => featured?.isFeatured === true)

@@ -8,9 +8,9 @@ import Link from "next/link";
 export default function LinkGroup({ featuredBrand, filterBrandData, categoryname  }: any) {
   return (
     <>
-     <section className="py-8 border-b border-gray-200">
+     <section className="pt-8">
       <div className="container mx-auto px-4">
-        <h2 className="text-xl font-bold text-gray-800 mb-6">Shop {categoryname} by brand</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-6 heading-border-top">Shop {categoryname} by brand</h2>
         <div className="grid items-center grid-cols-4 gap-2 text-left sm:grid-cols-6">
         {featuredBrand?.map((feature: any, fdx: number) => (
             <Link key={fdx} href={feature?.slug} className="flex flex-col items-start justify-start w-full text-left">

@@ -2546,7 +2546,6 @@ html {
   background-color: #FFFFFF !important;
 }
 }
-
 .search-icon-box button .search-icon-div{
     display: flex;
     border: 1px solid #ddd;
@@ -2581,4 +2580,9 @@ html {
   }
 
   img.mobile-search-icon { filter: invert(0) !important; top: -4px !important; left: 5px !important; position: relative;}
+}
+
+.heading-border-top{
+  border-top:1px solid #B2B2B2;
+  padding-top: 10px;
 }
