@@ -741,6 +741,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                         )}
                         <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                       </div>
+                      {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                        <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                      </div>}
                       {/* <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
                         {isMobile ? null : (
                           <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
@@ -798,6 +801,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                         <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
                       </div>}
                       <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                        <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                      </div>}
                     </div>
                   ))}
                 </>
